@@ -3092,6 +3092,9 @@ void SettingsView::setApplicationLanguage(int _language)
         case QLocale::German: {
             return "Deutsch";
         }
+        case QLocale::Greek: {
+            return "ελληνικά";
+        }
         case QLocale::Hebrew: {
             return "עִבְרִית";
         }

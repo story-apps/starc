@@ -940,11 +940,6 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
-    case QLocale::Armenian: {
-        translation = "hy";
-        break;
-    }
-
     case QLocale::Azerbaijani: {
         translation = "az";
         break;
@@ -980,11 +975,6 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
-    case QLocale::Esperanto: {
-        translation = "eo";
-        break;
-    }
-
     case QLocale::French: {
         translation = "fr";
         break;
@@ -997,6 +987,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
     case QLocale::German: {
         translation = "de";
+        break;
+    }
+
+    case QLocale::Greek: {
+        translation = "el";
         break;
     }
 
@@ -1072,11 +1067,6 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
     case QLocale::Swedish: {
         translation = "sv";
-        break;
-    }
-
-    case QLocale::Filipino: {
-        translation = "tl_PH";
         break;
     }
 

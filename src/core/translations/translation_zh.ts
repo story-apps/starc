@@ -12,63 +12,63 @@
 <context>
     <name>BaseTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="485"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="484"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="489"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="488"/>
         <source>Bold</source>
         <translation>粗体</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="495"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="494"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="501"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="500"/>
         <source>Underline</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="507"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="506"/>
         <source>Strikethrough</source>
         <translation>删除线</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="515"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="514"/>
         <source>Align left</source>
         <translation>左对齐</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="522"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="521"/>
         <source>Align center</source>
         <translation>居中</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="529"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="528"/>
         <source>Align right</source>
         <translation>右对齐</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="536"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="535"/>
         <source>Align justify</source>
         <translation>两端对齐</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="544"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="543"/>
         <source>Make uppercase</source>
         <translation>大写</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="550"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="549"/>
         <source>Make lowercase</source>
         <translation>小写</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="568"/>
-        <source>Paste as plain text</source>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="567"/>
+        <source>Paste without formatting</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1414,7 +1414,7 @@
 <context>
     <name>BusinessLayer::NovelTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="200"/>
+        <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="201"/>
         <source>Novel</source>
         <translation>小说</translation>
     </message>
@@ -2202,7 +2202,7 @@
 <context>
     <name>BusinessLayer::ScreenplayTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="164"/>
+        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="165"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
@@ -2285,134 +2285,133 @@
 <context>
     <name>BusinessLayer::StructureModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="261"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="275"/>
         <source>Recycle bin</source>
         <translation>回收站</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="267"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="273"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="304"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="281"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="287"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="318"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="269"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="300"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="323"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="283"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="314"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="337"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="351"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="365"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="379"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="271"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="302"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="325"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="285"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="316"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="339"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="353"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="366"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="367"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="380"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="281"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="312"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="295"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="326"/>
         <source>Treatment</source>
         <translation>处置</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="275"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="293"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="306"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="328"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="289"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="307"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="320"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="342"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="356"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="369"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="370"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="383"/>
         <source>Statistics</source>
         <translation>统计数据</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="288"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="302"/>
         <source>Series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="291"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="305"/>
         <source>Episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="298"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="312"/>
         <source>Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="321"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="335"/>
         <source>Comic book</source>
         <translation>漫画书</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="327"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="341"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="355"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="369"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="335"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="349"/>
         <source>Audioplay</source>
         <translation>音乐剧本</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="349"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="363"/>
         <source>Stageplay</source>
         <translation>舞台剧本</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="363"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="377"/>
         <source>Novel</source>
         <translation>小说</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="368"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="382"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="374"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="388"/>
         <source>Outline</source>
         <translation>概述</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="379"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="393"/>
         <source>Characters</source>
         <translation>角色</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="396"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="410"/>
         <source>Locations</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="413"/>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="422"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="427"/>
         <source>Worlds</source>
         <translation>世界</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="444"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="450"/>
         <source>Mind map</source>
         <translation>思维导图</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="450"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="456"/>
         <source>Images gallery</source>
         <translation>图片库</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="456"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="462"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2886,17 +2885,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="285"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="286"/>
         <source>Color hex code</source>
         <translation>色彩的十六进制代码</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="286"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="287"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="287"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="288"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
@@ -3087,6 +3086,8 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="122"/>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="141"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="181"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="208"/>
         <source>All supported files</source>
         <translation>所有支持的文件</translation>
     </message>
@@ -3215,14 +3216,11 @@
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="116"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1214"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1155"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1040"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1325"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1206"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="992"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1259"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1332"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1219"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1160"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1045"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1211"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="996"/>
         <source>End of</source>
         <translation>结束</translation>
     </message>
@@ -3344,192 +3342,192 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="744"/>
+        <location filename="../management_layer/application_manager.cpp" line="746"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>如果您想使用CLOUD版本，请更新到最新版本。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="745"/>
+        <location filename="../management_layer/application_manager.cpp" line="747"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>不，没有CLOUD，我也很好</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="746"/>
+        <location filename="../management_layer/application_manager.cpp" line="748"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="764"/>
+        <location filename="../management_layer/application_manager.cpp" line="766"/>
         <source>The last version is downloading</source>
         <translation> 最新版本正在下载</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1245"/>
+        <location filename="../management_layer/application_manager.cpp" line="1237"/>
         <source>in cloud</source>
         <translation>CLOUD上</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1246"/>
+        <location filename="../management_layer/application_manager.cpp" line="1238"/>
         <source>Read only</source>
         <translation>只读</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1256"/>
+        <location filename="../management_layer/application_manager.cpp" line="1248"/>
         <source> - changed</source>
         <translation>- 已修改</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1314"/>
-        <location filename="../management_layer/application_manager.cpp" line="1333"/>
-        <location filename="../management_layer/application_manager.cpp" line="1540"/>
+        <location filename="../management_layer/application_manager.cpp" line="1308"/>
+        <location filename="../management_layer/application_manager.cpp" line="1341"/>
+        <location filename="../management_layer/application_manager.cpp" line="1548"/>
         <source>Saving error</source>
         <translation>保存错误</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1315"/>
+        <location filename="../management_layer/application_manager.cpp" line="1309"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>更改无法写入。存在内部数据库错误：“%1”请检查您的文件是否存在以及您是否有写入权限。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1334"/>
+        <location filename="../management_layer/application_manager.cpp" line="1313"/>
+        <source>Retry</source>
+        <translation>重试</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="1342"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>由于位于“%1”的报道不存在，因此无法编写更改。请将文件移回，然后重试保存。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1416"/>
+        <location filename="../management_layer/application_manager.cpp" line="1424"/>
         <source>Project was modified. Save changes?</source>
         <translation>项目已修改。是否保存更改？</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1417"/>
+        <location filename="../management_layer/application_manager.cpp" line="1425"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1418"/>
+        <location filename="../management_layer/application_manager.cpp" line="1426"/>
         <source>Don&apos;t save</source>
         <translation>不保存</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1419"/>
+        <location filename="../management_layer/application_manager.cpp" line="1427"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1500"/>
+        <location filename="../management_layer/application_manager.cpp" line="1508"/>
         <source>Choose file to save story</source>
         <translation>选择要保存故事的文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1541"/>
+        <location filename="../management_layer/application_manager.cpp" line="1549"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>无法将故事保存到文件%1。请检查权限，然后重试。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1591"/>
+        <location filename="../management_layer/application_manager.cpp" line="1599"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>您试图在不存在的文件夹%1中创建项目。请为新项目选择其他位置。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1596"/>
+        <location filename="../management_layer/application_manager.cpp" line="1604"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>无法写入该文件。看起来它已被另一个应用程序打开。请关闭它，然后重试以创建新项目。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1600"/>
+        <location filename="../management_layer/application_manager.cpp" line="1608"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>无法写入该文件。请检查并授予应用写入所选文件夹的权限，或者选择另一个文件夹保存新项目。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1604"/>
+        <location filename="../management_layer/application_manager.cpp" line="1612"/>
         <source>Create project error</source>
         <translation>新建项目出错</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1795"/>
-        <location filename="../management_layer/application_manager.cpp" line="1818"/>
+        <location filename="../management_layer/application_manager.cpp" line="1803"/>
+        <location filename="../management_layer/application_manager.cpp" line="1826"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>此文件目前无法打开，因为它已在应用程序的另一个副本中打开。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1821"/>
+        <location filename="../management_layer/application_manager.cpp" line="1829"/>
         <source>Ignore and open</source>
         <translation>忽略并打开</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1917"/>
+        <location filename="../management_layer/application_manager.cpp" line="1925"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>您试图打开的文件没有写入权限。检查文件属性并允许对其进行编辑。由于它不可编辑，它将以只读模式打开。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1934"/>
+        <location filename="../management_layer/application_manager.cpp" line="1942"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>是否要继续使用文件格式 .%1？</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1935"/>
+        <location filename="../management_layer/application_manager.cpp" line="1943"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>某些项目数据无法用 .%1格式保存。我们建议您使用Story Architect  .%2格式，以便正确保存所有项目数据。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1938"/>
+        <location filename="../management_layer/application_manager.cpp" line="1946"/>
         <source>Never ask again</source>
         <translation>不再询问</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1939"/>
+        <location filename="../management_layer/application_manager.cpp" line="1947"/>
         <source>Keep .%1</source>
         <translation>保留 .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1940"/>
+        <location filename="../management_layer/application_manager.cpp" line="1948"/>
         <source>Switch to .STARC</source>
         <translation>切换到 .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3046"/>
-        <source>Maximum active sessions reached. To authorize from a new device, end one of the current sessions.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/application_manager.cpp" line="3332"/>
+        <location filename="../management_layer/application_manager.cpp" line="3405"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>项目所有者的CLOUD 服务订阅已过期。一旦他们续订了订阅，您就可以继续使用该项目。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3580"/>
+        <location filename="../management_layer/application_manager.cpp" line="3677"/>
         <source>Novel</source>
         <translation>小说</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3593"/>
+        <location filename="../management_layer/application_manager.cpp" line="3690"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3313"/>
-        <location filename="../management_layer/application_manager.cpp" line="3334"/>
+        <location filename="../management_layer/application_manager.cpp" line="3386"/>
+        <location filename="../management_layer/application_manager.cpp" line="3407"/>
         <source>Continue offline</source>
         <translation>继续离线</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="461"/>
-        <location filename="../management_layer/application_manager.cpp" line="475"/>
+        <location filename="../management_layer/application_manager.cpp" line="463"/>
+        <location filename="../management_layer/application_manager.cpp" line="477"/>
         <source>Open new window</source>
         <translation>打开新窗口</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="694"/>
+        <location filename="../management_layer/application_manager.cpp" line="696"/>
         <source>Loading missed fonts</source>
         <translation>正在加载丢失的字体</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3311"/>
+        <location filename="../management_layer/application_manager.cpp" line="3384"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>您的云服务订阅已过期。激活订阅以继续使用项目。</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3314"/>
+        <location filename="../management_layer/application_manager.cpp" line="3387"/>
         <source>Renew subscription</source>
         <translation>续订订阅</translation>
     </message>
@@ -3537,27 +3535,12 @@
 <context>
     <name>ManagementLayer::AudioplayStatisticsManager</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="106"/>
-        <source>Upgrade the app to the PRO version to access audioplay statistics exporting.</source>
-        <translation>将应用程序升级到PRO版本，以访问音乐播放统计数据的导出。</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="107"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="108"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="288"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="272"/>
         <source>Select location for saving report to file</source>
         <translation>选择将报告保存到文件的位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="289"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="273"/>
         <source>Select location for saving plot data to file</source>
         <translation>选择位置保存小说</translation>
     </message>
@@ -3595,63 +3578,30 @@
     </message>
 </context>
 <context>
-    <name>ManagementLayer::CharacterDialoguesManager</name>
-    <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="73"/>
-        <source>Upgrade the app to the PRO version to access character dialogues module.</source>
-        <translation>将应用程序升级到PRO版本以访问角色对话模块。</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="74"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="75"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::CharacterInformationManager</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="78"/>
-        <source>Upgrade the app to the PRO version to access extended character profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="79"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="80"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="561"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="547"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="563"/>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="611"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="549"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="597"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="564"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="550"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="610"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="596"/>
         <source>Do you want to delete the character&apos;s photo?</source>
         <translation>您要删除角色的照片么？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="612"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="598"/>
         <source>Yes, delete</source>
         <translation>是，请删除</translation>
     </message>
@@ -3659,37 +3609,22 @@
 <context>
     <name>ManagementLayer::CharactersRelationsManager</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="141"/>
-        <source>Upgrade the app to the PRO version to edit the character relations graph.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="545"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="530"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="547"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="532"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="548"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="533"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="142"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="143"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="162"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="147"/>
         <source>Character with this name already exists</source>
         <translation>具有此名称的角色已存在</translation>
     </message>
@@ -3697,157 +3632,157 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="462"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="606"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="471"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="615"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="476"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="620"/>
         <source>PRO version lifetime access granted.</source>
         <translation>授予PRO版本终身访问权限。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="480"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="624"/>
         <source>CLOUD version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="485"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="629"/>
         <source>CLOUD version lifetime access granted.</source>
         <translation>授予云版本终身访问权限。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="493"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="637"/>
         <source>%n credits were added to your balance.</source>
         <translation>
             <numerusform>%n 积分已添加到您的余额中。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="507"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="651"/>
         <source>The gift has been sent to the recipient&apos;s mailbox</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="755"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="911"/>
         <source>Promocode is incorrect</source>
         <translation>促销代码不正确</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="759"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="915"/>
         <source>Promocode expired</source>
         <translation>促销代码已过期</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="763"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="919"/>
         <source>Maximum number of promocode activations done</source>
         <translation>已到达促销代码激活的最大数量</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="767"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="923"/>
         <source>Promocode already used</source>
         <translation>促销代码已使用</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="836"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="995"/>
         <source>CUT TO:</source>
         <translation>切入：</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="852"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1011"/>
         <source>To use AI assistant, you need to replenish credits&apos; balance.</source>
         <translation>要使用AI助理，您需要补充积分余额。</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="853"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1012"/>
         <source>Maybe later</source>
         <translation>也许以后</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="854"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1013"/>
         <source>Replenish</source>
         <translation>补充</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1449"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1611"/>
         <source>Rephrasing text</source>
         <translation>改写文本</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1560"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1722"/>
         <source>Expanding text</source>
         <translation>扩展文本</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1669"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1831"/>
         <source>Shortening text</source>
         <translation>缩短文本</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1778"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1940"/>
         <source>Inserting text</source>
         <translation>插入文本</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1887"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2049"/>
         <source>Summarizing text</source>
         <translation>摘要文本</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1996"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2158"/>
         <source>Translating text</source>
         <translation>翻译文本</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2083"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2245"/>
         <source>Translating document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2227"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2344"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2389"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2506"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2402"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2521"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2564"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2683"/>
         <source>Generating novel (scene %1 from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2575"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2693"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2737"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2855"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="834"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="993"/>
         <source>INT.</source>
         <translation>內景INT.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="835"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="994"/>
         <source>EXT.</source>
         <translation>外景EXT.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2741"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2897"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2903"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="3059"/>
         <source>Processing text</source>
         <translation>处理文本</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2850"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="3012"/>
         <source>Generating image</source>
         <translation>正在生成图片</translation>
     </message>
@@ -3956,32 +3891,17 @@
 <context>
     <name>ManagementLayer::ImagesGalleryManager</name>
     <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="73"/>
-        <source>Upgrade the app to the PRO version to edit the images gallery.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="74"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="75"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="152"/>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="142"/>
         <source>Do you want to delete selected image?</source>
         <translation>是否要删除所选图像？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="153"/>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="143"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="154"/>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="144"/>
         <source>Yes, delete</source>
         <translation>是，请删除</translation>
     </message>
@@ -4029,169 +3949,84 @@ The following files will not be imported:
 <context>
     <name>ManagementLayer::LocationInformationManager</name>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="71"/>
-        <source>Upgrade the app to the PRO version to access extended location profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="72"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="73"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="246"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="231"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="248"/>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="292"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="233"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="277"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="249"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="234"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="291"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="276"/>
         <source>Do you want to delete the location&apos;s photo?</source>
         <translation>是否要删除该位置的照片？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="293"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="278"/>
         <source>Yes, delete</source>
         <translation>是，请删除</translation>
     </message>
 </context>
 <context>
-    <name>ManagementLayer::LocationScenesManager</name>
-    <message>
-        <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="73"/>
-        <source>Upgrade the app to the PRO version to access location scenes module.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="74"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="75"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::LocationsMapManager</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="139"/>
-        <source>Upgrade the app to the PRO version to edit the location map.</source>
-        <translation>将应用程序升级到PRO版本以编辑位置地图。</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="532"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="518"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="534"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="520"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="535"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="521"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="140"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="141"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="159"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="145"/>
         <source>Location with this name already exists</source>
         <translation>具有此名称的位置已存在</translation>
     </message>
 </context>
 <context>
-    <name>ManagementLayer::MindMapManager</name>
-    <message>
-        <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="91"/>
-        <source>Upgrade the app to the PRO version to edit the mind map.</source>
-        <translation>要修改思维导图，需要升级程序到PRO版本</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="92"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="93"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::NovelCardsManager</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="117"/>
-        <source>Upgrade the app to the PRO version to edit novel cards.
-
-If you want to continue editing novel text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation>将应用程序升级到PRO版本以编辑小说卡。
-
-如果要继续编辑小说文本，请通过左上角工具栏上的图标切换到相应的模块。</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="120"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="121"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="540"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="524"/>
         <source>Add part</source>
         <translation>添加小节</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="546"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="530"/>
         <source>Add chapter</source>
         <translation>添加大章</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="553"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="537"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="560"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="544"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="595"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="579"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="609"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="594"/>
         <source>Go to text</source>
         <translation>去看文本</translation>
     </message>
@@ -4247,39 +4082,22 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::NovelTimelineManager</name>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="119"/>
-        <source>Upgrade the app to the PRO version to edit novel timeline.
-
-If you want to continue editing novel text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="122"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="123"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="210"/>
+        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="195"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="217"/>
+        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="202"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="252"/>
+        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="237"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="266"/>
+        <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="252"/>
         <source>Go to text</source>
         <translation>去看文本</translation>
     </message>
@@ -4287,23 +4105,44 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::PresentationManager</name>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="506"/>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="559"/>
         <source>Choose the file to import</source>
         <translation>选择要导入的文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="543"/>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="604"/>
         <source>Processing presentation for document &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="608"/>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="629"/>
         <source>File loading error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="610"/>
-        <source>Please check internet connection and firewall/anitivirus settings, and try to send the file.</source>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="630"/>
+        <source>Error when uploading images: the server sent an incorrect file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="631"/>
+        <source>Please try to send the file later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="633"/>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="697"/>
+        <source>Retry</source>
+        <translation>重试</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="692"/>
+        <source>File processing error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="694"/>
+        <source>Please check internet connection and firewall/anitivirus settings, and try to send the file again.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4348,304 +4187,339 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="578"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="643"/>
         <source>Find all characters</source>
         <translation>查找所有角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="585"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="650"/>
         <source>Add character</source>
         <translation>添加角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="590"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="655"/>
         <source>Find all locations</source>
         <translation>查找所有地点</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="597"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="662"/>
         <source>Add location</source>
         <translation>添加位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="603"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="668"/>
         <source>Empty recycle bin</source>
         <translation>清空回收站</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="737"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="827"/>
         <source>Add document</source>
         <translation>添加文档</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="757"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="847"/>
         <source>Remove document</source>
         <translation>删除文档</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="706"/>
         <source>Open in new window</source>
         <translation>在新窗口中打开</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="914"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1004"/>
         <source>Character with this name already exists</source>
         <translation>具有此名称的角色已存在</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="925"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1015"/>
         <source>Location with this name already exists</source>
         <translation>具有此名称的位置已存在</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1088"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3736"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="141"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1179"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1870"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1881"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1965"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1966"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4131"/>
         <source>Current draft</source>
         <translation>当前草稿</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1150"/>
-        <source>Do you really want to remove document version &quot;%1&quot;?</source>
-        <translation>是否确实要删除文档版本“%1”？</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1151"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1271"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1735"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1275"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1406"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2003"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="501"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="566"/>
         <source>Remove split</source>
         <translation>删除拆分</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="502"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="567"/>
         <source>Split window</source>
         <translation>拆分窗口</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="729"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="819"/>
         <source>Add folder</source>
         <translation>添加文件夹</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="757"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="847"/>
         <source>Remove documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="617"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="682"/>
         <source>Sort alphabetically</source>
         <translation>按字母顺序排序 </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="565"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="630"/>
         <source>Remove permanently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="628"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2397"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="693"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2678"/>
         <source>Create draft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="653"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="718"/>
         <source>Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="709"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="774"/>
         <source>Share access</source>
         <translation>共享访问权限</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="771"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
+        <source>Compare documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="861"/>
         <source>Expand all</source>
         <translation>全部展开</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="777"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="867"/>
         <source>Collapse all</source>
         <translation>全部折叠</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="936"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1026"/>
         <source>World with this name already exists</source>
         <translation>具有此名称的世界已经存在</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1152"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1272"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1736"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1269"/>
+        <source>Do you really want to close comparison &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1270"/>
+        <source>Do you really want to remove document draft &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1271"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1407"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2004"/>
         <source>Yes, remove</source>
         <translation>是，请移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1261"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1271"/>
+        <source>Yes, close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1396"/>
         <source>Do you really want to permanently remove document: &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1498"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1633"/>
         <source>Characters from the text</source>
         <translation>文本中的角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1508"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1643"/>
         <source>Characters that are not found in the text</source>
         <translation>文本中未找不到角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1521"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1656"/>
         <source>Save only characters from the text</source>
         <translation>仅保存文本中的角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1522"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1657"/>
         <source>Save all characters</source>
         <translation>保存所有角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1523"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1653"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1658"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1788"/>
         <source>Change nothing</source>
         <translation>什么都没改变</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1628"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1763"/>
         <source>Locations from the text</source>
         <translation>文本中的位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1638"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1773"/>
         <source>Locations that are not found in the text</source>
         <translation>文本中未找到位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1651"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1786"/>
         <source>Save only locations from the text</source>
         <translation>仅保存文本中的位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1652"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1787"/>
         <source>Save all locations</source>
         <translation>保存所有位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1734"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1969"/>
+        <source>%1 vs %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2002"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>是否确实要从回收站中永久删除所有文档？</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2411"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2694"/>
+        <source>Compare drafts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2708"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2421"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2718"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2573"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2594"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2615"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2636"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2745"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2733"/>
+        <source>Close</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2882"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2924"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2945"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3054"/>
         <source>draft</source>
         <translation>草稿</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2592"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2613"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2634"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2901"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2922"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2943"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3418"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3743"/>
         <source>Mind map</source>
         <translation>思维导图</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3424"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3749"/>
         <source>Images gallery</source>
         <translation>图片库</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3495"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3532"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3568"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3610"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3654"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3835"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3885"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3933"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3990"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4047"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3498"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3535"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3569"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3612"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3657"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3838"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3888"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3934"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3992"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4050"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3500"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3840"/>
         <source>Audioplay</source>
         <translation>音乐剧本</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3537"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3890"/>
         <source>Comic book</source>
         <translation>漫画书</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3624"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4004"/>
         <source>Treatment</source>
         <translation>处置</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3571"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3936"/>
         <source>Novel</source>
         <translation>小说</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1259"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1394"/>
         <source>Do you really want to permanently remove following documents?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3580"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3945"/>
         <source>Outline</source>
         <translation>概述</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3659"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4052"/>
         <source>Stageplay</source>
         <translation>舞台剧</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3987"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4440"/>
         <source>Conflicted version</source>
         <translation>冲突的版本</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2571"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2743"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3615"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2880"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3052"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3995"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3503"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3540"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3574"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3618"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3662"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3843"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3939"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3998"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4055"/>
         <source>Statistics</source>
         <translation>统计数据</translation>
     </message>
@@ -4775,233 +4649,214 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>ManagementLayer::ScreenplayBreakdownManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="175"/>
-        <source>Upgrade the app to the CLOUD version to work with the screenplay breakdown.
-
-If you want to continue editing screenplay text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation>将应用程序升级到PRO版本以编辑影视剧本分镜。
-
-如果要继续编辑影视剧本文本，请通过左上角工具栏上的图标切换到相应的模块。</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="178"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="179"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="263"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="247"/>
         <source>Select location for saving breakdown to file</source>
         <translation>选择将分镜保存到文件的位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="538"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="522"/>
         <source>Scene intro</source>
         <translation>场景介绍</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="539"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="523"/>
         <source>Scene time</source>
         <translation>场景时刻</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="540"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="524"/>
         <source>Character extension</source>
         <translation>角色延伸</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="541"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="525"/>
         <source>Transition</source>
         <translation>翻译</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="703"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="687"/>
         <source>V.O.</source>
         <translation>旁白V.O.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="758"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="742"/>
         <source>Breakdown</source>
         <translation>分镜</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="825"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="809"/>
         <source>Script order</source>
         <translation>脚本顺序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="828"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="812"/>
         <source>Scene number</source>
         <translation>场号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="831"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1313"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="815"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1297"/>
         <source>I/E</source>
         <translation>转入外景I/E</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="834"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="818"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="837"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="821"/>
         <source>Scene description</source>
         <translation>场景描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="841"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="825"/>
         <source>D/N</source>
         <translation>借记单D/N</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="843"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="827"/>
         <source>Story day</source>
         <translation>故事发生之日</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="845"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1161"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1326"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1495"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="829"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1145"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1310"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1479"/>
         <source>Duration</source>
         <translation>持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="853"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1118"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1334"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="837"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1102"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1318"/>
         <source>Cast list</source>
         <translation>演员表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="893"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="877"/>
         <source>%1 list with IDs</source>
         <translation>%1 列表-含ID</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1142"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1479"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1126"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1463"/>
         <source>Board ID</source>
         <translation>板 ID</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1145"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1129"/>
         <source>Character</source>
         <translation>字</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1148"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1132"/>
         <source>Age</source>
         <translation>年龄</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1151"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1135"/>
         <source>Gender</source>
         <translation>性别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1154"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1319"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1488"/>
-        <source>One sentense description</source>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1138"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1303"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1472"/>
+        <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1158"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1323"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1492"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1142"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1307"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1476"/>
         <source>Scenes count</source>
         <translation>场次数量</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1171"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1505"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1155"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1489"/>
         <source>Scenes</source>
         <translation>场次</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1214"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1198"/>
         <source>Male</source>
         <translation>男</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1216"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1200"/>
         <source>Female</source>
         <translation>女</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1217"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1201"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1265"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1249"/>
         <source>Location list</source>
         <translation>位置列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1307"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1479"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1291"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1463"/>
         <source>Number</source>
         <translation>编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1310"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1294"/>
         <source>Location (complex)</source>
         <translation>位置（综合体）</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1482"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1466"/>
         <source>Element name</source>
         <translation>元素名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1485"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1469"/>
         <source>Max qty</source>
         <translation>最大数量</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="860"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="844"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1325"/>
         <source>Cast IDs</source>
         <translation>演员ID</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="856"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1337"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="840"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1321"/>
         <source>Cast list with IDs</source>
         <translation>带 ID 的演员表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="864"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1316"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="848"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1300"/>
         <source>Location (Set)</source>
         <translation>位置（设置）</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="867"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="851"/>
         <source>Location (Complex)</source>
         <translation>位置（复杂）</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="871"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="855"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="888"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1455"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="872"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1439"/>
         <source>%1 list</source>
         <translation>%1 列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="896"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="880"/>
         <source>%1 IDs</source>
         <translation>%1 ID</translation>
     </message>
@@ -5010,7 +4865,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <name>ManagementLayer::ScreenplayBreakdownStructureManager</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="382"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="686"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="688"/>
         <source>Expand level 1</source>
         <translation>扩展级别 1</translation>
     </message>
@@ -5022,7 +4877,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="211"/>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="393"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="692"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="694"/>
         <source>Expand all</source>
         <translation>全部展开</translation>
     </message>
@@ -5039,14 +4894,14 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="217"/>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="398"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="697"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="699"/>
         <source>Collapse all</source>
         <translation>全部折叠</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="223"/>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="403"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="702"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="704"/>
         <source>Sort alphabetically</source>
         <translation>按字母顺序排序 </translation>
     </message>
@@ -5058,7 +4913,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="238"/>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="411"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="710"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="712"/>
         <source>Sort by duration</source>
         <translation>持续时间排序</translation>
     </message>
@@ -5088,58 +4943,58 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>移除标记</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="510"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="511"/>
         <source>Do you really want to remove the entire &quot;%1&quot; category? All category elements (%2) will also be removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="545"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="546"/>
         <source>Add element</source>
         <translation>添加元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="565"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="622"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="566"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="623"/>
         <source>Please fill element name</source>
         <translation>请填写元素名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="596"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="597"/>
         <source>Edit element</source>
         <translation>修改元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="649"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="650"/>
         <source>Remove element</source>
         <translation>移除元素</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="658"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="660"/>
         <source>Do you really want to remove element &quot;%1&quot; from entire screenplay? It participates in %n scene(s).</source>
         <translation>
             <numerusform>确实要从整个剧本中删除元素 %1 吗？它参与了%n 个场景(s)。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="514"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="662"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="515"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="664"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="515"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="663"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="516"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="665"/>
         <source>Yes, remove</source>
         <translation>是，请移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="571"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="629"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="572"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="630"/>
         <source>Resource name already used</source>
         <translation>资源名称已使用</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="962"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="964"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
@@ -5147,52 +5002,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::ScreenplayCardsManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="119"/>
-        <source>Upgrade the app to the PRO version to edit screenplay cards.
-
-If you want to continue editing screenplay text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation>将应用程序升级到PRO版本以编辑剧本卡。
-
-
-如果您想继续编辑剧本文本，请通过左上角工具栏上的图标切换到相应的模块。</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="122"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="123"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="542"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="528"/>
         <source>Add act</source>
         <translation>添加动作 </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="548"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="534"/>
         <source>Add sequence</source>
         <translation>添加序列</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="555"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="541"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="562"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="548"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="597"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="583"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="611"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="598"/>
         <source>Go to text</source>
         <translation>去看文本</translation>
     </message>
@@ -5211,29 +5046,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
+    <name>ManagementLayer::ScreenplaySeriesPlanManager</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/screenplay_series_plan_manager.cpp" line="122"/>
+        <source>Select location for saving breakdown to file</source>
+        <translation>选择将分镜保存到文件的位置</translation>
+    </message>
+</context>
+<context>
     <name>ManagementLayer::ScreenplaySeriesStatisticsManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_manager.cpp" line="105"/>
-        <source>Upgrade the app to the CLOUD version to access series statistics exporting.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_manager.cpp" line="106"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_manager.cpp" line="107"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_manager.cpp" line="270"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_manager.cpp" line="254"/>
         <source>Select location for saving report to file</source>
         <translation>选择将报告保存到文件的位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_manager.cpp" line="271"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_manager.cpp" line="255"/>
         <source>Select location for saving plot data to file</source>
         <translation>选择位置保存小说</translation>
     </message>
@@ -5241,27 +5069,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::ScreenplayStatisticsManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="106"/>
-        <source>Upgrade the app to the PRO version to access screenplay statistics exporting.</source>
-        <translation>将应用程序升级到PRO版本以访问脚本统计导出。</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="107"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="108"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="288"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="272"/>
         <source>Select location for saving report to file</source>
         <translation>选择将报告保存到文件的位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="273"/>
         <source>Select location for saving plot data to file</source>
         <translation>选择位置保存小说</translation>
     </message>
@@ -5325,39 +5138,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::ScreenplayTimelineManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="119"/>
-        <source>Upgrade the app to the PRO version to edit screenplay timeline.
-
-If you want to continue editing screenplay text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="122"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="123"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="210"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="196"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="217"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="203"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="252"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="238"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="266"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="253"/>
         <source>Go to text</source>
         <translation>去看文本</translation>
     </message>
@@ -5389,62 +5185,62 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="929"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="933"/>
         <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="931"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="935"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="932"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="936"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1222"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1273"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1324"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1374"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1424"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1474"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1230"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1285"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1340"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1394"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1448"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1502"/>
         <source>Choose the file to save template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1243"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1294"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1344"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1394"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1444"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1494"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1250"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1305"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1359"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1413"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1467"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1521"/>
         <source>Choose the file with template to load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1791"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1821"/>
         <source>Spelling dictionary loading</source>
         <translation>拼写词典正在载入</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1831"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1859"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1898"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1931"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1861"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1889"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1928"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1961"/>
         <source>Dictionary loading error</source>
         <translation>词典载入出错</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1832"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1899"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1862"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1929"/>
         <source>For some reason dictionary file isn&apos;t loaded. Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1861"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1933"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1891"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1963"/>
         <source>Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5531,43 +5327,28 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::WorldInformationManager</name>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="71"/>
-        <source>Upgrade the app to the PRO version to access extended world profile.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="72"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="73"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="346"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="332"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="348"/>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="388"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="334"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="374"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="349"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="335"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="387"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="373"/>
         <source>Do you want to delete the world&apos;s photo?</source>
         <translation>你想删除世界的照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="389"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="375"/>
         <source>Yes, delete</source>
         <translation>是，请删除</translation>
     </message>
@@ -5575,37 +5356,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::WorldsMapManager</name>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="134"/>
-        <source>Upgrade the app to the PRO version to edit the world map.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="135"/>
-        <source>Maybe later</source>
-        <translation>也许以后</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="136"/>
-        <source>Upgrade</source>
-        <translation>升级</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="154"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="139"/>
         <source>World with this name already exists</source>
         <translation>具有此名称的世界已经存在</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="521"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="506"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="523"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="508"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="524"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="509"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
@@ -5613,7 +5379,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::WritingSessionManager</name>
     <message>
-        <location filename="../management_layer/content/writing_session/writing_session_manager.cpp" line="225"/>
+        <location filename="../management_layer/content/writing_session/writing_session_manager.cpp" line="224"/>
         <source>Total words</source>
         <translation>全部单词</translation>
     </message>
@@ -5652,27 +5418,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3936"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3973"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3943"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3980"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3949"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3986"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3956"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3993"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3962"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3999"/>
         <source>Select all</source>
         <translation>全选</translation>
     </message>
@@ -5680,27 +5446,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ProjectCard</name>
     <message>
-        <location filename="../ui/projects/project_card.cpp" line="257"/>
+        <location filename="../ui/projects/project_card.cpp" line="286"/>
         <source>Owner</source>
         <translation>拥有者</translation>
     </message>
     <message>
-        <location filename="../ui/projects/project_card.cpp" line="264"/>
+        <location filename="../ui/projects/project_card.cpp" line="293"/>
         <source>Editor</source>
         <translation>审校者</translation>
     </message>
     <message>
-        <location filename="../ui/projects/project_card.cpp" line="270"/>
+        <location filename="../ui/projects/project_card.cpp" line="299"/>
         <source>Commentator</source>
         <translation>评论员</translation>
     </message>
     <message>
-        <location filename="../ui/projects/project_card.cpp" line="276"/>
+        <location filename="../ui/projects/project_card.cpp" line="305"/>
         <source>Reader</source>
         <translation>读者</translation>
     </message>
     <message>
-        <location filename="../ui/projects/project_card.cpp" line="282"/>
+        <location filename="../ui/projects/project_card.cpp" line="311"/>
         <source>Partial access</source>
         <translation>部分访问权限</translation>
     </message>
@@ -5708,247 +5474,247 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="545"/>
         <source>Information about project</source>
         <translation>项目信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="546"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="547"/>
         <source>Project collaborators</source>
         <translation>项目合作者</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="551"/>
         <source>Information about screenplay</source>
         <translation>影视剧本信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="552"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
         <source>Screenplay parameters</source>
         <translation>影视剧本参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="555"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="589"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="620"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="640"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="660"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="680"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="556"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="590"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="621"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="641"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="661"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="681"/>
         <source>Title page text</source>
         <translation>扉页文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="592"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="623"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="643"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="663"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="683"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="624"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="644"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="664"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="684"/>
         <source>Synopsis text</source>
         <translation>概要文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="563"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="688"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="598"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="689"/>
         <source>Beats</source>
         <translation>节拍</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="572"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="697"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="607"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="698"/>
         <source>Timeline</source>
         <translation>时间线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="574"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="608"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="575"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
         <source>Breakdown</source>
         <translation>分镜</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="581"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="582"/>
         <source>Information about series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="583"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="584"/>
         <source>Series parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
-        <source>Series plan</source>
+        <location filename="../management_layer/plugins_builder.cpp" line="587"/>
+        <source>Episodes plan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="615"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="616"/>
         <source>Information about comic book</source>
         <translation>漫画书信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="617"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
         <source>Comic book parameters</source>
         <translation>漫画书参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="626"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="627"/>
         <source>Comic book text</source>
         <translation>漫画书文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="636"/>
         <source>Information about audioplay</source>
         <translation>音乐剧本信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="637"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="638"/>
         <source>Audioplay parameters</source>
         <translation>音乐剧本参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="646"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="647"/>
         <source>Audioplay text</source>
         <translation>音乐剧本文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="655"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="656"/>
         <source>Information about stageplay</source>
         <translation>舞台剧本信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="657"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="658"/>
         <source>Stageplay parameters</source>
         <translation>舞台剧本参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="666"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="667"/>
         <source>Stageplay text</source>
         <translation>舞台剧本文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="675"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="676"/>
         <source>Information about novel</source>
         <translation>小说信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="677"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="678"/>
         <source>Novel parameters</source>
         <translation>小说参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="686"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="687"/>
         <source>Outline text</source>
         <translation>概述文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="693"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="694"/>
         <source>Novel text</source>
         <translation>小说文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="704"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="705"/>
         <source>Characters relations</source>
         <translation>角色关系</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="707"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="708"/>
         <source>Character information</source>
         <translation>角色信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="709"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="710"/>
         <source>Character dialogues</source>
         <translation>角色对白</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="713"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="714"/>
         <source>Locations map</source>
         <translation>位置地图</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="716"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="717"/>
         <source>Location information</source>
         <translation>位置信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="718"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="719"/>
         <source>Location scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="722"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="723"/>
         <source>Worlds map</source>
         <translation>世界地图</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="725"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="726"/>
         <source>World information</source>
         <translation>世界信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="729"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="730"/>
         <source>Folder text</source>
         <translation>文件夹文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="732"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="733"/>
         <source>Document text</source>
         <translation>文档文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="736"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="737"/>
         <source>Recycle bin summary info</source>
         <translation>回收站摘要信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="739"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="740"/>
         <source>Mind map</source>
         <translation>思维导图</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="742"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="743"/>
         <source>Images gallery</source>
         <translation>图片库</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="745"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="746"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="595"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="562"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="596"/>
         <source>Treatment text</source>
         <translation>处理流程文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="602"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="569"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="603"/>
         <source>Screenplay text</source>
         <translation>影视剧本文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="565"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="599"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="604"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="628"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="648"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="668"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="690"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="695"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="566"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="571"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="605"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="629"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="649"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="669"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="691"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="696"/>
         <source>Cards</source>
         <translation>卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="577"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="611"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="631"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="651"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="671"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="700"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="578"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="612"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="632"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="652"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="672"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="701"/>
         <source>Statistics</source>
         <translation>统计数字</translation>
     </message>
@@ -7485,18 +7251,18 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Splitter</name>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="602"/>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="603"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="664"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="665"/>
         <source>Show hidden panel</source>
         <translation>显示隐藏的面板</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="604"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="666"/>
         <source>Hide left panel</source>
         <translation>隐藏左侧面板</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="605"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="667"/>
         <source>Hide right panel</source>
         <translation>隐藏右侧面板</translation>
     </message>
@@ -7719,7 +7485,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../ui/account/account_navigator.cpp" line="328"/>
         <location filename="../ui/account/account_navigator.cpp" line="344"/>
         <location filename="../ui/account/account_navigator.cpp" line="360"/>
-        <location filename="../ui/account/account_navigator.cpp" line="780"/>
+        <location filename="../ui/account/account_navigator.cpp" line="795"/>
         <source>Lifetime access</source>
         <translation>终身访问权限</translation>
     </message>
@@ -7743,78 +7509,78 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>无积分可用</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="776"/>
+        <location filename="../ui/account/account_navigator.cpp" line="791"/>
         <source>Account</source>
         <translation>账户</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="777"/>
+        <location filename="../ui/account/account_navigator.cpp" line="792"/>
         <source>Subscription</source>
         <translation>订阅</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="778"/>
+        <location filename="../ui/account/account_navigator.cpp" line="793"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="779"/>
+        <location filename="../ui/account/account_navigator.cpp" line="794"/>
         <source>FREE version</source>
         <translation>FREE 版本</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="781"/>
+        <location filename="../ui/account/account_navigator.cpp" line="796"/>
         <source>PRO version</source>
         <translation>PRO 版本</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="783"/>
-        <location filename="../ui/account/account_navigator.cpp" line="787"/>
+        <location filename="../ui/account/account_navigator.cpp" line="798"/>
+        <location filename="../ui/account/account_navigator.cpp" line="802"/>
         <source>Try for free</source>
         <translation>免费试用</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="785"/>
+        <location filename="../ui/account/account_navigator.cpp" line="800"/>
         <source>CLOUD version</source>
         <translation>CLOUD版本</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="795"/>
+        <location filename="../ui/account/account_navigator.cpp" line="810"/>
         <source>Owner</source>
         <translation>拥有者</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="797"/>
+        <location filename="../ui/account/account_navigator.cpp" line="812"/>
         <source>No one team created yet, press &quot;Add team&quot; button for adding your first team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="798"/>
+        <location filename="../ui/account/account_navigator.cpp" line="813"/>
         <source>Member</source>
         <translation>成员</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="799"/>
+        <location filename="../ui/account/account_navigator.cpp" line="814"/>
         <source>You are not on any team</source>
         <translation>您没有在团队中</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="800"/>
+        <location filename="../ui/account/account_navigator.cpp" line="815"/>
         <source>Add team</source>
         <translation>添加团队</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="801"/>
+        <location filename="../ui/account/account_navigator.cpp" line="816"/>
         <source>Edit team</source>
         <translation>修改团队</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="802"/>
+        <location filename="../ui/account/account_navigator.cpp" line="817"/>
         <source>Remove team</source>
         <translation>移除团队</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="803"/>
+        <location filename="../ui/account/account_navigator.cpp" line="818"/>
         <source>Exit team</source>
         <translation>退出团队</translation>
     </message>
@@ -7825,28 +7591,28 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="784"/>
-        <location filename="../ui/account/account_navigator.cpp" line="788"/>
+        <location filename="../ui/account/account_navigator.cpp" line="799"/>
+        <location filename="../ui/account/account_navigator.cpp" line="803"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="789"/>
+        <location filename="../ui/account/account_navigator.cpp" line="804"/>
         <source>STUDIO version</source>
         <translation>STUDIO 版本</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="791"/>
+        <location filename="../ui/account/account_navigator.cpp" line="806"/>
         <source>Credits for Ai tools</source>
         <translation>AI工具积分</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="792"/>
+        <location filename="../ui/account/account_navigator.cpp" line="807"/>
         <source>Buy credits</source>
         <translation>购买积分</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="793"/>
+        <location filename="../ui/account/account_navigator.cpp" line="808"/>
         <source>Logout</source>
         <translation>登出</translation>
     </message>
@@ -7854,17 +7620,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountToolBar</name>
     <message>
-        <location filename="../ui/account/account_tool_bar.cpp" line="54"/>
+        <location filename="../ui/account/account_tool_bar.cpp" line="55"/>
         <source>Go back to the previous screen</source>
         <translation>返回上一个屏幕</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_tool_bar.cpp" line="55"/>
+        <location filename="../ui/account/account_tool_bar.cpp" line="56"/>
         <source>Manage account</source>
         <translation>管理账户</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_tool_bar.cpp" line="56"/>
+        <location filename="../ui/account/account_tool_bar.cpp" line="57"/>
         <source>Manage teams</source>
         <translation>管理团队</translation>
     </message>
@@ -7872,57 +7638,57 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="228"/>
+        <location filename="../ui/account/account_view.cpp" line="217"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>用户名不能为空，请填写</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="537"/>
+        <location filename="../ui/account/account_view.cpp" line="526"/>
         <source>I want to receive STARC news</source>
         <translation>我想接收 STARC 新闻</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="535"/>
+        <location filename="../ui/account/account_view.cpp" line="524"/>
         <source>Your name</source>
         <translation>您的名字</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="536"/>
+        <location filename="../ui/account/account_view.cpp" line="525"/>
         <source>Your bio</source>
         <translation>您的简历</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="538"/>
+        <location filename="../ui/account/account_view.cpp" line="527"/>
         <source>Add avatar +</source>
         <translation>添加头像 +</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="538"/>
+        <location filename="../ui/account/account_view.cpp" line="527"/>
         <source>Change avatar...</source>
         <translation>更换头像...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="539"/>
+        <location filename="../ui/account/account_view.cpp" line="528"/>
         <source>Do you want to delete your avatar?</source>
         <translation>您要删除您的头像么？</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="540"/>
+        <location filename="../ui/account/account_view.cpp" line="529"/>
         <source>Select an area for the avatar</source>
         <translation>为头像选择区域</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="541"/>
+        <location filename="../ui/account/account_view.cpp" line="530"/>
         <source>Subscriptions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="542"/>
+        <location filename="../ui/account/account_view.cpp" line="531"/>
         <source>Compare subscriptions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="544"/>
+        <location filename="../ui/account/account_view.cpp" line="533"/>
         <source>Advanced tools for professionals
 • Characters relations
 • Corkboard
@@ -7932,7 +7698,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="551"/>
+        <location filename="../ui/account/account_view.cpp" line="540"/>
         <source>For those who are always on the move
 • 5GB cloud storage
 • Seamless synchronization across all your devices
@@ -7941,17 +7707,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="556"/>
+        <location filename="../ui/account/account_view.cpp" line="545"/>
         <source>Active sessions</source>
         <translation>活动会话</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="557"/>
+        <location filename="../ui/account/account_view.cpp" line="546"/>
         <source>Promotional or gift code</source>
         <translation>促销或礼品代码</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="558"/>
+        <location filename="../ui/account/account_view.cpp" line="547"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
@@ -7959,62 +7725,62 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountViewTeams</name>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="192"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="180"/>
         <source>Invitation sent to the %1</source>
         <translation>邀请已经发送到 %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="231"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="219"/>
         <source>Email invalid</source>
         <translation>电邮无效</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="387"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="376"/>
         <source>Owner</source>
         <translation>拥有者</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="390"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="379"/>
         <source>Member</source>
         <translation>成员</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="426"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="415"/>
         <source>Here will be a list of your teammates.</source>
         <translation>下面是你的队友名单。</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="427"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="416"/>
         <source>Invite the team</source>
         <translation>邀请团队</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="428"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="417"/>
         <source>Add people who you’d like to join the team</source>
         <translation>添加要加入团队的人员</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="429"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="418"/>
         <source>Email</source>
         <translation>电邮</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="430"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="419"/>
         <source>Name used for team</source>
         <translation>团队使用的名称</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="431"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="420"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="432"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="421"/>
         <source>Team members</source>
         <translation>团队成员</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view_teams.cpp" line="433"/>
+        <location filename="../ui/account/account_view_teams.cpp" line="422"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
@@ -8083,964 +7849,979 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AddCommentView</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="139"/>
+        <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="140"/>
         <source>Сomment</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="140"/>
+        <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="141"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="141"/>
+        <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="142"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
 </context>
 <context>
     <name>Ui::AiAssistantView</name>
+    <message>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="907"/>
+        <source>Translation will be loaded in the current document and fully replaced content. Do you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="909"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="910"/>
+        <source>Yes, translate</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1136"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
         <source>%n word(s) available</source>
         <translation>
             <numerusform>%n 单词可用</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1137"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1177"/>
         <source>No words available</source>
         <translation>无可用单词</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1142"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1169"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1174"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1182"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1209"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1214"/>
         <source>Rephrase</source>
         <translation>重新描述</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1143"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1179"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1183"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1216"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1219"/>
         <source>Expand</source>
         <translation>详述</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1144"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1181"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1184"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1221"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1224"/>
         <source>Shorten</source>
         <translation>缩短</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1145"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1175"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1180"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1185"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1186"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1191"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1196"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1358"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1215"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1220"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1225"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1226"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1231"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1236"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1398"/>
         <source>Insert</source>
         <translation>插入</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1146"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1192"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1195"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1186"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1232"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1235"/>
         <source>Summarize</source>
         <translation>总结</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1147"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1197"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1357"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1187"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1237"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1397"/>
         <source>Translate</source>
         <translation>翻译</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1148"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1359"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1188"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1399"/>
         <source>Generate synopsis</source>
         <translation>生成概要</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1149"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1366"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1189"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1406"/>
         <source>Generate novel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1150"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1368"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1190"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1408"/>
         <source>Generate script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1151"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1190"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1365"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1367"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1369"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1370"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1376"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1377"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1385"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1386"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1388"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1191"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1230"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1405"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1407"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1409"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1410"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1416"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1417"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1425"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1426"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1428"/>
         <source>Generate</source>
         <translation>生成</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1167"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1207"/>
         <source>Go back to list of assistant functions</source>
         <translation>返回辅助功能列表</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1170"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1210"/>
         <source>Text to rephrase</source>
         <translation>要改写的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1171"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1211"/>
         <source>Rephrase in style of</source>
         <translation>以此风格改写</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1172"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1212"/>
         <source>Keep empty to avoid style changing</source>
         <translation>保持为空以防止样式更改</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1173"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1213"/>
         <source>Rephrased text</source>
         <translation>改写的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1177"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1217"/>
         <source>Text to expand</source>
         <translation>要展开的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1178"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1218"/>
         <source>Expanded text</source>
         <translation>展开详述</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1182"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1222"/>
         <source>Text to shorten</source>
         <translation>要缩短的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1183"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1223"/>
         <source>Shortened text</source>
         <translation>缩短的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1187"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1227"/>
         <source>Text before inserted</source>
         <translation>插入前的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1188"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1228"/>
         <source>Text after inserted</source>
         <translation>插入后的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1189"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1229"/>
         <source>Inserted text</source>
         <translation>插入的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1193"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1233"/>
         <source>Text to summarize</source>
         <translation>要总结的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1194"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1234"/>
         <source>Summarized text</source>
         <translation>概述</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1198"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1238"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1199"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1239"/>
         <source>Text to translate</source>
         <translation>要翻译的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1200"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1240"/>
         <source>entire document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1201"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1241"/>
         <source>Translate to</source>
         <translation>译为</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1204"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1244"/>
         <source>Afrikaans</source>
         <translation>荷兰语（南非）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1205"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1245"/>
         <source>Albanian</source>
         <translation>阿尔巴尼亚</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1206"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1246"/>
         <source>Amharic</source>
         <translation>阿姆哈拉语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1207"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1247"/>
         <source>Arabic</source>
         <translation>阿拉伯语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1208"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1248"/>
         <source>Armenian</source>
         <translation>亚美尼亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1209"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1249"/>
         <source>Assamese</source>
         <translation>阿萨姆语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1210"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1250"/>
         <source>Aymara</source>
         <translation>艾马拉语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1211"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1251"/>
         <source>Azerbaijani</source>
         <translation>阿塞拜疆语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1212"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1252"/>
         <source>Bambara</source>
         <translation>班巴拉</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1213"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1253"/>
         <source>Basque</source>
         <translation>巴斯克语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1214"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1254"/>
         <source>Belarusian</source>
         <translation>白俄罗斯语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1215"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1255"/>
         <source>Bengali</source>
         <translation>孟加拉语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1216"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1256"/>
         <source>Bhojpuri</source>
         <translation>比哈尔语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1217"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1257"/>
         <source>Bosnian</source>
         <translation>波斯尼亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1218"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1258"/>
         <source>Bulgarian</source>
         <translation>保加利亚</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1219"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1259"/>
         <source>Catalan</source>
         <translation>加泰罗尼亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1220"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1260"/>
         <source>Cebuano</source>
         <translation>宿务语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1221"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1261"/>
         <source>Chinese (Simplified)</source>
         <translation>中文（简体）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1222"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1262"/>
         <source>Chinese (Traditional)</source>
         <translation>中文（繁体）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1223"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1263"/>
         <source>Corsican</source>
         <translation>科西嘉岛</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1224"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1264"/>
         <source>Croatian</source>
         <translation>克罗地亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1225"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1265"/>
         <source>Czech</source>
         <translation>捷克语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1226"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1266"/>
         <source>Danish</source>
         <translation>丹麦语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1227"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1267"/>
         <source>Dhivehi</source>
         <translation>迪维希语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1228"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1268"/>
         <source>Dogri</source>
         <translation>多格拉语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1229"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1269"/>
         <source>Dutch</source>
         <translation>荷兰语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1230"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1270"/>
         <source>English</source>
         <translation>英语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1231"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1271"/>
         <source>Esperanto</source>
         <translation>世界语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1232"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1272"/>
         <source>Estonian</source>
         <translation>爱沙尼亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1233"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1273"/>
         <source>Ewe</source>
         <translation>埃维语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1234"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1274"/>
         <source>Filipino (Tagalog)</source>
         <translation>菲律宾语（他加禄语）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1235"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1275"/>
         <source>Finnish</source>
         <translation>芬兰语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1236"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1276"/>
         <source>French</source>
         <translation>法语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1237"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1277"/>
         <source>Frisian</source>
         <translation>弗里西亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1238"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1278"/>
         <source>Galician</source>
         <translation>加利西亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1239"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1279"/>
         <source>Georgian</source>
         <translation>格鲁吉亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1240"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1280"/>
         <source>German</source>
         <translation>德语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1241"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1281"/>
         <source>Greek</source>
         <translation>希腊语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1242"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1282"/>
         <source>Guarani</source>
         <translation>瓜拉尼</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1243"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1283"/>
         <source>Gujarati</source>
         <translation>古吉拉特语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1244"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1284"/>
         <source>Haitian Creole</source>
         <translation>海地 克里奥尔语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1245"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1285"/>
         <source>Hausa</source>
         <translation>豪萨语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1246"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1286"/>
         <source>Hawaiian</source>
         <translation>夏威夷</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1247"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1287"/>
         <source>Hebrew</source>
         <translation>希伯来语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1248"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1288"/>
         <source>Hindi</source>
         <translation>印地语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1249"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1289"/>
         <source>Hmong</source>
         <translation>苗语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1250"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1290"/>
         <source>Hungarian</source>
         <translation>匈牙利</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1251"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1291"/>
         <source>Icelandic</source>
         <translation>冰岛语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1252"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1292"/>
         <source>Igbo</source>
         <translation>伊格博语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1253"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1293"/>
         <source>Ilocano</source>
         <translation>伊洛卡诺</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1254"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1294"/>
         <source>Indonesian</source>
         <translation>印度尼西亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1255"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1295"/>
         <source>Irish</source>
         <translation>爱尔兰</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1256"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1296"/>
         <source>Italian</source>
         <translation>意大利语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1257"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1297"/>
         <source>Japanese</source>
         <translation>日语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1258"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1298"/>
         <source>Javanese</source>
         <translation>爪哇语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1259"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1299"/>
         <source>Kannada</source>
         <translation>坎纳达语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1260"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1300"/>
         <source>Kazakh</source>
         <translation>哈萨克语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1261"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1301"/>
         <source>Khmer</source>
         <translation>高棉语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1262"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1302"/>
         <source>Kinyarwanda</source>
         <translation>卢旺达</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1263"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1303"/>
         <source>Konkani</source>
         <translation>孔卡尼语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1264"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1304"/>
         <source>Korean</source>
         <translation>朝鲜语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1265"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1305"/>
         <source>Krio</source>
         <translation>克里奥语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1266"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1306"/>
         <source>Kurdish</source>
         <translation>库尔德语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1267"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1307"/>
         <source>Kurdish (Sorani)</source>
         <translation>库尔德语（索拉尼语）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1268"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1308"/>
         <source>Kyrgyz</source>
         <translation>吉尔吉斯斯坦</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1269"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1309"/>
         <source>Lao</source>
         <translation>老挝</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1270"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1310"/>
         <source>Latin</source>
         <translation>拉丁语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1271"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1311"/>
         <source>Latvian</source>
         <translation>拉脱维亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1272"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1312"/>
         <source>Lingala</source>
         <translation>林加拉语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1273"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1313"/>
         <source>Lithuanian</source>
         <translation>立陶宛</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1274"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1314"/>
         <source>Luganda</source>
         <translation>卢干达语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1275"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1315"/>
         <source>Luxembourgish</source>
         <translation>卢森堡语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1276"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1316"/>
         <source>Macedonian</source>
         <translation>马其顿语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1277"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1317"/>
         <source>Maithili</source>
         <translation>迈蒂利语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1278"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1318"/>
         <source>Malagasy</source>
         <translation>马拉加西</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1279"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1319"/>
         <source>Malay</source>
         <translation>马来语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1280"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1320"/>
         <source>Malayalam</source>
         <translation>马拉雅拉姆语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1281"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1321"/>
         <source>Maltese</source>
         <translation>马耳他</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1282"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1322"/>
         <source>Maori</source>
         <translation>毛利</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1283"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1323"/>
         <source>Marathi</source>
         <translation>马拉塔语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1284"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1324"/>
         <source>Meiteilon (Manipuri)</source>
         <translation>Meiteilon（曼尼普尔）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1285"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1325"/>
         <source>Mizo</source>
         <translation>米佐</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1286"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1326"/>
         <source>Mongolian</source>
         <translation>蒙古</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1287"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1327"/>
         <source>Myanmar (Burmese)</source>
         <translation>缅甸（缅甸语）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1288"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1328"/>
         <source>Nepali</source>
         <translation>尼泊尔语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1289"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1329"/>
         <source>Norwegian</source>
         <translation>挪威</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1290"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1330"/>
         <source>Nyanja (Chichewa)</source>
         <translation>尼扬贾（奇切瓦）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1291"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1331"/>
         <source>Odia (Oriya)</source>
         <translation>奥迪亚（奥里亚）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1292"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1332"/>
         <source>Oromo</source>
         <translation>奥罗莫语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1293"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1333"/>
         <source>Pashto</source>
         <translation>普什图语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1294"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1334"/>
         <source>Persian</source>
         <translation>波斯</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1295"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1335"/>
         <source>Polish</source>
         <translation>波兰语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1296"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1336"/>
         <source>Portuguese (Portugal, Brazil)</source>
         <translation>葡萄牙语（葡萄牙、巴西）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1297"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1337"/>
         <source>Punjabi</source>
         <translation>旁遮普语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1298"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1338"/>
         <source>Quechua</source>
         <translation>克丘亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1299"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1339"/>
         <source>Romanian</source>
         <translation>罗马尼亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1300"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1340"/>
         <source>Russian</source>
         <translation>俄语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1301"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1341"/>
         <source>Samoan</source>
         <translation>萨摩亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1302"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1342"/>
         <source>Sanskrit</source>
         <translation>梵文</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1303"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1343"/>
         <source>Scots Gaelic</source>
         <translation>苏格兰盖尔语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1304"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1344"/>
         <source>Sepedi</source>
         <translation>塞佩迪</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1305"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1345"/>
         <source>Serbian</source>
         <translation>塞尔维亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1306"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1346"/>
         <source>Sesotho</source>
         <translation>塞索托语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1307"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1347"/>
         <source>Shona</source>
         <translation>绍纳语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1308"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1348"/>
         <source>Sindhi</source>
         <translation>信德语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1309"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1349"/>
         <source>Sinhala (Sinhalese)</source>
         <translation>僧伽罗语（僧伽罗语）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1310"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1350"/>
         <source>Slovak</source>
         <translation>斯洛伐克语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1311"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1351"/>
         <source>Slovenian</source>
         <translation>斯洛文尼亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1312"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1352"/>
         <source>Somali</source>
         <translation>索马里语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1313"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1353"/>
         <source>Spanish</source>
         <translation>西班牙语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1314"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1354"/>
         <source>Sundanese</source>
         <translation>巽他语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1315"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1355"/>
         <source>Swahili</source>
         <translation>斯瓦希里</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1316"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1356"/>
         <source>Swedish</source>
         <translation>瑞典语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1317"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1357"/>
         <source>Tagalog (Filipino)</source>
         <translation>他加禄语（菲律宾语）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1318"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1358"/>
         <source>Tajik</source>
         <translation>塔吉克</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1319"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1359"/>
         <source>Tamil</source>
         <translation>泰米尔人</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1320"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1360"/>
         <source>Tatar</source>
         <translation>鞑靼</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1321"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1361"/>
         <source>Telugu</source>
         <translation>泰卢固语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1322"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1362"/>
         <source>Thai</source>
         <translation>泰语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1323"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1363"/>
         <source>Tigrinya</source>
         <translation>提格里尼亚语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1324"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1364"/>
         <source>Tsonga</source>
         <translation>特松加</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1325"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1365"/>
         <source>Turkish</source>
         <translation>土耳其</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1326"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1366"/>
         <source>Turkmen</source>
         <translation>土库曼人</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1327"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1367"/>
         <source>Twi (Akan)</source>
         <translation>Twi (Akan)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1328"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1368"/>
         <source>Ukrainian</source>
         <translation>乌克兰语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1329"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1369"/>
         <source>Urdu</source>
         <translation>乌都语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1330"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1370"/>
         <source>Uyghur</source>
         <translation>维吾尔语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1331"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1371"/>
         <source>Uzbek</source>
         <translation>乌兹别克语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1332"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1372"/>
         <source>Vietnamese</source>
         <translation>越南语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1333"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1373"/>
         <source>Welsh</source>
         <translation>威尔士语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1334"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1374"/>
         <source>Xhosa</source>
         <translation>班图语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1335"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1375"/>
         <source>Yiddish</source>
         <translation>意第绪语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1336"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1376"/>
         <source>Yoruba</source>
         <translation>约鲁巴语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1337"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1377"/>
         <source>Zulu</source>
         <translation>祖鲁语</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1356"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1396"/>
         <source>Translated text</source>
         <translation>译文</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1360"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1400"/>
         <source>Synopsis length</source>
         <translation>剧情简介长度</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1361"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1401"/>
         <source>short (20 words per scene)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1362"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1402"/>
         <source>medium (45 words per scene)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1363"/>
-        <source>unlimitted</source>
-        <translation>无限制</translation>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1403"/>
+        <source>unlimited</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1364"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1404"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1371"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1378"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1387"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1411"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1418"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1427"/>
         <source>Prompt</source>
         <translation>提示</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1372"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1412"/>
         <source>Insert result</source>
         <translation>插入结果</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1373"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1413"/>
         <source>at the beginning of the document</source>
         <translation>文档开头</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1374"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1414"/>
         <source>at the cursor position</source>
         <translation>在光标位置</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1375"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1415"/>
         <source>at the end of the document</source>
         <translation>文档末尾</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1379"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1419"/>
         <source>Personal info</source>
         <translation>个人信息</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1380"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1420"/>
         <source>Physique</source>
         <translation>体格</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1381"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1421"/>
         <source>Life</source>
         <translation>生活</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1382"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1422"/>
         <source>Attitude</source>
         <translation>态度</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1383"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1423"/>
         <source>Biography</source>
         <translation>传记</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1384"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1424"/>
         <source>Photo</source>
         <translation>照片</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1390"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1430"/>
         <source>purchase</source>
         <translation>购买</translation>
     </message>
@@ -9082,39 +8863,39 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayGenderReportView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="199"/>
         <source>Does not pass</source>
         <translation>禁止通过</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="199"/>
         <source>Passed %n time(s)</source>
         <translation>
             <numerusform>已通过 %n 次</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="277"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="264"/>
         <source>Bechdel test</source>
         <translation>贝克德尔测验</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="278"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="265"/>
         <source>Reverse Bechdel test</source>
         <translation>反向贝克德尔测验</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="280"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="267"/>
         <source>Scenes statistics</source>
         <translation>场景统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="281"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="268"/>
         <source>Dialogues statistics</source>
         <translation>对白统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="282"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="269"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
@@ -9122,64 +8903,64 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="116"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="124"/>
         <source>Perfect logline length</source>
         <translation>完美的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="118"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="126"/>
         <source>Good logline length</source>
         <translation>好的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="120"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="128"/>
         <source>Recommended logline length is 30 words</source>
         <translation>建议剧情梗概长度不超过30个单词</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="122"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="130"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n 个单词</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="221"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="229"/>
         <source>Audioplay name</source>
         <translation>音乐剧本名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="230"/>
         <source>Tagline</source>
         <translation>宣传词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="231"/>
         <source>Logline</source>
         <translation>剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="224"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="232"/>
         <source>Generate logline</source>
         <translation>生成剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="233"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="234"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="227"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="235"/>
         <source>Audioplay</source>
         <translation>音乐剧</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="236"/>
         <source>Statistics</source>
         <translation>统计数字</translation>
     </message>
@@ -9187,42 +8968,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="249"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="254"/>
         <source>Header</source>
         <translation>页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="250"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="255"/>
         <source>Print header on title page</source>
         <translation>在标题页上打印页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="251"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="256"/>
         <source>Footer</source>
         <translation>页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="252"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="257"/>
         <source>Print footer on title page</source>
         <translation>在标题页上打印页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="253"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="258"/>
         <source>Override common settings for this audioplay</source>
         <translation>覆盖这个音乐剧本的常用设置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="254"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="259"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="255"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="260"/>
         <source>Show block numbers</source>
         <translation>显示块编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="256"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="261"/>
         <source>Continue block numbers through document</source>
         <translation>通过文档继续对块编号</translation>
     </message>
@@ -9230,158 +9011,158 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayStatisticsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="755"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="849"/>
         <source>Summary text statisics</source>
         <translation>汇总文本统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="756"/>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="787"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="850"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="881"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="758"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="852"/>
         <source>Show characters</source>
         <translation>显示角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="759"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="853"/>
         <source>Sort scenes</source>
         <translation>场景排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="760"/>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="769"/>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="777"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="854"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="863"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="871"/>
         <source>by script order</source>
         <translation>按脚本顺序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="761"/>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="770"/>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="778"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="855"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="864"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="872"/>
         <source>by alphabetical order</source>
         <translation>按字母顺序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="762"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="856"/>
         <source>from longest to shortest scene</source>
         <translation>场景从长到短</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="763"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="857"/>
         <source>from shortest to longest scene</source>
         <translation>场景从短到长</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="764"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="858"/>
         <source>from massive to unmanned scene</source>
         <translation>场景从多人到无人</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="765"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="859"/>
         <source>from unmanned to massive scene</source>
         <translation>场景从无人到多人</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="767"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="861"/>
         <source>Extended view</source>
         <translation>扩展视图</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="768"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="862"/>
         <source>Sort locations</source>
         <translation>位置排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="771"/>
-        <source>from most to least occurences</source>
-        <translation>事件从多到少</translation>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="865"/>
+        <source>from most to least occurrences</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="772"/>
-        <source>from least to most occurences</source>
-        <translation>事件从少到多</translation>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="866"/>
+        <source>from least to most occurrences</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="773"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="867"/>
         <source>from longest to shortest duration</source>
         <translation>持续时间从长到短</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="774"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="868"/>
         <source>from shortest to longest duration</source>
         <translation>持续时间从短到长</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="776"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="870"/>
         <source>Sort characters</source>
         <translation>角色排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="779"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="873"/>
         <source>from most to least scenes</source>
         <translation>场景从多到少</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="780"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="874"/>
         <source>from least to most scenes</source>
         <translation>场景从少到多</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="781"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="875"/>
         <source>from most to least dialogues</source>
         <translation>对白从多到少</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="782"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="876"/>
         <source>from least to most dialogues</source>
         <translation>对白从少到多</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="784"/>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="797"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="878"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="891"/>
         <source>All characters</source>
         <translation>所有角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="786"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="880"/>
         <source>Bechdel test</source>
         <translation>贝克德尔测验</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="788"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="882"/>
         <source>Dialogues statistics</source>
         <translation>对白统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="789"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="883"/>
         <source>Scenes statistics</source>
         <translation>场景统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="791"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="885"/>
         <source>Scene duration</source>
         <translation>场景持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="792"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="886"/>
         <source>Action duration</source>
         <translation>情节持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="793"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="887"/>
         <source>Dialogues duration</source>
         <translation>对白持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="794"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="888"/>
         <source>Characters count</source>
         <translation>角色数目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="795"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="889"/>
         <source>Dialogues count</source>
         <translation>对白数目</translation>
     </message>
@@ -9442,27 +9223,37 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="389"/>
-        <source>Unlock ability to manage audioplay statistics</source>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="405"/>
+        <source>You&apos;re in the read only mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="390"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="407"/>
+        <source>Activate PRO version to unlock full access to the statistics module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="408"/>
+        <source>Unlock statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="409"/>
         <source>Update statistics</source>
         <translation>更新统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="410"/>
         <source>Save statistics to the file</source>
         <translation>统计数据保存到文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="411"/>
         <source>No statistics available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="412"/>
         <source>Statistics appear when you&apos;ll start to write audioplay</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9478,32 +9269,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplaySummaryReportView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="257"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="244"/>
         <source>Duration</source>
         <translation>持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="258"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="245"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="259"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="246"/>
         <source>Words</source>
         <translation>字</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="260"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="247"/>
         <source>Characters with/without spaces</source>
         <translation>带/不带空格的字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="262"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="249"/>
         <source>Text statistics</source>
         <translation>文本统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="263"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_summary_report_view.cpp" line="250"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
@@ -9511,27 +9302,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1504"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1459"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1508"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1463"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1514"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1469"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1519"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1474"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1526"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1481"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -9544,69 +9335,69 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="319"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="323"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="318"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="326"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="320"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="328"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="321"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="329"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="323"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="331"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="326"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="334"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="327"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="335"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="328"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="336"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="329"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="337"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="339"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="332"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="340"/>
         <source>Show only current scene text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="333"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="341"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
 </context>
 <context>
@@ -9655,69 +9446,69 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="312"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="308"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1083"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1082"/>
         <source>Writing text</source>
         <translation>书写文本</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1356"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1362"/>
         <source>Document translation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1475"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1480"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1476"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1481"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1477"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1482"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1478"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1483"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1481"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1486"/>
         <source>Start prompt from something like &quot;Write an audio drama about ...&quot;, or &quot;Write a radio drama about ...&quot;</source>
         <translation>从诸如“写一部关于......的音乐剧”或“写一部关于......的广播剧”之类的内容开始提示</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1498"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1503"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1499"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1504"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1500"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1505"/>
         <source>In character</source>
         <translation>在角色中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1501"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1506"/>
         <source>In dialogue</source>
         <translation>在对白中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="313"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="309"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
@@ -9781,104 +9572,104 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CardItemParametersView</name>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="217"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="799"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="211"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="795"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="221"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="215"/>
         <source>Each line is a separate beat</source>
         <translation>每行都是一个单独的节拍</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="293"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="287"/>
         <source>Value should be in format DD.MM.YYYY HH:MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="779"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="797"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="775"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="793"/>
         <source>Heading</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="781"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="777"/>
         <source>Select item color</source>
         <translation>选择条目颜色</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="786"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="782"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="787"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="783"/>
         <source>Human-readable name (hidden in text)</source>
         <translation>人类可读的名称（隐藏在文本中）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="788"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="784"/>
         <source>Select scene color</source>
         <translation>选择场景颜色</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="798"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="794"/>
         <source>Header text (visible in text)</source>
         <translation>页眉文本（在文本中可见）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="801"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="797"/>
         <source>Story day</source>
         <translation>故事发生之日</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="802"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="798"/>
         <source>Start date and time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="803"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="799"/>
         <source>DD.MM.YYYY HH:MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="804"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="800"/>
         <source>Stamp</source>
         <translation>邮票</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="805"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="801"/>
         <source>Auto scene numbering</source>
         <translation>场景自动编号</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="806"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="802"/>
         <source>Scene number</source>
         <translation>场号</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="807"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="803"/>
         <source>Skip the number of this scene</source>
         <translation>跳过此场景的编号</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="809"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="805"/>
         <source>Skip logical number of this scene for determining the next scene number</source>
         <translation>跳过此场景的逻辑编号以确定下一个场景编号</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="810"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="806"/>
         <source>Tags</source>
         <translation>标记</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="811"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="807"/>
         <source>Add tag to the selected card</source>
         <translation>将标签添加到所选卡片</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="812"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="808"/>
         <source>Tag name</source>
         <translation>标记名称</translation>
     </message>
@@ -9886,12 +9677,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharacterDialoguesView</name>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="353"/>
-        <source>Unlock ability to use characters dialogues</source>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="352"/>
+        <source>You&apos;re in the read only mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="354"/>
+        <source>Activate PRO version to unlock full access to the character dialogues module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="355"/>
+        <source>Go back to character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="356"/>
+        <source>Unlock report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="357"/>
         <source>Update character dialogues list</source>
         <translation>更新角色对白列表</translation>
     </message>
@@ -9975,487 +9781,497 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharacterInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="764"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="839"/>
         <source>Apply new character name</source>
         <translation>应用新角色名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="770"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2209"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="845"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2303"/>
         <source>Select character color</source>
         <translation>选择字符颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2205"/>
-        <source>Unlock access to extended character profile</source>
-        <translation>允许访问角色详情</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2208"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2302"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2210"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2304"/>
         <source>Story role</source>
         <translation>故事信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="701"/>
         <source>Primary</source>
         <translation>首要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="701"/>
         <source>Secondary</source>
         <translation>次要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="701"/>
         <source>Tertiary</source>
         <translation>必要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="701"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="706"/>
         <source>Undefined</source>
         <translation>未定义</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="785"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2214"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="860"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2308"/>
         <source>Age</source>
         <translation>年龄</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="791"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2215"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="866"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2309"/>
         <source>Gender</source>
         <translation>性别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="706"/>
         <source>Male</source>
         <translation>男</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="706"/>
         <source>Female</source>
         <translation>女</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="706"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2206"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2307"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2296"/>
+        <source>You&apos;re in the base profile mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2298"/>
+        <source>Activate PRO version to unlock full access to the character profile module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2299"/>
+        <source>Unlock full profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2300"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2401"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2219"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2313"/>
         <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2220"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2314"/>
         <source>Long description</source>
         <translation>细致描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2221"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2315"/>
         <source>Dreamcast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2223"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2317"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2223"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2317"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2224"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2318"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>你想删除角色的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2225"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2319"/>
         <source>Select an area for the character main photo</source>
         <translation>为角色主照片选择一个区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2227"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2321"/>
         <source>Photos</source>
         <translation>照片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2229"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2323"/>
         <source>Personal info</source>
         <translation>个人信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2230"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2324"/>
         <source>Real name</source>
         <translation>真实姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2231"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2325"/>
         <source>Date of birth</source>
         <translation>生日</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2232"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2326"/>
         <source>Place of birth</source>
         <translation>出生地</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2233"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2327"/>
         <source>Ethnicity/race</source>
         <translation>民族/种族</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2234"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2328"/>
         <source>Family</source>
         <translation>家庭</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2236"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2330"/>
         <source>Physique</source>
         <translation>体格</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2237"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2331"/>
         <source>Height</source>
         <translation>身高</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2238"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2332"/>
         <source>Weight</source>
         <translation>体重</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2239"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2333"/>
         <source>Body</source>
         <translation>身体</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2240"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2334"/>
         <source>Skin tone</source>
         <translation>肤色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2241"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2335"/>
         <source>Hair style</source>
         <translation>发型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2242"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2336"/>
         <source>Hair color</source>
         <translation>发色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2243"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2337"/>
         <source>Eye shape</source>
         <translation>眼睛形状</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2244"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2338"/>
         <source>Eye color</source>
         <translation>眼睛颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2245"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2339"/>
         <source>Facial shape</source>
         <translation>面部形状</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2246"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2340"/>
         <source>Distinguish feature</source>
         <translation>显著特点</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2247"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2341"/>
         <source>Other facial features</source>
         <translation>其他面部特征</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2248"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2342"/>
         <source>Posture</source>
         <translation>姿势</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2249"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2343"/>
         <source>Other physical appearance</source>
         <translation>其他物理外观</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2251"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2345"/>
         <source>Life</source>
         <translation>生活</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2252"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2346"/>
         <source>Skills</source>
         <translation>技能</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2253"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2347"/>
         <source>How skills developed</source>
         <translation>技能如何发展</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2254"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2348"/>
         <source>Incompetence</source>
         <translation>不称职</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2255"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2349"/>
         <source>Strength/talent</source>
         <translation>实力/天赋</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2256"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2350"/>
         <source>Weakness</source>
         <translation>弱点</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2257"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2351"/>
         <source>Hobbies</source>
         <translation>爱好</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2258"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2352"/>
         <source>Habits</source>
         <translation>习惯</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2259"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2353"/>
         <source>Health</source>
         <translation>健康</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2260"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2354"/>
         <source>Speech</source>
         <translation>演讲</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2261"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2355"/>
         <source>Pet</source>
         <translation>宠物</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2262"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2356"/>
         <source>Dress</source>
         <translation>服装</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2263"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2357"/>
         <source>Something always carried/weapon/tools</source>
         <translation>随身携带的东西/武器/工具</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2264"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2358"/>
         <source>Accessories</source>
         <translation>附件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2265"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2359"/>
         <source>Area of residence/environment</source>
         <translation>居住区域/环境</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2266"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2360"/>
         <source>Home description</source>
         <translation>住宅描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2267"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2361"/>
         <source>Neighborhood</source>
         <translation>街区</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2268"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2362"/>
         <source>Organization involved</source>
         <translation>涉及的组织</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2269"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2363"/>
         <source>Income</source>
         <translation>收入</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2270"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2364"/>
         <source>Job/occupation</source>
         <translation>工作/职业</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2271"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2365"/>
         <source>Job rank/position</source>
         <translation>职务等级/职位</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2272"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2366"/>
         <source>Job satisfaction</source>
         <translation>工作满意度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2274"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2368"/>
         <source>Attitude</source>
         <translation>态度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2275"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2369"/>
         <source>Personality</source>
         <translation>个性</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2276"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2370"/>
         <source>Moral</source>
         <translation>品行</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2277"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2371"/>
         <source>Motivation</source>
         <translation>赋予动机</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2278"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2372"/>
         <source>Discouragement</source>
         <translation>挫折</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2279"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2373"/>
         <source>Philosophy</source>
         <translation>生活理念</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2280"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2374"/>
         <source>Greatest fear</source>
         <translation>最大恐惧</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2281"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2375"/>
         <source>Self control</source>
         <translation>自我控制</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2282"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2376"/>
         <source>Intelligence level</source>
         <translation>智力水平</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2283"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2377"/>
         <source>Confidence level</source>
         <translation>置信度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2285"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2379"/>
         <source>Biography</source>
         <translation>传记</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2286"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2380"/>
         <source>Childhood</source>
         <translation>童年</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2287"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2381"/>
         <source>Important past event</source>
         <translation>过去的重要事件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2288"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2382"/>
         <source>Best accomplishment</source>
         <translation>最佳成就</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2289"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2383"/>
         <source>Other accomplishment</source>
         <translation>其他成就</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2290"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2384"/>
         <source>Worst moment</source>
         <translation>最糟糕的时刻</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2291"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2385"/>
         <source>Failure</source>
         <translation>失败</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2292"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2386"/>
         <source>Secrets</source>
         <translation>秘密</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2293"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2387"/>
         <source>Best memories</source>
         <translation>最美好的回忆</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2294"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2388"/>
         <source>Worst memories</source>
         <translation>最糟糕的记忆</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2296"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2390"/>
         <source>Story</source>
         <translation>故事</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2297"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2391"/>
         <source>Short term goal</source>
         <translation>短期目标</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2298"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2392"/>
         <source>Long term goal</source>
         <translation>长期目标</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2299"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2393"/>
         <source>Initial beliefs</source>
         <translation>最初的信念</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2300"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2394"/>
         <source>Changed beliefs</source>
         <translation>改变的信念</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2301"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2395"/>
         <source>What leads to change</source>
         <translation>变化原因</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2302"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2396"/>
         <source>First appearance</source>
         <translation>首次出场</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2303"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2397"/>
         <source>Plot involvement</source>
         <translation>参与剧情</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2304"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2398"/>
         <source>Conflict</source>
         <translation>冲突</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2305"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2399"/>
         <source>Most defining moment</source>
         <translation>最具决定性的时刻</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2310"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2404"/>
         <source>Give AI a short description of the character you want it to elaborate.</source>
         <translation>给 AI 一个简短的描述，描述你想要它阐述的角色。</translation>
     </message>
@@ -10481,208 +10297,208 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharactersRelationsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="364"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="387"/>
         <source>Apply new character name</source>
         <translation>应用新角色名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="370"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="831"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="393"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="910"/>
         <source>Select character color</source>
         <translation>选择字符颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="659"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="809"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="706"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="888"/>
         <source>To create a new relation, hold the Option button and move one character to another.</source>
         <translation>要创建新关系，请按住“选项”按钮并将一个角色移动到另一个角色。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="662"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="812"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="709"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="891"/>
         <source>To create a new relation, hold the Alt button and move one character to another.</source>
         <translation>要创建新关系，请按住 Alt 按钮并将一个角色移动到另一个角色。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="667"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="714"/>
         <source>%1 has no relations with other characters</source>
         <translation>%1 与其他角色没有关系</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="670"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="717"/>
         <source>What %1 feels to</source>
         <translation>%1 的感受</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="676"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="847"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="723"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="926"/>
         <source>Open relation details</source>
         <translation>打开关系细节</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="739"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="744"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="792"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <source>%1 point of view</source>
         <translation>%1 观点</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="740"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="741"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="745"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="746"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="793"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="794"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="798"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="799"/>
         <source>Show all %1&apos;s relations</source>
         <translation>显示%1的所有关系</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="806"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="885"/>
         <source>To see relation details, select concrete relation.</source>
         <translation>要查看关系细节，请选择指定关系。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="819"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="898"/>
         <source>Border line type</source>
         <translation>边框类型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="820"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="899"/>
         <source>Group name</source>
         <translation>小组名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="821"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="900"/>
         <source>Group description</source>
         <translation>小组描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="823"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="902"/>
         <source>Profile</source>
         <translation>配置文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="824"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="903"/>
         <source>Relations</source>
         <translation>关系</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="827"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="906"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="827"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="906"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="828"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="907"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>你想删除角色的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="829"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="908"/>
         <source>Select an area for the character main photo</source>
         <translation>为角色主照片选择一个区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="830"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="909"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="832"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="911"/>
         <source>Story role</source>
         <translation>故事信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="835"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="914"/>
         <source>Primary</source>
         <translation>首要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="835"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="914"/>
         <source>Secondary</source>
         <translation>次要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="835"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="914"/>
         <source>Tertiary</source>
         <translation>必要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="835"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="841"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="914"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="920"/>
         <source>Undefined</source>
         <translation>未定义</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="837"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="916"/>
         <source>Age</source>
         <translation>年龄</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="838"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="917"/>
         <source>Gender</source>
         <translation>性别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="841"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="920"/>
         <source>Male</source>
         <translation>男</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="841"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="920"/>
         <source>Female</source>
         <translation>女</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="841"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="920"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="843"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="922"/>
         <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="844"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="923"/>
         <source>Long description</source>
         <translation>细致描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="850"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="929"/>
         <source>Line type</source>
         <translation>线型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="814"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="893"/>
         <source>Solid line</source>
         <translation>实线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="805"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="884"/>
         <source>To see character information and all their relations, select concrete character.</source>
         <translation>要查看角色信息及其关系，选择具体的角色。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="814"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="893"/>
         <source>Dash line</source>
         <translation>虚线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="814"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="893"/>
         <source>Dot line</source>
         <translation>点线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="851"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="853"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="930"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="932"/>
         <source>Feeling</source>
         <translation>感受</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="852"/>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="854"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="931"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="933"/>
         <source>Details</source>
         <translation>细节</translation>
     </message>
@@ -10690,47 +10506,57 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharactersRelationsView</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="191"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="202"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="396"/>
-        <source>Unlock ability to edit characters relations</source>
-        <translation>解锁编辑角色关系的功能</translation>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="409"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="411"/>
+        <source>Activate PRO version to unlock full access to the characters relations module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="412"/>
+        <source>Unlock characters relations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="413"/>
         <source>Add character</source>
         <translation>添加角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="414"/>
         <source>Add group</source>
         <translation>添加小组</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="401"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="417"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="412"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="428"/>
         <source>Show relations titles only for the selected characters</source>
         <translation>仅显示所选角色的关系标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="431"/>
         <source>Save relations scheme to image</source>
         <translation>将关系方案保存到图像</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="417"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="433"/>
         <source>Here will be a characters relations scheme.</source>
         <translation>这将是一个人物关系方案。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="418"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="434"/>
         <source>It&apos;s time to create the first character!</source>
         <translation>是时候创造第一个角色了！</translation>
     </message>
@@ -10746,64 +10572,64 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="117"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="125"/>
         <source>Perfect logline length</source>
         <translation>完美的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="119"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="127"/>
         <source>Good logline length</source>
         <translation>好的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="121"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="129"/>
         <source>Recommended logline length is 30 words</source>
         <translation>建议剧情梗概长度不超过30个单词</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="123"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="131"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n 个单词</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="230"/>
         <source>Comic book name</source>
         <translation>漫画书名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="231"/>
         <source>Tagline</source>
         <translation>宣传词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="224"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="232"/>
         <source>Logline</source>
         <translation>剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="233"/>
         <source>Generate logline</source>
         <translation>生成剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="234"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="227"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="235"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="236"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="229"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="237"/>
         <source>Statistics</source>
         <translation>统计数字</translation>
     </message>
@@ -10811,32 +10637,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="207"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="212"/>
         <source>Header</source>
         <translation>页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="208"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="213"/>
         <source>Print header on title page</source>
         <translation>在标题页上打印页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="209"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="214"/>
         <source>Footer</source>
         <translation>页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="210"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="215"/>
         <source>Print footer on title page</source>
         <translation>在标题页上打印页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="211"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="216"/>
         <source>Override common settings for this comic book</source>
         <translation>覆盖这本漫画书的常用设置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="217"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
@@ -10844,27 +10670,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="220"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="207"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="221"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="208"/>
         <source>Panels</source>
         <translation>面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="209"/>
         <source>Words</source>
         <translation>字</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="210"/>
         <source>Characters with/without spaces</source>
         <translation>带/不带空格的字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="212"/>
         <source>Text statistics</source>
         <translation>文本统计数据</translation>
     </message>
@@ -10872,34 +10698,34 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1234"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1239"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n 面板</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1480"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1435"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1484"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1439"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1490"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1445"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1495"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1450"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1502"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1457"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -10912,69 +10738,69 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="319"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="323"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="318"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="326"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="320"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="328"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="321"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="329"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="323"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="331"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="326"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="334"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="327"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="335"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="328"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="336"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="329"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="337"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="339"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="332"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="340"/>
         <source>Show only current scene text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="333"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="341"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
 </context>
 <context>
@@ -11033,7 +10859,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="304"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="301"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
@@ -11043,64 +10869,64 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>书写文本</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1353"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1360"/>
         <source>Document translation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1471"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1477"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1472"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1478"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1473"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1479"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1474"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1480"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1477"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1483"/>
         <source>Start prompt from something like &quot;Write a comic book script about ...&quot;</source>
         <translation>从“写一本关于......的小说”或“写一章关于......”之类的内容开始提示</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1493"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1499"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1494"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1500"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1495"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1501"/>
         <source>In action</source>
         <translation>在行动中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1496"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1502"/>
         <source>In character</source>
         <translation>在角色中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1497"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1503"/>
         <source>In dialogue</source>
         <translation>在对白中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="305"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="302"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
@@ -11133,17 +10959,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CommentRepliesView</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="280"/>
+        <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="281"/>
         <source>Back to comments list</source>
         <translation>回到评论列表</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="281"/>
+        <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="282"/>
         <source>Edit reply</source>
         <translation>修改回复</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="283"/>
+        <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="284"/>
         <source>Add reply</source>
         <translation>添加回复</translation>
     </message>
@@ -11151,83 +10977,83 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CommentsToolbar</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="540"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="539"/>
         <source>Choose review mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="541"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="540"/>
         <source>Review mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="542"/>
-        <source>Track additions mode</source>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="541"/>
+        <source>Track changes mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="543"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="542"/>
         <source>Revision mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="546"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="545"/>
         <source>[select text to activate option]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="548"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="547"/>
         <source>Change text color</source>
         <translation>改变文本颜色</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="553"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="552"/>
         <source>Change text highlight color</source>
         <translation>改变高亮文本颜色</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="558"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="557"/>
         <source>Add comment</source>
         <translation>添加评论</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="562"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="561"/>
         <source>Mark added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="563"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="562"/>
         <source>Mark removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="565"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="564"/>
         <source>Mark revisited</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="569"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="568"/>
         <source>Choose color for the action</source>
         <extracomment>This allow user to choose color for the review mode actions like text higlight or comments</extracomment>
         <translation>选择评审颜色</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="570"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="569"/>
         <source>Apply change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="571"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="570"/>
         <source>Mark as done</source>
         <translation>标记为已完成</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="572"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="571"/>
         <source>Cancel change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="573"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="572"/>
         <source>Remove selected mark</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11295,6 +11121,29 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="227"/>
         <source>Remove selected notes</source>
         <translation>移除选中注释</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CompareDraftDialog</name>
+    <message>
+        <location filename="../ui/project/compare_draft_dialog.cpp" line="105"/>
+        <source>Compare documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/compare_draft_dialog.cpp" line="107"/>
+        <source>Select drafts to compare.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/compare_draft_dialog.cpp" line="108"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/compare_draft_dialog.cpp" line="109"/>
+        <source>Compare</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11554,13 +11403,13 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="335"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
     <name>Ui::ConnectionStatusToolBar</name>
     <message>
-        <location filename="../ui/account/connection_status_tool_bar.cpp" line="288"/>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="283"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
         <translation>与服务器的连接丢失。已启用自动重新连接。按下立即尝试重新连接。</translation>
     </message>
@@ -11581,142 +11430,142 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CoverGeneratorSidebar</name>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="611"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="610"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="612"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="611"/>
         <source>Background image</source>
         <translation>背景图片</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="613"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="612"/>
         <source>Color between text and image</source>
         <translation>图文之间的颜色</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="614"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="613"/>
         <source>black</source>
         <translation>块</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="615"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="614"/>
         <source>transparent</source>
         <translation>透明</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="616"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="615"/>
         <source>white</source>
         <translation>白</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="617"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="616"/>
         <source>Text of the first top line</source>
         <translation>第一行的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="618"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="617"/>
         <source>Text of the second top line</source>
         <translation>第二行的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="619"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="618"/>
         <source>Text above of the project name</source>
         <translation>项目名称上方的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="620"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="619"/>
         <source>Project name</source>
         <translation>项目名称</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="621"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="620"/>
         <source>Text under the project name</source>
         <translation>项目名称下方的文本</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="622"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="621"/>
         <source>Credits</source>
         <translation>积分</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="623"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="622"/>
         <source>Release date or coming soon</source>
         <translation>发布日期或即将发布</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="624"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="623"/>
         <source>Website</source>
         <translation>网站</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="635"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="634"/>
         <source>Font family</source>
         <translation>字体系列</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="636"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="635"/>
         <source>Size</source>
         <translation>尺寸</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="637"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="636"/>
         <source>Text color</source>
         <translation>文本颜色</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="638"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="637"/>
         <source>Make text bold</source>
         <translation>加粗</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="639"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="638"/>
         <source>Make text italic</source>
         <translation>倾斜</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="640"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="639"/>
         <source>Make text underlined</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="641"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="640"/>
         <source>Align text to the left</source>
         <translation>左对齐</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="642"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="641"/>
         <source>Align text to the center</source>
         <translation>居中</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="643"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="642"/>
         <source>Align text to the right</source>
         <translation>右对齐</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="646"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="645"/>
         <source>Search images</source>
         <translation>搜索图片</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="647"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="646"/>
         <source>Enter keywords for search</source>
         <translation>输入要搜索的关键字</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="649"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="648"/>
         <source>Paste image from clipboard (image file or image url)</source>
         <translation>从剪贴板粘贴图像（图像文件或图像url）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="650"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="649"/>
         <source>Choose file with image</source>
         <translation>选择带有图像的文件</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="651"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="650"/>
         <source>Loading images</source>
         <translation>正在载入图片</translation>
     </message>
@@ -11724,52 +11573,52 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CoverGeneratorView</name>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="174"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="175"/>
         <source>Loading image</source>
         <translation>正在载入图片</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="198"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="199"/>
         <source>Select an area for cover background</source>
         <translation>选择封面背景区域</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="313"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="314"/>
         <source>Select location for saving cover to file</source>
         <translation>选择将封面保存到文件的位置</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="314"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="315"/>
         <source>PNG image</source>
         <translation>PNG 图片</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="348"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="349"/>
         <source>Select file for background image</source>
         <translation>选择背景图像的文件</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="349"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="350"/>
         <source>Images</source>
         <translation>图片</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="385"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="386"/>
         <source>Use cover for the project</source>
         <translation>为项目使用封面</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="386"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="387"/>
         <source>Close without saving</source>
         <translation>关闭而不保存</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="387"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="388"/>
         <source>Clear cover parameters</source>
         <translation>清除封面参数</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="388"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="389"/>
         <source>Save cover to the file</source>
         <translation>将封面保存到文件</translation>
     </message>
@@ -11777,7 +11626,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CoverImageCard</name>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="245"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="239"/>
         <source>Create poster</source>
         <translation>制作海报</translation>
     </message>
@@ -11785,77 +11634,77 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CrashReportDialog</name>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="192"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="196"/>
         <source>Oops.. looks like a crash has happened</source>
         <translation>噫～出错了</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="194"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="198"/>
         <source>We are sorry that someting went wrong. Please help us fix this issue and share some details so it&apos;ll never bother you again.</source>
         <translation>我们很抱歉出了问题。请帮助我们解决此问题并分享一些详细信息，这样它就不会再困扰您了。</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="196"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="200"/>
         <source>How often do crashes happen?</source>
         <translation>崩溃发生的频率是多少？</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="197"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="201"/>
         <source>Once</source>
         <translation>一次</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="198"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="202"/>
         <source>Time to time</source>
         <translation>不时</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="199"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="203"/>
         <source>Often</source>
         <translation>经常</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="200"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="204"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="203"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="207"/>
         <source>Does the issue happen within all projects or with the last edited project?</source>
         <translation>问题是发生在所有项目中，还是发生在上次编辑的项目中？</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="204"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="208"/>
         <source>I don&apos;t know</source>
         <translation>我不知道</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="205"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="209"/>
         <source>All projects</source>
         <translation>所有项目</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="206"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="210"/>
         <source>Single project</source>
         <translation>单个项目</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="207"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="211"/>
         <source>What did you do when this issue happened?</source>
         <translation>当这个问题发生时，你做了什么？</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="208"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="212"/>
         <source>Contact e-mail</source>
         <translation>联系电邮</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="209"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="213"/>
         <source>Ignore error</source>
         <translation>忽略错误</translation>
     </message>
     <message>
-        <location filename="../ui/crash_report_dialog.cpp" line="210"/>
+        <location filename="../ui/crash_report_dialog.cpp" line="214"/>
         <source>Send report</source>
         <translation>发送报告</translation>
     </message>
@@ -11863,27 +11712,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateCharacterDialog</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="69"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="70"/>
         <source>The character should have a name</source>
         <translation>角色要有名字</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="102"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="103"/>
         <source>Create new character</source>
         <translation>创建角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="103"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="104"/>
         <source>Character name</source>
         <translation>角色名字</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="104"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="106"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
@@ -12198,47 +12047,77 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDraftDialog</name>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="145"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="152"/>
+        <source>Choose the file to import</source>
+        <translation>选择要导入的文件</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="162"/>
+        <source>File format not supported</source>
+        <translation>不支持的文件格式</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="163"/>
+        <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="216"/>
+        <source>Draft from external file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="261"/>
         <source>Edit document draft</source>
         <translation>编辑文档草稿</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="145"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="261"/>
         <source>Create document draft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="147"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="263"/>
         <source>Store actual draft as a separate document to keep your progress.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="148"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="264"/>
         <source>Draft name</source>
         <translation>草稿名称</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="149"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="265"/>
         <source>Based on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="150"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="266"/>
+        <source>Choose file with draft to import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="267"/>
+        <source>Choose file for importing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="268"/>
         <source>Lock draft text editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="151"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="269"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="152"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="270"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="152"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="270"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -12246,27 +12125,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateLocationDialog</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="67"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="68"/>
         <source>The location should have a name</source>
         <translation>位置要有名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="100"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="101"/>
         <source>Create new location</source>
         <translation>新建位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="101"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="102"/>
         <source>Location name</source>
         <translation>位置名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="102"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="103"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="103"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="104"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
@@ -12427,27 +12306,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateWorldDialog</name>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="66"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="67"/>
         <source>The world should have a name</source>
         <translation>世界要有个名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="99"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
         <source>Create new world</source>
         <translation>创建世界</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="101"/>
         <source>World name</source>
         <translation>世界名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="101"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="102"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="102"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="103"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
@@ -12532,21 +12411,44 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
+    <name>Ui::ImagesGallerySidebar</name>
+    <message>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_sidebar.cpp" line="163"/>
+        <source>Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_sidebar.cpp" line="164"/>
+        <source>Images gallery name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_sidebar.cpp" line="165"/>
+        <source>Images gallery description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::ImagesGalleryView</name>
     <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="205"/>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation>解锁编辑影视剧本卡片的功能</translation>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="212"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="206"/>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="214"/>
+        <source>Activate PRO version to unlock full access to the images gallery module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="215"/>
+        <source>Unlock images gallery</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="217"/>
         <source>Add images to the gallery</source>
         <translation>图片加入库</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="208"/>
-        <source>Name</source>
-        <translation>姓名</translation>
     </message>
 </context>
 <context>
@@ -12688,42 +12590,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="307"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="317"/>
         <source>Translation is ready for %1%</source>
         <translation>翻译已经完成 %1%</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="317"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="327"/>
         <source>Select file with translation</source>
         <translation>选择翻译文件</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="319"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="329"/>
         <source>Compiled Qt translation files</source>
         <translation>编译的Qt翻译文件</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="353"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="363"/>
         <source>Change application language</source>
         <translation>更改应用程序语言</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="356"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="366"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>没有找到您喜欢的语言？阅读如何自行添加。</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="358"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="368"/>
         <source>Improve</source>
         <translation>改进</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="359"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="369"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="360"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="370"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -12777,152 +12679,162 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="334"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="348"/>
         <source>Apply new location name</source>
         <translation>应用新位置名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="748"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
+        <source>You&apos;re in the base profile mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="758"/>
+        <source>Activate PRO version to unlock full access to the location profile module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="759"/>
+        <source>Unlock full profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="761"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="750"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="763"/>
         <source>Story role</source>
         <translation>故事信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="289"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="303"/>
         <source>Primary</source>
         <translation>首要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="289"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="303"/>
         <source>Secondary</source>
         <translation>次要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="289"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="303"/>
         <source>Tertiary</source>
         <translation>必要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="289"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="303"/>
         <source>Undefined</source>
         <translation>未定义</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="354"/>
         <source>Select character color</source>
         <translation>选择字符颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="746"/>
-        <source>Unlock access to extended location profile</source>
-        <translation>解锁对扩展位置配置文件的访问</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="749"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="762"/>
         <source>Select location color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="754"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="767"/>
         <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="755"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="768"/>
         <source>Long description</source>
         <translation>细致描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="769"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="769"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="757"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="770"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>你想删除位置的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="758"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="771"/>
         <source>Select an area for the location main photo</source>
         <translation>为位置主照片选择一个区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="760"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="773"/>
         <source>Photos</source>
         <translation>照片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="762"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="775"/>
         <source>Sense info</source>
         <translation>感知信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="763"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="776"/>
         <source>Sight</source>
         <translation>名胜</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="764"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="777"/>
         <source>Smell</source>
         <translation>气味</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="765"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="778"/>
         <source>Sound</source>
         <translation>声音</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="766"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="779"/>
         <source>Taste</source>
         <translation>味道</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="767"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="780"/>
         <source>Touch</source>
         <translation>触觉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="769"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="782"/>
         <source>Geography info</source>
         <translation>地理信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="770"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="783"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="771"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="784"/>
         <source>Climate</source>
         <translation>气候</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="772"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="785"/>
         <source>Landmark</source>
         <translation>地标</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="773"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="786"/>
         <source>Nearby places</source>
         <translation>附近的地方</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="775"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="788"/>
         <source>Background info</source>
         <translation>背景信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="776"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="789"/>
         <source>History</source>
         <translation>历史</translation>
     </message>
@@ -12930,12 +12842,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationScenesView</name>
     <message>
-        <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="338"/>
-        <source>Unlock ability to use locations scenes</source>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="337"/>
+        <source>You&apos;re in the read only mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="339"/>
+        <source>Activate PRO version to unlock full access to the location scenes module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="340"/>
+        <source>Go back to location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="341"/>
+        <source>Unlock report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="342"/>
         <source>Update location scenes list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12951,174 +12878,174 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsMapSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="342"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="356"/>
         <source>Apply new location name</source>
         <translation>应用新位置名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="348"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="362"/>
         <source>Select character color</source>
         <translation>选择字符颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="607"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="745"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="644"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="814"/>
         <source>To create a new route, hold the Option button and move one location to another.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="610"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="748"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="647"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="817"/>
         <source>To create a new route, hold the Alt button and move one location to another.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="614"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="651"/>
         <source>%1 has no routes with other locations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="616"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="653"/>
         <source>What routes %1 has</source>
         <translation>%1 有哪些路线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="622"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="776"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="659"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="845"/>
         <source>Open route details</source>
         <translation>打开路径细节</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="682"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="683"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="687"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="688"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="725"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="726"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="731"/>
         <source>Show all %1&apos;s routes</source>
         <translation>显示%1的所有路径</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="741"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="810"/>
         <source>To see location info and all their routes, select concrete location.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="742"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="811"/>
         <source>To see route details, select concrete route.</source>
         <translation>要查看路径细节，请选择指定路径。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="750"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="819"/>
         <source>Solid line</source>
         <translation>实线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="750"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="819"/>
         <source>Dash line</source>
         <translation>虚线 </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="750"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="819"/>
         <source>Dot line</source>
         <translation>点线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="755"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="824"/>
         <source>Border line type</source>
         <translation>边框类型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="756"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="825"/>
         <source>Group name</source>
         <translation>小组名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="757"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="826"/>
         <source>Group description</source>
         <translation>小组描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="759"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="828"/>
         <source>Profile</source>
         <translation>配置文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="760"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="829"/>
         <source>Routes</source>
         <translation>路径</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="762"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="831"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="762"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="831"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="763"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="832"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>你想删除位置的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="833"/>
         <source>Select an area for the location main photo</source>
         <translation>为位置主照片选择一个区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="765"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="780"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="834"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="849"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="766"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="835"/>
         <source>Select location color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="767"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="836"/>
         <source>Story role</source>
         <translation>故事信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="770"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="839"/>
         <source>Primary</source>
         <translation>首要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="770"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="839"/>
         <source>Secondary</source>
         <translation>次要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="770"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="839"/>
         <source>Tertiary</source>
         <translation>必要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="770"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="839"/>
         <source>Undefined</source>
         <translation>未定义</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="772"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="841"/>
         <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="773"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="842"/>
         <source>Long description</source>
         <translation>细致描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="779"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="848"/>
         <source>Line type</source>
         <translation>线型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="781"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="850"/>
         <source>Details</source>
         <translation>细节</translation>
     </message>
@@ -13126,47 +13053,57 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsMapView</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="190"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="201"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="393"/>
-        <source>Unlock ability to edit locations map</source>
-        <translation>解锁编辑位置地图的功能</translation>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="406"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="408"/>
+        <source>Activate PRO version to unlock full access to the locations map module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="409"/>
+        <source>Unlock locations map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="410"/>
         <source>Add location</source>
         <translation>添加位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="395"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="411"/>
         <source>Add group</source>
         <translation>添加小组</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="414"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="409"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="425"/>
         <source>Show routes titles only for the selected locations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="412"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="428"/>
         <source>Save locations map to image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="414"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="430"/>
         <source>Here will be a locations map.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="431"/>
         <source>It&apos;s time to create the first location!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13174,52 +13111,52 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LoginDialog</name>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="132"/>
+        <location filename="../ui/account/login_dialog.cpp" line="142"/>
         <source>Email invalid</source>
         <translation>电邮无效</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="79"/>
+        <location filename="../ui/account/login_dialog.cpp" line="80"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>我们发送的确认码已过期。</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="81"/>
+        <location filename="../ui/account/login_dialog.cpp" line="82"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>我们已向上面的电子邮件发送了确认码，请在此处输入以进行验证</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="204"/>
+        <location filename="../ui/account/login_dialog.cpp" line="214"/>
         <source>Get into your account</source>
         <translation>进入您的帐户</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="207"/>
+        <location filename="../ui/account/login_dialog.cpp" line="217"/>
         <source>Sign in to get access to extended features of the FREE, PRO and CLOUD versions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="208"/>
+        <location filename="../ui/account/login_dialog.cpp" line="218"/>
         <source>Email</source>
         <translation>电邮</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="210"/>
+        <location filename="../ui/account/login_dialog.cpp" line="220"/>
         <source>Confirmation code</source>
         <translation>确认代码</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="211"/>
+        <location filename="../ui/account/login_dialog.cpp" line="221"/>
         <source>Sign in</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="212"/>
+        <location filename="../ui/account/login_dialog.cpp" line="222"/>
         <source>Send code again</source>
         <translation>再次发送代码</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="213"/>
+        <location filename="../ui/account/login_dialog.cpp" line="223"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -13237,298 +13174,298 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>阅读更多</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="482"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="503"/>
         <source>Every successful screen story has a central character. Describe it!</source>
         <translation>每一个成功的银幕故事都有一个中心人物。描述它！</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="492"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="513"/>
         <source>Untick if you don&apos;t want to include theme.</source>
         <translation>如果不想包含主题，请取消勾选。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="502"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="523"/>
         <source>Come on! No goal, no story! Complete it, then move on.</source>
         <translation>加油！没有目标，就没有故事！完成它，然后继续前进。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="513"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="518"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="534"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="539"/>
         <source>Untick if you don&apos;t want to include MPR.</source>
         <translation>如果不想包含中点逆转，请取消勾选。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="529"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="550"/>
         <source>Untick if you don&apos;t want to include special rules.</source>
         <translation>如果不想包含特殊规则，请取消勾选。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="539"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="560"/>
         <source>Untick if you don&apos;t want to include stakes.</source>
         <translation>如果不想包含利益，请取消勾选。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="571"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="592"/>
         <source>he</source>
         <translation>他</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="572"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="593"/>
         <source>she</source>
         <translation>她</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="572"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="593"/>
         <source>they</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="576"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="597"/>
         <source>When</source>
         <translation>何时</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="584"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="605"/>
         <source>in</source>
         <translation>位于</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="595"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="622"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="616"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="643"/>
         <source>must</source>
         <translation>必须</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="604"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="613"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="634"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="646"/>
         <source>in order to</source>
         <translation>为了</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="622"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="643"/>
         <source>but</source>
         <translation>但是</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="622"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="643"/>
         <source>when</source>
         <translation>何时</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="634"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="655"/>
         <source>before</source>
         <translation>以前</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="739"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="760"/>
         <source>Share your logline</source>
         <translation>分享您的剧情梗概</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="742"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="763"/>
         <source>Check out my new logline</source>
         <translation>查看我的新剧情梗概</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="768"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="811"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="789"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="832"/>
         <source>Show help</source>
         <translation>展示帮助</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="810"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="831"/>
         <source>Logline generator</source>
         <translation>剧情梗概生成器</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="813"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="834"/>
         <source>Describe your main character</source>
         <translation>描述你的主角</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="814"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="835"/>
         <source>E.g. &apos;A lonesome cowboy&apos;, or &apos;An arrogant publicist&apos;.</source>
         <translation>例如：《一个孤独的牛仔》或《一个傲慢的公关人员》。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="815"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="836"/>
         <source>What is their gender?</source>
         <translation>他们的性别是什么？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="816"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="837"/>
         <source>Male</source>
         <translation>男</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="816"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="837"/>
         <source>Female</source>
         <translation>女</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="816"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="817"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="837"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="838"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="819"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="840"/>
         <source>Typically this includes the character&apos;s function or job, and some weakness and/or strength. Loglines only have character names if the names are already a part of popular culture.</source>
         <translation>通常包括角色的功能或工作，以及一些弱点（和/或）优势。只有当角色的名字已经是流行文化的一部分时，剧情梗概才会有角色名称。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="823"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="844"/>
         <source>What event triggers the story&apos;s main action?</source>
         <translation>什么事件触发了故事的主要情节？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="825"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="846"/>
         <source>E.g. &apos;A shark kills a swimmer&apos; or &apos;her best friend shoots a man who tried to rape her&apos;.</source>
         <translation>例如：《鲨鱼杀死了一名游泳者》或《她最好的朋友射杀了试图侵犯她的男人》。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="828"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="849"/>
         <source>Did you include a description of the main character?</source>
         <translation>你介绍主角了吗？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="830"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="851"/>
         <source>Events are things that happen to the main character, and that motivates their actions. They&apos;re never anything the character does. Here we&apos;re looking for the story&apos;s main event or Inciting Incident / Call To Adventure. This typically happens in the first 10 - 20 minutes.</source>
         <translation>事件是发生在主角身上的事情，并激励他们的行动。它们从来都不是角色所做的任何事情。在这里，我们正在寻找故事的重要事件或导火线事件/冒险的召唤。这通常发生在前 10 到 20 分钟内。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="835"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="856"/>
         <source>Include a Theme or Character Arc</source>
         <translation>包括主题或人物弧线</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="836"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="857"/>
         <source>What do they have to learn/overcome?</source>
         <translation>他们需要学习/克服什么？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="837"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="858"/>
         <source>E.g. &apos;to become less selfish&apos;, or &apos;to find purpose in life&apos;.</source>
         <translation>例如，“变得不那么自私”，或“在生活中找到目标”。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="839"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="860"/>
         <source>Even if theme is important in most stories, it is not critical to a basic logline. And often theme is established further down the development process. Leave it out for now, or try something and change it later.</source>
         <translation>即使主题在大多数故事中都很重要，但它对基本剧情来说并不重要。而且主题往往是在发展过程中进一步确立的。暂时搁置，或者尝试别的事物，稍后再更改。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="843"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="864"/>
         <source>What is the main Action / Goal?</source>
         <translation>主要情节/目标是什么？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="845"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="866"/>
         <source>E.g. &apos;to close the beach&apos;, or &apos;to find her son and return him home&apos;.</source>
         <translation>例如，“关闭海滩”，或“找到她的儿子并送他回家”。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="847"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="868"/>
         <source>The main action or goal is &apos;what the story is about&apos; for the broad audience. It is that part of the story we can visualise when we hear the logline, and which (hopefully) makes us want to see the film or show episode. It is the objective the main character will pursue for most of the time.</source>
         <translation>主要情节或目标是为广大观众提供“故事的内容”。当我们听到剧情台词时，我们可以想象出故事的一部分，希望它能让我们想看电影或节目集。这是主角大部分时间都会追求的目标。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="852"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="873"/>
         <source>Include a Mid Point Reversal (MPR)</source>
         <translation>包括中点反转 （MPR）</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="853"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="874"/>
         <source>What is the MPR Event?</source>
         <translation>中点逆转事件什么是？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="855"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="876"/>
         <source>E.g. &apos;the trip to Vegas is aborted&apos;, or &apos;his employer turns out to be his nemesis&apos;.</source>
         <translation>例如，“拉斯维加斯之旅流产了”，或者“他的雇主成了他的克星”。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="856"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="877"/>
         <source>What is the character&apos;s new Action / Goal?</source>
         <translation>角色的新行动/目标是什么？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="857"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="878"/>
         <source>E.g. &apos;to venture into the ocean and kill the shark&apos;</source>
         <translation>例如“冒险进入大海杀死鲨鱼”</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="859"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="880"/>
         <source>This event often happens just when the goal is within reach. It flips the character&apos;s fortune, and any gains now seem lost. But it may also be the motivation for the character&apos;s change in goal or approach. After the MPR, they often change their behaviour and start doing &apos;the right thing&apos;.</source>
         <translation>此事件通常发生在目标触手可及的时候。它颠覆了角色的命运，现在似乎失去了任何收益。但这也可能是角色改变目标或方法的动机。在中点逆转之后，他们经常改变自己的行为并开始做“正确的事”。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="864"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="885"/>
         <source>Is the story set in a special, future or magical world?</source>
         <translation>故事背景是在一个特殊的、未来的还是神奇的世界？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="865"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="886"/>
         <source>How is your story world different from normal reality?</source>
         <translation>你的故事世界与正常的现实有何不同？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="867"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="888"/>
         <source>E.g. &apos;it is 1920&apos;s Paris&apos;, or &apos;it is a world where pigs fly&apos;</source>
         <translation>例如：《这是1920年的巴黎》或《这是一个猪飞的世界》</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="868"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="889"/>
         <source>Only add this if it is essential to understand the story. </source>
         <translation>为了理解故事必不可少时，才可添加此内容。 </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="870"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="891"/>
         <source>Include a Deadline/Stakes?</source>
         <translation>包括截止日期/利益？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="871"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="892"/>
         <source>What happens if the main character fails?</source>
         <translation>如果主角失败了会发生什么？</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="872"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="893"/>
         <source>E.g. &apos;the police catches the girls&apos;, or &apos;the shark attacks again&apos;.</source>
         <translation>例如，“警察抓女孩”，或“鲨鱼再次袭击”。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="876"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="897"/>
         <source>To make the logline work, write this as a full sentence like in the examples.</source>
         <translation>为了使 剧情梗概 正常工作，请将其写成一个完整的句子，就像示例中一样。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="877"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="898"/>
         <source>Often the stakes are clear from the Main Event. But in some cases, adding negative stakes adds urgency to the logline, ultimately improving its emotional impact.</source>
         <translation>通常情况下，重大事件的利害关系是显而易见的。但在某些情况下，增加负面风险会增加剧情梗概的紧张，最终提高感情冲击力度。</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="893"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="914"/>
         <source>Your logline is cooked!</source>
         <translation>您的剧情梗概已经完成！</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="895"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="916"/>
         <source>Continue</source>
         <translation>继续</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="896"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="917"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="897"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="918"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="898"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="919"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
@@ -13537,19 +13474,19 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <name>Ui::MenuView</name>
     <message>
         <location filename="../ui/menu_view.cpp" line="331"/>
-        <location filename="../ui/menu_view.cpp" line="569"/>
+        <location filename="../ui/menu_view.cpp" line="570"/>
         <source>Hide developers version</source>
         <translation>隐藏开发者版本</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="332"/>
-        <location filename="../ui/menu_view.cpp" line="570"/>
+        <location filename="../ui/menu_view.cpp" line="571"/>
         <source>Show developers version</source>
         <translation>展示开发者版本</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="412"/>
-        <location filename="../ui/menu_view.cpp" line="546"/>
+        <location filename="../ui/menu_view.cpp" line="547"/>
         <source>All changes saved</source>
         <translation>保存所有修改</translation>
     </message>
@@ -13559,128 +13496,128 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>保存修改</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="541"/>
+        <location filename="../ui/menu_view.cpp" line="542"/>
         <source>Sign in</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="542"/>
+        <location filename="../ui/menu_view.cpp" line="543"/>
         <source>Stories</source>
         <translation>故事</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="543"/>
+        <location filename="../ui/menu_view.cpp" line="544"/>
         <source>Create story</source>
         <translation>创建故事</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="544"/>
+        <location filename="../ui/menu_view.cpp" line="545"/>
         <source>Open story</source>
         <translation>打开故事</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="550"/>
+        <location filename="../ui/menu_view.cpp" line="551"/>
         <source>Import documents...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="551"/>
+        <location filename="../ui/menu_view.cpp" line="552"/>
         <source>Export current document...</source>
         <translation>导出当前文档...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="545"/>
+        <location filename="../ui/menu_view.cpp" line="546"/>
         <source>Save story changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="549"/>
+        <location filename="../ui/menu_view.cpp" line="550"/>
         <source>Save story as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="552"/>
+        <location filename="../ui/menu_view.cpp" line="553"/>
         <source>Full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="555"/>
+        <location filename="../ui/menu_view.cpp" line="556"/>
         <source>Application settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="557"/>
+        <location filename="../ui/menu_view.cpp" line="558"/>
         <source>Show writing statistics</source>
         <translation>显示写作统计数字</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="558"/>
+        <location filename="../ui/menu_view.cpp" line="559"/>
         <source>Show writing sprint timer</source>
         <translation>显示写作竞赛计时器</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="559"/>
+        <location filename="../ui/menu_view.cpp" line="560"/>
         <source>Show notifications</source>
         <translation>显示通知</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="562"/>
+        <location filename="../ui/menu_view.cpp" line="563"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="563"/>
+        <location filename="../ui/menu_view.cpp" line="564"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="565"/>
+        <location filename="../ui/menu_view.cpp" line="566"/>
         <source>Back to main menu</source>
         <translation>返回主菜单</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="566"/>
-        <location filename="../ui/menu_view.cpp" line="573"/>
+        <location filename="../ui/menu_view.cpp" line="567"/>
+        <location filename="../ui/menu_view.cpp" line="574"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="567"/>
+        <location filename="../ui/menu_view.cpp" line="568"/>
         <source>Notifications preferences</source>
         <translation>通知首选项</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="572"/>
+        <location filename="../ui/menu_view.cpp" line="573"/>
         <source>Account</source>
         <translation>账户</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="574"/>
+        <location filename="../ui/menu_view.cpp" line="575"/>
         <source>Writing statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="575"/>
+        <location filename="../ui/menu_view.cpp" line="576"/>
         <source>Writing sprint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="630"/>
+        <location filename="../ui/menu_view.cpp" line="631"/>
         <source>About Story Architect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="635"/>
+        <location filename="../ui/menu_view.cpp" line="636"/>
         <source>Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="660"/>
+        <location filename="../ui/menu_view.cpp" line="661"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="674"/>
+        <location filename="../ui/menu_view.cpp" line="675"/>
         <source>View</source>
         <translation>查看</translation>
     </message>
@@ -13688,98 +13625,98 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::MindMapSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="619"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="678"/>
         <source>Solid line</source>
         <translation>实线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="619"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="678"/>
         <source>Dash line</source>
         <translation>虚线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="619"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="678"/>
         <source>Dot line</source>
         <translation>点线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="621"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="680"/>
         <source>Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="622"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="681"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="624"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="683"/>
         <source>Mind map name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="625"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="684"/>
         <source>Mind map description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="628"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="687"/>
         <source>To see node info and all their connections, select concrete node.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="629"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="688"/>
         <source>To see connection details, select concrete connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="632"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="691"/>
         <source>To create a new connection, hold the Option button and move one node to another.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="635"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="694"/>
         <source>To create a new connection, hold the Alt button and move one node to another.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="641"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="700"/>
         <source>Node text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="642"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="701"/>
         <source>Node details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="644"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="648"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="703"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="707"/>
         <source>Line type</source>
         <translation>线型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="645"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="704"/>
         <source>Connection text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="646"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="705"/>
         <source>Connection details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="649"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="708"/>
         <source>Group name</source>
         <translation>小组名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="650"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="709"/>
         <source>Group details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="652"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="711"/>
         <source>Give AI a short description of the idea or question you want it to provide ideas about.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13787,85 +13724,369 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::MindMapView</name>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="158"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="295"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="174"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="308"/>
         <source>New node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="302"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="818"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="315"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="845"/>
         <source>Add child node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="308"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="321"/>
         <source>Add sibling node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="329"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="342"/>
         <source>New group</source>
         <translation>新建小组</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="353"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="366"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="632"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="648"/>
         <source>Writing ideas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="651"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="667"/>
         <source>Ideas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="804"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="825"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="827"/>
+        <source>Activate PRO version to unlock full access to the mind map module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="828"/>
+        <source>Unlock mind map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="832"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="809"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="837"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="812"/>
-        <source>Unlock ability to edit mind map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="815"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="842"/>
         <source>Add node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="819"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="846"/>
         <source>Add group</source>
         <translation>添加小组</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="822"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="849"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="831"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="858"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="834"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="861"/>
         <source>Show connections titles only for the selected nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="835"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="862"/>
         <source>Save mind map to image</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ModulePromoWidget</name>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="246"/>
+        <source>Characters relations</source>
+        <translation>角色关系</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="249"/>
+        <source>Character information</source>
+        <translation>角色信息</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="252"/>
+        <source>Character dialogues</source>
+        <translation>角色对白</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="255"/>
+        <source>Locations map</source>
+        <translation>位置地图</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="258"/>
+        <source>Location information</source>
+        <translation>位置信息</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="261"/>
+        <source>Location scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="264"/>
+        <source>Worlds map</source>
+        <translation>世界地图</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="267"/>
+        <source>World information</source>
+        <translation>世界信息</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="270"/>
+        <source>Extended statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="273"/>
+        <source>Index cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="276"/>
+        <source>Story timeline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="279"/>
+        <source>Screenplay breakdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="282"/>
+        <source>Images gallery</source>
+        <translation>图片库</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="285"/>
+        <source>Mind maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="288"/>
+        <source>Presentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="291"/>
+        <source>Series plan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="294"/>
+        <source>Cloud synchronization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="297"/>
+        <source>Series statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="362"/>
+        <source>characters relations map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="366"/>
+        <source>full character profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="370"/>
+        <source>character dialogues report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="374"/>
+        <source>locations map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="378"/>
+        <source>full location profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="382"/>
+        <source>location scenes report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="386"/>
+        <source>worlds map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="390"/>
+        <source>world profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="394"/>
+        <source>story index cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="398"/>
+        <source>story timeline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="402"/>
+        <source>extended statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="406"/>
+        <source>images gallery</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="410"/>
+        <source>mind maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="414"/>
+        <source>presentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="418"/>
+        <source>Subscribe to PRO version and get advanced features that speed up and simplify your work</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="424"/>
+        <source>Subscribe to PRO version and unlock access to the</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="425"/>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="501"/>
+        <source>and other advanced features that speed up and simplify your work</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="450"/>
+        <source>Activate PRO</source>
+        <translation>激活 PRO 版本</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="453"/>
+        <source>Get access to the best features with a PRO subscription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="458"/>
+        <source>Advanced worldbuilding tools (full character, location and world profiles and maps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="459"/>
+        <source>Story timeline, index cards, extended statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="460"/>
+        <source>Extended research tools (mind maps, images gallery and presentations)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="462"/>
+        <source>Become a PRO user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="478"/>
+        <source>cloud sync, real time collaboration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="482"/>
+        <source>screenplay breakdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="486"/>
+        <source>series plan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="490"/>
+        <source>series statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="494"/>
+        <source>Subscribe to CLOUD version and get advanced features that speed up and simplify your work</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="500"/>
+        <source>Subscribe to CLOUD version and unlock access to the</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="516"/>
+        <source>Activate CLOUD</source>
+        <translation>激活CLOUD版本</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="519"/>
+        <source>Get access to all features with a CLOUD subscription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="523"/>
+        <source>Cloud sync and real time collaboration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="524"/>
+        <source>Preproduction tools (screenplay breakdown)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="525"/>
+        <source>Showrunner tools (series plan, series statistics)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="526"/>
+        <source>Plus everything from the PRO version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="528"/>
+        <source>Become a CLOUD user</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -13970,57 +14191,57 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="198"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="234"/>
         <source>Please enter positive number</source>
         <translation>请输入正数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="397"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="463"/>
         <source>View</source>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="398"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="464"/>
         <source>Lock cards positions</source>
         <translation>锁定卡片位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="399"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="465"/>
         <source>Arrange cards in rows</source>
         <translation>按行排列卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="400"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="466"/>
         <source>Arrange cards in columns</source>
         <translation>按列排列卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="401"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="467"/>
         <source>Card size</source>
         <translation>卡片尺寸</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="402"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="468"/>
         <source>Card ratio</source>
         <translation>卡片比例</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="403"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="469"/>
         <source>Space between cards</source>
         <translation>卡片间距</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="404"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="470"/>
         <source>Arrange cards by</source>
         <translation>卡片排列方式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="405"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="471"/>
         <source>in row</source>
         <translation>按行</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="406"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="472"/>
         <source>Keep empty to fit cards on screen</source>
         <translation>保持空白以适应屏幕上的卡片</translation>
     </message>
@@ -14028,52 +14249,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="173"/>
-        <source>Unlock ability to edit novel cards</source>
-        <translation>解锁编辑小说卡片的功能</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="175"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="152"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="179"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="156"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="182"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="159"/>
         <source>Add part</source>
         <translation>添加小节</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="183"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="160"/>
         <source>Add chapter</source>
         <translation>添加大章</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="184"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="161"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="185"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="162"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="195"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="172"/>
         <source>Search cards</source>
         <translation>搜索卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="199"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="176"/>
         <source>Print cards</source>
         <translation>打印卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="202"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="179"/>
         <source>Save cards to image</source>
         <translation>将卡片保存到图像</translation>
     </message>
@@ -14081,9 +14297,29 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="279"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="287"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="953"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="955"/>
+        <source>Activate PRO version to unlock full access to the novel cards module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="956"/>
+        <source>Go back to text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="957"/>
+        <source>Unlock cards</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14117,69 +14353,69 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="120"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="128"/>
         <source>Perfect logline length</source>
         <translation>完美的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="122"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="130"/>
         <source>Good logline length</source>
         <translation>好的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="124"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="132"/>
         <source>Recommended logline length is 30 words</source>
         <translation>建议剧情梗概长度不超过30个单词</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="126"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="134"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n 个单词</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="233"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="241"/>
         <source>Novel name</source>
         <translation>小说名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="234"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="242"/>
         <source>Tagline</source>
         <translation>宣传词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="235"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="243"/>
         <source>Logline</source>
         <translation>剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="236"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="244"/>
         <source>Generate logline</source>
         <translation>生成剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="237"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="245"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="238"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="246"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="239"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="247"/>
         <source>Outline</source>
         <translation>概述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="240"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="248"/>
         <source>Novel</source>
         <translation>小说</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="241"/>
+        <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="249"/>
         <source>Statistics</source>
         <translation>统计数字</translation>
     </message>
@@ -14187,27 +14423,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelOutlineEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1316"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1270"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1320"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1274"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1325"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1279"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1330"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1284"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1337"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1291"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -14220,90 +14456,90 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="319"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="323"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="318"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="326"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="320"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="328"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="321"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="329"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="323"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="331"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="326"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="334"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="327"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="335"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="328"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="336"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="329"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="337"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="339"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="332"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="340"/>
         <source>Show only current chapter text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="333"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="341"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
 </context>
 <context>
     <name>Ui::NovelOutlineView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="330"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="327"/>
         <source>Hide scene parameters</source>
         <translation>隐藏场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="331"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="328"/>
         <source>Show scene parameters</source>
         <translation>显示场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="332"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="329"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="333"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="330"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
@@ -14313,47 +14549,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>书写文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1754"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1760"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1755"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1761"/>
         <source>Scene parameters</source>
         <translation>场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1756"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1762"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1757"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1763"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1758"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1764"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1761"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1767"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>从“写一本关于......的小说”或“写一章关于......”之类的内容开始提示</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1778"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1784"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1779"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1785"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1780"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1786"/>
         <source>In beats</source>
         <translation>在节拍中</translation>
     </message>
@@ -14361,32 +14597,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="205"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="210"/>
         <source>Header</source>
         <translation>页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="206"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="211"/>
         <source>Print header on title page</source>
         <translation>在标题页上打印页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="207"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="212"/>
         <source>Footer</source>
         <translation>页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="208"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="213"/>
         <source>Print footer on title page</source>
         <translation>在标题页上打印页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="209"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="214"/>
         <source>Override common settings for this novel</source>
         <translation>覆盖此小说的常见设置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="210"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="215"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
@@ -14394,22 +14630,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="213"/>
+        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="200"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="214"/>
+        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="201"/>
         <source>Words</source>
         <translation>单词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="215"/>
+        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="202"/>
         <source>Characters with/without spaces</source>
         <translation>带/不带空格的字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="217"/>
+        <location filename="../management_layer/plugins/novel_statistics/novel_statistics_view.cpp" line="204"/>
         <source>Text statistics</source>
         <translation>文本统计数据</translation>
     </message>
@@ -14417,27 +14653,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1691"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1648"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1695"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1652"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1700"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1657"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1705"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1662"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1711"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1668"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -14450,79 +14686,79 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="327"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="335"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="339"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="334"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="342"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="336"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="344"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="337"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="345"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="338"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="346"/>
         <source>Hide beats headings</source>
         <translation>隐藏节拍标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="339"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="347"/>
         <source>Show beats headings</source>
         <translation>显示节拍标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="341"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="349"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="344"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="352"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="345"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="353"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="346"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="354"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="347"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="355"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="349"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="357"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="350"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="358"/>
         <source>Show only current chapter text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="351"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="359"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
 </context>
 <context>
@@ -14572,86 +14808,86 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTextView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="348"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="341"/>
         <source>Hide scene parameters</source>
         <translation>隐藏场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="349"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="342"/>
         <source>Show scene parameters</source>
         <translation>显示场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="350"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="343"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="351"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="344"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1493"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1489"/>
         <source>Writing text</source>
         <translation>书写文本</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1723"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1726"/>
         <source>Document translation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1725"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1728"/>
         <source>Script generation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1839"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1841"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1840"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1842"/>
         <source>Scene parameters</source>
         <translation>场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1841"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1843"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1842"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1844"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1843"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1845"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1846"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1848"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>从“写一本关于......的小说”或“写一章关于......”之类的内容开始提示</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1863"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1865"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1864"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1866"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1865"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1867"/>
         <source>In text</source>
         <translation>全文</translation>
     </message>
@@ -14777,37 +15013,37 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTimelineSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="346"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="412"/>
         <source>View</source>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="347"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="413"/>
         <source>Arrange timeline horizontal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="348"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="414"/>
         <source>Arrange timeline vertical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="349"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="415"/>
         <source>Card size</source>
         <translation>卡片尺寸</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="350"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="416"/>
         <source>Card ratio</source>
         <translation>卡片比例</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="351"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="417"/>
         <source>Space between cards</source>
         <translation>卡片间距</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="352"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="418"/>
         <source>Timeline scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14815,37 +15051,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTimelineToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="148"/>
-        <source>Unlock ability to edit novel cards</source>
-        <translation>解锁编辑小说卡片的功能</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="150"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="130"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="154"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="134"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="157"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="137"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="158"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="138"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="168"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="148"/>
         <source>Search cards</source>
         <translation>搜索卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="171"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="151"/>
         <source>Save cards to image</source>
         <translation>将卡片保存到图像</translation>
     </message>
@@ -14853,236 +15084,285 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTimelineView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="306"/>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="313"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="951"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="953"/>
+        <source>Activate PRO version to unlock full access to the novel timeline module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="954"/>
+        <source>Go back to text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="955"/>
+        <source>Unlock timeline</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Ui::OnboardingNavigator</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="602"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="874"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="647"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="924"/>
         <source>Translation is ready for %1%</source>
         <translation>翻译已经完成 %1%</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="655"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="700"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>我们发送的确认码已过期。</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="663"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="708"/>
         <source>Email invalid</source>
         <translation>电邮无效</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="815"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>我们已向上面的电子邮件发送了确认码，请在此处输入以进行验证</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="683"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="728"/>
         <source>Choose image</source>
         <translation>选择图片</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="684"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="729"/>
         <source>Images</source>
         <translation>图片</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="693"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="738"/>
         <source>Select an area for the avatar</source>
         <translation>为头像选择区域</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="709"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="754"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>用户名不能为空，请填写</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="918"/>
         <source>Welcome to the Story Architect</source>
         <translation>欢迎使用 Story Architect</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="919"/>
         <source>Let&apos;s configure something before start</source>
         <translation>让我们在开始之前配置一些东西</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="920"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="926"/>
         <source>Choose application theme</source>
         <translation>选择程序主题</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="877"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="927"/>
         <source>Setup size of the user interface elements</source>
         <translation>设置用户界面元素的大小</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="928"/>
         <source>small</source>
         <translation>小</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="879"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="929"/>
         <source>big</source>
         <translation>大</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="898"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="917"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="930"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="948"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="960"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="967"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="983"/>
         <source>Continue</source>
         <translation>继续</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="883"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="933"/>
         <source>Sign in to get access to the extended
 FREE, PRO and CLOUD features</source>
         <translation>登录以访问更多的FREE、PRO以及CLOUD功能</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="947"/>
         <source>I want to receive STARC news</source>
         <translation>我想接收 STARC 新闻</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="934"/>
         <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
         <translation>如写作竞赛、写作数据统计、世界构建工具、故事研发工具、协作等</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="886"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="936"/>
         <source>Email</source>
         <translation>电邮</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="937"/>
         <source>Confirmation code</source>
         <translation>确认代码</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="938"/>
         <source>Sign up</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="889"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="939"/>
         <source>Send code again</source>
         <translation>再次发送代码</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="940"/>
         <source>Continue without sign in</source>
         <translation>不登录，继续</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="942"/>
         <source>Set up your account</source>
         <translation>设置您的帐户</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="943"/>
         <source>Personalize your workspace</source>
         <translation>个性化您的工作空间</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="894"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="944"/>
         <source>Change avatar</source>
         <translation>更换头像</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="895"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="945"/>
         <source>Your name</source>
         <translation>您的名字</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="896"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="946"/>
         <source>Your bio</source>
         <translation>您的简历</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="900"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="950"/>
         <source>Customize your workspace</source>
         <translation>自定义您的工作空间</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="901"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="913"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="951"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="963"/>
         <source>Feel at home</source>
         <translation>宾至如归的感觉</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="903"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="953"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
         <translation>Story Architect为任何形式的写作提供了工具。选择您计划使用的：</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="905"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="955"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="906"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="956"/>
         <source>Comic book</source>
         <translation>漫画书</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="957"/>
         <source>Audioplay</source>
         <translation>音乐剧本</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="908"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="958"/>
         <source>Stageplay</source>
         <translation>舞台剧本</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="959"/>
         <source>Novel</source>
         <translation>小说</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="912"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="962"/>
         <source>Customize your work environment</source>
         <translation>自定义您的工作环境</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="915"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="965"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
         <translation>我们将利用您在其他应用程序方面的经验来帮助您习惯 STARC。</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="918"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="968"/>
         <source>Application</source>
         <translation>程序</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="919"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="969"/>
         <source>Adapt the interface and workflow</source>
         <translation>调整界面和工作流程</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="921"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="971"/>
+        <source>AI assistant</source>
+        <translation>AI助理</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="972"/>
+        <source>Your writing mate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="974"/>
+        <source>An intelligent assistant speeds up your work and helps you hear yourself clearly. It will help you:
+
+• paraphrase, supplement, expand, abbreviate, translate, and summarize text
+
+• brainstorm and suggest ways to organize your ideas as text or mind maps
+
+• translate a script, comic, or novel into any language while fully preserving its formatting
+
+• create a summary of any text document, convert a script to a novel and back, and much more.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="982"/>
+        <source>Enable AI assistant</source>
+        <translation>启用AI助理</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="985"/>
         <source>Before you get started</source>
         <translation>开始之前</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="922"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="986"/>
         <source>Feel our care</source>
         <translation>感受我们的关怀</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="924"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="988"/>
         <source>You should know that Story Architect cares about the safety of your work, so the app:
 
 • automatically saves changes every three seconds when there is no activity
@@ -15103,22 +15383,22 @@ This will help to protect your creativity in any unforeseen situation.</source>
 这将有助于在任何不可预见的情况下保护您的创造力。</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="932"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="996"/>
         <source>Thanks I&apos;ll know</source>
         <translation>谢谢，我知道</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="934"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="998"/>
         <source>Follow us on social media</source>
         <translation>在社交媒体上关注我们</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="935"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="999"/>
         <source>Let&apos;s unite to make the best app for writers</source>
         <translation>让我们团结起来，为写手们制作最好的应用程序</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="936"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="1000"/>
         <source>Be the first to know our news, fresh updates and special offers.
 
 Get in touch with our technical support, share your feedback and suggest improvements.
@@ -15131,7 +15411,7 @@ Discuss everything with fellow community of writers, share your work in progress
 与其他作家社区讨论一切，分享您正在进行的工作并谈论生活。</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="946"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="1010"/>
         <source>Start writing</source>
         <translation>开始写作文吧</translation>
     </message>
@@ -15192,17 +15472,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PresentationSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="90"/>
+        <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="162"/>
         <source>Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="91"/>
+        <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="163"/>
         <source>Presentation name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="92"/>
+        <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="164"/>
         <source>Presentation description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15210,7 +15490,22 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PresentationView</name>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/presentation/presentation_view.cpp" line="396"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_view.cpp" line="398"/>
+        <source>Activate PRO version to unlock full access to the presentation module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_view.cpp" line="399"/>
+        <source>Unlock presentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_view.cpp" line="403"/>
         <source>Load new presentation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15309,80 +15604,80 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectCollaboratorsView</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="178"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="164"/>
         <source>People who allowed to work with the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="179"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="165"/>
         <source>Only you have access to the project</source>
         <translation>仅您有访问项目的权限</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="255"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="241"/>
         <source>Email invalid</source>
         <translation>电邮无效</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="328"/>
         <source>Owner</source>
         <translation>拥有者</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="342"/>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="409"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="331"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="398"/>
         <source>Editor</source>
         <translation>审校者</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="345"/>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="410"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="334"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="399"/>
         <source>Commentator</source>
         <translation>评论员</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="348"/>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="411"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="337"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="400"/>
         <source>Reader</source>
         <translation>读者</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="351"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="340"/>
         <source>Partial access</source>
         <translation>部分访问权限</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="387"/>
         <source>Share the project</source>
         <translation>分享项目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="388"/>
         <source>Add people who you’d like to share with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="401"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="390"/>
         <source>Email or user name</source>
         <translation>电邮或用户名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="403"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="392"/>
         <source>Email</source>
         <translation>电邮</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="405"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="394"/>
         <source>Configure access</source>
         <translation>配置访问权限</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="406"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="395"/>
         <source>Invite</source>
         <translation>邀请</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="396"/>
         <source>Role</source>
         <translation>扮演</translation>
     </message>
@@ -15390,37 +15685,37 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="160"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="151"/>
         <source>Project name</source>
         <translation>项目名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="161"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="152"/>
         <source>Short description</source>
         <translation>简要描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="162"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="153"/>
         <source>Tagline, logline or something similar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="163"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="154"/>
         <source>Add cover +</source>
         <translation>添加封面 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="163"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="154"/>
         <source>Change cover...</source>
         <translation>更换封面...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="164"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="155"/>
         <source>Do you want to reset the story&apos;s cover?</source>
         <translation>你想重新设置故事的封面吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="165"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="156"/>
         <source>Select an area for the cover</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15455,42 +15750,42 @@ Discuss everything with fellow community of writers, share your work in progress
     <name>Ui::ProjectView</name>
     <message>
         <location filename="../ui/project/project_view.cpp" line="244"/>
-        <location filename="../ui/project/project_view.cpp" line="313"/>
+        <location filename="../ui/project/project_view.cpp" line="316"/>
         <source>Current draft</source>
         <translation>当前草稿</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="300"/>
+        <location filename="../ui/project/project_view.cpp" line="303"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="301"/>
+        <location filename="../ui/project/project_view.cpp" line="304"/>
         <source>Choose an item to edit, or</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="302"/>
+        <location filename="../ui/project/project_view.cpp" line="305"/>
         <source>create a new one</source>
         <translation>新建一个</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="304"/>
+        <location filename="../ui/project/project_view.cpp" line="307"/>
         <source>Document content loading...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="306"/>
+        <location filename="../ui/project/project_view.cpp" line="309"/>
         <source>Please, wait a while and document editor will be activated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="309"/>
+        <location filename="../ui/project/project_view.cpp" line="312"/>
         <source>Ooops... looks like editor of this document not implemented yet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="311"/>
+        <location filename="../ui/project/project_view.cpp" line="314"/>
         <source>But don&apos;t worry, it will be here in one of the future updates!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15570,37 +15865,37 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PurchaseDialogOptionWidget</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="153"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="154"/>
         <source>Pay with:</source>
         <translation>付款方式：</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="172"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="175"/>
         <source>%1 lifetime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="174"/>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="177"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="263"/>
         <source>%1 for %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="176"/>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="179"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="263"/>
         <source>%n month(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="177"/>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="261"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="180"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="264"/>
         <source>%1 credits</source>
         <translation>%1 积分</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="294"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="298"/>
         <source>$%1 per month</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15608,49 +15903,49 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PurchaseGiftDialog</name>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="98"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="100"/>
         <source>Email invalid</source>
         <translation>电邮无效</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="127"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
         <source>Purchasing a gift</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="128"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
         <source>Recepient email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
         <source>A promo code to activate the gift will be sent here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="132"/>
         <source>Greeting text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="133"/>
         <source>You can leave it blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="132"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="134"/>
         <source>A promo code to activate the gift will be sent to the recipient immediately after payment.
 
 Promo code validity period is a 1 year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="135"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="137"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="136"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="138"/>
         <source>Purchase</source>
         <translation>购买</translation>
     </message>
@@ -15688,62 +15983,62 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ReleaseView</name>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="209"/>
+        <location filename="../ui/notifications/release_view.cpp" line="208"/>
         <source>Dev version updated</source>
         <translation>开发版本已更新</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="211"/>
+        <location filename="../ui/notifications/release_view.cpp" line="210"/>
         <source>Story Architect version %1 was published for testing.</source>
         <translation>Story Architect版本%1已发布以进行测试。</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="212"/>
+        <location filename="../ui/notifications/release_view.cpp" line="211"/>
         <source>Check out what&apos;s changed</source>
         <translation>查看更改内容</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="218"/>
+        <location filename="../ui/notifications/release_view.cpp" line="217"/>
         <source>Version %1 published</source>
         <translation>已发布版本%1</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="220"/>
+        <location filename="../ui/notifications/release_view.cpp" line="219"/>
         <source>Read more about release</source>
         <translation>阅读有关发布的更多信息</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="240"/>
+        <location filename="../ui/notifications/release_view.cpp" line="239"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="241"/>
+        <location filename="../ui/notifications/release_view.cpp" line="240"/>
         <source>Installed</source>
         <translation>已安装</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="262"/>
+        <location filename="../ui/notifications/release_view.cpp" line="261"/>
         <source>Cancel downloading</source>
         <translation>取消下载</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="276"/>
+        <location filename="../ui/notifications/release_view.cpp" line="275"/>
         <source>Downloading failed</source>
         <translation>下载失败</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="278"/>
+        <location filename="../ui/notifications/release_view.cpp" line="277"/>
         <source>Retry</source>
         <translation>重试</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="290"/>
+        <location filename="../ui/notifications/release_view.cpp" line="289"/>
         <source>Downloaded</source>
         <translation>已下载</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="291"/>
+        <location filename="../ui/notifications/release_view.cpp" line="290"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
@@ -15805,65 +16100,65 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownCreateResourceView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="177"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="185"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="348"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="194"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="470"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="202"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="478"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="236"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="244"/>
         <source>Please fill element name</source>
         <translation>请填写元素名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="253"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="261"/>
         <source>Element name already used</source>
         <translation>元素名称已使用</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="359"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="467"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="367"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="475"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="494"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="502"/>
         <source>Category</source>
         <translation>类别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="495"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="503"/>
         <source>Element name</source>
         <translation>元素名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="496"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="504"/>
         <source>Qty</source>
         <translation>数量</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="497"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="505"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="498"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="506"/>
         <source>Description for scene</source>
         <translation>场景描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="499"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="507"/>
         <source>Mark all mentions in screenplay</source>
         <translation>在剧本中标记所有提及的内容</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="500"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="508"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -15876,7 +16171,7 @@ Promo code validity period is a 1 year</source>
         <translation>为所选文本添加“%1”元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_toolbar.cpp" line="242"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_toolbar.cpp" line="241"/>
         <source>Add element for selected text</source>
         <translation>为所选文本添加元素</translation>
     </message>
@@ -15884,37 +16179,37 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownResourcesView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="132"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="131"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="139"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="138"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="479"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="478"/>
         <source>Create new element</source>
         <translation>新建元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="480"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="479"/>
         <source>Additional options</source>
         <translation>附加选项</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="481"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="480"/>
         <source>Add exisiting elements</source>
         <translation>添加存在的元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="482"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="481"/>
         <source>Copy elements from another scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="483"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="482"/>
         <source>Copy scene elements to another scene</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15922,108 +16217,108 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownStructureCharacterDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="243"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="248"/>
         <source>Create new character</source>
         <translation>创建角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="244"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="249"/>
         <source>Edit character</source>
         <translation>修改角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="245"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="250"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="246"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="251"/>
         <source>Story role</source>
         <translation>故事信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="249"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="254"/>
         <source>Primary</source>
         <translation>首要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="249"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="254"/>
         <source>Secondary</source>
         <translation>次要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="249"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="254"/>
         <source>Tertiary</source>
         <translation>必要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="249"/>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="254"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="259"/>
         <source>Undefined</source>
         <translation>未定义</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="251"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="256"/>
         <source>Age</source>
         <translation>年龄</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="252"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="257"/>
         <source>Gender</source>
         <translation>性别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="254"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="259"/>
         <source>Male</source>
         <translation>男</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="254"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="259"/>
         <source>Female</source>
         <translation>女</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="254"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="259"/>
         <source>Other</source>
         <translation>其它</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="256"/>
-        <source>One sentense description</source>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="261"/>
+        <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="258"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="263"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="258"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="263"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="259"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="264"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>你想删除角色的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="260"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="265"/>
         <source>Select an area for the character main photo</source>
         <translation>为角色主照片选择一个区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="261"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="266"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="262"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="267"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="262"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_character_dialog.cpp" line="267"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -16031,82 +16326,82 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownStructureLocationDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="206"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="210"/>
         <source>Create new location</source>
         <translation>新建位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="207"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="211"/>
         <source>Edit location</source>
         <translation>修改位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="208"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="212"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="209"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="213"/>
         <source>Story role</source>
         <translation>故事信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="216"/>
         <source>Primary</source>
         <translation>首要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="216"/>
         <source>Secondary</source>
         <translation>次要的</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="216"/>
         <source>Tertiary</source>
         <translation>必要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="216"/>
         <source>Undefined</source>
         <translation>未定义</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="214"/>
-        <source>One sentense description</source>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="218"/>
+        <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="215"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="219"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="215"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="219"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="216"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="220"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>你想删除位置的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="217"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="221"/>
         <source>Select an area for the location main photo</source>
         <translation>为位置主照片选择一个区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="218"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="222"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="219"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="223"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="219"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_location_dialog.cpp" line="223"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -16114,42 +16409,42 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownStructureResourceCategoryDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="154"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="155"/>
         <source>Create new category</source>
         <translation>创建新类别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="155"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="156"/>
         <source>Edit category</source>
         <translation>修改类别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="156"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="157"/>
         <source>Category name</source>
         <translation>类别名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="157"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="158"/>
         <source>Select category color</source>
         <translation>选择类别颜色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="158"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="159"/>
         <source>Assign board ID numbers for category elements</source>
         <translation>为类别元素指定板ID号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="159"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="160"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="160"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="161"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="160"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="161"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -16157,42 +16452,42 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownStructureResourceDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="170"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="174"/>
         <source>Create new element</source>
         <translation>新建元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="171"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="175"/>
         <source>Edit element</source>
         <translation>修改元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="172"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="176"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="173"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="177"/>
         <source>Category</source>
         <translation>类别</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="174"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="178"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="175"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="179"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="176"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="180"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="176"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="180"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -16223,107 +16518,127 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="402"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="415"/>
         <source>Hide scene parameters</source>
         <translation>隐藏场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="403"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="416"/>
         <source>Show scene parameters</source>
         <translation>显示场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="404"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="417"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="405"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="418"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="420"/>
         <source>Hide screenplay dictionaries</source>
         <translation>隐藏影视剧本词典</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="408"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="421"/>
         <source>Show screenplay dictionaries</source>
         <translation>显示影视剧本词典</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1265"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1305"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>确实要从当前场景中删除元素“%1”吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2133"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2174"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2176"/>
+        <source>Activate CLOUD version to unlock full access to the screenplay breakdown module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2177"/>
+        <source>Go back to text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2178"/>
+        <source>Unlock breakdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2180"/>
         <source>Elements</source>
         <translation>元素</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2154"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2201"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2155"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2202"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2156"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2203"/>
         <source>In cast list</source>
         <translation>在演员表中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2157"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2204"/>
         <source>In action</source>
         <translation>在行动中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2158"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2205"/>
         <source>In character</source>
         <translation>在角色中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2159"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2206"/>
         <source>In dialogue</source>
         <translation>在对白中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1267"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1307"/>
         <source>No</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1268"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1308"/>
         <source>Yes, remove</source>
         <translation>是，请移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2134"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2181"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2135"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2182"/>
         <source>Scene parameters</source>
         <translation>场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2136"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2183"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2137"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2184"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2138"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2185"/>
         <source>Dictionaries</source>
         <translation>词典</translation>
     </message>
@@ -16429,57 +16744,57 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayCardsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="199"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="235"/>
         <source>Please enter positive number</source>
         <translation>请输入正数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="464"/>
         <source>View</source>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="465"/>
         <source>Lock cards positions</source>
         <translation>锁定卡片位置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="400"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="466"/>
         <source>Arrange cards in rows</source>
         <translation>按行排列卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="401"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="467"/>
         <source>Arrange cards in columns</source>
         <translation>按列排列卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="402"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="468"/>
         <source>Card size</source>
         <translation>卡片尺寸</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="403"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="469"/>
         <source>Card ratio</source>
         <translation>卡片比例</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="404"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="470"/>
         <source>Space between cards</source>
         <translation>卡片间距</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="405"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="471"/>
         <source>Arrange cards by</source>
         <translation>卡片排列方式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="406"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="472"/>
         <source>in row</source>
         <translation>按行</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="407"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="473"/>
         <source>Keep empty to fit cards on screen</source>
         <translation>保持空白以适应屏幕上的卡片</translation>
     </message>
@@ -16487,52 +16802,47 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayCardsToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="175"/>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation>解锁编辑影视剧本卡片的功能</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="177"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="155"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="181"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="159"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="184"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="162"/>
         <source>Add act</source>
         <translation>添加动作 </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="185"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="163"/>
         <source>Add sequence</source>
         <translation>添加序列</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="186"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="164"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="187"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="165"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="197"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="175"/>
         <source>Search cards</source>
         <translation>搜索卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="201"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="179"/>
         <source>Print cards</source>
         <translation>打印卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="204"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="182"/>
         <source>Save cards to image</source>
         <translation>将卡片保存到图像</translation>
     </message>
@@ -16540,9 +16850,29 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="284"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="291"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="975"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="977"/>
+        <source>Activate PRO version to unlock full access to the screenplay cards module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="978"/>
+        <source>Go back to text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="979"/>
+        <source>Unlock cards</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -16594,39 +16924,39 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayGenderReportView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="199"/>
         <source>Does not pass</source>
         <translation>禁止通过</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="199"/>
         <source>Passed %n time(s)</source>
         <translation>
             <numerusform>已通过 %n 次</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="277"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="264"/>
         <source>Bechdel test</source>
         <translation>贝克德尔测验</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="278"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="265"/>
         <source>Reverse Bechdel test</source>
         <translation>反向贝克德尔测验</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="280"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="267"/>
         <source>Scenes statistics</source>
         <translation>场景统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="281"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="268"/>
         <source>Dialogues statistics</source>
         <translation>对白统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="282"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="269"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
@@ -16634,69 +16964,79 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="120"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="147"/>
         <source>Perfect logline length</source>
         <translation>完美的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="122"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="149"/>
         <source>Good logline length</source>
         <translation>好的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="124"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="151"/>
         <source>Recommended logline length is 30 words</source>
         <translation>建议剧情梗概长度不超过30个单词</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="126"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="153"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n 个单词</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="233"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="273"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="274"/>
+        <source>Send for checking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="276"/>
         <source>Screenplay name</source>
         <translation>影视剧本名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="234"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="277"/>
         <source>Tagline</source>
         <translation>宣传词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="235"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="278"/>
         <source>Logline</source>
         <translation>剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="236"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="279"/>
         <source>Generate logline</source>
         <translation>生成剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="237"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="280"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="238"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="281"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="239"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="282"/>
         <source>Treatment</source>
         <translation>处置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="240"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="283"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="241"/>
+        <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="284"/>
         <source>Statistics</source>
         <translation>统计数字</translation>
     </message>
@@ -16704,193 +17044,193 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="789"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="795"/>
         <source>Header</source>
         <translation>页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="790"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="796"/>
         <source>Print header on title page</source>
         <translation>在标题页上打印页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="791"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="797"/>
         <source>Footer</source>
         <translation>页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="792"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="798"/>
         <source>Print footer on title page</source>
         <translation>在标题页上打印页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="362"/>
         <source>Do you want unlock scene numbers?</source>
         <translation>是否要解锁场景编号？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="363"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="358"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="364"/>
         <source>Yes, unlock</source>
         <translation>是，解锁</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="793"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="799"/>
         <source>Scenes numbering</source>
         <translation>场景正在编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="794"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="800"/>
         <source>Scenes numbers&apos; template</source>
         <translation>场景编号模板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="795"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="801"/>
         <source>Use # mark for the scene number</source>
         <translation>用#标记场景编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="796"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="802"/>
         <source>Reset scene numbers template</source>
         <translation>重置场景编号模板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="797"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="803"/>
         <source>Scenes numbering start at</source>
         <translation>场景编号从此开始</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="798"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="804"/>
         <source>Lock numbering</source>
         <translation>锁定编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="799"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="805"/>
         <source>Lock numbering again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="800"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="806"/>
         <source>Unlock numbering</source>
         <translation>解锁编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="801"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="807"/>
         <source>Override common settings for this screenplay</source>
         <translation>覆盖此剧本的常用设置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="802"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="808"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="803"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="809"/>
         <source>Print scenes numbers</source>
         <translation>打印场景编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="804"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="810"/>
         <source>on the left</source>
         <translation>在左边</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="805"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="811"/>
         <source>on the right</source>
         <translation>在右边</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="806"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="812"/>
         <source>Print dialogues numbers</source>
         <translation>打印对白编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="807"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="813"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>根据页数计算持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="808"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="814"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="820"/>
         <source>at the rate of</source>
         <translation>如此速度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="809"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="815"/>
         <source>pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="810"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="817"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="816"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="823"/>
         <source>has duration</source>
         <translation>长期存在</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="811"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="818"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="822"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="825"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="827"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="829"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="817"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="824"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="828"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="831"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="833"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="835"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="837"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="839"/>
         <source>seconds</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="813"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="819"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>根据字母数计算持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="815"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="821"/>
         <source>letters</source>
         <translation>字母</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="816"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="822"/>
         <source>including spaces</source>
         <translation>包含的空格</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="819"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="825"/>
         <source>Calculate duration based on the custom rules</source>
         <translation>自行估算工期</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="820"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="826"/>
         <source>For action</source>
         <translation>用于行动</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="821"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="827"/>
         <source>Per entry</source>
         <translation>每条</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="823"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="828"/>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="832"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="829"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="834"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="838"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="824"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="830"/>
         <source>Each 50 characters</source>
         <translation>每50个字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="826"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="832"/>
         <source>For dialogue</source>
         <translation>用于对话</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="830"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="836"/>
         <source>For scene heading</source>
         <translation>用于场景标题</translation>
     </message>
@@ -16906,69 +17246,69 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplaySeriesInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="129"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="137"/>
         <source>Perfect logline length</source>
         <translation>完美的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="131"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="139"/>
         <source>Good logline length</source>
         <translation>好的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="133"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="141"/>
         <source>Recommended logline length is 30 words</source>
         <translation>建议剧情梗概长度不超过30个单词</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="135"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="143"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n 个单词</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="242"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="250"/>
         <source>Series name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="243"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="251"/>
         <source>Tagline</source>
         <translation>宣传词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="244"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="252"/>
         <source>Logline</source>
         <translation>剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="245"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="253"/>
         <source>Generate logline</source>
         <translation>生成剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="246"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="254"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="247"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="255"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="248"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="256"/>
         <source>Treatment</source>
         <translation>处置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="249"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="257"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="250"/>
+        <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="258"/>
         <source>Statistics</source>
         <translation>统计数字</translation>
     </message>
@@ -16976,276 +17316,420 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplaySeriesParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="649"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="653"/>
         <source>Header</source>
         <translation>页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="650"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="654"/>
         <source>Print header on title page</source>
         <translation>在标题页上打印页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="651"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="655"/>
         <source>Footer</source>
         <translation>页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="652"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="656"/>
         <source>Print footer on title page</source>
         <translation>在标题页上打印页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="653"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="657"/>
         <source>Override common settings for this series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="654"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="658"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="655"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="659"/>
         <source>Print scenes numbers</source>
         <translation>打印场景编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="656"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="660"/>
         <source>on the left</source>
         <translation>在左边</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="657"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="661"/>
         <source>on the right</source>
         <translation>在右边</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="658"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="662"/>
         <source>Print dialogues numbers</source>
         <translation>打印对白编号</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="659"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="663"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>根据页数计算持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="660"/>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="666"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="664"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="670"/>
         <source>at the rate of</source>
         <translation>如此速度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="661"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="665"/>
         <source>pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="662"/>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="669"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="666"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="673"/>
         <source>has duration</source>
         <translation>长期存在</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="663"/>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="670"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="667"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="674"/>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="677"/>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="679"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="678"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="681"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="683"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="685"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="687"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="689"/>
         <source>seconds</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="665"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="669"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>根据字母数计算持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="667"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="671"/>
         <source>letters</source>
         <translation>字母</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="668"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="672"/>
         <source>including spaces</source>
         <translation>包含的空格</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="671"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="675"/>
         <source>Calculate duration based on the custom rules</source>
         <translation>自行估算工期</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="672"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="676"/>
         <source>For action</source>
         <translation>用于行动</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="673"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="677"/>
         <source>Per entry</source>
         <translation>每条</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="675"/>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="680"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="679"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="684"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="688"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="676"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="680"/>
         <source>Each 50 characters</source>
         <translation>每50个字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="678"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="682"/>
         <source>For dialogue</source>
         <translation>用于对话</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="682"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="686"/>
         <source>For scene heading</source>
         <translation>用于场景标题</translation>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplaySeriesPlanSearchToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_search_toolbar.cpp" line="85"/>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_search_toolbar.cpp" line="166"/>
+        <source>Search without case sensitive</source>
+        <translation>搜索时 不区分大小写</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_search_toolbar.cpp" line="86"/>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_search_toolbar.cpp" line="167"/>
+        <source>Search with case sensitive</source>
+        <translation>搜索时 区分大小写</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_search_toolbar.cpp" line="160"/>
+        <source>Exit from search</source>
+        <translation>退出搜索</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_search_toolbar.cpp" line="163"/>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_search_toolbar.cpp" line="164"/>
+        <source>Enter search phrase here</source>
+        <translation>在此处输入搜索短语</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplaySeriesPlanSidebar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_sidebar.cpp" line="410"/>
+        <source>View</source>
+        <translation>查看</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_sidebar.cpp" line="411"/>
+        <source>Card size</source>
+        <translation>卡片尺寸</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_sidebar.cpp" line="412"/>
+        <source>Card ratio</source>
+        <translation>卡片比例</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_sidebar.cpp" line="413"/>
+        <source>Space between cards</source>
+        <translation>卡片间距</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_sidebar.cpp" line="414"/>
+        <source>Story line name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_sidebar.cpp" line="415"/>
+        <source>Episode name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_sidebar.cpp" line="416"/>
+        <source>Episode story line description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplaySeriesPlanToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_toolbar.cpp" line="144"/>
+        <source>Undo last action</source>
+        <translation>撤消上一个操作</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_toolbar.cpp" line="148"/>
+        <source>Redo last action</source>
+        <translation>重做上一个操作</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_toolbar.cpp" line="151"/>
+        <source>Add episode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_toolbar.cpp" line="152"/>
+        <source>Add story line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_toolbar.cpp" line="153"/>
+        <source>Remove selected item</source>
+        <translation>删除所选条目</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_toolbar.cpp" line="163"/>
+        <source>Search story lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_toolbar.cpp" line="167"/>
+        <source>Export episodes plan</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplaySeriesPlanView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="517"/>
+        <source>Do you really want to remove story line &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="518"/>
+        <source>No</source>
+        <translation>否</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="519"/>
+        <source>Yes, remove</source>
+        <translation>是，请移除</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="566"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="568"/>
+        <source>Activate CLOUD version to unlock full access to the screenplay series plan module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="569"/>
+        <source>Go back to text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="570"/>
+        <source>Unlock series plan</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplaySeriesStatisticsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="655"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="741"/>
         <source>Summary text statisics</source>
         <translation>汇总文本统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="656"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="742"/>
         <source>Scenes statistics</source>
         <translation>场景统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="657"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="743"/>
         <source>Locations statistics</source>
         <translation>位置统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="658"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="744"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="660"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="746"/>
         <source>Show characters</source>
         <translation>显示角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="661"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="747"/>
         <source>Sort scenes</source>
         <translation>场景排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="662"/>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="671"/>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="681"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="748"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="757"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="767"/>
         <source>by script order</source>
         <translation>按脚本顺序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="663"/>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="672"/>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="682"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="758"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="768"/>
         <source>by alphabetical order</source>
         <translation>按字母顺序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="664"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="750"/>
         <source>from longest to shortest scene</source>
         <translation>场景从长到短</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="665"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="751"/>
         <source>from shortest to longest scene</source>
         <translation>场景从短到长</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="666"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="752"/>
         <source>from massive to unmanned scene</source>
         <translation>场景从多人到无人</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="667"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="753"/>
         <source>from unmanned to massive scene</source>
         <translation>场景从无人到多人</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="669"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="755"/>
         <source>Extended view</source>
         <translation>扩展视图 </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="670"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="756"/>
         <source>Sort locations</source>
         <translation>位置排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="673"/>
-        <source>from most to least occurences</source>
-        <translation>事件从多到少</translation>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="759"/>
+        <source>from most to least occurrences</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="674"/>
-        <source>from least to most occurences</source>
-        <translation>事件从少到多</translation>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="760"/>
+        <source>from least to most occurrences</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="675"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="761"/>
         <source>from longest to shortest duration</source>
         <translation>持续时间从长到短</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="676"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="762"/>
         <source>from shortest to longest duration</source>
         <translation>持续时间从短到长</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="678"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="764"/>
         <source>Show detailed scenes info</source>
         <translation>显示场景信息细节</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="679"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="765"/>
         <source>Show words count</source>
         <translation>显示单词数量</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="680"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="766"/>
         <source>Sort characters</source>
         <translation>角色排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="683"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="769"/>
         <source>from most to least scenes</source>
         <translation>场景从多到少</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="684"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="770"/>
         <source>from least to most scenes</source>
         <translation>场景从少到多</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="685"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="771"/>
         <source>from most to least dialogues</source>
         <translation>对白从多到少</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="686"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="772"/>
         <source>from least to most dialogues</source>
         <translation>对白从少到多</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="688"/>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="690"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="774"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="776"/>
         <source>All characters</source>
         <translation>所有角色</translation>
     </message>
@@ -17253,27 +17737,37 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplaySeriesStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="354"/>
-        <source>Unlock ability to manage screenplay series statistics</source>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="368"/>
+        <source>You&apos;re in the read only mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="355"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="370"/>
+        <source>Activate CLOUD version to unlock full access to the series statistics module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="371"/>
+        <source>Unlock statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="372"/>
         <source>Update statistics</source>
         <translation>更新统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="373"/>
         <source>Save statistics to the file</source>
         <translation>统计数据保存到文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="374"/>
         <source>No statistics available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="358"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="375"/>
         <source>Statistics appear when you&apos;ll start to write screenplay</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17281,42 +17775,42 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplaySeriesSummaryReportView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="320"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="307"/>
         <source>Duration</source>
         <translation>持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="321"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="308"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="309"/>
         <source>Words</source>
         <translation>单词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="323"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="310"/>
         <source>Characters with/without spaces</source>
         <translation>带/不带空格的字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="325"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="312"/>
         <source>Text statistics</source>
         <translation>文本统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="326"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="313"/>
         <source>Scenes statistics</source>
         <translation>场景统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="327"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="314"/>
         <source>Locations statistics</source>
         <translation>位置统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="328"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/reports/screenplay_series_summary_report_view.cpp" line="315"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
@@ -17324,174 +17818,174 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayStatisticsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="789"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="883"/>
         <source>Summary text statisics</source>
         <translation>汇总文本统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="790"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="827"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="884"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="921"/>
         <source>Scenes statistics</source>
         <translation>场景统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="791"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="885"/>
         <source>Locations statistics</source>
         <translation>位置统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="792"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="825"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="886"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="919"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="794"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="888"/>
         <source>Show characters</source>
         <translation>显示角色</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="795"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="889"/>
         <source>Sort scenes</source>
         <translation>场景排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="796"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="805"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="815"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="890"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="899"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="909"/>
         <source>by script order</source>
         <translation>按脚本顺序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="797"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="806"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="816"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="891"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="900"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="910"/>
         <source>by alphabetical order</source>
         <translation>按字母顺序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="798"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="892"/>
         <source>from longest to shortest scene</source>
         <translation>场景从长到短</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="799"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="893"/>
         <source>from shortest to longest scene</source>
         <translation>场景从短到长</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="800"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="894"/>
         <source>from massive to unmanned scene</source>
         <translation>场景从多人到无人</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="801"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="895"/>
         <source>from unmanned to massive scene</source>
         <translation>场景从无人到多人</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="803"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="897"/>
         <source>Extended view</source>
         <translation>扩展视图 </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="804"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="898"/>
         <source>Sort locations</source>
         <translation>位置排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="807"/>
-        <source>from most to least occurences</source>
-        <translation>事件从多到少</translation>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="901"/>
+        <source>from most to least occurrences</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="808"/>
-        <source>from least to most occurences</source>
-        <translation>事件从少到多</translation>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="902"/>
+        <source>from least to most occurrences</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="809"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="903"/>
         <source>from longest to shortest duration</source>
         <translation>持续时间从长到短</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="810"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="904"/>
         <source>from shortest to longest duration</source>
         <translation>持续时间从短到长</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="812"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="906"/>
         <source>Show detailed scenes info</source>
         <translation>显示场景信息细节</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="813"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="907"/>
         <source>Show words count</source>
         <translation>显示单词数量</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="814"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="908"/>
         <source>Sort characters</source>
         <translation>角色排序</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="817"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="911"/>
         <source>from most to least scenes</source>
         <translation>场景从多到少</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="818"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="912"/>
         <source>from least to most scenes</source>
         <translation>场景从少到多</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="819"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="913"/>
         <source>from most to least dialogues</source>
         <translation>对白从多到少</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="820"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="914"/>
         <source>from least to most dialogues</source>
         <translation>对白从少到多</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="824"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="918"/>
         <source>Bechdel test</source>
         <translation>贝克德尔测验</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="826"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="920"/>
         <source>Dialogues statistics</source>
         <translation>对白统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="829"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="923"/>
         <source>Scene duration</source>
         <translation>场景持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="830"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="924"/>
         <source>Action duration</source>
         <translation>情节持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="831"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="925"/>
         <source>Dialogues duration</source>
         <translation>对白持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="832"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="926"/>
         <source>Characters count</source>
         <translation>角色数量</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="833"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="927"/>
         <source>Dialogues count</source>
         <translation>对白数量</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="822"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="835"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="916"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="929"/>
         <source>All characters</source>
         <translation>所有角色</translation>
     </message>
@@ -17560,27 +18054,37 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="390"/>
-        <source>Unlock ability to manage screenplay statistics</source>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="405"/>
+        <source>You&apos;re in the read only mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="407"/>
+        <source>Activate PRO version to unlock full access to the statistics module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="408"/>
+        <source>Unlock statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="409"/>
         <source>Update statistics</source>
         <translation>更新统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="410"/>
         <source>Save statistics to the file</source>
         <translation>统计数据保存到文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="411"/>
         <source>No statistics available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="412"/>
         <source>Statistics appear when you&apos;ll start to write screenplay</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17596,42 +18100,42 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplaySummaryReportView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="319"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="306"/>
         <source>Duration</source>
         <translation>持续时间</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="320"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="307"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="321"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="308"/>
         <source>Words</source>
         <translation>字</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="309"/>
         <source>Characters with/without spaces</source>
         <translation>带/不带空格的字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="324"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="311"/>
         <source>Text statistics</source>
         <translation>文本统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="325"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="312"/>
         <source>Scenes statistics</source>
         <translation>场景统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="326"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="313"/>
         <source>Locations statistics</source>
         <translation>位置统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="327"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="314"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
@@ -17662,76 +18166,76 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTemplatePageView</name>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="362"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="357"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="362"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="357"/>
         <source>inch</source>
         <translation>英寸</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="363"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="358"/>
         <source>Template name</source>
         <translation>模板名称</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="364"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="359"/>
         <source>Page format</source>
         <translation>页面格式</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="376"/>
         <source>Page margins</source>
         <translation>页边距</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="382"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="394"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="377"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="389"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="384"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="391"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="379"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="386"/>
         <source>Top</source>
         <translation>顶部</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="386"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="396"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="391"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="388"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="392"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="383"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="387"/>
         <source>Bottom</source>
         <translation>底部</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="390"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="385"/>
         <source>Page numbering alignment by vertical</source>
         <translation>页面编号按垂直对齐</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="393"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="388"/>
         <source>by horizontal</source>
         <translation>按水平方向</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="395"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="390"/>
         <source>Center</source>
         <translation>中间</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="397"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="392"/>
         <source>Show number on the first page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="398"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="393"/>
         <source>Split page into columns in proportion</source>
         <translation>按比例将页面拆分成列</translation>
     </message>
@@ -17739,166 +18243,166 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTemplateParagraphsView</name>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="792"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="794"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="792"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="794"/>
         <source>inch</source>
         <translation>英寸</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="796"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
         <source>Is paragraph style available</source>
         <translation>段落样式可用吗</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="797"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
         <source>Font family</source>
         <translation>字体系列</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
         <source>Font size</source>
         <translation>字体尺寸</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="801"/>
         <source>Place paragraph at the top of the page</source>
         <translation>将段落放在页面顶部</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="802"/>
         <source>Use UPPERCASE characters for paragraph text</source>
         <translation>对段落文本使用大写字符</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="801"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="803"/>
         <source>Bold</source>
         <translation>粗体</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="802"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="804"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="803"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="805"/>
         <source>Underline</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="804"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="806"/>
         <source>Align text on the page</source>
         <translation>对齐页面上的文本</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="805"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="815"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="823"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="807"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="817"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="825"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="806"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="808"/>
         <source>Center</source>
         <translation>中间</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="807"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="825"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="809"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="821"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="827"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="808"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="810"/>
         <source>Justify</source>
         <translation>对齐</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="809"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="811"/>
         <source>Vertical indentation</source>
         <translation>垂直缩进</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="810"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="812"/>
         <source>Top</source>
         <translation>顶部</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="811"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="813"/>
         <source>Bottom</source>
         <translation>底部</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="812"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="814"/>
         <source>lines</source>
         <translation>线条</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="814"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="816"/>
         <source>Horizontal indentation</source>
         <translation>水平缩进</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="817"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
         <source>First line</source>
         <translation>首行</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="822"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="824"/>
         <source>Horizontal indentation (for two-column mode)</source>
         <translation>水平缩进（用于两列模式）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="827"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="829"/>
         <source>Line spacing</source>
         <translation>行距</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="828"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>Single</source>
         <translation>单一</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>One and half</source>
         <translation>1.5倍</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>Double</source>
         <translation>2倍</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>Fixed</source>
         <translation>固定</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="831"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="833"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="833"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="835"/>
         <source>Show paragraph&apos;s title</source>
         <translation>显示段落的标题</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="834"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="836"/>
         <source>Use custom title</source>
         <translation>使用自定义标题</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="835"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="837"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
@@ -17942,44 +18446,44 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1811"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1832"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1767"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1786"/>
         <source>Merge paragraph</source>
         <translation>合并段落</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1813"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1834"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1769"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1788"/>
         <source>Split paragraph</source>
         <translation>拆分段落</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1778"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1863"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1734"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1817"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1782"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1867"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1738"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1821"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1788"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1873"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1744"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1827"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1794"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1879"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1750"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1833"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1801"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1886"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1757"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1840"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -17988,103 +18492,98 @@ Promo code validity period is a 1 year</source>
     <name>Ui::ScreenplayTextEditToolbar</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="106"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="105"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="99"/>
         <source>Scene heading</source>
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="331"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="324"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="339"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="303"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="335"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="328"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="343"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="307"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="338"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="346"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="310"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="340"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="333"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="348"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="312"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="341"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="334"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="349"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="313"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="342"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="350"/>
         <source>Hide beats headings</source>
         <translation>隐藏节拍标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="343"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="351"/>
         <source>Show beats headings</source>
         <translation>显示节拍标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="345"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="336"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="353"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="315"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="348"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="339"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="318"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="349"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="340"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="319"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="350"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="358"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="351"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="359"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="353"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="342"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="361"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="321"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="354"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="343"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="362"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="322"/>
         <source>Show only current scene text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="355"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="344"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="363"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="323"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="322"/>
-        <source>Unlock ability to work with the screenplay breakdown</source>
-        <translation>解锁处理剧本分镜的能力</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="345"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="324"/>
         <source>Export screenplay breakdown</source>
         <translation>导出影视剧本分镜</translation>
     </message>
@@ -18135,123 +18634,123 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="392"/>
         <source>Hide scene parameters</source>
         <translation>隐藏场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="393"/>
         <source>Show scene parameters</source>
         <translation>显示场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="394"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="402"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="397"/>
         <source>Hide screenplay dictionaries</source>
         <translation>隐藏影视剧本词典</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="403"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="398"/>
         <source>Show screenplay dictionaries</source>
         <translation>显示影视剧本词典</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1592"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1590"/>
         <source>Writing text</source>
         <translation>书写文本</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1881"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1885"/>
         <source>Document translation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1883"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1887"/>
         <source>Synopsis generation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1885"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1889"/>
         <source>Novel generation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2004"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2007"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2005"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2008"/>
         <source>Scene parameters</source>
         <translation>场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2006"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2009"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2007"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2010"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2008"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2011"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2009"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2012"/>
         <source>Dictionaries</source>
         <translation>词典</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2012"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2015"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
         <translation>从“写一本关于......的影视剧本”或“写一个关于......的短剧剧本”之类的内容开始提示</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2029"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2032"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2030"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2033"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2031"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2034"/>
         <source>In cast list</source>
         <translation>在演员表中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2032"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2035"/>
         <source>In action</source>
         <translation>在行动中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2033"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2036"/>
         <source>In character</source>
         <translation>在角色中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2034"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2037"/>
         <source>In dialogue</source>
         <translation>在对白中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="400"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="395"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
@@ -18377,37 +18876,37 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTimelineSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="348"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="415"/>
         <source>View</source>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="349"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="416"/>
         <source>Arrange timeline horizontal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="350"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="417"/>
         <source>Arrange timeline vertical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="351"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="418"/>
         <source>Card size</source>
         <translation>卡片尺寸</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="352"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="419"/>
         <source>Card ratio</source>
         <translation>卡片比例</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="353"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="420"/>
         <source>Space between cards</source>
         <translation>卡片间距</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="354"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="421"/>
         <source>Timeline scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18415,37 +18914,32 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTimelineToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="150"/>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation>解锁编辑影视剧本卡片的功能</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="152"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="132"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="156"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="136"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="159"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="139"/>
         <source>Add scene</source>
         <translation>添加场景</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="160"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="140"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="170"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="150"/>
         <source>Search cards</source>
         <translation>搜索卡片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="173"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="153"/>
         <source>Save cards to image</source>
         <translation>将卡片保存到图像</translation>
     </message>
@@ -18453,35 +18947,55 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTimelineView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="308"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="318"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="961"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="963"/>
+        <source>Activate PRO version to unlock full access to the screenplay timeline module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="964"/>
+        <source>Go back to text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="965"/>
+        <source>Unlock timeline</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1356"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1311"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1360"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1315"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1366"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1321"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1372"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1327"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1379"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1334"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -18494,90 +19008,90 @@ Promo code validity period is a 1 year</source>
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="321"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="317"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="325"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="320"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="328"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="322"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="330"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="323"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="331"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="325"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="333"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="328"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="336"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="329"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="337"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="330"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="338"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="339"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="333"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="341"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="334"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="342"/>
         <source>Show only current scene text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="335"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="343"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayTreatmentView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="360"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="357"/>
         <source>Hide scene parameters</source>
         <translation>隐藏场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="361"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="358"/>
         <source>Show scene parameters</source>
         <translation>显示场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="362"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="359"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="363"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="360"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
@@ -18587,47 +19101,47 @@ Promo code validity period is a 1 year</source>
         <translation>书写文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1831"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1837"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1832"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1838"/>
         <source>Scene parameters</source>
         <translation>场景参数</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1833"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1839"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1834"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1840"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1835"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1841"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1838"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1844"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>从“写一本关于......的小说”或“写一章关于......”之类的内容开始提示</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1855"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1861"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1856"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1862"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1857"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1863"/>
         <source>In beats</source>
         <translation>在节拍中</translation>
     </message>
@@ -18899,67 +19413,72 @@ STARTED</source>
 <context>
     <name>Ui::SettingsNavigator</name>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="184"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="190"/>
         <source>Application settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="187"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="193"/>
         <source>User interface</source>
         <translation>用户界面</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="190"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="196"/>
         <source>Save changes &amp; backups</source>
         <translation>保存更改和备份</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="193"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="199"/>
         <source>Text editing</source>
         <translation>文字修改</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="194"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="202"/>
+        <source>AI assistant</source>
+        <translation>AI助理</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_navigator.cpp" line="203"/>
         <source>Components</source>
         <translation>部件</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="195"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="204"/>
         <source>Simple text</source>
         <translation>简单文本</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="196"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="205"/>
         <source>Screenplay</source>
         <translation>影视剧本</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="197"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="206"/>
         <source>Comic book</source>
         <translation>漫画书</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="198"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="207"/>
         <source>Audioplay</source>
         <translation>音乐剧本</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="199"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="208"/>
         <source>Stageplay</source>
         <translation>舞台剧本</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="200"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="209"/>
         <source>Novel</source>
         <translation>小说</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="201"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="210"/>
         <source>Shortcuts</source>
         <translation>快捷键</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="203"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="212"/>
         <source>Reset to defaults</source>
         <translation>重置为默认</translation>
     </message>
@@ -18975,1025 +19494,1035 @@ STARTED</source>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1739"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1737"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>选择备份文件夹</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1859"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2025"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2358"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2530"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2717"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2880"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2023"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2356"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2528"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2715"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2878"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1867"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2033"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2366"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2538"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2725"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2888"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2031"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2364"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2536"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2723"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2886"/>
         <source>Create new template based on current</source>
         <translation>新建模板</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1874"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2040"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2373"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2545"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2732"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2895"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2038"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2371"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2543"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2730"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2893"/>
         <source>Save to file</source>
         <translation>保存</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1880"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2046"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2379"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2551"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2738"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2901"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2044"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2549"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2736"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2899"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1887"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2053"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2386"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2558"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2745"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2908"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2051"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2384"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2556"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2743"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2906"/>
         <source>Load template from file</source>
         <translation>导入模板</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4018"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4029"/>
         <source>Application settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4019"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4030"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4023"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4034"/>
         <source>Make application interface compact</source>
         <translation>紧凑模式</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4032"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4043"/>
         <source>Qty</source>
         <translation>数量</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4033"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4044"/>
         <source>Text editing</source>
         <translation>文字修改</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4034"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4045"/>
         <source>Show documents pages</source>
         <translation>显示文档页码</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4035"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4046"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>击键拟声</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4036"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
         <source>Spell check</source>
         <translation>拼写检查</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4037"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4048"/>
         <source>Spelling dictionary</source>
         <translation>拼写词典</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4039"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4050"/>
         <source>Afrikaans</source>
         <translation>荷兰语（南非）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4040"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4051"/>
         <source>Aragonese</source>
         <translation>阿拉贡语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4041"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4052"/>
         <source>Arabic</source>
         <translation>阿拉伯语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4042"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
         <source>Asturian</source>
         <translation>阿斯图里亚斯语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4043"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
         <source>Azerbaijani</source>
         <translation>阿塞拜疆语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4044"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
         <source>Belarusian</source>
         <translation>白俄罗斯语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4045"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
         <source>Bulgarian</source>
         <translation>保加利亚</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4046"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4057"/>
         <source>Bengali</source>
         <translation>孟加拉语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
         <source>Tibetan</source>
         <translation>藏语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4048"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4059"/>
         <source>Breton</source>
         <translation>布列塔尼</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4049"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
         <source>Bosnian</source>
         <translation>波斯尼亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4050"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4061"/>
         <source>Catalan (Valencian)</source>
         <translation>加泰罗尼亚语（巴伦西亚语）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4051"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4062"/>
         <source>Catalan</source>
         <translation>加泰罗尼亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4052"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4063"/>
         <source>Czech</source>
         <translation>捷克语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4064"/>
         <source>Welsh</source>
         <translation>威尔士语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4065"/>
         <source>Danish</source>
         <translation>丹麦语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4066"/>
         <source>German (Austria)</source>
         <translation>德语（奥地利）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
         <source>German (Switzerland)</source>
         <translation>德语（瑞士）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4057"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4068"/>
         <source>German</source>
         <translation>德语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
         <source>Greek (Polytonic)</source>
         <translation>希腊语（Polytonic）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4059"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
         <source>Greek</source>
         <translation>希腊语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4071"/>
         <source>English (Australia)</source>
         <translation>英语（澳大利亚）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4061"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4072"/>
         <source>English (Canada)</source>
         <translation>英语（加拿大）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4062"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4073"/>
         <source>English (United Kingdom)</source>
         <translation>英语（英国）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4063"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4074"/>
         <source>English (New Zealand)</source>
         <translation>英语（新西兰）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4064"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4075"/>
         <source>English (South Africa)</source>
         <translation>英语（南非）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4065"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4076"/>
         <source>English (United States)</source>
         <translation>英语（美国）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4066"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4077"/>
         <source>Esperanto</source>
         <translation>世界语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
         <source>Spanish (Argentina)</source>
         <translation>西班牙语（阿根廷）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4068"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4079"/>
         <source>Spanish (Bolivia)</source>
         <translation>西班牙语（玻利维亚）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
         <source>Spanish (Chile)</source>
         <translation>西班牙语（智利）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
         <source>Spanish (Colombia)</source>
         <translation>西班牙语（哥伦比亚）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4071"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4082"/>
         <source>Spanish (Costa Rica)</source>
         <translation>西班牙语（哥斯达黎加）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4072"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
         <source>Spanish (Cuba)</source>
         <translation>西班牙语（古巴）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4073"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>西班牙语（多米尼加共和国）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4074"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
         <source>Spanish (Ecuador)</source>
         <translation>西班牙语（厄瓜多尔）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4075"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
         <source>Spanish (Guatemala)</source>
         <translation>西班牙语（危地马拉）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4076"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4087"/>
         <source>Spanish (Honduras)</source>
         <translation>西班牙语（洪都拉斯）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4077"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4088"/>
         <source>Spanish (Mexico)</source>
         <translation>西班牙语（墨西哥）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4089"/>
         <source>Spanish (Nicaragua)</source>
         <translation>西班牙语（尼加拉瓜）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4079"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4090"/>
         <source>Spanish (Panama)</source>
         <translation>西班牙语（巴拿马）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
         <source>Spanish (Peru)</source>
         <translation>西班牙语（秘鲁）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
         <source>Spanish (Philippines)</source>
         <translation>西班牙语（菲律宾）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4082"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4093"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>西班牙语（波多黎各）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
         <source>Spanish (Paraguay)</source>
         <translation>西班牙语（巴拉圭）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
         <source>Spanish (El Salvador)</source>
         <translation>西班牙语（萨尔瓦多）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
         <source>Spanish (United States)</source>
         <translation>西班牙语（美国）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4097"/>
         <source>Spanish (Uruguay)</source>
         <translation>西班牙语（乌拉圭）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4087"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4098"/>
         <source>Spanish (Venezuela)</source>
         <translation>西班牙语（委内瑞拉）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4088"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4099"/>
         <source>Spanish</source>
         <translation>西班牙语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4089"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4100"/>
         <source>Estonian</source>
         <translation>爱沙尼亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4090"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4101"/>
         <source>Basque</source>
         <translation>巴斯克语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
         <source>Persian</source>
         <translation>波斯</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
         <source>Faroese</source>
         <translation>法罗语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4093"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
         <source>French</source>
         <translation>法语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
         <source>Friulian</source>
         <translation>弗留利语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
         <source>Western Frisian</source>
         <translation>西弗里斯兰</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
         <source>Irish</source>
         <translation>爱尔兰</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4097"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4108"/>
         <source>Gaelic</source>
         <translation>盖尔语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4098"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4109"/>
         <source>Galician</source>
         <translation>加利西亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4099"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4110"/>
         <source>Gujarati</source>
         <translation>古吉拉特语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4100"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4111"/>
         <source>Guarani</source>
         <translation>瓜拉尼</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4101"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4112"/>
         <source>Hebrew</source>
         <translation>希伯来语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
         <source>Hindi</source>
         <translation>印地语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
         <source>Croatian</source>
         <translation>克罗地亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
         <source>Hungarian</source>
         <translation>匈牙利</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
         <source>Armenian</source>
         <translation>亚美尼亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
         <source>Armenian (Western)</source>
         <translation>亚美尼亚语（西部）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4118"/>
         <source>Interlingua</source>
         <translation>国际语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4108"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4119"/>
         <source>Indonesian</source>
         <translation>印度尼西亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4109"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
         <source>Icelandic</source>
         <translation>冰岛语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4110"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
         <source>Italian</source>
         <translation>意大利语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4111"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
         <source>Georgian</source>
         <translation>格鲁吉亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4112"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
         <source>Kazakh</source>
         <translation>哈萨克语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
         <source>Kurdish</source>
         <translation>库尔德语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4125"/>
         <source>Korean</source>
         <translation>朝鲜语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
         <source>Latin</source>
         <translation>拉丁语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
         <source>Luxembourgish</source>
         <translation>卢森堡语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
         <source>Lao</source>
         <translation>老挝</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4118"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4129"/>
         <source>Lithuanian</source>
         <translation>立陶宛</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4119"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4130"/>
         <source>Latgalian</source>
         <translation>拉特加莱语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
         <source>Latvian</source>
         <translation>拉脱维亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
         <source>Macedonian</source>
         <translation>马其顿语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
         <source>Mongolian</source>
         <translation>蒙古</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
         <source>Maltese</source>
         <translation>马耳他</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4135"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4139"/>
         <source>Norwegian</source>
         <translation>挪威</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4125"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
         <source>Low German</source>
         <translation>低地德语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
         <source>Nepali</source>
         <translation>尼泊尔语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
         <source>Dutch</source>
         <translation>荷兰语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4129"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4140"/>
         <source>Occitan</source>
         <translation>奥克西坦语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4130"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4141"/>
         <source>Polish</source>
         <translation>波兰语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4142"/>
         <source>Portuguese (Brazilian)</source>
         <translation>葡萄牙语（巴西）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4143"/>
         <source>Portuguese</source>
         <translation>葡萄牙语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4144"/>
         <source>Quechua</source>
         <translation>克丘亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4145"/>
         <source>Romanian</source>
         <translation>罗马尼亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4135"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4146"/>
         <source>Russian (with Yo)</source>
         <translation>俄语（带Yo）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4147"/>
         <source>Russian</source>
         <translation>俄语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4148"/>
         <source>Kinyarwanda</source>
         <translation>卢旺达</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4149"/>
         <source>Sinhala</source>
         <translation>僧伽罗语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4139"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4150"/>
         <source>Slovak</source>
         <translation>斯洛伐克语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4140"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4151"/>
         <source>Slovenian</source>
         <translation>斯洛文尼亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4141"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4152"/>
         <source>Albanian</source>
         <translation>阿尔巴尼亚</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4142"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4153"/>
         <source>Serbian (Latin)</source>
         <translation>塞尔维亚语（拉丁语）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4143"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4154"/>
         <source>Serbian</source>
         <translation>塞尔维亚语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4144"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4155"/>
         <source>Swedish (Finland)</source>
         <translation>瑞典语（芬兰）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4145"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4156"/>
         <source>Swedish</source>
         <translation>瑞典语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4146"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4157"/>
         <source>Swahili</source>
         <translation>斯瓦希里</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4147"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4158"/>
         <source>Tamil</source>
         <translation>泰米尔人</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4148"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4159"/>
         <source>Telugu</source>
         <translation>泰卢固语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4149"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4160"/>
         <source>Thai</source>
         <translation>泰语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4150"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4161"/>
         <source>Turkmen</source>
         <translation>土库曼人</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4151"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4162"/>
         <source>Klingon (Latin)</source>
         <translation>克林贡语（拉丁语）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4152"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4163"/>
         <source>Klingon</source>
         <translation>克林贡</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4153"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4164"/>
         <source>Turkish</source>
         <translation>土耳其</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4154"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4165"/>
         <source>Ukrainian</source>
         <translation>乌克兰语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4155"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
         <source>Vietnamese</source>
         <translation>越南语</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4165"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4176"/>
         <source>User interface</source>
         <translation>用户界面</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4177"/>
         <source>Manage user dictionary</source>
         <translation>用户词典</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4171"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4182"/>
         <source>Automatic text corrections</source>
         <translation>文本自动更正</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4172"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4183"/>
         <source>Correct DOuble CApitals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4173"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4184"/>
         <source>Capitalize single &quot;i&quot; letter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4174"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4185"/>
         <source>Replace three single dots with ellipsis</source>
         <translation>用省略号替换三个单点</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4175"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4186"/>
         <source>Replace vertical quotation marks to curly ones</source>
         <translation>将垂直引号替换为卷曲引号</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4176"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4187"/>
         <source>Replace two dashes with em dash</source>
         <translation>将两个破折号替换为全破折号</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4177"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4188"/>
         <source>Avoid multiple spaces</source>
         <translation>避免多个空格</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4184"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4189"/>
+        <source>AI assistant</source>
+        <translation>AI助理</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4190"/>
+        <source>Enable AI assistant</source>
+        <translation>启用AI助理</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4197"/>
         <source>Turn on/off text and folders module</source>
         <translation>开/关 文字和文件夹模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4198"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4211"/>
         <source>Turn on/off screenplay module</source>
         <translation>开/关 剧本模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4208"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4221"/>
         <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
         <translation>在由动作分隔的对话中添加一个延续（CONT&apos;D）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4210"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4223"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation>自动更正影视剧本文本内的分页符</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4218"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4299"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4328"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4231"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4288"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4312"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4341"/>
         <source>Show characters suggestions in empty paragraph</source>
         <translation>空段落显示字符提示</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4220"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
         <source>Use opening bracket in dialogue to switch to parenthetical</source>
         <translation>对话括号补全</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4221"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4234"/>
         <source>Screenplay navigator</source>
         <translation>影视剧本助手</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4222"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4235"/>
         <source>Show beats</source>
         <translation>显示节拍</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4223"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4236"/>
         <source>in treatment</source>
         <translation>治疗</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4237"/>
         <source>in screenplay</source>
         <translation>在影视剧本里</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4245"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4258"/>
         <source>Calculate duration based on the custom rules</source>
         <translation>自行估算工期</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4246"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4259"/>
         <source>For action</source>
         <translation>用于行动</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4247"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4260"/>
         <source>Per entry</source>
         <translation>每条</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4249"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4254"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4258"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4267"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4271"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4250"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4263"/>
         <source>Each 50 characters</source>
         <translation>每50个字符</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4252"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4265"/>
         <source>For dialogue</source>
         <translation>用于对话</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4256"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4269"/>
         <source>For scene heading</source>
         <translation>用于场景标题</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
         <source>Turn on/off comic book module</source>
         <translation>开/关 漫画书模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4284"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4297"/>
         <source>Audioplay module</source>
         <translation>音乐剧本模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4298"/>
         <source>Turn on/off audioplay module</source>
         <translation>开/关 音乐剧模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4290"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4303"/>
         <source>Show block numbers</source>
         <translation>显示块编号</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4304"/>
         <source>Continue block numbers through document</source>
         <translation>通过文档继续对块编号</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4338"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4351"/>
         <source>Novel module</source>
         <translation>小说模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4339"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4352"/>
         <source>Turn on/off novel module</source>
         <translation>开/关 小说模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4353"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4366"/>
         <source>characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4354"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4367"/>
         <source>characters with spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4358"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4371"/>
         <source>Application</source>
         <translation>程序</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4361"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4374"/>
         <source>Action</source>
         <translation>情节</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4365"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4378"/>
         <source>Simple text editor</source>
         <translation>简单文本编辑器</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4371"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4383"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4395"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4407"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4419"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4431"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4384"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4396"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4408"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4420"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4432"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4444"/>
         <source>If you press in empty paragraph</source>
         <translation>若您插入空段落</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4389"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4402"/>
         <source>Comic book editor</source>
         <translation>漫画书编辑器</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4401"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4414"/>
         <source>Audioplay editor</source>
         <translation>音乐剧本编辑器</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4413"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4426"/>
         <source>Stageplay editor</source>
         <translation>舞台剧本编辑器</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4425"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4438"/>
         <source>Novel editor</source>
         <translation>小说编辑器</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4313"/>
         <source>Audioplay navigator</source>
         <translation>音乐剧本助手</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4309"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4322"/>
         <source>Calculate duration based on the count of words</source>
         <translation>根据单词数计算持续时长</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4311"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4352"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4324"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4365"/>
         <source>words</source>
         <translation>单词</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4315"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4328"/>
         <source>Stageplay module</source>
         <translation>舞台剧本模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4316"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4329"/>
         <source>Turn on/off stageplay module</source>
         <translation>开/关 舞台剧本模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4329"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4342"/>
         <source>Stageplay navigator</source>
         <translation>舞台剧本助手</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4390"/>
         <source>Screenplay editor</source>
         <translation>影视剧本编辑器</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4368"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4380"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4392"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4404"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4416"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4428"/>
-        <source>Block name</source>
-        <translation>块名称</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4362"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4369"/>
         <location filename="../ui/settings/settings_view.cpp" line="4381"/>
         <location filename="../ui/settings/settings_view.cpp" line="4393"/>
         <location filename="../ui/settings/settings_view.cpp" line="4405"/>
         <location filename="../ui/settings/settings_view.cpp" line="4417"/>
         <location filename="../ui/settings/settings_view.cpp" line="4429"/>
-        <source>Shortcut</source>
-        <translation>快捷键</translation>
+        <location filename="../ui/settings/settings_view.cpp" line="4441"/>
+        <source>Block name</source>
+        <translation>块名称</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4370"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4375"/>
         <location filename="../ui/settings/settings_view.cpp" line="4382"/>
         <location filename="../ui/settings/settings_view.cpp" line="4394"/>
         <location filename="../ui/settings/settings_view.cpp" line="4406"/>
         <location filename="../ui/settings/settings_view.cpp" line="4418"/>
         <location filename="../ui/settings/settings_view.cpp" line="4430"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4442"/>
+        <source>Shortcut</source>
+        <translation>快捷键</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4383"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4395"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4407"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4419"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4431"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4443"/>
         <source>If you press in paragraphs end</source>
         <translation>若您在段尾插入</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4374"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4386"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4398"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4410"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4422"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4434"/>
-        <source>Add paragraph</source>
-        <translation>添加段落</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4375"/>
         <location filename="../ui/settings/settings_view.cpp" line="4387"/>
         <location filename="../ui/settings/settings_view.cpp" line="4399"/>
         <location filename="../ui/settings/settings_view.cpp" line="4411"/>
         <location filename="../ui/settings/settings_view.cpp" line="4423"/>
         <location filename="../ui/settings/settings_view.cpp" line="4435"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4447"/>
+        <source>Add paragraph</source>
+        <translation>添加段落</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4388"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4400"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4412"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4424"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4436"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4448"/>
         <source>Change to</source>
         <translation>变成</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4020"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4031"/>
         <source>Size of the user interface elements:</source>
         <translation>用户界面元素的大小：</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4021"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4032"/>
         <source>small</source>
         <translation>小</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4022"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4033"/>
         <source>big</source>
         <translation>大</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4024"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4035"/>
         <source>Save changes &amp; backups</source>
         <translation>保存更改和备份</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4025"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4036"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>自动保存</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4027"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4038"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -20002,242 +20531,242 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 如果你的工作没有中断，它每3分钟保存一次项目。</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4030"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4041"/>
         <source>Save backups</source>
         <translation>保存备份</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4031"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4042"/>
         <source>Backups folder path</source>
         <translation>备份文件夹路径</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4168"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4179"/>
         <source>Focus current paragraph</source>
         <translation>当前段落</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4170"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4181"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation>使用打字机滚动（与屏幕中心的光标保持一致）</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4179"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4192"/>
         <source>Components</source>
         <translation>部件</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4183"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4196"/>
         <source>Simple text module</source>
         <translation>简单文本模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4185"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4263"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4286"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4317"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4340"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4198"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4212"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4276"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4299"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4330"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4353"/>
         <source>Text editor</source>
         <translation>文字编辑器</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4186"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4200"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4264"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4287"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4318"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4341"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4213"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4277"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4331"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4354"/>
         <source>Default template</source>
         <translation>默认模板</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4188"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4202"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4266"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4289"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4320"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4343"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4201"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4215"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4279"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4302"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4333"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4356"/>
         <source>Available actions for the selected template</source>
         <translation>所选模板的可用操作</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4203"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4225"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4301"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4330"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4216"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4314"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4343"/>
         <source>Show scene number</source>
         <translation>显示场景编号</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4217"/>
         <source>on the left</source>
         <translation>在左边</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4205"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4218"/>
         <source>on the right</source>
         <translation>在右边</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4206"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4267"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4219"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4280"/>
         <source>Show dialogue number</source>
         <translation>显示对话编号</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4167"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4178"/>
         <source>Highlight current line</source>
         <translation>高亮当前行</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4189"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4276"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4344"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4202"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4289"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4357"/>
         <source>Navigator</source>
         <translation>助手</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4190"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4203"/>
         <source>Show chapter text, lines</source>
         <translation>显示章节文本，行</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4197"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4210"/>
         <source>Screenplay module</source>
         <translation>影视剧本模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4211"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
         <source>Save characters &amp; locations on typing</source>
         <translation>保存键入的字符和位置</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4213"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4226"/>
         <source>Show hints for all characters &amp; locations, or only for</source>
         <translation>显示所有字符和位置的提示，或仅显示</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4214"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4271"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4295"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4324"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4227"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4284"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4308"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4337"/>
         <source>primary</source>
         <translation>首要的</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4215"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4272"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4296"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4325"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4228"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4309"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4338"/>
         <source>secondary</source>
         <translation>次要的</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4216"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4273"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4297"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4326"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4229"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4286"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4310"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4339"/>
         <source>tertiary</source>
         <translation>必要</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4226"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4302"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4331"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4345"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4315"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4344"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4358"/>
         <source>Show scene text, lines</source>
         <translation>显示场景文本，行</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4232"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4308"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4245"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4321"/>
         <source>Duration</source>
         <translation>持续时间</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4246"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>根据页数计算持续时间</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4234"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4240"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4310"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4247"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4253"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4323"/>
         <source>at the rate of</source>
         <translation>如此速度</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4235"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4248"/>
         <source>pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4236"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4243"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4312"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4249"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4256"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4325"/>
         <source>has duration</source>
         <translation>长期存在</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4237"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4244"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4248"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4251"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4253"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4255"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4250"/>
         <location filename="../ui/settings/settings_view.cpp" line="4257"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4259"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4313"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4261"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4264"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4266"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4268"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4270"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4272"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4326"/>
         <source>seconds</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4252"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>根据字母数计算持续时间</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4241"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4254"/>
         <source>letters</source>
         <translation>字母</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4242"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4255"/>
         <source>including spaces</source>
         <translation>包含的空格</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4261"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4274"/>
         <source>Comic book module</source>
         <translation>漫画书模块</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4268"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4292"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4321"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4281"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4305"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4334"/>
         <source>Save characters on typing</source>
         <translation>保存键入的字符</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4270"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4294"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4323"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4283"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4307"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4336"/>
         <source>Show hints for all characters, or only for</source>
         <translation>显示所有字符的提示，或仅显示</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4277"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4290"/>
         <source>Show panel text, lines</source>
         <translation>显示面板文本，行</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4351"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4364"/>
         <source>Scene content counter type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4356"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4369"/>
         <source>Shortcuts</source>
         <translation>快捷键</translation>
     </message>
@@ -20245,27 +20774,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="992"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1082"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="996"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1086"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1001"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1091"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1006"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1096"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1013"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1103"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -20278,69 +20807,69 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="306"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="314"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="310"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="318"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="321"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="323"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="316"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="324"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="318"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="326"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="321"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="329"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="322"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="330"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="323"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="331"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="324"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="332"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="326"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="334"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="327"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="335"/>
         <source>Show only current scene text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="328"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="336"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
 </context>
 <context>
@@ -20401,49 +20930,49 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextView</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="288"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="290"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="289"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="291"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1042"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1047"/>
         <source>Writing text</source>
         <translation>书写文本</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1260"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1282"/>
         <source>Document translation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1376"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1397"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1377"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1398"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1378"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1399"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1379"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1400"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1382"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1403"/>
         <source>Start prompt from something like &quot;Write a story about ...&quot;, or &quot;Write about ...&quot;, or simply ask AI about anything</source>
         <translation>从“写一个关于......的故事”或“写关于......”之类的内容开始提示，或者只是向AI询问任何事情</translation>
     </message>
@@ -20459,64 +20988,64 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="117"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="125"/>
         <source>Perfect logline length</source>
         <translation>完美的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="119"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="127"/>
         <source>Good logline length</source>
         <translation>好的剧情梗概长度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="121"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="129"/>
         <source>Recommended logline length is 30 words</source>
         <translation>建议剧情梗概长度不超过30个单词</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="123"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="131"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n 个单词</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="233"/>
         <source>Stageplay name</source>
         <translation>舞台剧本名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="234"/>
         <source>Tagline</source>
         <translation>宣传词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="227"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="235"/>
         <source>Logline</source>
         <translation>剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="236"/>
         <source>Generate logline</source>
         <translation>生成剧情梗概</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="229"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="237"/>
         <source>Title page</source>
         <translation>扉页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="230"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="238"/>
         <source>Synopsis</source>
         <translation>概要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="231"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="239"/>
         <source>Stageplay</source>
         <translation>舞台剧</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="232"/>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="240"/>
         <source>Statistics</source>
         <translation>统计数字</translation>
     </message>
@@ -20524,32 +21053,32 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="205"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="210"/>
         <source>Header</source>
         <translation>页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="206"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="211"/>
         <source>Print header on title page</source>
         <translation>在标题页上打印页眉</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="207"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="212"/>
         <source>Footer</source>
         <translation>页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="208"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="213"/>
         <source>Print footer on title page</source>
         <translation>在标题页上打印页脚</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="209"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="214"/>
         <source>Override common settings for this stageplay</source>
         <translation>覆盖这个舞台剧本的常用设置</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="210"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="215"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
@@ -20557,27 +21086,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="239"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="226"/>
         <source>Pages</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="240"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="227"/>
         <source>Words</source>
         <translation>单词</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="241"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="228"/>
         <source>Characters with/without spaces</source>
         <translation>带/不带空格的字符</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="243"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="230"/>
         <source>Text statistics</source>
         <translation>文本统计数据</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="244"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="231"/>
         <source>Characters statistics</source>
         <translation>角色统计数据</translation>
     </message>
@@ -20585,27 +21114,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1543"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1498"/>
         <source>Bookmark</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1547"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1502"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1553"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1508"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1558"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1513"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1565"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1520"/>
         <source>Show/hide list</source>
         <translation>显示/隐藏 列表</translation>
     </message>
@@ -20618,69 +21147,69 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>场景标题</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="319"/>
         <source>Undo last action</source>
         <translation>撤消上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="323"/>
         <source>Redo last action</source>
         <translation>重做上一个操作</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="318"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="326"/>
         <source>Current paragraph format</source>
         <translation>当前段落格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="320"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="328"/>
         <source>Hide fast format panel</source>
         <translation>隐藏快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="321"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="329"/>
         <source>Show fast format panel</source>
         <translation>显示快速格式面板</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="323"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="331"/>
         <source>Search text</source>
         <translation>搜索文本</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="326"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="334"/>
         <source>Disable review mode</source>
         <translation>禁用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="327"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="335"/>
         <source>Enable review mode</source>
         <translation>启用审阅模式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="328"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="336"/>
         <source>Disable AI assistant</source>
         <translation>禁用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="329"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="337"/>
         <source>Enable AI assistant</source>
         <translation>启用AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="339"/>
         <source>Show full text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="332"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="340"/>
         <source>Show only current scene text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="333"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="341"/>
         <source>Additional options</source>
-        <translation type="unfinished">附加选项</translation>
+        <translation>附加选项</translation>
     </message>
 </context>
 <context>
@@ -20729,12 +21258,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="290"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="287"/>
         <source>Hide bookmarks list</source>
         <translation>隐藏书签列表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="291"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="288"/>
         <source>Show bookmarks list</source>
         <translation>显示书签列表</translation>
     </message>
@@ -20744,54 +21273,54 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>书写文本</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1314"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1321"/>
         <source>Document translation will take %n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1432"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1438"/>
         <source>Formatting</source>
         <translation>格式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1433"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1439"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1434"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1440"/>
         <source>AI assistant</source>
         <translation>AI助理</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1435"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1441"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1438"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1444"/>
         <source>Start prompt from something like &quot;Write a stage play about ...&quot;</source>
         <translation>从“写一本关于......的小说”或“写一章关于......”之类的内容开始提示</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1454"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1460"/>
         <source>In the whole text</source>
         <translation>在全部文本中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1455"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1461"/>
         <source>In scene heading</source>
         <translation>在场景标题内</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1456"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1462"/>
         <source>In character</source>
         <translation>在角色中</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1457"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1463"/>
         <source>In dialogue</source>
         <translation>在对白中</translation>
     </message>
@@ -20888,42 +21417,42 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SubscriptionWidget</name>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="125"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="126"/>
         <source>Lifetime access</source>
         <translation>终身访问权限</translation>
     </message>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="126"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="127"/>
         <source>Active until %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="168"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="171"/>
         <source>from $%1/mo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="178"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="181"/>
         <source>30 days for free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="179"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="182"/>
         <source>Try for free</source>
         <translation>免费试用</translation>
     </message>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="180"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="183"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="181"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="184"/>
         <source>Buy lifetime</source>
         <translation>购买终身版</translation>
     </message>
     <message>
-        <location filename="../ui/account/subscription_widget.cpp" line="182"/>
+        <location filename="../ui/account/subscription_widget.cpp" line="185"/>
         <source>Buy as a gift</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20931,57 +21460,57 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::TeamDialog</name>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="162"/>
+        <location filename="../ui/account/team_dialog.cpp" line="163"/>
         <source>Create new team</source>
         <translation>创建团队</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="162"/>
+        <location filename="../ui/account/team_dialog.cpp" line="163"/>
         <source>Edit team</source>
         <translation>修改团队</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="163"/>
+        <location filename="../ui/account/team_dialog.cpp" line="164"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="164"/>
+        <location filename="../ui/account/team_dialog.cpp" line="165"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="165"/>
+        <location filename="../ui/account/team_dialog.cpp" line="166"/>
         <source>Add avatar +</source>
         <translation>添加头像 +</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="165"/>
+        <location filename="../ui/account/team_dialog.cpp" line="166"/>
         <source>Change avatar...</source>
         <translation>更换头像...</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="166"/>
+        <location filename="../ui/account/team_dialog.cpp" line="167"/>
         <source>Do you want to delete the team&apos;s avatar?</source>
         <translation>你想删除团队的头像吗？</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="167"/>
+        <location filename="../ui/account/team_dialog.cpp" line="168"/>
         <source>Select an area for the team avatar</source>
         <translation>为团队头像选择一个区域</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="168"/>
+        <location filename="../ui/account/team_dialog.cpp" line="169"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="169"/>
+        <location filename="../ui/account/team_dialog.cpp" line="170"/>
         <source>Create</source>
         <translation>创建</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="169"/>
+        <location filename="../ui/account/team_dialog.cpp" line="170"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
@@ -21080,12 +21609,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::TitlePageEdit</name>
     <message>
-        <location filename="../management_layer/plugins/title_page/text/title_page_edit.cpp" line="426"/>
+        <location filename="../management_layer/plugins/title_page/text/title_page_edit.cpp" line="431"/>
         <source>Cast list</source>
         <translation>演员表</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/title_page/text/title_page_edit.cpp" line="442"/>
+        <location filename="../management_layer/plugins/title_page/text/title_page_edit.cpp" line="447"/>
         <source>TBD</source>
         <translation>待定</translation>
     </message>
@@ -21172,93 +21701,93 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WorldInformationStructureView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="156"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="153"/>
         <source>Main</source>
         <translation>主要</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="157"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="154"/>
         <source>World description</source>
         <translation>世界描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="159"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="156"/>
         <source>Nature</source>
         <translation>自然</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="163"/>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="207"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="160"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="204"/>
         <source>Basic info</source>
         <translation>基本信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="166"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="163"/>
         <source>Races</source>
         <translation>种族</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="169"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="166"/>
         <source>Flora</source>
         <translation>植物群</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="173"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="170"/>
         <source>Animals</source>
         <translation>动物</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="177"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="174"/>
         <source>Natural resources</source>
         <translation>自然资源</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="181"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="178"/>
         <source>Climate</source>
         <translation>气候</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="183"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="180"/>
         <source>Culture</source>
         <translation>文化</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="187"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="184"/>
         <source>Religions and beliefs</source>
         <translation>宗教和信仰</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="191"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="188"/>
         <source>Ethics and values</source>
         <translation>道德与价值观</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="195"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="192"/>
         <source>Languages</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="199"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="196"/>
         <source>Class/caste system</source>
         <translation>阶级/种姓制度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="200"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="197"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="201"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="198"/>
         <source>Politics</source>
         <translation>政治</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="203"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="200"/>
         <source>Magic</source>
         <translation>魔法</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="211"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="208"/>
         <source>Magic types</source>
         <translation>魔法类型</translation>
     </message>
@@ -21266,313 +21795,323 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WorldInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="500"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="579"/>
         <source>Apply new world name</source>
         <translation>应用新的世界名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1338"/>
-        <source>Unlock access to extended world profile</source>
-        <translation>无法访问世界详情</translation>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1412"/>
+        <source>You&apos;re in the base profile mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1340"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1414"/>
+        <source>Activate PRO version to unlock full access to the world profile module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1415"/>
+        <source>Unlock full profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1417"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1418"/>
         <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1342"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1419"/>
         <source>Long description</source>
         <translation>细致描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1420"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1420"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1344"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1421"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
         <translation>你想删除世界的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1345"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1422"/>
         <source>Select an area for the world main photo</source>
         <translation>为世界主要照片选择区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1347"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1424"/>
         <source>Photos</source>
         <translation>照片</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1349"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1426"/>
         <source>World description</source>
         <translation>世界描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1350"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1427"/>
         <source>Overview</source>
         <translation>纵览</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1351"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1428"/>
         <source>Earth like?</source>
         <translation>类似地球？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1352"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1429"/>
         <source>World history</source>
         <translation>世界历史</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1353"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1430"/>
         <source>World mood</source>
         <translation>世界氛围</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1355"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1432"/>
         <source>Nature</source>
         <translation>自然</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1356"/>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1400"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1433"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1477"/>
         <source>Basic info</source>
         <translation>基本信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1357"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1434"/>
         <source>Biology</source>
         <translation>生物学</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1358"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1435"/>
         <source>Physics</source>
         <translation>物理学</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1359"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1436"/>
         <source>Astronomy</source>
         <translation>天文学</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1360"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1437"/>
         <source>Geography</source>
         <translation>地理学</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1361"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1438"/>
         <source>Races</source>
         <translation>种族</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1362"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1439"/>
         <source>Flora</source>
         <translation>植物群</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1363"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1440"/>
         <source>Animals</source>
         <translation>动物</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1364"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1441"/>
         <source>Natural resources</source>
         <translation>自然资源</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1365"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1442"/>
         <source>Climate</source>
         <translation>气候</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1367"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1444"/>
         <source>Culture</source>
         <translation>文化</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1368"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1445"/>
         <source>Religions and beliefs</source>
         <translation>宗教和信仰</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1369"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1446"/>
         <source>Ethics and values</source>
         <translation>道德与价值观</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1370"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1447"/>
         <source>Languages</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1371"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1448"/>
         <source>Class/caste system</source>
         <translation>阶级/种姓制度</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1373"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1450"/>
         <source>System info</source>
         <translation>系统信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1374"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1451"/>
         <source>Technology</source>
         <translation>科技</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1375"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1452"/>
         <source>Economy</source>
         <translation>经济</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1376"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1453"/>
         <source>Trade</source>
         <translation>贸易</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1377"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1454"/>
         <source>Business</source>
         <translation>商业</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1378"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1455"/>
         <source>Industry</source>
         <translation>工业</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1379"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1456"/>
         <source>Currency</source>
         <translation>货币</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1380"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1457"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1381"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1458"/>
         <source>Communication method</source>
         <translation>联络方式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1382"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1459"/>
         <source>Art</source>
         <translation>艺术</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1383"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1460"/>
         <source>Entertainment</source>
         <translation>娱乐</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1384"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1461"/>
         <source>Travel</source>
         <translation>旅行</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1385"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1462"/>
         <source>Science</source>
         <translation>科学</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1387"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1464"/>
         <source>Politics info</source>
         <translation>政治信息</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1388"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1465"/>
         <source>Government format</source>
         <translation>政府形式</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1389"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1466"/>
         <source>Government history</source>
         <translation>执政历史</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1390"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1467"/>
         <source>Laws and justice system</source>
         <translation>法律和司法系统</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1391"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1468"/>
         <source>Foreign relations</source>
         <translation>对外关系</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1392"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1469"/>
         <source>People perception of government</source>
         <translation>人民对政府的看法</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1393"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1470"/>
         <source>Propaganda</source>
         <translation>宣传</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1394"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1471"/>
         <source>Anti-government organisations</source>
         <translation>反政府组织</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1395"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1472"/>
         <source>Past war</source>
         <translation>过去的战争</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1396"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1473"/>
         <source>Current war</source>
         <translation>当前战争</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1397"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1474"/>
         <source>Potential war</source>
         <translation>潜在的战争</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1399"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1476"/>
         <source>Magic</source>
         <translation>魔法</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1401"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1478"/>
         <source>Magic rule</source>
         <translation>魔法规则</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1402"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1479"/>
         <source>Who can use</source>
         <translation>谁可以使用</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1403"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1480"/>
         <source>Effect to world</source>
         <translation>对世界的影响</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1404"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1481"/>
         <source>Effect to society</source>
         <translation>对社会的影响</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1405"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1482"/>
         <source>Effect to technology</source>
         <translation>对科技的影响</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1406"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1483"/>
         <source>Magic types</source>
         <translation>魔法类型</translation>
     </message>
@@ -21580,7 +22119,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WorldItemListView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="360"/>
+        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="369"/>
         <source>Add one more</source>
         <translation>再添加一个</translation>
     </message>
@@ -21588,22 +22127,22 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WorldItemView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="116"/>
+        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="125"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="117"/>
+        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="126"/>
         <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="118"/>
+        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="127"/>
         <source>Long description</source>
         <translation>细致描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="119"/>
+        <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="128"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
@@ -21619,139 +22158,139 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WorldsMapSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="337"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="352"/>
         <source>Apply new world name</source>
         <translation>应用新的世界名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="568"/>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="705"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="606"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="775"/>
         <source>To create a new route, hold the Option button and move one world to another.</source>
         <translation>要创建新路径，请按住“选项”按钮，然后将一个世界移动到另一个世界。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="571"/>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="708"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="609"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="778"/>
         <source>To create a new route, hold the Alt button and move one world to another.</source>
         <translation>若要创建新路径，请按住Alt按钮并将一个世界移动到另一个世界。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="575"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="613"/>
         <source>%1 has no routes with other worlds</source>
         <translation>%1与其他世界没有路径</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="577"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="615"/>
         <source>What routes %1 has</source>
         <translation>%1 有哪些路线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="583"/>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="621"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="800"/>
         <source>Open route details</source>
         <translation>打开路径细节</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="643"/>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="644"/>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="648"/>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="649"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="687"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="688"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="692"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="693"/>
         <source>Show all %1&apos;s routes</source>
         <translation>显示%1的所有路径</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="701"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="771"/>
         <source>To see world info and all their routes, select concrete world.</source>
         <translation>要查看世界信息及其路径，选择指定的世界。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="702"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="772"/>
         <source>To see route details, select concrete route.</source>
         <translation>要查看路径细节，请选择指定路径。</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="713"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="783"/>
         <source>Solid line</source>
         <translation>实线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="713"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="783"/>
         <source>Dash line</source>
         <translation>虚线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="713"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="783"/>
         <source>Dot line</source>
         <translation>点线</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="715"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="785"/>
         <source>Border line type</source>
         <translation>边框类型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="716"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="786"/>
         <source>Group name</source>
         <translation>小组名称</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="717"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="787"/>
         <source>Group description</source>
         <translation>小组描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="719"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="789"/>
         <source>Profile</source>
         <translation>配置文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="720"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="790"/>
         <source>Routes</source>
         <translation>路径</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="722"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="792"/>
         <source>Add photo +</source>
         <translation>添加相片 +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="722"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="792"/>
         <source>Change photo...</source>
         <translation>更换照片...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="723"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="793"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
         <translation>你想删除世界的主要照片吗？</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="724"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="794"/>
         <source>Select an area for the world main photo</source>
         <translation>为世界主要照片选择区域</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="725"/>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="734"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="795"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="804"/>
         <source>Name</source>
         <translation>姓名</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="726"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="796"/>
         <source>One sentence description</source>
         <translation>一句话描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="727"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="797"/>
         <source>Long description</source>
         <translation>细致描述</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="733"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="803"/>
         <source>Line type</source>
         <translation>线型</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="735"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="805"/>
         <source>Details</source>
         <translation>细节</translation>
     </message>
@@ -21759,47 +22298,57 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WorldsMapView</name>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="188"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="199"/>
         <source>Choose the file to save image</source>
         <translation>选择要保存图像的文件</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="387"/>
-        <source>Unlock ability to edit worlds map</source>
-        <translation>解锁编辑世界地图的功能</translation>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="399"/>
+        <source>You&apos;re in the read only mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="401"/>
+        <source>Activate PRO version to unlock full access to the worlds map module</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="402"/>
+        <source>Unlock worlds map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="403"/>
         <source>Add world</source>
         <translation>添加世界</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="404"/>
         <source>Add group</source>
         <translation>添加小组</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="407"/>
         <source>Remove selected item</source>
         <translation>删除所选条目</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="403"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="418"/>
         <source>Show routes titles only for the selected worlds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="404"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="419"/>
         <source>Save worlds map to image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="406"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="421"/>
         <source>Here will be a worlds map.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="422"/>
         <source>It&apos;s time to create the first world!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21831,32 +22380,32 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         </translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="494"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="498"/>
         <source>Sprint duration</source>
         <translation>竞赛持续时间</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="495"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="499"/>
         <source>min</source>
         <translation>分</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="496"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="500"/>
         <source>Play sound at end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="497"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="501"/>
         <source>Great job</source>
         <translation>伟大的工作</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="498"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="502"/>
         <source>words written</source>
         <translation>写出单词</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="499"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="503"/>
         <source>Restart sprint</source>
         <translation>重启竞赛</translation>
     </message>
@@ -21864,7 +22413,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>WebLoader</name>
     <message>
-        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="311"/>
+        <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="308"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
         <translation>很抱歉，加载时出错。错误为：%1</translation>
     </message>
