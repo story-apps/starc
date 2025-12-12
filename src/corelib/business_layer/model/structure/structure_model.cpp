@@ -183,7 +183,7 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
                .arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()))
                .toUtf8();
-    auto writeVersionXml = [&xml](StructureModelItem* _item) {
+    auto writeDraftXml = [&xml](StructureModelItem* _item) {
         xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\"%10/>\n")
                    .arg(kDraftKey, kUuidAttribute, _item->uuid().toString(), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
@@ -194,7 +194,7 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                    .toUtf8();
     };
     std::function<void(StructureModelItem*)> writeItemXml;
-    writeItemXml = [&xml, &writeItemXml, writeVersionXml](StructureModelItem* _item) {
+    writeItemXml = [&xml, &writeItemXml, writeDraftXml](StructureModelItem* _item) {
         xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\"")
                    .arg(kItemKey, kUuidAttribute, _item->uuid().toString(), kTypeAttribute,
                         Domain::mimeTypeFor(_item->type()), kNameAttribute,
@@ -208,8 +208,8 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
         }
 
         xml += ">\n";
-        for (const auto version : _item->drafts()) {
-            writeVersionXml(version);
+        for (const auto draft : _item->drafts()) {
+            writeDraftXml(draft);
         }
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             writeItemXml(_item->childAt(childIndex));

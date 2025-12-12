@@ -601,7 +601,63 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
     const auto selectedIndexes = navigator->selectedIndexes();
 
-    const auto enabled = editingMode == DocumentEditingMode::Edit;
+    //
+    // Пользователь может редактировать проект, если
+    // - проект локальный
+    // - он владелец облачного проекта
+    // - он имеет доступ на редактирование ко всему проекту
+    //
+    const auto hasEditingPermissionsForProject
+        = !isProjectRemote || isProjectOwner || editingMode == DocumentEditingMode::Edit;
+    bool hasEditingPermissionsForDocument = hasEditingPermissionsForProject;
+    QModelIndex documentIndexToShare;
+    //
+    // Если у пользователя нет доступа для редактирования всего проекта, проверим,
+    // есть ли у него права на редактирование конкретного документа
+    //
+    if (!hasEditingPermissionsForProject) {
+        QUuid documentUuidToShare;
+        switch (currentItem->type()) {
+        case Domain::DocumentObjectType::Character:
+        case Domain::DocumentObjectType::Location:
+        case Domain::DocumentObjectType::World:
+        case Domain::DocumentObjectType::AudioplayTitlePage:
+        case Domain::DocumentObjectType::AudioplaySynopsis:
+        case Domain::DocumentObjectType::AudioplayText:
+        case Domain::DocumentObjectType::AudioplayStatistics:
+        case Domain::DocumentObjectType::ComicBookTitlePage:
+        case Domain::DocumentObjectType::ComicBookSynopsis:
+        case Domain::DocumentObjectType::ComicBookText:
+        case Domain::DocumentObjectType::ComicBookStatistics:
+        case Domain::DocumentObjectType::NovelTitlePage:
+        case Domain::DocumentObjectType::NovelSynopsis:
+        case Domain::DocumentObjectType::NovelOutline:
+        case Domain::DocumentObjectType::NovelText:
+        case Domain::DocumentObjectType::NovelStatistics:
+        case Domain::DocumentObjectType::ScreenplayTitlePage:
+        case Domain::DocumentObjectType::ScreenplaySynopsis:
+        case Domain::DocumentObjectType::ScreenplayTreatment:
+        case Domain::DocumentObjectType::ScreenplayText:
+        case Domain::DocumentObjectType::ScreenplayStatistics:
+        case Domain::DocumentObjectType::StageplayTitlePage:
+        case Domain::DocumentObjectType::StageplaySynopsis:
+        case Domain::DocumentObjectType::StageplayText:
+        case Domain::DocumentObjectType::StageplayStatistics: {
+            documentIndexToShare = _index.parent();
+            documentUuidToShare = currentItem->parent()->uuid();
+            break;
+        }
+        default: {
+            documentIndexToShare = _index;
+            documentUuidToShare = currentItem->uuid();
+            break;
+        }
+        }
+
+        hasEditingPermissionsForDocument
+            = editingPermissions.value(documentUuidToShare, DocumentEditingMode::Read)
+            == DocumentEditingMode::Edit;
+    }
 
     //
     // Определяем, где находятся элементы: все корзине/все не в корзине
@@ -629,7 +685,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     if (allInsideRecycleBin) {
         auto removeDocument = new QAction(tr("Remove permanently"));
         removeDocument->setIconText(u8"\U000f01b4");
-        removeDocument->setEnabled(enabled);
+        removeDocument->setEnabled(hasEditingPermissionsForProject);
         connect(removeDocument, &QAction::triggered, q,
                 [this, selectedIndexes] { removeDocuments(selectedIndexes); });
         menuActions.append(removeDocument);
@@ -642,32 +698,34 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             if (currentItem->type() == Domain::DocumentObjectType::Characters) {
                 auto findAllCharacters = new QAction(tr("Find all characters"));
                 findAllCharacters->setIconText(u8"\U000F0016");
-                findAllCharacters->setEnabled(enabled);
+                findAllCharacters->setEnabled(hasEditingPermissionsForProject);
                 connect(findAllCharacters, &QAction::triggered, q,
                         [this] { this->findAllCharacters(); });
                 menuActions.append(findAllCharacters);
                 //
                 auto addCharacter = new QAction(tr("Add character"));
                 addCharacter->setIconText(u8"\U000F0014");
+                addCharacter->setEnabled(hasEditingPermissionsForProject);
                 connect(addCharacter, &QAction::triggered, q, [this] { addDocument(); });
                 menuActions.append(addCharacter);
             } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
                 auto findAllLocations = new QAction(tr("Find all locations"));
                 findAllLocations->setIconText(u8"\U000F13B0");
-                findAllLocations->setEnabled(enabled);
+                findAllLocations->setEnabled(hasEditingPermissionsForProject);
                 connect(findAllLocations, &QAction::triggered, q,
                         [this] { this->findAllLocations(); });
                 menuActions.append(findAllLocations);
                 //
                 auto addLocation = new QAction(tr("Add location"));
                 addLocation->setIconText(u8"\U000F0975");
+                addLocation->setEnabled(hasEditingPermissionsForProject);
                 connect(addLocation, &QAction::triggered, q, [this] { addDocument(); });
                 menuActions.append(addLocation);
             } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
                 if (currentItem->hasChildren()) {
                     auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
                     emptyRecycleBin->setIconText(u8"\U000f05e8");
-                    emptyRecycleBin->setEnabled(enabled);
+                    emptyRecycleBin->setEnabled(hasEditingPermissionsForProject);
                     connect(emptyRecycleBin, &QAction::triggered, q,
                             [this] { this->emptyRecycleBin(); });
                     menuActions.append(emptyRecycleBin);
@@ -681,6 +739,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 || currentItem->type() == Domain::DocumentObjectType::Locations) {
                 auto sortAlphabetically = new QAction(tr("Sort alphabetically"));
                 sortAlphabetically->setIconText(u8"\U000F05BD");
+                sortAlphabetically->setEnabled(hasEditingPermissionsForProject);
                 connect(sortAlphabetically, &QAction::triggered, q,
                         [this] { sortChildrenAlphabetically(); });
                 menuActions.append(sortAlphabetically);
@@ -693,7 +752,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 auto createNewDraft = new QAction(tr("Create draft"));
                 createNewDraft->setSeparator(!menuActions.isEmpty());
                 createNewDraft->setIconText(u8"\U000F00FB");
-                createNewDraft->setEnabled(enabled);
+                createNewDraft->setEnabled(hasEditingPermissionsForDocument);
                 connect(createNewDraft, &QAction::triggered, q,
                         [this, currentItemIndex] { this->createNewDraft(currentItemIndex); });
                 menuActions.append(createNewDraft);
@@ -728,63 +787,19 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             //
             if (isProjectRemote && allowGrantAccessToProject
                 && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
-                QModelIndex documentIndexToShare;
-                const auto documentUuidToShare = [currentItem, _index, &documentIndexToShare] {
-                    switch (currentItem->type()) {
-                    case Domain::DocumentObjectType::Character:
-                    case Domain::DocumentObjectType::Location:
-                    case Domain::DocumentObjectType::World:
-                    case Domain::DocumentObjectType::AudioplayTitlePage:
-                    case Domain::DocumentObjectType::AudioplaySynopsis:
-                    case Domain::DocumentObjectType::AudioplayText:
-                    case Domain::DocumentObjectType::AudioplayStatistics:
-                    case Domain::DocumentObjectType::ComicBookTitlePage:
-                    case Domain::DocumentObjectType::ComicBookSynopsis:
-                    case Domain::DocumentObjectType::ComicBookText:
-                    case Domain::DocumentObjectType::ComicBookStatistics:
-                    case Domain::DocumentObjectType::NovelTitlePage:
-                    case Domain::DocumentObjectType::NovelSynopsis:
-                    case Domain::DocumentObjectType::NovelOutline:
-                    case Domain::DocumentObjectType::NovelText:
-                    case Domain::DocumentObjectType::NovelStatistics:
-                    case Domain::DocumentObjectType::ScreenplayTitlePage:
-                    case Domain::DocumentObjectType::ScreenplaySynopsis:
-                    case Domain::DocumentObjectType::ScreenplayTreatment:
-                    case Domain::DocumentObjectType::ScreenplayText:
-                    case Domain::DocumentObjectType::ScreenplayStatistics:
-                    case Domain::DocumentObjectType::StageplayTitlePage:
-                    case Domain::DocumentObjectType::StageplaySynopsis:
-                    case Domain::DocumentObjectType::StageplayText:
-                    case Domain::DocumentObjectType::StageplayStatistics: {
-                        documentIndexToShare = _index.parent();
-                        return currentItem->parent()->uuid();
-                    }
-                    default: {
-                        documentIndexToShare = _index;
-                        return currentItem->uuid();
-                    }
-                    }
-                }();
-                //
-                // ... если пользователь владелец, или может изменять этот документ
-                //
-                if ((isProjectOwner || editingMode == DocumentEditingMode::Edit
-                     || editingPermissions.value(documentUuidToShare, DocumentEditingMode::Read)
-                         == DocumentEditingMode::Edit)) {
-                    auto shareAccess = new QAction(tr("Share access"));
-                    shareAccess->setSeparator(!menuActions.isEmpty());
-                    shareAccess->setIconText(u8"\U000F0010");
-                    connect(shareAccess, &QAction::triggered, q, [this, documentIndexToShare] {
-                        auto projectCollaboratorsView = pluginsBuilder.projectCollaboratorsView(
-                            modelsFacade.modelFor(Domain::DocumentObjectType::Project));
-                        view.left->addEditor(projectCollaboratorsView->asQWidget());
+                auto shareAccess = new QAction(tr("Share access"));
+                shareAccess->setSeparator(!menuActions.isEmpty());
+                shareAccess->setIconText(u8"\U000F0010");
+                connect(shareAccess, &QAction::triggered, q, [this, documentIndexToShare] {
+                    auto projectCollaboratorsView = pluginsBuilder.projectCollaboratorsView(
+                        modelsFacade.modelFor(Domain::DocumentObjectType::Project));
+                    view.left->addEditor(projectCollaboratorsView->asQWidget());
 
-                        QMetaObject::invokeMethod(projectCollaboratorsView->asQWidget(),
-                                                  "configureDocumentAccessPressed",
-                                                  Q_ARG(QModelIndex, documentIndexToShare));
-                    });
-                    menuActions.append(shareAccess);
-                }
+                    QMetaObject::invokeMethod(projectCollaboratorsView->asQWidget(),
+                                              "configureDocumentAccessPressed",
+                                              Q_ARG(QModelIndex, documentIndexToShare));
+                });
+                menuActions.append(shareAccess);
             }
         }
         //
@@ -804,7 +819,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 auto compareDocuments = new QAction(tr("Compare documents"));
                 compareDocuments->setSeparator(!menuActions.isEmpty());
                 compareDocuments->setIconText(u8"\U000F1492");
-                compareDocuments->setEnabled(enabled);
+                compareDocuments->setEnabled(hasEditingPermissionsForDocument);
                 connect(compareDocuments, &QAction::triggered, q,
                         [this, firstItemIndex, secondItemIndex] {
                             compareTextDocuments(firstItemIndex, secondItemIndex);
@@ -819,14 +834,14 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             auto addFolder = new QAction(tr("Add folder"));
             addFolder->setSeparator(!menuActions.isEmpty());
             addFolder->setIconText(u8"\U000F0257");
-            addFolder->setEnabled(enabled);
+            addFolder->setEnabled(hasEditingPermissionsForProject);
             connect(addFolder, &QAction::triggered, q,
                     [this] { addDocument(Domain::DocumentObjectType::Folder); });
             menuActions.append(addFolder);
             //
             auto addDocument = new QAction(tr("Add document"));
             addDocument->setIconText(u8"\U000F0415");
-            addDocument->setEnabled(enabled);
+            addDocument->setEnabled(hasEditingPermissionsForProject);
             connect(addDocument, &QAction::triggered, q, [this] { this->addDocument(); });
             menuActions.append(addDocument);
 
@@ -847,7 +862,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                     selectedIndexes.size() > 1 ? tr("Remove documents") : tr("Remove document"));
                 removeDocument->setSeparator(true);
                 removeDocument->setIconText(u8"\U000f01b4");
-                removeDocument->setEnabled(enabled);
+                removeDocument->setEnabled(hasEditingPermissionsForProject);
                 connect(removeDocument, &QAction::triggered, q,
                         [this, selectedIndexes] { removeDocuments(selectedIndexes); });
                 menuActions.append(removeDocument);
