@@ -670,6 +670,10 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 const QDateTime crashTime = QDateTime::fromSecsSinceEpoch(report.creation_time);
                 const QDir logsDir(q->logFilePath());
 
+                Log::info(
+                    QString("BugSplat: Searching for log file. Crash time: %1, Logs directory: %2")
+                        .arg(crashTime.toString(Qt::ISODate), logsDir.absolutePath()));
+
                 QString previousSessionLogPath;
                 if (logsDir.exists()) {
                     QFileInfo bestLogFile;
@@ -677,6 +681,9 @@ void ApplicationManager::Implementation::sendCrashInfo()
 
                     const auto logFiles
                         = logsDir.entryInfoList({ "*.log" }, QDir::Files, QDir::Time);
+                    Log::info(QString("BugSplat: Found %1 log file(s) in directory")
+                                  .arg(logFiles.size()));
+
                     for (const auto& logFile : logFiles) {
                         const QDateTime logFileTime = logFile.lastModified();
                         //
@@ -687,7 +694,16 @@ void ApplicationManager::Implementation::sendCrashInfo()
                             if (bestLogFile.filePath().isEmpty() || logFileTime > bestLogTime) {
                                 bestLogFile = logFile;
                                 bestLogTime = logFileTime;
+                                Log::info(
+                                    QString("BugSplat: Candidate log file found: %1 (modified: %2)")
+                                        .arg(logFile.absoluteFilePath(),
+                                             logFileTime.toString(Qt::ISODate)));
                             }
+                        } else {
+                            Log::info(QString("BugSplat: Skipping log file %1 (modified: %2, "
+                                              "after crash time)")
+                                          .arg(logFile.absoluteFilePath(),
+                                               logFileTime.toString(Qt::ISODate)));
                         }
                     }
 
@@ -696,11 +712,35 @@ void ApplicationManager::Implementation::sendCrashInfo()
                     //
                     if (!bestLogFile.filePath().isEmpty() && bestLogFile.exists()) {
                         previousSessionLogPath = bestLogFile.absoluteFilePath();
+                        Log::info(
+                            QString("BugSplat: Selected log file: %1").arg(previousSessionLogPath));
+                    } else {
+                        if (bestLogFile.filePath().isEmpty()) {
+                            Log::info("BugSplat: No suitable log file found (no file modified "
+                                      "before crash time)");
+                        } else {
+                            Log::warning(QString("BugSplat: Selected log file does not exist: %1")
+                                             .arg(bestLogFile.absoluteFilePath()));
+                        }
                     }
+                } else {
+                    Log::warning(QString("BugSplat: Logs directory does not exist: %1")
+                                     .arg(logsDir.absolutePath()));
                 }
 
                 if (!previousSessionLogPath.isEmpty() && QFile::exists(previousSessionLogPath)) {
                     loader->addRequestAttributeFile("upload_file_log", previousSessionLogPath);
+                    Log::info(QString("BugSplat: Log file attached to crash report: %1")
+                                  .arg(previousSessionLogPath));
+                } else {
+                    if (previousSessionLogPath.isEmpty()) {
+                        Log::info(
+                            "BugSplat: No log file to attach (previousSessionLogPath is empty)");
+                    } else {
+                        Log::warning(
+                            QString("BugSplat: Cannot attach log file - file does not exist: %1")
+                                .arg(previousSessionLogPath));
+                    }
                 }
 
                 QObject::connect(loader, &NetworkRequest::downloadComplete,
