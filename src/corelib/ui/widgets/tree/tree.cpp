@@ -272,6 +272,11 @@ QSize Tree::viewportSizeHint() const
     return d->tree->viewportSizeHint();
 }
 
+QWidget* Tree::viewport() const
+{
+    return d->tree->viewport();
+}
+
 void Tree::setEditTriggers(QAbstractItemView::EditTriggers _triggers)
 {
     d->tree->setEditTriggers(_triggers);

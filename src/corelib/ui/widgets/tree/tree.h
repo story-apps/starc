@@ -158,6 +158,11 @@ public:
     QSize viewportSizeHint() const;
 
     /**
+     * @brief Получить вьюпорт дерева
+     */
+    QWidget* viewport() const;
+
+    /**
      * @brief Задать действия приводящие к редактированию элементов дерева
      */
     void setEditTriggers(QAbstractItemView::EditTriggers _triggers);
