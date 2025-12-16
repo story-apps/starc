@@ -611,49 +611,48 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         = !isProjectRemote || isProjectOwner || editingMode == DocumentEditingMode::Edit;
     bool hasEditingPermissionsForDocument = hasEditingPermissionsForProject;
     QModelIndex documentIndexToShare;
+    QUuid documentUuidToShare;
+    switch (currentItem->type()) {
+    case Domain::DocumentObjectType::Character:
+    case Domain::DocumentObjectType::Location:
+    case Domain::DocumentObjectType::World:
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis:
+    case Domain::DocumentObjectType::AudioplayText:
+    case Domain::DocumentObjectType::AudioplayStatistics:
+    case Domain::DocumentObjectType::ComicBookTitlePage:
+    case Domain::DocumentObjectType::ComicBookSynopsis:
+    case Domain::DocumentObjectType::ComicBookText:
+    case Domain::DocumentObjectType::ComicBookStatistics:
+    case Domain::DocumentObjectType::NovelTitlePage:
+    case Domain::DocumentObjectType::NovelSynopsis:
+    case Domain::DocumentObjectType::NovelOutline:
+    case Domain::DocumentObjectType::NovelText:
+    case Domain::DocumentObjectType::NovelStatistics:
+    case Domain::DocumentObjectType::ScreenplayTitlePage:
+    case Domain::DocumentObjectType::ScreenplaySynopsis:
+    case Domain::DocumentObjectType::ScreenplayTreatment:
+    case Domain::DocumentObjectType::ScreenplayText:
+    case Domain::DocumentObjectType::ScreenplayStatistics:
+    case Domain::DocumentObjectType::StageplayTitlePage:
+    case Domain::DocumentObjectType::StageplaySynopsis:
+    case Domain::DocumentObjectType::StageplayText:
+    case Domain::DocumentObjectType::StageplayStatistics: {
+        documentIndexToShare = _index.parent();
+        documentUuidToShare = currentItem->parent()->uuid();
+        break;
+    }
+    default: {
+        documentIndexToShare = _index;
+        documentUuidToShare = currentItem->uuid();
+        break;
+    }
+    }
     //
     // Если у пользователя нет доступа для редактирования всего проекта, проверим,
     // есть ли у него права на редактирование конкретного документа
     //
     if (!hasEditingPermissionsForProject) {
-        QUuid documentUuidToShare;
-        switch (currentItem->type()) {
-        case Domain::DocumentObjectType::Character:
-        case Domain::DocumentObjectType::Location:
-        case Domain::DocumentObjectType::World:
-        case Domain::DocumentObjectType::AudioplayTitlePage:
-        case Domain::DocumentObjectType::AudioplaySynopsis:
-        case Domain::DocumentObjectType::AudioplayText:
-        case Domain::DocumentObjectType::AudioplayStatistics:
-        case Domain::DocumentObjectType::ComicBookTitlePage:
-        case Domain::DocumentObjectType::ComicBookSynopsis:
-        case Domain::DocumentObjectType::ComicBookText:
-        case Domain::DocumentObjectType::ComicBookStatistics:
-        case Domain::DocumentObjectType::NovelTitlePage:
-        case Domain::DocumentObjectType::NovelSynopsis:
-        case Domain::DocumentObjectType::NovelOutline:
-        case Domain::DocumentObjectType::NovelText:
-        case Domain::DocumentObjectType::NovelStatistics:
-        case Domain::DocumentObjectType::ScreenplayTitlePage:
-        case Domain::DocumentObjectType::ScreenplaySynopsis:
-        case Domain::DocumentObjectType::ScreenplayTreatment:
-        case Domain::DocumentObjectType::ScreenplayText:
-        case Domain::DocumentObjectType::ScreenplayStatistics:
-        case Domain::DocumentObjectType::StageplayTitlePage:
-        case Domain::DocumentObjectType::StageplaySynopsis:
-        case Domain::DocumentObjectType::StageplayText:
-        case Domain::DocumentObjectType::StageplayStatistics: {
-            documentIndexToShare = _index.parent();
-            documentUuidToShare = currentItem->parent()->uuid();
-            break;
-        }
-        default: {
-            documentIndexToShare = _index;
-            documentUuidToShare = currentItem->uuid();
-            break;
-        }
-        }
-
         hasEditingPermissionsForDocument
             = editingPermissions.value(documentUuidToShare, DocumentEditingMode::Read)
             == DocumentEditingMode::Edit;
