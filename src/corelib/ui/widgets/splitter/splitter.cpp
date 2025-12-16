@@ -359,7 +359,7 @@ void Splitter::setSizes(const QVector<int>& _sizes)
                 // Геометрия, при установке в неё ширину, считает на два пикселя меньше, поэтому
                 // тут добавляем дельту, которая будет компенсировать этот недостаток
                 //
-                const auto widthDelta = isRightToLeft() ? -2 : 1;
+                const auto widthDelta = widgetSize > 0 ? (isRightToLeft() ? -2 : 1) : 0;
                 widgetGeometry.setWidth(widgetSize + widthDelta);
             } else {
                 widgetGeometry.setHeight(widgetSize);
