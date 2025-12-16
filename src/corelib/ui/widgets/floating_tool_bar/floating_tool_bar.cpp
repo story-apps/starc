@@ -441,7 +441,7 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем заблюренный фон
     //
-    if (parentWidget() != nullptr) {
+    if (parentWidget() != nullptr && !d->isFlat) {
         auto backgroundImageRect = backgroundRect;
         backgroundImageRect.moveTopLeft(backgroundImageRect.topLeft() + pos());
         QPixmap backgroundPixmap(backgroundImageRect.size());
