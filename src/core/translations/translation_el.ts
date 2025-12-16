@@ -431,15 +431,15 @@
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="417"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="582"/>
         <source>Does not pass</source>
-        <translation>Δεν πληροί</translation>
+        <translation>Δεν περνάει</translation>
     </message>
     <message numerus="yes">
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="418"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="583"/>
         <source>Passed %n time(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Πέρασε %n φορά</numerusform>
+            <numerusform>Πέρασε %n φορές</numerusform>
         </translation>
     </message>
     <message>
@@ -1842,15 +1842,15 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="465"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="630"/>
         <source>Does not pass</source>
-        <translation>Δεν πληροί</translation>
+        <translation>Δεν περνάει</translation>
     </message>
     <message numerus="yes">
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="466"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="631"/>
         <source>Passed %n time(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Πέρασε %n φορά</numerusform>
+            <numerusform>Πέρασε %n φορές</numerusform>
         </translation>
     </message>
     <message>
@@ -4158,37 +4158,37 @@ The following files will not be imported:
 <context>
     <name>ManagementLayer::ProjectCollaboratorsManager</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="378"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="414"/>
         <source>Editor</source>
         <translation>Συντάκτης</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="386"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="422"/>
         <source>Commentator</source>
         <translation>Σχολιαστής</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="395"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="431"/>
         <source>Reader</source>
         <translation>Αναγνώστης</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="403"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="439"/>
         <source>Partial access</source>
         <translation>Μερική πρόσβαση</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="411"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="447"/>
         <source>Configure access</source>
         <translation>Ρύθμιση πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="420"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="456"/>
         <source>Close access</source>
         <translation>Κλείσιμο πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="446"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_manager.cpp" line="482"/>
         <source>Invitation sent to the %1</source>
         <translation>Η πρόσκληση στάλθηκε στο %1</translation>
     </message>
@@ -4196,70 +4196,70 @@ The following files will not be imported:
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="643"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="698"/>
         <source>Find all characters</source>
         <translation>Εύρεση όλων των χαρακτήρων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="650"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="705"/>
         <source>Add character</source>
         <translation>Προσθήκη χαρακτήρα</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="655"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="711"/>
         <source>Find all locations</source>
         <translation>Εύρεση όλων των τοποθεσιών</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="662"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="718"/>
         <source>Add location</source>
         <translation>Προσθήκη τοποθεσίας</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="668"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="725"/>
         <source>Empty recycle bin</source>
         <translation>Άδειασμα κάδου ανακύκλωσης</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="827"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="841"/>
         <source>Add document</source>
         <translation>Προσθήκη εγγράφου</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="847"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="861"/>
         <source>Remove document</source>
         <translation>Αφαίρεση εγγράφου</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="706"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="764"/>
         <source>Open in new window</source>
         <translation>Άνοιγμα σε νέο παράθυρο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1004"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1018"/>
         <source>Character with this name already exists</source>
         <translation>Υπάρχει ήδη χαρακτήρας με αυτό το όνομα</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1015"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1029"/>
         <source>Location with this name already exists</source>
         <translation>Υπάρχει ήδη τοποθεσία με αυτό το όνομα</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="141"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1179"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1870"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1881"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1965"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1966"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4131"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1193"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1884"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1895"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1979"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1980"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4145"/>
         <source>Current draft</source>
         <translation>Τρέχον προσχέδιο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1275"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1406"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2003"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1289"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1420"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2017"/>
         <source>No</source>
         <translation>Όχι</translation>
     </message>
@@ -4274,261 +4274,261 @@ The following files will not be imported:
         <translation>Διαχωρισμός παραθύρου</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="819"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="833"/>
         <source>Add folder</source>
         <translation>Προσθήκη φακέλου</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="847"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="861"/>
         <source>Remove documents</source>
         <translation>Αφαίρεση εγγράφων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="682"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="739"/>
         <source>Sort alphabetically</source>
         <translation>Ταξινόμηση αλφαβητικά</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="630"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="685"/>
         <source>Remove permanently</source>
         <translation>Οριστική αφαίρεση</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="693"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2678"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="751"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2692"/>
         <source>Create draft</source>
         <translation>Δημιουργία προσχεδίου</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="718"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="776"/>
         <source>Export...</source>
         <translation>Εξαγωγή...</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="774"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="789"/>
         <source>Share access</source>
         <translation>Κοινή χρήση πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="818"/>
         <source>Compare documents</source>
         <translation>Σύγκριση εγγράφων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="861"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="875"/>
         <source>Expand all</source>
         <translation>Ανάπτυξη όλων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="867"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="881"/>
         <source>Collapse all</source>
         <translation>Σύμπτυξη όλων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1026"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1040"/>
         <source>World with this name already exists</source>
         <translation>Υπάρχει ήδη κόσμος με αυτό το όνομα</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1269"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1283"/>
         <source>Do you really want to close comparison &quot;%1&quot;?</source>
         <translation>Θέλετε σίγουρα να κλείσετε τη σύγκριση «%1»;</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1270"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1284"/>
         <source>Do you really want to remove document draft &quot;%1&quot;?</source>
         <translation>Θέλετε σίγουρα να αφαιρέσετε το προσχέδιο του εγγράφου «%1»;</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1271"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1407"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2004"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1285"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1421"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2018"/>
         <source>Yes, remove</source>
         <translation>Ναι, αφαίρεση</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1271"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1285"/>
         <source>Yes, close</source>
         <translation>Ναι, κλείσιμο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1396"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1410"/>
         <source>Do you really want to permanently remove document: &quot;%1&quot;?</source>
         <translation>Θέλετε σίγουρα να αφαιρέσετε οριστικά το έγγραφο: «%1»;</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1633"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1647"/>
         <source>Characters from the text</source>
         <translation>Χαρακτήρες από το κείμενο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1643"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1657"/>
         <source>Characters that are not found in the text</source>
         <translation>αρακτήρες που δεν βρίσκονται στο κείμενο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1656"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1670"/>
         <source>Save only characters from the text</source>
         <translation>Αποθήκευση μόνο των χαρακτήρων από το κείμενο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1657"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1671"/>
         <source>Save all characters</source>
         <translation>Αποθήκευση όλων των χαρακτήρων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1658"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1788"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1672"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1802"/>
         <source>Change nothing</source>
         <translation>Καμία αλλαγή</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1763"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1777"/>
         <source>Locations from the text</source>
         <translation>Τοποθεσίες από το κείμενο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1773"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1787"/>
         <source>Locations that are not found in the text</source>
         <translation>Τοποθεσίες που δεν βρίσκονται στο κείμενο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1786"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1800"/>
         <source>Save only locations from the text</source>
         <translation>Αποθήκευση μόνο των τοποθεσιών από το κείμενο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1787"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1801"/>
         <source>Save all locations</source>
         <translation>Αποθήκευση όλων των τοποθεσιών</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1969"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1983"/>
         <source>%1 vs %2</source>
         <translation>%1 έναντι %2</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2002"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2016"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Θέλετε σίγουρα να αφαιρέσετε οριστικά όλα τα έγγραφα από τον κάδο ανακύκλωσης;</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2694"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2708"/>
         <source>Compare drafts</source>
         <translation>Σύγκριση προσχεδίων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2708"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2722"/>
         <source>Edit</source>
         <translation>Επεξεργασία</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2718"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2732"/>
         <source>Remove</source>
         <translation>Αφαίρεση</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2733"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2747"/>
         <source>Close</source>
         <translation>Κλείσιμο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2882"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2903"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2924"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2945"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3054"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2917"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2938"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2959"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3068"/>
         <source>draft</source>
         <translation>πρόχειρο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2901"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2922"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2943"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2915"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2936"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2957"/>
         <source>Script</source>
         <translation>Σενάριο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3743"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3757"/>
         <source>Mind map</source>
         <translation>Χάρτης ιδεών</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3749"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3763"/>
         <source>Images gallery</source>
         <translation>Συλλογή εικόνων</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3835"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3885"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3933"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3990"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4047"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3849"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3947"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4004"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4061"/>
         <source>Title page</source>
         <translation>Σελίδα τίτλου</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3838"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3888"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3934"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3992"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4050"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3852"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3902"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3948"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4006"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4064"/>
         <source>Synopsis</source>
         <translation>Σύνοψη</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3840"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3854"/>
         <source>Audioplay</source>
         <translation>Ακουστικό σενάριο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3904"/>
         <source>Comic book</source>
         <translation>Κόμικ</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4004"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4018"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3936"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3950"/>
         <source>Novel</source>
         <translation>Μυθιστόρημα</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1394"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1408"/>
         <source>Do you really want to permanently remove following documents?</source>
         <translation>Θέλετε σίγουρα να αφαιρέσετε οριστικά τα παρακάτω έγγραφα;</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3945"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3959"/>
         <source>Outline</source>
         <translation>Περίγραμμα</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4052"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4066"/>
         <source>Stageplay</source>
         <translation>Θεατρικό έργο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4440"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4454"/>
         <source>Conflicted version</source>
         <translation>Συγκρουόμενη έκδοση</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2880"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3052"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3995"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3066"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4009"/>
         <source>Screenplay</source>
         <translation>Σενάριο</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3843"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3893"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3939"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3998"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4055"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3857"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3907"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3953"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4012"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4069"/>
         <source>Statistics</source>
         <translation>Στατιστικά</translation>
     </message>
@@ -7471,22 +7471,22 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>Ui::AccessToolBar</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="81"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="113"/>
         <source>Forbid access</source>
         <translation>Απαγόρευση πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="82"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="114"/>
         <source>Can read</source>
         <translation>Μπορεί να διαβάσει</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="83"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="115"/>
         <source>Can comment</source>
         <translation>Μπορεί να σχολιάσει</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="84"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_toolbar.cpp" line="116"/>
         <source>Can edit</source>
         <translation>Μπορεί να επεξεργαστεί</translation>
     </message>
@@ -7891,7 +7891,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="907"/>
         <source>Translation will be loaded in the current document and fully replaced content. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Η μετάφραση θα φορτωθεί στο τρέχον έγγραφο και θα αντικαταστήσει πλήρως το περιεχόμενο. Θέλετε να συνεχίσετε;</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="909"/>
@@ -7901,7 +7901,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="910"/>
         <source>Yes, translate</source>
-        <translation type="unfinished"></translation>
+        <translation>Ναι, μετέφρασε</translation>
     </message>
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
@@ -8888,14 +8888,14 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="199"/>
         <source>Does not pass</source>
-        <translation>Δεν πληροί</translation>
+        <translation>Δεν περνάει</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="199"/>
         <source>Passed %n time(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Πέρασε %n φορά</numerusform>
+            <numerusform>Πέρασε %n φορές</numerusform>
         </translation>
     </message>
     <message>
@@ -13708,32 +13708,32 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="687"/>
         <source>To see node info and all their connections, select concrete node.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να δείτε πληροφορίες κόμβου και όλες τις συνδέσεις του, επιλέξτε συγκεκριμένο κόμβο.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="688"/>
         <source>To see connection details, select concrete connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να δείτε λεπτομέρειες σύνδεσης, επιλέξτε συγκεκριμένη σύνδεση.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="691"/>
         <source>To create a new connection, hold the Option button and move one node to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να δημιουργήσετε νέα σύνδεση, κρατήστε πατημένο το Option και μετακινήστε έναν κόμβο σε έναν άλλο.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="694"/>
         <source>To create a new connection, hold the Alt button and move one node to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να δημιουργήσετε νέα σύνδεση, κρατήστε πατημένο το Alt και μετακινήστε έναν κόμβο σε έναν άλλο.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="700"/>
         <source>Node text</source>
-        <translation type="unfinished"></translation>
+        <translation>Κείμενο κόμβου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="701"/>
         <source>Node details</source>
-        <translation type="unfinished"></translation>
+        <translation>Λεπτομέρειες κόμβου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="703"/>
@@ -13744,12 +13744,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="704"/>
         <source>Connection text</source>
-        <translation type="unfinished"></translation>
+        <translation>Κείμενο σύνδεσης</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="705"/>
         <source>Connection details</source>
-        <translation type="unfinished"></translation>
+        <translation>Λεπτομέρειες σύνδεσης</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="708"/>
@@ -13759,12 +13759,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="709"/>
         <source>Group details</source>
-        <translation type="unfinished"></translation>
+        <translation>Λεπτομέρειες ομάδας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="711"/>
         <source>Give AI a short description of the idea or question you want it to provide ideas about.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δώστε στην AI μια σύντομη περιγραφή της ιδέας ή ερώτησης για την οποία θέλετε να προτείνει ιδέες.</translation>
     </message>
 </context>
 <context>
@@ -13773,18 +13773,18 @@ This action can&apos;t be canceled.</source>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="174"/>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="308"/>
         <source>New node</source>
-        <translation type="unfinished"></translation>
+        <translation>Νέος κόμβος</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="315"/>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="845"/>
         <source>Add child node</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη θυγατρικού κόμβου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="321"/>
         <source>Add sibling node</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη αδελφικού κόμβου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="342"/>
@@ -13799,12 +13799,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="648"/>
         <source>Writing ideas</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιδέες γραφής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="667"/>
         <source>Ideas</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιδέες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="825"/>
@@ -13814,12 +13814,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="827"/>
         <source>Activate PRO version to unlock full access to the mind map module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιήστε την έκδοση PRO για να ξεκλειδώσετε πλήρη πρόσβαση στη μονάδα νοητικών χαρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="828"/>
         <source>Unlock mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα νοητικού χάρτη</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="832"/>
@@ -13834,7 +13834,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="842"/>
         <source>Add node</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη κόμβου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="846"/>
@@ -13854,12 +13854,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="861"/>
         <source>Show connections titles only for the selected nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση τίτλων συνδέσεων μόνο για τους επιλεγμένους κόμβους</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="862"/>
         <source>Save mind map to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση νοητικού χάρτη ως εικόνα</translation>
     </message>
 </context>
 <context>
@@ -13912,17 +13912,17 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="273"/>
         <source>Index cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάρτες ευρετηρίου</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="276"/>
         <source>Story timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρονολόγιο ιστορίας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="279"/>
         <source>Screenplay breakdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ανάλυση σεναρίου</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="282"/>
@@ -13942,103 +13942,103 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="291"/>
         <source>Series plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Σχέδιο σειράς</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="294"/>
         <source>Cloud synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>Συγχρονισμός cloud</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="297"/>
         <source>Series statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Στατιστικά σειράς</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="362"/>
         <source>characters relations map</source>
-        <translation type="unfinished"></translation>
+        <translation>Χάρτης σχέσεων χαρακτήρων</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="366"/>
         <source>full character profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλήρες προφίλ χαρακτήρα</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="370"/>
         <source>character dialogues report</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναφορά διαλόγων χαρακτήρα</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="374"/>
         <source>locations map</source>
-        <translation type="unfinished"></translation>
+        <translation>Χάρτης τοποθεσιών</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="378"/>
         <source>full location profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλήρες προφίλ τοποθεσίας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="382"/>
         <source>location scenes report</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναφορά σκηνών τοποθεσίας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="386"/>
         <source>worlds map</source>
-        <translation type="unfinished"></translation>
+        <translation>Χάρτης κόσμων</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="390"/>
         <source>world profile</source>
-        <translation type="unfinished"></translation>
+        <translation>προφίλ κόσμου</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="394"/>
         <source>story index cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάρτες ευρετηρίου ιστορίας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="398"/>
         <source>story timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρονολόγιο ιστορίας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="402"/>
         <source>extended statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτεταμένα στατιστικά</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="406"/>
         <source>images gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Συλλογή εικόνων</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="410"/>
         <source>mind maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Νοητικοί χάρτες</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="414"/>
         <source>presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Παρουσίαση</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="418"/>
         <source>Subscribe to PRO version and get advanced features that speed up and simplify your work</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγγραφείτε στην έκδοση PRO και αποκτήστε προηγμένες λειτουργίες που επιταχύνουν και απλοποιούν τη δουλειά σας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="424"/>
         <source>Subscribe to PRO version and unlock access to the</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγγραφείτε στην έκδοση PRO και ξεκλειδώστε πρόσβαση σε</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="425"/>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="501"/>
         <source>and other advanced features that speed up and simplify your work</source>
-        <translation type="unfinished"></translation>
+        <translation>και σε άλλες προηγμένες λειτουργίες που επιταχύνουν και απλοποιούν τη δουλειά σας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="450"/>
@@ -14048,57 +14048,57 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="453"/>
         <source>Get access to the best features with a PRO subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποκτήστε πρόσβαση στις καλύτερες λειτουργίες με συνδρομή PRO</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="458"/>
         <source>Advanced worldbuilding tools (full character, location and world profiles and maps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Προηγμένα εργαλεία χτυσίματος κόσμων (πλήρη προφίλ και χάρτες χαρακτήρων, τοποθεσιών και κόσμων)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="459"/>
         <source>Story timeline, index cards, extended statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρονολόγιο ιστορίας, κάρτες ευρετηρίου, εκτεταμένα στατιστικά</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="460"/>
         <source>Extended research tools (mind maps, images gallery and presentations)</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτεταμένα εργαλεία έρευνας (νοητικοί χάρτες, συλλογή εικόνων και παρουσιάσεις)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="462"/>
         <source>Become a PRO user</source>
-        <translation type="unfinished"></translation>
+        <translation>Γίνετε χρήστης PRO</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="478"/>
         <source>cloud sync, real time collaboration</source>
-        <translation type="unfinished"></translation>
+        <translation>συγχρονισμός cloud, συνεργασία σε πραγματικό χρόνο</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="482"/>
         <source>screenplay breakdown</source>
-        <translation type="unfinished"></translation>
+        <translation>ανάλυση σεναρίου</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="486"/>
         <source>series plan</source>
-        <translation type="unfinished"></translation>
+        <translation>σχέδιο σειράς</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="490"/>
         <source>series statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>στατιστικά σειράς</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="494"/>
         <source>Subscribe to CLOUD version and get advanced features that speed up and simplify your work</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγγραφείτε στην έκδοση CLOUD και αποκτήστε προηγμένες λειτουργίες που επιταχύνουν και απλοποιούν τη δουλειά σας</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="500"/>
         <source>Subscribe to CLOUD version and unlock access to the</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγγραφείτε στην έκδοση CLOUD και ξεκλειδώστε πρόσβαση σε</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="516"/>
@@ -14108,32 +14108,32 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="519"/>
         <source>Get access to all features with a CLOUD subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποκτήστε πρόσβαση σε όλες τις λειτουργίες με συνδρομή CLOUD</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="523"/>
         <source>Cloud sync and real time collaboration</source>
-        <translation type="unfinished"></translation>
+        <translation>Συγχρονισμός cloud και συνεργασία σε πραγματικό χρόνο</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="524"/>
         <source>Preproduction tools (screenplay breakdown)</source>
-        <translation type="unfinished"></translation>
+        <translation>Εργαλεία προ-παραγωγής (ανάλυση σεναρίου)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="525"/>
         <source>Showrunner tools (series plan, series statistics)</source>
-        <translation type="unfinished"></translation>
+        <translation>Εργαλεία showrunner (σχέδιο σειράς, στατιστικά σειράς)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="526"/>
         <source>Plus everything from the PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>Συν όλα όσα περιλαμβάνει η έκδοση PRO</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/promo_widget/module_promo_widget.cpp" line="528"/>
         <source>Become a CLOUD user</source>
-        <translation type="unfinished"></translation>
+        <translation>Γίνετε χρήστης CLOUD</translation>
     </message>
 </context>
 <context>
@@ -14141,32 +14141,32 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="287"/>
         <source>Print cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="289"/>
         <source>Page orientation</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσανατολισμός σελίδας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="290"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Κατακόρυφος</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="291"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Οριζόντιος</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="292"/>
         <source>Cards count</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλήθος καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="293"/>
         <source>Print colored cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση έγχρωμων καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="295"/>
@@ -14176,7 +14176,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="296"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση</translation>
     </message>
 </context>
 <context>
@@ -14216,22 +14216,22 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_search_toolbar.cpp" line="236"/>
         <source>In the whole card content</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε όλο το περιεχόμενο της κάρτας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_search_toolbar.cpp" line="236"/>
         <source>In titles &amp; headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε τίτλους &amp; επικεφαλίδες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_search_toolbar.cpp" line="237"/>
         <source>In text</source>
-        <translation type="unfinished"></translation>
+        <translation>Στο κείμενο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_search_toolbar.cpp" line="237"/>
         <source>In tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε ετικέτες</translation>
     </message>
 </context>
 <context>
@@ -14239,7 +14239,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="234"/>
         <source>Please enter positive number</source>
-        <translation type="unfinished"></translation>
+        <translation>Παρακαλώ εισάγετε θετικό αριθμό</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="463"/>
@@ -14249,17 +14249,17 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="464"/>
         <source>Lock cards positions</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλείδωμα θέσεων καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="465"/>
         <source>Arrange cards in rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Ταξινόμηση καρτών σε σειρές</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="466"/>
         <source>Arrange cards in columns</source>
-        <translation type="unfinished"></translation>
+        <translation>Ταξινόμηση καρτών σε στήλες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="467"/>
@@ -14279,17 +14279,17 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="470"/>
         <source>Arrange cards by</source>
-        <translation type="unfinished"></translation>
+        <translation>Ταξινόμηση καρτών κατά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="471"/>
         <source>in row</source>
-        <translation type="unfinished"></translation>
+        <translation>σε σειρά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="472"/>
         <source>Keep empty to fit cards on screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Αφήστε κενό για αυτόματη προσαρμογή καρτών στην οθόνη</translation>
     </message>
 </context>
 <context>
@@ -14327,17 +14327,17 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="172"/>
         <source>Search cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναζήτηση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="176"/>
         <source>Print cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="179"/>
         <source>Save cards to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση καρτών ως εικόνα</translation>
     </message>
 </context>
 <context>
@@ -14355,7 +14355,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="955"/>
         <source>Activate PRO version to unlock full access to the novel cards module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίηση έκδοσης PRO για πλήρη πρόσβαση στη μονάδα καρτών μυθιστορήματος</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="956"/>
@@ -14365,7 +14365,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="957"/>
         <source>Unlock cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα καρτών</translation>
     </message>
 </context>
 <context>
@@ -14373,7 +14373,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="132"/>
         <source>Export novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή μυθιστορήματος</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="133"/>
@@ -14383,17 +14383,17 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="134"/>
         <source>Include parts &amp; chapters footers</source>
-        <translation type="unfinished"></translation>
+        <translation>Συμπερίληψη μερών &amp; υποσέλιδων κεφαλαίων</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="135"/>
         <source>Scenes&apos; ornamental break</source>
-        <translation type="unfinished"></translation>
+        <translation>Διακοσμητική διακοπή σκηνών</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="136"/>
         <source>Keep empty, if you want to print scene headings instead</source>
-        <translation type="unfinished"></translation>
+        <translation>Αφήστε κενό αν θέλετε να εκτυπωθούν οι επικεφαλίδες των σκηνών</translation>
     </message>
 </context>
 <context>
@@ -14560,7 +14560,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="340"/>
         <source>Show only current chapter text</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση μόνο του κειμένου του τρέχοντος κεφαλαίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="341"/>
@@ -14573,12 +14573,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="327"/>
         <source>Hide scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="328"/>
         <source>Show scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="329"/>
@@ -14603,7 +14603,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1761"/>
         <source>Scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράμετροι σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1762"/>
@@ -14623,7 +14623,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1767"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκινήστε την προτροπή με κάτι όπως «Γράψε ένα μυθιστόρημα για ...» ή «Γράψε ένα κεφάλαιο για ...»</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1784"/>
@@ -14638,7 +14638,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1786"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε beats</translation>
     </message>
 </context>
 <context>
@@ -14666,7 +14666,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="214"/>
         <source>Override common settings for this novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράκαμψη των κοινών ρυθμίσεων για αυτό το μυθιστόρημα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="215"/>
@@ -14760,12 +14760,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="346"/>
         <source>Hide beats headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη επικεφαλίδων beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="347"/>
         <source>Show beats headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση επικεφαλίδων beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="349"/>
@@ -14800,7 +14800,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="358"/>
         <source>Show only current chapter text</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση μόνο του κειμένου του τρέχοντος κεφαλαίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="359"/>
@@ -14862,12 +14862,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="341"/>
         <source>Hide scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="342"/>
         <source>Show scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="343"/>
@@ -14895,9 +14895,9 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1728"/>
         <source>Script generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Η δημιουργία σεναρίου θα χρειαστεί %n λέξη</numerusform>
+            <numerusform>Η δημιουργία σεναρίου θα χρειαστεί %n λέξεις</numerusform>
         </translation>
     </message>
     <message>
@@ -14908,7 +14908,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1842"/>
         <source>Scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράμετροι σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1843"/>
@@ -14928,7 +14928,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1848"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκινήστε την προτροπή με κάτι όπως «Γράψε ένα μυθιστόρημα για ...» ή «Γράψε ένα κεφάλαιο για ...»</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1865"/>
@@ -14943,7 +14943,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1867"/>
         <source>In text</source>
-        <translation type="unfinished"></translation>
+        <translation>Στο κείμενο</translation>
     </message>
 </context>
 <context>
@@ -14951,22 +14951,22 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="81"/>
         <source>Jan</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιαν</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="85"/>
         <source>Feb</source>
-        <translation type="unfinished"></translation>
+        <translation>Φεβ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="89"/>
         <source>Mar</source>
-        <translation type="unfinished"></translation>
+        <translation>Μαρ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="93"/>
         <source>Apr</source>
-        <translation type="unfinished"></translation>
+        <translation>Απρ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="97"/>
@@ -14976,37 +14976,37 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="101"/>
         <source>Jun</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιουν</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="105"/>
         <source>Jul</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιουλ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="109"/>
         <source>Aug</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυγ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="113"/>
         <source>Sep</source>
-        <translation type="unfinished"></translation>
+        <translation>Σεπ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="117"/>
         <source>Oct</source>
-        <translation type="unfinished"></translation>
+        <translation>Οκτ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="121"/>
         <source>Nov</source>
-        <translation type="unfinished"></translation>
+        <translation>Νοε</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_indicator.cpp" line="125"/>
         <source>Dec</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεκ</translation>
     </message>
 </context>
 <context>
@@ -15046,22 +15046,22 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_search_toolbar.cpp" line="236"/>
         <source>In the whole card content</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε όλο το περιεχόμενο της κάρτας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_search_toolbar.cpp" line="236"/>
         <source>In titles &amp; headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε τίτλους &amp; επικεφαλίδες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_search_toolbar.cpp" line="237"/>
         <source>In text</source>
-        <translation type="unfinished"></translation>
+        <translation>Στο κείμενο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_search_toolbar.cpp" line="237"/>
         <source>In tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Στις ετικέτες</translation>
     </message>
 </context>
 <context>
@@ -15074,12 +15074,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="413"/>
         <source>Arrange timeline horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>Οριζόντια διάταξη χρονολογίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="414"/>
         <source>Arrange timeline vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάθετη διάταξη χρονολογίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="415"/>
@@ -15099,7 +15099,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_sidebar.cpp" line="418"/>
         <source>Timeline scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλίμακα χρονολογίου</translation>
     </message>
 </context>
 <context>
@@ -15127,12 +15127,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="148"/>
         <source>Search cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναζήτηση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_toolbar.cpp" line="151"/>
         <source>Save cards to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση καρτών ως εικόνα</translation>
     </message>
 </context>
 <context>
@@ -15150,7 +15150,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="953"/>
         <source>Activate PRO version to unlock full access to the novel timeline module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιήστε την έκδοση PRO για να ξεκλειδώσετε πλήρη πρόσβαση στη λειτουργία χρονολογίου μυθιστορήματος</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="954"/>
@@ -15160,7 +15160,7 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/ui/novel_timeline_view.cpp" line="955"/>
         <source>Unlock timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα χρονολογίου</translation>
     </message>
 </context>
 <context>
@@ -15209,12 +15209,12 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="918"/>
         <source>Welcome to the Story Architect</source>
-        <translation type="unfinished"></translation>
+        <translation>Καλώς ήρθες στο Story Architect</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="919"/>
         <source>Let&apos;s configure something before start</source>
-        <translation type="unfinished"></translation>
+        <translation>Ας ρυθμίσουμε κάτι πριν ξεκινήσουμε</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="920"/>
@@ -15224,22 +15224,22 @@ This action can&apos;t be canceled.</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="926"/>
         <source>Choose application theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλογή θέματος εφαρμογής</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="927"/>
         <source>Setup size of the user interface elements</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρύθμιση μεγέθους στοιχείων διεπαφής χρήστη</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="928"/>
         <source>small</source>
-        <translation type="unfinished"></translation>
+        <translation>μικρό</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="929"/>
         <source>big</source>
-        <translation type="unfinished"></translation>
+        <translation>μεγάλο</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="930"/>
@@ -15254,7 +15254,7 @@ This action can&apos;t be canceled.</source>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="933"/>
         <source>Sign in to get access to the extended
 FREE, PRO and CLOUD features</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνδεθείτε για να αποκτήσετε πρόσβαση στις διευρυμένες λειτουργίες των FREE, PRO και CLOUD εκδόσεων</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="947"/>
@@ -15264,7 +15264,7 @@ FREE, PRO and CLOUD features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="934"/>
         <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
-        <translation type="unfinished"></translation>
+        <translation>Όπως σπριντ συγγραφής, στατιστικά γραφής, εργαλεία δημιουργίας κόσμων, εργαλεία ανάπτυξης ιστορίας, συνεργασία και άλλα</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="936"/>
@@ -15279,7 +15279,7 @@ FREE, PRO and CLOUD features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="938"/>
         <source>Sign up</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγγραφή</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="939"/>
@@ -15289,22 +15289,22 @@ FREE, PRO and CLOUD features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="940"/>
         <source>Continue without sign in</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνέχεια χωρίς είσοδο</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="942"/>
         <source>Set up your account</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρυθμίστε τον λογαριασμό σας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="943"/>
         <source>Personalize your workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσωποποιήστε τον χώρο εργασίας σας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="944"/>
         <source>Change avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Αλλαγή avatar</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="945"/>
@@ -15319,18 +15319,18 @@ FREE, PRO and CLOUD features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="950"/>
         <source>Customize your workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσαρμογή χώρου εργασίας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="951"/>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="963"/>
         <source>Feel at home</source>
-        <translation type="unfinished"></translation>
+        <translation>Νιώστε σαν στο σπίτι σας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="953"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
-        <translation type="unfinished"></translation>
+        <translation>Το Story Architect παρέχει εργαλεία για κάθε μορφή γραφής. Επιλέξτε αυτά που σκοπεύετε να χρησιμοποιήσετε:</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="955"/>
@@ -15360,22 +15360,22 @@ FREE, PRO and CLOUD features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="962"/>
         <source>Customize your work environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσαρμόστε το περιβάλλον εργασίας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="965"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
-        <translation type="unfinished"></translation>
+        <translation>Θα σας βοηθήσουμε να συνηθίσετε το STARC αξιοποιώντας την εμπειρία σας με άλλες εφαρμογές.</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="968"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Εφαρμογή</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="969"/>
         <source>Adapt the interface and workflow</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσαρμόστε τη διεπαφή και τη ροή εργασίας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="971"/>
@@ -15416,12 +15416,12 @@ FREE, PRO and CLOUD features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="985"/>
         <source>Before you get started</source>
-        <translation type="unfinished"></translation>
+        <translation>Πριν ξεκινήσετε</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="986"/>
         <source>Feel our care</source>
-        <translation type="unfinished"></translation>
+        <translation>Νιώστε τη φροντίδα μας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="988"/>
@@ -15434,22 +15434,30 @@ FREE, PRO and CLOUD features</source>
 • automatically creates backup copies of local and cloud projects in the folder &quot;%1&quot;
 
 This will help to protect your creativity in any unforeseen situation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρέπει να γνωρίζετε ότι το Story Architect νοιάζεται για την ασφάλεια της δουλειάς σας, γι’ αυτό η εφαρμογή:
+
+• αποθηκεύει αυτόματα τις αλλαγές κάθε τρία δευτερόλεπτα όταν δεν υπάρχει δραστηριότητα
+
+• αποθηκεύει αυτόματα τις αλλαγές κάθε τρία λεπτά όταν εργάζεστε ενεργά
+
+• δημιουργεί αυτόματα αντίγραφα ασφαλείας των τοπικών και cloud έργων στον φάκελο «%1»
+
+Αυτό θα βοηθήσει στην προστασία της δημιουργικότητάς σας σε οποιαδήποτε απρόβλεπτη κατάσταση.</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="996"/>
         <source>Thanks I&apos;ll know</source>
-        <translation type="unfinished"></translation>
+        <translation>Ευχαριστώ, θα το ξέρω</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="998"/>
         <source>Follow us on social media</source>
-        <translation type="unfinished"></translation>
+        <translation>Ακολουθήστε μας στα social media</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="999"/>
         <source>Let&apos;s unite to make the best app for writers</source>
-        <translation type="unfinished"></translation>
+        <translation>Ας ενωθούμε για να δημιουργήσουμε την καλύτερη εφαρμογή για συγγραφείς</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="1000"/>
@@ -15458,12 +15466,16 @@ This will help to protect your creativity in any unforeseen situation.</source>
 Get in touch with our technical support, share your feedback and suggest improvements.
 
 Discuss everything with fellow community of writers, share your work in progress and chat about life.</source>
-        <translation type="unfinished"></translation>
+        <translation>Μάθετε πρώτοι τα νέα μας, τις φρέσκες ενημερώσεις και τις ειδικές προσφορές.
+
+Επικοινωνήστε με την τεχνική μας υποστήριξη, μοιραστείτε τα σχόλιά σας και προτείνετε βελτιώσεις.
+
+Συζητήστε τα πάντα με τη συγγραφική κοινότητα, μοιραστείτε τη δουλειά σας σε εξέλιξη και κάντε κουβέντα για τη ζωή.</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="1010"/>
         <source>Start writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκινήστε να γράφετε</translation>
     </message>
 </context>
 <context>
@@ -15471,12 +15483,12 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="95"/>
         <source>Translation is ready for %1%. Know how you can improve it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η μετάφραση είναι έτοιμη κατά %1%. Μάθετε πώς μπορείτε να τη βελτιώσετε.</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
         <source>Choose preferred language</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλογή προτιμώμενης γλώσσας</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
@@ -15491,32 +15503,32 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
         <source>Skip initial setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράλειψη αρχικής ρύθμισης</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="442"/>
         <source>Choose application theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλογή θέματος εφαρμογής</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="443"/>
         <source>Setup size of the user interface elements</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρύθμιση μεγέθους στοιχείων διεπαφής χρήστη</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="444"/>
         <source>small</source>
-        <translation type="unfinished"></translation>
+        <translation>μικρό</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="445"/>
         <source>big</source>
-        <translation type="unfinished"></translation>
+        <translation>μεγάλο</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="446"/>
         <source>Start writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκινήστε να γράφετε</translation>
     </message>
 </context>
 <context>
@@ -15529,12 +15541,12 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="163"/>
         <source>Presentation name</source>
-        <translation type="unfinished"></translation>
+        <translation>Όνομα παρουσίασης</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="164"/>
         <source>Presentation description</source>
-        <translation type="unfinished"></translation>
+        <translation>Περιγραφή παρουσίασης</translation>
     </message>
 </context>
 <context>
@@ -15557,98 +15569,98 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_view.cpp" line="403"/>
         <source>Load new presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Φόρτωση νέας παρουσίασης</translation>
     </message>
 </context>
 <context>
     <name>Ui::ProjectCollaboratorsAccessDialog</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="227"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="226"/>
         <source>Email invalid</source>
         <translation>Μη έγκυρο email</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="381"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="363"/>
         <source>Configure access to the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαμόρφωση πρόσβασης στο project</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="383"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="365"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="384"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="366"/>
         <source>Provide access to all documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Παροχή πρόσβασης σε όλα τα έγγραφα</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="385"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="367"/>
         <source>Documents</source>
         <translation>Έγγραφα</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="386"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="368"/>
         <source>Close access</source>
         <translation>Κλείσιμο πρόσβασης</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="387"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="369"/>
         <source>Cancel</source>
         <translation>Ακύρωση</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="388"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="370"/>
         <source>Grant access</source>
-        <translation type="unfinished"></translation>
+        <translation>Παραχώρηση πρόσβασης</translation>
     </message>
 </context>
 <context>
     <name>Ui::ProjectCollaboratorsDocumentAccessDialog</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="202"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="201"/>
         <source>Collaborators and team members</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνεργάτες και μέλη ομάδας</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="204"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="203"/>
         <source>Collaborators</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνεργάτες</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="206"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="205"/>
         <source>Team members</source>
         <translation>Μέλη ομάδας</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="208"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="207"/>
         <source>Here will be a list of your collaborators</source>
-        <translation type="unfinished"></translation>
+        <translation>Εδώ θα εμφανιστεί η λίστα των συνεργατών σας</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="329"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="311"/>
         <source>Configure access to the document</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαμόρφωση πρόσβασης στο έγγραφο</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="331"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="313"/>
         <source>User name or email</source>
-        <translation type="unfinished"></translation>
+        <translation>Όνομα χρήστη ή email</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="332"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="314"/>
         <source>Invite collaborator</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρόσκληση συνεργάτη</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="333"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="315"/>
         <source>Cancel</source>
         <translation>Ακύρωση</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="334"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="316"/>
         <source>Grant access</source>
-        <translation type="unfinished"></translation>
+        <translation>Παραχώρηση πρόσβασης</translation>
     </message>
 </context>
 <context>
@@ -15656,12 +15668,12 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="164"/>
         <source>People who allowed to work with the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Άτομα με άδεια εργασίας στο project</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="165"/>
         <source>Only you have access to the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Μόνο εσείς έχετε πρόσβαση στο project</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="241"/>
@@ -15699,17 +15711,17 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="387"/>
         <source>Share the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Κοινοποίηση project</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="388"/>
         <source>Add people who you’d like to share with</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη ατόμων με τα οποία θέλετε να το μοιραστείτε</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="390"/>
         <source>Email or user name</source>
-        <translation type="unfinished"></translation>
+        <translation>Email ή όνομα χρήστη</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="392"/>
@@ -15724,7 +15736,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="395"/>
         <source>Invite</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρόσκληση</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_view.cpp" line="396"/>
@@ -15742,32 +15754,32 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="152"/>
         <source>Short description</source>
-        <translation type="unfinished"></translation>
+        <translation>Σύντομη περιγραφή</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="153"/>
         <source>Tagline, logline or something similar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagline, logline ή κάτι παρόμοιο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="154"/>
         <source>Add cover +</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη εξωφύλλου +</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="154"/>
         <source>Change cover...</source>
-        <translation type="unfinished"></translation>
+        <translation>Αλλαγή εξωφύλλου...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="155"/>
         <source>Do you want to reset the story&apos;s cover?</source>
-        <translation type="unfinished"></translation>
+        <translation>Θέλετε να επαναφέρετε το εξώφυλλο της ιστορίας;</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="156"/>
         <source>Select an area for the cover</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλέξτε περιοχή για το εξώφυλλο</translation>
     </message>
 </context>
 <context>
@@ -15775,7 +15787,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/project/project_navigator.cpp" line="364"/>
         <source>Show document structure</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση δομής εγγράφου</translation>
     </message>
     <message>
         <location filename="../ui/project/project_navigator.cpp" line="372"/>
@@ -15793,7 +15805,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/project/project_tool_bar.cpp" line="146"/>
         <source>Show main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση κύριου μενού</translation>
     </message>
 </context>
 <context>
@@ -15807,37 +15819,37 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/project/project_view.cpp" line="303"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
-        <translation type="unfinished"></translation>
+        <translation>Εδώ θα εμφανιστεί ο επεξεργαστής του εγγράφου που επιλέγετε στον πλοηγό (στα αριστερά).</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="304"/>
         <source>Choose an item to edit, or</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλέξτε ένα αντικείμενο για επεξεργασία ή δημιουργήστε ένα νέο</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="305"/>
         <source>create a new one</source>
-        <translation type="unfinished"></translation>
+        <translation>δημιουργήστε ένα νέο</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="307"/>
         <source>Document content loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Φόρτωση περιεχομένου εγγράφου...</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="309"/>
         <source>Please, wait a while and document editor will be activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Παρακαλώ περιμένετε λίγο και ο επεξεργαστής του εγγράφου θα ενεργοποιηθεί.</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="312"/>
         <source>Ooops... looks like editor of this document not implemented yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ουπς... φαίνεται πως ο επεξεργαστής αυτού του εγγράφου δεν έχει υλοποιηθεί ακόμη.</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="314"/>
         <source>But don&apos;t worry, it will be here in one of the future updates!</source>
-        <translation type="unfinished"></translation>
+        <translation>Αλλά μην ανησυχείτε, θα είναι διαθέσιμος σε μελλοντικές ενημερώσεις!</translation>
     </message>
 </context>
 <context>
@@ -15855,7 +15867,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/projects/projects_navigator.cpp" line="76"/>
         <source>User guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Οδηγός χρήσης</translation>
     </message>
 </context>
 <context>
@@ -15863,7 +15875,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/projects/projects_tool_bar.cpp" line="21"/>
         <source>Show main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση κύριου μενού</translation>
     </message>
 </context>
 <context>
@@ -15871,12 +15883,12 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/projects/projects_view.cpp" line="194"/>
         <source>Here will be a list of your stories.</source>
-        <translation type="unfinished"></translation>
+        <translation>Εδώ θα εμφανιστεί η λίστα των ιστοριών σας.</translation>
     </message>
     <message>
         <location filename="../ui/projects/projects_view.cpp" line="195"/>
         <source>It&apos;s time to create the first story!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ώρα να δημιουργήσετε την πρώτη ιστορία!</translation>
     </message>
     <message>
         <location filename="../ui/projects/projects_view.cpp" line="192"/>
@@ -15894,7 +15906,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/account/purchase_dialog.cpp" line="210"/>
         <source>Choose what suits you</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλέξτε τι σας ταιριάζει</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog.cpp" line="211"/>
@@ -15909,7 +15921,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/account/purchase_dialog.cpp" line="213"/>
         <source>Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγορά</translation>
     </message>
 </context>
 <context>
@@ -15917,38 +15929,38 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="154"/>
         <source>Pay with:</source>
-        <translation type="unfinished"></translation>
+        <translation>Πληρωμή με:</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="175"/>
         <source>%1 lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 εφ&apos; όρου ζωής</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="177"/>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="263"/>
         <source>%1 for %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 για %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="179"/>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="263"/>
         <source>%n month(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n μήνας</numerusform>
+            <numerusform>%n μήνες</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="180"/>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="264"/>
         <source>%1 credits</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 credits</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="298"/>
         <source>$%1 per month</source>
-        <translation type="unfinished"></translation>
+        <translation>$%1 ανά μήνα</translation>
     </message>
 </context>
 <context>
@@ -15961,34 +15973,36 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
         <source>Purchasing a gift</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγορά δώρου</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
         <source>Recepient email</source>
-        <translation type="unfinished"></translation>
+        <translation>Email παραλήπτη</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
         <source>A promo code to activate the gift will be sent here</source>
-        <translation type="unfinished"></translation>
+        <translation>Ένας προωθητικός κωδικός για ενεργοποίηση του δώρου θα σταλεί εδώ</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="132"/>
         <source>Greeting text</source>
-        <translation type="unfinished"></translation>
+        <translation>Κείμενο ευχών</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="133"/>
         <source>You can leave it blank</source>
-        <translation type="unfinished"></translation>
+        <translation>Μπορείτε να το αφήσετε κενό</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="134"/>
         <source>A promo code to activate the gift will be sent to the recipient immediately after payment.
 
 Promo code validity period is a 1 year</source>
-        <translation type="unfinished"></translation>
+        <translation>Ένας κωδικός προώθησης για την ενεργοποίηση του δώρου θα σταλεί στον παραλήπτη αμέσως μετά την πληρωμή.
+
+Η περίοδος ισχύος του κωδικού προώθησης είναι 1 έτος.</translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="137"/>
@@ -15998,7 +16012,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/account/purchase_gift_dialog.cpp" line="138"/>
         <source>Purchase</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγορά</translation>
     </message>
 </context>
 <context>
@@ -16011,20 +16025,20 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="69"/>
         <source>There are no documents in the recycle bin, but when they will be here, you&apos;ll be able to check them out.</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν υπάρχουν έγγραφα στον κάδο ανακύκλωσης, αλλά όταν εμφανιστούν, θα μπορείτε να τα δείτε.</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="75"/>
         <source>There are %n document(s) in the recycle bin.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Υπάρχει %n έγγραφο στον κάδο ανακύκλωσης.</numerusform>
+            <numerusform>Υπάρχουν %n έγγραφα στον κάδο ανακύκλωσης.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="76"/>
         <source>Select a document to see its contents.</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλέξτε ένα έγγραφο για να δείτε τα περιεχόμενά του.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="77"/>
@@ -16037,47 +16051,47 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="208"/>
         <source>Dev version updated</source>
-        <translation type="unfinished"></translation>
+        <translation>Η έκδοση ανάπτυξης ενημερώθηκε.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="210"/>
         <source>Story Architect version %1 was published for testing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η έκδοση %1 του Story Architect δημοσιεύτηκε για δοκιμή.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="211"/>
         <source>Check out what&apos;s changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Δείτε τι έχει αλλάξει</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="217"/>
         <source>Version %1 published</source>
-        <translation type="unfinished"></translation>
+        <translation>Η έκδοση %1 δημοσιεύτηκε</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="219"/>
         <source>Read more about release</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαβάστε περισσότερα για την έκδοση</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="239"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Λήψη</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="240"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγκατεστημένο</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="261"/>
         <source>Cancel downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>Ακύρωση λήψης</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="275"/>
         <source>Downloading failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποτυχία λήψης</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="277"/>
@@ -16087,12 +16101,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="289"/>
         <source>Downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Λήφθηκε</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="290"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγκατάσταση</translation>
     </message>
 </context>
 <context>
@@ -16100,7 +16114,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="309"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Κατηγορία</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="310"/>
@@ -16118,7 +16132,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="204"/>
         <source>Copy elements from selected scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντιγραφή στοιχείων από την επιλεγμένη σκηνή</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="205"/>
@@ -16136,7 +16150,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="138"/>
         <source>Copy elements to selected scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντιγραφή στοιχείων στην επιλεγμένη σκηνή</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="139"/>
@@ -16171,7 +16185,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="261"/>
         <source>Element name already used</source>
-        <translation type="unfinished"></translation>
+        <translation>Το όνομα του στοιχείου χρησιμοποιείται ήδη</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="367"/>
@@ -16182,7 +16196,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="502"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Κατηγορία</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="503"/>
@@ -16192,7 +16206,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="504"/>
         <source>Qty</source>
-        <translation type="unfinished"></translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="505"/>
@@ -16202,12 +16216,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="506"/>
         <source>Description for scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Περιγραφή για τη σκηνή</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="507"/>
         <source>Mark all mentions in screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Επισημάνετε όλες τις αναφορές στο σενάριο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="508"/>
@@ -16220,12 +16234,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_toolbar.cpp" line="152"/>
         <source>Add &quot;%1&quot; element for selected text</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη του στοιχείου «%1» για το επιλεγμένο κείμενο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_toolbar.cpp" line="241"/>
         <source>Add element for selected text</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη στοιχείου για το επιλεγμένο κείμενο</translation>
     </message>
 </context>
 <context>
@@ -16243,7 +16257,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="478"/>
         <source>Create new element</source>
-        <translation type="unfinished"></translation>
+        <translation>Δημιουργία νέου στοιχείου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="479"/>
@@ -16253,17 +16267,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="480"/>
         <source>Add exisiting elements</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη υπαρχόντων στοιχείων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="481"/>
         <source>Copy elements from another scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντιγραφή στοιχείων από άλλη σκηνή</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="482"/>
         <source>Copy scene elements to another scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντιγραφή στοιχείων σκηνής σε άλλη σκηνή</translation>
     </message>
 </context>
 <context>
@@ -16465,7 +16479,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="155"/>
         <source>Create new category</source>
-        <translation type="unfinished"></translation>
+        <translation>Δημιουργία νέας κατηγορίας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="156"/>
@@ -16475,17 +16489,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="157"/>
         <source>Category name</source>
-        <translation type="unfinished"></translation>
+        <translation>Όνομα κατηγορίας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="158"/>
         <source>Select category color</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλογή χρώματος κατηγορίας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="159"/>
         <source>Assign board ID numbers for category elements</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντιστοίχιση αριθμών ID για τα στοιχεία της κατηγορίας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="160"/>
@@ -16508,7 +16522,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="174"/>
         <source>Create new element</source>
-        <translation type="unfinished"></translation>
+        <translation>Δημιουργία νέου στοιχείου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="175"/>
@@ -16523,7 +16537,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="177"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Κατηγορία</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_dialog.cpp" line="178"/>
@@ -16566,7 +16580,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="447"/>
         <source>Elements</source>
-        <translation type="unfinished"></translation>
+        <translation>Στοιχεία</translation>
     </message>
 </context>
 <context>
@@ -16574,12 +16588,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="415"/>
         <source>Hide scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="416"/>
         <source>Show scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="417"/>
@@ -16594,17 +16608,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="420"/>
         <source>Hide screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη λεξικών σεναρίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="421"/>
         <source>Show screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση λεξικών σεναρίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1305"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
-        <translation type="unfinished"></translation>
+        <translation>Θέλετε πραγματικά να αφαιρέσετε το στοιχείο «%1» από την τρέχουσα σκηνή;</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2174"/>
@@ -16614,7 +16628,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2176"/>
         <source>Activate CLOUD version to unlock full access to the screenplay breakdown module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιείστε την έκδοση CLOUD για να ξεκλειδώσετε πλήρη πρόσβαση στη μονάδα ανάλυσης σεναρίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2177"/>
@@ -16624,12 +16638,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2178"/>
         <source>Unlock breakdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα ανάλυσης</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2180"/>
         <source>Elements</source>
-        <translation type="unfinished"></translation>
+        <translation>Στοιχεία</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2201"/>
@@ -16644,7 +16658,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2203"/>
         <source>In cast list</source>
-        <translation type="unfinished"></translation>
+        <translation>Στη λίστα ρόλων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2204"/>
@@ -16679,7 +16693,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2182"/>
         <source>Scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράμετροι σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2183"/>
@@ -16694,7 +16708,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2185"/>
         <source>Dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Λεξικά</translation>
     </message>
 </context>
 <context>
@@ -16702,32 +16716,32 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="287"/>
         <source>Print cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="289"/>
         <source>Page orientation</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσανατολισμός σελίδας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="290"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Κατακόρυφος</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="291"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Οριζόντιος</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="292"/>
         <source>Cards count</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλήθος καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="293"/>
         <source>Print colored cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση έγχρωμων καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="295"/>
@@ -16737,7 +16751,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="296"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση</translation>
     </message>
 </context>
 <context>
@@ -16777,22 +16791,22 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="236"/>
         <source>In the whole card content</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε όλο το περιεχόμενο της κάρτας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="236"/>
         <source>In titles &amp; headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε τίτλους &amp; επικεφαλίδες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="237"/>
         <source>In text</source>
-        <translation type="unfinished"></translation>
+        <translation>Στο κείμενο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="237"/>
         <source>In tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Στις ετικέτες</translation>
     </message>
 </context>
 <context>
@@ -16800,7 +16814,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="235"/>
         <source>Please enter positive number</source>
-        <translation type="unfinished"></translation>
+        <translation>Παρακαλώ εισάγετε θετικό αριθμό</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="464"/>
@@ -16810,17 +16824,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="465"/>
         <source>Lock cards positions</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλείδωμα θέσεων καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="466"/>
         <source>Arrange cards in rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Ταξινόμηση καρτών σε σειρές</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="467"/>
         <source>Arrange cards in columns</source>
-        <translation type="unfinished"></translation>
+        <translation>Ταξινόμηση καρτών σε στήλες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="468"/>
@@ -16840,17 +16854,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="471"/>
         <source>Arrange cards by</source>
-        <translation type="unfinished"></translation>
+        <translation>Ταξινόμηση καρτών κατά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="472"/>
         <source>in row</source>
-        <translation type="unfinished"></translation>
+        <translation>σε σειρά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="473"/>
         <source>Keep empty to fit cards on screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Αφήστε κενό για αυτόματη προσαρμογή καρτών στην οθόνη</translation>
     </message>
 </context>
 <context>
@@ -16888,17 +16902,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="175"/>
         <source>Search cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναζήτηση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="179"/>
         <source>Print cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="182"/>
         <source>Save cards to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση καρτών ως εικόνα</translation>
     </message>
 </context>
 <context>
@@ -16916,7 +16930,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="977"/>
         <source>Activate PRO version to unlock full access to the screenplay cards module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιείστε την έκδοση PRO για να ξεκλειδώσετε πλήρη πρόσβαση στη μονάδα καρτών σεναρίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="978"/>
@@ -16926,7 +16940,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="979"/>
         <source>Unlock cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα καρτών</translation>
     </message>
 </context>
 <context>
@@ -16942,7 +16956,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="169"/>
         <source>Export screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή σεναρίου</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="170"/>
@@ -16967,12 +16981,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="174"/>
         <source>Export concrete scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή συγκεκριμένων σκηνών</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="175"/>
         <source>Keep empty, if you want to print all scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>Αφήστε κενό εάν θέλετε να εκτυπώσετε όλες τις σκηνές</translation>
     </message>
 </context>
 <context>
@@ -16980,14 +16994,14 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="199"/>
         <source>Does not pass</source>
-        <translation>Δεν πληροί</translation>
+        <translation>Δεν περνάει</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="199"/>
         <source>Passed %n time(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Πέρασε %n φορά</numerusform>
+            <numerusform>Πέρασε %n φορές</numerusform>
         </translation>
     </message>
     <message>
@@ -17044,12 +17058,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="273"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Σχόλιο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="274"/>
         <source>Send for checking</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποστολή για έλεγχο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="276"/>
@@ -17122,7 +17136,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="362"/>
         <source>Do you want unlock scene numbers?</source>
-        <translation type="unfinished"></translation>
+        <translation>Θέλετε να ξεκλειδώσετε τους αριθμούς σκηνών;</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="363"/>
@@ -17132,52 +17146,52 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="364"/>
         <source>Yes, unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Ναι, ξεκλείδωμα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="799"/>
         <source>Scenes numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Αρίθμηση σκηνών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="800"/>
         <source>Scenes numbers&apos; template</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρότυπο αριθμών σκηνών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="801"/>
         <source>Use # mark for the scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρήση του συμβόλου # για τον αριθμό της σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="802"/>
         <source>Reset scene numbers template</source>
-        <translation type="unfinished"></translation>
+        <translation>Επαναφορά προτύπου αριθμών σκηνών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="803"/>
         <source>Scenes numbering start at</source>
-        <translation type="unfinished"></translation>
+        <translation>Η αρίθμηση σκηνών ξεκινά από</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="804"/>
         <source>Lock numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλείδωμα αρίθμησης</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="805"/>
         <source>Lock numbering again</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλείδωμα αρίθμησης ξανά.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="806"/>
         <source>Unlock numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα αρίθμησης</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="807"/>
         <source>Override common settings for this screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράκαμψη κοινών ρυθμίσεων για αυτό το σενάριο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="808"/>
@@ -17187,44 +17201,44 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="809"/>
         <source>Print scenes numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση αριθμών σκηνών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="810"/>
         <source>on the left</source>
-        <translation type="unfinished"></translation>
+        <translation>στα αριστερά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="811"/>
         <source>on the right</source>
-        <translation type="unfinished"></translation>
+        <translation>στα δεξιά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="812"/>
         <source>Print dialogues numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση αριθμών διαλόγων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="813"/>
         <source>Calculate duration based on the count of pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση τον αριθμό των σελίδων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="814"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="820"/>
         <source>at the rate of</source>
-        <translation type="unfinished"></translation>
+        <translation>με ρυθμό</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="815"/>
         <source>pages</source>
-        <translation type="unfinished"></translation>
+        <translation>σελίδες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="816"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="823"/>
         <source>has duration</source>
-        <translation type="unfinished"></translation>
+        <translation>έχει διάρκεια</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="817"/>
@@ -17236,59 +17250,59 @@ Promo code validity period is a 1 year</source>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="837"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="839"/>
         <source>seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>δευτερόλεπτα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="819"/>
         <source>Calculate duration based on the count of letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση τον αριθμό των γραμμάτων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="821"/>
         <source>letters</source>
-        <translation type="unfinished"></translation>
+        <translation>γράμματα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="822"/>
         <source>including spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>συμπεριλαμβανομένων των κενών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="825"/>
         <source>Calculate duration based on the custom rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση προσαρμοσμένους κανόνες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="826"/>
         <source>For action</source>
-        <translation type="unfinished"></translation>
+        <translation>Για δράση</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="827"/>
         <source>Per entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Ανά καταχώρηση</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="829"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="834"/>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="838"/>
         <source>+</source>
-        <translation type="unfinished"></translation>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="830"/>
         <source>Each 50 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάθε 50 χαρακτήρες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="832"/>
         <source>For dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>Για διάλογο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="836"/>
         <source>For scene heading</source>
-        <translation type="unfinished"></translation>
+        <translation>Για επικεφαλίδα σκηνής</translation>
     </message>
 </context>
 <context>
@@ -17327,7 +17341,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="250"/>
         <source>Series name</source>
-        <translation type="unfinished"></translation>
+        <translation>Όνομα σειράς</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="251"/>
@@ -17395,7 +17409,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="657"/>
         <source>Override common settings for this series</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράκαμψη κοινών ρυθμίσεων για αυτή τη σειρά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="658"/>
@@ -17405,44 +17419,44 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="659"/>
         <source>Print scenes numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση αριθμών σκηνών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="660"/>
         <source>on the left</source>
-        <translation type="unfinished"></translation>
+        <translation>στα αριστερά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="661"/>
         <source>on the right</source>
-        <translation type="unfinished"></translation>
+        <translation>στα δεξιά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="662"/>
         <source>Print dialogues numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκτύπωση αριθμών διαλόγων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="663"/>
         <source>Calculate duration based on the count of pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση τον αριθμό των σελίδων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="664"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="670"/>
         <source>at the rate of</source>
-        <translation type="unfinished"></translation>
+        <translation>με ρυθμό</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="665"/>
         <source>pages</source>
-        <translation type="unfinished"></translation>
+        <translation>σελίδες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="666"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="673"/>
         <source>has duration</source>
-        <translation type="unfinished"></translation>
+        <translation>έχει διάρκεια</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="667"/>
@@ -17454,59 +17468,59 @@ Promo code validity period is a 1 year</source>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="687"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="689"/>
         <source>seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>δευτερόλεπτα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="669"/>
         <source>Calculate duration based on the count of letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση τον αριθμό των γραμμάτων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="671"/>
         <source>letters</source>
-        <translation type="unfinished"></translation>
+        <translation>γράμματα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="672"/>
         <source>including spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>συμπεριλαμβανομένων των κενών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="675"/>
         <source>Calculate duration based on the custom rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση προσαρμοσμένους κανόνες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="676"/>
         <source>For action</source>
-        <translation type="unfinished"></translation>
+        <translation>Για δράση</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="677"/>
         <source>Per entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Ανά καταχώρηση</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="679"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="684"/>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="688"/>
         <source>+</source>
-        <translation type="unfinished"></translation>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="680"/>
         <source>Each 50 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάθε 50 χαρακτήρες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="682"/>
         <source>For dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>Για διάλογο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="686"/>
         <source>For scene heading</source>
-        <translation type="unfinished"></translation>
+        <translation>Για επικεφαλίδα σκηνής</translation>
     </message>
 </context>
 <context>
@@ -17650,7 +17664,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_plan/ui/screenplay_series_plan_view.cpp" line="570"/>
         <source>Unlock series plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα πλάνου σειράς</translation>
     </message>
 </context>
 <context>
@@ -17752,12 +17766,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="764"/>
         <source>Show detailed scenes info</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση λεπτομερών πληροφοριών σκηνών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="765"/>
         <source>Show words count</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση αριθμού λέξεων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_sidebar.cpp" line="766"/>
@@ -17801,7 +17815,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="370"/>
         <source>Activate CLOUD version to unlock full access to the series statistics module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιείστε την έκδοση CLOUD για πλήρη πρόσβαση στη μονάδα στατιστικών σειράς</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="371"/>
@@ -17826,7 +17840,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="375"/>
         <source>Statistics appear when you&apos;ll start to write screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Τα στατιστικά θα εμφανιστούν όταν ξεκινήσεις να γράφεις το σενάριο</translation>
     </message>
 </context>
 <context>
@@ -17973,12 +17987,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="906"/>
         <source>Show detailed scenes info</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση λεπτομερών πληροφοριών σκηνών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="907"/>
         <source>Show words count</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση αριθμού λέξεων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="908"/>
@@ -18143,7 +18157,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="412"/>
         <source>Statistics appear when you&apos;ll start to write screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Τα στατιστικά θα εμφανιστούν όταν ξεκινήσεις να γράφεις το σενάριο</translation>
     </message>
 </context>
 <context>
@@ -18202,22 +18216,23 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="66"/>
         <source>Edit template parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργασία παραμέτρων προτύπου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="67"/>
         <source>Show template parameters in</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση παραμέτρων προτύπου σε</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="68"/>
         <source>Millimeters</source>
-        <translation type="unfinished"></translation>
+        <translation>Χιλιοστά
+&#xa0;</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="69"/>
         <source>Inches</source>
-        <translation type="unfinished"></translation>
+        <translation>Ίντσες</translation>
     </message>
 </context>
 <context>
@@ -18230,71 +18245,71 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="357"/>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>ίντσα</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="358"/>
         <source>Template name</source>
-        <translation type="unfinished"></translation>
+        <translation>Όνομα προτύπου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="359"/>
         <source>Page format</source>
-        <translation type="unfinished"></translation>
+        <translation>Μορφή σελίδας</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="376"/>
         <source>Page margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Περιθώρια σελίδας</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="377"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="389"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Αριστερά</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="379"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="386"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Πάνω</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="391"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεξιά</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="383"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="387"/>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάτω</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="385"/>
         <source>Page numbering alignment by vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Στοίχιση αρίθμησης σελίδων ως προς το κατακόρυφο</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="388"/>
         <source>by horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>ως προς το οριζόντιο</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="390"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Κέντρο</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="392"/>
         <source>Show number on the first page</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση αριθμού στην πρώτη σελίδα</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="393"/>
         <source>Split page into columns in proportion</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαχωρισμός σελίδας σε στήλες αναλογικά</translation>
     </message>
 </context>
 <context>
@@ -18307,12 +18322,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="794"/>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>ίντσα</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
         <source>Is paragraph style available</source>
-        <translation type="unfinished"></translation>
+        <translation>Είναι διαθέσιμο το στιλ παραγράφου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
@@ -18322,17 +18337,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
         <source>Font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Μέγεθος γραμματοσειράς</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="801"/>
         <source>Place paragraph at the top of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Τοποθέτηση παραγράφου στην κορυφή της σελίδας</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="802"/>
         <source>Use UPPERCASE characters for paragraph text</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρήση ΚΕΦΑΛΑΙΩΝ για το κείμενο της παραγράφου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="803"/>
@@ -18352,111 +18367,111 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="806"/>
         <source>Align text on the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Στοίχιση κειμένου στη σελίδα</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="807"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="817"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="825"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Αριστερά</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="808"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Κέντρο</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="809"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="821"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="827"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεξιά</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="810"/>
         <source>Justify</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλήρης στοίχιση</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="811"/>
         <source>Vertical indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Κατακόρυφη εσοχή</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="812"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Πάνω</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="813"/>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάτω</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="814"/>
         <source>lines</source>
-        <translation type="unfinished"></translation>
+        <translation>γραμμές</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="816"/>
         <source>Horizontal indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Οριζόντια εσοχή</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
         <source>First line</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρώτη γραμμή</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="824"/>
         <source>Horizontal indentation (for two-column mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Οριζόντια εσοχή (για λειτουργία δύο στηλών)</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="829"/>
         <source>Line spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόσταση γραμμών</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Τύπος</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>Single</source>
-        <translation type="unfinished"></translation>
+        <translation>Μονή</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>One and half</source>
-        <translation type="unfinished"></translation>
+        <translation>Μιάμιση</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>Double</source>
-        <translation type="unfinished"></translation>
+        <translation>Διπλή</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
         <source>Fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>Σταθερή</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="833"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Τιμή</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="835"/>
         <source>Show paragraph&apos;s title</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση τίτλου παραγράφου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="836"/>
         <source>Use custom title</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρήση προσαρμοσμένου τίτλου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="837"/>
@@ -18474,17 +18489,17 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="88"/>
         <source>Template page settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρυθμίσεις σελίδας προτύπου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="89"/>
         <source>Title page template</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρότυπο σελίδας τίτλου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="90"/>
         <source>Template paragraphs settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρυθμίσεις παραγράφων προτύπου</translation>
     </message>
 </context>
 <context>
@@ -18492,12 +18507,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_view_tool_bar.cpp" line="48"/>
         <source>Save template</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση προτύπου</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_view_tool_bar.cpp" line="49"/>
         <source>Export template to the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή προτύπου σε αρχείο</translation>
     </message>
 </context>
 <context>
@@ -18506,13 +18521,13 @@ Promo code validity period is a 1 year</source>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1767"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1786"/>
         <source>Merge paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Συγχώνευση παραγράφου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1769"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1788"/>
         <source>Split paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαχωρισμός παραγράφου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1734"/>
@@ -18586,12 +18601,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="350"/>
         <source>Hide beats headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη επικεφαλίδων beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="351"/>
         <source>Show beats headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση επικεφαλίδων beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="353"/>
@@ -18642,7 +18657,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="324"/>
         <source>Export screenplay breakdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή ανάλυσης σεναρίου</translation>
     </message>
 </context>
 <context>
@@ -18698,12 +18713,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="392"/>
         <source>Hide scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="393"/>
         <source>Show scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="394"/>
@@ -18713,12 +18728,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="397"/>
         <source>Hide screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη λεξικών σεναρίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="398"/>
         <source>Show screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση λεξικών σεναρίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1590"/>
@@ -18736,17 +18751,17 @@ Promo code validity period is a 1 year</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1887"/>
         <source>Synopsis generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Η δημιουργία σύνοψης θα χρησιμοποιήσει %n λέξη</numerusform>
+            <numerusform>Η δημιουργία σύνοψης θα χρησιμοποιήσει %n λέξεις</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1889"/>
         <source>Novel generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Η δημιουργία μυθιστορήματος θα χρησιμοποιήσει %n λέξη</numerusform>
+            <numerusform>Η δημιουργία μυθιστορήματος θα χρησιμοποιήσει %n λέξεις</numerusform>
         </translation>
     </message>
     <message>
@@ -18757,7 +18772,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2008"/>
         <source>Scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράμετροι σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2009"/>
@@ -18777,12 +18792,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2012"/>
         <source>Dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Λεξικά</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2015"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκικήστε την προτροπή με κάτι όπως «Γράψε ένα σενάριο για…» ή «Γράψε ένα σενάριο μικρού μήκους για…»</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2032"/>
@@ -18797,7 +18812,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2034"/>
         <source>In cast list</source>
-        <translation type="unfinished"></translation>
+        <translation>Στη λίστα ρόλων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2035"/>
@@ -18825,22 +18840,22 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="81"/>
         <source>Jan</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιαν</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="85"/>
         <source>Feb</source>
-        <translation type="unfinished"></translation>
+        <translation>Φεβ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="89"/>
         <source>Mar</source>
-        <translation type="unfinished"></translation>
+        <translation>Μαρ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="93"/>
         <source>Apr</source>
-        <translation type="unfinished"></translation>
+        <translation>Απρ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="97"/>
@@ -18850,37 +18865,37 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="101"/>
         <source>Jun</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιουν</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="105"/>
         <source>Jul</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιουλ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="109"/>
         <source>Aug</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυγ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="113"/>
         <source>Sep</source>
-        <translation type="unfinished"></translation>
+        <translation>Σεπ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="117"/>
         <source>Oct</source>
-        <translation type="unfinished"></translation>
+        <translation>Οκτ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="121"/>
         <source>Nov</source>
-        <translation type="unfinished"></translation>
+        <translation>Νοε</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_indicator.cpp" line="125"/>
         <source>Dec</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεκ</translation>
     </message>
 </context>
 <context>
@@ -18920,22 +18935,22 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="237"/>
         <source>In the whole card content</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε όλο το περιεχόμενο της κάρτας</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="237"/>
         <source>In titles &amp; headings</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε τίτλους &amp; επικεφαλίδες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="238"/>
         <source>In text</source>
-        <translation type="unfinished"></translation>
+        <translation>Στο κείμενο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="238"/>
         <source>In tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Στις ετικέτες</translation>
     </message>
 </context>
 <context>
@@ -18948,12 +18963,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="416"/>
         <source>Arrange timeline horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>Οριζόντια διάταξη χρονολογίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="417"/>
         <source>Arrange timeline vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάθετη διάταξη χρονολογίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="418"/>
@@ -18973,7 +18988,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="421"/>
         <source>Timeline scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλίμακα χρονολογίου</translation>
     </message>
 </context>
 <context>
@@ -19001,12 +19016,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="150"/>
         <source>Search cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναζήτηση καρτών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="153"/>
         <source>Save cards to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση καρτών ως εικόνα</translation>
     </message>
 </context>
 <context>
@@ -19024,7 +19039,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="963"/>
         <source>Activate PRO version to unlock full access to the screenplay timeline module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίησε την έκδοση PRO για να ξεκλειδώσεις πλήρη πρόσβαση στη χρονογραμμή σεναρίου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="964"/>
@@ -19034,7 +19049,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="965"/>
         <source>Unlock timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωμα χρονολογίου</translation>
     </message>
 </context>
 <context>
@@ -19143,12 +19158,12 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="357"/>
         <source>Hide scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Απόκρυψη παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="358"/>
         <source>Show scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση παραμέτρων σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="359"/>
@@ -19173,7 +19188,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1838"/>
         <source>Scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράμετροι σκηνής</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1839"/>
@@ -19193,7 +19208,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1844"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκινήστε την προτροπή με κάτι όπως «Γράψε ένα μυθιστόρημα για ...» ή «Γράψε ένα κεφάλαιο για ...»</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1861"/>
@@ -19208,7 +19223,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1863"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε beats</translation>
     </message>
 </context>
 <context>
@@ -19231,7 +19246,7 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/export/script_export_dialog.cpp" line="254"/>
         <source>Draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρόχειρο</translation>
     </message>
     <message>
         <location filename="../ui/export/script_export_dialog.cpp" line="255"/>
@@ -19276,32 +19291,32 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="352"/>
         <source>Go to the next search result</source>
-        <translation type="unfinished"></translation>
+        <translation>Μετάβαση στο επόμενο αποτέλεσμα αναζήτησης</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="356"/>
         <source>Go to the previous search result</source>
-        <translation type="unfinished"></translation>
+        <translation>Μετάβαση στο προηγούμενο αποτέλεσμα αναζήτησης</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="363"/>
         <source>Replace with</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντικατάσταση με</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="364"/>
         <source>Enter phrase to replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγωγή φράσης για αντικατάσταση</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="365"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντικατάσταση</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="366"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Όλα</translation>
     </message>
 </context>
 <context>
@@ -19309,83 +19324,86 @@ Promo code validity period is a 1 year</source>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="130"/>
         <source>today</source>
-        <translation type="unfinished"></translation>
+        <translation>σήμερα</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="134"/>
         <source>yesterday</source>
-        <translation type="unfinished"></translation>
+        <translation>χθες</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="143"/>
         <source>at</source>
-        <translation type="unfinished"></translation>
+        <translation>στις</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="168"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="169"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="170"/>
         <source>word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>λέξη</numerusform>
+            <numerusform>λέξεις</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="178"/>
         <source>Current session</source>
-        <translation type="unfinished"></translation>
+        <translation>Τρέχουσα συνεδρία</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="179"/>
         <source>WORDS
 WRITTEN</source>
-        <translation type="unfinished"></translation>
+        <translation>ΛΕΞΕΙΣ
+ΓΡΑΜΜΕΝΕΣ</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="180"/>
         <source>SESSION
 DURATION</source>
-        <translation type="unfinished"></translation>
+        <translation>ΣΥΝΕΔΡΙΑ
+ΔΙΑΡΚΕΙΑ</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="181"/>
         <source>SESSION
 STARTED</source>
-        <translation type="unfinished"></translation>
+        <translation>ΣΥΝΕΔΡΙΑ
+ΞΕΚΙΝΗΣΕ</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="182"/>
         <source>30 days overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Επισκόπηση 30 ημερών</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="183"/>
         <source>Session duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Διάρκεια συνεδρίας</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="184"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="186"/>
         <source>THE LOWEST</source>
-        <translation type="unfinished"></translation>
+        <translation>ΤΟ ΧΑΜΗΛΟΤΕΡΟ</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="184"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="186"/>
         <source>AVERAGE</source>
-        <translation type="unfinished"></translation>
+        <translation>ΜΕΣΟΣ ΟΡΟΣ</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="184"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="186"/>
         <source>THE HIGHEST</source>
-        <translation type="unfinished"></translation>
+        <translation>ΤΟ ΥΨΗΛΟΤΕΡΟ</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="185"/>
         <source>Words written</source>
-        <translation type="unfinished"></translation>
+        <translation>Λέξεις που γράφτηκαν</translation>
     </message>
 </context>
 <context>
@@ -19401,27 +19419,27 @@ STARTED</source>
     <message>
         <location filename="../ui/session_statistics/session_statistics_view.cpp" line="289"/>
         <source>Separate statistics by devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαχωρισμός στατιστικών ανά συσκευή</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_view.cpp" line="293"/>
         <source>To show detailed statistics, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να εμφανιστούν λεπτομερή στατιστικά, χρειάζεται αναβάθμιση στην έκδοση PRO</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_view.cpp" line="294"/>
         <source>Dayly</source>
-        <translation type="unfinished"></translation>
+        <translation>Ημερήσια</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_view.cpp" line="295"/>
         <source>Monthly</source>
-        <translation type="unfinished"></translation>
+        <translation>Μηνιαία</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_view.cpp" line="296"/>
         <source>Yearly</source>
-        <translation type="unfinished"></translation>
+        <translation>Ετήσια</translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_view.cpp" line="297"/>
@@ -19431,7 +19449,7 @@ STARTED</source>
     <message>
         <location filename="../ui/session_statistics/session_statistics_view.cpp" line="298"/>
         <source>Time, min</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρόνος, λεπτά</translation>
     </message>
 </context>
 <context>
@@ -19439,38 +19457,38 @@ STARTED</source>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="128"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>Τρέχουσα συσκευή</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="131"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνδεδεμένος</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="137"/>
         <source>today</source>
-        <translation type="unfinished"></translation>
+        <translation>σήμερα</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="139"/>
         <source>yesterday</source>
-        <translation type="unfinished"></translation>
+        <translation>χθες</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="146"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>ήταν ενεργός %1 στις %2</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="149"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>Τερματισμός άλλων</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="150"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>Τερματισμός</translation>
     </message>
 </context>
 <context>
@@ -19483,17 +19501,17 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="193"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Διεπαφή χρήστη</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="196"/>
         <source>Save changes &amp; backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση αλλαγών &amp; αντιγράφων ασφαλείας</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="199"/>
         <source>Text editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργασία κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="202"/>
@@ -19503,7 +19521,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="203"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Στοιχεία</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="204"/>
@@ -19538,12 +19556,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="210"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Συντομεύσεις</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="212"/>
         <source>Reset to defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Επαναφορά στις προεπιλογές</translation>
     </message>
 </context>
 <context>
@@ -19559,7 +19577,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1737"/>
         <source>Choose the folder where backups will be saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλογή φακέλου για την αποθήκευση αντιγράφων ασφαλείας</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1859"/>
@@ -19579,7 +19597,7 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="2723"/>
         <location filename="../ui/settings/settings_view.cpp" line="2886"/>
         <source>Create new template based on current</source>
-        <translation type="unfinished"></translation>
+        <translation>Δημιουργία νέου προτύπου βασισμένου στο τρέχον</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1874"/>
@@ -19589,7 +19607,7 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="2730"/>
         <location filename="../ui/settings/settings_view.cpp" line="2893"/>
         <source>Save to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση σε αρχείο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1880"/>
@@ -19609,7 +19627,7 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="2743"/>
         <location filename="../ui/settings/settings_view.cpp" line="2906"/>
         <source>Load template from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Φόρτωση προτύπου από αρχείο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4029"/>
@@ -19624,37 +19642,37 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4034"/>
         <source>Make application interface compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάνε τη διεπαφή της εφαρμογής πιο συμπαγή</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4043"/>
         <source>Qty</source>
-        <translation type="unfinished"></translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4044"/>
         <source>Text editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργασία κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4045"/>
         <source>Show documents pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση σελίδων εγγράφων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4046"/>
         <source>Use typewriter sound for keys pressing</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρήση ήχου γραφομηχανής κατά το πάτημα των πλήκτρων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4047"/>
         <source>Spell check</source>
-        <translation type="unfinished"></translation>
+        <translation>Ορθογραφικός έλεγχος</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4048"/>
         <source>Spelling dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>Λεξικό ορθογραφίας</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4050"/>
@@ -19664,7 +19682,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4051"/>
         <source>Aragonese</source>
-        <translation type="unfinished"></translation>
+        <translation>Αραγωνικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4052"/>
@@ -19674,7 +19692,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4053"/>
         <source>Asturian</source>
-        <translation type="unfinished"></translation>
+        <translation>Αστουριανά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4054"/>
@@ -19699,12 +19717,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4058"/>
         <source>Tibetan</source>
-        <translation type="unfinished"></translation>
+        <translation>Θιβετιανά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4059"/>
         <source>Breton</source>
-        <translation type="unfinished"></translation>
+        <translation>Βρετονικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4060"/>
@@ -19714,7 +19732,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4061"/>
         <source>Catalan (Valencian)</source>
-        <translation type="unfinished"></translation>
+        <translation>Καταλανικά (Βαλενθιανά)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4062"/>
@@ -19739,12 +19757,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4066"/>
         <source>German (Austria)</source>
-        <translation type="unfinished"></translation>
+        <translation>Γερμανικά (Αυστρίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4067"/>
         <source>German (Switzerland)</source>
-        <translation type="unfinished"></translation>
+        <translation>Γερμανικά (Ελβετίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4068"/>
@@ -19754,7 +19772,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4069"/>
         <source>Greek (Polytonic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ελληνικά (Πολυτονικό)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4070"/>
@@ -19764,32 +19782,32 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4071"/>
         <source>English (Australia)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγγλικά (Αυστραλίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4072"/>
         <source>English (Canada)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγγλικά (Καναδά)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4073"/>
         <source>English (United Kingdom)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγγλικά (Ηνωμένου Βασιλείου)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4074"/>
         <source>English (New Zealand)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγγλικά (Νέας Ζηλανδίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4075"/>
         <source>English (South Africa)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγγλικά (Νότιας Αφρικής)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4076"/>
         <source>English (United States)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγγλικά (Ηνωμένων Πολιτειών)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4077"/>
@@ -19799,107 +19817,107 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4078"/>
         <source>Spanish (Argentina)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Αργεντινής)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4079"/>
         <source>Spanish (Bolivia)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Βολιβίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4080"/>
         <source>Spanish (Chile)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Χιλής)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4081"/>
         <source>Spanish (Colombia)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Κολομβίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4082"/>
         <source>Spanish (Costa Rica)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Κόστα Ρίκα)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4083"/>
         <source>Spanish (Cuba)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Κούβας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4084"/>
         <source>Spanish (Dominican Republic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Δομινικανής Δημοκρατίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4085"/>
         <source>Spanish (Ecuador)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Ισημερινού)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4086"/>
         <source>Spanish (Guatemala)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Γουατεμάλας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4087"/>
         <source>Spanish (Honduras)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Ονδούρας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4088"/>
         <source>Spanish (Mexico)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Μεξικού)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4089"/>
         <source>Spanish (Nicaragua)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Νικαράγουας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4090"/>
         <source>Spanish (Panama)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Παναμά)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4091"/>
         <source>Spanish (Peru)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Περού)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4092"/>
         <source>Spanish (Philippines)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Φιλιππίνες)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4093"/>
         <source>Spanish (Puerto Rico)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Πουέρτο Ρίκο)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4094"/>
         <source>Spanish (Paraguay)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Παραγουάη)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4095"/>
         <source>Spanish (El Salvador)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Ελ Σαλβαδόρ)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4096"/>
         <source>Spanish (United States)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Ηνωμένων Πολιτειών)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4097"/>
         <source>Spanish (Uruguay)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Ουρουγουάης)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4098"/>
         <source>Spanish (Venezuela)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ισπανικά (Βενεζουέλας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4099"/>
@@ -19924,7 +19942,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4103"/>
         <source>Faroese</source>
-        <translation type="unfinished"></translation>
+        <translation>Φεροϊκά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4104"/>
@@ -19934,12 +19952,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4105"/>
         <source>Friulian</source>
-        <translation type="unfinished"></translation>
+        <translation>Φριουλάνικα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4106"/>
         <source>Western Frisian</source>
-        <translation type="unfinished"></translation>
+        <translation>Δυτικά Φριζιανά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4107"/>
@@ -19949,7 +19967,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4108"/>
         <source>Gaelic</source>
-        <translation type="unfinished"></translation>
+        <translation>Γαελικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4109"/>
@@ -19994,12 +20012,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4117"/>
         <source>Armenian (Western)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αρμενικά (Δυτικά)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4118"/>
         <source>Interlingua</source>
-        <translation type="unfinished"></translation>
+        <translation>Ιντερλίνγκουα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4119"/>
@@ -20059,7 +20077,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4130"/>
         <source>Latgalian</source>
-        <translation type="unfinished"></translation>
+        <translation>Λατγαλικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4131"/>
@@ -20090,7 +20108,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4136"/>
         <source>Low German</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάτω Γερμανικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4137"/>
@@ -20105,7 +20123,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4140"/>
         <source>Occitan</source>
-        <translation type="unfinished"></translation>
+        <translation>Οξιτανικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4141"/>
@@ -20115,12 +20133,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4142"/>
         <source>Portuguese (Brazilian)</source>
-        <translation type="unfinished"></translation>
+        <translation>Πορτογαλικά (Βραζιλίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4143"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Πορτογαλικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4144"/>
@@ -20135,7 +20153,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4146"/>
         <source>Russian (with Yo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρωσικά (με «Ё»)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4147"/>
@@ -20150,7 +20168,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4149"/>
         <source>Sinhala</source>
-        <translation type="unfinished"></translation>
+        <translation>Σινχαλέζικα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4150"/>
@@ -20170,7 +20188,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4153"/>
         <source>Serbian (Latin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Σερβικά (Λατινικό)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4154"/>
@@ -20180,7 +20198,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4155"/>
         <source>Swedish (Finland)</source>
-        <translation type="unfinished"></translation>
+        <translation>Σουηδικά (Φινλανδίας)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4156"/>
@@ -20215,12 +20233,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4162"/>
         <source>Klingon (Latin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλίνγκον (Λατινικό)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4163"/>
         <source>Klingon</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλίνγκον</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4164"/>
@@ -20240,47 +20258,47 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4176"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Διεπαφή χρήστη</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4177"/>
         <source>Manage user dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαχείριση λεξικού χρήστη</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4182"/>
         <source>Automatic text corrections</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυτόματες διορθώσεις κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4183"/>
         <source>Correct DOuble CApitals</source>
-        <translation type="unfinished"></translation>
+        <translation>Διόρθωση ΔΙπλών ΚΕφαλαίων γραμμάτων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4184"/>
         <source>Capitalize single &quot;i&quot; letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Κεφαλαιοποίηση του μονού γράμματος &quot;i&quot;</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4185"/>
         <source>Replace three single dots with ellipsis</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντικατάσταση τριών μονών τελειών με αποσιωπητικά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4186"/>
         <source>Replace vertical quotation marks to curly ones</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντικατάσταση κάθετων εισαγωγικών με κυρτά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4187"/>
         <source>Replace two dashes with em dash</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντικατάσταση δύο παύλων με μακρά παύλα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4188"/>
         <source>Avoid multiple spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποφυγή πολλαπλών διαστημάτων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4189"/>
@@ -20295,22 +20313,22 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4197"/>
         <source>Turn on/off text and folders module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίηση/απενεργοποίηση μονάδας κειμένου και φακέλων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4211"/>
         <source>Turn on/off screenplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίηση/απενεργοποίηση μονάδας σεναρίου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4221"/>
         <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη συνέχειας (CONT&apos;D) σε διαλόγους που χωρίζονται από ενέργεια</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4223"/>
         <source>Automatically correct screenplay text on page breaks</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυτόματη διόρθωση κειμένου σεναρίου σε αλλαγές σελίδας</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4231"/>
@@ -20318,84 +20336,84 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4312"/>
         <location filename="../ui/settings/settings_view.cpp" line="4341"/>
         <source>Show characters suggestions in empty paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση προτάσεων χαρακτήρων σε κενή παράγραφο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4233"/>
         <source>Use opening bracket in dialogue to switch to parenthetical</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρήση ανοιχτής αγκύλης σε διάλογο για αλλαγή σε παρένθεση</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4234"/>
         <source>Screenplay navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλοηγός σεναρίου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4235"/>
         <source>Show beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση beats</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4236"/>
         <source>in treatment</source>
-        <translation type="unfinished"></translation>
+        <translation>σε treatment</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4237"/>
         <source>in screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>σε σενάριο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4258"/>
         <source>Calculate duration based on the custom rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση προσαρμοσμένους κανόνες</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4259"/>
         <source>For action</source>
-        <translation type="unfinished"></translation>
+        <translation>Για δράση</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4260"/>
         <source>Per entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Ανά καταχώρηση</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4262"/>
         <location filename="../ui/settings/settings_view.cpp" line="4267"/>
         <location filename="../ui/settings/settings_view.cpp" line="4271"/>
         <source>+</source>
-        <translation type="unfinished"></translation>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4263"/>
         <source>Each 50 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Κάθε 50 χαρακτήρες</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4265"/>
         <source>For dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>Για διάλογο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4269"/>
         <source>For scene heading</source>
-        <translation type="unfinished"></translation>
+        <translation>Για επικεφαλίδα σκηνής</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4275"/>
         <source>Turn on/off comic book module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίηση/απενεργοποίηση μονάδας κόμικ</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4297"/>
         <source>Audioplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Μονάδα ακουστικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4298"/>
         <source>Turn on/off audioplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίηση/απενεργοποίηση ακουστικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4303"/>
@@ -20410,27 +20428,27 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4351"/>
         <source>Novel module</source>
-        <translation type="unfinished"></translation>
+        <translation>Μονάδα μυθιστορήματος</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4352"/>
         <source>Turn on/off novel module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίηση/απενεργοποίηση μονάδας μυθιστορήματος</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4366"/>
         <source>characters</source>
-        <translation type="unfinished"></translation>
+        <translation>χαρακτήρες</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4367"/>
         <source>characters with spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>χαρακτήρες με διαστήματα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4371"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>Εφαρμογή</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4374"/>
@@ -20440,7 +20458,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4378"/>
         <source>Simple text editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Απλός επεξεργαστής κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4384"/>
@@ -20450,63 +20468,63 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4432"/>
         <location filename="../ui/settings/settings_view.cpp" line="4444"/>
         <source>If you press in empty paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Αν πατήσετε σε κενή παράγραφο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4402"/>
         <source>Comic book editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργαστής κόμικ</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4414"/>
         <source>Audioplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργαστής ακουστικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4426"/>
         <source>Stageplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργαστής θεατρικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4438"/>
         <source>Novel editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργαστής μυθιστορήματος</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4313"/>
         <source>Audioplay navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλοηγός ακουστικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4322"/>
         <source>Calculate duration based on the count of words</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας βάσει πλήθους λέξεων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4324"/>
         <location filename="../ui/settings/settings_view.cpp" line="4365"/>
         <source>words</source>
-        <translation type="unfinished"></translation>
+        <translation>λέξεις</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4328"/>
         <source>Stageplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Μονάδα θεατρικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4329"/>
         <source>Turn on/off stageplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίηση/απενεργοποίηση μονάδας θεατρικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4342"/>
         <source>Stageplay navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Πλοηγός θεατρικού έργου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4390"/>
         <source>Screenplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργαστής σεναρίου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4381"/>
@@ -20516,7 +20534,7 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4429"/>
         <location filename="../ui/settings/settings_view.cpp" line="4441"/>
         <source>Block name</source>
-        <translation type="unfinished"></translation>
+        <translation>Όνομα μπλοκ</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4375"/>
@@ -20527,7 +20545,7 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4430"/>
         <location filename="../ui/settings/settings_view.cpp" line="4442"/>
         <source>Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Συντόμευση</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4383"/>
@@ -20537,7 +20555,7 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4431"/>
         <location filename="../ui/settings/settings_view.cpp" line="4443"/>
         <source>If you press in paragraphs end</source>
-        <translation type="unfinished"></translation>
+        <translation>Αν πατήσετε στο τέλος παραγράφων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4387"/>
@@ -20547,7 +20565,7 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4435"/>
         <location filename="../ui/settings/settings_view.cpp" line="4447"/>
         <source>Add paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη παραγράφου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4388"/>
@@ -20557,69 +20575,71 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4436"/>
         <location filename="../ui/settings/settings_view.cpp" line="4448"/>
         <source>Change to</source>
-        <translation type="unfinished"></translation>
+        <translation>Αλλαγή σε</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4031"/>
         <source>Size of the user interface elements:</source>
-        <translation type="unfinished"></translation>
+        <translation>Μέγεθος στοιχείων διεπαφής χρήστη</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4032"/>
         <source>small</source>
-        <translation type="unfinished"></translation>
+        <translation>μικρό</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4033"/>
         <source>big</source>
-        <translation type="unfinished"></translation>
+        <translation>μεγάλο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4035"/>
         <source>Save changes &amp; backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση αλλαγών &amp; αντιγράφων ασφαλείας</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4036"/>
         <source>Automatically save changes as soon as possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Αυτόματη αποθήκευση αλλαγών το συντομότερο δυνατό</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4038"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η αυτόματη αποθήκευση λειτουργεί με μεγάλη ακρίβεια.
+Αποθηκεύει το έργο κάθε 3 δευτερόλεπτα, εάν δεν χρησιμοποιείτε το ποντίκι ή το πληκτρολόγιο.
+Αν εργάζεστε χωρίς διακοπές, αποθηκεύει το έργο κάθε 3 λεπτά.</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4041"/>
         <source>Save backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση αντιγράφων ασφαλείας</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4042"/>
         <source>Backups folder path</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαδρομή φακέλου αντιγράφων ασφαλείας</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4179"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Εστίαση τρέχουσας παραγράφου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4181"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρήση κύλισης γραφομηχανής (κρατά τη γραμμή με τον  κέρσορα στο κέντρο της οθόνης)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4192"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Στοιχεία</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4196"/>
         <source>Simple text module</source>
-        <translation type="unfinished"></translation>
+        <translation>Απλή μονάδα κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4198"/>
@@ -20629,7 +20649,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4330"/>
         <location filename="../ui/settings/settings_view.cpp" line="4353"/>
         <source>Text editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργαστής κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4199"/>
@@ -20639,7 +20659,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4331"/>
         <location filename="../ui/settings/settings_view.cpp" line="4354"/>
         <source>Default template</source>
-        <translation type="unfinished"></translation>
+        <translation>Προεπιλεγμένο πρότυπο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4201"/>
@@ -20649,7 +20669,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4333"/>
         <location filename="../ui/settings/settings_view.cpp" line="4356"/>
         <source>Available actions for the selected template</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαθέσιμες ενέργειες για το επιλεγμένο πρότυπο</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4216"/>
@@ -20657,28 +20677,28 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4314"/>
         <location filename="../ui/settings/settings_view.cpp" line="4343"/>
         <source>Show scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση αριθμού σκηνής</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4217"/>
         <source>on the left</source>
-        <translation type="unfinished"></translation>
+        <translation>στα αριστερά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4218"/>
         <source>on the right</source>
-        <translation type="unfinished"></translation>
+        <translation>στα δεξιά</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4219"/>
         <location filename="../ui/settings/settings_view.cpp" line="4280"/>
         <source>Show dialogue number</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση αριθμού διαλόγου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4178"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Επισήμανση τρέχουσας γραμμής</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4202"/>
@@ -20690,22 +20710,22 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4203"/>
         <source>Show chapter text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση κειμένου κεφαλαίου, γραμμές</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4210"/>
         <source>Screenplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Μονάδα σεναρίου</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4224"/>
         <source>Save characters &amp; locations on typing</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση χαρακτήρων &amp; τοποθεσιών κατά την πληκτρολόγηση</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4226"/>
         <source>Show hints for all characters &amp; locations, or only for</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση υποδείξεων για όλους τους χαρακτήρες &amp; τοποθεσίες, ή μόνο για</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4227"/>
@@ -20713,7 +20733,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4308"/>
         <location filename="../ui/settings/settings_view.cpp" line="4337"/>
         <source>primary</source>
-        <translation type="unfinished"></translation>
+        <translation>πρωτεύοντες</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4228"/>
@@ -20721,7 +20741,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4309"/>
         <location filename="../ui/settings/settings_view.cpp" line="4338"/>
         <source>secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>δευτερεύοντες</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4229"/>
@@ -20729,7 +20749,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4310"/>
         <location filename="../ui/settings/settings_view.cpp" line="4339"/>
         <source>tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation>τριτεύοντες</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4239"/>
@@ -20737,7 +20757,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4344"/>
         <location filename="../ui/settings/settings_view.cpp" line="4358"/>
         <source>Show scene text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση κειμένου σκηνής, γραμμές</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4245"/>
@@ -20748,26 +20768,26 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4246"/>
         <source>Calculate duration based on the count of pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση τον αριθμό των σελίδων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4247"/>
         <location filename="../ui/settings/settings_view.cpp" line="4253"/>
         <location filename="../ui/settings/settings_view.cpp" line="4323"/>
         <source>at the rate of</source>
-        <translation type="unfinished"></translation>
+        <translation>με ρυθμό</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4248"/>
         <source>pages</source>
-        <translation type="unfinished"></translation>
+        <translation>σελίδες</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4249"/>
         <location filename="../ui/settings/settings_view.cpp" line="4256"/>
         <location filename="../ui/settings/settings_view.cpp" line="4325"/>
         <source>has duration</source>
-        <translation type="unfinished"></translation>
+        <translation>έχει διάρκεια</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4250"/>
@@ -20780,56 +20800,56 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="4272"/>
         <location filename="../ui/settings/settings_view.cpp" line="4326"/>
         <source>seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>δευτερόλεπτα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4252"/>
         <source>Calculate duration based on the count of letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός διάρκειας με βάση τον αριθμό των γραμμάτων</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4254"/>
         <source>letters</source>
-        <translation type="unfinished"></translation>
+        <translation>γράμματα</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4255"/>
         <source>including spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>συμπεριλαμβανομένων των κενών</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4274"/>
         <source>Comic book module</source>
-        <translation type="unfinished"></translation>
+        <translation>Μονάδα κόμικ</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4281"/>
         <location filename="../ui/settings/settings_view.cpp" line="4305"/>
         <location filename="../ui/settings/settings_view.cpp" line="4334"/>
         <source>Save characters on typing</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση χαρακτήρων κατά την πληκτρολόγηση</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4283"/>
         <location filename="../ui/settings/settings_view.cpp" line="4307"/>
         <location filename="../ui/settings/settings_view.cpp" line="4336"/>
         <source>Show hints for all characters, or only for</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση υποδείξεων για όλους τους χαρακτήρες, ή μόνο για</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4290"/>
         <source>Show panel text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση κειμένου πάνελ, γραμμές</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4364"/>
         <source>Scene content counter type</source>
-        <translation type="unfinished"></translation>
+        <translation>Τύπος μετρητή περιεχομένου σκηνής</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4369"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Συντομεύσεις</translation>
     </message>
 </context>
 <context>
@@ -20938,7 +20958,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="90"/>
         <source>Export text document</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή εγγράφου κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="91"/>
@@ -21040,7 +21060,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1403"/>
         <source>Start prompt from something like &quot;Write a story about ...&quot;, or &quot;Write about ...&quot;, or simply ask AI about anything</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκίνα τη προτροπή με κάτι σαν «Γράψε μια ιστορία για ...» ή «Γράψε για ...» ή απλώς ρώτα την AI οτιδήποτε</translation>
     </message>
 </context>
 <context>
@@ -21048,7 +21068,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="56"/>
         <source>Export stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή θεατρικού έργου</translation>
     </message>
 </context>
 <context>
@@ -21142,7 +21162,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="214"/>
         <source>Override common settings for this stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Παράκαμψη κοινών ρυθμίσεων για αυτό το θεατρικό έργο</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="215"/>
@@ -21375,7 +21395,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1444"/>
         <source>Start prompt from something like &quot;Write a stage play about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκίνα τη προτροπή με κάτι σαν «Γράψε ένα θεατρικό έργο για ...»</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1460"/>
@@ -21404,60 +21424,60 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/notifications/subscription_view.cpp" line="98"/>
         <location filename="../ui/notifications/subscription_view.cpp" line="107"/>
         <source>Subscription ends</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή λήγει</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="87"/>
         <source>Subscription ended</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή έληξε</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="79"/>
         <source>Cloud projects removal</source>
-        <translation type="unfinished"></translation>
+        <translation>Διαγραφή έργων από το cloud</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="80"/>
         <source>Your Story Architect cloud projects will be removed tomorrow if you don&apos;t renew CLOUD subscription.</source>
-        <translation type="unfinished"></translation>
+        <translation>Τα cloud έργα σου στο Story Architect θα διαγραφούν αύριο αν δεν ανανεώσεις τη συνδρομή CLOUD.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="89"/>
         <source>Your PRO version subscription is expired. Account is switched to the FREE version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή PRO έληξε. Ο λογαριασμός μεταφέρθηκε στην έκδοση FREE.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="91"/>
         <source>Your CLOUD version subscription is expired. Your cloud projects will be stored for 30 days and then removed if you don&apos;t reactivate CLOUD subscription.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή CLOUD έληξε. Τα cloud projects θα παραμείνουν για 30 ημέρες και μετά θα διαγραφούν αν δεν ενεργοποιήσεις ξανά τη συνδρομή CLOUD.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="100"/>
         <source>Your PRO version subscription expires today.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή PRO λήγει σήμερα.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="101"/>
         <source>Your CLOUD version subscription expires today.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή CLOUD λήγει σήμερα.</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="110"/>
         <source>Your CLOUD version subscription expires in %n day(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Η συνδρομή CLOUD λήγει σε %n ημέρα.</numerusform>
+            <numerusform>Η συνδρομή CLOUD λήγει σε %n ημέρες.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="121"/>
         <source>Your CLOUD version subscription active until %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή CLOUD είναι ενεργή έως %1.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="132"/>
         <source>Your CLOUD version lifetime subscription activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιήθηκε η ισόβια συνδρομή CLOUD.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="138"/>
@@ -21467,26 +21487,26 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="109"/>
         <source>Your PRO version subscription expires in %n day(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Η συνδρομή PRO λήγει σε %n ημέρα.</numerusform>
+            <numerusform>Η συνδρομή PRO λήγει σε %n ημέρες.</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="117"/>
         <location filename="../ui/notifications/subscription_view.cpp" line="129"/>
         <source>Subscription renewed</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή ανανεώθηκε</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="119"/>
         <source>Your PRO version subscription active until %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνδρομή PRO είναι ενεργή έως %1.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="131"/>
         <source>Your PRO version lifetime subscription activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιήθηκε η ισόβια συνδρομή PRO.</translation>
     </message>
 </context>
 <context>
@@ -21504,12 +21524,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/subscription_widget.cpp" line="171"/>
         <source>from $%1/mo</source>
-        <translation type="unfinished"></translation>
+        <translation>από $%1/μήνα</translation>
     </message>
     <message>
         <location filename="../ui/account/subscription_widget.cpp" line="181"/>
         <source>30 days for free</source>
-        <translation type="unfinished"></translation>
+        <translation>30 ημέρες δωρεάν</translation>
     </message>
     <message>
         <location filename="../ui/account/subscription_widget.cpp" line="182"/>
@@ -21524,7 +21544,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/subscription_widget.cpp" line="184"/>
         <source>Buy lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>Αγορά ισόβιας</translation>
     </message>
     <message>
         <location filename="../ui/account/subscription_widget.cpp" line="185"/>
@@ -21537,7 +21557,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/team_dialog.cpp" line="163"/>
         <source>Create new team</source>
-        <translation type="unfinished"></translation>
+        <translation>Δημιουργία νέας ομάδας</translation>
     </message>
     <message>
         <location filename="../ui/account/team_dialog.cpp" line="163"/>
@@ -21567,12 +21587,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/team_dialog.cpp" line="167"/>
         <source>Do you want to delete the team&apos;s avatar?</source>
-        <translation type="unfinished"></translation>
+        <translation>Θέλεις να διαγράψεις το avatar της ομάδας;</translation>
     </message>
     <message>
         <location filename="../ui/account/team_dialog.cpp" line="168"/>
         <source>Select an area for the team avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Επίλεξε περιοχή για το avatar της ομάδας</translation>
     </message>
     <message>
         <location filename="../ui/account/team_dialog.cpp" line="169"/>
@@ -21595,7 +21615,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="114"/>
         <source>Background color</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρώμα φόντου</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="116"/>
@@ -21608,7 +21628,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="321"/>
         <source>HASH copied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το HASH αντιγράφηκε.</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="326"/>
@@ -21628,17 +21648,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="350"/>
         <source>HASH pasted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Το HASH επικολλήθηκε.</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="413"/>
         <source>Copy theme HASH to share your custom theme with others</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντιγραφή του HASH θέματος για να μοιραστείς το προσαρμοσμένο θέμα σου με άλλους</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="414"/>
         <source>Paste theme HASH from clipboard and apply it</source>
-        <translation type="unfinished"></translation>
+        <translation>Επικόλληση HASH θέματος από το clipboard και εφαρμογή</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="416"/>
@@ -21648,7 +21668,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="417"/>
         <source>Accent</source>
-        <translation type="unfinished"></translation>
+        <translation>Έμφαση</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="418"/>
@@ -21658,17 +21678,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="419"/>
         <source>Surface</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιφάνεια</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="420"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Σφάλμα</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="421"/>
         <source>Text edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργασία κειμένου</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="423"/>
@@ -21691,7 +21711,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit.cpp" line="447"/>
         <source>TBD</source>
-        <translation type="unfinished"></translation>
+        <translation>TBD</translation>
     </message>
 </context>
 <context>
@@ -21709,22 +21729,22 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="217"/>
         <source>Current text font family</source>
-        <translation type="unfinished"></translation>
+        <translation>Τρέχουσα οικογένεια γραμματοσειράς κειμένου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="218"/>
         <source>Current text font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Τρέχον μέγεθος γραμματοσειράς κειμένου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="219"/>
         <source>Add cast list</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη λίστας ηθοποιών</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="220"/>
         <source>Restore default title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Επαναφορά προεπιλεγμένης σελίδας τίτλου</translation>
     </message>
 </context>
 <context>
@@ -21740,37 +21760,37 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/export/world_export_dialog.cpp" line="129"/>
         <source>Export world</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή κόσμου</translation>
     </message>
     <message>
         <location filename="../ui/export/world_export_dialog.cpp" line="131"/>
         <source>Include world description info</source>
-        <translation type="unfinished"></translation>
+        <translation>Συμπερίληψη πληροφοριών περιγραφής κόσμου</translation>
     </message>
     <message>
         <location filename="../ui/export/world_export_dialog.cpp" line="132"/>
         <source>Include nature info</source>
-        <translation type="unfinished"></translation>
+        <translation>Συμπερίληψη πληροφοριών φύσης</translation>
     </message>
     <message>
         <location filename="../ui/export/world_export_dialog.cpp" line="133"/>
         <source>Include culture info</source>
-        <translation type="unfinished"></translation>
+        <translation>Συμπερίληψη πληροφοριών κουλτούρας</translation>
     </message>
     <message>
         <location filename="../ui/export/world_export_dialog.cpp" line="134"/>
         <source>Include system info</source>
-        <translation type="unfinished"></translation>
+        <translation>Συμπερίληψη πληροφοριών συστήματος</translation>
     </message>
     <message>
         <location filename="../ui/export/world_export_dialog.cpp" line="135"/>
         <source>Include politics info</source>
-        <translation type="unfinished"></translation>
+        <translation>Συμπερίληψη πολιτικών πληροφοριών</translation>
     </message>
     <message>
         <location filename="../ui/export/world_export_dialog.cpp" line="136"/>
         <source>Include magic info</source>
-        <translation type="unfinished"></translation>
+        <translation>Συμπερίληψη πληροφοριών μαγείας</translation>
     </message>
 </context>
 <context>
@@ -21849,7 +21869,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="197"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Σύστημα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="198"/>
@@ -21872,7 +21892,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="579"/>
         <source>Apply new world name</source>
-        <translation type="unfinished"></translation>
+        <translation>Εφαρμογή νέου ονόματος κόσμου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1412"/>
@@ -21882,7 +21902,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1414"/>
         <source>Activate PRO version to unlock full access to the world profile module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποίησε την έκδοση PRO για πλήρη πρόσβαση στο module προφίλ κόσμου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1415"/>
@@ -21912,18 +21932,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1420"/>
         <source>Change photo...</source>
-        <translation>Προσθήκη φωτογραφίας +,
-Αλλαγή φωτογραφίας...</translation>
+        <translation>Αλλαγή φωτογραφίας...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1421"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Θέλεις να διαγράψεις την κεντρική φωτογραφία του κόσμου;</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1422"/>
         <source>Select an area for the world main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Επίλεξε περιοχή για την κεντρική φωτογραφία του κόσμου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1424"/>
@@ -22104,7 +22123,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1464"/>
         <source>Politics info</source>
-        <translation type="unfinished"></translation>
+        <translation>Πολιτικές πληροφορίες</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1465"/>
@@ -22197,7 +22216,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="369"/>
         <source>Add one more</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρόσθεσε ένα ακόμα</translation>
     </message>
 </context>
 <context>
@@ -22228,7 +22247,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/export/worlds_export_dialog.cpp" line="51"/>
         <source>Export worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Εξαγωγή κόσμων</translation>
     </message>
 </context>
 <context>
@@ -22236,24 +22255,24 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="352"/>
         <source>Apply new world name</source>
-        <translation type="unfinished"></translation>
+        <translation>Εφαρμογή νέου ονόματος κόσμου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="606"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="775"/>
         <source>To create a new route, hold the Option button and move one world to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να δημιουργήσεις νέα διαδρομή, κράτα πατημένο το Option και μετακίνησε έναν κόσμο σε έναν άλλο.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="609"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="778"/>
         <source>To create a new route, hold the Alt button and move one world to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να δημιουργήσεις νέα διαδρομή, κράτα πατημένο το Alt και μετακίνησε έναν κόσμο σε έναν άλλο.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="613"/>
         <source>%1 has no routes with other worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Το %1 δεν έχει διαδρομές με άλλους κόσμους</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="615"/>
@@ -22277,7 +22296,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="771"/>
         <source>To see world info and all their routes, select concrete world.</source>
-        <translation type="unfinished"></translation>
+        <translation>Για να δεις πληροφορίες κόσμου και όλες τις διαδρομές του, επίλεξε συγκεκριμένο κόσμο.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="772"/>
@@ -22332,18 +22351,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="792"/>
         <source>Change photo...</source>
-        <translation>Προσθήκη φωτογραφίας +,
-Αλλαγή φωτογραφίας...</translation>
+        <translation>Αλλαγή φωτογραφίας...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="793"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Θέλεις να διαγράψεις την κεντρική φωτογραφία του κόσμου;</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="794"/>
         <source>Select an area for the world main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Επίλεξε περιοχή για την κεντρική φωτογραφία του κόσμου</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="795"/>
@@ -22387,12 +22405,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="401"/>
         <source>Activate PRO version to unlock full access to the worlds map module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ενεργοποιείστε την έκδοση PRO για πρόσβαση στη μονάδα των χαρτών κόσμων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="402"/>
         <source>Unlock worlds map</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκλείδωσε τον χάρτη κόσμων</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="403"/>
@@ -22412,22 +22430,22 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="418"/>
         <source>Show routes titles only for the selected worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση τίτλων διαδρομών μόνο για τους επιλεγμένους κόσμους</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="419"/>
         <source>Save worlds map to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποθήκευση χάρτη κόσμων ως εικόνα</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="421"/>
         <source>Here will be a worlds map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Εδώ θα εμφανιστεί ένας χάρτης κόσμων.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="422"/>
         <source>It&apos;s time to create the first world!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ήρθε η ώρα να δημιουργήσεις τον πρώτο κόσμο!</translation>
     </message>
 </context>
 <context>
@@ -22435,58 +22453,58 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="236"/>
         <source>Until the end of the sprint left</source>
-        <translation type="unfinished"></translation>
+        <translation>Απομένει έως το τέλος του σπριντ</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="242"/>
         <source>Sprint finished!</source>
-        <translation type="unfinished"></translation>
+        <translation>Το σπριντ ολοκληρώθηκε!</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="305"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Έτοιμο! Μόλις έγραψα %n λέξη</numerusform>
+            <numerusform>Έτοιμο! Μόλις έγραψα %n λέξεις</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="306"/>
         <source>in %n minute(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform> σε %n λεπτό</numerusform>
+            <numerusform> σε %n λεπτά</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="498"/>
         <source>Sprint duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Διάρκεια σπριντ</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="499"/>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>λεπτά</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="500"/>
         <source>Play sound at end</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναπαραγωγή ήχου στο τέλος</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="501"/>
         <source>Great job</source>
-        <translation type="unfinished"></translation>
+        <translation>Μπράβο</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="502"/>
         <source>words written</source>
-        <translation type="unfinished"></translation>
+        <translation>λέξεις γραμμένες</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="503"/>
         <source>Restart sprint</source>
-        <translation type="unfinished"></translation>
+        <translation>Επανεκκίνηση του σπριντ</translation>
     </message>
 </context>
 <context>
@@ -22494,7 +22512,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="308"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Συγγνώμη, προέκυψε σφάλμα κατά τη φόρτωση. Το σφάλμα είναι: %1</translation>
     </message>
 </context>
 </TS>

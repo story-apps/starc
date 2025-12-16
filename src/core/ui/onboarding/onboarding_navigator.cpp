@@ -348,7 +348,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     addLanguage("Deutsch", QLocale::German, 92);
     auto englishItem = addLanguage("English", QLocale::English, 100);
     addLanguage("Español", QLocale::Spanish, 92);
-    addLanguage("ελληνικά", QLocale::Greek, 83);
+    addLanguage("ελληνικά", QLocale::Greek, 100);
     addLanguage("Français", QLocale::French, 69);
     addLanguage("Galego", QLocale::Galician, 47);
     addLanguage("Hrvatski", QLocale::Croatian, 43);
