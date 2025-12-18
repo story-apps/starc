@@ -254,13 +254,6 @@ void SimpleTextModel::setDocumentName(const QString& _name)
     setName(_name);
 }
 
-void SimpleTextModel::setDocumentContent(const QByteArray& _content)
-{
-    clearDocument();
-    document()->setContent(_content);
-    initDocument();
-}
-
 QStringList SimpleTextModel::mimeTypes() const
 {
     return { kMimeType };

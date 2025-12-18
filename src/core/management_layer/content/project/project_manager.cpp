@@ -2249,14 +2249,29 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             //
             auto document
                 = DataStorageLayer::StorageFacade::documentStorage()->createDocument(_uuid, _type);
-            if (!_content.isNull()) {
-                document->setContent(_content);
-            }
-
             auto documentModel = d->modelsFacade.modelFor(document);
             documentModel->setDocumentName(_name);
+            //
+            // ... если для документа есть импортированный контент, то нужно создать патч между
+            //     болванкой контента и импортированным
+            //
             if (!_content.isNull()) {
+                //
+                // ... сохраним xml пустого документа
+                //
                 documentModel->reassignContent();
+                const auto emptyContent = document->content();
+                //
+                // ... устанавливаем импортированный
+                //
+                documentModel->setDocumentContent(_content);
+                documentModel->reassignContent();
+                //
+                // ... возвращаем в документ болванку, чтобы создался патч, по замене контента
+                //     документа на импортированный
+                //
+                document->setContent(emptyContent);
+                documentModel->saveChanges();
             }
 
             switch (_type) {
@@ -2299,7 +2314,14 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 break;
             }
 
-            documentModel->reassignContent();
+            //
+            // Если в документе на данный момент нет содержимого, то сформируем болванку, для
+            // дальнейшей синхронизации нужно, чтобы он не был пустым
+            //
+            if (document->content().isEmpty()) {
+                documentModel->reassignContent();
+            }
+
             emit uploadDocumentRequested(_uuid, true);
         });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAboutToBeRemoved,

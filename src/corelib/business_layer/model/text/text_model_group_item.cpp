@@ -149,6 +149,11 @@ QUuid TextModelGroupItem::uuid() const
     return d->uuid;
 }
 
+void TextModelGroupItem::resetUuid()
+{
+    d->uuid = {};
+}
+
 int TextModelGroupItem::level() const
 {
     return textGroupTypeLevel(d->groupType);

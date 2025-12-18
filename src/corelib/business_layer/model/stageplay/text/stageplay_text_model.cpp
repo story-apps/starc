@@ -564,6 +564,7 @@ void StageplayTextModel::initEmptyDocument()
     auto sceneHeading = new TextModelTextItem(this);
     sceneHeading->setParagraphType(TextParagraphType::SceneHeading);
     auto scene = new StageplayTextModelSceneItem(this);
+    scene->resetUuid();
     scene->appendItem(sceneHeading);
     appendItem(scene);
 }

@@ -181,6 +181,17 @@ void AbstractModel::reassignContent()
     d->document->setContent(toXml());
 }
 
+void AbstractModel::setDocumentContent(const QByteArray& _content)
+{
+    if (d->document == nullptr) {
+        return;
+    }
+
+    clearDocument();
+    d->document->setContent(_content);
+    initDocument();
+}
+
 void AbstractModel::saveChanges()
 {
     //

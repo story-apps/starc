@@ -598,6 +598,7 @@ void ComicBookTextModel::initEmptyDocument()
     auto pageText = createTextItem();
     pageText->setParagraphType(TextParagraphType::PageHeading);
     auto page = createGroupItem(TextGroupType::Page);
+    page->resetUuid();
     page->appendItem(pageText);
     appendItem(page);
 }

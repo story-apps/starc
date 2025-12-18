@@ -358,6 +358,7 @@ void NovelTextModel::initEmptyDocument()
     auto sceneHeading = new NovelTextModelTextItem(this);
     sceneHeading->setParagraphType(TextParagraphType::SceneHeading);
     auto scene = new NovelTextModelSceneItem(this);
+    scene->resetUuid();
     scene->appendItem(sceneHeading);
     appendItem(scene);
 }

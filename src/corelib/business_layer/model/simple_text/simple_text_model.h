@@ -33,11 +33,6 @@ public:
     void setDocumentName(const QString& _name) override;
 
     /**
-     * @brief Перезаписать содержимое документа
-     */
-    void setDocumentContent(const QByteArray& _content);
-
-    /**
      * @brief Определим список майм типов для модели
      */
     QStringList mimeTypes() const override;

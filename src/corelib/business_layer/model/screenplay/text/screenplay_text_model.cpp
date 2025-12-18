@@ -981,6 +981,7 @@ void ScreenplayTextModel::initEmptyDocument()
     auto sceneHeading = new ScreenplayTextModelTextItem(this);
     sceneHeading->setParagraphType(TextParagraphType::SceneHeading);
     auto scene = new ScreenplayTextModelSceneItem(this);
+    scene->resetUuid();
     scene->appendItem(sceneHeading);
     appendItem(scene);
 }

@@ -652,6 +652,7 @@ void AudioplayTextModel::initEmptyDocument()
     auto sceneHeading = new AudioplayTextModelTextItem(this);
     sceneHeading->setParagraphType(TextParagraphType::SceneHeading);
     auto scene = new AudioplayTextModelSceneItem(this);
+    scene->resetUuid();
     scene->appendItem(sceneHeading);
     appendItem(scene);
 }

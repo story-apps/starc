@@ -95,6 +95,7 @@ void ModelHelper::resetTitlePageModel(BusinessLayer::SimpleTextModel* _model)
     // ... а затем восстанавливаем исходный контент, чтобы сформировать правильный патч
     //
     _model->document()->setContent(oldContent);
+    _model->saveChanges();
 }
 
 QPair<bool, bool> ModelHelper::isMimeHasJustOneBlock(const QString& _mime)
