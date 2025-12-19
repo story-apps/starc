@@ -668,7 +668,8 @@ void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized,
     d->isUserAuthorized = _authorized;
     d->canCreateCloudProject = _subscritionType == Domain::SubscriptionType::CloudMonthly
         || _subscritionType == Domain::SubscriptionType::CloudLifetime
-        || _subscritionType == Domain::SubscriptionType::Studio;
+        || _subscritionType == Domain::SubscriptionType::Studio
+        || _subscritionType == Domain::SubscriptionType::Campus;
 
     if (!d->createProjectDialog.isNull()) {
         d->createProjectDialog->configureCloudProjectCreationAbility(

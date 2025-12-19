@@ -38,12 +38,22 @@ enum class NotificationType {
  */
 enum class SubscriptionType {
     Undefined = -1,
+    //
+    // Персональные подписки
+    //
     Free = 0,
     ProMonthly = 1000,
     ProLifetime = 1100,
     CloudMonthly = 2000,
     CloudLifetime = 2100,
+    //
+    // Корпоративные
+    //
     Studio = 10000,
+    //
+    // Образовательные
+    //
+    Campus = 10100,
 
     //
     // Подписки на конкретные модули (для коммерческих клиентов и для внутреннего использования)

@@ -48,6 +48,7 @@ public:
     void updateProSubtitleLabel();
     void updateCloudSubtitleLabel();
     void updateStudioSubtitleLabel();
+    void updateCampusSubtitleLabel();
     void updateCreditsSubtitleLabel();
 
     /**
@@ -61,6 +62,7 @@ public:
     QDateTime proSubscriptionEnds;
     QDateTime cloudSubscriptionEnds;
     QDateTime studioSubscriptionEnds;
+    QDateTime campusSubscriptionEnds;
     int creditsAvailable = 0;
     bool isTeamsCanBeAdded = false;
 
@@ -95,6 +97,12 @@ public:
     ProgressBar* studioSpaceStats = nullptr;
     Subtitle2Label* studioSpaceInfo = nullptr;
     Subtitle2Label* studioSubtitle = nullptr;
+
+    IconsMidLabel* campusTitleIcon = nullptr;
+    ButtonLabel* campusTitle = nullptr;
+    ProgressBar* campusSpaceStats = nullptr;
+    Subtitle2Label* campusSpaceInfo = nullptr;
+    Subtitle2Label* campusSubtitle = nullptr;
 
     IconsMidLabel* creditsTitleIcon = nullptr;
     ButtonLabel* creditsTitle = nullptr;
@@ -154,6 +162,12 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     , studioSpaceInfo(new Subtitle2Label(accountPage))
     , studioSubtitle(new Subtitle2Label(accountPage))
     //
+    , campusTitleIcon(new IconsMidLabel(accountPage))
+    , campusTitle(new ButtonLabel(accountPage))
+    , campusSpaceStats(new ProgressBar(accountPage))
+    , campusSpaceInfo(new Subtitle2Label(accountPage))
+    , campusSubtitle(new Subtitle2Label(accountPage))
+    //
     , creditsTitleIcon(new IconsMidLabel(accountPage))
     , creditsTitle(new ButtonLabel(accountPage))
     , creditsSubtitle(new Subtitle2Label(accountPage))
@@ -199,6 +213,7 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     proTitleIcon->setIcon(u8"\U000F18BC");
     cloudTitleIcon->setIcon(u8"\U000F015F");
     studioTitleIcon->setIcon(u8"\U000F0381");
+    campusTitleIcon->setIcon(u8"\U000F0474");
     creditsTitleIcon->setIcon(u8"\U000F133C");
 
     logoutButton->setIcon(u8"\U000F0343");
@@ -254,6 +269,18 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     accountLayout->addWidget(studioSpaceStats, row++, 2);
     accountLayout->addWidget(studioSpaceInfo, row++, 2);
     accountLayout->addWidget(studioSubtitle, row++, 2);
+    //
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(campusTitleIcon);
+        layout->addWidget(campusTitle, 1);
+        accountLayout->addLayout(layout, row++, 2);
+    }
+    accountLayout->addWidget(campusSpaceStats, row++, 2);
+    accountLayout->addWidget(campusSpaceInfo, row++, 2);
+    accountLayout->addWidget(campusSubtitle, row++, 2);
     //
     {
         auto layout = new QHBoxLayout;
@@ -359,6 +386,22 @@ void AccountNavigator::Implementation::updateStudioSubtitleLabel()
         studioSubscriptionEnds.isNull()
             ? tr("Lifetime access")
             : tr("Active until %1").arg(studioSubscriptionEnds.toString("dd.MM.yyyy")));
+}
+
+void AccountNavigator::Implementation::updateCampusSubtitleLabel()
+{
+    if (cloudStorageSize > 0) {
+        campusSpaceStats->setProgress(cloudStorageSizeUsed / static_cast<qreal>(cloudStorageSize));
+        const qreal divider = 1024. * 1024. * 1024.;
+        campusSpaceInfo->setText(
+            tr("Used %1 GB from %2 GB")
+                .arg(QString::number(static_cast<qreal>(cloudStorageSizeUsed) / divider, 'f', 2),
+                     QString::number(static_cast<qreal>(cloudStorageSize) / divider, 'f', 2)));
+    }
+    campusSubtitle->setText(
+        campusSubscriptionEnds.isNull()
+            ? tr("Lifetime access")
+            : tr("Active until %1").arg(campusSubscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 void AccountNavigator::Implementation::updateCreditsSubtitleLabel()
@@ -532,6 +575,13 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     d->studioSpaceStats->hide();
     d->studioSpaceInfo->hide();
     d->studioSubtitle->hide();
+    //
+    d->campusTitleIcon->hide();
+    d->campusTitle->hide();
+    d->campusSubtitle->hide();
+    d->campusSpaceStats->hide();
+    d->campusSpaceInfo->hide();
+    d->campusSubtitle->hide();
 
     //
     // А потом показываем, в зависимости от активных подписок и доступных опций
@@ -541,11 +591,13 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     bool hasCloudSubscription = false;
     bool hasCloudLifetime = false;
     bool hasStudio = false;
+    bool hasCampus = false;
     d->cloudStorageSize = _account.cloudStorageSize;
     d->cloudStorageSizeUsed = _account.cloudStorageSizeUsed;
     auto isAccountTeamsCanBeAdded = false;
     for (const auto& subscription : _account.subscriptions) {
         switch (subscription.type) {
+        default:
         case Domain::SubscriptionType::Free: {
             break;
         }
@@ -636,14 +688,42 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             isAccountTeamsCanBeAdded = true;
             break;
         }
+
+        case Domain::SubscriptionType::Campus: {
+            hasCampus = true;
+
+            d->freeTitleIcon->hide();
+            d->freeTitle->hide();
+            d->freeSubtitle->hide();
+            d->proTitleIcon->hide();
+            d->proTitle->hide();
+            d->proSubtitle->hide();
+            d->cloudTitleIcon->hide();
+            d->cloudTitle->hide();
+            d->cloudSubtitle->hide();
+            d->cloudSpaceStats->hide();
+            d->cloudSpaceInfo->hide();
+            d->cloudSubtitle->hide();
+            //
+            d->campusSubscriptionEnds = subscription.end;
+            d->updateCampusSubtitleLabel();
+            d->campusTitleIcon->show();
+            d->campusTitle->show();
+            d->campusSubtitle->show();
+            d->campusSpaceStats->show();
+            d->campusSpaceInfo->show();
+            d->campusSubtitle->show();
+            isAccountTeamsCanBeAdded = true;
+            break;
+        }
         }
     }
     d->setAccountTeamsCanBeAdded(isAccountTeamsCanBeAdded);
 
     //
-    // Если у пользователя нет студийной подписки
+    // Если у пользователя нет студийной или образовательной подписки
     //
-    if (!hasStudio) {
+    if (!hasStudio && !hasCampus) {
         //
         // ... настроим заголовки и кнопки в зависимости от доступных опций оплат
         //
@@ -737,15 +817,14 @@ void AccountNavigator::setAccountTeams(const QVector<Domain::TeamInfo>& _teams)
         teamRow->setData(_team.id, kTeamIdRole);
         teamRow->setData(_team.description, Qt::WhatsThisRole);
         if (_team.avatar.isNull()) {
-            teamRow->setData(
-                ImageHelper::makeAvatar(_team.name, Ui::DesignSystem::font().body1(),
-                                        Ui::DesignSystem::treeOneLineItem().iconSize().toSize(),
-                                        Qt::white),
-                Qt::DecorationRole);
+            teamRow->setData(ImageHelper::makeAvatar(
+                                 _team.name, DesignSystem::font().body1(),
+                                 DesignSystem::treeOneLineItem().iconSize().toSize(), Qt::white),
+                             Qt::DecorationRole);
         } else {
             teamRow->setData(
                 ImageHelper::makeAvatar(ImageHelper::imageFromBytes(_team.avatar),
-                                        Ui::DesignSystem::treeOneLineItem().iconSize().toSize()),
+                                        DesignSystem::treeOneLineItem().iconSize().toSize()),
                 Qt::DecorationRole);
         }
         teamRow->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -803,6 +882,8 @@ void AccountNavigator::updateTranslations()
     d->renewCloudSubscriptionButton->setText(tr("Activate"));
     d->studioTitle->setText(tr("STUDIO version"));
     d->updateStudioSubtitleLabel();
+    d->campusTitle->setText(tr("CAMPUS version"));
+    d->updateCampusSubtitleLabel();
     d->creditsTitle->setText(tr("Credits for Ai tools"));
     d->buyCreditsButton->setText(tr("Buy credits"));
     d->logoutButton->setText(tr("Logout"));
@@ -836,39 +917,41 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     auto titleIconMargins
-        = QMarginsF(Ui::DesignSystem::layout().px(18), Ui::DesignSystem::compactLayout().px(20),
-                    Ui::DesignSystem::layout().px12(), Ui::DesignSystem::compactLayout().px4());
+        = QMarginsF(DesignSystem::layout().px(18), DesignSystem::compactLayout().px(20),
+                    DesignSystem::layout().px12(), DesignSystem::compactLayout().px4());
     for (auto icon : {
              d->freeTitleIcon,
              d->proTitleIcon,
              d->cloudTitleIcon,
              d->studioTitleIcon,
+             d->campusTitleIcon,
              d->creditsTitleIcon,
          }) {
-        icon->setBackgroundColor(Ui::DesignSystem::color().primary());
-        icon->setTextColor(Ui::DesignSystem::color().onPrimary());
+        icon->setBackgroundColor(DesignSystem::color().primary());
+        icon->setTextColor(DesignSystem::color().onPrimary());
         icon->setContentsMargins(titleIconMargins.toMargins());
     }
-    auto titleMargins = Ui::DesignSystem::label().margins();
+    auto titleMargins = DesignSystem::label().margins();
     titleMargins.setLeft(0);
-    titleMargins.setTop(Ui::DesignSystem::compactLayout().px24());
+    titleMargins.setTop(DesignSystem::compactLayout().px24());
     titleMargins.setBottom(0);
     for (auto title : {
              d->freeTitle,
              d->proTitle,
              d->cloudTitle,
              d->studioTitle,
+             d->campusTitle,
              d->creditsTitle,
          }) {
-        title->setBackgroundColor(Ui::DesignSystem::color().primary());
-        title->setTextColor(Ui::DesignSystem::color().onPrimary());
+        title->setBackgroundColor(DesignSystem::color().primary());
+        title->setTextColor(DesignSystem::color().onPrimary());
         title->setContentsMargins(titleMargins.toMargins());
     }
 
     auto subtitleMargins = titleMargins;
-    subtitleMargins.setLeft(Ui::DesignSystem::layout().px(18));
-    subtitleMargins.setBottom(Ui::DesignSystem::compactLayout().px12());
-    subtitleMargins.setTop(Ui::DesignSystem::compactLayout().px2());
+    subtitleMargins.setLeft(DesignSystem::layout().px(18));
+    subtitleMargins.setBottom(DesignSystem::compactLayout().px12());
+    subtitleMargins.setTop(DesignSystem::compactLayout().px2());
     for (auto subtitle : {
              d->freeSubtitle,
              d->proSubtitle,
@@ -876,26 +959,28 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->cloudSubtitle,
              d->studioSpaceInfo,
              d->studioSubtitle,
+             d->campusSpaceInfo,
+             d->campusSubtitle,
              d->creditsSubtitle,
          }) {
-        subtitle->setBackgroundColor(Ui::DesignSystem::color().primary());
-        subtitle->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
-                                                        Ui::DesignSystem::inactiveItemOpacity()));
+        subtitle->setBackgroundColor(DesignSystem::color().primary());
+        subtitle->setTextColor(ColorHelper::transparent(DesignSystem::color().onPrimary(),
+                                                        DesignSystem::inactiveItemOpacity()));
         subtitle->setContentsMargins(subtitleMargins.toMargins());
     }
 
     auto captionMargins
-        = QMarginsF(Ui::DesignSystem::layout().px(18), Ui::DesignSystem::compactLayout().px(20),
-                    Ui::DesignSystem::layout().px12(), Ui::DesignSystem::compactLayout().px4());
-    subtitleMargins.setTop(Ui::DesignSystem::compactLayout().px2());
+        = QMarginsF(DesignSystem::layout().px(18), DesignSystem::compactLayout().px(20),
+                    DesignSystem::layout().px12(), DesignSystem::compactLayout().px4());
+    subtitleMargins.setTop(DesignSystem::compactLayout().px2());
     for (auto caption : std::vector<Widget*>{
              d->teamsOwnerLabel,
              d->teamsOwnerEmptyLabel,
              d->teamsMemberLabel,
              d->teamsMemberEmptyLabel,
          }) {
-        caption->setBackgroundColor(Ui::DesignSystem::color().primary());
-        caption->setTextColor(Ui::DesignSystem::color().onPrimary());
+        caption->setBackgroundColor(DesignSystem::color().primary());
+        caption->setTextColor(DesignSystem::color().onPrimary());
         caption->setContentsMargins(captionMargins.toMargins());
     }
 
@@ -908,34 +993,38 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->logoutButton,
              d->addTeamButton,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
-    d->cloudSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->cloudSpaceStats->setBackgroundColor(DesignSystem::color().primary());
     d->cloudSpaceStats->setContentsMargins(
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px4());
-    d->studioSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
+        DesignSystem::layout().px16(), DesignSystem::compactLayout().px16(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px4());
+    d->studioSpaceStats->setBackgroundColor(DesignSystem::color().primary());
     d->studioSpaceStats->setContentsMargins(
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px4());
+        DesignSystem::layout().px16(), DesignSystem::compactLayout().px16(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px4());
+    d->campusSpaceStats->setBackgroundColor(DesignSystem::color().primary());
+    d->campusSpaceStats->setContentsMargins(
+        DesignSystem::layout().px16(), DesignSystem::compactLayout().px16(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px4());
 
-    d->accountLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px4());
-    d->accountLayout->setColumnMinimumWidth(0, Ui::DesignSystem::layout().px4());
-    d->accountLayout->setColumnMinimumWidth(3, Ui::DesignSystem::layout().px12());
-    d->accountLayout->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px12());
+    d->accountLayout->setVerticalSpacing(DesignSystem::compactLayout().px4());
+    d->accountLayout->setColumnMinimumWidth(0, DesignSystem::layout().px4());
+    d->accountLayout->setColumnMinimumWidth(3, DesignSystem::layout().px12());
+    d->accountLayout->setContentsMargins(0, 0, 0, DesignSystem::layout().px12());
 
 
     d->teamsOwner->setFixedHeight(d->teamsOwner->viewportSizeHint().height());
     d->teamsMember->setFixedHeight(d->teamsMember->viewportSizeHint().height());
 
-    d->addTeamButtonLayout->setContentsMargins(Ui::DesignSystem::layout().px12(), 0,
-                                               Ui::DesignSystem::layout().px12(),
-                                               Ui::DesignSystem::layout().px12());
+    d->addTeamButtonLayout->setContentsMargins(DesignSystem::layout().px12(), 0,
+                                               DesignSystem::layout().px12(),
+                                               DesignSystem::layout().px12());
 
-    d->teamsContextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->teamsContextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->teamsContextMenu->setBackgroundColor(DesignSystem::color().background());
+    d->teamsContextMenu->setTextColor(DesignSystem::color().onBackground());
 }
 
 } // namespace Ui
