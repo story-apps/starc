@@ -129,8 +129,11 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
-    connect(d->sendForChecking, &Button::clicked, this,
-            [this] { emit sendDocumentToReviewRequested(d->checkingComment->text()); });
+    connect(d->sendForChecking, &Button::clicked, this, [this] {
+        const auto comment = d->checkingComment->text();
+        d->checkingComment->clear();
+        emit sendDocumentToReviewRequested(comment);
+    });
 
     connect(d->screenplayName, &TextField::textChanged, this,
             [this] { emit nameChanged(d->screenplayName->text()); });

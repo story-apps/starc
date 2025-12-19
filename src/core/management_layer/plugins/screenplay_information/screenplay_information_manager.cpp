@@ -150,7 +150,7 @@ void ScreenplayInformationManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplayInformationModel::setScreenplayStatisticsVisible);
 
         //
-        connect(_view, &Ui::ScreenplayInformationView::sendDocumentToReviewRequested, q,
+        connect(_view, &Ui::ScreenplayInformationView::sendDocumentToReviewRequested, model,
                 [this, model](const QString& _comment) {
                     emit q->sendDocumentToReviewRequested(model->document()->uuid(), _comment);
                 });
