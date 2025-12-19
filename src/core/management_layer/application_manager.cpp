@@ -1972,8 +1972,6 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
         return false;
     }
 
-    *(volatile int*)0 = 0;
-
     if (projectsManager->project(_path) != nullptr && projectsManager->project(_path)->isLocal()
         && !QFileInfo::exists(_path)) {
         projectsManager->hideProject(_path);
@@ -2918,6 +2916,16 @@ void ApplicationManager::initConnections()
     QShortcut* fullScreenShortcut = new QShortcut(QKeySequence::FullScreen, d->applicationView);
     fullScreenShortcut->setContext(Qt::ApplicationShortcut);
     connect(fullScreenShortcut, &QShortcut::activated, this, [this] { d->toggleFullScreen(); });
+    //
+    // Тестовый краш
+    //
+#ifdef Q_OS_MACOS
+    QShortcut* testCrashShortcut = new QShortcut(QKeySequence("Meta+Shift+C"), d->applicationView);
+#else
+    QShortcut* testCrashShortcut = new QShortcut(QKeySequence("Ctrl+Shift+C"), d->applicationView);
+#endif
+    testCrashShortcut->setContext(Qt::ApplicationShortcut);
+    connect(testCrashShortcut, &QShortcut::activated, this, [] { *(volatile int*)0 = 0; });
 
     //
     // Представление приложения
