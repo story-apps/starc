@@ -1262,9 +1262,9 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         const auto placeholderText
                             = QString("--- %1: %2 ---")
-                                  .arg(tr(blockType == TextParagraphType::PartFooter
-                                              ? "End of part"
-                                              : "End of chapter"),
+                                  .arg(blockType == TextParagraphType::PartFooter
+                                           ? tr("End of part")
+                                           : tr("End of chapter"),
                                        headerBlock.text());
                         const auto rect = textRect();
                         painter.drawText(rect, block.blockFormat().alignment(), placeholderText);

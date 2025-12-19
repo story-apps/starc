@@ -3218,11 +3218,6 @@
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="116"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1219"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1160"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1045"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1211"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="996"/>
         <source>End of</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4243,7 +4238,7 @@ The following files will not be imported:
         <location filename="../management_layer/content/project/project_manager.cpp" line="1895"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1979"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1980"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4145"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4167"/>
         <source>Current draft</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4286,7 +4281,7 @@ The following files will not be imported:
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="751"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2692"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2714"/>
         <source>Create draft</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4404,86 +4399,86 @@ The following files will not be imported:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2708"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2730"/>
         <source>Compare drafts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2722"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2744"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2732"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2754"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2747"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2769"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2896"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2917"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2938"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2959"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3068"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2918"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2939"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2960"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2981"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3090"/>
         <source>draft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2915"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2936"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2957"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2937"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2958"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2979"/>
         <source>Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3757"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3779"/>
         <source>Mind map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3763"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3785"/>
         <source>Images gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3849"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3899"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3947"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4004"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4061"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3871"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3921"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3969"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4026"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4083"/>
         <source>Title page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3852"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3902"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3948"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4006"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4064"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3874"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3924"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3970"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4028"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4086"/>
         <source>Synopsis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3854"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3876"/>
         <source>Audioplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3904"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3926"/>
         <source>Comic book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4018"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4040"/>
         <source>Treatment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3950"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3972"/>
         <source>Novel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4493,33 +4488,33 @@ The following files will not be imported:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3959"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3981"/>
         <source>Outline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4066"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4088"/>
         <source>Stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4454"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4476"/>
         <source>Conflicted version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2894"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3066"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4009"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2916"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3088"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4031"/>
         <source>Screenplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3857"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3907"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3953"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4012"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4069"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3879"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3929"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3975"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4034"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4091"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9307,6 +9302,16 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>Ui::AudioplayTextEdit</name>
     <message>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1219"/>
+        <source>End of act</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1220"/>
+        <source>End of folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1459"/>
         <source>Bookmark</source>
         <translation type="unfinished"></translation>
@@ -10709,6 +10714,16 @@ This action can&apos;t be canceled.</source>
 </context>
 <context>
     <name>Ui::ComicBookTextEdit</name>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1160"/>
+        <source>End of act</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1161"/>
+        <source>End of folder</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1239"/>
         <source>%n panels</source>
@@ -14446,27 +14461,37 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>Ui::NovelOutlineEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1270"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="998"/>
+        <source>End of part</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="999"/>
+        <source>End of chapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1272"/>
         <source>Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1274"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1276"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1279"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1281"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1284"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1286"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1291"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1293"/>
         <source>Show/hide list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14675,6 +14700,16 @@ This action can&apos;t be canceled.</source>
 </context>
 <context>
     <name>Ui::NovelTextEdit</name>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1266"/>
+        <source>End of part</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1267"/>
+        <source>End of chapter</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1648"/>
         <source>Bookmark</source>
@@ -19006,6 +19041,16 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1045"/>
+        <source>End of act</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1046"/>
+        <source>End of folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1311"/>
         <source>Bookmark</source>
         <translation type="unfinished"></translation>
@@ -21146,6 +21191,16 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 </context>
 <context>
     <name>Ui::StageplayTextEdit</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1211"/>
+        <source>End of act</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1212"/>
+        <source>End of folder</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1498"/>
         <source>Bookmark</source>

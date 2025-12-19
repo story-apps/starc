@@ -1328,8 +1328,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // Определим область для отрисовки плейсхолдера
                         //
                         const auto placeholderText = QString("%1: %2").arg(
-                            tr(blockType == TextParagraphType::ActFooter ? "End of act"
-                                                                         : "End of folder"),
+                            blockType == TextParagraphType::ActFooter ? tr("End of act")
+                                                                      : tr("End of folder"),
                             headerBlock.text());
                         const auto rect = textRect();
                         painter.drawText(rect, block.blockFormat().alignment(), placeholderText);

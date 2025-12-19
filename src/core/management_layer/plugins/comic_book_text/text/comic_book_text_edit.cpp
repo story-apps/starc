@@ -1156,9 +1156,9 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Определим область для отрисовки плейсхолдера
                         //
-                        const auto placeholderText = QString("%1 %2").arg(
-                            QCoreApplication::translate("KeyProcessingLayer::FolderFooterHandler",
-                                                        "End of"),
+                        const auto placeholderText = QString("%1: %2").arg(
+                            blockType == TextParagraphType::ActFooter ? tr("End of act")
+                                                                      : tr("End of folder"),
                             headerBlock.text());
                         const QPoint topLeft = QPoint(
                             textLeft + leftDelta + spaceBetweenSceneNumberAndText, cursorR.top());

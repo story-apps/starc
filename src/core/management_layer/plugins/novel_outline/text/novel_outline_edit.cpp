@@ -992,10 +992,12 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Определим область для отрисовки плейсхолдера
                         //
-                        const auto placeholderText = QString("%1 %2").arg(
-                            QCoreApplication::translate("KeyProcessingLayer::FolderFooterHandler",
-                                                        "End of"),
-                            headerBlock.text());
+                        const auto placeholderText
+                            = QString("--- %1: %2 ---")
+                                  .arg(blockType == TextParagraphType::PartFooter
+                                           ? tr("End of part")
+                                           : tr("End of chapter"),
+                                       headerBlock.text());
                         const QPoint topLeft = QPoint(
                             textLeft + leftDelta + spaceBetweenSceneNumberAndText, cursorR.top());
                         const QPoint bottomRight
