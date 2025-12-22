@@ -1,15 +1,12 @@
-[submodule "src/3rd_party/qbreakpad"]
-	path = src/3rd_party/qbreakpad
-	url = git@github.com:story-apps/qBreakpad.git
 [submodule "src/3rd_party/pdfhummus"]
 	path = src/3rd_party/pdfhummus
-	url = git@github.com:story-apps/PDF-Writer.git
+	url = https://github.com/story-apps/PDF-Writer.git
 [submodule "src/3rd_party/pdftextextraction"]
 	path = src/3rd_party/pdftextextraction
-	url = git@github.com:story-apps/pdf-text-extraction.git
+	url = https://github.com/story-apps/pdf-text-extraction.git
 [submodule "src/cloud"]
-	path = src/cloud
-	url = git@github.com:story-apps/starcloud
+    path = src/cloud
+    url = git@github.com:story-apps/starcloud
 [submodule "src/core/management_layer/plugins/character_information"]
 	path = src/core/management_layer/plugins/character_information
 	url = git@github.com:story-apps/starc-character-information-plugin.git
