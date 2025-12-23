@@ -2009,7 +2009,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
         projectsManager->setCurrentProjectCanBeSynced(true);
         const auto unsyncedDocuments = projectManager->unsyncedDocuments();
         for (const auto document : unsyncedDocuments) {
-            cloudServiceManager->openDocument(projectsManager->currentProject()->id(), document);
+            cloudServiceManager->openDocument(projectsManager->currentProject()->id(), document,
+                                              projectManager->draftSource(document->uuid()));
         }
     }
 #endif
@@ -3433,7 +3434,7 @@ void ApplicationManager::initConnections()
 
                 //
                 // Для сложных типов документов, нужна подгрузка документов, которые с ним связаны,
-                // а смаа загрузка документов должна происходить в строго определённом порядке
+                // а сама загрузка документов должна происходить в строго определённом порядке
                 //
                 auto documentsToSync = d->projectManager->documentBundle(_documentUuid);
                 if (documentsToSync.isEmpty()) {
@@ -3518,7 +3519,8 @@ void ApplicationManager::initConnections()
                 //
                 if (_isNewDocument) {
                     d->cloudServiceManager->openDocument(
-                        currentProject->id(), d->projectManager->documentToSync(_documentUuid));
+                        currentProject->id(), d->projectManager->documentToSync(_documentUuid),
+                        d->projectManager->draftSource(_documentUuid));
                 }
                 //
                 // В противном случае, запросим отправку изменений

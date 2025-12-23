@@ -183,6 +183,11 @@ public:
     Domain::DocumentObject* documentToSync(const QUuid& _documentUuid) const;
 
     /**
+     * @brief Получить документ, являющийся основным для заданного драфта
+     */
+    QUuid draftSource(const QUuid& _documentUuid) const;
+
+    /**
      * @brief Получить полный комплект документов, связанных с заданным
      */
     QVector<QUuid> documentBundle(const QUuid& _documentUuid) const;

@@ -4720,6 +4720,57 @@ Domain::DocumentObject* ProjectManager::documentToSync(const QUuid& _documentUui
     return DataStorageLayer::StorageFacade::documentStorage()->document(_documentUuid);
 }
 
+QUuid ProjectManager::draftSource(const QUuid& _documentUuid) const
+{
+    const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
+    const QSet<Domain::DocumentObjectType> textDocuments = {
+        Domain::DocumentObjectType::ScreenplayTitlePage,
+        Domain::DocumentObjectType::ScreenplaySynopsis,
+        Domain::DocumentObjectType::ScreenplayTreatment,
+        Domain::DocumentObjectType::ScreenplayText,
+        Domain::DocumentObjectType::ScreenplaySeriesTitlePage,
+        Domain::DocumentObjectType::ScreenplaySeriesSynopsis,
+        Domain::DocumentObjectType::ScreenplaySeriesTreatment,
+        Domain::DocumentObjectType::ScreenplaySeriesText,
+        Domain::DocumentObjectType::ComicBookTitlePage,
+        Domain::DocumentObjectType::ComicBookSynopsis,
+        Domain::DocumentObjectType::ComicBookText,
+        Domain::DocumentObjectType::AudioplayTitlePage,
+        Domain::DocumentObjectType::AudioplaySynopsis,
+        Domain::DocumentObjectType::AudioplayText,
+        Domain::DocumentObjectType::StageplayTitlePage,
+        Domain::DocumentObjectType::StageplaySynopsis,
+        Domain::DocumentObjectType::StageplayText,
+        Domain::DocumentObjectType::NovelTitlePage,
+        Domain::DocumentObjectType::NovelSynopsis,
+        Domain::DocumentObjectType::NovelOutline,
+        Domain::DocumentObjectType::NovelText,
+        Domain::DocumentObjectType::Folder,
+        Domain::DocumentObjectType::SimpleText,
+    };
+    if (item == nullptr || !textDocuments.contains(item->type()) || !item->hasParent()) {
+        return {};
+    }
+
+    const auto parent = item->parent();
+    for (int index = 0; index < parent->childCount(); ++index) {
+        const auto sibling = parent->childAt(index);
+        if (sibling->uuid() == _documentUuid) {
+            return {};
+        }
+
+        if (!sibling->drafts().isEmpty()) {
+            for (const auto& draft : sibling->drafts()) {
+                if (draft->uuid() == _documentUuid) {
+                    return sibling->uuid();
+                }
+            }
+        }
+    }
+
+    return {};
+}
+
 QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
 {
     const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
