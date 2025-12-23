@@ -151,7 +151,7 @@ QUuid TextModelGroupItem::uuid() const
 
 void TextModelGroupItem::resetUuid()
 {
-    d->uuid = {};
+    d->uuid = QUuid("{10000000-0000-0000-0000-000000000000}");
 }
 
 int TextModelGroupItem::level() const
