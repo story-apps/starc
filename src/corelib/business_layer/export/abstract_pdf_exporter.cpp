@@ -174,6 +174,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             const auto table = qobject_cast<QTextTable*>(_document->frameAt(block.position()));
             if (table != nullptr) {
                 blockRect = layout->blockBoundingRect(block);
+                blockRect.moveLeft(blockRect.left() + block.blockFormat().leftMargin());
                 //
                 // ... необходимо также учитывать высоту строки для особых случаев
                 //
