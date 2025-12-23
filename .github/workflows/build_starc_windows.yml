@@ -243,7 +243,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: 6.8.3
+          version: 6.10.1
           arch: win64_msvc2022_64
           target: desktop
           setup-python: false

@@ -125,7 +125,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.8.3
+          version: 6.10.1
           target: desktop
           modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
 
