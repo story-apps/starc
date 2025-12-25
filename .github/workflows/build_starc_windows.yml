@@ -109,7 +109,7 @@ jobs:
           npm i -g node-dump-syms
 
       - name: Upload debug symbols from _build folder
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -123,7 +123,7 @@ jobs:
           dumpSyms: true
 
       - name: Upload debug symbols from _build/plugins folder
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -266,7 +266,7 @@ jobs:
           npm i -g node-dump-syms
 
       - name: Upload debug symbols from _build folder
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -280,7 +280,7 @@ jobs:
           dumpSyms: true
 
       - name: Upload debug symbols from _build/plugins folder
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -422,7 +422,7 @@ jobs:
           npm i -g node-dump-syms
 
       - name: Upload debug symbols from _build folder
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -436,7 +436,7 @@ jobs:
           dumpSyms: true
 
       - name: Upload debug symbols from _build/plugins folder
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
