@@ -107,7 +107,7 @@ jobs:
           npm i -g node-dump-syms
 
       - name: Upload Symbols for .so files
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -121,7 +121,7 @@ jobs:
           dumpSyms: true
 
       - name: Upload Symbols for starcapp
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -253,7 +253,7 @@ jobs:
           npm i -g node-dump-syms
 
       - name: Upload Symbols for .so files
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -267,7 +267,7 @@ jobs:
           dumpSyms: true
 
       - name: Upload Symbols for starcapp
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
