@@ -279,7 +279,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}-x32
           files: "*.{pdb,exe,dll}"
           directory: "src/_build"
           node-version: "22"
@@ -293,7 +293,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}-x32
           files: "*.{pdb,dll}"
           directory: "src/_build/plugins"
           node-version: "22"
@@ -337,7 +337,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows32" F "qt=5" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows32" -F "qt=5" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
 
   build_windows_64_qt6:
     name: Build Windows 64 version with qt6
