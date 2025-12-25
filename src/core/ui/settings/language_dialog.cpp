@@ -246,10 +246,6 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     int column = 0;
     int maximumRow = 0;
     auto addButton = [this, &row, &column](PercentRadioButton* _button) {
-        if (_button->percents <= 20) {
-            _button->hide();
-            return;
-        }
         contentsLayout()->addWidget(_button, row++, column);
     };
     addButton(d->azerbaijani);
@@ -300,6 +296,8 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     //
     contentsLayout()->setRowStretch(maximumRow++, 1);
     contentsLayout()->setColumnStretch(4, 1);
+    //
+    row = maximumRow;
     contentsLayout()->addWidget(d->languageHowToAddLink, row++, 0, 1, 5);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 5);
 
