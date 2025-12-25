@@ -283,7 +283,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}-x32
           files: "*.{pdb,exe,dll}"
           directory: "src/_build"
           node-version: "22"
@@ -297,7 +297,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}-x32
           files: "*.{pdb,dll}"
           directory: "src/_build/plugins"
           node-version: "22"
