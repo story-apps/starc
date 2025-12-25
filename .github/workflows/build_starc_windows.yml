@@ -108,12 +108,6 @@ jobs:
             build/windows/starc-setup-qt5-64.exe
             build/windows/starc-qt5-64.zip
 
-      - name: Notify clients that stable release published
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: bash
-        run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows64" -F "qt=5" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
-
   build_windows_32_qt5:
     name: Build Windows 32 version with qt5
     runs-on: windows-latest
@@ -205,12 +199,6 @@ jobs:
           files: |
             build/windows/starc-setup-qt5-32.exe
             build/windows/starc-qt5-32.zip
-
-      - name: Notify clients that stable release published
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: bash
-        run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows32" F "qt=5" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
 
   build_windows_64_qt6:
     name: Build Windows 64 version with qt6
@@ -320,7 +308,7 @@ jobs:
             build/windows/starc-package.msix
 
       - name: Publish artifacts to the dev stream and notify clients
-        if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') != true
+        if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') != true && github.ref == 'refs/heads/master'
         shell: pwsh
         env:
           STARC_API_KEY: ${{ secrets.STARC_API_KEY }}
@@ -347,9 +335,3 @@ jobs:
             build/windows/starc-setup.exe
             build/windows/starc.zip
             build/windows/starc-package.msix
-
-      - name: Notify clients that stable release published
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: bash
-        run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows64" -F "qt=6" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
