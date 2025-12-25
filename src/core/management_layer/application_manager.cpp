@@ -129,7 +129,10 @@ QString bugsplatAppName()
     return appName;
 }
 
-const QString kBugsplatDatabaseName("starc-desktop");
+QString bugsplatDatabaseName()
+{
+    return QString("starc-desktop");
+}
 
 } // namespace
 
@@ -153,6 +156,11 @@ public:
      * @brief Отправить краш-репорт
      */
     void sendCrashInfo();
+
+    /**
+     * @brief Вызвать тестовый краш для проверки системы краш-репортов
+     */
+    void testCrash();
 
     /**
      * @brief Загрузить недостающие шрифты
@@ -619,7 +627,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
         [this, database = std::move(database), reportsToSend, dialog] {
             for (auto& report : reportsToSend) {
                 const QUrl url(QStringLiteral("https://%1.bugsplat.com/post/bp/crash/crashpad.php")
-                                   .arg(kBugsplatDatabaseName));
+                                   .arg(bugsplatDatabaseName()));
 
                 //
                 // Проверим наличие файла дампа
@@ -656,6 +664,9 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 appVersion += "-qt5";
 #elif QT_VERSION_MAJOR == 6
                 appVersion += "-qt6";
+#endif
+#if defined(Q_OS_WINDOWS) && defined(_WIN32) && !defined(_WIN64)
+                appVersion += "-x32";
 #endif
                 loader->addRequestAttribute("version", appVersion);
                 loader->addRequestAttribute("qt", QString("Qt") + QT_VERSION_STR);
@@ -772,6 +783,11 @@ void ApplicationManager::Implementation::sendCrashInfo()
     // Отображаем диалог
     //
     dialog->showDialog();
+}
+
+void ApplicationManager::Implementation::testCrash()
+{
+    *(volatile int*)0 = 0;
 }
 
 void ApplicationManager::Implementation::loadMissedFonts()
@@ -1375,7 +1391,7 @@ bool ApplicationManager::Implementation::initializeCrashpad()
     base::FilePath reportsDir(CrashpadPaths::getPlatformString(crashpadPaths.getReportsPath()));
     base::FilePath metricsDir(CrashpadPaths::getPlatformString(crashpadPaths.getMetricsPath()));
 
-    const QString dbName = kBugsplatDatabaseName;
+    const QString dbName = bugsplatDatabaseName();
     const QString appName = bugsplatAppName();
     QString appVersion = QApplication::applicationVersion();
 #if QT_VERSION_MAJOR == 5
@@ -2926,7 +2942,7 @@ void ApplicationManager::initConnections()
     QShortcut* testCrashShortcut = new QShortcut(QKeySequence("Ctrl+Shift+C"), d->applicationView);
 #endif
     testCrashShortcut->setContext(Qt::ApplicationShortcut);
-    connect(testCrashShortcut, &QShortcut::activated, this, [] { *(volatile int*)0 = 0; });
+    connect(testCrashShortcut, &QShortcut::activated, this, [this] { d->testCrash(); });
 
     //
     // Представление приложения
