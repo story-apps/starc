@@ -74,20 +74,18 @@ jobs:
           make -j4
 
       - name: Upload debug symbols
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
-          username: "${{ secrets.BUGSPLAT_USER }}"
-          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          clientId: "${{ secrets.BUGSPLAT_USER }}"
+          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-mac"
           version: "${{ env.BUGSPLAT_VERSION }}"
-          files: "**/*.dSYM"
+          files: "starcapp.app/Contents/MacOS/*"
           directory: "src/_build"
           node-version: "22"
-          dumpSyms: false
-        env:
-          DEBUG: true
+          dumpSyms: true
 
       - name: Make dmg image
         uses: nick-fields/retry@v3
@@ -187,18 +185,18 @@ jobs:
           make -j4
 
       - name: Upload debug symbols
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
         with:
-          username: "${{ secrets.BUGSPLAT_USER }}"
-          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          clientId: "${{ secrets.BUGSPLAT_USER }}"
+          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-mac"
           version: "${{ env.BUGSPLAT_VERSION }}"
           files: "**/*.dSYM"
           directory: "src/_build"
           node-version: "22"
-          dumpSyms: false
+          dumpSyms: true
 
       - name: Make dmg image
         uses: nick-fields/retry@v3

@@ -1,8 +1,5 @@
 #include "application_manager.h"
 
-#include "client/crash_report_database.h"
-#include "client/crashpad_client.h"
-#include "client/settings.h"
 #include "content/account/account_manager.h"
 #include "content/export/export_manager.h"
 #include "content/import/import_manager.h"
@@ -37,6 +34,9 @@
 #endif
 
 #include <business_layer/model/abstract_model.h>
+#include <client/crash_report_database.h>
+#include <client/crashpad_client.h>
+#include <client/settings.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -132,6 +132,9 @@ void restartApplication()
     }
 }
 
+/**
+ * @brief Имя приложения в базе данных багсплата
+ */
 QString bugsplatAppName()
 {
     QString appName("starcapp");
@@ -145,6 +148,9 @@ QString bugsplatAppName()
     return appName;
 }
 
+/**
+ * @brief Имя базы данных проекта в багсплате
+ */
 QString bugsplatDatabaseName()
 {
     return QString("starc-desktop");
@@ -157,6 +163,11 @@ class ApplicationManager::Implementation
 public:
     explicit Implementation(ApplicationManager* _q);
     ~Implementation();
+
+    /**
+     * @brief Инициализировать сборщик крашдампов
+     */
+    bool initCrashpad();
 
     /**
      * @brief Настроить способ работы с конвертацией метрик
@@ -272,11 +283,6 @@ public:
      * @brief Задать использование компакстного режима
      */
     void setDesignSystemDensity(int _density);
-
-    /**
-     * @brief Инициализировать сборщик крашдампов
-     */
-    bool initializeCrashpad();
 
     //
     // Работа с проектом
@@ -516,6 +522,93 @@ ApplicationManager::Implementation::~Implementation()
     }
 }
 
+bool ApplicationManager::Implementation::initCrashpad()
+{
+    CrashpadPaths crashpadPaths;
+    base::FilePath handler(CrashpadPaths::getPlatformString(crashpadPaths.getHandlerPath()));
+    base::FilePath reportsDir(CrashpadPaths::getPlatformString(crashpadPaths.getReportsPath()));
+    base::FilePath metricsDir(CrashpadPaths::getPlatformString(crashpadPaths.getMetricsPath()));
+
+    const QString dbName = bugsplatDatabaseName();
+    const QString appName = bugsplatAppName();
+    QString appVersion = QApplication::applicationVersion();
+#if QT_VERSION_MAJOR == 5
+    appVersion += "-qt5";
+#elif QT_VERSION_MAJOR == 6
+    appVersion += "-qt6";
+#endif
+
+    const QString url = "https://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
+
+    QMap<std::string, std::string> annotations;
+    annotations["format"] = "minidump";
+    annotations["database"] = dbName.toStdString();
+    annotations["product"] = appName.toStdString();
+    annotations["version"] = appVersion.toStdString();
+
+    //
+    // Убираем лимиты по дампам
+    //
+    std::vector<std::string> arguments;
+    arguments.push_back("--no-rate-limit");
+
+    //
+    // Инициализируем базу данных crashpad
+    //
+#if defined(Q_OS_WIN)
+    const QString reportsPath = QString::fromStdWString(reportsDir.value());
+#else
+    const QString reportsPath = QString::fromStdString(reportsDir.value());
+#endif
+    Log::info("[BugSplat] Initializing Crashpad database at: %1", reportsPath);
+    std::unique_ptr<crashpad::CrashReportDatabase> database
+        = crashpad::CrashReportDatabase::Initialize(reportsDir);
+    if (database == nullptr) {
+        Log::critical("[BugSplat] Failed to initialize Crashpad database");
+        return false;
+    }
+    Log::info("[BugSplat] Crashpad database initialized successfully");
+
+    //
+    // Отключаем автоматическую отправку отчетов
+    //
+    crashpad::Settings* settings = database->GetSettings();
+    if (settings == nullptr) {
+        return false;
+    }
+    settings->SetUploadsEnabled(false);
+
+    //
+    // Прикрепляем текущий лог-файл к дампу
+    //
+    std::vector<base::FilePath> attachments;
+    const QString logFilePath = q->logFilePath();
+    if (!logFilePath.isEmpty() && QFile::exists(logFilePath)) {
+#if defined(Q_OS_WIN)
+        attachments.push_back(base::FilePath(logFilePath.toStdWString()));
+#else
+        attachments.push_back(base::FilePath(logFilePath.toStdString()));
+#endif
+        Log::info("[BugSplat] Crashpad will attach log file: %1", logFilePath);
+    }
+
+    //
+    // Запускаем crashpad
+    //
+    crashpadClient.reset(new crashpad::CrashpadClient());
+    Log::info("[BugSplat] Starting Crashpad handler...");
+    bool status
+        = crashpadClient->StartHandler(handler, reportsDir, metricsDir, url.toStdString(),
+                                       annotations.toStdMap(), arguments, true, false, attachments);
+    if (status) {
+        Log::info("[BugSplat] Crashpad handler started successfully");
+    } else {
+        Log::critical("[BugSplat] Failed to start Crashpad handler");
+        crashpadClient.reset();
+    }
+    return status;
+}
+
 void ApplicationManager::Implementation::initMeasurementMetrics()
 {
     MeasurementHelper::setAccurateMetricsHandling(
@@ -681,7 +774,8 @@ void ApplicationManager::Implementation::sendCrashInfo()
     }
 
     if (reportsToSend.empty()) {
-        Log::debug("No reports to show (no pending reports and no recent completed reports)");
+        Log::debug(
+            "[BugSplat] No reports to show (no pending reports and no recent completed reports)");
         return;
     }
 
@@ -700,9 +794,6 @@ void ApplicationManager::Implementation::sendCrashInfo()
         dialog, &Ui::CrashReportDialog::sendReportPressed, q,
         [this, database = std::move(database), reportsToSend, dialog] {
             for (auto& report : reportsToSend) {
-                const QUrl url(QStringLiteral("https://%1.bugsplat.com/post/bp/crash/crashpad.php")
-                                   .arg(bugsplatDatabaseName()));
-
                 //
                 // Проверим наличие файла дампа
                 //
@@ -753,10 +844,10 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 // Прикрепляем лог-файл сессии, когда произошел краш
                 //
                 const QDateTime crashTime = QDateTime::fromSecsSinceEpoch(report.creation_time);
-                const QDir logsDir(q->logFilePath());
+                const QDir logsDir = QFileInfo(q->logFilePath()).absoluteDir();
 
                 Log::info(
-                    QString("BugSplat: Searching for log file. Crash time: %1, Logs directory: %2")
+                    QString("[BugSplat] Searching for log file. Crash time: %1, Logs directory: %2")
                         .arg(crashTime.toString(Qt::ISODate), logsDir.absolutePath()));
 
                 QString previousSessionLogPath;
@@ -766,7 +857,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
 
                     const auto logFiles
                         = logsDir.entryInfoList({ "*.log" }, QDir::Files, QDir::Time);
-                    Log::info(QString("BugSplat: Found %1 log file(s) in directory")
+                    Log::info(QString("[BugSplat] Found %1 log file(s) in directory")
                                   .arg(logFiles.size()));
 
                     for (const auto& logFile : logFiles) {
@@ -780,12 +871,13 @@ void ApplicationManager::Implementation::sendCrashInfo()
                                 bestLogFile = logFile;
                                 bestLogTime = logFileTime;
                                 Log::info(
-                                    QString("BugSplat: Candidate log file found: %1 (modified: %2)")
+                                    QString(
+                                        "[BugSplat] Candidate log file found: %1 (modified: %2)")
                                         .arg(logFile.absoluteFilePath(),
                                              logFileTime.toString(Qt::ISODate)));
                             }
                         } else {
-                            Log::info(QString("BugSplat: Skipping log file %1 (modified: %2, "
+                            Log::info(QString("[BugSplat] Skipping log file %1 (modified: %2, "
                                               "after crash time)")
                                           .arg(logFile.absoluteFilePath(),
                                                logFileTime.toString(Qt::ISODate)));
@@ -797,52 +889,55 @@ void ApplicationManager::Implementation::sendCrashInfo()
                     //
                     if (!bestLogFile.filePath().isEmpty() && bestLogFile.exists()) {
                         previousSessionLogPath = bestLogFile.absoluteFilePath();
-                        Log::info(
-                            QString("BugSplat: Selected log file: %1").arg(previousSessionLogPath));
+                        Log::info(QString("[BugSplat] Selected log file: %1")
+                                      .arg(previousSessionLogPath));
                     } else {
                         if (bestLogFile.filePath().isEmpty()) {
-                            Log::info("BugSplat: No suitable log file found (no file modified "
+                            Log::info("[BugSplat] No suitable log file found (no file modified "
                                       "before crash time)");
                         } else {
-                            Log::warning(QString("BugSplat: Selected log file does not exist: %1")
+                            Log::warning(QString("[BugSplat] Selected log file does not exist: %1")
                                              .arg(bestLogFile.absoluteFilePath()));
                         }
                     }
                 } else {
-                    Log::warning(QString("BugSplat: Logs directory does not exist: %1")
+                    Log::warning(QString("[BugSplat] Logs directory does not exist: %1")
                                      .arg(logsDir.absolutePath()));
                 }
 
                 if (!previousSessionLogPath.isEmpty() && QFile::exists(previousSessionLogPath)) {
                     loader->addRequestAttributeFile("upload_file_log", previousSessionLogPath);
-                    Log::info(QString("BugSplat: Log file attached to crash report: %1")
+                    Log::info(QString("[BugSplat] Log file attached to crash report: %1")
                                   .arg(previousSessionLogPath));
                 } else {
                     if (previousSessionLogPath.isEmpty()) {
                         Log::info(
-                            "BugSplat: No log file to attach (previousSessionLogPath is empty)");
+                            "[BugSplat] No log file to attach (previousSessionLogPath is empty)");
                     } else {
                         Log::warning(
-                            QString("BugSplat: Cannot attach log file - file does not exist: %1")
+                            QString("[BugSplat] Cannot attach log file - file does not exist: %1")
                                 .arg(previousSessionLogPath));
                     }
                 }
 
-                QObject::connect(loader, &NetworkRequest::downloadComplete,
-                                 [dmpPath](const QByteArray& body, const QUrl&) {
-                                     //
-                                     // Удаляем файл отчёта после успешной отправки
-                                     //
-                                     QFile::remove(dmpPath);
-                                 });
+                connect(loader, &NetworkRequest::downloadComplete,
+                        [dmpPath](const QByteArray& _body, const QUrl&) {
+                            Log::info("[BugSplat] Crash report successfuly sent. Result: "
+                                      + _body.simplified());
 
-                QObject::connect(loader, &NetworkRequest::error,
-                                 [dmpPath](const QString& err, const QUrl&) {
-                                     Log::info("BugSplat upload failed: " + err);
-                                 });
+                            //
+                            // Удаляем файл отчёта после успешной отправки
+                            //
+                            QFile::remove(dmpPath);
+                        });
 
-                QObject::connect(loader, &NetworkRequest::finished, &NetworkRequest::deleteLater);
-                loader->loadAsync(url);
+                connect(loader, &NetworkRequest::error, [dmpPath](const QString& err, const QUrl&) {
+                    Log::info("[BugSplat] Crash report uploading failed: " + err);
+                });
+
+                connect(loader, &NetworkRequest::finished, &NetworkRequest::deleteLater);
+
+                loader->loadAsync("https://starc.app/api/services/bugsplat/");
             }
 
             //
@@ -1492,93 +1587,6 @@ void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
     Log::info("Setup design system density");
     Ui::DesignSystem::setDensity(_density);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
-}
-
-bool ApplicationManager::Implementation::initializeCrashpad()
-{
-    CrashpadPaths crashpadPaths;
-    base::FilePath handler(CrashpadPaths::getPlatformString(crashpadPaths.getHandlerPath()));
-    base::FilePath reportsDir(CrashpadPaths::getPlatformString(crashpadPaths.getReportsPath()));
-    base::FilePath metricsDir(CrashpadPaths::getPlatformString(crashpadPaths.getMetricsPath()));
-
-    const QString dbName = bugsplatDatabaseName();
-    const QString appName = bugsplatAppName();
-    QString appVersion = QApplication::applicationVersion();
-#if QT_VERSION_MAJOR == 5
-    appVersion += "-qt5";
-#elif QT_VERSION_MAJOR == 6
-    appVersion += "-qt6";
-#endif
-
-    const QString url = "https://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
-
-    QMap<std::string, std::string> annotations;
-    annotations["format"] = "minidump";
-    annotations["database"] = dbName.toStdString();
-    annotations["product"] = appName.toStdString();
-    annotations["version"] = appVersion.toStdString();
-
-    //
-    // Убираем лимиты по дампам
-    //
-    std::vector<std::string> arguments;
-    arguments.push_back("--no-rate-limit");
-
-    //
-    // Инициализируем базу данных crashpad
-    //
-#if defined(Q_OS_WIN)
-    const QString reportsPath = QString::fromStdWString(reportsDir.value());
-#else
-    const QString reportsPath = QString::fromStdString(reportsDir.value());
-#endif
-    Log::info("Initializing Crashpad database at: %1", reportsPath);
-    std::unique_ptr<crashpad::CrashReportDatabase> database
-        = crashpad::CrashReportDatabase::Initialize(reportsDir);
-    if (database == nullptr) {
-        Log::critical("Failed to initialize Crashpad database");
-        return false;
-    }
-    Log::info("Crashpad database initialized successfully");
-
-    //
-    // Отключаем автоматическую отправку отчетов
-    //
-    crashpad::Settings* settings = database->GetSettings();
-    if (settings == nullptr) {
-        return false;
-    }
-    settings->SetUploadsEnabled(false);
-
-    //
-    // Прикрепляем текущий лог-файл к дампу
-    //
-    std::vector<base::FilePath> attachments;
-    const QString logFilePath = q->logFilePath();
-    if (!logFilePath.isEmpty() && QFile::exists(logFilePath)) {
-#if defined(Q_OS_WIN)
-        attachments.push_back(base::FilePath(logFilePath.toStdWString()));
-#else
-        attachments.push_back(base::FilePath(logFilePath.toStdString()));
-#endif
-        Log::info("Crashpad will attach log file: %1", logFilePath);
-    }
-
-    //
-    // Запускаем crashpad
-    //
-    crashpadClient.reset(new crashpad::CrashpadClient());
-    Log::info("Starting Crashpad handler...");
-    bool status
-        = crashpadClient->StartHandler(handler, reportsDir, metricsDir, url.toStdString(),
-                                       annotations.toStdMap(), arguments, true, false, attachments);
-    if (status) {
-        Log::info("Crashpad handler started successfully");
-    } else {
-        Log::critical("Failed to start Crashpad handler");
-        crashpadClient.reset();
-    }
-    return status;
 }
 
 void ApplicationManager::Implementation::updateWindowTitle(const QString& _projectName)
@@ -2807,7 +2815,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Инициилизируем crashpad
     //
-    d->initializeCrashpad();
+    d->initCrashpad();
 }
 
 ApplicationManager::~ApplicationManager()

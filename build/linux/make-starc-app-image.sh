@@ -45,5 +45,5 @@ cp -R $FLATHUB_DIR $APP_IMAGE_DIR
 #
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
 chmod a+x linuxdeployqt
-./linuxdeployqt appdir/starc -no-copy-copyright-files -no-translations -always-overwrite -exclude-libs=libqsqlmimer,libqsqloci -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration -executable=appdir/plugins/libcoreplugin.so -appimage
+./linuxdeployqt appdir/starc -no-copy-copyright-files -no-translations -always-overwrite -exclude-libs=libqsqlmimer,libqsqloci -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration -executable=appdir/plugins/libcoreplugin.so -appimage -unsupported-allow-new-glibc
 mv *.AppImage starc-setup.AppImage
