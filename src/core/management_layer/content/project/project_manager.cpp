@@ -4576,8 +4576,21 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     // Если обновилась структура, восстановим последний выделенный элемент
     //
     if (document->type() == Domain::DocumentObjectType::Structure) {
+        //
+        // ... сбрасываем индекс активного элемента
+        //
         d->view.activeIndex = {};
+        //
+        // ... восстанавливаем состояние навигатора
+        //
         restoreCurrentProjectState(d->projectPath);
+        //
+        // ... если новый элемент выделен не был, то определим индекс вручную
+        //
+        if (!d->view.activeIndex.isValid()) {
+            d->view.activeIndex
+                = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
+        }
     }
     //
     // Если не структура, а какая-либо из моделей, то обновим представление для неё
