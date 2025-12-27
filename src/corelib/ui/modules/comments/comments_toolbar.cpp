@@ -463,7 +463,7 @@ void CommentsToolbar::showToolbar()
 
 void CommentsToolbar::hideToolbar()
 {
-    if (isHidden()) {
+    if (!isVisible()) {
         return;
     }
 
