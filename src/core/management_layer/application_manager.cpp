@@ -679,7 +679,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 // Прикрепляем лог-файл сессии, когда произошел краш
                 //
                 const QDateTime crashTime = QDateTime::fromSecsSinceEpoch(report.creation_time);
-                const QDir logsDir(q->logFilePath());
+                const QDir logsDir(QFileInfo(q->logFilePath()).absolutePath());
 
                 Log::info(
                     QString("BugSplat: Searching for log file. Crash time: %1, Logs directory: %2")
@@ -1999,6 +1999,8 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
         showProject();
         return false;
     }
+
+    testCrash();
 
     //
     // ... закроем текущий проект
