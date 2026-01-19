@@ -120,6 +120,9 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
 {
     paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
     Q_ASSERT(paragraphType != TextParagraphType::Undefined);
+    if (paragraphType == TextParagraphType::Undefined) {
+        paragraphType = TextParagraphType::UnformattedText;
+    }
 
     auto currentTag = xml::readNextElement(_contentReader);
 
@@ -285,6 +288,8 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     if (isCorrection) {
         return {};
     }
+
+    Q_ASSERT(paragraphType != TextParagraphType::Undefined);
 
     const auto _end = _from + _length;
 

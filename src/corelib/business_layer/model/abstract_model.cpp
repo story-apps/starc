@@ -5,6 +5,7 @@
 
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
+#include <utils/logging.h>
 #include <utils/tools/debouncer.h>
 
 #include <QApplication>
@@ -201,14 +202,15 @@ void AbstractModel::saveChanges()
         return;
     }
 
+    const auto documentContent = d->document->content();
     const auto content = toXml();
     //
-    const QByteArray undoPatch = d->dmpController.makePatch(content, d->document->content());
+    const QByteArray undoPatch = d->dmpController.makePatch(content, documentContent);
     if (undoPatch.isEmpty()) {
         return;
     }
     //
-    const QByteArray redoPatch = d->dmpController.makePatch(d->document->content(), content);
+    const QByteArray redoPatch = d->dmpController.makePatch(documentContent, content);
     if (redoPatch.isEmpty()) {
         return;
     }
@@ -218,7 +220,7 @@ void AbstractModel::saveChanges()
     // если содержимое документа было пустым (как правило это кейс после создания документа),
     // то отменять и нечего, поэтому игнорируем такие изменения
     //
-    const auto needToNotifyAboutContentChanged = !d->document->content().isEmpty();
+    const auto needToNotifyAboutContentChanged = !documentContent.isEmpty();
     d->document->setContent(content);
     if (needToNotifyAboutContentChanged) {
         emit contentsChanged(undoPatch, redoPatch);
@@ -291,7 +293,12 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
         // Если патч не принёс успеха, значит ошибка в наложении изменений
         //
         if (patchedContent.size() == newContent.size() && patchedContent == newContent) {
-            return false;
+            //
+            // ... логгируем и пропускаем патч, чтобы собрать какой-никакой результат
+            //
+            Log::warning("Can't apply patch for document: Patch is\n\n%1\n",
+                         qUtf8Printable(QByteArray::fromPercentEncoding(patch)));
+            continue;
         }
 
         newContent.swap(patchedContent);
