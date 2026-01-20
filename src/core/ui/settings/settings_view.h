@@ -89,7 +89,7 @@ public:
     void setScreenplayEditorSaveItemsFromText(bool _save);
     void setScreenplayEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
-    void setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use);
+    void setScreenplayEditorUseOpenParenthesisInDialogueForParenthetical(bool _use);
     //
     void setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment, bool _inScreenplay);
     void setScreenplayNavigatorShowSceneNumber(bool _show);

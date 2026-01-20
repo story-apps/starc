@@ -538,8 +538,8 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayEditorShowHintsForTertiaryItemsKey, false);
         defaultValues.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              true);
-        defaultValues.insert(kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey,
-                             true);
+        defaultValues.insert(
+            kComponentsScreenplayEditorUseOpenParenthesisInDialogueForParentheticalKey, true);
         //
         // Параметры навигатора сценария
         //

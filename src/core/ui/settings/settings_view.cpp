@@ -388,7 +388,7 @@ public:
     CheckBox* screenplayEditorShowHintsForSecondaryItems = nullptr;
     CheckBox* screenplayEditorShowHintsForTertiaryItems = nullptr;
     CheckBox* screenplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
-    CheckBox* screenplayEditorUseOpenBracketInDialogueForParenthetical = nullptr;
+    CheckBox* screenplayEditorUseOpenParenthesisInDialogueForParenthetical = nullptr;
     //
     // ... Screenplay navigator
     //
@@ -718,7 +718,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowHintsForSecondaryItems(new CheckBox(screenplayCard))
     , screenplayEditorShowHintsForTertiaryItems(new CheckBox(screenplayCard))
     , screenplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(screenplayCard))
-    , screenplayEditorUseOpenBracketInDialogueForParenthetical(new CheckBox(screenplayCard))
+    , screenplayEditorUseOpenParenthesisInDialogueForParenthetical(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
     , screenplayNavigatorShowBeats(new CheckBox(screenplayCard))
     , screenplayNavigatorShowBeatsInTreatment(new CheckBox(screenplayCard))
@@ -1214,7 +1214,7 @@ void SettingsView::Implementation::initScreenplayCard()
     }
     screenplayCardLayout->addWidget(screenplayEditorShowCharacterSuggestionsInEmptyBlock,
                                     itemIndex++, 0);
-    screenplayCardLayout->addWidget(screenplayEditorUseOpenBracketInDialogueForParenthetical,
+    screenplayCardLayout->addWidget(screenplayEditorUseOpenParenthesisInDialogueForParenthetical,
                                     itemIndex++, 0);
     //
     // ... навигатор сценария
@@ -1958,7 +1958,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayEditorShowHintsForSecondaryItems,
                  d->screenplayEditorShowHintsForTertiaryItems,
                  d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
-                 d->screenplayEditorUseOpenBracketInDialogueForParenthetical,
+                 d->screenplayEditorUseOpenParenthesisInDialogueForParenthetical,
                  d->screenplayNavigatorTitle,
                  d->screenplayNavigatorShowBeats,
                  d->screenplayNavigatorShowBeatsInTreatment,
@@ -2133,8 +2133,9 @@ SettingsView::SettingsView(QWidget* _parent)
             notifyScreenplayEditorShowHintsChanged);
     connect(d->screenplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged,
             this, &SettingsView::screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
-    connect(d->screenplayEditorUseOpenBracketInDialogueForParenthetical, &CheckBox::checkedChanged,
-            this, &SettingsView::screenplayEditorUseOpenBracketInDialogueForParentheticalChanged);
+    connect(d->screenplayEditorUseOpenParenthesisInDialogueForParenthetical,
+            &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayEditorUseOpenBracketInDialogueForParentheticalChanged);
     //
     // ... навигатор сценария
     //
@@ -3366,9 +3367,9 @@ void SettingsView::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool 
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setChecked(_show);
 }
 
-void SettingsView::setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use)
+void SettingsView::setScreenplayEditorUseOpenParenthesisInDialogueForParenthetical(bool _use)
 {
-    d->screenplayEditorUseOpenBracketInDialogueForParenthetical->setChecked(_use);
+    d->screenplayEditorUseOpenParenthesisInDialogueForParenthetical->setChecked(_use);
 }
 
 void SettingsView::setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment,
@@ -4229,8 +4230,8 @@ void SettingsView::updateTranslations()
     d->screenplayEditorShowHintsForTertiaryItems->setText(tr("tertiary"));
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
         tr("Show characters suggestions in empty paragraph"));
-    d->screenplayEditorUseOpenBracketInDialogueForParenthetical->setText(
-        tr("Use opening bracket in dialogue to switch to parenthetical"));
+    d->screenplayEditorUseOpenParenthesisInDialogueForParenthetical->setText(
+        tr("Use opening parenthesis in dialogue to switch to parenthetical"));
     d->screenplayNavigatorTitle->setText(tr("Screenplay navigator"));
     d->screenplayNavigatorShowBeats->setText(tr("Show beats"));
     d->screenplayNavigatorShowBeatsInTreatment->setText(tr("in treatment"));
@@ -4618,7 +4619,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorShowHintsForSecondaryItems,
              d->screenplayEditorShowHintsForTertiaryItems,
              d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
-             d->screenplayEditorUseOpenBracketInDialogueForParenthetical,
+             d->screenplayEditorUseOpenParenthesisInDialogueForParenthetical,
              d->screenplayNavigatorShowBeats,
              d->screenplayNavigatorShowBeatsInTreatment,
              d->screenplayNavigatorShowBeatsInScreenplay,

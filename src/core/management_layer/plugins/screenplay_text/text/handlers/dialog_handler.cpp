@@ -242,16 +242,17 @@ void DialogHandler::handleOther(QKeyEvent* _event)
     // ... текст после курсора
     const QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... необходимо ли менять стиль при открытой скобке на ремарку
-    const bool needToCheckOpenBracket
-        = settingsValue(DataStorageLayer::
-                            kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey)
+    const bool needToCheckOpenParenthesis
+        = settingsValue(
+              DataStorageLayer::
+                  kComponentsScreenplayEditorUseOpenParenthesisInDialogueForParentheticalKey)
               .toBool();
 
 
     //
     // Обработка
     //
-    if (needToCheckOpenBracket && cursorBackwardText.endsWith("(") && _event != nullptr
+    if (needToCheckOpenParenthesis && cursorBackwardText.endsWith("(") && _event != nullptr
         && _event->text() == "(") {
         //! Если нажата открывающая скобка
 

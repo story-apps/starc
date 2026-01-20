@@ -213,9 +213,10 @@ void SettingsManager::Implementation::loadScreenplaySettings()
         settingsValue(
             DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)
             .toBool());
-    view->setScreenplayEditorUseOpenBracketInDialogueForParenthetical(
-        settingsValue(DataStorageLayer::
-                          kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey)
+    view->setScreenplayEditorUseOpenParenthesisInDialogueForParenthetical(
+        settingsValue(
+            DataStorageLayer::
+                kComponentsScreenplayEditorUseOpenParenthesisInDialogueForParentheticalKey)
             .toBool());
     //
     view->setScreenplayNavigatorShowBeats(
@@ -2185,12 +2186,12 @@ void SettingsManager::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bo
 
 void SettingsManager::setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use)
 {
-    setSettingsValue(
-        DataStorageLayer::kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey,
-        _use);
+    setSettingsValue(DataStorageLayer::
+                         kComponentsScreenplayEditorUseOpenParenthesisInDialogueForParentheticalKey,
+                     _use);
     emit screenplayEditorChanged(
         { DataStorageLayer::
-              kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey });
+              kComponentsScreenplayEditorUseOpenParenthesisInDialogueForParentheticalKey });
 }
 
 void SettingsManager::setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment,

@@ -226,8 +226,11 @@ const QString kComponentsScreenplayEditorShowHintsForTertiaryItemsKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-hints-for-tertiary-items");
 const QString kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
-const QString kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey
+const QString kComponentsScreenplayEditorUseOpenParenthesisInDialogueForParentheticalKey
     = kComponentsScreenplayEditorKey
+    // в какой-то момент нам подсказали, что brackets это квадратные скобки [ ], поэтому мы
+    // переименовали параметр и методы, но в самой настройке оставим первоначальный вид, чтобы не
+    // ломать для тех, у кого этот параметр уже задан
     + QStringLiteral("/use-open-bracket-in-dialogue-for-parenthetical");
 const QString kComponentsScreenplayEditorShortcutsKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/shortcuts");
