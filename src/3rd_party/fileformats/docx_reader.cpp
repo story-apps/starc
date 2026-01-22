@@ -685,8 +685,6 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
 
 void DocxReader::readText()
 {
-    const bool keepws = (m_xml.attributes().value("xml:space") == QLatin1String("preserve"));
-
     //
     // Иногда попадаются файлы странно оформленными, они внутри могут содержать разный шлак, поэтому
     // будем читать, пока не дойдём до конца текстового блока, а всё лишнее просто игнорируем
@@ -698,9 +696,7 @@ void DocxReader::readText()
             continue;
         }
 
-        if (keepws || !m_xml.isWhitespace()) {
-            text += m_xml.text();
-        }
+        text += m_xml.text();
     } while (!m_xml.isEndElement() || m_xml.qualifiedName() != QLatin1String("w:t"));
 
     if (!text.isEmpty()) {

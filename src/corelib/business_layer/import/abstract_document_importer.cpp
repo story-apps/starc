@@ -22,7 +22,7 @@ namespace {
  * @brief Регулярное выражение для определения блока "Время и место" по наличию слов места
  */
 const QRegularExpression kPlaceContainsChecker(
-    "^(INT|EXT|INT/EXT|ИНТ|НАТ|ИНТ/НАТ|ПАВ|ЭКСТ|ИНТ/ЭКСТ)([.]|[ - ])");
+    "^(INT|EXT|INT/EXT|EXT/INT|ИНТ|НАТ|НАТ/ИНТ|ИНТ/НАТ|ПАВ|ЭКСТ|ИНТ/ЭКСТ)([.]|[ - ])");
 
 /**
  * @brief Регулярное выражение для определения строки, начинающейся с номера
@@ -192,6 +192,16 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
     {
         QTextCursor cursor(&document);
         while (!cursor.atEnd()) {
+            //
+            // ... если нашли заголовок сцены, то смотрим его отступ, это наиболее верный способ
+            //     оценки для более менее стандартных шаблонов сценария
+            //
+            if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
+                blockTextUppercase.contains(kPlaceContainsChecker)) {
+                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
+                break;
+            }
+
             if (minLeftMargin > cursor.blockFormat().leftMargin()) {
                 minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
             }
@@ -325,9 +335,20 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
     {
         QTextCursor cursor(&_document);
         while (!cursor.atEnd()) {
+            //
+            // ... если нашли заголовок сцены, то смотрим его отступ, это наиболее верный способ
+            //     оценки для более менее стандартных шаблонов сценария
+            //
+            if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
+                blockTextUppercase.contains(kPlaceContainsChecker)) {
+                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
+                break;
+            }
+
             if (minLeftMargin > cursor.blockFormat().leftMargin()) {
                 minLeftMargin = cursor.blockFormat().leftMargin();
             }
+
             cursor.movePosition(QTextCursor::NextBlock);
             cursor.movePosition(QTextCursor::EndOfBlock);
         }
