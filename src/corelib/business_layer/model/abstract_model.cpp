@@ -281,6 +281,15 @@ bool AbstractModel::isRedoInProcess() const
 bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
                                          const QVector<QByteArray>& _patches)
 {
+    //
+    // Если в документе на данный момент нет содержимого, то сформируем болванку, для
+    // дальнейшего сохранения изменений она должна быть
+    //
+    if (document()->content().isEmpty()) {
+        reassignContent();
+    }
+
+
     if (_content.isEmpty() && _patches.isEmpty()) {
         return false;
     }
