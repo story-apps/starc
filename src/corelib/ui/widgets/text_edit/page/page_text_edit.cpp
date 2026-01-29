@@ -3952,10 +3952,6 @@ void PageTextEdit::setHorizontalScroll(int _value)
 
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
-    if (isReadOnly()) {
-        return nullptr;
-    }
-
     Q_D(PageTextEdit);
     auto cursor = cursorForPosition(d->correctMousePosition(_position));
     const int startPosition = std::min(textCursor().selectionStart(), textCursor().selectionEnd());
@@ -3969,7 +3965,7 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     }
 
     auto cutAction = new QAction;
-    cutAction->setEnabled(textCursor().hasSelection());
+    cutAction->setEnabled(textCursor().hasSelection() && !isReadOnly());
     cutAction->setText(tr("Cut"));
     cutAction->setIconText(u8"\U000F0190");
     cutAction->setWhatsThis(QKeySequence(QKeySequence::Cut).toString(QKeySequence::NativeText));
@@ -3983,13 +3979,14 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     connect(copyAction, &QAction::triggered, this, &PageTextEdit::copy);
 
     auto pasteAction = new QAction;
+    pasteAction->setEnabled(!isReadOnly());
     pasteAction->setText(tr("Paste"));
     pasteAction->setIconText(u8"\U000F0192");
     pasteAction->setWhatsThis(QKeySequence(QKeySequence::Paste).toString(QKeySequence::NativeText));
     connect(pasteAction, &QAction::triggered, this, &PageTextEdit::paste);
 
     auto deleteAction = new QAction;
-    deleteAction->setEnabled(textCursor().hasSelection());
+    deleteAction->setEnabled(textCursor().hasSelection() && !isReadOnly());
     deleteAction->setText(tr("Delete"));
     deleteAction->setIconText(u8"\U000F01B4");
     connect(deleteAction, &QAction::triggered, this, [this] { textCursor().removeSelectedText(); });
