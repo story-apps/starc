@@ -1111,7 +1111,21 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
         } else {
             const auto posterPath = d->projectPosterPath(projectPath);
             QFile posterFile(posterPath);
-            if (posterFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            //
+            // Если постер не изменился
+            //
+            if (posterFile.exists() && posterFile.size() == _projectInfo.poster.size()) {
+                //
+                // ... ничего не делаем
+                //
+            }
+            //
+            // А если изменился
+            //
+            else if (posterFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                //
+                // ... то сохраним его в файл
+                //
                 posterFile.write(_projectInfo.poster);
                 posterFile.close();
             }
