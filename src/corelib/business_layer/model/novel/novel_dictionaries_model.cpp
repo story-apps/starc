@@ -148,6 +148,8 @@ void NovelDictionariesModel::initDocument()
         return;
     }
 
+    const auto shouldBeInitialized = document()->content().isEmpty();
+
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
@@ -165,7 +167,7 @@ void NovelDictionariesModel::initDocument()
         }
     };
     //
-    {
+    if (!shouldBeInitialized) {
         const auto storyDaysNode = documentNode.firstChildElement(kStoryDaysKey);
         auto storyDayNode = storyDaysNode.firstChildElement();
         while (!storyDayNode.isNull()) {
@@ -178,7 +180,7 @@ void NovelDictionariesModel::initDocument()
         }
     }
     //
-    {
+    if (!shouldBeInitialized) {
         const auto tagsNode = documentNode.firstChildElement(kTagsKey);
         auto tagNode = tagsNode.firstChildElement();
         while (!tagNode.isNull()) {
@@ -190,6 +192,14 @@ void NovelDictionariesModel::initDocument()
             d->tags.emplace(tag, count);
             tagNode = tagNode.nextSiblingElement();
         }
+    }
+
+    //
+    // Т.к. документ справочников не создаётся в рамках структуры проекта, то нужно вручную
+    // применить болванку контента для документа, чтобы далее он мог быть корректно сохранён
+    //
+    if (shouldBeInitialized) {
+        reassignContent();
     }
 }
 

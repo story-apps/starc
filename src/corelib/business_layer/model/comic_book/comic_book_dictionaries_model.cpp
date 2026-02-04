@@ -92,6 +92,8 @@ void ComicBookDictionariesModel::initDocument()
         return;
     }
 
+    const auto shouldBeInitialized = document()->content().isEmpty();
+
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
@@ -130,6 +132,14 @@ void ComicBookDictionariesModel::initDocument()
     const QStringList defaultCharacterExtensions
         = { tr("OFF"), tr("WHISPER"), tr("BURST"), tr("WEAK"), tr("SINGING") };
     fillDictionary(kCharacterExtensionsKey, defaultCharacterExtensions, d->characterExtensions);
+
+    //
+    // Т.к. документ справочников не создаётся в рамках структуры проекта, то нужно вручную
+    // применить болванку контента для документа, чтобы далее он мог быть корректно сохранён
+    //
+    if (shouldBeInitialized) {
+        reassignContent();
+    }
 }
 
 void ComicBookDictionariesModel::clearDocument()
