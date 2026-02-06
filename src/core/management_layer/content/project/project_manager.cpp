@@ -4372,15 +4372,6 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     }
 
     //
-    // Нет смысла продолжать, если в документе нет контента с изменениями,
-    // если это конечно не новый документ
-    //
-    if (_documentInfo.content.isEmpty() && _documentInfo.changes.isEmpty()
-        && document->id().isValid()) {
-        return;
-    }
-
-    //
     // Загрузим модель для документа
     //
     auto documentModel = documentType == Domain::DocumentObjectType::Structure
@@ -4397,6 +4388,40 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     }
 
     //
+    // Загрузим несинхронизированные изменения
+    //
+    const auto unsyncedChanges
+        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
+            document->uuid());
+
+    //
+    // Если в документе нет контента с изменениями
+    //
+    if (_documentInfo.content.isEmpty() && _documentInfo.changes.isEmpty()) {
+        //
+        // ... если это новый документ, то продолжаем логику дальше
+        //
+        if (!document->id().isValid()) {
+            //
+            //
+            //
+        }
+        //
+        // ... если есть несинхронизированные изменения, то запросим отправку изменений
+        //
+        else if (!unsyncedChanges.isEmpty()) {
+            emit contentsChanged(documentModel);
+            return;
+        }
+        //
+        // ... во всех остальных случаях ничего делать не будем
+        //
+        else {
+            return;
+        }
+    }
+
+    //
     // Сохраним изменения документа, которые накопились до момента синхронизации
     //
     documentModel->saveChanges();
@@ -4405,9 +4430,6 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     // Если есть локальные несинхронизированные изменения данного документа, сохраним копию контента
     //
     QByteArray lastDocumentVersion;
-    const auto unsyncedChanges
-        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
-            document->uuid());
     if (!unsyncedChanges.isEmpty()) {
         lastDocumentVersion = document->content();
     }
