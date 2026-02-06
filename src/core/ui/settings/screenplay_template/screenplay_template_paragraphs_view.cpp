@@ -488,6 +488,7 @@ void ScreenplayTemplateParagraphsView::configureTemplateFor(Domain::DocumentObje
             BusinessLayer::TextParagraphType::PanelHeading,
             BusinessLayer::TextParagraphType::Description,
             BusinessLayer::TextParagraphType::Character,
+            BusinessLayer::TextParagraphType::Parenthetical,
             BusinessLayer::TextParagraphType::Dialogue,
             BusinessLayer::TextParagraphType::InlineNote,
             BusinessLayer::TextParagraphType::UnformattedText,

@@ -354,6 +354,9 @@ const QString kComponentsComicBookEditorShowHintsForTertiaryItemsKey
     = kComponentsComicBookEditorKey + QStringLiteral("/show-hints-for-tertiary-items");
 const QString kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsComicBookEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
+const QString kComponentsComicBookEditorUseOpenBracketInDialogueForParentheticalKey
+    = kComponentsComicBookEditorKey
+    + QStringLiteral("/use-open-bracket-in-dialogue-for-parenthetical");
 const QString kComponentsComicBookEditorShortcutsKey
     = kComponentsComicBookEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
