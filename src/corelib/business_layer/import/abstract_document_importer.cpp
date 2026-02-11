@@ -25,6 +25,12 @@ const QRegularExpression kPlaceContainsChecker(
     "^(INT|EXT|INT/EXT|EXT/INT|ИНТ|НАТ|НАТ/ИНТ|ИНТ/НАТ|ПАВ|ЭКСТ|ИНТ/ЭКСТ)([.]|[ - ])");
 
 /**
+ * @brief Регулярное выражение для определения блока "Время и место" по наличию слов времени
+ */
+const QRegularExpression kTimeContainsChecker(
+    "[ ](DAY|NIGHT|LATER|CONTINUES|УТРО|ДЕНЬ|ВЕЧЕР|НОЧЬ)([.]|)$");
+
+/**
  * @brief Регулярное выражение для определения строки, начинающейся с номера
  */
 const QRegularExpression kStartFromNumberChecker(
@@ -197,7 +203,8 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
             //     оценки для более менее стандартных шаблонов сценария
             //
             if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
-                blockTextUppercase.contains(kPlaceContainsChecker)) {
+                blockTextUppercase.contains(kPlaceContainsChecker)
+                || blockTextUppercase.contains(kTimeContainsChecker)) {
                 minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
                 break;
             }
@@ -340,7 +347,8 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             //     оценки для более менее стандартных шаблонов сценария
             //
             if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
-                blockTextUppercase.contains(kPlaceContainsChecker)) {
+                blockTextUppercase.contains(kPlaceContainsChecker)
+                || blockTextUppercase.contains(kTimeContainsChecker)) {
                 minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
                 break;
             }
@@ -561,6 +569,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
         // 1. содержит ключевые сокращения места действия или начинается с номера сцены
         //
         if (blockTextUppercase.contains(kPlaceContainsChecker)
+            || blockTextUppercase.contains(kTimeContainsChecker)
             || blockTextUppercase.contains(kStartFromNumberChecker)) {
             blockType = TextParagraphType::SceneHeading;
         }
