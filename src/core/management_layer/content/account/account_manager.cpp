@@ -134,9 +134,10 @@ void AccountManager::Implementation::initNavigatorConnections()
     connect(navigator, &Ui::AccountNavigator::buyProLifetimePressed, q,
             &AccountManager::buyProLifetme);
     connect(navigator, &Ui::AccountNavigator::renewProPressed, q, &AccountManager::renewPro);
-    connect(navigator, &Ui::AccountNavigator::tryCloudForFreePressed, q,
-            &AccountManager::tryCloudForFree);
-    connect(navigator, &Ui::AccountNavigator::renewCloudPressed, q, &AccountManager::renewCloud);
+    connect(navigator, &Ui::AccountNavigator::tryCreatorForFreePressed, q,
+            &AccountManager::tryCreatorForFree);
+    connect(navigator, &Ui::AccountNavigator::renewCreatorPressed, q,
+            &AccountManager::renewCreator);
     connect(navigator, &Ui::AccountNavigator::buyCreditsPressed, q, &AccountManager::buyCredits);
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
         q->clearAccountInfo();
@@ -294,12 +295,13 @@ void AccountManager::Implementation::initViewConnections()
             });
 
     connect(view, &Ui::AccountView::tryProForFreePressed, q, &AccountManager::tryProForFree);
-    connect(view, &Ui::AccountView::tryCloudForFreePressed, q, &AccountManager::tryCloudForFree);
+    connect(view, &Ui::AccountView::tryCreatorForFreePressed, q,
+            &AccountManager::tryCreatorForFree);
     connect(view, &Ui::AccountView::buyProLifetimePressed, q, &AccountManager::buyProLifetme);
     connect(view, &Ui::AccountView::renewProPressed, q, &AccountManager::renewPro);
     connect(view, &Ui::AccountView::giftProPressed, q, &AccountManager::giftPro);
-    connect(view, &Ui::AccountView::renewCloudPressed, q, &AccountManager::renewCloud);
-    connect(view, &Ui::AccountView::giftCloudPressed, q, &AccountManager::giftCloud);
+    connect(view, &Ui::AccountView::renewCreatorPressed, q, &AccountManager::renewCreator);
+    connect(view, &Ui::AccountView::giftCreatorPressed, q, &AccountManager::giftCreator);
     connect(view, &Ui::AccountView::activatePromocodePressed, q,
             &AccountManager::activatePromocodeRequested);
 
@@ -535,7 +537,7 @@ void AccountManager::upgradeAccountToPro()
     }
 }
 
-void AccountManager::upgradeAccountToCloud()
+void AccountManager::upgradeAccountToCreator()
 {
     //
     // Если ещё не авторизован, то отправим на авторизацию
@@ -547,12 +549,12 @@ void AccountManager::upgradeAccountToCloud()
     // Иначе, покажем диалог с апгрейдом аккаунта
     //
     else {
-        const auto canBeUpdatedForFree = tryCloudForFree();
+        const auto canBeUpdatedForFree = tryCreatorForFree();
         if (canBeUpdatedForFree) {
             return;
         }
 
-        renewCloud();
+        renewCreator();
     }
 }
 
@@ -678,7 +680,7 @@ void AccountManager::giftPro()
     d->purchaseDialog->showDialog();
 }
 
-bool AccountManager::tryCloudForFree()
+bool AccountManager::tryCreatorForFree()
 {
     //
     // Ищем бесплатную активацию
@@ -686,7 +688,7 @@ bool AccountManager::tryCloudForFree()
     Domain::PaymentOption freeOption;
     for (const auto& paymentOption : std::as_const(d->accountInfo.paymentOptions)) {
         if (paymentOption.amount != 0
-            || paymentOption.subscriptionType != Domain::SubscriptionType::CloudMonthly) {
+            || paymentOption.subscriptionType != Domain::SubscriptionType::CreatorMonthly) {
             continue;
         }
 
@@ -701,12 +703,12 @@ bool AccountManager::tryCloudForFree()
         auto dialog = new Dialog(d->view->topLevelWidget());
         dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
         dialog->showDialog(
-            tr("Try CLOUD version for free"),
-            tr("You can try all the features of the CLOUD version during 30 days for free. After "
-               "trial period, you can continue to use the CLOUD version by renewing your "
+            tr("Try CREATOR version for free"),
+            tr("You can try all the features of the CREATOR version during 30 days for free. After "
+               "trial period, you can continue to use the CREATOR version by renewing your "
                "subscription. Otherwise, you'll be returned to the FREE version automatically."),
             { { 0, tr("Continue with FREE version"), Dialog::RejectButton },
-              { 1, tr("Activate CLOUD"), Dialog::AcceptButton } });
+              { 1, tr("Activate CREATOR"), Dialog::AcceptButton } });
         QObject::connect(dialog, &Dialog::finished, this,
                          [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
                              dialog->hideDialog();
@@ -721,18 +723,18 @@ bool AccountManager::tryCloudForFree()
     return false;
 }
 
-void AccountManager::renewCloud()
+void AccountManager::renewCreator()
 {
-    auto cloudPaymentOptions = d->accountInfo.paymentOptions;
-    for (int index = cloudPaymentOptions.size() - 1; index >= 0; --index) {
-        const auto& option = cloudPaymentOptions.at(index);
+    auto creatorPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = creatorPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = creatorPaymentOptions.at(index);
         if (option.amount == 0 || option.type != Domain::PaymentType::Subscription
-            || (option.subscriptionType != Domain::SubscriptionType::CloudMonthly
-                && option.subscriptionType != Domain::SubscriptionType::CloudLifetime)) {
-            cloudPaymentOptions.removeAt(index);
+            || (option.subscriptionType != Domain::SubscriptionType::CreatorMonthly
+                && option.subscriptionType != Domain::SubscriptionType::CreatorLifetime)) {
+            creatorPaymentOptions.removeAt(index);
         }
     }
-    if (cloudPaymentOptions.isEmpty()) {
+    if (creatorPaymentOptions.isEmpty()) {
         return;
     }
 
@@ -741,7 +743,7 @@ void AccountManager::renewCloud()
                        [](const Domain::SubscriptionInfo& _subscription) {
                            return _subscription.type == Domain::SubscriptionType::ProLifetime;
                        });
-    const int discount = cloudPaymentOptions.constFirst().discount;
+    const int discount = creatorPaymentOptions.constFirst().discount;
     QString discountInfo;
     if (hasProLifetime != d->accountInfo.subscriptions.end()) {
         if (discount > 20) {
@@ -760,23 +762,23 @@ void AccountManager::renewCloud()
 
     d->initPurchaseDialog();
     d->purchaseDialog->setDiscountInfo(discountInfo);
-    d->purchaseDialog->setPaymentOptions(cloudPaymentOptions);
-    d->purchaseDialog->selectOption(cloudPaymentOptions.constLast());
+    d->purchaseDialog->setPaymentOptions(creatorPaymentOptions);
+    d->purchaseDialog->selectOption(creatorPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
 }
 
-void AccountManager::giftCloud()
+void AccountManager::giftCreator()
 {
-    auto cloudPaymentOptions = d->accountInfo.paymentOptions;
-    for (int index = cloudPaymentOptions.size() - 1; index >= 0; --index) {
-        const auto& option = cloudPaymentOptions.at(index);
+    auto creatorPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = creatorPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = creatorPaymentOptions.at(index);
         if (option.amount == 0 || option.type != Domain::PaymentType::Subscription
-            || (option.subscriptionType != Domain::SubscriptionType::CloudMonthly
-                && option.subscriptionType != Domain::SubscriptionType::CloudLifetime)) {
-            cloudPaymentOptions.removeAt(index);
+            || (option.subscriptionType != Domain::SubscriptionType::CreatorMonthly
+                && option.subscriptionType != Domain::SubscriptionType::CreatorLifetime)) {
+            creatorPaymentOptions.removeAt(index);
         }
     }
-    if (cloudPaymentOptions.isEmpty()) {
+    if (creatorPaymentOptions.isEmpty()) {
         return;
     }
 
@@ -785,7 +787,7 @@ void AccountManager::giftCloud()
                        [](const Domain::SubscriptionInfo& _subscription) {
                            return _subscription.type == Domain::SubscriptionType::ProLifetime;
                        });
-    const int discount = cloudPaymentOptions.constFirst().discount;
+    const int discount = creatorPaymentOptions.constFirst().discount;
     QString discountInfo;
     if (hasProLifetime != d->accountInfo.subscriptions.end()) {
         if (discount > 20) {
@@ -804,9 +806,9 @@ void AccountManager::giftCloud()
 
     d->initPurchaseDialog();
     d->purchaseDialog->setDiscountInfo(discountInfo);
-    d->purchaseDialog->setPaymentOptions(cloudPaymentOptions);
+    d->purchaseDialog->setPaymentOptions(creatorPaymentOptions);
     d->purchaseDialog->setPurchaseAvailable(false);
-    d->purchaseDialog->selectOption(cloudPaymentOptions.constLast());
+    d->purchaseDialog->selectOption(creatorPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
 }
 

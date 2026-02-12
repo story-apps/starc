@@ -44,8 +44,8 @@ enum class SubscriptionType {
     Free = 0,
     ProMonthly = 1000,
     ProLifetime = 1100,
-    CloudMonthly = 2000,
-    CloudLifetime = 2100,
+    CreatorMonthly = 2000,
+    CreatorLifetime = 2100,
     //
     // Корпоративные
     //

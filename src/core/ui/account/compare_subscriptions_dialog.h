@@ -16,7 +16,7 @@ public:
     /**
      * @brief Задать наличие пожизненных подписок
      */
-    void setLifetimeOptions(bool _hasPro, bool _hasCloud);
+    void setLifetimeOptions(bool _hasPro, bool _hasCreator);
 
     /**
      * @brief Задать подключён ли клиент к сервисе
@@ -50,8 +50,8 @@ signals:
      */
     void purchaseProPressed();
     void giftProPressed();
-    void purchaseCloudPressed();
-    void giftCloudPressed();
+    void purchaseCreatorPressed();
+    void giftCreatorPressed();
 
     /**
      * @brief Пользователь передумал вносить платёж

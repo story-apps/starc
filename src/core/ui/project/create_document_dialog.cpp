@@ -554,7 +554,7 @@ void CreateDocumentDialog::updateTranslations()
     d->importFilePath->setLabel(tr("Choose file for importing"));
     d->importFilePath->setTrailingIconToolTip(tr("Choose file for importing"));
     d->blockedFeatureLabel->setText(
-        tr("Document can be created only with a PRO or CLOUD version of the app."));
+        tr("Document can be created only with a PRO or CREATOR version of the app."));
     d->upgradeToProButton->setText(tr("Upgrade to PRO"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));

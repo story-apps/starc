@@ -27,9 +27,9 @@ public:
     ButtonLabel* proTitle = nullptr;
     Subtitle2Label* proSubtitle = nullptr;
     //
-    IconsMidLabel* cloudTitleIcon = nullptr;
-    ButtonLabel* cloudTitle = nullptr;
-    Subtitle2Label* cloudSubtitle = nullptr;
+    IconsMidLabel* creatorTitleIcon = nullptr;
+    ButtonLabel* creatorTitle = nullptr;
+    Subtitle2Label* creatorSubtitle = nullptr;
     //
     QScrollArea* content = nullptr;
     QGridLayout* contentLayout = nullptr;
@@ -37,8 +37,8 @@ public:
     //
     Button* buyPro = nullptr;
     Button* giftPro = nullptr;
-    Button* buyCloud = nullptr;
-    Button* giftCloud = nullptr;
+    Button* buyCreator = nullptr;
+    Button* giftCreator = nullptr;
     Button* cancelButton = nullptr;
 };
 
@@ -49,22 +49,22 @@ CompareSubscriptionsDialog::Implementation::Implementation(QWidget* _parent)
     , proTitleIcon(new IconsMidLabel(_parent))
     , proTitle(new ButtonLabel(_parent))
     , proSubtitle(new Subtitle2Label(_parent))
-    , cloudTitleIcon(new IconsMidLabel(_parent))
-    , cloudTitle(new ButtonLabel(_parent))
-    , cloudSubtitle(new Subtitle2Label(_parent))
+    , creatorTitleIcon(new IconsMidLabel(_parent))
+    , creatorTitle(new ButtonLabel(_parent))
+    , creatorSubtitle(new Subtitle2Label(_parent))
     , content(UiHelper::createScrollAreaWithGridLayout(_parent))
     , buyPro(new Button(_parent))
     , giftPro(new Button(_parent))
-    , buyCloud(new Button(_parent))
-    , giftCloud(new Button(_parent))
+    , buyCreator(new Button(_parent))
+    , giftCreator(new Button(_parent))
     , cancelButton(new Button(_parent))
 {
     freeTitleIcon->setIcon(u8"\U000F0381");
     freeSubtitle->setAlignment(Qt::AlignCenter);
     proTitleIcon->setIcon(u8"\U000F18BC");
     proSubtitle->setAlignment(Qt::AlignCenter);
-    cloudTitleIcon->setIcon(u8"\U000F015F");
-    cloudSubtitle->setAlignment(Qt::AlignCenter);
+    creatorTitleIcon->setIcon(u8"\U000F0674");
+    creatorSubtitle->setAlignment(Qt::AlignCenter);
     contentLayout = qobject_cast<QGridLayout*>(content->widget()->layout());
 
     new Shadow(Qt::TopEdge, content);
@@ -80,11 +80,11 @@ CompareSubscriptionsDialog::Implementation::Implementation(QWidget* _parent)
         QString text = {};
         bool free = false;
         bool pro = false;
-        bool cloud = false;
+        bool creator = false;
 
         bool isTitle() const
         {
-            return !free && !pro && !cloud;
+            return !free && !pro && !creator;
         }
     };
     const QVector<Row> table = {
@@ -127,6 +127,8 @@ CompareSubscriptionsDialog::Implementation::Implementation(QWidget* _parent)
         { tr("Timeline"), false, true, true },
         { tr("Extended statistics"), false, true, true },
         { tr("Script breakdown"), false, false, true },
+        { tr("Series plan"), false, false, true },
+        { tr("Series statistics"), false, false, true },
         { tr("Comics") },
         { tr("Logline & synopsis"), true, true, true },
         { tr("Title page"), true, true, true },
@@ -188,14 +190,14 @@ CompareSubscriptionsDialog::Implementation::Implementation(QWidget* _parent)
             pro->setIcon(rowData.pro ? u8"\U000F012C" : u8"\U000F0374");
             contentLayout->addWidget(pro, row, 2, Qt::AlignCenter);
             //
-            auto cloud = new IconsMidLabel;
-            cloud->setBackgroundColor(DesignSystem::color().background());
-            cloud->setTextColor(rowData.cloud ? DesignSystem::color().accent()
-                                              : unavailableIconColor);
-            cloud->setIcon(rowData.cloud ? u8"\U000F012C" : u8"\U000F0374");
-            contentLayout->addWidget(cloud, row, 3, Qt::AlignCenter);
+            auto creator = new IconsMidLabel;
+            creator->setBackgroundColor(DesignSystem::color().background());
+            creator->setTextColor(rowData.creator ? DesignSystem::color().accent()
+                                                  : unavailableIconColor);
+            creator->setIcon(rowData.creator ? u8"\U000F012C" : u8"\U000F0374");
+            contentLayout->addWidget(creator, row, 3, Qt::AlignCenter);
 
-            contentWidgets.append({ label, free, pro, cloud });
+            contentWidgets.append({ label, free, pro, creator });
         }
 
         ++row;
@@ -255,14 +257,14 @@ CompareSubscriptionsDialog::CompareSubscriptionsDialog(QWidget* _parent)
         titleLayout->setContentsMargins({});
         titleLayout->setSpacing(0);
         titleLayout->addStretch();
-        titleLayout->addWidget(d->cloudTitleIcon);
-        titleLayout->addWidget(d->cloudTitle, 0, Qt::AlignVCenter);
+        titleLayout->addWidget(d->creatorTitleIcon);
+        titleLayout->addWidget(d->creatorTitle, 0, Qt::AlignVCenter);
         titleLayout->addStretch();
         auto layout = new QVBoxLayout;
         layout->setContentsMargins({});
         layout->setSpacing(0);
         layout->addLayout(titleLayout);
-        layout->addWidget(d->cloudSubtitle, 0, Qt::AlignCenter);
+        layout->addWidget(d->creatorSubtitle, 0, Qt::AlignCenter);
         topLayout->addLayout(layout, 1);
     }
 
@@ -273,8 +275,8 @@ CompareSubscriptionsDialog::CompareSubscriptionsDialog(QWidget* _parent)
     buttonsLayout->addStretch(1);
     buttonsLayout->addWidget(d->buyPro, 1, Qt::AlignCenter);
     buttonsLayout->addWidget(d->giftPro, 1, Qt::AlignCenter);
-    buttonsLayout->addWidget(d->buyCloud, 1, Qt::AlignCenter);
-    buttonsLayout->addWidget(d->giftCloud, 1, Qt::AlignCenter);
+    buttonsLayout->addWidget(d->buyCreator, 1, Qt::AlignCenter);
+    buttonsLayout->addWidget(d->giftCreator, 1, Qt::AlignCenter);
 
     int row = 0;
     contentsLayout()->addLayout(topLayout, row++, 0);
@@ -286,28 +288,30 @@ CompareSubscriptionsDialog::CompareSubscriptionsDialog(QWidget* _parent)
     connect(d->buyPro, &Button::clicked, this, &CompareSubscriptionsDialog::hideDialog);
     connect(d->giftPro, &Button::clicked, this, &CompareSubscriptionsDialog::giftProPressed);
     connect(d->giftPro, &Button::clicked, this, &CompareSubscriptionsDialog::hideDialog);
-    connect(d->buyCloud, &Button::clicked, this, &CompareSubscriptionsDialog::purchaseCloudPressed);
-    connect(d->buyCloud, &Button::clicked, this, &CompareSubscriptionsDialog::hideDialog);
-    connect(d->giftCloud, &Button::clicked, this, &CompareSubscriptionsDialog::giftCloudPressed);
-    connect(d->giftCloud, &Button::clicked, this, &CompareSubscriptionsDialog::hideDialog);
+    connect(d->buyCreator, &Button::clicked, this,
+            &CompareSubscriptionsDialog::purchaseCreatorPressed);
+    connect(d->buyCreator, &Button::clicked, this, &CompareSubscriptionsDialog::hideDialog);
+    connect(d->giftCreator, &Button::clicked, this,
+            &CompareSubscriptionsDialog::giftCreatorPressed);
+    connect(d->giftCreator, &Button::clicked, this, &CompareSubscriptionsDialog::hideDialog);
 }
 
 CompareSubscriptionsDialog::~CompareSubscriptionsDialog() = default;
 
-void CompareSubscriptionsDialog::setLifetimeOptions(bool _hasPro, bool _hasCloud)
+void CompareSubscriptionsDialog::setLifetimeOptions(bool _hasPro, bool _hasCreator)
 {
     d->buyPro->setVisible(!_hasPro);
     d->giftPro->setVisible(_hasPro);
-    d->buyCloud->setVisible(!_hasCloud);
-    d->giftCloud->setVisible(_hasCloud);
+    d->buyCreator->setVisible(!_hasCreator);
+    d->giftCreator->setVisible(_hasCreator);
 }
 
 void CompareSubscriptionsDialog::setConnected(bool _connected)
 {
     d->buyPro->setEnabled(_connected);
     d->giftPro->setEnabled(_connected);
-    d->buyCloud->setEnabled(_connected);
-    d->giftCloud->setEnabled(_connected);
+    d->buyCreator->setEnabled(_connected);
+    d->giftCreator->setEnabled(_connected);
 }
 
 QWidget* CompareSubscriptionsDialog::focusedWidgetAfterShow() const
@@ -317,7 +321,7 @@ QWidget* CompareSubscriptionsDialog::focusedWidgetAfterShow() const
 
 QWidget* CompareSubscriptionsDialog::lastFocusableWidget() const
 {
-    return d->buyCloud;
+    return d->buyCreator;
 }
 
 void CompareSubscriptionsDialog::updateTranslations()
@@ -326,12 +330,12 @@ void CompareSubscriptionsDialog::updateTranslations()
     d->freeSubtitle->setText(tr("For those who are at the beginning of creative journey"));
     d->proTitle->setText("PRO");
     d->proSubtitle->setText(tr("Advanced tools for professionals"));
-    d->cloudTitle->setText("CLOUD");
-    d->cloudSubtitle->setText(tr("For those who are always on the move"));
+    d->creatorTitle->setText("CREATOR");
+    d->creatorSubtitle->setText(tr("The next level tools for unlimited creativity"));
     d->buyPro->setText(tr("Activate"));
     d->giftPro->setText(tr("Buy as a gift"));
-    d->buyCloud->setText(tr("Activate"));
-    d->giftCloud->setText(tr("Buy as a gift"));
+    d->buyCreator->setText(tr("Activate"));
+    d->giftCreator->setText(tr("Buy as a gift"));
     d->cancelButton->setText(tr("Cancel"));
 }
 
@@ -348,8 +352,8 @@ void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent
              d->freeTitle,
              d->proTitleIcon,
              d->proTitle,
-             d->cloudTitleIcon,
-             d->cloudTitle,
+             d->creatorTitleIcon,
+             d->creatorTitle,
          }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
@@ -357,7 +361,7 @@ void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent
     for (auto label : {
              d->freeTitleIcon,
              d->proTitleIcon,
-             d->cloudTitleIcon,
+             d->creatorTitleIcon,
          }) {
         label->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px24(),
                                   DesignSystem::layout().px12(), DesignSystem::layout().px12());
@@ -365,7 +369,7 @@ void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent
     for (auto label : {
              d->freeTitle,
              d->proTitle,
-             d->cloudTitle,
+             d->creatorTitle,
          }) {
         label->setContentsMargins(0, DesignSystem::layout().px24(), DesignSystem::layout().px24(),
                                   DesignSystem::layout().px12());
@@ -374,7 +378,7 @@ void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent
     for (auto label : {
              d->freeSubtitle,
              d->proSubtitle,
-             d->cloudSubtitle,
+             d->creatorSubtitle,
          }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
@@ -386,8 +390,8 @@ void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent
     for (auto button : {
              d->buyPro,
              d->giftPro,
-             d->buyCloud,
-             d->giftCloud,
+             d->buyCreator,
+             d->giftCreator,
          }) {
         UiHelper::initColorsFor(button, UiHelper::DialogAccept);
         button->setContentsMargins(0, DesignSystem::layout().px12(), 0,

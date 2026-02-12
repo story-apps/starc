@@ -210,9 +210,9 @@ signals:
     void renewProPressed();
 
     /**
-     * @brief Пользователь нажал кнопку продления CLOUD версии
+     * @brief Пользователь нажал кнопку продления CREATOR версии
      */
-    void renewTeamPressed();
+    void renewCreatorPressed();
 
 protected:
     /**

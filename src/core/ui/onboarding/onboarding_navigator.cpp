@@ -932,7 +932,7 @@ void OnboardingNavigator::updateTranslations()
     d->uiContinueButton->setText(tr("Continue"));
 
     d->signInTitle->setText(
-        tr("Sign in to get access to the extended\nFREE, PRO and CLOUD features"));
+        tr("Sign in to get access to the extended\nFREE, PRO and CREATOR features"));
     d->signInSubtitle->setText(tr("Such as writing sprints, writing statistics, worldbuilding "
                                   "tools, story development tools, collaboration and more"));
     d->signInEmail->setLabel(tr("Email"));

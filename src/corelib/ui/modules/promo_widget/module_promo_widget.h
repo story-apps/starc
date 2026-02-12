@@ -46,7 +46,7 @@ public:
      */
     /** @{ */
     void setupProVersionContent(ModulePromoType _forType);
-    void setupCloudVersionContent(ModulePromoType _forType);
+    void setupCreatorVersionContent(ModulePromoType _forType);
     /** @} */
 
 signals:

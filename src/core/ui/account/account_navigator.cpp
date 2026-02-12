@@ -46,7 +46,7 @@ public:
      * @brief Обновить текст лейбла окончания подписки
      */
     void updateProSubtitleLabel();
-    void updateCloudSubtitleLabel();
+    void updateCreatorSubtitleLabel();
     void updateStudioSubtitleLabel();
     void updateCampusSubtitleLabel();
     void updateCreditsSubtitleLabel();
@@ -60,7 +60,7 @@ public:
     quint64 cloudStorageSize = 0;
     quint64 cloudStorageSizeUsed = 0;
     QDateTime proSubscriptionEnds;
-    QDateTime cloudSubscriptionEnds;
+    QDateTime creatorSubscriptionEnds;
     QDateTime studioSubscriptionEnds;
     QDateTime campusSubscriptionEnds;
     int creditsAvailable = 0;
@@ -84,13 +84,13 @@ public:
     Button* tryProButton = nullptr;
     Button* renewProSubscriptionButton = nullptr;
 
-    IconsMidLabel* cloudTitleIcon = nullptr;
-    ButtonLabel* cloudTitle = nullptr;
-    ProgressBar* cloudSpaceStats = nullptr;
-    Subtitle2Label* cloudSpaceInfo = nullptr;
-    Subtitle2Label* cloudSubtitle = nullptr;
-    Button* tryCloudButton = nullptr;
-    Button* renewCloudSubscriptionButton = nullptr;
+    IconsMidLabel* creatorTitleIcon = nullptr;
+    ButtonLabel* creatorTitle = nullptr;
+    ProgressBar* creatorSpaceStats = nullptr;
+    Subtitle2Label* creatorSpaceInfo = nullptr;
+    Subtitle2Label* creatorSubtitle = nullptr;
+    Button* tryCreatorButton = nullptr;
+    Button* renewCreatorSubscriptionButton = nullptr;
 
     IconsMidLabel* studioTitleIcon = nullptr;
     ButtonLabel* studioTitle = nullptr;
@@ -148,13 +148,13 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     , tryProButton(new Button(accountPage))
     , renewProSubscriptionButton(new Button(accountPage))
     //
-    , cloudTitleIcon(new IconsMidLabel(accountPage))
-    , cloudTitle(new ButtonLabel(accountPage))
-    , cloudSpaceStats(new ProgressBar(accountPage))
-    , cloudSpaceInfo(new Subtitle2Label(accountPage))
-    , cloudSubtitle(new Subtitle2Label(accountPage))
-    , tryCloudButton(new Button(accountPage))
-    , renewCloudSubscriptionButton(new Button(accountPage))
+    , creatorTitleIcon(new IconsMidLabel(accountPage))
+    , creatorTitle(new ButtonLabel(accountPage))
+    , creatorSpaceStats(new ProgressBar(accountPage))
+    , creatorSpaceInfo(new Subtitle2Label(accountPage))
+    , creatorSubtitle(new Subtitle2Label(accountPage))
+    , tryCreatorButton(new Button(accountPage))
+    , renewCreatorSubscriptionButton(new Button(accountPage))
     //
     , studioTitleIcon(new IconsMidLabel(accountPage))
     , studioTitle(new ButtonLabel(accountPage))
@@ -211,7 +211,7 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
 
     freeTitleIcon->setIcon(u8"\U000F0381");
     proTitleIcon->setIcon(u8"\U000F18BC");
-    cloudTitleIcon->setIcon(u8"\U000F015F");
+    creatorTitleIcon->setIcon(u8"\U000F0674");
     studioTitleIcon->setIcon(u8"\U000F0381");
     campusTitleIcon->setIcon(u8"\U000F0474");
     creditsTitleIcon->setIcon(u8"\U000F133C");
@@ -248,15 +248,15 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
         layout->setSpacing(0);
-        layout->addWidget(cloudTitleIcon);
-        layout->addWidget(cloudTitle, 1);
+        layout->addWidget(creatorTitleIcon);
+        layout->addWidget(creatorTitle, 1);
         accountLayout->addLayout(layout, row++, 2);
     }
-    accountLayout->addWidget(cloudSpaceStats, row++, 2);
-    accountLayout->addWidget(cloudSpaceInfo, row++, 2);
-    accountLayout->addWidget(cloudSubtitle, row++, 2);
-    accountLayout->addWidget(tryCloudButton, row++, 2);
-    accountLayout->addWidget(renewCloudSubscriptionButton, row++, 2);
+    accountLayout->addWidget(creatorSpaceStats, row++, 2);
+    accountLayout->addWidget(creatorSpaceInfo, row++, 2);
+    accountLayout->addWidget(creatorSubtitle, row++, 2);
+    accountLayout->addWidget(tryCreatorButton, row++, 2);
+    accountLayout->addWidget(renewCreatorSubscriptionButton, row++, 2);
     //
     {
         auto layout = new QHBoxLayout;
@@ -356,20 +356,20 @@ void AccountNavigator::Implementation::updateProSubtitleLabel()
             : tr("Active until %1").arg(proSubscriptionEnds.toString("dd.MM.yyyy")));
 }
 
-void AccountNavigator::Implementation::updateCloudSubtitleLabel()
+void AccountNavigator::Implementation::updateCreatorSubtitleLabel()
 {
     if (cloudStorageSize > 0) {
-        cloudSpaceStats->setProgress(cloudStorageSizeUsed / static_cast<qreal>(cloudStorageSize));
+        creatorSpaceStats->setProgress(cloudStorageSizeUsed / static_cast<qreal>(cloudStorageSize));
         const qreal divider = 1024. * 1024. * 1024.;
-        cloudSpaceInfo->setText(
+        creatorSpaceInfo->setText(
             tr("Used %1 GB from %2 GB")
                 .arg(QString::number(static_cast<qreal>(cloudStorageSizeUsed) / divider, 'f', 2),
                      QString::number(static_cast<qreal>(cloudStorageSize) / divider, 'f', 2)));
     }
-    cloudSubtitle->setText(
-        cloudSubscriptionEnds.isNull()
+    creatorSubtitle->setText(
+        creatorSubscriptionEnds.isNull()
             ? tr("Lifetime access")
-            : tr("Active until %1").arg(cloudSubscriptionEnds.toString("dd.MM.yyyy")));
+            : tr("Active until %1").arg(creatorSubscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 void AccountNavigator::Implementation::updateStudioSubtitleLabel()
@@ -471,9 +471,10 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     connect(d->tryProButton, &Button::clicked, this, &AccountNavigator::tryProForFreePressed);
     connect(d->renewProSubscriptionButton, &Button::clicked, this,
             &AccountNavigator::renewProPressed);
-    connect(d->tryCloudButton, &Button::clicked, this, &AccountNavigator::tryCloudForFreePressed);
-    connect(d->renewCloudSubscriptionButton, &Button::clicked, this,
-            &AccountNavigator::renewCloudPressed);
+    connect(d->tryCreatorButton, &Button::clicked, this,
+            &AccountNavigator::tryCreatorForFreePressed);
+    connect(d->renewCreatorSubscriptionButton, &Button::clicked, this,
+            &AccountNavigator::renewCreatorPressed);
     connect(d->buyCreditsButton, &Button::clicked, this, &AccountNavigator::buyCreditsPressed);
     connect(d->logoutButton, &Button::clicked, this, &AccountNavigator::logoutPressed);
     //
@@ -538,8 +539,8 @@ void AccountNavigator::setConnected(bool _connected)
 {
     d->tryProButton->setEnabled(_connected);
     d->renewProSubscriptionButton->setEnabled(_connected);
-    d->tryCloudButton->setEnabled(_connected);
-    d->renewCloudSubscriptionButton->setEnabled(_connected);
+    d->tryCreatorButton->setEnabled(_connected);
+    d->renewCreatorSubscriptionButton->setEnabled(_connected);
     d->buyCreditsButton->setEnabled(_connected);
     //
     d->teamsOwner->setContextMenuPolicy(_connected ? Qt::CustomContextMenu : Qt::NoContextMenu);
@@ -561,13 +562,13 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     d->tryProButton->hide();
     d->renewProSubscriptionButton->hide();
     //
-    d->cloudTitleIcon->show();
-    d->cloudTitle->show();
-    d->cloudSpaceStats->hide();
-    d->cloudSpaceInfo->hide();
-    d->cloudSubtitle->hide();
-    d->tryCloudButton->hide();
-    d->renewCloudSubscriptionButton->hide();
+    d->creatorTitleIcon->show();
+    d->creatorTitle->show();
+    d->creatorSpaceStats->hide();
+    d->creatorSpaceInfo->hide();
+    d->creatorSubtitle->hide();
+    d->tryCreatorButton->hide();
+    d->renewCreatorSubscriptionButton->hide();
     //
     d->studioTitleIcon->hide();
     d->studioTitle->hide();
@@ -588,8 +589,8 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     //
     bool hasProSubscription = false;
     bool hasProLifetime = false;
-    bool hasCloudSubscription = false;
-    bool hasCloudLifetime = false;
+    bool hasCreatorSubscription = false;
+    bool hasCreatorLifetime = false;
     bool hasStudio = false;
     bool hasCampus = false;
     d->cloudStorageSize = _account.cloudStorageSize;
@@ -628,23 +629,23 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             break;
         }
 
-        case Domain::SubscriptionType::CloudMonthly: {
-            hasCloudSubscription = true;
+        case Domain::SubscriptionType::CreatorMonthly: {
+            hasCreatorSubscription = true;
 
             d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
             //
-            d->cloudSubscriptionEnds = subscription.end;
-            d->updateCloudSubtitleLabel();
-            d->cloudSpaceStats->show();
-            d->cloudSpaceInfo->show();
-            d->cloudSubtitle->show();
+            d->creatorSubscriptionEnds = subscription.end;
+            d->updateCreatorSubtitleLabel();
+            d->creatorSpaceStats->show();
+            d->creatorSpaceInfo->show();
+            d->creatorSubtitle->show();
             break;
         }
 
-        case Domain::SubscriptionType::CloudLifetime: {
-            hasCloudLifetime = true;
+        case Domain::SubscriptionType::CreatorLifetime: {
+            hasCreatorLifetime = true;
 
             d->freeTitleIcon->hide();
             d->freeTitle->hide();
@@ -653,11 +654,11 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             d->proTitle->hide();
             d->proSubtitle->hide();
             //
-            d->cloudSubscriptionEnds = {};
-            d->updateCloudSubtitleLabel();
-            d->cloudSpaceStats->show();
-            d->cloudSpaceInfo->show();
-            d->cloudSubtitle->show();
+            d->creatorSubscriptionEnds = {};
+            d->updateCreatorSubtitleLabel();
+            d->creatorSpaceStats->show();
+            d->creatorSpaceInfo->show();
+            d->creatorSubtitle->show();
             break;
         }
 
@@ -670,12 +671,12 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             d->proTitleIcon->hide();
             d->proTitle->hide();
             d->proSubtitle->hide();
-            d->cloudTitleIcon->hide();
-            d->cloudTitle->hide();
-            d->cloudSubtitle->hide();
-            d->cloudSpaceStats->hide();
-            d->cloudSpaceInfo->hide();
-            d->cloudSubtitle->hide();
+            d->creatorTitleIcon->hide();
+            d->creatorTitle->hide();
+            d->creatorSubtitle->hide();
+            d->creatorSpaceStats->hide();
+            d->creatorSpaceInfo->hide();
+            d->creatorSubtitle->hide();
             //
             d->studioSubscriptionEnds = subscription.end;
             d->updateStudioSubtitleLabel();
@@ -698,12 +699,12 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             d->proTitleIcon->hide();
             d->proTitle->hide();
             d->proSubtitle->hide();
-            d->cloudTitleIcon->hide();
-            d->cloudTitle->hide();
-            d->cloudSubtitle->hide();
-            d->cloudSpaceStats->hide();
-            d->cloudSpaceInfo->hide();
-            d->cloudSubtitle->hide();
+            d->creatorTitleIcon->hide();
+            d->creatorTitle->hide();
+            d->creatorSubtitle->hide();
+            d->creatorSpaceStats->hide();
+            d->creatorSpaceInfo->hide();
+            d->creatorSubtitle->hide();
             //
             d->campusSubscriptionEnds = subscription.end;
             d->updateCampusSubtitleLabel();
@@ -728,7 +729,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         // ... настроим заголовки и кнопки в зависимости от доступных опций оплат
         //
         bool isProTrialAvailable = false;
-        bool isCloudoTrialAvailable = false;
+        bool isCreatorTrialAvailable = false;
         for (const auto& paymentOption : _account.paymentOptions) {
             switch (paymentOption.subscriptionType) {
             case Domain::SubscriptionType::ProMonthly: {
@@ -741,12 +742,12 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
                 break;
             }
 
-            case Domain::SubscriptionType::CloudMonthly: {
+            case Domain::SubscriptionType::CreatorMonthly: {
                 if (paymentOption.amount == 0) {
-                    isCloudoTrialAvailable = true;
-                    d->tryCloudButton->show();
+                    isCreatorTrialAvailable = true;
+                    d->tryCreatorButton->show();
                 } else {
-                    d->renewCloudSubscriptionButton->show();
+                    d->renewCreatorSubscriptionButton->show();
                 }
                 break;
             }
@@ -763,20 +764,20 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         if (isProTrialAvailable) {
             d->renewProSubscriptionButton->hide();
         }
-        if (isCloudoTrialAvailable) {
-            d->renewCloudSubscriptionButton->hide();
+        if (isCreatorTrialAvailable) {
+            d->renewCreatorSubscriptionButton->hide();
         }
 
         //
         // Если активна только какая-то одна подписка, то оставим интерфейс только для неё
         //
-        if (hasProSubscription && !hasCloudSubscription && !hasCloudLifetime) {
-            d->cloudTitleIcon->hide();
-            d->cloudTitle->hide();
-            d->cloudSubtitle->hide();
-            d->tryCloudButton->hide();
-            d->renewCloudSubscriptionButton->hide();
-        } else if (!hasProSubscription && !hasProLifetime && hasCloudSubscription) {
+        if (hasProSubscription && !hasCreatorSubscription && !hasCreatorLifetime) {
+            d->creatorTitleIcon->hide();
+            d->creatorTitle->hide();
+            d->creatorSubtitle->hide();
+            d->tryCreatorButton->hide();
+            d->renewCreatorSubscriptionButton->hide();
+        } else if (!hasProSubscription && !hasProLifetime && hasCreatorSubscription) {
             d->proTitleIcon->hide();
             d->proTitle->hide();
             d->proSubtitle->hide();
@@ -791,9 +792,9 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             d->tryProButton->hide();
             d->renewProSubscriptionButton->hide();
         }
-        if (hasCloudLifetime) {
-            d->tryCloudButton->hide();
-            d->renewCloudSubscriptionButton->hide();
+        if (hasCreatorLifetime) {
+            d->tryCreatorButton->hide();
+            d->renewCreatorSubscriptionButton->hide();
         }
     }
 
@@ -876,10 +877,10 @@ void AccountNavigator::updateTranslations()
     d->updateProSubtitleLabel();
     d->tryProButton->setText(tr("Try for free"));
     d->renewProSubscriptionButton->setText(tr("Activate"));
-    d->cloudTitle->setText(tr("CLOUD version"));
-    d->updateCloudSubtitleLabel();
-    d->tryCloudButton->setText(tr("Try for free"));
-    d->renewCloudSubscriptionButton->setText(tr("Activate"));
+    d->creatorTitle->setText(tr("CREATOR version"));
+    d->updateCreatorSubtitleLabel();
+    d->tryCreatorButton->setText(tr("Try for free"));
+    d->renewCreatorSubscriptionButton->setText(tr("Activate"));
     d->studioTitle->setText(tr("STUDIO version"));
     d->updateStudioSubtitleLabel();
     d->campusTitle->setText(tr("CAMPUS version"));
@@ -922,7 +923,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto icon : {
              d->freeTitleIcon,
              d->proTitleIcon,
-             d->cloudTitleIcon,
+             d->creatorTitleIcon,
              d->studioTitleIcon,
              d->campusTitleIcon,
              d->creditsTitleIcon,
@@ -938,7 +939,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto title : {
              d->freeTitle,
              d->proTitle,
-             d->cloudTitle,
+             d->creatorTitle,
              d->studioTitle,
              d->campusTitle,
              d->creditsTitle,
@@ -955,8 +956,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto subtitle : {
              d->freeSubtitle,
              d->proSubtitle,
-             d->cloudSpaceInfo,
-             d->cloudSubtitle,
+             d->creatorSpaceInfo,
+             d->creatorSubtitle,
              d->studioSpaceInfo,
              d->studioSubtitle,
              d->campusSpaceInfo,
@@ -987,8 +988,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto button : {
              d->tryProButton,
              d->renewProSubscriptionButton,
-             d->tryCloudButton,
-             d->renewCloudSubscriptionButton,
+             d->tryCreatorButton,
+             d->renewCreatorSubscriptionButton,
              d->buyCreditsButton,
              d->logoutButton,
              d->addTeamButton,
@@ -997,8 +998,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         button->setTextColor(DesignSystem::color().accent());
     }
 
-    d->cloudSpaceStats->setBackgroundColor(DesignSystem::color().primary());
-    d->cloudSpaceStats->setContentsMargins(
+    d->creatorSpaceStats->setBackgroundColor(DesignSystem::color().primary());
+    d->creatorSpaceStats->setContentsMargins(
         DesignSystem::layout().px16(), DesignSystem::compactLayout().px16(),
         DesignSystem::layout().px24(), DesignSystem::compactLayout().px4());
     d->studioSpaceStats->setBackgroundColor(DesignSystem::color().primary());

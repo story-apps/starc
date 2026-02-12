@@ -2718,8 +2718,8 @@ void ApplicationManager::initConnections()
     //
     connect(d->menuView, &Ui::MenuView::renewProPressed, d->accountManager.data(),
             &AccountManager::renewPro);
-    connect(d->menuView, &Ui::MenuView::renewTeamPressed, d->accountManager.data(),
-            &AccountManager::renewCloud);
+    connect(d->menuView, &Ui::MenuView::renewCreatorPressed, d->accountManager.data(),
+            &AccountManager::renewCreator);
 
     //
     // Менеджер посадки
@@ -2808,7 +2808,7 @@ void ApplicationManager::initConnections()
     connect(d->projectsManager.data(), &ProjectsManager::signInRequested, d->accountManager.data(),
             &AccountManager::signIn);
     connect(d->projectsManager.data(), &ProjectsManager::renewTeamSubscriptionRequested,
-            d->accountManager.data(), &AccountManager::renewCloud);
+            d->accountManager.data(), &AccountManager::renewCreator);
     connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this,
             [this] { d->createProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::createLocalProjectRequested, this,
@@ -2839,8 +2839,8 @@ void ApplicationManager::initConnections()
             [this] { d->showMenu(); });
     connect(d->projectManager.data(), &ProjectManager::upgradeToProRequested,
             d->accountManager.data(), &AccountManager::upgradeAccountToPro);
-    connect(d->projectManager.data(), &ProjectManager::upgradeToCloudRequested,
-            d->accountManager.data(), &AccountManager::upgradeAccountToCloud);
+    connect(d->projectManager.data(), &ProjectManager::upgradeToCreatorRequested,
+            d->accountManager.data(), &AccountManager::upgradeAccountToCreator);
     connect(d->projectManager.data(), &ProjectManager::buyCreditsRequested,
             d->accountManager.data(), &AccountManager::buyCredits);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
@@ -3396,7 +3396,7 @@ void ApplicationManager::initConnections()
                         return;
                     }
 
-                    d->accountManager->renewCloud();
+                    d->accountManager->renewCreator();
                 });
             QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
         } else {

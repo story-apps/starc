@@ -62,7 +62,7 @@ public:
      * @brief Проапгрейдить учётную любым из способов
      */
     void upgradeAccountToPro();
-    void upgradeAccountToCloud();
+    void upgradeAccountToCreator();
 
     /**
      * @brief Активировать бесплатный период для ПРО
@@ -79,13 +79,13 @@ public:
     /**
      * @brief Активировать бесплатный период для ПРО
      */
-    bool tryCloudForFree();
+    bool tryCreatorForFree();
 
     /**
      * @brief Оплатить ПРО версию
      */
-    void renewCloud();
-    void giftCloud();
+    void renewCreator();
+    void giftCreator();
 
     /**
      * @brief Докупить кредиты

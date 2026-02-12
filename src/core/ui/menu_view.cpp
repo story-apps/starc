@@ -481,7 +481,7 @@ void MenuView::setNotifications(const QVector<Domain::Notification>& _notificati
         case Domain::NotificationType::TeamSubscriptionEnds: {
             auto view = new SubscriptionView(this, notification);
             connect(view, &SubscriptionView::renewProPressed, this, &MenuView::renewProPressed);
-            connect(view, &SubscriptionView::renewTeamPressed, this, &MenuView::renewTeamPressed);
+            connect(view, &SubscriptionView::renewCreatorPressed, this, &MenuView::renewCreatorPressed);
             notificationView = view;
             break;
         }

@@ -66,7 +66,7 @@ public:
     H5Label* subscriptionsTitle = nullptr;
     Body1LinkLabel* compareSubscriptions = nullptr;
     SubscriptionWidget* proSubscription = nullptr;
-    SubscriptionWidget* cloudSubscription = nullptr;
+    SubscriptionWidget* creatorSubscription = nullptr;
 
     Card* promocodeInfo = nullptr;
     QGridLayout* promocodeInfoLayout = nullptr;
@@ -98,7 +98,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionsTitle(new H5Label(accountPage))
     , compareSubscriptions(new Body1LinkLabel(accountPage))
     , proSubscription(new SubscriptionWidget(accountPage))
-    , cloudSubscription(new SubscriptionWidget(accountPage))
+    , creatorSubscription(new SubscriptionWidget(accountPage))
     //
     , promocodeInfo(new Card(accountPage))
     , promocodeInfoLayout(new QGridLayout)
@@ -147,7 +147,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     accountContentLayout->addWidget(compareSubscriptions, row++, 1,
                                     Qt::AlignRight | Qt::AlignBottom);
     accountContentLayout->addWidget(proSubscription, row, 0);
-    accountContentLayout->addWidget(cloudSubscription, row++, 1);
+    accountContentLayout->addWidget(creatorSubscription, row++, 1);
     accountContentLayout->addWidget(promocodeInfo, row++, 0, 1, 2);
     accountContentLayout->addWidget(sessionsTitle, row++, 0, 1, 2);
     accountContentLayout->setColumnStretch(0, 1);
@@ -238,16 +238,16 @@ AccountView::AccountView(QWidget* _parent)
     connect(d->compareSubscriptions, &Body1LinkLabel::clicked, this, [this] {
         auto dialog = new CompareSubscriptionsDialog(topLevelWidget());
         dialog->setLifetimeOptions(d->proSubscription->isLifetime(),
-                                   d->cloudSubscription->isLifetime());
+                                   d->creatorSubscription->isLifetime());
         dialog->setConnected(d->isConnected);
         connect(dialog, &CompareSubscriptionsDialog::purchaseProPressed, this,
                 &AccountView::renewProPressed);
         connect(dialog, &CompareSubscriptionsDialog::giftProPressed, this,
                 &AccountView::giftProPressed);
-        connect(dialog, &CompareSubscriptionsDialog::purchaseCloudPressed, this,
-                &AccountView::renewCloudPressed);
-        connect(dialog, &CompareSubscriptionsDialog::giftCloudPressed, this,
-                &AccountView::giftCloudPressed);
+        connect(dialog, &CompareSubscriptionsDialog::purchaseCreatorPressed, this,
+                &AccountView::renewCreatorPressed);
+        connect(dialog, &CompareSubscriptionsDialog::giftCreatorPressed, this,
+                &AccountView::giftCreatorPressed);
         connect(dialog, &CompareSubscriptionsDialog::disappeared, dialog,
                 &CompareSubscriptionsDialog::deleteLater);
         dialog->showDialog();
@@ -260,12 +260,12 @@ AccountView::AccountView(QWidget* _parent)
             &AccountView::buyProLifetimePressed);
     connect(d->proSubscription, &SubscriptionWidget::giftPressed, this,
             &AccountView::giftProPressed);
-    connect(d->cloudSubscription, &SubscriptionWidget::tryPressed, this,
-            &AccountView::tryCloudForFreePressed);
-    connect(d->cloudSubscription, &SubscriptionWidget::buyPressed, this,
-            &AccountView::renewCloudPressed);
-    connect(d->cloudSubscription, &SubscriptionWidget::giftPressed, this,
-            &AccountView::giftCloudPressed);
+    connect(d->creatorSubscription, &SubscriptionWidget::tryPressed, this,
+            &AccountView::tryCreatorForFreePressed);
+    connect(d->creatorSubscription, &SubscriptionWidget::buyPressed, this,
+            &AccountView::renewCreatorPressed);
+    connect(d->creatorSubscription, &SubscriptionWidget::giftPressed, this,
+            &AccountView::giftCreatorPressed);
 
     connect(d->promocodeName, &TextField::textChanged, d->promocodeName,
             [this] { d->promocodeName->setError({}); });
@@ -328,7 +328,7 @@ void AccountView::setConnected(bool _connected)
     d->newsletterSubscription->setEnabled(d->isConnected);
     d->avatar->setEnabled(d->isConnected);
     d->proSubscription->setEnabled(d->isConnected);
-    d->cloudSubscription->setEnabled(d->isConnected);
+    d->creatorSubscription->setEnabled(d->isConnected);
     d->promocodeName->setEnabled(d->isConnected);
     d->activatePromocode->setEnabled(d->isConnected);
     //
@@ -387,7 +387,7 @@ void AccountView::setSubscriptions(const QVector<Domain::SubscriptionInfo>& _sub
     bool isLifetime = true;
     bool isSecondary = true;
     d->proSubscription->setStatus(!isActive, !isLifetime, !isSecondary, {});
-    d->cloudSubscription->setStatus(!isActive, !isLifetime, !isSecondary, {});
+    d->creatorSubscription->setStatus(!isActive, !isLifetime, !isSecondary, {});
 
     for (const auto& subscription : _subscriptions) {
         switch (subscription.type) {
@@ -399,8 +399,9 @@ void AccountView::setSubscriptions(const QVector<Domain::SubscriptionInfo>& _sub
             d->proSubscription->setStatus(isActive, isLifetime, !isSecondary, {});
             break;
         }
-        case Domain::SubscriptionType::CloudMonthly: {
-            d->cloudSubscription->setStatus(isActive, !isLifetime, !isSecondary, subscription.end);
+        case Domain::SubscriptionType::CreatorMonthly: {
+            d->creatorSubscription->setStatus(isActive, !isLifetime, !isSecondary,
+                                              subscription.end);
             //
             // Когда активна клауд, считаем, что и про тоже активна
             //
@@ -409,8 +410,8 @@ void AccountView::setSubscriptions(const QVector<Domain::SubscriptionInfo>& _sub
             }
             break;
         }
-        case Domain::SubscriptionType::CloudLifetime: {
-            d->cloudSubscription->setStatus(isActive, isLifetime, !isSecondary, {});
+        case Domain::SubscriptionType::CreatorLifetime: {
+            d->creatorSubscription->setStatus(isActive, isLifetime, !isSecondary, {});
             //
             // Когда активна клауд, считаем, что и про тоже активна навсегда
             //
@@ -428,18 +429,18 @@ void AccountView::setSubscriptions(const QVector<Domain::SubscriptionInfo>& _sub
 
 void AccountView::setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions)
 {
-    QVector<Domain::PaymentOption> pro, cloud;
+    QVector<Domain::PaymentOption> pro, creator;
     for (const auto& option : _paymentOptions) {
         if (option.subscriptionType == Domain::SubscriptionType::ProMonthly
             || option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
             pro.append(option);
-        } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
-                   || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
-            cloud.append(option);
+        } else if (option.subscriptionType == Domain::SubscriptionType::CreatorMonthly
+                   || option.subscriptionType == Domain::SubscriptionType::CreatorLifetime) {
+            creator.append(option);
         }
     }
     d->proSubscription->setPaymentOptions(pro);
-    d->cloudSubscription->setPaymentOptions(cloud);
+    d->creatorSubscription->setPaymentOptions(creator);
 }
 
 void AccountView::clearPromocode()
@@ -536,12 +537,13 @@ void AccountView::updateTranslations()
                                    "• Timeline\n"
                                    "• Mind maps\n"
                                    "• and more writer's tools..."));
-    d->cloudSubscription->setInfo("CLOUD",
-                                  tr("For those who are always on the move\n"
-                                     "• 5GB cloud storage\n"
-                                     "• Seamless synchronization across all your devices\n"
-                                     "• Realtime collaboration\n"
-                                     "• Production tools"));
+    d->creatorSubscription->setInfo("CREATOR",
+                                    tr("The next level tools for unlimited creativity\n"
+                                       "• 5GB cloud storage\n"
+                                       "• Seamless synchronization across all your devices\n"
+                                       "• Realtime collaboration\n"
+                                       "• Showrunner tools\n"
+                                       "• Production tools"));
     d->sessionsTitle->setText(tr("Active sessions"));
     d->promocodeName->setLabel(tr("Promotional or gift code"));
     d->activatePromocode->setText(tr("Activate"));

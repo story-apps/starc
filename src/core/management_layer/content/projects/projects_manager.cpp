@@ -284,7 +284,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                          &Dialog::deleteLater);
                     }
                     //
-                    // Если у пользователя нет активной подписки на CLOUD версию,
+                    // Если у пользователя нет активной подписки на версию с облаком,
                     // покажем соответствующее уведомление с предложением обновиться
                     //
                     else if (!d->canCreateCloudProject) {
@@ -292,7 +292,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                         dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
                         dialog->showDialog({},
                                            tr("To move a project to the cloud, you need to upgrade "
-                                              "to the CLOUD version."),
+                                              "to the CREATOR version."),
                                            { { 0, tr("Maybe later"), Dialog::RejectButton },
                                              { 1, tr("Upgrade"), Dialog::AcceptButton } });
                         QObject::connect(dialog, &Dialog::finished, this,
@@ -666,8 +666,8 @@ void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized,
                                                      Domain::SubscriptionType _subscritionType)
 {
     d->isUserAuthorized = _authorized;
-    d->canCreateCloudProject = _subscritionType == Domain::SubscriptionType::CloudMonthly
-        || _subscritionType == Domain::SubscriptionType::CloudLifetime
+    d->canCreateCloudProject = _subscritionType == Domain::SubscriptionType::CreatorMonthly
+        || _subscritionType == Domain::SubscriptionType::CreatorLifetime
         || _subscritionType == Domain::SubscriptionType::Studio
         || _subscritionType == Domain::SubscriptionType::Campus;
 

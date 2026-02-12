@@ -150,7 +150,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         = (d->option.subscriptionType == Domain::SubscriptionType::ProMonthly
            || d->option.subscriptionType == Domain::SubscriptionType::ProLifetime)
         ? "PRO"
-        : "CLOUD";
+        : "CREATOR";
     const auto paymentMethodsTitle = tr("Pay with:");
     const auto regularPrice = PriceHelper::adoptPriceLabel(
         QString("$%1").arg(PriceHelper::adoptPrice(d->option.amount / 100.0), 0, 'f', 2));

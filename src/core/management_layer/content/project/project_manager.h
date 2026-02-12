@@ -248,7 +248,7 @@ signals:
      * @brief Запрос на апгрейд аккаунта из одного из плагинов
      */
     void upgradeToProRequested();
-    void upgradeToCloudRequested();
+    void upgradeToCreatorRequested();
 
     /**
      * @brief Запрос на покупку кредитов из одного из плагинов

@@ -78,7 +78,7 @@ void SubscriptionView::Implementation::setupView()
     if (daysLeft < -1) {
         title = tr("Cloud projects removal");
         body = tr("Your Story Architect cloud projects will be removed tomorrow if you don't "
-                  "renew CLOUD subscription.");
+                  "renew CREATOR subscription.");
     }
     //
     // Подписка закончилась
@@ -88,8 +88,8 @@ void SubscriptionView::Implementation::setupView()
         body = notification.type == Domain::NotificationType::ProSubscriptionEnds
             ? tr("Your PRO version subscription is expired. Account is switched to the FREE "
                  "version.")
-            : tr("Your CLOUD version subscription is expired. Your cloud projects will be stored "
-                 "for 30 days and then removed if you don't reactivate CLOUD subscription.");
+            : tr("Your CREATOR version subscription is expired. Your cloud projects will be stored "
+                 "for 30 days and then removed if you don't reactivate CREATOR subscription.");
     }
     //
     // Последний день подписки
@@ -98,7 +98,7 @@ void SubscriptionView::Implementation::setupView()
         title = tr("Subscription ends");
         body = notification.type == Domain::NotificationType::ProSubscriptionEnds
             ? tr("Your PRO version subscription expires today.")
-            : tr("Your CLOUD version subscription expires today.");
+            : tr("Your CREATOR version subscription expires today.");
     }
     //
     // Подписка скоро закончится
@@ -107,7 +107,7 @@ void SubscriptionView::Implementation::setupView()
         title = tr("Subscription ends");
         body = notification.type == Domain::NotificationType::ProSubscriptionEnds
             ? tr("Your PRO version subscription expires in %n day(s).", "", std::max(1, daysLeft))
-            : tr("Your CLOUD version subscription expires in %n day(s).", "",
+            : tr("Your CREATOR version subscription expires in %n day(s).", "",
                  std::max(1, daysLeft));
     }
     //
@@ -118,7 +118,7 @@ void SubscriptionView::Implementation::setupView()
         body = notification.type == Domain::NotificationType::ProSubscriptionEnds
             ? tr("Your PRO version subscription active until %1.")
                   .arg(endDateTime.toString("dd.MM.yyyy"))
-            : tr("Your CLOUD version subscription active until %1.")
+            : tr("Your CREATOR version subscription active until %1.")
                   .arg(endDateTime.toString("dd.MM.yyyy"));
         isButtonVisible = false;
     }
@@ -129,7 +129,7 @@ void SubscriptionView::Implementation::setupView()
         title = tr("Subscription renewed");
         body = notification.type == Domain::NotificationType::ProSubscriptionEnds
             ? tr("Your PRO version lifetime subscription activated.")
-            : tr("Your CLOUD version lifetime subscription activated.");
+            : tr("Your CREATOR version lifetime subscription activated.");
         isButtonVisible = false;
     }
 
@@ -171,7 +171,7 @@ SubscriptionView::SubscriptionView(QWidget* _parent, const Domain::Notification&
         }
 
         case Domain::NotificationType::TeamSubscriptionEnds: {
-            emit renewTeamPressed();
+            emit renewCreatorPressed();
             break;
         }
 

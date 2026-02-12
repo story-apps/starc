@@ -67,7 +67,7 @@ public:
     Button* purchase = nullptr;
 
     /**
-     * @brief Рекламируем PRO версию (true) или CLOUD (false)
+     * @brief Рекламируем PRO версию (true) или CREATOR (false)
      */
     bool isPromoteProVersion = true;
 
@@ -464,7 +464,7 @@ void ModulePromoWidget::setupProVersionContent(ModulePromoType _forType)
     designSystemChangeEvent(nullptr);
 }
 
-void ModulePromoWidget::setupCloudVersionContent(ModulePromoType _forType)
+void ModulePromoWidget::setupCreatorVersionContent(ModulePromoType _forType)
 {
     if (_forType == ModulePromoType::Undefined) {
         return;
@@ -491,13 +491,13 @@ void ModulePromoWidget::setupCloudVersionContent(ModulePromoType _forType)
             break;
         }
         default: {
-            return tr("Subscribe to CLOUD version and get advanced features that speed up and "
+            return tr("Subscribe to CREATOR version and get advanced features that speed up and "
                       "simplify your work");
         }
         }
 
         return QString("%1 %2 %3")
-            .arg(tr("Subscribe to CLOUD version and unlock access to the"), componentName,
+            .arg(tr("Subscribe to CREATOR version and unlock access to the"), componentName,
                  tr("and other advanced features that speed up and simplify your work"));
     };
 
@@ -513,10 +513,10 @@ void ModulePromoWidget::setupCloudVersionContent(ModulePromoType _forType)
     }
     d->updatePreviewUi(d->previewModules.indexOf(d->preview->currentWidget()));
 
-    d->title->setText(tr("Activate CLOUD"));
+    d->title->setText(tr("Activate CREATOR"));
 
     d->advancedVersionIcon->setIcon(u8"\U000F18BC");
-    d->advancedVersionTitle->setText(tr("Get access to all features with a CLOUD subscription"));
+    d->advancedVersionTitle->setText(tr("Get access to all features with a CREATOR subscription"));
     d->advancedVersionDescription->setText(advancedVersionDescription());
 
     d->clearOptions();
@@ -525,7 +525,7 @@ void ModulePromoWidget::setupCloudVersionContent(ModulePromoType _forType)
     d->addOption(tr("Showrunner tools (series plan, series statistics)"));
     d->addOption(tr("Plus everything from the PRO version"));
 
-    d->purchase->setText(tr("Become a CLOUD user"));
+    d->purchase->setText(tr("Become a CREATOR user"));
 
     designSystemChangeEvent(nullptr);
 }
@@ -542,7 +542,7 @@ void ModulePromoWidget::updateTranslations()
     if (d->isPromoteProVersion) {
         setupProVersionContent(d->promoteType);
     } else {
-        setupCloudVersionContent(d->promoteType);
+        setupCreatorVersionContent(d->promoteType);
     }
 }
 

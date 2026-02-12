@@ -141,7 +141,7 @@ public:
     // /**
     //  * @brief Пользователь хочет проапгрейдить свой аккаунт
     //  */
-    // void upgradeToCloudRequested();
+    // void upgradeToCreatorRequested();
 
     // /**
     //  * @brief Запрос на создание документа заданного типа
