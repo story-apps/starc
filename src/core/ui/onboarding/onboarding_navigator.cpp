@@ -827,6 +827,8 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     connect(d->socialTelegramButton, &IconButton::clicked, this, [] {
         QDesktopServices::openUrl(QUrl(QLocale().language() == QLocale::Russian
                                                || QLocale().language() == QLocale::Belarusian
+                                               || QLocale().language() == QLocale::Ukrainian
+                                               || QLocale().language() == QLocale::Kazakh
                                            ? "https://t.me/starcapp_ru"
                                            : "https://t.me/starcapp"));
     });

@@ -149,8 +149,8 @@ QWidget* AboutApplicationDialog::lastFocusableWidget() const
 void AboutApplicationDialog::updateTranslations()
 {
     d->isRussianSpeaking = QLocale().language() == QLocale::Russian
-        || QLocale().language() == QLocale::Belarusian
-        || QLocale().language() == QLocale::Ukrainian;
+        || QLocale().language() == QLocale::Belarusian || QLocale().language() == QLocale::Ukrainian
+        || QLocale().language() == QLocale::Kazakh;
     d->twitterButton->setVisible(!d->isRussianSpeaking);
     d->discordButton->setVisible(!d->isRussianSpeaking);
     d->vkButton->setVisible(d->isRussianSpeaking);
