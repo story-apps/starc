@@ -38,6 +38,7 @@ signals:
     void componentsStageplayPressed();
     void componentsNovelPressed();
     void shortcutsPressed();
+    void advancedPressed();
 
     /**
      * @brief Пользователь хочет сбросить настройки до заводских

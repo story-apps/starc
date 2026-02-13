@@ -25,6 +25,7 @@ constexpr int kComponentsAudioplayIndex = 3;
 constexpr int kComponentsStageplayIndex = 4;
 constexpr int kComponentsNovelIndex = 5;
 constexpr int kShortcutsIndex = 2;
+constexpr int kAdvancedIndex = 3;
 } // namespace
 
 
@@ -65,6 +66,7 @@ SettingsNavigator::Implementation::Implementation(QWidget* _parent)
     componentsItem->appendRow(createItem(u8"\U000F05DA"));
     model->appendRow(componentsItem);
     model->appendRow(createItem(u8"\U000f030c"));
+    model->appendRow(createItem(u8"\U000F066A"));
     tree->setModel(model);
     tree->setCurrentIndex(model->index(0, 0));
     tree->expandAll();
@@ -166,6 +168,10 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
                 emit shortcutsPressed();
                 break;
             }
+            case kAdvancedIndex: {
+                emit advancedPressed();
+                break;
+            }
             default: {
                 break;
             }
@@ -208,6 +214,7 @@ void SettingsNavigator::updateTranslations()
     model->item(kComponentsIndex)->child(kComponentsStageplayIndex)->setText(tr("Stageplay"));
     model->item(kComponentsIndex)->child(kComponentsNovelIndex)->setText(tr("Novel"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
+    model->item(kAdvancedIndex)->setText(tr("Advanced"));
 
     d->resetToDefaults->setText(tr("Reset to defaults"));
 }

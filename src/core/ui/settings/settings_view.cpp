@@ -256,6 +256,11 @@ public:
     void initShortcutsCard();
 
     /**
+     * @brief Настроить карточку экспериментальных опций
+     */
+    void initAdvancedCard();
+
+    /**
      * @brief Проскролить представление до заданного виджета
      */
     void scrollToTitle(AbstractLabel* title);
@@ -635,6 +640,14 @@ public:
     ComboBoxItemDelegate* novelParagraphChangeTypeDelegate = nullptr;
     //
     int shortcutsCardBottomSpacerIndex = 0;
+
+    //
+    // Advanced options
+    //
+    Card* advancedCard = nullptr;
+    QGridLayout* advancedCardLayout = nullptr;
+    H5Label* advancedTitle = nullptr;
+    CheckBox* advancedUseExtendedLogging = nullptr;
 };
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
@@ -897,6 +910,11 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
           new ComboBoxItemDelegate(shortcutsForNovel, novelParagraphTypesModel))
     , novelParagraphChangeTypeDelegate(
           new ComboBoxItemDelegate(shortcutsForNovel, novelParagraphTypesModel))
+    //
+    , advancedCard(new Card(content))
+    , advancedCardLayout(new QGridLayout)
+    , advancedTitle(new H5Label(advancedCard))
+    , advancedUseExtendedLogging(new CheckBox(advancedCard))
 {
     scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
     scrollAnimation.setDuration(180);
@@ -911,6 +929,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     initStageplayCard();
     initNovelCard();
     initShortcutsCard();
+    initAdvancedCard();
 
     auto layout = qobject_cast<QVBoxLayout*>(content->widget()->layout());
     layout->addWidget(applicationCard);
@@ -922,6 +941,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(stageplayCard);
     layout->addWidget(novelCard);
     layout->addWidget(shortcutsCard);
+    layout->addWidget(advancedCard);
     layout->addStretch();
 }
 
@@ -1658,6 +1678,20 @@ void SettingsView::Implementation::initShortcutsCard()
     //
     shortcutsCardBottomSpacerIndex = itemIndex;
     shortcutsCard->setContentLayout(shortcutsCardLayout);
+}
+
+void SettingsView::Implementation::initAdvancedCard()
+{
+    //
+    // Компоновка
+    //
+    applicationCardLayout->setContentsMargins({});
+    applicationCardLayout->setSpacing(0);
+    int itemIndex = 0;
+    advancedCardLayout->addWidget(advancedTitle, itemIndex++, 0);
+    advancedCardLayout->addWidget(advancedUseExtendedLogging, itemIndex++, 0);
+    //
+    advancedCard->setContentLayout(advancedCardLayout);
 }
 
 void SettingsView::Implementation::scrollToTitle(AbstractLabel* title)
@@ -2978,6 +3012,12 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // Соединения шорткатов настраиваются в момент установки моделей с данными о них в представление
     //
+
+    //
+    // Соединения дополнительных параметров
+    //
+    connect(d->advancedUseExtendedLogging, &CheckBox::checkedChanged, this,
+            &SettingsView::advancedUseExtendedLoggingChanged);
 }
 
 void SettingsView::showDefaultPage()
@@ -3048,6 +3088,11 @@ void SettingsView::showComponentsNovel()
 void SettingsView::showShortcuts()
 {
     d->scrollToTitle(d->shortcutsTitle);
+}
+
+void SettingsView::showAdvanced()
+{
+    d->scrollToTitle(d->advancedTitle);
 }
 
 void SettingsView::setApplicationLanguage(int _language)
@@ -4018,6 +4063,11 @@ void SettingsView::setShortcutsForNovelModel(HierarchicalModel* _model)
         });
 }
 
+void SettingsView::setAdvancedUseExtendedLogging(bool _use)
+{
+    d->advancedUseExtendedLogging->setChecked(_use);
+}
+
 void SettingsView::resizeEvent(QResizeEvent* _event)
 {
     StackWidget::resizeEvent(_event);
@@ -4447,6 +4497,9 @@ void SettingsView::updateTranslations()
     buildNovelParagraphTypesModel(d->shortcutsForNovel, d->novelParagraphTypesModel);
     d->novelParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
     d->novelParagraphChangeTypeDelegate->setLabel(tr("Change to"));
+    //
+    d->advancedTitle->setText(tr("Advanced settings"));
+    d->advancedUseExtendedLogging->setText(tr("Collect extended logs"));
 }
 
 SettingsView::~SettingsView() = default;
@@ -4478,6 +4531,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->stageplayCard,
              d->novelCard,
              d->shortcutsCard,
+             d->advancedCard,
          }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
@@ -4521,6 +4575,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->shortcutsForAudioplayTitle,
              d->shortcutsForStageplayTitle,
              d->shortcutsForNovelTitle,
+             d->advancedTitle,
          }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
@@ -4658,6 +4713,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              //
              d->novelNavigatorShowSceneText,
              d->novelNavigatorCounterType,
+             //
+             d->advancedUseExtendedLogging,
          }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());

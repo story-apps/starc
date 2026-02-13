@@ -6,6 +6,7 @@
 #include <data_layer/mapper/mapper_facade.h>
 #include <data_layer/mapper/settings_mapper.h>
 #include <ui/design_system/design_system.h>
+#include <utils/logging.h>
 
 #include <QDir>
 #include <QKeySequence>
@@ -118,6 +119,7 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationAiAssistantEnabledKey, true);
     defaultValues.insert(kApplicationShortcutsImportKey, "Alt+I");
     defaultValues.insert(kApplicationShortcutsCurrentDocumentExportKey, "Alt+E");
+    defaultValues.insert(kApplicationLoggingLevelKey, static_cast<int>(Log::Level::Debug));
 
     defaultValues.insert(kProjectTypeKey, 0);
     defaultValues.insert(kProjectSaveFolderKey,

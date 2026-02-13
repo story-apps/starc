@@ -41,6 +41,7 @@ public:
     void showComponentsStageplay();
     void showComponentsNovel();
     void showShortcuts();
+    void showAdvanced();
 
     //
     // Задание параметров приложения
@@ -170,6 +171,11 @@ public:
     void setShortcutsForAudioplayModel(HierarchicalModel* _model);
     void setShortcutsForStageplayModel(HierarchicalModel* _model);
     void setShortcutsForNovelModel(HierarchicalModel* _model);
+
+    //
+    // Задание экспериментальных параметров
+    //
+    void setAdvancedUseExtendedLogging(bool _use);
 
 signals:
     /**
@@ -376,6 +382,11 @@ signals:
     void shortcutsForNovelEditorChanged(const QString& _blockType, const QString& _shortcut,
                                         const QString& _jumpByTab, const QString& _jumpByEnter,
                                         const QString& _changeByTab, const QString& _changeByEnter);
+
+    //
+    // Уведомления об изменении экспериментальных параметров
+    //
+    void advancedUseExtendedLoggingChanged(bool _use);
 
 protected:
     /**

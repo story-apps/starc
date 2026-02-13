@@ -91,6 +91,11 @@ signals:
     void novelNavigatorChanged();
 
     /**
+     * @brief Изменились расширенные параметры приложения
+     */
+    void advancedUseExtendingLoggingChanged(bool _use);
+
+    /**
      * @brief Пользователь хочет сбросить настройки к заводским
      */
     void resetToDefaultsRequested();
@@ -249,6 +254,11 @@ private:
     void setShortcutsForNovelEdit(const QString& _blockType, const QString& _shortcut,
                                   const QString& _jumpByTab, const QString& _jumpByEnter,
                                   const QString& _changeByTab, const QString& _changeByEnter);
+
+    //
+    // Сохранение расширенных параметров
+    //
+    void setAdvancedUseExtendedLogging(bool _use);
 
 private:
     class Implementation;

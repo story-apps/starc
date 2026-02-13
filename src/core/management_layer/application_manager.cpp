@@ -115,6 +115,11 @@ public:
     ~Implementation();
 
     /**
+     * @brief Настроить логгирование
+     */
+    void initLogging();
+
+    /**
      * @brief Настроить док-меню
      */
     void initDockMenu();
@@ -445,6 +450,33 @@ ApplicationManager::Implementation::~Implementation()
          }) {
         object->disconnect();
     }
+}
+
+void ApplicationManager::Implementation::initLogging()
+{
+    const auto logFilePath
+        = QString("%1/starc/logs/%2.log")
+              .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                   PlatformHelper::systemSavebleFileName(
+                       QDateTime::currentDateTime().toString(Qt::ISODateWithMs)));
+    const auto loggingLevel =
+#if defined(QT_DEBUG) || (defined(DEV_BUILD) && DEV_BUILD > 0)
+        Log::Level::Trace;
+#else
+        static_cast<Log::Level>(
+            settingsValue(DataStorageLayer::kApplicationLoggingLevelKey).toInt());
+#endif
+    Log::init(loggingLevel, logFilePath);
+
+    QString applicationVersion = "0.8.1";
+#if defined(DEV_BUILD) && DEV_BUILD > 0
+    applicationVersion += QString(" dev %1").arg(DEV_BUILD);
+#endif
+    QApplication::setApplicationVersion(applicationVersion);
+
+    Log::info("%1 version %2, %3, %4", QApplication::applicationName(),
+              QApplication::applicationVersion(), QSysInfo().prettyProductName(),
+              QSysInfo().currentCpuArchitecture());
 }
 
 void ApplicationManager::Implementation::initDockMenu()
@@ -2312,28 +2344,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Первым делом настраиваем сбор логов
     //
-    const auto logFilePath
-        = QString("%1/logs/%2.log")
-              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
-                   PlatformHelper::systemSavebleFileName(
-                       QDateTime::currentDateTime().toString(Qt::ISODateWithMs)));
-    const auto loggingLevel =
-#if defined(QT_DEBUG) || (defined(DEV_BUILD) && DEV_BUILD > 0)
-        Log::Level::Trace;
-#else
-        Log::Level::Debug;
-#endif
-    Log::init(loggingLevel, logFilePath);
-
-    QString applicationVersion = "0.8.1";
-#if defined(DEV_BUILD) && DEV_BUILD > 0
-    applicationVersion += QString(" dev %1").arg(DEV_BUILD);
-#endif
-    QApplication::setApplicationVersion(applicationVersion);
-
-    Log::info("%1 version %2, %3, %4", QApplication::applicationName(),
-              QApplication::applicationVersion(), QSysInfo().prettyProductName(),
-              QSysInfo().currentCpuArchitecture());
+    d->initLogging();
 
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
@@ -3021,6 +3032,9 @@ void ApplicationManager::initConnections()
             });
     connect(d->settingsManager.data(), &SettingsManager::novelNavigatorChanged, this,
             [this] { d->projectManager->reconfigureNovelNavigator(); });
+    //
+    connect(d->settingsManager.data(), &SettingsManager::advancedUseExtendingLoggingChanged, this,
+            [this] { d->initLogging(); });
     //
     connect(d->settingsManager.data(), &SettingsManager::resetToDefaultsRequested, this, [this] {
         //

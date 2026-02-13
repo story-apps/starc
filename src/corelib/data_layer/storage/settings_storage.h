@@ -106,6 +106,11 @@ const QString kApplicationShortcutsKey = kApplicationGroupKey + "/shortcuts";
 const QString kApplicationShortcutsImportKey = kApplicationShortcutsKey + "/import";
 const QString kApplicationShortcutsCurrentDocumentExportKey
     = kApplicationShortcutsKey + "/current-document-export";
+//
+// логгирование
+const QString kApplicationLoggingKey = kApplicationGroupKey + "/logging";
+// уровень логгирования
+const QString kApplicationLoggingLevelKey = kApplicationLoggingKey + "/level";
 
 //
 // Аккаунт

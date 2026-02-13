@@ -26,6 +26,7 @@
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
 #include <utils/helpers/shortcuts_helper.h>
+#include <utils/logging.h>
 
 #include <QApplication>
 #include <QDir>
@@ -82,6 +83,14 @@ public:
     void loadShortcutsForStageplaySettings();
     void loadShortcutsForNovelSettings();
 
+    /**
+     * @brief Загрузить дополнительные параметры
+     */
+    void loadAdvancedSettings();
+
+    /**
+     * @brief Перезагрузкить все настройки
+     */
     void reloadSettings();
 
 
@@ -877,11 +886,19 @@ void SettingsManager::Implementation::loadShortcutsForNovelSettings()
     view->setShortcutsForNovelModel(model);
 }
 
+void SettingsManager::Implementation::loadAdvancedSettings()
+{
+    view->setAdvancedUseExtendedLogging(
+        settingsValue(DataStorageLayer::kApplicationLoggingLevelKey).toInt()
+        == static_cast<int>(Log::Level::Trace));
+}
+
 void SettingsManager::Implementation::reloadSettings()
 {
     loadApplicationSettings();
     loadComponentsSettings();
     loadShortcutsSettings();
+    loadAdvancedSettings();
 }
 
 
@@ -926,6 +943,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &Ui::SettingsView::showComponentsNovel);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view,
             &Ui::SettingsView::showShortcuts);
+    connect(d->navigator, &Ui::SettingsNavigator::advancedPressed, d->view,
+            &Ui::SettingsView::showAdvanced);
     connect(d->navigator, &Ui::SettingsNavigator::resetToDefaultsPressed, this, [this] {
         auto dialog = new Dialog(d->view->topLevelWidget());
         const int kCancelButtonId = 0;
@@ -1643,6 +1662,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setShortcutsForStageplayEdit);
     connect(d->view, &Ui::SettingsView::shortcutsForNovelEditorChanged, this,
             &SettingsManager::setShortcutsForNovelEdit);
+
+    //
+    // Дополнительные параметры
+    //
+    connect(d->view, &Ui::SettingsView::advancedUseExtendedLoggingChanged, this,
+            &SettingsManager::setAdvancedUseExtendedLogging);
 }
 
 SettingsManager::~SettingsManager() = default;
@@ -2635,6 +2660,13 @@ void SettingsManager::setShortcutsForNovelEdit(const QString& _blockType, const 
     ShortcutsHelper::setNovelChangeByEnter(
         blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
     emit novelEditorChanged({ DataStorageLayer::kComponentsNovelEditorShortcutsKey });
+}
+
+void SettingsManager::setAdvancedUseExtendedLogging(bool _use)
+{
+    setSettingsValue(DataStorageLayer::kApplicationLoggingLevelKey,
+                     static_cast<int>(_use ? Log::Level::Trace : Log::Level::Debug));
+    emit advancedUseExtendingLoggingChanged(_use);
 }
 
 } // namespace ManagementLayer
