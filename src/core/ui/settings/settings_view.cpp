@@ -4499,7 +4499,7 @@ void SettingsView::updateTranslations()
     d->novelParagraphChangeTypeDelegate->setLabel(tr("Change to"));
     //
     d->advancedTitle->setText(tr("Advanced settings"));
-    d->advancedUseExtendedLogging->setText(tr("Collect extended logs"));
+    d->advancedUseExtendedLogging->setText(tr("Collect extended logs about application operation"));
 }
 
 SettingsView::~SettingsView() = default;
