@@ -204,7 +204,8 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
             //
             if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
                 blockTextUppercase.contains(kPlaceContainsChecker)
-                || blockTextUppercase.contains(kTimeContainsChecker)) {
+                || blockTextUppercase.contains(kTimeContainsChecker)
+                || blockTextUppercase.contains(kStartFromNumberChecker)) {
                 minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
                 break;
             }
@@ -348,7 +349,8 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             //
             if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
                 blockTextUppercase.contains(kPlaceContainsChecker)
-                || blockTextUppercase.contains(kTimeContainsChecker)) {
+                || blockTextUppercase.contains(kTimeContainsChecker)
+                || blockTextUppercase.contains(kStartFromNumberChecker)) {
                 minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
                 break;
             }
