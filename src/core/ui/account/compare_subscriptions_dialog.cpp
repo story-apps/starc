@@ -331,7 +331,7 @@ void CompareSubscriptionsDialog::updateTranslations()
     d->proTitle->setText("PRO");
     d->proSubtitle->setText(tr("Advanced tools for professionals"));
     d->creatorTitle->setText("CREATOR");
-    d->creatorSubtitle->setText(tr("The next level tools for unlimited creativity"));
+    d->creatorSubtitle->setText(tr("The next level tools for storytelling and collaboration"));
     d->buyPro->setText(tr("Activate"));
     d->giftPro->setText(tr("Buy as a gift"));
     d->buyCreator->setText(tr("Activate"));

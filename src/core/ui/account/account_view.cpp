@@ -538,7 +538,7 @@ void AccountView::updateTranslations()
                                    "• Mind maps\n"
                                    "• and more writer's tools..."));
     d->creatorSubscription->setInfo("CREATOR",
-                                    tr("The next level tools for unlimited creativity\n"
+                                    tr("The next level tools for storytelling and collaboration\n"
                                        "• 5GB cloud storage\n"
                                        "• Seamless synchronization across all your devices\n"
                                        "• Realtime collaboration\n"
