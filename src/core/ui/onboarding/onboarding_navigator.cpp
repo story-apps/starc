@@ -15,12 +15,14 @@
 #include <ui/widgets/toggle/toggle.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/ui_helper.h>
 #include <utils/tools/debouncer.h>
 #include <utils/validators/email_validator.h>
 
 #include <QBoxLayout>
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QScrollArea>
 #include <QStandardItemModel>
 #include <QStandardPaths>
 #include <QTimer>
@@ -110,6 +112,7 @@ public:
     ApplicationTheme selectedTheme = ApplicationTheme::Light;
 
     Widget* uiPage = nullptr;
+    QScrollArea* uiPageContainer = nullptr;
     ImageLabel* uiLogo = nullptr;
     H6Label* uiTitle = nullptr;
     Body2Label* uiSubtitle = nullptr;
@@ -180,6 +183,7 @@ public:
     Button* styleChooseContinueButton = nullptr;
 
     Widget* aiPage = nullptr;
+    QScrollArea* aiPageContainer = nullptr;
     ImageLabel* aiLogo = nullptr;
     H6Label* aiTitle = nullptr;
     Body2Label* aiSubtitle = nullptr;
@@ -189,6 +193,7 @@ public:
     Button* aiContinueButton = nullptr;
 
     Widget* backupsPage = nullptr;
+    QScrollArea* backupsPageContainer = nullptr;
     ImageLabel* backupsLogo = nullptr;
     H6Label* backupsTitle = nullptr;
     Body2Label* backupsSubtitle = nullptr;
@@ -196,6 +201,7 @@ public:
     Button* backupsContinueButton = nullptr;
 
     Widget* socialPage = nullptr;
+    QScrollArea* socialPageContainer = nullptr;
     ImageLabel* socialLogo = nullptr;
     H6Label* socialTitle = nullptr;
     Body2Label* socialSubtitle = nullptr;
@@ -211,21 +217,22 @@ public:
 OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     : q(_q)
     , uiPage(new Widget(q))
-    , uiLogo(new ImageLabel(uiPage))
-    , uiTitle(new H6Label(uiPage))
-    , uiSubtitle(new Body2Label(uiPage))
-    , uiLanguage(new ComboBox(uiPage))
+    , uiPageContainer(UiHelper::createScrollArea(uiPage))
+    , uiLogo(new ImageLabel(uiPageContainer))
+    , uiTitle(new H6Label(uiPageContainer))
+    , uiSubtitle(new Body2Label(uiPageContainer))
+    , uiLanguage(new ComboBox(uiPageContainer))
     , uiLanguageModel(new QStandardItemModel(uiLanguage))
-    , uiThemeTitle(new Subtitle2Label(uiPage))
+    , uiThemeTitle(new Subtitle2Label(uiPageContainer))
     , uiThemeLayout(new QHBoxLayout)
-    , uiLightTheme(new ThemePreview(uiPage))
-    , uiDarkAndLightTheme(new ThemePreview(uiPage))
-    , uiDarkTheme(new ThemePreview(uiPage))
-    , uiScaleTitle(new Subtitle2Label(uiPage))
-    , uiScaleSlider(new Slider(uiPage))
-    , uiScaleSmallInfoLabel(new Body2Label(uiPage))
-    , uiScaleBigInfoLabel(new Body2Label(uiPage))
-    , uiContinueButton(new Button(uiPage))
+    , uiLightTheme(new ThemePreview(uiPageContainer))
+    , uiDarkAndLightTheme(new ThemePreview(uiPageContainer))
+    , uiDarkTheme(new ThemePreview(uiPageContainer))
+    , uiScaleTitle(new Subtitle2Label(uiPageContainer))
+    , uiScaleSlider(new Slider(uiPageContainer))
+    , uiScaleSmallInfoLabel(new Body2Label(uiPageContainer))
+    , uiScaleBigInfoLabel(new Body2Label(uiPageContainer))
+    , uiContinueButton(new Button(uiPageContainer))
     //
     , signInPage(new Widget(q))
     , signInTitle(new H6Label(signInPage))
@@ -277,32 +284,35 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     , styleChooseContinueButton(new Button(styleChoosePage))
     //
     , aiPage(new Widget(q))
-    , aiLogo(new ImageLabel(aiPage))
-    , aiTitle(new H6Label(aiPage))
-    , aiSubtitle(new Body2Label(aiPage))
-    , aiDescription(new Subtitle1Label(aiPage))
-    , aiEnabledTitle(new Body1Label(aiPage))
-    , aiEnabledToggle(new Toggle(aiPage))
-    , aiContinueButton(new Button(aiPage))
+    , aiPageContainer(UiHelper::createScrollArea(aiPage))
+    , aiLogo(new ImageLabel(aiPageContainer))
+    , aiTitle(new H6Label(aiPageContainer))
+    , aiSubtitle(new Body2Label(aiPageContainer))
+    , aiDescription(new Subtitle1Label(aiPageContainer))
+    , aiEnabledTitle(new Body1Label(aiPageContainer))
+    , aiEnabledToggle(new Toggle(aiPageContainer))
+    , aiContinueButton(new Button(aiPageContainer))
     //
     , backupsPage(new Widget(q))
-    , backupsLogo(new ImageLabel(backupsPage))
-    , backupsTitle(new H6Label(backupsPage))
-    , backupsSubtitle(new Body2Label(backupsPage))
-    , backupsDescription(new Subtitle1Label(backupsPage))
-    , backupsContinueButton(new Button(backupsPage))
+    , backupsPageContainer(UiHelper::createScrollArea(backupsPage))
+    , backupsLogo(new ImageLabel(backupsPageContainer))
+    , backupsTitle(new H6Label(backupsPageContainer))
+    , backupsSubtitle(new Body2Label(backupsPageContainer))
+    , backupsDescription(new Subtitle1Label(backupsPageContainer))
+    , backupsContinueButton(new Button(backupsPageContainer))
     //
     , socialPage(new Widget(q))
-    , socialLogo(new ImageLabel(socialPage))
-    , socialTitle(new H6Label(socialPage))
-    , socialSubtitle(new Body2Label(socialPage))
-    , socialDescription(new Subtitle1Label(socialPage))
-    , socialTwitterButton(new IconButton(socialPage))
-    , socialDiscordButton(new IconButton(socialPage))
-    , socialTelegramButton(new IconButton(socialPage))
-    , socialVkButton(new IconButton(socialPage))
-    , socialFacebookButton(new IconButton(socialPage))
-    , socialContinueButton(new Button(socialPage))
+    , socialPageContainer(UiHelper::createScrollArea(socialPage))
+    , socialLogo(new ImageLabel(socialPageContainer))
+    , socialTitle(new H6Label(socialPageContainer))
+    , socialSubtitle(new Body2Label(socialPageContainer))
+    , socialDescription(new Subtitle1Label(socialPageContainer))
+    , socialTwitterButton(new IconButton(socialPageContainer))
+    , socialDiscordButton(new IconButton(socialPageContainer))
+    , socialTelegramButton(new IconButton(socialPageContainer))
+    , socialVkButton(new IconButton(socialPageContainer))
+    , socialFacebookButton(new IconButton(socialPageContainer))
+    , socialContinueButton(new Button(socialPageContainer))
 {
     initUiPage();
     initSignUpPage();
@@ -390,7 +400,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     uiScaleSlider->setDefaultValue(500);
     uiContinueButton->setContained(true);
 
-    auto pageLayout = new QVBoxLayout;
+    auto pageLayout = qobject_cast<QVBoxLayout*>(uiPageContainer->widget()->layout());
     pageLayout->setContentsMargins({});
     pageLayout->setSpacing(0);
     pageLayout->addWidget(uiLogo, 0, Qt::AlignHCenter);
@@ -419,7 +429,10 @@ void OnboardingNavigator::Implementation::initUiPage()
     }
     pageLayout->addStretch();
     pageLayout->addWidget(uiContinueButton);
-    uiPage->setLayout(pageLayout);
+
+    auto layout = UiHelper::makeVBoxLayout();
+    layout->addWidget(uiPageContainer);
+    uiPage->setLayout(layout);
 }
 
 void OnboardingNavigator::Implementation::initSignUpPage()
@@ -440,9 +453,7 @@ void OnboardingNavigator::Implementation::initSignUpPage()
     signInResendCodeButton->setContained(true);
     signInResendCodeButton->hide();
 
-    auto pageLayout = new QVBoxLayout;
-    pageLayout->setContentsMargins({});
-    pageLayout->setSpacing(0);
+    auto pageLayout = UiHelper::makeVBoxLayout();
     pageLayout->addWidget(signInTitle);
     pageLayout->addWidget(signInSubtitle);
     pageLayout->addWidget(signInEmail);
@@ -465,9 +476,7 @@ void OnboardingNavigator::Implementation::initAccountPage()
     accountDescription->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     accountContinueButton->setContained(true);
 
-    auto pageLayout = new QVBoxLayout;
-    pageLayout->setContentsMargins({});
-    pageLayout->setSpacing(0);
+    auto pageLayout = UiHelper::makeVBoxLayout();
     pageLayout->addWidget(accountTitle);
     pageLayout->addWidget(accountSubtitle);
     pageLayout->addWidget(accountAvatar, 0, Qt::AlignHCenter);
@@ -487,9 +496,7 @@ void OnboardingNavigator::Implementation::initModulesPage()
     modulesSubtitle->setAlignment(Qt::AlignCenter);
     modulesContinueButton->setContained(true);
 
-    auto pageLayout = new QVBoxLayout;
-    pageLayout->setContentsMargins({});
-    pageLayout->setSpacing(0);
+    auto pageLayout = UiHelper::makeVBoxLayout();
     pageLayout->addWidget(modulesLogo, 0, Qt::AlignHCenter);
     pageLayout->addWidget(modulesTitle);
     pageLayout->addWidget(modulesSubtitle);
@@ -518,9 +525,7 @@ void OnboardingNavigator::Implementation::initStyleChoosePage()
     styleChooseComboBox->setModel(styleChooseModel);
     styleChooseComboBox->setEnabled(false);
 
-    auto pageLayout = new QVBoxLayout;
-    pageLayout->setContentsMargins({});
-    pageLayout->setSpacing(0);
+    auto pageLayout = UiHelper::makeVBoxLayout();
     pageLayout->addWidget(styleChooseLogo, 0, Qt::AlignHCenter);
     pageLayout->addWidget(styleChooseTitle);
     pageLayout->addWidget(styleChooseSubtitle);
@@ -540,9 +545,7 @@ void OnboardingNavigator::Implementation::initAiPage()
     aiSubtitle->setAlignment(Qt::AlignCenter);
     aiContinueButton->setContained(true);
 
-    auto pageLayout = new QVBoxLayout;
-    pageLayout->setContentsMargins({});
-    pageLayout->setSpacing(0);
+    auto pageLayout = qobject_cast<QVBoxLayout*>(aiPageContainer->widget()->layout());
     pageLayout->addWidget(aiLogo, 0, Qt::AlignHCenter);
     pageLayout->addWidget(aiTitle);
     pageLayout->addWidget(aiSubtitle);
@@ -550,7 +553,10 @@ void OnboardingNavigator::Implementation::initAiPage()
     addToggleWithTitle(pageLayout, aiEnabledToggle, aiEnabledTitle);
     pageLayout->addStretch();
     pageLayout->addWidget(aiContinueButton);
-    aiPage->setLayout(pageLayout);
+
+    auto layout = UiHelper::makeVBoxLayout();
+    layout->addWidget(aiPageContainer);
+    aiPage->setLayout(layout);
 }
 
 void OnboardingNavigator::Implementation::initBackupsPage()
@@ -560,16 +566,17 @@ void OnboardingNavigator::Implementation::initBackupsPage()
     backupsSubtitle->setAlignment(Qt::AlignCenter);
     backupsContinueButton->setContained(true);
 
-    auto pageLayout = new QVBoxLayout;
-    pageLayout->setContentsMargins({});
-    pageLayout->setSpacing(0);
+    auto pageLayout = qobject_cast<QVBoxLayout*>(backupsPageContainer->widget()->layout());
     pageLayout->addWidget(backupsLogo, 0, Qt::AlignHCenter);
     pageLayout->addWidget(backupsTitle);
     pageLayout->addWidget(backupsSubtitle);
     pageLayout->addWidget(backupsDescription);
     pageLayout->addStretch();
     pageLayout->addWidget(backupsContinueButton);
-    backupsPage->setLayout(pageLayout);
+
+    auto layout = UiHelper::makeVBoxLayout();
+    layout->addWidget(backupsPageContainer);
+    backupsPage->setLayout(layout);
 }
 
 void OnboardingNavigator::Implementation::initSocialPage()
@@ -584,9 +591,7 @@ void OnboardingNavigator::Implementation::initSocialPage()
     socialFacebookButton->setIcon(u8"\U0000f09a");
     socialContinueButton->setContained(true);
 
-    auto pageLayout = new QVBoxLayout;
-    pageLayout->setContentsMargins({});
-    pageLayout->setSpacing(0);
+    auto pageLayout = qobject_cast<QVBoxLayout*>(socialPageContainer->widget()->layout());
     pageLayout->addWidget(socialLogo, 0, Qt::AlignHCenter);
     pageLayout->addWidget(socialTitle);
     pageLayout->addWidget(socialSubtitle);
@@ -606,7 +611,10 @@ void OnboardingNavigator::Implementation::initSocialPage()
     }
     pageLayout->addStretch();
     pageLayout->addWidget(socialContinueButton);
-    socialPage->setLayout(pageLayout);
+
+    auto layout = UiHelper::makeVBoxLayout();
+    layout->addWidget(socialPageContainer);
+    socialPage->setLayout(layout);
 }
 
 void OnboardingNavigator::Implementation::updateAccountAvatar()
