@@ -454,9 +454,24 @@ ApplicationManager::Implementation::~Implementation()
 
 void ApplicationManager::Implementation::initLogging()
 {
+    //
+    // Удаляем старые логи
+    //
+    const auto logFileFolder
+        = QString("%1/starc/logs")
+              .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    auto logFiles = QDir(logFileFolder).entryInfoList(QDir::Files, QDir::Time);
+    constexpr int maxLogFilesSize = 5;
+    while (logFiles.size() > maxLogFilesSize) {
+        QFile::remove(logFiles.takeLast().absoluteFilePath());
+    }
+
+    //
+    // Настраиваем текущий лог файл
+    //
     const auto logFilePath
-        = QString("%1/starc/logs/%2.log")
-              .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+        = QString("%1/%2.log")
+              .arg(logFileFolder,
                    PlatformHelper::systemSavebleFileName(
                        QDateTime::currentDateTime().toString(Qt::ISODateWithMs)));
     const auto loggingLevel =
