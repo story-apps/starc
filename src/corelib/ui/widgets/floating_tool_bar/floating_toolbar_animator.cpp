@@ -29,6 +29,8 @@ FloatingToolbarAnimator::FloatingToolbarAnimator(QWidget* _parent)
     : FloatingToolBar(_parent)
     , d(new Implementation)
 {
+    setCurtain(true);
+
     hide();
 
     d->geometryAnimation.setEasingCurve(QEasingCurve::OutQuad);

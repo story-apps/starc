@@ -11,6 +11,7 @@
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QShortcut>
 #include <QStringListModel>
 
 
@@ -155,9 +156,13 @@ SearchToolbar::SearchToolbar(QWidget* _parent)
     setFocusProxy(d->searchText);
 
     d->closeAction->setIconText(u8"\U000F004D");
-    d->closeAction->setShortcut(QKeySequence::Find);
     addAction(d->closeAction);
-    connect(d->closeAction, &QAction::triggered, this, [this] {
+    connect(d->closeAction, &QAction::triggered, this, &SearchToolbar::closePressed);
+    //
+    // Заведём отдельный шорткат, который будет реагировать на дополнительные попытки поиска
+    //
+    auto closeActionShortcut = new QShortcut(QKeySequence::Find, this);
+    connect(closeActionShortcut, &QShortcut::activated, this, [this] {
         if (d->searchText->hasFocus()) {
             if (d->searchText->text().isEmpty()
                 || d->searchText->text() == d->searchText->selectedText()) {
