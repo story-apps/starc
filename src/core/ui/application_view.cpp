@@ -191,9 +191,9 @@ void ApplicationView::restoreState(bool _onboaringPassed, const QVariantMap& _st
         return;
     }
 
-    if (_state.contains(kSplitterState)) {
-        d->splitter->restoreState(_state[kSplitterState].toByteArray());
-    }
+    //
+    // Восстанавливаем геометрию окна
+    //
     if (_state.contains(kViewGeometry)) {
         restoreGeometry(_state[kViewGeometry].toByteArray());
     }
@@ -215,6 +215,13 @@ void ApplicationView::restoreState(bool _onboaringPassed, const QVariantMap& _st
     if (height() < minSize || width() < minSize) {
         resize(Ui::DesignSystem::layout().px(1200), Ui::DesignSystem::layout().px(740));
         move(screen()->availableGeometry().center() - QPoint(width() / 2, height() / 2));
+    }
+
+    //
+    // После того, как геометрия окна была окончательно настроена, восстановим состояние сплиттера
+    //
+    if (_state.contains(kSplitterState)) {
+        d->splitter->restoreState(_state[kSplitterState].toByteArray());
     }
 
     //
