@@ -3637,8 +3637,15 @@ void ApplicationManager::initConnections()
     // Статистика по сессии
     //
     connect(d->writingSessionManager.data(),
-            &WritingSessionManager::sessionStatisticsPublishRequested,
-            d->cloudServiceManager.data(), &CloudServiceManager::pushSessionStatistics);
+            &WritingSessionManager::sessionStatisticsPublishRequested, this,
+            [this](const QVector<Domain::SessionStatistics>& _sessionStatistics) {
+                //
+                // ... если пользователь авторизован, то отправляем статистику в сервис
+                //
+                if (d->accountManager->accountInfo().isValid()) {
+                    d->cloudServiceManager->pushSessionStatistics(_sessionStatistics);
+                }
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::sessionStatisticsReceived,
             d->writingSessionManager.data(), &WritingSessionManager::setSessionStatistics);
 
