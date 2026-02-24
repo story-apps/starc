@@ -166,6 +166,18 @@ void simplifyTextBlock(QTextCursor& _cursor)
     _cursor.movePosition(QTextCursor::EndOfBlock);
 }
 
+/**
+ * @brief Является ли заданный текст заголовком сцены
+ */
+bool isSceneHeading(const QString& _blockText)
+{
+    const auto blockTextUppercase = TextHelper::smartToUpper(_blockText);
+    return blockTextUppercase == _blockText
+        && (blockTextUppercase.contains(kPlaceContainsChecker)
+            || blockTextUppercase.contains(kTimeContainsChecker)
+            || blockTextUppercase.contains(kStartFromNumberChecker));
+}
+
 } // namespace
 
 
@@ -202,10 +214,7 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
             // ... если нашли заголовок сцены, то смотрим его отступ, это наиболее верный способ
             //     оценки для более менее стандартных шаблонов сценария
             //
-            if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
-                blockTextUppercase.contains(kPlaceContainsChecker)
-                || blockTextUppercase.contains(kTimeContainsChecker)
-                || blockTextUppercase.contains(kStartFromNumberChecker)) {
+            if (isSceneHeading(cursor.block().text())) {
                 minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
                 break;
             }
@@ -347,10 +356,7 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             // ... если нашли заголовок сцены, то смотрим его отступ, это наиболее верный способ
             //     оценки для более менее стандартных шаблонов сценария
             //
-            if (const auto blockTextUppercase = TextHelper::smartToUpper(cursor.block().text());
-                blockTextUppercase.contains(kPlaceContainsChecker)
-                || blockTextUppercase.contains(kTimeContainsChecker)
-                || blockTextUppercase.contains(kStartFromNumberChecker)) {
+            if (isSceneHeading(cursor.block().text())) {
                 minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
                 break;
             }
@@ -570,9 +576,10 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
         // Самым первым пробуем определить заголовок сцены
         // 1. содержит ключевые сокращения места действия или начинается с номера сцены
         //
-        if (blockTextUppercase.contains(kPlaceContainsChecker)
-            || blockTextUppercase.contains(kTimeContainsChecker)
-            || blockTextUppercase.contains(kStartFromNumberChecker)) {
+        if (textIsUppercase
+            && (blockTextUppercase.contains(kPlaceContainsChecker)
+                || blockTextUppercase.contains(kTimeContainsChecker)
+                || blockTextUppercase.contains(kStartFromNumberChecker))) {
             blockType = TextParagraphType::SceneHeading;
         }
         //
