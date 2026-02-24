@@ -21,8 +21,9 @@ class CORE_LIBRARY_EXPORT StructureModelItem : public AbstractModelItem
 {
 public:
     explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-                                const QString& _name, const QColor& _color, bool _visible,
-                                bool _readOnly, bool _comparison);
+                                const QString& _name, const QString& _draftName,
+                                const QColor& _color, bool _visible, bool _readOnly,
+                                bool _comparison);
     explicit StructureModelItem(const StructureModelItem& _other);
     ~StructureModelItem() override;
 
@@ -43,10 +44,22 @@ public:
     void setName(const QString& _name);
 
     /**
+     * @brief Название текущего драфта
+     */
+    const QString& draftName() const;
+    void setDraftName(const QString& _name);
+
+    /**
      * @brief Цвет элемента
      */
     const QColor& color() const;
     void setColor(const QColor& _color);
+
+    /**
+     * @brief Цвет текущего драфта
+     */
+    const QColor& draftColor() const;
+    void setDraftColor(const QColor& _color);
 
     /**
      * @brief Должен ли быть виден элемент модели

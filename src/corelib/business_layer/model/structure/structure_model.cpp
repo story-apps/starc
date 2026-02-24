@@ -35,7 +35,9 @@ const QLatin1String kVersionKey("version");
 const QLatin1String kUuidAttribute("uuid");
 const QLatin1String kTypeAttribute("type");
 const QLatin1String kNameAttribute("name");
+const QLatin1String kDraftNameAttribute("draft_name");
 const QLatin1String kColorAttribute("color");
+const QLatin1String kDraftColorAttribute("draft_color");
 const QLatin1String kVisibleAttribute("visible");
 const QLatin1String kReadOnlyAttribute("readonly");
 const QLatin1String kComparisonAttribute("comparison");
@@ -89,7 +91,7 @@ public:
 };
 
 StructureModel::Implementation::Implementation()
-    : rootItem(new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}, true,
+    : rootItem(new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}, {}, true,
                                       false, false))
 {
 }
@@ -116,14 +118,24 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
     //
     // Формируем элемент структуры
     //
+    const QString draftName = _node.hasAttribute(kDraftNameAttribute)
+        ? TextHelper::fromHtmlEscaped(_node.attribute(kDraftNameAttribute))
+        //
+        // ... для совместимости со старыми версиями
+        // TODO: выпилить метку текущего драфта и его цвет в версии 0.9.0
+        //
+        : tr("Current draft");
     const auto readOnly = false;
     const auto comparison = false;
-    auto item = new StructureModelItem(QUuid::fromString(_node.attribute(kUuidAttribute)),
-                                       Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
-                                       TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
-                                       ColorHelper::fromString(_node.attribute(kColorAttribute)),
-                                       _node.attribute(kVisibleAttribute) == "true", readOnly,
-                                       comparison);
+    auto item = new StructureModelItem(
+        QUuid::fromString(_node.attribute(kUuidAttribute)),
+        Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
+        TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)), draftName,
+        ColorHelper::fromString(_node.attribute(kColorAttribute)),
+        _node.attribute(kVisibleAttribute) == "true", readOnly, comparison);
+    if (_node.hasAttribute(kDraftColorAttribute)) {
+        item->setDraftColor(ColorHelper::fromString(_node.attribute(kDraftColorAttribute)));
+    }
     //
     // ... вкладываем в родителя
     //
@@ -159,6 +171,7 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
             auto version = new StructureModelItem(
                 QUuid::fromString(versionNode.attribute(kUuidAttribute)), item->type(),
                 TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
+                TextHelper::fromHtmlEscaped(versionNode.attribute(kDraftNameAttribute)),
                 ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible, readOnly,
                 comparison);
             item->addDraft(version);
@@ -184,7 +197,7 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                .arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()))
                .toUtf8();
     auto writeDraftXml = [&xml](StructureModelItem* _item) {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\"%10/>\n")
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\"%10/>")
                    .arg(kDraftKey, kUuidAttribute, _item->uuid().toString(), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
                         ColorHelper::toString(_item->color()), kReadOnlyAttribute,
@@ -195,11 +208,14 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
     };
     std::function<void(StructureModelItem*)> writeItemXml;
     writeItemXml = [&xml, &writeItemXml, writeDraftXml](StructureModelItem* _item) {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\"")
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\" %12=\"%13\" "
+                       "%14=\"%15\"")
                    .arg(kItemKey, kUuidAttribute, _item->uuid().toString(), kTypeAttribute,
                         Domain::mimeTypeFor(_item->type()), kNameAttribute,
-                        TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
-                        ColorHelper::toString(_item->color()), kVisibleAttribute,
+                        TextHelper::toHtmlEscaped(_item->name()), kDraftNameAttribute,
+                        TextHelper::toHtmlEscaped(_item->draftName()), kColorAttribute,
+                        ColorHelper::toString(_item->color()), kDraftColorAttribute,
+                        ColorHelper::toString(_item->draftColor()), kVisibleAttribute,
                         (_item->isVisible() ? "true" : "false"))
                    .toUtf8();
         if (_item->drafts().isEmpty() && !_item->hasChildren()) {
@@ -260,7 +276,8 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         auto uuid = QUuid::createUuid();
         const auto readOnly = false;
         const auto comparison = false;
-        return new StructureModelItem(uuid, _type, _name, {}, _visible, readOnly, comparison);
+        return new StructureModelItem(uuid, _type, _name, tr("First draft"), {}, _visible, readOnly,
+                                      comparison);
     };
 
     auto parentItem = itemForIndex(_parent);
@@ -1265,7 +1282,7 @@ void StructureModel::addItemDraft(StructureModelItem* _item, const QString& _nam
     emit draftAdded(_item->uuid());
 }
 
-void StructureModel::updateItemDraft(StructureModelItem* _item, int _versionIndex,
+void StructureModel::updateItemDraft(StructureModelItem* _item, int _draftIndex,
                                      const QString& _name, const QColor& _color, bool _readOnly)
 {
     if (_item == nullptr) {
@@ -1273,21 +1290,21 @@ void StructureModel::updateItemDraft(StructureModelItem* _item, int _versionInde
     }
 
     const auto itemIndex = indexForItem(_item);
-    auto version = _item->drafts().at(_versionIndex);
+    auto version = _item->drafts().at(_draftIndex);
     version->setName(_name);
     version->setColor(_color);
     version->setReadOnly(_readOnly);
     emit dataChanged(itemIndex, itemIndex);
 }
 
-void StructureModel::removeItemDraft(StructureModelItem* _item, int _versionIndex)
+void StructureModel::removeItemDraft(StructureModelItem* _item, int _draftIndex)
 {
     if (_item == nullptr) {
         return;
     }
 
     const auto itemIndex = indexForItem(_item);
-    _item->removeDraft(_versionIndex);
+    _item->removeDraft(_draftIndex);
     emit dataChanged(itemIndex, itemIndex);
     emit draftRemoved(_item->uuid());
 }

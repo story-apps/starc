@@ -35,13 +35,20 @@ enum State {
 class CreateDraftDialog::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(CreateDraftDialog* _q);
 
     /**
      * @brief Можно ли импортировать драфт для документа
      */
     bool canImport() const;
 
+    /**
+     * @brief Обновить перевод опции блокировки редактирования текста
+     */
+    void updateTranslationForLockOption();
+
+
+    CreateDraftDialog* q = nullptr;
 
     Body1Label* draftHint = nullptr;
     TextField* draftName = nullptr;
@@ -60,17 +67,18 @@ public:
     State state = AddNew;
 };
 
-CreateDraftDialog::Implementation::Implementation(QWidget* _parent)
-    : draftHint(new Body1Label(_parent))
-    , draftName(new TextField(_parent))
-    , draftColorPopup(new ColorPickerPopup(_parent))
-    , sourceDraft(new ComboBox(_parent))
+CreateDraftDialog::Implementation::Implementation(CreateDraftDialog* _q)
+    : q(_q)
+    , draftHint(new Body1Label(_q))
+    , draftName(new TextField(_q))
+    , draftColorPopup(new ColorPickerPopup(_q))
+    , sourceDraft(new ComboBox(_q))
     , sourceDraftModel(new QStringListModel(sourceDraft))
-    , sourceFileForImport(new TextField(_parent))
-    , lockEditingDraft(new CheckBox(_parent))
+    , sourceFileForImport(new TextField(_q))
+    , lockEditingDraft(new CheckBox(_q))
     , buttonsLayout(new QHBoxLayout)
-    , cancelButton(new Button(_parent))
-    , createButton(new Button(_parent))
+    , cancelButton(new Button(_q))
+    , createButton(new Button(_q))
 {
     draftColorPopup->setColorCanBeDeselected(false);
     draftColorPopup->setSelectedColor(Qt::white);
@@ -94,6 +102,16 @@ CreateDraftDialog::Implementation::Implementation(QWidget* _parent)
 bool CreateDraftDialog::Implementation::canImport() const
 {
     return !importFilters.isEmpty();
+}
+
+void CreateDraftDialog::Implementation::updateTranslationForLockOption()
+{
+    if (sourceDraft->isVisibleTo(q)) {
+        lockEditingDraft->setText(
+            tr("Lock text editing for \"%1\"").arg(sourceDraft->currentText()));
+    } else {
+        lockEditingDraft->setText(tr("Lock draft text editing"));
+    }
 }
 
 
@@ -128,11 +146,12 @@ CreateDraftDialog::CreateDraftDialog(QWidget* _parent)
         d->draftColorPopup->showPopup(d->draftName, Qt::AlignBottom | Qt::AlignRight);
     });
     connect(d->sourceDraft, &ComboBox::currentIndexChanged, this,
-            [this, updateCreateButtonAvailability](const QModelIndex& _currentInex) {
+            [this, updateCreateButtonAvailability](const QModelIndex& _currentIndex) {
                 //
                 // Если драфт не может быть импортированным, то ничего не делаем
                 //
                 if (!d->canImport()) {
+                    d->lockEditingDraft->hide();
                     return;
                 }
                 //
@@ -140,10 +159,15 @@ CreateDraftDialog::CreateDraftDialog(QWidget* _parent)
                 // - если последнюю, значит будет импортировать, покажем поле для выбора файла
                 // - если нет, то скрыть и очистить поле для выбора файл
                 //
-                d->sourceFileForImport->setVisible(_currentInex.row()
-                                                   == d->sourceDraftModel->rowCount() - 1);
-                if (d->sourceFileForImport->isHidden()) {
+                const auto newDraftFromFile
+                    = _currentIndex.row() == d->sourceDraftModel->rowCount() - 1;
+                d->sourceFileForImport->setVisible(newDraftFromFile);
+                if (newDraftFromFile) {
+                    d->lockEditingDraft->hide();
+                } else {
                     d->sourceFileForImport->clear();
+                    d->updateTranslationForLockOption();
+                    d->lockEditingDraft->show();
                 }
                 updateCreateButtonAvailability();
             });
@@ -219,6 +243,7 @@ void CreateDraftDialog::setDrafts(const QStringList& _drafts, int _selectDraftIn
     d->sourceDraft->setVisible(drafts.size() > 1);
     d->sourceDraftModel->setStringList(drafts);
     d->sourceDraft->setCurrentText(drafts.at(_selectDraftIndex));
+    d->updateTranslationForLockOption();
 }
 
 QString CreateDraftDialog::importFilePath() const
@@ -231,17 +256,33 @@ void CreateDraftDialog::setImportFolder(const QString& _path)
     d->importFolder = _path;
 }
 
-void CreateDraftDialog::edit(const QString& _name, const QColor& _color, bool _readOnly,
-                             bool _comparison)
+void CreateDraftDialog::editCurrent(const QString& _name, const QColor& _color)
 {
     d->state = Edit;
     updateTranslations();
 
+    d->draftHint->hide();
     d->draftName->setText(_name);
     d->draftName->setTrailingIconColor(_color);
+    d->draftColorPopup->setSelectedColor(_color);
     d->sourceDraft->hide();
     d->sourceFileForImport->hide();
+    d->lockEditingDraft->hide();
+}
+
+void CreateDraftDialog::edit(const QString& _name, const QColor& _color, bool _readOnly,
+                                  bool _comparison)
+{
+    d->state = Edit;
+    updateTranslations();
+
+    d->draftHint->hide();
+    d->draftName->setText(_name);
+    d->draftName->setTrailingIconColor(_color);
     d->draftColorPopup->setSelectedColor(_color);
+    d->sourceDraft->hide();
+    d->sourceFileForImport->hide();
+    d->lockEditingDraft->show();
     d->lockEditingDraft->setChecked(_readOnly);
     d->lockEditingDraft->setVisible(_comparison == false);
 }
@@ -265,7 +306,7 @@ void CreateDraftDialog::updateTranslations()
     d->sourceDraft->setLabel(tr("Based on"));
     d->sourceFileForImport->setLabel(tr("Choose file with draft to import"));
     d->sourceFileForImport->setTrailingIconToolTip(tr("Choose file for importing"));
-    d->lockEditingDraft->setText(tr("Lock draft text editing"));
+    d->updateTranslationForLockOption();
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
 }

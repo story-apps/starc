@@ -137,8 +137,8 @@ QString itemConcreteName(const BusinessLayer::StructureModelItem* _item, bool _a
             for (int index = 0; index < _item->parent()->childCount(); ++index) {
                 if (auto childItem = _item->parent()->childAt(index);
                     childItem->type() == _item->type()) {
-                    name += QString(" [%1]").arg(
-                        childItem != _item ? _item->name() : ProjectManager::tr("Current draft"));
+                    name += QString(" [%1]").arg(childItem != _item ? _item->name()
+                                                                    : _item->draftName());
                     break;
                 }
             }
@@ -1190,7 +1190,7 @@ void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemInde
     auto dialog = new Ui::CreateDraftDialog(topLevelWidget);
     dialog->setDrafts(
         [item] {
-            QStringList drafts = { tr("Current draft") };
+            QStringList drafts = { item->draftName() };
             for (const auto draft : item->drafts()) {
                 drafts.append(draft->name());
             }
@@ -1201,15 +1201,15 @@ void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemInde
     connect(
         dialog, &Ui::CreateDraftDialog::savePressed, view.active,
         [this, item, dialog](const QString& _name, const QColor& _color, int _draftIndex,
-                             bool _readOnly) {
+                             bool _lockEditing) {
             dialog->hideDialog();
-
-            QByteArray itemContent;
 
             //
             // Если новый драфт создаётся на базе одного из существущих
             //
-            if (dialog->importFilePath().isEmpty()) {
+            QByteArray itemContent;
+            const auto isDraftFromFile = !dialog->importFilePath().isEmpty();
+            if (!isDraftFromFile) {
                 //
                 // ... возьмём его содержимое из модели
                 //
@@ -1218,7 +1218,7 @@ void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemInde
                 itemContent = model->document()->content();
             }
             //
-            // В противном случае импортируем из заданного файла
+            // ... в противном случае импортируем из заданного файла
             //
             else {
                 documentImportingContainer.waitForDocument = true;
@@ -1228,10 +1228,33 @@ void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemInde
                 documentImportingContainer = {};
             }
 
+            //
+            // При необходимости настраиваем возможность редактирования базового драфт
+            //
+            if (_draftIndex > 0 && !isDraftFromFile) {
+                const auto draft = item->drafts().at(_draftIndex - 1);
+                projectStructureModel->updateItemDraft(item, _draftIndex - 1, draft->name(),
+                                                       draft->color(), _lockEditing);
+            }
+
+            //
+            // Переносим текущий драфт в дополнительный
+            //
+            auto currentDraftModel = modelsFacade.modelFor(item->uuid());
+            const auto currentDraftContent = currentDraftModel->document()->content();
             const auto comparison = false;
-            projectStructureModel->addItemDraft(item, _name, _color, _readOnly, itemContent,
-                                                comparison);
-            view.active->setDocumentDrafts(item->drafts());
+            projectStructureModel->addItemDraft(item, item->draftName(), item->draftColor(),
+                                                (_draftIndex == 0 ? _lockEditing : false),
+                                                currentDraftContent, comparison);
+            //
+            // ... а в текущий устанавливаем целевое название и содержимое
+            //
+            item->setDraftName(_name);
+            item->setDraftColor(_color);
+            currentDraftModel->setDocumentContent(itemContent);
+            projectStructureModel->updateItem(item);
+
+            view.active->setDocumentDrafts(item);
 
             //
             // Если в данный момент открыт не текущий драфт, то нужно сместить индекс выделенной
@@ -1251,23 +1274,45 @@ void ProjectManager::Implementation::editDraft(const QModelIndex& _itemIndex, in
 {
     auto dialog = new Ui::CreateDraftDialog(topLevelWidget);
     const auto item = aliasedItemForIndex(_itemIndex);
-    const auto draft = item->drafts().at(_draftIndex);
-    dialog->edit(draft->name(), draft->color(), draft->isReadOnly(), draft->isComparison());
-    connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
-            [this, item, _draftIndex, dialog](const QString& _name, const QColor& _color,
-                                              int _sourceDraftIndex, bool _readOnly) {
-                Q_UNUSED(_sourceDraftIndex)
+    //
+    // Редактируем основной драфт
+    //
+    if (_draftIndex == -1) {
+        dialog->editCurrent(item->draftName(), item->draftColor());
+        connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
+                [this, item, dialog](const QString& _name, const QColor& _color) {
+                    dialog->hideDialog();
 
-                dialog->hideDialog();
+                    item->setDraftName(_name);
+                    item->setDraftColor(_color);
+                    projectStructureModel->updateItem(item);
+                    view.active->setDocumentDrafts(item);
+                });
+    }
+    //
+    // Редактируем один из дополнительных драфтов
+    //
+    else {
+        const auto draft = item->drafts().at(_draftIndex);
+        dialog->edit(draft->name(), draft->color(), draft->isReadOnly(),
+                          draft->isComparison());
+        connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
+                [this, item, _draftIndex, dialog](const QString& _name, const QColor& _color,
+                                                  int _sourceDraftIndex, bool _readOnly) {
+                    Q_UNUSED(_sourceDraftIndex)
 
-                projectStructureModel->updateItemDraft(item, _draftIndex, _name, _color, _readOnly);
-                view.active->setDocumentDrafts(item->drafts());
+                    dialog->hideDialog();
 
-                //
-                // Пеерзагрузим отображение, чтобы обновить флаг редактируемости драфта
-                //
-                q->showViewForDraft(item->drafts().at(_draftIndex));
-            });
+                    projectStructureModel->updateItemDraft(item, _draftIndex, _name, _color,
+                                                           _readOnly);
+                    view.active->setDocumentDrafts(item);
+
+                    //
+                    // Пеерзагрузим отображение, чтобы обновить флаг редактируемости драфта
+                    //
+                    q->showViewForDraft(item->drafts().at(_draftIndex));
+                });
+    }
     connect(dialog, &Ui::CreateDraftDialog::disappeared, dialog,
             &Ui::CreateDraftDialog::deleteLater);
 
@@ -1278,14 +1323,20 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
 {
     auto dialog = new Dialog(view.active->topLevelWidget());
     const auto item = aliasedItemForIndex(_itemIndex);
-    const auto draft = item->drafts().at(_draftIndex);
-    const auto dialogTitle = draft->isComparison()
+    auto isComparison = false;
+    auto draftName = item->draftName();
+    if (_draftIndex != -1) {
+        const auto draft = item->drafts().at(_draftIndex);
+        isComparison = draft->isComparison();
+        draftName = draft->name();
+    }
+    const auto dialogTitle = isComparison
         ? tr("Do you really want to close comparison \"%1\"?")
         : tr("Do you really want to remove document draft \"%1\"?");
-    const auto removeButtonText = draft->isComparison() ? tr("Yes, close") : tr("Yes, remove");
+    const auto removeButtonText = isComparison ? tr("Yes, close") : tr("Yes, remove");
     constexpr int cancelButtonId = 0;
     constexpr int removeButtonId = 1;
-    dialog->showDialog({}, dialogTitle.arg(draft->name()),
+    dialog->showDialog({}, dialogTitle.arg(draftName),
                        { { cancelButtonId, tr("No"), Dialog::RejectButton },
                          { removeButtonId, removeButtonText, Dialog::AcceptCriticalButton } });
     connect(
@@ -1301,17 +1352,18 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
             }
 
             //
-            // Если таки хочет, то сперва выберем другой документ для редактирования
+            // Если таки хочет, то сперва выберем другой документ для редактирования,
+            // если текущий не основной драфт и выбран тот драфт, который будет удалён
             //
-            if ((view.active->currentDraft() - 1) == _draftIndex) {
+            if (_draftIndex != -1 && (view.active->currentDraft() - 1) == _draftIndex) {
                 //
-                // ... если удалён последний драфт, то покажем текущую
+                // ... если будет удалён последний драфт, то покажем текущий
                 //
                 if (_draftIndex == 0) {
                     q->showViewForDraft(item);
                 }
                 //
-                // ... если удалён не последний, то покажем предыдущий
+                // ... если не последний, то покажем предыдущий от удаляемого
                 //
                 else {
                     q->showViewForDraft(item->drafts().at(_draftIndex - 1));
@@ -1324,13 +1376,42 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
             //
             // ... а потом собственно удалим заданный драфт
             //
-            const auto documentUuid = item->drafts().at(_draftIndex)->uuid();
-            auto document
-                = DataStorageLayer::StorageFacade::documentStorage()->document(documentUuid);
-            modelsFacade.removeModelFor(document);
-            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-            projectStructureModel->removeItemDraft(item, _draftIndex);
-            view.active->setDocumentDrafts(item->drafts());
+            QUuid documentToRemoveUuid;
+            //
+            // ... если пользоватеь хочет удалить драфт, который является текущим
+            //     по факту удалим самый последний драфт, а в текущий поместим его содержимое
+            //
+            if (_draftIndex == -1) {
+                const auto draftToRemoveIndex = 0;
+                const auto draftToRemove = item->drafts().at(draftToRemoveIndex);
+                documentToRemoveUuid = draftToRemove->uuid();
+
+                item->setDraftName(draftToRemove->name());
+                item->setDraftColor(draftToRemove->color());
+                auto itemModel = modelsFacade.modelFor(item->uuid());
+                projectStructureModel->updateItem(item);
+
+                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                    documentToRemoveUuid);
+
+                itemModel->setDocumentContent(document->content());
+
+                modelsFacade.removeModelFor(document);
+                DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+                projectStructureModel->removeItemDraft(item, draftToRemoveIndex);
+            }
+            //
+            // ... в противном случае просто удаляем конкретный драфт
+            //
+            else {
+                documentToRemoveUuid = item->drafts().at(_draftIndex)->uuid();
+                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                    documentToRemoveUuid);
+                modelsFacade.removeModelFor(document);
+                DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+                projectStructureModel->removeItemDraft(item, _draftIndex);
+            }
+            view.active->setDocumentDrafts(item);
 
             //
             // Если в данный момент открыт драфт, который находится после удаляемого, то нужно
@@ -1342,7 +1423,7 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
                 view.active->setCurrentDraft(currentDraftIndex - 1);
             }
 
-            emit q->documentRemoved(documentUuid);
+            emit q->documentRemoved(documentToRemoveUuid);
         });
     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
@@ -1881,7 +1962,7 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
             itemConcreteName(lhsItem),
             [this, _lhs] {
                 const auto item = aliasedItemForIndex(_lhs);
-                QStringList drafts = { tr("Current draft") };
+                QStringList drafts = { item->draftName() };
                 for (const auto draft : item->drafts()) {
                     if (!draft->isComparison()) {
                         drafts.append(draft->name());
@@ -1892,7 +1973,7 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
             0, itemConcreteName(rhsItem),
             [this, _rhs] {
                 const auto item = aliasedItemForIndex(_rhs);
-                QStringList drafts = { tr("Current draft") };
+                QStringList drafts = { item->draftName() };
                 for (const auto draft : item->drafts()) {
                     if (!draft->isComparison()) {
                         drafts.append(draft->name());
@@ -1976,13 +2057,13 @@ void ProjectManager::Implementation::compareTextDocumentsItems(
     // ... если же сравнение происходит для драфтов одного документа, то скорректируем названия
     //
     if (_lhsItem->parent() == _rhsItem->parent()) {
-        lhsName = _lhsItem == comparisonDraftHostItem ? tr("Current draft") : _lhsItem->name();
-        rhsName = _rhsItem == comparisonDraftHostItem ? tr("Current draft") : _rhsItem->name();
+        lhsName = _lhsItem == comparisonDraftHostItem ? _lhsItem->draftName() : _lhsItem->name();
+        rhsName = _rhsItem == comparisonDraftHostItem ? _rhsItem->draftName() : _rhsItem->name();
     }
     projectStructureModel->addItemDraft(comparisonDraftHostItem,
                                         tr("%1 vs %2").arg(lhsName, rhsName), QColor(), readOnly,
                                         lhsXml, comparison);
-    view.active->setDocumentDrafts(comparisonDraftHostItem->drafts());
+    view.active->setDocumentDrafts(comparisonDraftHostItem);
 
     //
     // Сформировать диф с заданной моделью в новый драфт
@@ -2355,7 +2436,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
 
                 auto item = d->aliasedItemForIndex(sourceIndex);
-                d->view.active->setDocumentDrafts(item->drafts());
+                d->view.active->setDocumentDrafts(item);
             });
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted, this,
@@ -2713,7 +2794,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 createNewDraftAction->setIconText(u8"\U000F00FB");
                 createNewDraftAction->setText(tr("Create draft"));
                 createNewDraftAction->setEnabled(enabled);
-                createNewDraftAction->setSeparator(_draftIndex > 0);
+                createNewDraftAction->setSeparator(true);
                 connect(createNewDraftAction, &QAction::triggered, this,
                         [this, currentItemIndex] { d->createNewDraft(currentItemIndex); });
                 menuActions.append(createNewDraftAction);
@@ -2736,9 +2817,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             }
 
             //
-            // Для любого драфта, кроме текущего, показываем опции редактирования
+            // Для любого драфта, кроме сравнения, показываем опции редактирования и удаления
             //
-            if (_draftIndex > 0 && !item->drafts().at(realDraftIndex)->isComparison()) {
+            if (_draftIndex == 0 || !item->drafts().at(realDraftIndex)->isComparison()) {
                 auto editDraftAction = new QAction;
                 editDraftAction->setIconText(u8"\U000F090C");
                 editDraftAction->setText(tr("Edit"));
@@ -3759,8 +3840,8 @@ void ProjectManager::storeDocument(const BusinessLayer::AbstractImporter::Docume
         const auto visible = true;
         const auto readOnly = false;
         const auto comparison = false;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                     comparison);
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                     visible, readOnly, comparison);
     };
 
     const auto parentItem
@@ -3820,8 +3901,8 @@ void ProjectManager::storeSimpleText(const QString& _name, const QString& _text)
         const auto visible = true;
         const auto readOnly = false;
         const auto comparison = false;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                     comparison);
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                     visible, readOnly, comparison);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -3859,8 +3940,8 @@ void ProjectManager::storeAudioplay(const QString& _name, const QString& _titleP
         const auto visible = true;
         const auto readOnly = false;
         const auto comparison = false;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                     comparison);
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                     visible, readOnly, comparison);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -3909,8 +3990,8 @@ void ProjectManager::storeComicBook(const QString& _name, const QString& _titleP
         const auto visible = true;
         const auto readOnly = false;
         const auto comparison = false;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                     comparison);
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                     visible, readOnly, comparison);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -3957,8 +4038,8 @@ void ProjectManager::storeNovel(const QString& _name, const QString& _text)
         const auto visible = true;
         const auto readOnly = false;
         const auto comparison = false;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                     comparison);
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                     visible, readOnly, comparison);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -4014,8 +4095,8 @@ void ProjectManager::storeScreenplay(const QString& _name, const QString& _title
         const auto visible = true;
         const auto readOnly = false;
         const auto comparison = false;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                     comparison);
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                     visible, readOnly, comparison);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -4071,8 +4152,8 @@ void ProjectManager::storeStageplay(const QString& _name, const QString& _titleP
         const auto visible = true;
         const auto readOnly = false;
         const auto comparison = false;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                     comparison);
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                     visible, readOnly, comparison);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -4115,8 +4196,8 @@ void ProjectManager::storePresentation(const QUuid& _documentUuid, const QString
             const auto visible = true;
             const auto readOnly = false;
             const auto comparison = false;
-            return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly,
-                                                         comparison);
+            return new BusinessLayer::StructureModelItem(uuid, _type, _name, tr("First draft"), {},
+                                                         visible, readOnly, comparison);
         };
 
         auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -4164,7 +4245,7 @@ QVector<QPair<QString, BusinessLayer::AbstractModel*>> ProjectManager::currentMo
         }
 
         QVector<QPair<QString, BusinessLayer::AbstractModel*>> models;
-        models.append({ tr("Current draft"), d->modelsFacade.modelFor(_item->uuid()) });
+        models.append({ _item->draftName(), d->modelsFacade.modelFor(_item->uuid()) });
         for (const auto& version : _item->drafts()) {
             models.append({ version->name(), d->modelsFacade.modelFor(version->uuid()) });
         }
@@ -4502,7 +4583,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
                 const auto comparison = false;
                 d->projectStructureModel->addItemDraft(item, versionName, color, readOnly,
                                                        lastDocumentVersion, comparison);
-                d->view.active->setDocumentDrafts(item->drafts());
+                d->view.active->setDocumentDrafts(item);
             }
 
             //
@@ -5416,7 +5497,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     Log::trace("Set view cursors");
     view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     Log::trace("Set document versions");
-    d->view.active->setDocumentDrafts(aliasedItem->drafts());
+    d->view.active->setDocumentDrafts(aliasedItem);
     Log::trace("Show view");
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;

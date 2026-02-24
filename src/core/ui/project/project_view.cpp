@@ -227,9 +227,9 @@ void ProjectView::setActive(bool _active)
     }
 }
 
-void ProjectView::setDocumentDrafts(const QVector<BusinessLayer::StructureModelItem*>& _drafts)
+void ProjectView::setDocumentDrafts(const BusinessLayer::StructureModelItem* _item)
 {
-    if (d->documentDrafts->count() == 1 && _drafts.isEmpty()) {
+    if (d->documentDrafts->count() == 1 && _item->drafts().isEmpty()) {
         return;
     }
 
@@ -241,8 +241,8 @@ void ProjectView::setDocumentDrafts(const QVector<BusinessLayer::StructureModelI
     const auto lastActiveDraft = d->documentDrafts->currentTab();
 
     d->documentDrafts->removeAllTabs();
-    d->documentDrafts->addTab(tr("Current draft"));
-    for (const auto draft : _drafts) {
+    d->documentDrafts->addTab(_item->draftName(), u8"\U000F0765", _item->draftColor());
+    for (const auto draft : _item->drafts()) {
         d->documentDrafts->addTab(draft->name(),
                                   draft->isComparison()
                                       ? u8"\U000F1492"
@@ -312,8 +312,6 @@ void ProjectView::updateTranslations()
         tr("Ooops... looks like editor of this document not implemented yet."));
     d->notImplementedPageBodyLabel->setText(
         tr("But don't worry, it will be here in one of the future updates!"));
-
-    d->documentDrafts->setTabName(0, tr("Current draft"));
 }
 
 void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

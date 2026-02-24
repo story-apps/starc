@@ -31,6 +31,11 @@ public:
     void setImportFolder(const QString& _path);
 
     /**
+     * @brief Редактировать текущий драфт
+     */
+    void editCurrent(const QString& _name, const QColor& _color);
+
+    /**
      * @brief Редактировать драфт с заданными параметрами
      */
     void edit(const QString& _name, const QColor& _color, bool _readOnly, bool _comparison);
@@ -40,7 +45,7 @@ signals:
      * @brief Пользователь нажал кнопку создания нового драфта/сохранения редактируемого
      */
     void savePressed(const QString& _draftName, const QColor& _color, int _sourceDraftIndex,
-                     bool _readOnly);
+                     bool _lockEditing);
 
 protected:
     /**

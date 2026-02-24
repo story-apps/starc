@@ -14,13 +14,15 @@ class StructureModelItem::Implementation
 {
 public:
     explicit Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type,
-                            const QString& _name, const QColor& _color, bool _visible,
-                            bool _readOnly, bool _comparison);
+                            const QString& _name, const QString& _draftName, const QColor& _color,
+                            bool _visible, bool _readOnly, bool _comparison);
 
     QUuid uuid;
     Domain::DocumentObjectType type;
     QString name;
+    QString draftName;
     QColor color;
+    QColor draftColor;
     bool visible = true;
     bool readOnly = false;
     bool comparison = false;
@@ -29,11 +31,13 @@ public:
 
 StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
                                                    Domain::DocumentObjectType _type,
-                                                   const QString& _name, const QColor& _color,
-                                                   bool _visible, bool _readOnly, bool _comparison)
+                                                   const QString& _name, const QString& _draftName,
+                                                   const QColor& _color, bool _visible,
+                                                   bool _readOnly, bool _comparison)
     : uuid(_uuid)
     , type(_type)
     , name(_name)
+    , draftName(_draftName)
     , color(_color)
     , visible(_visible)
     , readOnly(_readOnly)
@@ -46,17 +50,20 @@ StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
 
 
 StructureModelItem::StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-                                       const QString& _name, const QColor& _color, bool _visible,
-                                       bool _readOnly, bool _comparison)
+                                       const QString& _name, const QString& _draftName,
+                                       const QColor& _color, bool _visible, bool _readOnly,
+                                       bool _comparison)
     : AbstractModelItem()
-    , d(new Implementation(_uuid, _type, _name, _color, _visible, _readOnly, _comparison))
+    , d(new Implementation(_uuid, _type, _name, _draftName, _color, _visible, _readOnly,
+                           _comparison))
 {
 }
 
 StructureModelItem::StructureModelItem(const StructureModelItem& _other)
     : AbstractModelItem()
-    , d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color,
-                           _other.d->visible, _other.d->readOnly, _other.d->comparison))
+    , d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->draftName,
+                           _other.d->color, _other.d->visible, _other.d->readOnly,
+                           _other.d->comparison))
 {
     //
     // Я не знаю зачем это может понадобится, по идее новый элемент должен создаваться без драфтов
@@ -90,6 +97,16 @@ void StructureModelItem::setName(const QString& _name)
     d->name = _name;
 }
 
+const QString& StructureModelItem::draftName() const
+{
+    return d->draftName;
+}
+
+void StructureModelItem::setDraftName(const QString& _name)
+{
+    d->draftName = _name;
+}
+
 const QColor& StructureModelItem::color() const
 {
     return d->color;
@@ -98,6 +115,16 @@ const QColor& StructureModelItem::color() const
 void StructureModelItem::setColor(const QColor& _color)
 {
     d->color = _color;
+}
+
+const QColor& StructureModelItem::draftColor() const
+{
+    return d->draftColor;
+}
+
+void StructureModelItem::setDraftColor(const QColor& _color)
+{
+    d->draftColor = _color;
 }
 
 bool StructureModelItem::isVisible() const
@@ -146,7 +173,7 @@ StructureModelItem* StructureModelItem::addDraft(const QString& _name, const QCo
                                                  bool _readOnly, bool _comparison)
 {
     const auto visible = true;
-    auto draft = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, visible,
+    auto draft = new StructureModelItem(QUuid::createUuid(), type(), _name, _name, _color, visible,
                                         _readOnly, _comparison);
     draft->setParent(parent());
     //
@@ -222,7 +249,8 @@ QByteArray StructureModelItem::toXml() const
 bool StructureModelItem::isEqual(const StructureModelItem* _other) const
 {
     return d->uuid == _other->d->uuid && d->type == _other->d->type && d->name == _other->d->name
-        && d->color == _other->d->color && d->visible == _other->d->visible
+        && d->draftName == _other->d->draftName && d->color == _other->d->color
+        && d->draftColor == _other->d->draftColor && d->visible == _other->d->visible
         && d->readOnly == _other->d->readOnly && d->comparison == _other->d->comparison
         && d->drafts == _other->d->drafts;
 }
@@ -237,7 +265,9 @@ void StructureModelItem::copyFrom(const StructureModelItem* _other) const
     d->uuid = _other->d->uuid;
     d->type = _other->d->type;
     d->name = _other->d->name;
+    d->draftName = _other->d->draftName;
     d->color = _other->d->color;
+    d->draftColor = _other->d->draftColor;
     d->visible = _other->d->visible;
     d->readOnly = _other->d->readOnly;
     d->comparison = _other->d->comparison;

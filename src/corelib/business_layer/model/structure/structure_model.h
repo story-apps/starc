@@ -156,9 +156,9 @@ public:
      */
     void addItemDraft(StructureModelItem* _item, const QString& _name, const QColor& _color,
                       bool _readOnly, const QByteArray& _content, bool _comparison);
-    void updateItemDraft(StructureModelItem* _item, int _versionIndex, const QString& _name,
+    void updateItemDraft(StructureModelItem* _item, int _draftIndex, const QString& _name,
                          const QColor& _color, bool _readOnly);
-    void removeItemDraft(StructureModelItem* _item, int _versionIndex);
+    void removeItemDraft(StructureModelItem* _item, int _draftIndex);
 
     /**
      * @brief Задать возможность перехода в навигатор для заданного индекса
