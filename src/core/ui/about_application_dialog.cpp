@@ -129,8 +129,10 @@ AboutApplicationDialog::AboutApplicationDialog(QWidget* _parent)
         QDesktopServices::openUrl(
             QUrl(d->isRussianSpeaking ? "https://t.me/starcapp_ru" : "https://t.me/starcapp"));
     });
-    connect(d->mailButton, &IconButton::clicked, this,
-            [] { QDesktopServices::openUrl(QUrl("https://starc.app/contacts")); });
+    connect(d->mailButton, &IconButton::clicked, this, [this] {
+        QDesktopServices::openUrl(QUrl(d->isRussianSpeaking ? "https://starc.app/ru/contacts"
+                                                            : "https://starc.app/contacts"));
+    });
     connect(d->closeButton, &Button::clicked, this, &AboutApplicationDialog::hideDialog);
 }
 
