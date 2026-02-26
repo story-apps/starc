@@ -182,23 +182,17 @@ void DocxReader::readStyles()
                 if (m_xml.readNextStartElement()) {
                     if (m_xml.qualifiedName() == QLatin1String("w:rPr")) {
                         readRunProperties(m_current_style);
-                    } else {
-                        m_xml.skipCurrentElement();
                     }
                 }
             } else if (m_xml.qualifiedName() == QLatin1String("w:pPrDefault")) {
                 if (m_xml.readNextStartElement()) {
                     if (m_xml.qualifiedName() == QLatin1String("w:pPr")) {
                         readParagraphProperties(m_current_style);
-                    } else {
-                        m_xml.skipCurrentElement();
                     }
                 }
-            } else {
-                m_xml.skipCurrentElement();
             }
+            m_xml.skipCurrentElement();
         }
-        m_xml.skipCurrentElement();
     }
 
     // Read styles

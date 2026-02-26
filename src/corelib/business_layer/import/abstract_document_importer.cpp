@@ -567,6 +567,13 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
                  > kLeftMarginDelta + _minLeftMargin)
             || (blockFormat.alignment().testFlag(Qt::AlignHCenter))
             || blockText.startsWith(kOldSchoolCenteringPrefix));
+    // ... есть отступ перед блоком (даже небольшой)
+    const auto hasSpaceBefore
+        = _prevEmptyLines > 0 || blockFormat.topMargin() > 0 || prevBlockFormat.bottomMargin() > 0;
+    // ... есть отступ перед блоком (линия и больше)
+    const auto lineSpacing = TextHelper::fineLineSpacing(charFormat.font());
+    const auto hasLineBefore = _prevEmptyLines > 0 || blockFormat.topMargin() >= lineSpacing
+        || prevBlockFormat.bottomMargin() >= lineSpacing;
 
     //
     // Собственно определение типа
@@ -603,16 +610,14 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
             }
             //
             // Персонаж
-            // 1. В верхнем регистре
-            // 2. Предыдущий блок - не персонаж
-            // 3. Есть отступ сверху, или есть отступ снизу у предыдущего
+            // 1. в верхнем регистре
+            // 2. предыдущий блок - не персонаж
+            // 3. есть отступ сверху
             //
             else if ((textIsUppercase
                       || blockTextWithoutParentheses
                           == TextHelper::smartToUpper(blockTextWithoutParentheses))
-                     && _lastBlockType != TextParagraphType::Character
-                     && (_prevEmptyLines > 0 || blockFormat.topMargin() > 0
-                         || prevBlockFormat.bottomMargin() > 0)) {
+                     && _lastBlockType != TextParagraphType::Character && hasSpaceBefore) {
                 blockType = TextParagraphType::Character;
             }
             //
@@ -647,8 +652,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
                 //
                 if ((_lastBlockType == TextParagraphType::SceneHeading
                      || _lastBlockType == TextParagraphType::SceneCharacters)
-                    && _prevEmptyLines == 0 && blockFormat.topMargin() == 0
-                    && prevBlockFormat.bottomMargin() == 0) {
+                    && !hasLineBefore) {
                     blockType = TextParagraphType::SceneCharacters;
                 }
                 //
