@@ -2768,6 +2768,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             // Создаём сам текстовый элемент
             //
             auto textItem = d->model->createTextItem();
+            textItem->beginChangeTransaction();
+            textItem->setParagraphType(paragraphType);
             textItem->setCorrection(
                 block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
             textItem->setCorrectionContinued(
@@ -2781,7 +2783,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             } else {
                 textItem->setInFirstColumn({});
             }
-            textItem->setParagraphType(paragraphType);
             if (d->documentTemplate().paragraphStyle(paragraphType).align()
                 != block.blockFormat().alignment()) {
                 textItem->setAlignment(block.blockFormat().alignment());
@@ -2792,6 +2793,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
             textItem->setResourceMarks(block.textFormats());
+            textItem->finishChangeTransaction();
 
             //
             // Является ли предыдущий элемент футером папки

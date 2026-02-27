@@ -112,6 +112,13 @@ public:
     int subtype() const override final;
 
     /**
+     * @brief Методы для реализации транзакции изменения элемента (когда нужно сделать множество
+     *        изменений последовательно, чтобы не перезапускать каждый раз формирование xml и т.п.)
+     */
+    void beginChangeTransaction();
+    void finishChangeTransaction();
+
+    /**
      * @brief Тип параграфа
      */
     const TextParagraphType& paragraphType() const;

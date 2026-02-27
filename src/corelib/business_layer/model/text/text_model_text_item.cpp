@@ -45,6 +45,11 @@ public:
     TextModelTextItem* q = nullptr;
 
     /**
+     * @brief Запущена ли транзакция изменения блока
+     */
+    bool isChangeTransactionStarted = false;
+
+    /**
      * @brief Номер блока
      */
     std::optional<Number> number;
@@ -280,16 +285,18 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
 
 void TextModelTextItem::Implementation::updateXml()
 {
+    if (isChangeTransactionStarted) {
+        return;
+    }
+
     xml = buildXml(0, q->textToSave().length());
 }
 
 QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
 {
-    if (isCorrection) {
+    if (isCorrection || paragraphType == TextParagraphType::Undefined) {
         return {};
     }
-
-    Q_ASSERT(paragraphType != TextParagraphType::Undefined);
 
     const auto _end = _from + _length;
 
@@ -676,6 +683,21 @@ TextModelTextItem::~TextModelTextItem() = default;
 int TextModelTextItem::subtype() const
 {
     return static_cast<int>(paragraphType());
+}
+
+void TextModelTextItem::beginChangeTransaction()
+{
+    d->isChangeTransactionStarted = true;
+}
+
+void TextModelTextItem::finishChangeTransaction()
+{
+    if (!d->isChangeTransactionStarted) {
+        return;
+    }
+
+    d->isChangeTransactionStarted = false;
+    d->updateXml();
 }
 
 const TextParagraphType& TextModelTextItem::paragraphType() const
