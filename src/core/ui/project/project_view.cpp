@@ -230,6 +230,7 @@ void ProjectView::setActive(bool _active)
 void ProjectView::setDocumentDrafts(const BusinessLayer::StructureModelItem* _item)
 {
     if (d->documentDrafts->count() == 1 && _item->drafts().isEmpty()) {
+        setDraftsVisible(false);
         return;
     }
 
