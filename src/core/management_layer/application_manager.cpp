@@ -2176,6 +2176,31 @@ void ApplicationManager::Implementation::exportCurrentDocument()
     }
 
     //
+    // Если у нас хоть одной из моделей нет, то значит они сейчас загружаются с сервера
+    //
+    const char* modelsLoadingTaskId = "loading-models-for-export";
+    if (std::find_if(models.begin(), models.end(),
+                     [](const QPair<QString, BusinessLayer::AbstractModel*>& _item) {
+                         return _item.second == nullptr;
+                     })
+        != models.end()) {
+        //
+        // ... так что покажем уведомление, мол мы подготавливаемся к экспорту
+        //
+        if (TaskBar::isTaskFinished(modelsLoadingTaskId)) {
+            TaskBar::addTask(modelsLoadingTaskId);
+            TaskBar::setTaskTitle(modelsLoadingTaskId, tr("Prepare document for exporting"));
+            TaskBar::setIndeterminate(modelsLoadingTaskId, true);
+        }
+        //
+        // ... и запланируем выполнение экспорта чуть позже
+        //
+        QTimer::singleShot(300, q, [this] { exportCurrentDocument(); });
+        return;
+    }
+    TaskBar::finishTask(modelsLoadingTaskId);
+
+    //
     // Если экпортируем напрямую из редактора сценария, то предустановим выбранным драфтом тот,
     // с которым идёт работа в данный момент
     //

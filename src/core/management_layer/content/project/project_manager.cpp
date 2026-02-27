@@ -211,6 +211,11 @@ public:
                             const PluginsBuilder& _pluginsBuilder);
 
     /**
+     * @brief Получить модель по заданному юиду, если модель нулевая, то запросить его из облака
+     */
+    BusinessLayer::AbstractModel* modelFor(const QUuid& _uuid);
+
+    /**
      * @brief Обновить текст пункта меню разделения экрана
      */
     void updateOptionsText();
@@ -559,6 +564,16 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     toolBar->setOptions({ splitScreenAction }, AppBarOptionsLevel::View);
     splitScreenShortcut->setKey(QKeySequence("F2"));
     splitScreenShortcut->setContext(Qt::ApplicationShortcut);
+}
+
+BusinessLayer::AbstractModel* ProjectManager::Implementation::modelFor(const QUuid& _uuid)
+{
+    auto model = modelsFacade.modelFor(_uuid);
+    if (model == nullptr) {
+        emit q->downloadDocumentRequested(_uuid);
+    }
+
+    return model;
 }
 
 void ProjectManager::Implementation::updateOptionsText()
@@ -1294,8 +1309,7 @@ void ProjectManager::Implementation::editDraft(const QModelIndex& _itemIndex, in
     //
     else {
         const auto draft = item->drafts().at(_draftIndex);
-        dialog->edit(draft->name(), draft->color(), draft->isReadOnly(),
-                          draft->isComparison());
+        dialog->edit(draft->name(), draft->color(), draft->isReadOnly(), draft->isComparison());
         connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
                 [this, item, _draftIndex, dialog](const QString& _name, const QColor& _color,
                                                   int _sourceDraftIndex, bool _readOnly) {
@@ -4245,9 +4259,9 @@ QVector<QPair<QString, BusinessLayer::AbstractModel*>> ProjectManager::currentMo
         }
 
         QVector<QPair<QString, BusinessLayer::AbstractModel*>> models;
-        models.append({ _item->draftName(), d->modelsFacade.modelFor(_item->uuid()) });
+        models.append({ _item->draftName(), d->modelFor(_item->uuid()) });
         for (const auto& version : _item->drafts()) {
-            models.append({ version->name(), d->modelsFacade.modelFor(version->uuid()) });
+            models.append({ version->name(), d->modelFor(version->uuid()) });
         }
         return models;
     };
@@ -4704,10 +4718,10 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         if (item != nullptr) {
             if (d->view.active->currentDraft() == 0 && item->uuid() == _documentInfo.uuid) {
                 showView(d->navigator->currentIndex(), d->view.activeViewMimeType);
-            } else if (const auto versionItem
+            } else if (const auto draftItem
                        = item->drafts().value(d->view.active->currentDraft() - 1);
-                       versionItem != nullptr && versionItem->uuid() == _documentInfo.uuid) {
-                showViewForDraft(versionItem);
+                       draftItem != nullptr && draftItem->uuid() == _documentInfo.uuid) {
+                showViewForDraft(draftItem);
             }
         }
     }
