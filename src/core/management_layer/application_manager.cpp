@@ -461,7 +461,7 @@ void ApplicationManager::Implementation::initLogging()
         = QString("%1/starc/logs")
               .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     auto logFiles = QDir(logFileFolder).entryInfoList(QDir::Files, QDir::Time);
-    constexpr int maxLogFilesSize = 5;
+    constexpr int maxLogFilesSize = 11;
     while (logFiles.size() > maxLogFilesSize) {
         QFile::remove(logFiles.takeLast().absoluteFilePath());
     }
