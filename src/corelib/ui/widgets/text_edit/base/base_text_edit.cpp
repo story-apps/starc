@@ -717,6 +717,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         setVerticalScroll(verticalScroll()
                           + verticalScrollSingleStep() * (_event->key() == Qt::Key_Up ? -1 : 1));
     }
+    //
     // ... перевод курсора к следующему символу
     //
     else if (_event == QKeySequence::MoveToNextChar) {

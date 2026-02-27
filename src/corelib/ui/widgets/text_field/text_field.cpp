@@ -1200,6 +1200,42 @@ void TextField::keyPressEvent(QKeyEvent* _event)
     updateEnteredText(_event);
 }
 
+bool TextField::keyPressEventReimpl(QKeyEvent* _event)
+{
+    bool isEventHandled = true;
+
+    //
+    // Переопределяем
+    //
+    // ... нажатие кнопки вверх
+    //
+    if (_event->key() == Qt::Key_Up && _event->modifiers().testFlag(Qt::NoModifier)) {
+        auto cursor = textCursor();
+        if (!cursor.movePosition(QTextCursor::Up)) {
+            cursor.movePosition(QTextCursor::Start);
+        }
+        setTextCursor(cursor);
+    }
+    //
+    // ... нажатие кнопки вниз
+    //
+    else if (_event->key() == Qt::Key_Down && _event->modifiers().testFlag(Qt::NoModifier)) {
+        auto cursor = textCursor();
+        if (!cursor.movePosition(QTextCursor::Down)) {
+            cursor.movePosition(QTextCursor::End);
+        }
+        setTextCursor(cursor);
+    }
+    //
+    // Обрабатываем в базовом классе
+    //
+    else {
+        isEventHandled = BaseTextEdit::keyPressEventReimpl(_event);
+    }
+
+    return isEventHandled;
+}
+
 void TextField::changeEvent(QEvent* _event)
 {
     switch (_event->type()) {

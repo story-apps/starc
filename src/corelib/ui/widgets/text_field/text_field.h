@@ -204,6 +204,11 @@ protected:
     void keyPressEvent(QKeyEvent* _event) override;
 
     /**
+     * @brief Обрабатываем специфичные ситуации
+     */
+    bool keyPressEventReimpl(QKeyEvent* _event) override;
+
+    /**
      * @brief Ловим LayoutDirectionChanged
      */
     void changeEvent(QEvent* _event) override;
