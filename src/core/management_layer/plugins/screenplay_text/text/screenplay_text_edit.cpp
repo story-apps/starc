@@ -463,7 +463,13 @@ void ScreenplayTextEdit::setBeatsVisible(bool _visible)
 
 void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
 {
-    BusinessLayer::TextCursor cursor = textCursor();
+    addParagraph(_type, textCursor());
+}
+
+void ScreenplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
+                                      const QTextCursor& _cursor)
+{
+    BusinessLayer::TextCursor cursor = _cursor;
 
     //
     // При попытке вставки папки или сцены в таблицу, подменяем тип на описание действия
@@ -502,17 +508,17 @@ void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
         while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
             moveCursor(QTextCursor::NextBlock);
             moveCursor(QTextCursor::EndOfBlock);
-            cursor = textCursor();
+            cursor = _cursor;
         }
     }
 
-    d->document.addParagraph(_type, textCursor());
+    d->document.addParagraph(_type, _cursor);
 
     //
     // ... при необходимости восстанавливаем режим изоляции
     //
     if (needReisolate) {
-        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(_cursor.block()));
     }
 
     emit paragraphTypeChanged();

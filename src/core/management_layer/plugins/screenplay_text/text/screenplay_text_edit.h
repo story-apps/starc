@@ -104,6 +104,7 @@ public:
      * @param Тип блока
      */
     void addParagraph(BusinessLayer::TextParagraphType _type);
+    void addParagraph(BusinessLayer::TextParagraphType _type, const QTextCursor& _cursor);
 
     /**
      * @brief Установить тип текущего блока

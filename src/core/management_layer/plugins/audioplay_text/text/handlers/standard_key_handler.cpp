@@ -304,12 +304,15 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
 
     //
     // Если курсор в абзаце с таблицей, а под таблицей ничего нет, то добавим блок вниз,
+    // NOTE: используем именно версию с добавлением параграфа в заданном курсоре, т.к. мы не можем
+    //       установить визаульный курсор в блок разделителя, он автоматически будет смещён в блок,
+    //       в который можно добавлять текст
     //
     if (cursor.atEnd()
         && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter) {
         cursor.clearSelection();
+        editor()->addParagraph(TextParagraphType::Cue, cursor);
         editor()->setTextCursor(cursor);
-        editor()->addParagraph(TextParagraphType::Cue);
     }
 }
 

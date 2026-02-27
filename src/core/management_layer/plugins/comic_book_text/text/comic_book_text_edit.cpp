@@ -369,13 +369,19 @@ void ComicBookTextEdit::redo()
 
 void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
 {
+    addParagraph(_type, textCursor());
+}
+
+void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
+                                     const QTextCursor& _cursor)
+{
     QString mimeDataToMove;
 
     //
     // Выводим курсор за пределы таблицы, чтобы вставка происходила за её пределами и не создавались
     // многоуровневые таблицы
     //
-    if (BusinessLayer::TextCursor cursor = textCursor(); cursor.inTable()) {
+    if (BusinessLayer::TextCursor cursor = _cursor; cursor.inTable()) {
         //
         // Курсор обязательно должен быть во второй колонке
         //
@@ -421,13 +427,13 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
     //
     // Вставляем параграф на уровне модели
     //
-    d->document.addParagraph(_type, textCursor());
+    d->document.addParagraph(_type, _cursor);
 
     //
     // ... при необходимости восстанавливаем режим изоляции
     //
     if (needReisolate) {
-        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(_cursor.block()));
     }
 
     //
@@ -438,9 +444,9 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
         // Если вставляется персонаж, то разделяем страницу, для добавления реплики
         //
         if (_type == BusinessLayer::TextParagraphType::Character) {
-            const auto cursorPosition = textCursor().position();
-            d->document.splitParagraph(textCursor());
-            auto cursor = textCursor();
+            const auto cursorPosition = _cursor.position();
+            d->document.splitParagraph(_cursor);
+            auto cursor = _cursor;
             cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
             setTextCursor(cursor);
             cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
@@ -450,9 +456,9 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
         // Если вставляется реплика, то разделяем страницу и ставим курсор во вторую колонку
         //
         else if (_type == BusinessLayer::TextParagraphType::Dialogue) {
-            const auto cursorPosition = textCursor().position();
-            d->document.splitParagraph(textCursor());
-            auto cursor = textCursor();
+            const auto cursorPosition = _cursor.position();
+            d->document.splitParagraph(_cursor);
+            auto cursor = _cursor;
             cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
             setTextCursor(cursor);
             d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, cursor);
@@ -466,7 +472,7 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
     // Вставляем вырезанные данные
     //
     if (!mimeDataToMove.isEmpty()) {
-        d->document.insertFromMime(textCursor().position(), mimeDataToMove);
+        d->document.insertFromMime(_cursor.position(), mimeDataToMove);
     }
 
     emit paragraphTypeChanged();
