@@ -2199,11 +2199,19 @@ Ui::IDocumentView* ProjectManager::Implementation::inactiveDocumentView() const
 void ProjectManager::Implementation::updateViewsEditingMode()
 {
     if (auto activeView = activeDocumentView(); activeView != nullptr) {
-        const auto item = projectStructureModel->itemForIndex(view.activeIndex);
+        auto item = projectStructureModel->itemForIndex(view.activeIndex);
+        if (view.active->currentDraft() > 0) {
+            const auto draftIndex = view.active->currentDraft() - 1;
+            item = item->drafts().at(draftIndex);
+        }
         activeView->setEditingMode(documentEditingMode(item));
     }
     if (auto inactiveView = inactiveDocumentView(); inactiveView != nullptr) {
-        const auto item = projectStructureModel->itemForIndex(view.inactiveIndex);
+        auto item = projectStructureModel->itemForIndex(view.inactiveIndex);
+        if (view.active->currentDraft() > 0) {
+            const auto draftIndex = view.inactive->currentDraft() - 1;
+            item = item->drafts().at(draftIndex);
+        }
         inactiveView->setEditingMode(documentEditingMode(item));
     }
 
