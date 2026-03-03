@@ -271,7 +271,7 @@ void CreateDraftDialog::editCurrent(const QString& _name, const QColor& _color)
 }
 
 void CreateDraftDialog::edit(const QString& _name, const QColor& _color, bool _readOnly,
-                                  bool _comparison)
+                             bool _comparison)
 {
     d->state = Edit;
     updateTranslations();
