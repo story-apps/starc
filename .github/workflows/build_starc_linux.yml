@@ -1,7 +1,7 @@
 name: Build Starc for Linux
 
 env:
-  APP_VERSION: 0.8.1
+  APP_VERSION: 0.8.2
 
 on:
   push:
