@@ -186,7 +186,7 @@ QString DocumentChangeMapper::insertStatement(Domain::DomainObject* _object,
 
     const auto documentChangeObject = static_cast<DocumentChangeObject*>(_object);
     _insertValues.clear();
-    _insertValues.append(documentChangeObject->id().value());
+    _insertValues.append(QVariant());
     _insertValues.append(documentChangeObject->documentUuid().toString());
     _insertValues.append(documentChangeObject->uuid().toString());
     _insertValues.append(qCompress(documentChangeObject->undoPatch()));

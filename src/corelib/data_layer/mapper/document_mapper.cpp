@@ -126,7 +126,7 @@ QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _in
 
     const auto documentObject = static_cast<DocumentObject*>(_object);
     _insertValues.clear();
-    _insertValues.append(documentObject->id().value());
+    _insertValues.append(QVariant());
     _insertValues.append(documentObject->uuid().toString());
     _insertValues.append(static_cast<int>(documentObject->type()));
     _insertValues.append(documentObject->content());

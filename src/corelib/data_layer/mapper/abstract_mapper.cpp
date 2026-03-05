@@ -19,7 +19,6 @@ namespace DataMappingLayer {
 
 void AbstractMapper::clear()
 {
-    m_isLastIdentifierLoaded = false;
     for (auto& [key, value] : m_loadedObjectsMap) {
         delete value;
         value = nullptr;
@@ -56,16 +55,6 @@ QVector<Domain::DomainObject*> AbstractMapper::abstractFind(const QString& _filt
 bool AbstractMapper::abstractInsert(DomainObject* _object)
 {
     //
-    // Установим идентификатор для нового объекта
-    //
-    _object->setId(findNextIdentifier());
-
-    //
-    // Добавим вновь созданный объект в список загруженных объектов
-    //
-    m_loadedObjectsMap.emplace(_object->id(), _object);
-
-    //
     // Получим данные для формирования запроса на их добавление
     //
     QVariantList insertValues;
@@ -85,7 +74,15 @@ bool AbstractMapper::abstractInsert(DomainObject* _object)
     //
     const auto isInsertSuccesful = executeSql(insertQuery);
     if (isInsertSuccesful) {
+        //
+        // .. если добавление оказалось успешным, определим идентификатор объекта
+        //
+        _object->setId(Identifier(insertQuery.lastInsertId().toInt()));
         _object->markChangesStored();
+        //
+        // ... и добавим вновь созданный объект в список загруженных объектов
+        //
+        m_loadedObjectsMap.emplace(_object->id(), _object);
     }
     return isInsertSuccesful;
 }
@@ -189,31 +186,6 @@ DomainObject* AbstractMapper::loadObjectFromDatabase(const Identifier& _id)
     const QSqlRecord record = query.record();
     DomainObject* result = load(record);
     return result;
-}
-
-Identifier AbstractMapper::findNextIdentifier()
-{
-    if (!m_isLastIdentifierLoaded) {
-        //
-        // Если нет ещё последнего индекса по таблице, загрузим его
-        //
-        QSqlQuery query = Database::query();
-        query.prepare(findLastOneStatement());
-        query.exec();
-        query.next();
-        const QSqlRecord record = query.record();
-        load(record);
-
-        m_isLastIdentifierLoaded = true;
-    }
-
-    Identifier maxId(0);
-    if (!m_loadedObjectsMap.empty()) {
-        auto iter = m_loadedObjectsMap.cend();
-        --iter;
-        maxId = iter->first;
-    }
-    return maxId.next();
 }
 
 DomainObject* AbstractMapper::load(const QSqlRecord& _record)

@@ -72,21 +72,11 @@ private:
     Domain::DomainObject* loadObjectFromDatabase(const Domain::Identifier& _id);
 
     /**
-     * @brief Получить идентификатор для нового объекта на сохранение в БД
-     */
-    Domain::Identifier findNextIdentifier();
-
-    /**
      * @brief Загрузить или обновить объект из записи в БД
      */
     Domain::DomainObject* load(const QSqlRecord& _record);
 
 private:
-    /**
-     * @brief Был ли загружен идентификатор последнего элемента
-     */
-    bool m_isLastIdentifierLoaded = false;
-
     /**
      * @brief Загруженные объекты из базы данных
      */
