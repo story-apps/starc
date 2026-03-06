@@ -1262,12 +1262,25 @@ void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemInde
                                                 (_draftIndex == 0 ? _lockEditing : false),
                                                 currentDraftContent, comparison);
             //
-            // ... а в текущий устанавливаем целевое название и содержимое
+            // ... а в текущий устанавливаем целевое название, цвет
             //
             item->setDraftName(_name);
             item->setDraftColor(_color);
-            currentDraftModel->setDocumentContent(itemContent);
             projectStructureModel->updateItem(item);
+            //
+            // ... и содержимое
+            //
+            currentDraftModel->setDocumentContent(itemContent);
+            //
+            // ... переназначим содержимое, т.к. если новый драфт, создаётся на базе импортируемого
+            //     документа, то оно может несколько отличаться от эталонного
+            //
+            currentDraftModel->reassignContent();
+            //
+            // ... но при этом установим в документ старое содержимое, чтобы модель создала патч
+            //
+            currentDraftModel->document()->setContent(currentDraftContent);
+            currentDraftModel->saveChanges();
 
             view.active->setDocumentDrafts(item);
 
@@ -1399,17 +1412,30 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
                 const auto draftToRemoveIndex = 0;
                 const auto draftToRemove = item->drafts().at(draftToRemoveIndex);
                 documentToRemoveUuid = draftToRemove->uuid();
-
+                //
+                // ... а в текущий поместим название, цвет
+                //
                 item->setDraftName(draftToRemove->name());
                 item->setDraftColor(draftToRemove->color());
-                auto itemModel = modelsFacade.modelFor(item->uuid());
                 projectStructureModel->updateItem(item);
-
+                //
+                // ... и содержимое удаляемого драфта
+                //
+                auto currentDraftModel = modelsFacade.modelFor(item->uuid());
+                const auto currentDraftContent = currentDraftModel->document()->content();
                 auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
                     documentToRemoveUuid);
+                currentDraftModel->setDocumentContent(document->content());
+                currentDraftModel->reassignContent();
+                //
+                // ... но при этом установим в документ старое содержимое, чтобы модель создала патч
+                //
+                currentDraftModel->document()->setContent(currentDraftContent);
+                currentDraftModel->saveChanges();
 
-                itemModel->setDocumentContent(document->content());
-
+                //
+                // Собственно удаляем драфт
+                //
                 modelsFacade.removeModelFor(document);
                 DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
                 projectStructureModel->removeItemDraft(item, draftToRemoveIndex);
@@ -2368,6 +2394,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 // ... устанавливаем импортированный
                 //
                 documentModel->setDocumentContent(_content);
+                //
+                // ... переназначим содержимое, т.к. оно может отличаться от импортированного
+                //
                 documentModel->reassignContent();
                 //
                 // ... возвращаем в документ болванку, чтобы создался патч, по замене контента
