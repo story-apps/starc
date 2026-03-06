@@ -497,11 +497,15 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             // ECMA-376 1st edition, ECMA-376 2nd edition transitional, ISO/IEC 29500 transitional
             if (attributes.hasAttribute("w:before")) {
                 top_indent = pixelsFromTwips(attributes.value("w:before").toString().toInt());
-                style.block_format.setTopMargin(top_indent);
+                if (top_indent) {
+                    style.block_format.setTopMargin(top_indent);
+                }
             }
             if (attributes.hasAttribute("w:after")) {
                 bottom_indent = pixelsFromTwips(attributes.value("w:after").toString().toInt());
-                style.block_format.setBottomMargin(bottom_indent);
+                if (bottom_indent) {
+                    style.block_format.setBottomMargin(bottom_indent);
+                }
             }
         } else if (m_xml.qualifiedName() == QLatin1String("w:textDirection")) {
             if (value == QLatin1String("rl")) {
