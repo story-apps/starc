@@ -517,6 +517,7 @@ void ImportManager::importScreenplay(const QString& _filePath, bool _importDocum
     options.importCharacters = _importDocuments;
     options.importLocations = _importDocuments;
     options.importResearch = _importDocuments;
+    options.keepSceneNumbers = true;
     d->importScreenplay(options);
 }
 
