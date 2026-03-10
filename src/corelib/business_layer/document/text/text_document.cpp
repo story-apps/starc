@@ -2044,14 +2044,20 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     //
     do {
         //
-        // ... определим область которую будет занимать новый контент
+        // ... если добавляемая заметка касается только одного блока
         //
         auto selectionInterval = _cursor.selectionInterval();
+        if (findBlock(selectionInterval.from) != findBlock(selectionInterval.to)) {
+            break;
+        }
+        //
+        // ... определим область которую будет занимать новый контент
+        //
         const auto blockPosition = _cursor.block().position();
         selectionInterval.from -= blockPosition;
         selectionInterval.to -= blockPosition;
         //
-        // ... ищем текстовый элемент для текста куда добавляется новый текст
+        // ... ищем текстовый элемент для текста куда добавляется новая заметка
         //
         const auto iter = d->positionsToItems.lower_bound(blockPosition);
         if (iter == d->positionsToItems.end() || iter->second->type() != TextModelItemType::Text) {
