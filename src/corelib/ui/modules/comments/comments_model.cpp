@@ -153,7 +153,9 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
                     == previousTextItem->text().length()) {
                 auto& reviewMarkWrapper
                     = reviewMarks[reviewMarks.indexOf(previousTextItemLastReviewMarkWrapper)];
-                reviewMarkWrapper.items.append(_textItem);
+                if (!reviewMarkWrapper.items.contains(_textItem)) {
+                    reviewMarkWrapper.items.append(_textItem);
+                }
                 reviewMarkWrapper.toInLastItem = _reviewMark.length;
                 reviewMarkAdded = true;
             }
@@ -788,7 +790,9 @@ void CommentsModel::setTextModel(TextModel* _model)
                                         == lastReviewMarkWrapper.items.constLast()
                                                ->text()
                                                .length()) {
-                                    lastReviewMarkWrapper.items.append(textItem);
+                                    if (!lastReviewMarkWrapper.items.contains(textItem)) {
+                                        lastReviewMarkWrapper.items.append(textItem);
+                                    }
                                     lastReviewMarkWrapper.toInLastItem = reviewMark.length;
                                     continue;
                                 }
@@ -806,7 +810,9 @@ void CommentsModel::setTextModel(TextModel* _model)
                                 if (lastReviewMarkWrapper.items.last() == textItem
                                     && lastReviewMarkWrapper.reviewMark.isPartiallyEqual(reviewMark)
                                     && lastReviewMarkWrapper.toInLastItem == reviewMark.from) {
-                                    lastReviewMarkWrapper.items.append(textItem);
+                                    if (!lastReviewMarkWrapper.items.contains(textItem)) {
+                                        lastReviewMarkWrapper.items.append(textItem);
+                                    }
                                     lastReviewMarkWrapper.toInLastItem = reviewMark.end();
                                     continue;
                                 }
