@@ -407,9 +407,31 @@ void DocxReader::readParagraph()
 
     // Read paragraph text
     if (has_children) {
+        //
+        // Если документ находился в режиме отслеживания изменений, то в нём, наравне с обычным
+        // текстом, присутствуют блоки w:ins, w:moveTo и w:del, внутри которых уже находятся строки
+        // с добавленным, перемещённым, либо удалённым текстом.
+        //
+        // Так как мы считываем только актуальный текст, добавляем логику, учитывающую эти блоки, а
+        // также учитывающую момент со считыванием следующих строк текста, которые могут находится
+        // как внутри этих блоков, так и на одном уровне с ними.
+        //
+        const QSet<QString> insertion_headers = {
+            QLatin1String("w:ins"),
+            QLatin1String("w:moveTo"),
+        };
+        bool in_insertion = false;
         do {
+            if (in_insertion && m_xml.tokenType() == QXmlStreamReader::EndElement
+                && insertion_headers.contains(m_xml.qualifiedName().toString())) {
+                in_insertion = false;
+                continue;
+            }
+
             if (m_xml.qualifiedName() == QLatin1String("w:r")) {
                 readRun();
+            } else if (insertion_headers.contains(m_xml.qualifiedName().toString())) {
+                in_insertion = true;
             } else if ((m_xml.qualifiedName() == QLatin1String("w:commentRangeStart"))
                        || (m_xml.qualifiedName() == QLatin1String("w:bookmarkStart"))) {
                 m_current_comment.clear();
@@ -424,7 +446,7 @@ void DocxReader::readParagraph()
             } else if (m_xml.tokenType() != QXmlStreamReader::EndElement) {
                 m_xml.skipCurrentElement();
             }
-        } while (m_xml.readNextStartElement());
+        } while (m_xml.readNextStartElement() || in_insertion);
     }
     m_in_block = false;
 
