@@ -518,10 +518,6 @@ void AccountView::showTeam(int _teamId)
 
 void AccountView::updateTranslations()
 {
-    const auto isRussianSpeaking = QLocale().language() == QLocale::Russian
-        || QLocale().language() == QLocale::Belarusian
-        || QLocale().language() == QLocale::Ukrainian;
-
     d->name->setLabel(tr("Your name"));
     d->description->setLabel(tr("Your bio"));
     d->newsletterSubscription->setText(tr("I want to receive STARC news"));
@@ -531,14 +527,14 @@ void AccountView::updateTranslations()
     d->subscriptionsTitle->setText(tr("Subscriptions"));
     d->compareSubscriptions->setText(tr("Compare subscriptions"));
     d->proSubscription->setInfo("PRO",
-                                tr("Advanced tools for professionals\n"
+                                tr("Advanced tools for professionals\n\n"
                                    "• Characters relations\n"
                                    "• Corkboard\n"
                                    "• Timeline\n"
                                    "• Mind maps\n"
                                    "• and more writer's tools..."));
     d->creatorSubscription->setInfo("CREATOR",
-                                    tr("The next level tools for storytelling and collaboration\n"
+                                    tr("The next level tools for storytelling and collaboration\n\n"
                                        "• 5GB cloud storage\n"
                                        "• Seamless synchronization across all your devices\n"
                                        "• Realtime collaboration\n"
