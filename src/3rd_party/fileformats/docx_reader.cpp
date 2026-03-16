@@ -22,6 +22,7 @@
 #include "format_helpers.h"
 #include "qtzip/QtZipReader"
 
+#include <QSet>
 #include <QTextDocument>
 #include <QXmlStreamAttributes>
 
