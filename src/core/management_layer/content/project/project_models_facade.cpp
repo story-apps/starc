@@ -48,6 +48,7 @@
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <utils/logging.h>
 
 #include <QSet>
 
@@ -283,6 +284,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(
                     modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning("Information model isn't initialized for screenplay title page "
+                                 "with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    titlePageModel->deleteLater();
+                    return nullptr;
+                }
                 titlePageModel->setInformationModel(informationModel);
 
                 model = titlePageModel;
@@ -305,6 +314,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(
                     modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for screenplay synopsis with uuid %1",
+                        documentToLoad->uuid().toString());
+                    synopsisModel->deleteLater();
+                    return nullptr;
+                }
                 synopsisModel->setInformationModel(informationModel);
 
                 model = synopsisModel;
@@ -324,6 +341,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                     return nullptr;
                 }
                 Q_ASSERT(treatmentItem->parent());
+
                 //
                 // ... модель сценария
                 //
@@ -339,8 +357,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 model = modelFor(screenplayItem->uuid());
                 //
                 // ... если не удалось получить модель сценария, то значит она ещё не была загружена
-                // из
-                //     облака, возвращаем тут пустую модель, т.к. это нормальная штатная ситуация
+                //     из облака, возвращаем тут пустую модель, т.к. это нормальная штатная ситуация
                 //
                 if (model == nullptr) {
                     return nullptr;
@@ -366,6 +383,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 auto informationModel = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(
                     modelFor(parentUuid));
                 Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for screenplay text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    screenplayModel->deleteLater();
+                    return nullptr;
+                }
                 screenplayModel->setInformationModel(informationModel);
                 //
                 // ... модель титульной страницы
@@ -377,6 +401,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 auto titlePageModel = qobject_cast<BusinessLayer::SimpleTextModel*>(
                     modelFor(titlePageItem->uuid()));
                 Q_ASSERT(titlePageModel);
+                if (titlePageModel == nullptr) {
+                    Log::warning(
+                        "Title page model isn't initialized for screenplay text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    screenplayModel->deleteLater();
+                    return nullptr;
+                }
                 screenplayModel->setTitlePageModel(titlePageModel);
                 //
                 // ... модель синопсиса
@@ -388,6 +419,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 auto synopsisModel
                     = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
                 Q_ASSERT(synopsisModel);
+                if (synopsisModel == nullptr) {
+                    Log::warning(
+                        "Synopsis model isn't initialized for screenplay text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    screenplayModel->deleteLater();
+                    return nullptr;
+                }
                 screenplayModel->setSynopsisModel(synopsisModel);
                 //
                 // ... модель справочников сценариев
@@ -445,6 +483,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(!screenplayTextItemUuid.isNull());
                 auto screenplayModel = qobject_cast<BusinessLayer::ScreenplayTextModel*>(
                     modelFor(screenplayTextItemUuid));
+                Q_ASSERT(screenplayModel);
+                if (screenplayModel == nullptr) {
+                    Log::warning(
+                        "Text model isn't initialized for screenplay statistics with uuid %1",
+                        documentToLoad->uuid().toString());
+                    statisticsModel->deleteLater();
+                    return nullptr;
+                }
                 statisticsModel->setScreenplayTextModel(screenplayModel);
 
                 model = statisticsModel;
@@ -503,6 +549,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                     = qobject_cast<BusinessLayer::ScreenplaySeriesInformationModel*>(
                         modelFor(parentUuid));
                 Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning("Information model isn't initialized for screenplay series "
+                                 "episodes with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    episodesModel->deleteLater();
+                    return nullptr;
+                }
                 episodesModel->setInformationModel(informationModel);
 
                 //
@@ -572,6 +625,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(!episodesItemUuid.isNull());
                 auto episodesModel = qobject_cast<BusinessLayer::ScreenplaySeriesEpisodesModel*>(
                     modelFor(episodesItemUuid));
+                Q_ASSERT(episodesModel);
+                if (episodesModel == nullptr) {
+                    Log::warning("Episodes model isn't initialized for screenplay series "
+                                 "statistics with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    statisticsModel->deleteLater();
+                    return nullptr;
+                }
                 statisticsModel->setEpisodesModel(episodesModel);
 
                 model = statisticsModel;
@@ -622,6 +683,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for comicbook title page with uuid %1",
+                        documentToLoad->uuid().toString());
+                    titlePageModel->deleteLater();
+                    return nullptr;
+                }
                 titlePageModel->setInformationModel(informationModel);
 
                 model = titlePageModel;
@@ -644,6 +713,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for comicbook synopsis with uuid %1",
+                        documentToLoad->uuid().toString());
+                    synopsisModel->deleteLater();
+                    return nullptr;
+                }
                 synopsisModel->setInformationModel(informationModel);
 
                 model = synopsisModel;
@@ -666,6 +743,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for comicbook text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    comicBookModel->deleteLater();
+                    return nullptr;
+                }
                 comicBookModel->setInformationModel(informationModel);
                 //
                 // ... модель титульной страницы
@@ -676,6 +761,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::ComicBookTitlePage);
                 auto titlePageModel = qobject_cast<BusinessLayer::SimpleTextModel*>(
                     modelFor(titlePageItem->uuid()));
+                Q_ASSERT(titlePageModel);
+                if (titlePageModel == nullptr) {
+                    Log::warning(
+                        "Title page model isn't initialized for comicbook text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    comicBookModel->deleteLater();
+                    return nullptr;
+                }
                 comicBookModel->setTitlePageModel(titlePageModel);
                 //
                 // ... модель синопсиса
@@ -686,6 +779,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::ComicBookSynopsis);
                 auto synopsisModel
                     = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+                Q_ASSERT(synopsisModel);
+                if (synopsisModel == nullptr) {
+                    Log::warning("Synopsis model isn't initialized for comicbook text with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    comicBookModel->deleteLater();
+                    return nullptr;
+                }
                 comicBookModel->setSynopsisModel(synopsisModel);
                 //
                 // ... модель справочников
@@ -734,6 +834,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(!comicBookTextItemUuid.isNull());
                 auto comicBookModel = qobject_cast<BusinessLayer::ComicBookTextModel*>(
                     modelFor(comicBookTextItemUuid));
+                Q_ASSERT(comicBookModel);
+                if (comicBookModel == nullptr) {
+                    Log::warning(
+                        "Text model isn't initialized for comicbook statistics with uuid %1",
+                        documentToLoad->uuid().toString());
+                    statisticsModel->deleteLater();
+                    return nullptr;
+                }
                 statisticsModel->setComicBookTextModel(comicBookModel);
 
                 model = statisticsModel;
@@ -784,6 +892,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::AudioplayInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for audioplay title page with uuid %1",
+                        documentToLoad->uuid().toString());
+                    titlePageModel->deleteLater();
+                    return nullptr;
+                }
                 titlePageModel->setInformationModel(informationModel);
 
                 connect(titlePageModel,
@@ -812,6 +928,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::AudioplayInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for audioplay synopsis with uuid %1",
+                        documentToLoad->uuid().toString());
+                    synopsisModel->deleteLater();
+                    return nullptr;
+                }
                 synopsisModel->setInformationModel(informationModel);
 
                 model = synopsisModel;
@@ -834,6 +958,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::AudioplayInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for audioplay text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    audioplayModel->deleteLater();
+                    return nullptr;
+                }
                 audioplayModel->setInformationModel(informationModel);
                 //
                 // ... модель титульной страницы
@@ -844,6 +976,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::AudioplayTitlePage);
                 auto titlePageModel = qobject_cast<BusinessLayer::SimpleTextModel*>(
                     modelFor(titlePageItem->uuid()));
+                Q_ASSERT(titlePageModel);
+                if (titlePageModel == nullptr) {
+                    Log::warning(
+                        "Title page model isn't initialized for audioplay text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    audioplayModel->deleteLater();
+                    return nullptr;
+                }
                 audioplayModel->setTitlePageModel(titlePageModel);
                 //
                 // ... модель синопсиса
@@ -854,6 +994,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::AudioplaySynopsis);
                 auto synopsisModel
                     = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+                Q_ASSERT(synopsisModel);
+                if (synopsisModel == nullptr) {
+                    Log::warning("Synopsis model isn't initialized for audioplay text with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    audioplayModel->deleteLater();
+                    return nullptr;
+                }
                 audioplayModel->setSynopsisModel(synopsisModel);
                 //
                 // ... модель персонажей
@@ -891,6 +1038,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(!audioplayTextItemUuid.isNull());
                 auto audioplayModel = qobject_cast<BusinessLayer::AudioplayTextModel*>(
                     modelFor(audioplayTextItemUuid));
+                Q_ASSERT(audioplayModel);
+                if (audioplayModel == nullptr) {
+                    Log::warning(
+                        "Text model isn't initialized for audioplay statistics with uuid %1",
+                        documentToLoad->uuid().toString());
+                    statisticsModel->deleteLater();
+                    return nullptr;
+                }
                 statisticsModel->setAudioplayTextModel(audioplayModel);
 
                 model = statisticsModel;
@@ -941,6 +1096,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::StageplayInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for stageplay title page with uuid %1",
+                        documentToLoad->uuid().toString());
+                    titlePageModel->deleteLater();
+                    return nullptr;
+                }
                 titlePageModel->setInformationModel(informationModel);
 
                 connect(titlePageModel,
@@ -969,6 +1132,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::StageplayInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for stageplay synopsis with uuid %1",
+                        documentToLoad->uuid().toString());
+                    synopsisModel->deleteLater();
+                    return nullptr;
+                }
                 synopsisModel->setInformationModel(informationModel);
 
                 model = synopsisModel;
@@ -991,6 +1162,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::StageplayInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for stageplay text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    stageplayModel->deleteLater();
+                    return nullptr;
+                }
                 stageplayModel->setInformationModel(informationModel);
                 //
                 // ... модель титульной страницы
@@ -1001,6 +1180,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::StageplayTitlePage);
                 auto titlePageModel = qobject_cast<BusinessLayer::SimpleTextModel*>(
                     modelFor(titlePageItem->uuid()));
+                Q_ASSERT(titlePageModel);
+                if (titlePageModel == nullptr) {
+                    Log::warning(
+                        "Title page model isn't initialized for stageplay text with uuid %1",
+                        documentToLoad->uuid().toString());
+                    stageplayModel->deleteLater();
+                    return nullptr;
+                }
                 stageplayModel->setTitlePageModel(titlePageModel);
                 //
                 // ... модель синопсиса
@@ -1011,6 +1198,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::StageplaySynopsis);
                 auto synopsisModel
                     = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+                Q_ASSERT(synopsisModel);
+                if (synopsisModel == nullptr) {
+                    Log::warning("Synopsis model isn't initialized for stageplay text with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    stageplayModel->deleteLater();
+                    return nullptr;
+                }
                 stageplayModel->setSynopsisModel(synopsisModel);
                 //
                 // ... модель персонажей
@@ -1048,6 +1242,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(!stageplayTextItemUuid.isNull());
                 auto stageplayModel = qobject_cast<BusinessLayer::StageplayTextModel*>(
                     modelFor(stageplayTextItemUuid));
+                Q_ASSERT(stageplayModel);
+                if (stageplayModel == nullptr) {
+                    Log::warning(
+                        "Text model isn't initialized for stageplay statistics with uuid %1",
+                        documentToLoad->uuid().toString());
+                    statisticsModel->deleteLater();
+                    return nullptr;
+                }
                 statisticsModel->setStageplayTextModel(stageplayModel);
 
                 model = statisticsModel;
@@ -1098,6 +1300,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::NovelInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for novel title page with uuid %1",
+                        documentToLoad->uuid().toString());
+                    titlePageModel->deleteLater();
+                    return nullptr;
+                }
                 titlePageModel->setInformationModel(informationModel);
 
                 model = titlePageModel;
@@ -1120,6 +1330,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 //
                 auto informationModel
                     = qobject_cast<BusinessLayer::NovelInformationModel*>(modelFor(parentUuid));
+                Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning(
+                        "Information model isn't initialized for novel synopsis with uuid %1",
+                        documentToLoad->uuid().toString());
+                    synopsisModel->deleteLater();
+                    return nullptr;
+                }
                 synopsisModel->setInformationModel(informationModel);
 
                 model = synopsisModel;
@@ -1155,8 +1373,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 model = modelFor(novelItem->uuid());
                 //
                 // ... если не удалось получить модель романа, то значит она ещё не была загружена
-                // из
-                //     облака, возвращаем тут пустую модель, т.к. это нормальная штатная ситуация
+                //     из облака, возвращаем тут пустую модель, т.к. это нормальная штатная ситуация
                 //
                 if (model == nullptr) {
                     return nullptr;
@@ -1182,6 +1399,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 auto informationModel
                     = qobject_cast<BusinessLayer::NovelInformationModel*>(modelFor(parentUuid));
                 Q_ASSERT(informationModel);
+                if (informationModel == nullptr) {
+                    Log::warning("Information model isn't initialized for novel text with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    novelModel->deleteLater();
+                    return nullptr;
+                }
                 novelModel->setInformationModel(informationModel);
                 //
                 // ... модель титульной страницы
@@ -1193,6 +1416,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 auto titlePageModel = qobject_cast<BusinessLayer::SimpleTextModel*>(
                     modelFor(titlePageItem->uuid()));
                 Q_ASSERT(titlePageModel);
+                if (titlePageModel == nullptr) {
+                    Log::warning("Title page model isn't initialized for novel text with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    novelModel->deleteLater();
+                    return nullptr;
+                }
                 novelModel->setTitlePageModel(titlePageModel);
                 //
                 // ... модель синопсиса
@@ -1204,6 +1433,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 auto synopsisModel
                     = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
                 Q_ASSERT(synopsisModel);
+                if (synopsisModel == nullptr) {
+                    Log::warning("Synopsis model isn't initialized for novel text with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    novelModel->deleteLater();
+                    return nullptr;
+                }
                 novelModel->setSynopsisModel(synopsisModel);
                 //
                 // ... модель справочников сценариев
@@ -1257,6 +1492,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 Q_ASSERT(!novelTextItemUuid.isNull());
                 auto novelModel
                     = qobject_cast<BusinessLayer::NovelTextModel*>(modelFor(novelTextItemUuid));
+                Q_ASSERT(novelModel);
+                if (novelModel == nullptr) {
+                    Log::warning("Text model isn't initialized for novel statistics with uuid %1",
+                                 documentToLoad->uuid().toString());
+                    statisticsModel->deleteLater();
+                    return nullptr;
+                }
                 statisticsModel->setNovelTextModel(novelModel);
 
                 model = statisticsModel;
