@@ -170,33 +170,11 @@ void TextHelper::updateFontHinting(QFont& _font)
 
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)
 {
-    const qreal lineHeight = fineLineSpacing(_font);
-    qreal height = 0;
-
-    //
-    // Корректируем текст, чтобы QTextLayout смог сам обработать переносы строк
-    //
-    QString correctedText = _text;
-    correctedText.replace('\n', QChar::LineSeparator);
-
-    //
-    // Компануем текст и считаем, какой высоты получается результат
-    //
-    QTextLayout textLayout(correctedText, _font);
-    textLayout.beginLayout();
-    forever
-    {
-        QTextLine line = textLayout.createLine();
-        if (!line.isValid()) {
-            break;
-        }
-
-        line.setLineWidth(_width);
-        height += lineHeight;
-    }
-    textLayout.endLayout();
-
-    return height;
+    const QFontMetricsF metrics(_font);
+    return metrics
+        .boundingRect(QRectF(0, 0, _width, 0), // width constraint, height=0 means unlimited
+                      Qt::TextWordWrap | Qt::AlignLeft, _text)
+        .height();
 }
 
 QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal _width)
