@@ -9,6 +9,7 @@
 
 #include <QKeyEvent>
 #include <QScrollArea>
+#include <QTimer>
 #include <QVBoxLayout>
 
 
@@ -19,12 +20,20 @@ class AddCommentView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Обновить отступ сверху над полем ввода
+     */
+    void updateTopMargin();
+
+
     QScrollArea* content = nullptr;
     Widget* commentContainer = nullptr;
     TextField* comment = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
     Button* saveButton = nullptr;
+
+    int commentTopMargin = 0;
 };
 
 AddCommentView::Implementation::Implementation(QWidget* _parent)
@@ -54,6 +63,15 @@ AddCommentView::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(saveButton);
 }
 
+void AddCommentView::Implementation::updateTopMargin()
+{
+    content->widget()->layout()->setContentsMargins(
+        0,
+        std::min(static_cast<int>(std::max(0.0, commentTopMargin - DesignSystem::layout().px24())),
+                 content->height() - commentContainer->height()),
+        0, 0);
+}
+
 
 // ****
 
@@ -64,6 +82,7 @@ AddCommentView::AddCommentView(QWidget* _parent)
 {
     setFocusProxy(d->comment);
 
+    d->content->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->comment->installEventFilter(this);
 
     auto commentContainerLayout = new QVBoxLayout(d->commentContainer);
@@ -102,11 +121,12 @@ AddCommentView::~AddCommentView() = default;
 
 void AddCommentView::setTopMargin(int _margin)
 {
-    d->content->widget()->layout()->setContentsMargins(
-        0,
-        std::min(static_cast<int>(std::max(0.0, _margin - DesignSystem::layout().px24())),
-                 height() - d->commentContainer->height()),
-        0, 0);
+    if (d->commentTopMargin == _margin) {
+        return;
+    }
+
+    d->commentTopMargin = _margin;
+    d->updateTopMargin();
 }
 
 QString AddCommentView::comment() const
@@ -121,14 +141,69 @@ void AddCommentView::setComment(const QString& _comment)
 
 bool AddCommentView::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if (_watched == d->comment && _event->type() == QEvent::KeyPress) {
-        const auto keyEvent = static_cast<QKeyEvent*>(_event);
-        if (keyEvent->key() == Qt::Key_Escape) {
-            emit cancelPressed();
-        } else if (keyEvent->modifiers().testFlag(Qt::ControlModifier)
-                   && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
-            emit savePressed();
-            return true;
+    if (_watched == d->comment) {
+        //
+        // На нажатие клавиш, испускаем сигналы сохранения/отмены
+        //
+        if (_event->type() == QEvent::KeyPress) {
+            const auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() == Qt::Key_Escape) {
+                emit cancelPressed();
+            } else if (keyEvent->modifiers().testFlag(Qt::ControlModifier)
+                       && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
+                emit savePressed();
+                return true;
+            }
+        }
+        //
+        // При изменении размера поля ввода комментария, корректируем позицию поля, для удобства
+        //
+        else if (_event->type() == QEvent::Resize) {
+            const auto resizeEvent = static_cast<QResizeEvent*>(_event);
+            //
+            // ... делаем коррекцию чуть отложено, чтобы все лейауты и полоса прокрутки
+            //     успели обновиться
+            //
+            QTimer::singleShot(
+                10, this,
+                [this,
+                 sizeChange = resizeEvent->size().height() - resizeEvent->oldSize().height()] {
+                    //
+                    // ... если появилась прорутка
+                    //
+                    bool needToScroll = false;
+                    if (d->content->verticalScrollBar()->maximum() > 0) {
+                        //
+                        // ... пробуем скорректировать верхний отступ
+                        //
+                        if (d->commentTopMargin > sizeChange) {
+                            d->commentTopMargin -= sizeChange;
+                            d->updateTopMargin();
+                        }
+                        //
+                        // ... либо двигаем прокрутку в самый низ, чтобы кнопки были у пользователя
+                        //     на виду и не уезжали вниз
+                        //
+                        else {
+                            if (d->commentTopMargin > 0) {
+                                d->commentTopMargin = 0;
+                                d->updateTopMargin();
+                            }
+                            needToScroll = true;
+                        }
+                    }
+                    //
+                    // ... вручную настраиваем отображение полосы прокрутки после того, как мы
+                    //     скорректировали положение поля для ввода комментария
+                    //
+                    d->content->setVerticalScrollBarPolicy(d->commentContainer->height() > height()
+                                                               ? Qt::ScrollBarAlwaysOn
+                                                               : Qt::ScrollBarAlwaysOff);
+                    if (needToScroll) {
+                        d->content->verticalScrollBar()->setValue(
+                            d->content->verticalScrollBar()->maximum());
+                    }
+                });
         }
     }
 
