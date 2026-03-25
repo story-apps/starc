@@ -148,7 +148,7 @@ qreal TextHelper::fineLineSpacing(const QFont& _font)
 
     const QFontMetricsF metrics(_font);
     const qreal platformDelta = 0;
-    return metrics.lineSpacing()
+    return metrics.boundingRect("X").height()
         + sFontToLineSpacing.value(!_font.families().isEmpty() ? _font.families().constFirst()
                                                                : _font.family(),
                                    platformDelta);
@@ -211,70 +211,62 @@ QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal
 
 QString TextHelper::elidedText(const QString& _text, const QFont& _font, const QRectF& _rect)
 {
-    const qreal lineHeight = fineLineSpacing(_font);
-    qreal height = 0;
+    QFontMetricsF metrics(_font);
 
     //
-    // Корректируем текст, чтобы QTextLayout смог сам обработать переносы строк
+    // Если влезает целиком, сразу выходим
     //
-    QString correctedText = _text;
-    correctedText.replace('\n', QChar::LineSeparator);
+    if (metrics.boundingRect(_rect, Qt::TextWordWrap, _text).height() <= _rect.height()) {
+        return _text;
+    }
 
-    //
-    // Компануем текст и определяем текст, который влезает в заданную область
-    //
     QString elidedText;
-    QTextLayout textLayout(correctedText, _font);
-    textLayout.beginLayout();
+    QString lastLine;
+
+    QTextLayout layout(_text, _font);
+    layout.beginLayout();
     forever
     {
-        QTextLine line = textLayout.createLine();
+        auto line = layout.createLine();
         if (!line.isValid()) {
             break;
         }
 
         line.setLineWidth(_rect.width());
-        height += lineHeight;
+
+        const auto nextLine = _text.mid(line.textStart(), line.textLength());
+        const auto candidate = elidedText + nextLine;
 
         //
-        // Если строка влезает, то оставляем её без изменений
+        // Проверяем, влезает ли текст в заданную область, если мы добавим к нему ещё одну линию
         //
-        const auto heightWithNextLine = height + lineHeight;
-        if (heightWithNextLine <= _rect.height()) {
-            elidedText += _text.mid(line.textStart(), line.textLength());
-        }
-        //
-        // А если это последняя строка, то многоточим её
-        //
-        else {
+        if (const auto usedHeight
+            = metrics.boundingRect(_rect, Qt::TextWordWrap, candidate.trimmed()).height();
+            usedHeight > _rect.height()) {
             //
-            // ... при этом берём не только влезающий текст, а чуть больше,
-            //     чтобы корректно обработать ситуацию длинного слова в конце строки
+            // ... если с этой линией уже не влезает, то многоточим последнюю строку
             //
-            QString lastLine = _text.mid(line.textStart(), line.textLength() * 2);
-
-            //
-            // ... если весь текст влез, не надо добавлять многоточие в конце
-            //
-            if (fineTextWidthF(lastLine, _font) <= _rect.width() && _text.endsWith(lastLine)) {
-                elidedText += lastLine;
-                break;
-            }
-
-            //
-            // ... многоточим
-            //
-            lastLine += "…";
+            elidedText.chop(lastLine.length());
+            lastLine += nextLine + "…";
             while (lastLine.length() > 1 && fineTextWidthF(lastLine, _font) > _rect.width()) {
                 lastLine.remove(lastLine.length() - 2, 1);
+            }
+            if (lastLine.endsWith(" …")) {
+                lastLine.chop(2);
+                lastLine += "…";
             }
             elidedText += lastLine;
             break;
         }
+        //
+        // А если влезает, то идём за следующей строкой
+        //
+        elidedText = candidate;
+        lastLine = nextLine;
     }
-    textLayout.endLayout();
+    layout.endLayout();
 
-    return elidedText;
+    return elidedText.trimmed();
 }
 
 QString TextHelper::elidedText(const QString& _text, const QFont& _font, qreal _width)
