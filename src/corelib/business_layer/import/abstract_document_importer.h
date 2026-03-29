@@ -46,7 +46,8 @@ protected:
      */
     virtual TextParagraphType typeForTextCursor(const QTextCursor& _cursor,
                                                 TextParagraphType _lastBlockType,
-                                                int _prevEmptyLines, int _minLeftMargin) const;
+                                                int _prevEmptyLines, int _minLeftMargin,
+                                                bool _beforeFirstSceneHeading = false) const;
 
     /**
      * @brief Очистка блоков от мусора и их корректировки

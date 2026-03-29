@@ -237,6 +237,7 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
     auto lastBlockType = TextParagraphType::Undefined;
     // ... количество пустых строк
     int emptyLines = 0;
+    bool beforeFirstSceneHeading = true;
     std::set<QString> characterNames;
     std::set<QString> locationNames;
     do {
@@ -249,8 +250,12 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
             //
             // ... определяем тип
             //
-            const auto blockType
-                = typeForTextCursor(cursor, lastBlockType, emptyLines, minLeftMargin);
+            const auto blockType = typeForTextCursor(cursor, lastBlockType, emptyLines,
+                                                     minLeftMargin, beforeFirstSceneHeading);
+
+            if (blockType == TextParagraphType::SceneHeading) {
+                beforeFirstSceneHeading = false;
+            }
 
             //
             // ... удаляем лишние пробельные символы
@@ -386,6 +391,7 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
     // ... количество пустых строк
     int emptyLines = 0;
     bool alreadyInScene = false;
+    bool beforeFirstSceneHeading = true;
     QTextCursor cursor(&_document);
     do {
         cursor.movePosition(QTextCursor::EndOfBlock);
@@ -406,8 +412,8 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             //
             // ... определяем тип
             //
-            const auto blockType
-                = typeForTextCursor(cursor, lastBlockType, emptyLines, minLeftMargin);
+            const auto blockType = typeForTextCursor(cursor, lastBlockType, emptyLines,
+                                                     minLeftMargin, beforeFirstSceneHeading);
 
             //
             // Извлечем номер сцены
@@ -445,6 +451,7 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             // Формируем блок сценария
             //
             if (blockType == TextParagraphType::SceneHeading) {
+                beforeFirstSceneHeading = false;
                 if (alreadyInScene) {
                     writer.writeEndElement(); // контент предыдущей сцены
                     writer.writeEndElement(); // предыдущая сцена
@@ -531,7 +538,8 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
 TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor& _cursor,
                                                               TextParagraphType _lastBlockType,
                                                               int _prevEmptyLines,
-                                                              int _minLeftMargin) const
+                                                              int _minLeftMargin,
+                                                              bool _beforeFirstSceneHeading) const
 {
     //
     // TODO: вынести это в конкретные импортеры
@@ -594,11 +602,18 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
         //
         else if (isCentered) {
             //
+            // Титульный лист и прочий текст до первого заголовка сцены: по геометрии часто
+            // совпадает с колонкой "персонаж/реплика", но не должен получать эти типы.
+            //
+            if (_beforeFirstSceneHeading) {
+                blockType = TextParagraphType::UnformattedText;
+            }
+            //
             // Переход
             // 1. в верхнем регистре
             // 2. заканчивается двоеточием (без учета пробелов)
             //
-            if (textIsUppercase && blockText.simplified().endsWith(":")) {
+            else if (textIsUppercase && blockText.simplified().endsWith(":")) {
                 blockType = TextParagraphType::Transition;
             }
             //

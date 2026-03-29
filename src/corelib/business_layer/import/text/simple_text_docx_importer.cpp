@@ -62,12 +62,14 @@ bool SimpleTextDocxImporter::documentForImport(const QString& _filePath,
 TextParagraphType SimpleTextDocxImporter::typeForTextCursor(const QTextCursor& _cursor,
                                                             TextParagraphType _lastBlockType,
                                                             int _prevEmptyLines,
-                                                            int _minLeftMargin) const
+                                                            int _minLeftMargin,
+                                                            bool _beforeFirstSceneHeading) const
 {
     Q_UNUSED(_cursor)
     Q_UNUSED(_lastBlockType)
     Q_UNUSED(_prevEmptyLines)
     Q_UNUSED(_minLeftMargin)
+    Q_UNUSED(_beforeFirstSceneHeading)
 
     return TextParagraphType::Text;
 }
