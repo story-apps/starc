@@ -490,15 +490,21 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             // ECMA-376 1st edition, ECMA-376 2nd edition transitional, ISO/IEC 29500 transitional
             if (attributes.hasAttribute("w:left")) {
                 left_indent = pixelsFromTwips(attributes.value("w:left").toString().toInt());
-                style.block_format.setLeftMargin(left_indent);
+                if (left_indent) {
+                    style.block_format.setLeftMargin(left_indent);
+                }
             }
             if (attributes.hasAttribute("w:right")) {
                 right_indent = pixelsFromTwips(attributes.value("w:right").toString().toInt());
-                style.block_format.setRightMargin(right_indent);
+                if (right_indent) {
+                    style.block_format.setRightMargin(right_indent);
+                }
             }
             if (attributes.hasAttribute("w:firstLine")) {
                 text_indent = pixelsFromTwips(attributes.value("w:firstLine").toString().toInt());
-                style.block_format.setTextIndent(text_indent);
+                if (text_indent) {
+                    style.block_format.setTextIndent(text_indent);
+                }
             }
             if (attributes.hasAttribute("w:hanging")) {
                 auto t = attributes.value("w:hanging").toString();
