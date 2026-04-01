@@ -130,6 +130,7 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
     setLayout(layout);
 
     connect(d->sendForChecking, &Button::clicked, this, [this] {
+        d->sendForChecking->setEnabled(false);
         const auto comment = d->checkingComment->text();
         d->checkingComment->clear();
         emit sendDocumentToReviewRequested(comment);
