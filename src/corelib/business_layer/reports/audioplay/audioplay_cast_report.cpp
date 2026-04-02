@@ -145,7 +145,7 @@ void AudioplayCastReport::build(QAbstractItemModel* _model)
                     }
 
                     if (!charactersData.contains(character)) {
-                        charactersData.insert(character, { 1, 1, 1, 0 });
+                        charactersData.insert(character, { 0, 1, 1, 0 });
                         charactersOrder.append(character);
                         lastSceneSpeakingCharacters.insert(character);
                     } else {
