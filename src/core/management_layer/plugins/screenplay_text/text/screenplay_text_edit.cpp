@@ -508,17 +508,17 @@ void ScreenplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
         while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
             moveCursor(QTextCursor::NextBlock);
             moveCursor(QTextCursor::EndOfBlock);
-            cursor = _cursor;
+            cursor = textCursor();
         }
     }
 
-    d->document.addParagraph(_type, _cursor);
+    d->document.addParagraph(_type, textCursor());
 
     //
     // ... при необходимости восстанавливаем режим изоляции
     //
     if (needReisolate) {
-        d->document.setVisibleTopLevelItem(d->document.itemIndex(_cursor.block()));
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
     }
 
     emit paragraphTypeChanged();

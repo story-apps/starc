@@ -407,13 +407,13 @@ void StageplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
     //
     // Вставляем параграф на уровне модели
     //
-    d->document.addParagraph(_type, _cursor);
+    d->document.addParagraph(_type, textCursor());
 
     //
     // ... при необходимости восстанавливаем режим изоляции
     //
     if (needReisolate) {
-        d->document.setVisibleTopLevelItem(d->document.itemIndex(_cursor.block()));
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
     }
 
     //
@@ -424,9 +424,9 @@ void StageplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
         // Если вставляется персонаж, то разделяем страницу, для добавления реплики
         //
         if (_type == BusinessLayer::TextParagraphType::Character) {
-            const auto cursorPosition = _cursor.position();
-            d->document.splitParagraph(_cursor);
-            auto cursor = _cursor;
+            const auto cursorPosition = textCursor().position();
+            d->document.splitParagraph(textCursor());
+            auto cursor = textCursor();
             cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
             setTextCursor(cursor);
             cursor.movePosition(QTextCursor::NextBlock);
@@ -436,9 +436,9 @@ void StageplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
         // Если вставляется реплика, то разделяем страницу и ставим курсор во вторую колонку
         //
         else if (_type == BusinessLayer::TextParagraphType::Dialogue) {
-            const auto cursorPosition = _cursor.position();
-            d->document.splitParagraph(_cursor);
-            auto cursor = _cursor;
+            const auto cursorPosition = textCursor().position();
+            d->document.splitParagraph(textCursor());
+            auto cursor = textCursor();
             cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
             setTextCursor(cursor);
             d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, cursor);
@@ -452,7 +452,7 @@ void StageplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
     // Вставляем вырезанные данные
     //
     if (!mimeDataToMove.isEmpty()) {
-        d->document.insertFromMime(_cursor.position(), mimeDataToMove);
+        d->document.insertFromMime(textCursor().position(), mimeDataToMove);
     }
 
     emit paragraphTypeChanged();
