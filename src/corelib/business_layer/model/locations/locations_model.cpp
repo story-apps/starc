@@ -60,19 +60,19 @@ bool LocationsGroup::operator!=(const LocationsGroup& _other) const
 
 LocationsModel::LocationsModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kLocationsGroupKey,
-            kLocationKey,
-            kIdKey,
-            kNameKey,
-            kDescriptionKey,
-            kRectKey,
-            kPositionKey,
-            kLineTypeKey,
-            kColorKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kLocationsGroupKey,
+              kLocationKey,
+              kIdKey,
+              kNameKey,
+              kDescriptionKey,
+              kRectKey,
+              kPositionKey,
+              kLineTypeKey,
+              kColorKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &LocationsModel::locationsGroupAdded, this,
@@ -380,10 +380,13 @@ void LocationsModel::initDocument()
         //
         // ... запоминаем позиции локаций на схеме
         //
-        const auto positionText = locationNode.attribute(kPositionKey).split(";");
-        Q_ASSERT(positionText.size() == 2);
-        const QPointF position(positionText.constFirst().toDouble(),
-                               positionText.constLast().toDouble());
+        QPointF position;
+        const auto positionText = locationNode.attribute(kPositionKey);
+        if (!positionText.isEmpty()) {
+            const auto positions = positionText.split(";");
+            Q_ASSERT(positions.size() == 2);
+            position = QPointF(positions.constFirst().toDouble(), positions.constLast().toDouble());
+        }
         d->locationsPositions[locationName] = position;
 
         locationNode = locationNode.nextSiblingElement();

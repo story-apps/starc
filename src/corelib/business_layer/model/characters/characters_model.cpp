@@ -62,19 +62,19 @@ bool CharactersGroup::operator!=(const CharactersGroup& _other) const
 
 CharactersModel::CharactersModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kCharactersGroupKey,
-            kCharacterKey,
-            kIdKey,
-            kNameKey,
-            kDescriptionKey,
-            kRectKey,
-            kPositionKey,
-            kLineTypeKey,
-            kColorKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kCharactersGroupKey,
+              kCharacterKey,
+              kIdKey,
+              kNameKey,
+              kDescriptionKey,
+              kRectKey,
+              kPositionKey,
+              kLineTypeKey,
+              kColorKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &CharactersModel::charactersGroupAdded, this,
@@ -380,10 +380,13 @@ void CharactersModel::initDocument()
         //
         // ... запоминаем позиции персонажей на схеме
         //
-        const auto positionText = characterNode.attribute(kPositionKey).split(";");
-        Q_ASSERT(positionText.size() == 2);
-        const QPointF position(positionText.constFirst().toDouble(),
-                               positionText.constLast().toDouble());
+        QPointF position;
+        const auto positionText = characterNode.attribute(kPositionKey);
+        if (!positionText.isEmpty()) {
+            const auto positions = positionText.split(";");
+            Q_ASSERT(positions.size() == 2);
+            position = QPointF(positions.constFirst().toDouble(), positions.constLast().toDouble());
+        }
         d->charactersPositions[characterName] = position;
 
         characterNode = characterNode.nextSiblingElement();
