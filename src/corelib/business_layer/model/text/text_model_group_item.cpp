@@ -717,15 +717,30 @@ bool TextModelGroupItem::isEqual(TextModelItem* _item) const
     }
 
     const auto groupItem = static_cast<TextModelGroupItem*>(_item);
-    return d->uuid == groupItem->d->uuid
-        && d->isOmited == groupItem->d->isOmited
+    auto compareNumbers = [](const std::optional<Number>& _lhs, const std::optional<Number>& _rhs) {
         //
-        // TODO: тут нужно сравнивать, только когда номера зафиксированы
+        // ... если номера не заданы
         //
-        //            && d->number == sceneItem->d->number
-        && d->color == groupItem->d->color && d->title == groupItem->d->title
-        && d->storyDay == groupItem->d->storyDay && d->startDateTime == groupItem->d->startDateTime
-        && d->stamp == groupItem->d->stamp && d->tags == groupItem->d->tags;
+        if (!_lhs.has_value() && !_rhs.has_value()) {
+            return true;
+        }
+        //
+        // ... если номера не зафиксированы и не заданы пользователем
+        //
+        if (_lhs.has_value() && !_lhs->isCustom && !_lhs->isLocked && _rhs.has_value()
+            && !_rhs->isCustom && !_rhs->isLocked) {
+            return true;
+        }
+        //
+        // ... все остальные случаи
+        //
+        return _lhs == _rhs;
+    };
+    return d->uuid == groupItem->d->uuid && d->isOmited == groupItem->d->isOmited
+        && compareNumbers(d->number, groupItem->d->number) && d->color == groupItem->d->color
+        && d->title == groupItem->d->title && d->storyDay == groupItem->d->storyDay
+        && d->startDateTime == groupItem->d->startDateTime && d->stamp == groupItem->d->stamp
+        && d->tags == groupItem->d->tags;
 }
 
 void TextModelGroupItem::setHeading(const QString& _heading)
