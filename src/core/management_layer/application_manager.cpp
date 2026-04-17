@@ -708,6 +708,18 @@ void ApplicationManager::Implementation::loadMissedFonts()
               QLatin1String("noto-sans-hebrew-regular.ttf"),
               QLatin1String("noto-sans-hebrew-medium.ttf"),
           } },
+        { QLatin1String("Noto Sans Kannada"),
+          {
+              QLatin1String("noto-sans-kannada-light.ttf"),
+              QLatin1String("noto-sans-kannada-regular.ttf"),
+              QLatin1String("noto-sans-kannada-medium.ttf"),
+          } },
+        { QLatin1String("Noto Sans KR"),
+          {
+              QLatin1String("noto-sans-kr-light.otf"),
+              QLatin1String("noto-sans-kr-regular.otf"),
+              QLatin1String("noto-sans-kr-medium.otf"),
+          } },
         { QLatin1String("Noto Sans Tamil"),
           {
               QLatin1String("noto-sans-tamil-light.ttf"),
@@ -719,12 +731,6 @@ void ApplicationManager::Implementation::loadMissedFonts()
               QLatin1String("noto-sans-telugu-light.ttf"),
               QLatin1String("noto-sans-telugu-regular.ttf"),
               QLatin1String("noto-sans-telugu-medium.ttf"),
-          } },
-        { QLatin1String("Noto Sans KR"),
-          {
-              QLatin1String("noto-sans-kr-light.otf"),
-              QLatin1String("noto-sans-kr-regular.otf"),
-              QLatin1String("noto-sans-kr-medium.otf"),
           } },
         { QLatin1String("Noto Color Emoji"),
           {

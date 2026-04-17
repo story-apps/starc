@@ -352,6 +352,12 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
         break;
     }
 
+    case QLocale::Kannada: {
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        fontFamilies.prepend(QLatin1String("Noto Sans Kannada"));
+        break;
+    }
+
     case QLocale::Tamil: {
         fontFamilies.prepend(QLatin1String("Noto Sans"));
         fontFamilies.prepend(QLatin1String("Noto Sans Tamil"));
