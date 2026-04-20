@@ -169,13 +169,50 @@ void simplifyTextBlock(QTextCursor& _cursor)
 /**
  * @brief Является ли заданный текст заголовком сцены
  */
-bool isSceneHeading(const QString& _blockText)
+bool isSceneHeading(const QString& _blockText, bool _strict = false)
 {
     const auto blockTextUppercase = TextHelper::smartToUpper(_blockText);
     return blockTextUppercase == _blockText
-        && (blockTextUppercase.contains(kPlaceContainsChecker)
-            || blockTextUppercase.contains(kTimeContainsChecker)
-            || blockTextUppercase.contains(kStartFromNumberChecker));
+        && (_strict ? (blockTextUppercase.contains(kPlaceContainsChecker)
+                       || blockTextUppercase.contains(kTimeContainsChecker))
+                    : (blockTextUppercase.contains(kPlaceContainsChecker)
+                       || blockTextUppercase.contains(kTimeContainsChecker)
+                       || blockTextUppercase.contains(kStartFromNumberChecker)));
+}
+
+/**
+ * @brief Определить минимальный отступ слева для всех блоков
+ */
+int minimumLeftMargin(QTextDocument& _document)
+{
+    //
+    // ЗАЧЕМ: во многих программах (Final Draft, Screeviner) сделано так, что поля
+    //		  задаются за счёт оступов. Получается что и заглавие сцены и описание действия
+    //		  имеют отступы. Так вот это и будет минимальным отступом, который не будем считать
+    //
+    int minMargin = 1000;
+    {
+        QTextCursor cursor(&_document);
+        while (!cursor.atEnd()) {
+            //
+            // ... если нашли заголовок сцены, то смотрим его отступ, это наиболее верный способ
+            //     оценки для более менее стандартных шаблонов сценария
+            //
+            constexpr bool strict = true;
+            if (isSceneHeading(cursor.block().text(), strict)) {
+                minMargin = std::max(0.0, cursor.blockFormat().leftMargin());
+                break;
+            }
+
+            if (minMargin > cursor.blockFormat().leftMargin()) {
+                minMargin = cursor.blockFormat().leftMargin();
+            }
+
+            cursor.movePosition(QTextCursor::NextBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        }
+    }
+    return minMargin;
 }
 
 } // namespace
@@ -201,44 +238,17 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
     }
 
     //
-    // Найти минимальный отступ слева для всех блоков
-    // ЗАЧЕМ: во многих программах (Final Draft, Screeviner) сделано так, что поля
-    //		  задаются за счёт оступов. Получается что и заглавие сцены и описание действия
-    //		  имеют отступы. Так вот это и будет минимальным отступом, который не будем считать
-    //
-    int minLeftMargin = 1000;
-    {
-        QTextCursor cursor(&document);
-        while (!cursor.atEnd()) {
-            //
-            // ... если нашли заголовок сцены, то смотрим его отступ, это наиболее верный способ
-            //     оценки для более менее стандартных шаблонов сценария
-            //
-            if (isSceneHeading(cursor.block().text())) {
-                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
-                break;
-            }
-
-            if (minLeftMargin > cursor.blockFormat().leftMargin()) {
-                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
-            }
-
-            cursor.movePosition(QTextCursor::NextBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock);
-        }
-    }
-
-    QTextCursor cursor(&document);
-
-    //
     // Для каждого блока текста определяем тип
     //
+    // ... минимальный отступ слева для всех блоков
+    const auto minLeftMargin = minimumLeftMargin(document);
     // ... последний стиль блока
     auto lastBlockType = TextParagraphType::Undefined;
     // ... количество пустых строк
     int emptyLines = 0;
     std::set<QString> characterNames;
     std::set<QString> locationNames;
+    QTextCursor cursor(&document);
     do {
         cursor.movePosition(QTextCursor::EndOfBlock);
 
@@ -342,34 +352,6 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
 QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
                                                 QTextDocument& _document) const
 {
-    //
-    // Найти минимальный отступ слева для всех блоков
-    // ЗАЧЕМ: во многих программах (Final Draft, Screeviner) сделано так, что поля
-    //		  задаются за счёт оступов. Получается что и заглавие сцены и описание действия
-    //		  имеют отступы. Так вот это и будет минимальным отступом, который не будем считать
-    //
-    int minLeftMargin = 1000;
-    {
-        QTextCursor cursor(&_document);
-        while (!cursor.atEnd()) {
-            //
-            // ... если нашли заголовок сцены, то смотрим его отступ, это наиболее верный способ
-            //     оценки для более менее стандартных шаблонов сценария
-            //
-            if (isSceneHeading(cursor.block().text())) {
-                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
-                break;
-            }
-
-            if (minLeftMargin > cursor.blockFormat().leftMargin()) {
-                minLeftMargin = cursor.blockFormat().leftMargin();
-            }
-
-            cursor.movePosition(QTextCursor::NextBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock);
-        }
-    }
-
     QString result;
     QXmlStreamWriter writer(&result);
     writer.writeStartDocument();
@@ -381,6 +363,8 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
     //
     // Для каждого блока текста определяем тип
     //
+    // ... минимальный отступ слева для всех блоков
+    const auto minLeftMargin = minimumLeftMargin(_document);
     // ... последний стиль блока
     auto lastBlockType = TextParagraphType::Undefined;
     // ... количество пустых строк
@@ -583,10 +567,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
         // Самым первым пробуем определить заголовок сцены
         // 1. содержит ключевые сокращения места действия или начинается с номера сцены
         //
-        if (textIsUppercase
-            && (blockTextUppercase.contains(kPlaceContainsChecker)
-                || blockTextUppercase.contains(kTimeContainsChecker)
-                || blockTextUppercase.contains(kStartFromNumberChecker))) {
+        if (textIsUppercase && isSceneHeading(blockTextUppercase)) {
             blockType = TextParagraphType::SceneHeading;
         }
         //
@@ -742,11 +723,6 @@ QString AbstractDocumentImporter::clearBlockText(TextParagraphType _blockType,
     }
 
     return result;
-}
-
-QRegularExpression AbstractDocumentImporter::startFromNumberChecker() const
-{
-    return kStartFromNumberChecker;
 }
 
 bool AbstractDocumentImporter::shouldKeepSceneNumbers(const ImportOptions& _options) const

@@ -54,11 +54,6 @@ protected:
     QString clearBlockText(TextParagraphType _blockType, const QString& _blockText) const;
 
     /**
-     * @brief Получить регулярное выражение для определения строки, начинающейся с номера
-     */
-    QRegularExpression startFromNumberChecker() const;
-
-    /**
      * @brief Следует ли сохранять номера сцен
      */
     virtual bool shouldKeepSceneNumbers(const ImportOptions& _options) const;
