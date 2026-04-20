@@ -3202,8 +3202,10 @@ void ApplicationManager::initConnections()
                     //
                     // ... текущий открытый документ
                     //
-                    d->projectManager->notifyDownloadDocumentRequested(
-                        d->projectManager->currentDocument()->uuid());
+                    if (const auto currentDocument = d->projectManager->currentDocument();
+                        currentDocument != nullptr) {
+                        d->projectManager->notifyDownloadDocumentRequested(currentDocument->uuid());
+                    }
                     //
                     // ... а также структуру, данные проекта и словари
                     //
