@@ -719,16 +719,10 @@ bool TextModelGroupItem::isEqual(TextModelItem* _item) const
     const auto groupItem = static_cast<TextModelGroupItem*>(_item);
     auto compareNumbers = [](const std::optional<Number>& _lhs, const std::optional<Number>& _rhs) {
         //
-        // ... если номера не заданы
+        // ... если номера не заданы, или не зафиксированы и не заданы пользователем
         //
-        if (!_lhs.has_value() && !_rhs.has_value()) {
-            return true;
-        }
-        //
-        // ... если номера не зафиксированы и не заданы пользователем
-        //
-        if (_lhs.has_value() && !_lhs->isCustom && !_lhs->isLocked && _rhs.has_value()
-            && !_rhs->isCustom && !_rhs->isLocked) {
+        if ((!_lhs.has_value() || (!_lhs->isCustom && !_lhs->isLocked))
+            && (!_rhs.has_value() || (!_rhs->isCustom && !_rhs->isLocked))) {
             return true;
         }
         //
