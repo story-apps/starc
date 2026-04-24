@@ -490,26 +490,26 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             // ECMA-376 1st edition, ECMA-376 2nd edition transitional, ISO/IEC 29500 transitional
             if (attributes.hasAttribute("w:left")) {
                 left_indent = pixelsFromTwips(attributes.value("w:left").toString().toInt());
-                if (left_indent) {
+                if (left_indent > 0 || style.block_format.leftMargin() > 0) {
                     style.block_format.setLeftMargin(left_indent);
                 }
             }
             if (attributes.hasAttribute("w:right")) {
                 right_indent = pixelsFromTwips(attributes.value("w:right").toString().toInt());
-                if (right_indent) {
+                if (right_indent > 0 || style.block_format.rightMargin() > 0) {
                     style.block_format.setRightMargin(right_indent);
                 }
             }
             if (attributes.hasAttribute("w:firstLine")) {
                 text_indent = pixelsFromTwips(attributes.value("w:firstLine").toString().toInt());
-                if (text_indent) {
-                    style.block_format.setTextIndent(text_indent);
+                if (text_indent > 0 || style.block_format.textIndent() > 0) {
+                    style.block_format.setRightMargin(right_indent);
                 }
             }
             if (attributes.hasAttribute("w:hanging")) {
                 auto t = attributes.value("w:hanging").toString();
                 indent = pixelsFromTwips(attributes.value("w:hanging").toString().toInt());
-                if (indent) {
+                if (indent > 0 || style.block_format.indent() > 0) {
                     // В docx этот параметр хранится в инвертированном по отношению к Qt виде
                     style.block_format.setIndent(-1 * indent);
                     left_indent = right_indent = 0;
@@ -518,7 +518,7 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             // ECMA-376 2nd edition, ISO/IEC 29500 strict
             else if (attributes.hasAttribute("w:start")) {
                 indent = pixelsFromTwips(attributes.value("w:start").toString().toInt());
-                if (indent) {
+                if (indent > 0 || style.block_format.indent() > 0) {
                     style.block_format.setIndent(indent);
                     left_indent = right_indent = 0;
                 }
@@ -527,13 +527,13 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             // ECMA-376 1st edition, ECMA-376 2nd edition transitional, ISO/IEC 29500 transitional
             if (attributes.hasAttribute("w:before")) {
                 top_indent = pixelsFromTwips(attributes.value("w:before").toString().toInt());
-                if (top_indent) {
+                if (top_indent > 0 || style.block_format.topMargin() > 0) {
                     style.block_format.setTopMargin(top_indent);
                 }
             }
             if (attributes.hasAttribute("w:after")) {
                 bottom_indent = pixelsFromTwips(attributes.value("w:after").toString().toInt());
-                if (bottom_indent) {
+                if (bottom_indent > 0 || style.block_format.bottomMargin() > 0) {
                     style.block_format.setBottomMargin(bottom_indent);
                 }
             }
