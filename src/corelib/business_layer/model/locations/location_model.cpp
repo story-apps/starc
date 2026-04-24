@@ -103,17 +103,17 @@ bool LocationScenes::operator==(const LocationScenes& _other) const
 
 LocationModel::LocationModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kNameKey,
-            kStoryRoleKey,
-            kOneSentenceDescriptionKey,
-            kLongDescriptionKey,
-            kMainPhotoKey,
-            kRoutesKey,
-            kRouteKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kNameKey,
+              kStoryRoleKey,
+              kOneSentenceDescriptionKey,
+              kLongDescriptionKey,
+              kMainPhotoKey,
+              kRoutesKey,
+              kRouteKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &LocationModel::nameChanged, this, &LocationModel::updateDocumentContent);

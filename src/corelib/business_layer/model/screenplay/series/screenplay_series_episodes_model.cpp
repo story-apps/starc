@@ -158,14 +158,14 @@ bool ScreenplaySeriesEpisodesModel::StoryLine::operator==(const StoryLine& _othe
 
 ScreenplaySeriesEpisodesModel::ScreenplaySeriesEpisodesModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kStoryLinesKey,
-            kStoryLineKey,
-            kColorKey,
-            kNameKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kStoryLinesKey,
+              kStoryLineKey,
+              kColorKey,
+              kNameKey,
+          },
+          _parent)
     , d(new Implementation(this))
 {
     connect(this, &ScreenplaySeriesEpisodesModel::storyLinesChanged, this,

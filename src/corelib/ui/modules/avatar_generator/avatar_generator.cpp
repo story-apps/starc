@@ -105,7 +105,7 @@ QPixmap AvatarGenerator::avatar(const QString& _name, const QString& _email)
     //
     if (!_email.isEmpty()) {
         QMetaObject::invokeMethod(
-            instance(), [_email] { emit instance()->avatarRequested(_email); },
+            instance(), [_email] { emit instance() -> avatarRequested(_email); },
             Qt::QueuedConnection);
     }
     //
@@ -149,7 +149,7 @@ void AvatarGenerator::setAvatar(const QString& _email, const QByteArray& _avatar
     //
     // И уведомим клиентов о его обновлении
     //
-    emit instance()->avatarUpdated(_email, avatar);
+    emit instance() -> avatarUpdated(_email, avatar);
 }
 
 AvatarGenerator* AvatarGenerator::instance()

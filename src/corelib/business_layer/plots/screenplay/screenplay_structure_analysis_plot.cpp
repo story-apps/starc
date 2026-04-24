@@ -410,7 +410,7 @@ void ScreenplayStructureAnalysisPlot::saveToFile(const QString& _fileName) const
                 const auto millisecondsInMinute = 60000.0;
                 writeText(column++,
                           isDuration ? TimeHelper::toString(std::chrono::milliseconds{
-                              static_cast<int>(value * millisecondsInMinute) })
+                                           static_cast<int>(value * millisecondsInMinute) })
                                      : QString::number(value));
             }
             ++reportRow;

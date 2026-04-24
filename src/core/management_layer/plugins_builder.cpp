@@ -386,11 +386,11 @@ bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
     //
     const QString pluginsDirName = "plugins";
     QDir pluginsDir(
-        //#ifndef QT_NO_DEBUG
+        // #ifndef QT_NO_DEBUG
         QApplication::applicationDirPath()
-        //#else
-        //                    QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-        //#endif
+        // #else
+        //                     QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+        // #endif
     );
 
 #if defined(Q_OS_MAC)

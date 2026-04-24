@@ -601,9 +601,10 @@ void TabBar::paintEvent(QPaintEvent* _event)
         // ... смещаем центр декорации в кейсе, когда табы могут прокручиваться
         //
         const auto decorationCenterPosition = d->decorationCenterPosition
-            - (!d->isFixed ? QPointF(
-                   d->scrollState.current - d->scrollingAnimation.startValue().toReal(), 0)
-                           : QPointF());
+            - (!d->isFixed
+                   ? QPointF(d->scrollState.current - d->scrollingAnimation.startValue().toReal(),
+                             0)
+                   : QPointF());
         if (tabBoundingRect.contains(decorationCenterPosition)
             && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
                 || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {

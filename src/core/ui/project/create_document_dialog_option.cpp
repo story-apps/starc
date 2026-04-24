@@ -120,7 +120,7 @@ void CreateDocumentDialogOption::paintEvent(QPaintEvent* _event)
                                                    Ui::DesignSystem::elevationEndOpacity()),
                           Ui::DesignSystem::layout().px())));
     painter.setBrush(underMouse() ? ColorHelper::transparent(
-                         textColor(), Ui::DesignSystem::elevationEndOpacity())
+                                        textColor(), Ui::DesignSystem::elevationEndOpacity())
                                   : backgroundColor());
     painter.drawRoundedRect(contentsRect(), Ui::DesignSystem::card().borderRadius(),
                             Ui::DesignSystem::card().borderRadius());

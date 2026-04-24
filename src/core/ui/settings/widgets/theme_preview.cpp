@@ -74,7 +74,7 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
     //
     const auto themeColor = d->theme == Ui::ApplicationTheme::Custom
         ? Ui::DesignSystem::Color(
-            settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString())
+              settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString())
         : Ui::DesignSystem::color(d->theme);
 
     //
@@ -255,9 +255,11 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
         copyAction->setText(tr("Copy theme HASH"));
         connect(copyAction, &QAction::triggered, this, [this] {
             QGuiApplication::clipboard()->setText(
-                (d->theme == Ui::ApplicationTheme::Custom ? Ui::DesignSystem::Color(
-                     settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString())
-                                                          : Ui::DesignSystem::color(d->theme))
+                (d->theme == Ui::ApplicationTheme::Custom
+                     ? Ui::DesignSystem::Color(
+                           settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey)
+                               .toString())
+                     : Ui::DesignSystem::color(d->theme))
                     .toString());
         });
         actions.append(copyAction);

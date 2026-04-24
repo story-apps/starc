@@ -40,14 +40,16 @@ protected:
      * @brief Добавить пустые строки перед абзацем
      */
     virtual void addIndentationAtBegin(QString& _paragraph, TextParagraphType _previosBlockType,
-                                       TextParagraphType _currentBlockType) const = 0;
+                                       TextParagraphType _currentBlockType) const
+        = 0;
 
     /**
      * @brief Обработать блок в зависимости от его типа
      * @return Был ли блок обработан
      */
     virtual bool processBlock(QString& _paragraph, const QTextBlock& _block,
-                              const ExportOptions& _exportOptions) const = 0;
+                              const ExportOptions& _exportOptions) const
+        = 0;
 
     /**
      * @brief Получить символы типа выделения текста

@@ -324,10 +324,10 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
             auto sceneTimes = sceneTimesToCount.keys(count);
             std::sort(sceneTimes.begin(), sceneTimes.end());
             for (const auto& time : sceneTimes) {
-                auto timeName
-                    = createModelItem(time.isEmpty() ? QCoreApplication::translate(
-                                          "BusinessLogic::ScreenplaySummaryReport", "[UNDEFINED]")
-                                                     : time);
+                auto timeName = createModelItem(
+                    time.isEmpty() ? QCoreApplication::translate(
+                                         "BusinessLogic::ScreenplaySummaryReport", "[UNDEFINED]")
+                                   : time);
                 timeName->setData(u8"\U000F0766", Qt::DecorationRole);
                 timeName->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 
@@ -385,10 +385,10 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
             auto locationPlaces = locationPlacesToCount.keys(count);
             std::sort(locationPlaces.begin(), locationPlaces.end());
             for (const auto& place : locationPlaces) {
-                auto placeName
-                    = createModelItem(place.isEmpty() ? QCoreApplication::translate(
+                auto placeName = createModelItem(
+                    place.isEmpty() ? QCoreApplication::translate(
                                           "BusinessLogic::ScreenplaySummaryReport", "[UNDEFINED]")
-                                                      : place);
+                                    : place);
                 placeName->setData(u8"\U000F0766", Qt::DecorationRole);
                 placeName->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 

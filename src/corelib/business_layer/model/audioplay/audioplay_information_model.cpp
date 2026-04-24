@@ -65,25 +65,25 @@ public:
 
 AudioplayInformationModel::AudioplayInformationModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kNameKey,
-            kTaglineKey,
-            kLoglineKey,
-            kTitlePageVisibleKey,
-            kSynopsisVisibleKey,
-            kAudioplayTextVisibleKey,
-            kAudioplayStatisticsVisibleKey,
-            kHeaderKey,
-            kPrintHeaderOnTitlePageKey,
-            kFooterKey,
-            kPrintFooterOnTitlePageKey,
-            kOverrideSystemSettingsKey,
-            kTemplateIdKey,
-            kShowBlockNumbersKey,
-            kContinueBlockNumbersKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kNameKey,
+              kTaglineKey,
+              kLoglineKey,
+              kTitlePageVisibleKey,
+              kSynopsisVisibleKey,
+              kAudioplayTextVisibleKey,
+              kAudioplayStatisticsVisibleKey,
+              kHeaderKey,
+              kPrintHeaderOnTitlePageKey,
+              kFooterKey,
+              kPrintFooterOnTitlePageKey,
+              kOverrideSystemSettingsKey,
+              kTemplateIdKey,
+              kShowBlockNumbersKey,
+              kContinueBlockNumbersKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &AudioplayInformationModel::nameChanged, this,

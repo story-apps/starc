@@ -327,10 +327,11 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
             std::sort(sceneTimeNames.begin(), sceneTimeNames.end());
             for (const auto& sceneTimeName : sceneTimeNames) {
                 const auto sceneTime = location.sceneTimes[sceneTimeName];
-                auto sceneTimeItem
-                    = createModelItem(sceneTime.name.isEmpty() ? QCoreApplication::translate(
-                                          "BusinessLayer::ScreenplayLocationReport", "NOT SET")
-                                                               : sceneTime.name);
+                auto sceneTimeItem = createModelItem(
+                    sceneTime.name.isEmpty()
+                        ? QCoreApplication::translate("BusinessLayer::ScreenplayLocationReport",
+                                                      "NOT SET")
+                        : sceneTime.name);
 
                 for (const auto& scene : sceneTime.scenes) {
                     sceneTimeItem->appendRow({

@@ -60,24 +60,24 @@ public:
 
 NovelInformationModel::NovelInformationModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kNameKey,
-            kTaglineKey,
-            kLoglineKey,
-            kTitlePageVisibleKey,
-            kSynopsisVisibleKey,
-            kTreatmentVisibleKey,
-            kNovelTextVisibleKey,
-            kNovelStatisticsVisibleKey,
-            kHeaderKey,
-            kPrintHeaderOnTitlePageKey,
-            kFooterKey,
-            kPrintFooterOnTitlePageKey,
-            kOverrideSystemSettingsKey,
-            kTemplateIdKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kNameKey,
+              kTaglineKey,
+              kLoglineKey,
+              kTitlePageVisibleKey,
+              kSynopsisVisibleKey,
+              kTreatmentVisibleKey,
+              kNovelTextVisibleKey,
+              kNovelStatisticsVisibleKey,
+              kHeaderKey,
+              kPrintHeaderOnTitlePageKey,
+              kFooterKey,
+              kPrintFooterOnTitlePageKey,
+              kOverrideSystemSettingsKey,
+              kTemplateIdKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &NovelInformationModel::nameChanged, this,

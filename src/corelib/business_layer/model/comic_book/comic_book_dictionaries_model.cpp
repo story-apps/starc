@@ -31,12 +31,12 @@ public:
 
 ComicBookDictionariesModel::ComicBookDictionariesModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kCharacterExtensionsKey,
-            kItemKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kCharacterExtensionsKey,
+              kItemKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &ComicBookDictionariesModel::charactersExtensionsChanged, this,

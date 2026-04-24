@@ -1023,10 +1023,11 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     if (!d->helper.isEmpty() || !d->wordCount.isEmpty() || !d->error.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().caption());
-        const QColor color = !d->error.isEmpty() ? (ColorHelper::transparent(
-                                 Ui::DesignSystem::color().error(),
-                                 isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity()))
-                                                 : d->textDisabledColor;
+        const QColor color = !d->error.isEmpty()
+            ? (ColorHelper::transparent(Ui::DesignSystem::color().error(),
+                                        isEnabled() ? 1.0
+                                                    : Ui::DesignSystem::disabledTextOpacity()))
+            : d->textDisabledColor;
         painter.setPen(color);
         const QRectF textRect(d->contentMargins().left() + d->margins().left(),
                               height() - d->contentMargins().bottom()

@@ -175,16 +175,16 @@ bool WorldRoute::operator!=(const WorldRoute& _other) const
 
 WorldModel::WorldModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kNameKey,
-            kOneSentenceDescriptionKey,
-            kOverviewKey,
-            kMainPhotoKey,
-            kRoutesKey,
-            kRouteKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kNameKey,
+              kOneSentenceDescriptionKey,
+              kOverviewKey,
+              kMainPhotoKey,
+              kRoutesKey,
+              kRouteKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     //

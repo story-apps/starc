@@ -223,21 +223,21 @@ bool CharacterDialogues::operator==(const CharacterDialogues& _other) const
 
 CharacterModel::CharacterModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kNameKey,
-            kColorKey,
-            kStoryRoleKey,
-            kAgeKey,
-            kGenderKey,
-            kOneSentenceDescriptionKey,
-            kLongDescriptionKey,
-            kDreamcastKey,
-            kMainPhotoKey,
-            kRelationsKey,
-            kRelationKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kNameKey,
+              kColorKey,
+              kStoryRoleKey,
+              kAgeKey,
+              kGenderKey,
+              kOneSentenceDescriptionKey,
+              kLongDescriptionKey,
+              kDreamcastKey,
+              kMainPhotoKey,
+              kRelationsKey,
+              kRelationKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &CharacterModel::nameChanged, this, &CharacterModel::updateDocumentContent);

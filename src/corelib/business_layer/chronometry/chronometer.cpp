@@ -28,7 +28,8 @@ public:
     }
     virtual ~AbstractChronometer() = default;
     virtual std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
-                                               const TextTemplate& _textTemplate) const = 0;
+                                               const TextTemplate& _textTemplate) const
+        = 0;
 
 protected:
     const ChronometerOptions& m_options;

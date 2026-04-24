@@ -326,9 +326,10 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
             for (const auto& sceneTimeName : sceneTimeNames) {
                 const auto sceneTime = location.sceneTimes[sceneTimeName];
                 auto sceneTimeItem = createModelItem(
-                    sceneTime.name.isEmpty() ? QCoreApplication::translate(
-                        "BusinessLayer::AudioplayLocationReport", "SCENE TIME NOT SET")
-                                             : sceneTime.name);
+                    sceneTime.name.isEmpty()
+                        ? QCoreApplication::translate("BusinessLayer::AudioplayLocationReport",
+                                                      "SCENE TIME NOT SET")
+                        : sceneTime.name);
 
                 for (const auto& scene : sceneTime.scenes) {
                     sceneTimeItem->appendRow({

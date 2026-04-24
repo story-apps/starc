@@ -60,19 +60,19 @@ bool WorldsGroup::operator!=(const WorldsGroup& _other) const
 
 WorldsModel::WorldsModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kWorldsGroupKey,
-            kWorldKey,
-            kIdKey,
-            kNameKey,
-            kDescriptionKey,
-            kRectKey,
-            kPositionKey,
-            kLineTypeKey,
-            kColorKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kWorldsGroupKey,
+              kWorldKey,
+              kIdKey,
+              kNameKey,
+              kDescriptionKey,
+              kRectKey,
+              kPositionKey,
+              kLineTypeKey,
+              kColorKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &WorldsModel::worldsGroupAdded, this, &WorldsModel::updateDocumentContent);

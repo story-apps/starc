@@ -504,13 +504,14 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     if (reviewMarksSize > 0) {
         _painter->setFont(DesignSystem::font().iconsSmall());
         const QRectF reviewMarksIconRect(
-            QPointF(inlineNotesRect.isValid() ? (
-                        isLeftToRight
-                            ? (inlineNotesRect.right() + DesignSystem::treeOneLineItem().spacing())
-                            : (inlineNotesRect.left() - DesignSystem::treeOneLineItem().spacing()
-                               - notesIconWidth))
-                                              : notesLeft,
-                    notesTop),
+            QPointF(
+                inlineNotesRect.isValid()
+                    ? (isLeftToRight
+                           ? (inlineNotesRect.right() + DesignSystem::treeOneLineItem().spacing())
+                           : (inlineNotesRect.left() - DesignSystem::treeOneLineItem().spacing()
+                              - notesIconWidth))
+                    : notesLeft,
+                notesTop),
             QSizeF(notesIconWidth, notesHeight));
         _painter->drawText(reviewMarksIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F0E31");
         //

@@ -59,18 +59,18 @@ public:
 
 ComicBookInformationModel::ComicBookInformationModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kNameKey,
-            kLoglineKey,
-            kHeaderKey,
-            kPrintHeaderOnTitlePageKey,
-            kFooterKey,
-            kPrintFooterOnTitlePageKey,
-            kOverrideSystemSettingsKey,
-            kTemplateIdKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kNameKey,
+              kLoglineKey,
+              kHeaderKey,
+              kPrintHeaderOnTitlePageKey,
+              kFooterKey,
+              kPrintFooterOnTitlePageKey,
+              kOverrideSystemSettingsKey,
+              kTemplateIdKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &ComicBookInformationModel::nameChanged, this,

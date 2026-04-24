@@ -59,23 +59,23 @@ public:
 
 StageplayInformationModel::StageplayInformationModel(QObject* _parent)
     : AbstractModel(
-        {
-            kDocumentKey,
-            kNameKey,
-            kTaglineKey,
-            kLoglineKey,
-            kTitlePageVisibleKey,
-            kSynopsisVisibleKey,
-            kStageplayTextVisibleKey,
-            kStageplayStatisticsVisibleKey,
-            kHeaderKey,
-            kPrintHeaderOnTitlePageKey,
-            kFooterKey,
-            kPrintFooterOnTitlePageKey,
-            kOverrideSystemSettingsKey,
-            kTemplateIdKey,
-        },
-        _parent)
+          {
+              kDocumentKey,
+              kNameKey,
+              kTaglineKey,
+              kLoglineKey,
+              kTitlePageVisibleKey,
+              kSynopsisVisibleKey,
+              kStageplayTextVisibleKey,
+              kStageplayStatisticsVisibleKey,
+              kHeaderKey,
+              kPrintHeaderOnTitlePageKey,
+              kFooterKey,
+              kPrintFooterOnTitlePageKey,
+              kOverrideSystemSettingsKey,
+              kTemplateIdKey,
+          },
+          _parent)
     , d(new Implementation)
 {
     connect(this, &StageplayInformationModel::nameChanged, this,

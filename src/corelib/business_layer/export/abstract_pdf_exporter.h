@@ -29,8 +29,8 @@ protected:
     /**
      * @brief Дописать в параметры экспорта данные зависящие от модели
      */
-    virtual void updateExportOptions(AbstractModel* _model,
-                                     ExportOptions& _exportOptions) const = 0;
+    virtual void updateExportOptions(AbstractModel* _model, ExportOptions& _exportOptions) const
+        = 0;
 
     /**
      * @brief Нарисовать декорацию блока
@@ -38,7 +38,8 @@ protected:
     virtual void printBlockDecorations(QPainter* _painter, qreal _pageYPos, const QRectF& _body,
                                        TextParagraphType _paragraphType, const QRectF& _blockRect,
                                        const QTextBlock& _block,
-                                       const ExportOptions& _exportOptions) const = 0;
+                                       const ExportOptions& _exportOptions) const
+        = 0;
 
 private:
     class Implementation;

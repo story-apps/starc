@@ -14454,8 +14454,8 @@ void QCustomPlot::setBufferDevicePixelRatio(double ratio)
         mBufferDevicePixelRatio = ratio;
         foreach (QSharedPointer<QCPAbstractPaintBuffer> buffer, mPaintBuffers)
             buffer->setDevicePixelRatio(mBufferDevicePixelRatio);
-            // Note: axis label cache has devicePixelRatio as part of cache hash, so no need to
-            // manually clear cache here
+        // Note: axis label cache has devicePixelRatio as part of cache hash, so no need to
+        // manually clear cache here
 #else
         qDebug() << Q_FUNC_INFO << "Device pixel ratios not supported for Qt versions before 5.4";
         mBufferDevicePixelRatio = 1.0;
@@ -21478,8 +21478,8 @@ void QCPGraph::draw(QCPPainter* painter)
         QCPDataRange lineDataRange = isSelectedSegment
             ? allSegments.at(i)
             : allSegments.at(i).adjusted(
-                -1, 1); // unselected segments extend lines to bordering selected data point (safe
-                        // to exceed total data bounds in first/last segment, getLines takes care)
+                  -1, 1); // unselected segments extend lines to bordering selected data point (safe
+                          // to exceed total data bounds in first/last segment, getLines takes care)
         getLines(&lines, lineDataRange);
 
         // check data validity if flag set:
@@ -23413,9 +23413,9 @@ void QCPCurve::draw(QCPPainter* painter)
         QCPDataRange lineDataRange = isSelectedSegment
             ? allSegments.at(i)
             : allSegments.at(i).adjusted(
-                -1,
-                1); // unselected segments extend lines to bordering selected data point (safe to
-                    // exceed total data bounds in first/last segment, getCurveLines takes care)
+                  -1,
+                  1); // unselected segments extend lines to bordering selected data point (safe to
+                      // exceed total data bounds in first/last segment, getCurveLines takes care)
         getCurveLines(&lines, lineDataRange, finalCurvePen.widthF());
 
         // check data validity if flag set:
@@ -36100,8 +36100,8 @@ void QCPPolarGraph::draw(QCPPainter* painter)
         QCPDataRange lineDataRange = isSelectedSegment
             ? allSegments.at(i)
             : allSegments.at(i).adjusted(
-                -1, 1); // unselected segments extend lines to bordering selected data point (safe
-                        // to exceed total data bounds in first/last segment, getLines takes care)
+                  -1, 1); // unselected segments extend lines to bordering selected data point (safe
+                          // to exceed total data bounds in first/last segment, getLines takes care)
         getLines(&lines, lineDataRange);
 
         // check data validity if flag set:
