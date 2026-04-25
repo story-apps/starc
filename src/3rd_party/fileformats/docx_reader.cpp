@@ -615,6 +615,16 @@ void DocxReader::readRun()
 
 void DocxReader::readRunProperties(Style& style, bool allowstyles)
 {
+    //
+    // NOTE: Почему-то некоторые документы приходят с минимально отличной от белого заливкой,
+    //       так что отдельно обрабатываем этот кейс и игнорируем такие цвета
+    //
+    auto isWhite = [](const QColor& _color) {
+        constexpr auto threshold = 253;
+        return _color.red() >= threshold && _color.green() >= threshold
+            && _color.blue() >= threshold;
+    };
+
     while (m_xml.readNextStartElement()) {
         const auto value = m_xml.attributes().value("w:val");
         if ((m_xml.qualifiedName() == QLatin1String("w:b"))
@@ -671,7 +681,7 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
             //
             // Игнорируем белый
             //
-            if (color.isValid() && color != Qt::white) {
+            if (color.isValid() && !isWhite(color)) {
                 style.char_format.setProperty(Docx::IsBackground, true);
                 style.char_format.setBackground(color);
                 style.char_format.setForeground(Qt::black);
@@ -685,7 +695,7 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
             //
             // Игнорируем белый
             //
-            if (color.isValid() && color != Qt::white) {
+            if (color.isValid() && !isWhite(color)) {
                 style.char_format.setProperty(Docx::IsHighlight, true);
                 style.char_format.setBackground(color);
                 style.char_format.setForeground(Qt::black);
