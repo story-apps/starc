@@ -354,7 +354,10 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                   createModelItem(QString::number(_count.totalDialogues)),
                   createModelItem(QString::number(_count.speakingScenesCount)),
                   createModelItem(QString::number(_count.nonspeakingScenesCount)),
-                  createModelItem(QString::number(_count.totalScenes())),
+                  createModelItem(QString("%1 (%2%)")
+                                      .arg(_count.totalScenes())
+                                      .arg(static_cast<int>(_count.totalScenes() * 100.0
+                                                            / d->screenplayModel->scenesCount()))),
               });
           };
     for (const auto& character : charactersSorted) {

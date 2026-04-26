@@ -126,7 +126,9 @@ void ScreenplaySeriesCastReport::build(QAbstractItemModel* _model)
     //
     // Собираем статистику
     //
+    int totalScenes = 0;
     for (const auto episode : d->episodesModel->episodes()) {
+        totalScenes += episode->scenesCount();
         std::function<void(const TextModelItem*)> includeInReport;
         includeInReport = [&includeInReport, &charactersData, &lastSceneNonspeakingCharacters,
                            &lastSceneSpeakingCharacters, &charactersOrder, &lastSpeakingCharacter,
@@ -348,18 +350,20 @@ void ScreenplaySeriesCastReport::build(QAbstractItemModel* _model)
         d->castModel->clear();
     }
     //
-    auto addCharacterItemToReport
-        = [this, &createModelItem](const QString& _name, const CharacterData& _count) {
-              auto characterItem = createModelItem(_name);
-              d->castModel->appendRow({
-                  characterItem,
-                  createModelItem(QString::number(_count.totalWords)),
-                  createModelItem(QString::number(_count.totalDialogues)),
-                  createModelItem(QString::number(_count.speakingScenesCount)),
-                  createModelItem(QString::number(_count.nonspeakingScenesCount)),
-                  createModelItem(QString::number(_count.totalScenes())),
-              });
-          };
+    auto addCharacterItemToReport = [this, &createModelItem, totalScenes](
+                                        const QString& _name, const CharacterData& _count) {
+        auto characterItem = createModelItem(_name);
+        d->castModel->appendRow({
+            characterItem,
+            createModelItem(QString::number(_count.totalWords)),
+            createModelItem(QString::number(_count.totalDialogues)),
+            createModelItem(QString::number(_count.speakingScenesCount)),
+            createModelItem(QString::number(_count.nonspeakingScenesCount)),
+            createModelItem(QString("%1 (%2%)")
+                                .arg(_count.totalScenes())
+                                .arg(static_cast<int>(_count.totalScenes() * 100.0 / totalScenes))),
+        });
+    };
     for (const auto& character : charactersSorted) {
         addCharacterItemToReport(character.first, character.second);
     }
