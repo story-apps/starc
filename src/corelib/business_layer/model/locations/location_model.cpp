@@ -17,6 +17,7 @@ const QLatin1String kColorKey("color");
 const QLatin1String kStoryRoleKey("story_role");
 const QLatin1String kOneSentenceDescriptionKey("one_sentence_description");
 const QLatin1String kLongDescriptionKey("long_description");
+const QLatin1String kIsSoundstageKey("is_soundstage");
 const QLatin1String kMainPhotoKey("main_photo");
 const QLatin1String kPhotosKey("photos");
 const QLatin1String kPhotoKey("photo");
@@ -46,6 +47,7 @@ public:
     LocationStoryRole storyRole = LocationStoryRole::Undefined;
     QString oneSentenceDescription;
     QString longDescription;
+    bool isSoundstage = false;
     QVector<Domain::DocumentImage> photos;
     QVector<LocationRoute> routes;
 
@@ -112,6 +114,7 @@ LocationModel::LocationModel(QObject* _parent)
               kMainPhotoKey,
               kRoutesKey,
               kRouteKey,
+              kIsSoundstageKey,
           },
           _parent)
     , d(new Implementation)
@@ -123,6 +126,7 @@ LocationModel::LocationModel(QObject* _parent)
             &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::longDescriptionChanged, this,
             &LocationModel::updateDocumentContent);
+    connect(this, &LocationModel::soundstageChanged, this, &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::mainPhotoChanged, this, &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::photosChanged, this, &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::routeAdded, this, &LocationModel::updateDocumentContent);
@@ -230,6 +234,21 @@ void LocationModel::setLongDescription(const QString& _text)
 
     d->longDescription = _text;
     emit longDescriptionChanged(d->longDescription);
+}
+
+bool LocationModel::isSoundstage() const
+{
+    return d->isSoundstage;
+}
+
+void LocationModel::setSoundstage(bool _soundstage)
+{
+    if (d->isSoundstage == _soundstage) {
+        return;
+    }
+
+    d->isSoundstage = _soundstage;
+    emit soundstageChanged(d->isSoundstage);
 }
 
 Domain::DocumentImage LocationModel::mainPhoto() const
@@ -343,7 +362,7 @@ void LocationModel::removePhoto(const QUuid& _photoUuid)
 
 void LocationModel::createRoute(const QUuid& _toLocation)
 {
-    for (const auto& relation : d->routes) {
+    for (const auto& relation : std::as_const(d->routes)) {
         if (relation.location == _toLocation) {
             return;
         }
@@ -605,6 +624,7 @@ void LocationModel::initDocument()
     }
     d->oneSentenceDescription = load(kOneSentenceDescriptionKey);
     d->longDescription = load(kLongDescriptionKey);
+    d->isSoundstage = load(kIsSoundstageKey) == "true";
     const auto photosNode = documentNode.firstChildElement(kPhotosKey);
     if (!photosNode.isNull()) {
         auto photoNode = photosNode.firstChildElement(kPhotoKey);
@@ -671,6 +691,7 @@ QByteArray LocationModel::toXml() const
     save(kStoryRoleKey, QString::number(static_cast<int>(d->storyRole)));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
     save(kLongDescriptionKey, d->longDescription);
+    save(kIsSoundstageKey, d->isSoundstage ? "true" : "false");
     if (!d->photos.isEmpty()) {
         xml += QString("<%1>\n").arg(kPhotosKey).toUtf8();
         for (const auto& photo : std::as_const(d->photos)) {
@@ -737,6 +758,7 @@ ChangeCursor LocationModel::applyPatch(const QByteArray& _patch)
     }
     setOneSentenceDescription(load(kOneSentenceDescriptionKey));
     setLongDescription(load(kLongDescriptionKey));
+    setSoundstage(load(kIsSoundstageKey) == "true");
     //
     // Считываем фотографии
     //

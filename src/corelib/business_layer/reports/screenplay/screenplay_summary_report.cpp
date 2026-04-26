@@ -2,6 +2,7 @@
 
 #include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
+#include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -356,7 +357,13 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     {
         QMap<QString, int> locationPlacesToCount;
         for (const auto& scene : scenes) {
-            const auto place = ScreenplaySceneHeadingParser::sceneIntro(scene);
+            auto place = ScreenplaySceneHeadingParser::sceneIntro(scene);
+            const auto locationName = ScreenplaySceneHeadingParser::location(scene);
+            const auto location = d->screenplayModel->location(locationName);
+            if (location != nullptr && location->isSoundstage()) {
+                place = QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+                                                    "SOUNDSTAGE");
+            }
             if (!locationPlacesToCount.contains(place)) {
                 locationPlacesToCount.insert(place, 0);
             }

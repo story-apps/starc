@@ -2,6 +2,7 @@
 
 #include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
+#include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/series/screenplay_series_episodes_model.h>
 #include <business_layer/model/screenplay/series/screenplay_series_information_model.h>
@@ -69,6 +70,10 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
 
     d->episodesModel = qobject_cast<ScreenplaySeriesEpisodesModel*>(_model);
     if (d->episodesModel == nullptr) {
+        return;
+    }
+
+    if (d->episodesModel->episodes().isEmpty()) {
         return;
     }
 
@@ -288,19 +293,21 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
         //
         d->textInfoModel->setHeaderData(
             0, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Paragraph"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Paragraph"),
             Qt::DisplayRole);
         d->textInfoModel->setHeaderData(
             1, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Words"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Words"),
             Qt::DisplayRole);
         d->textInfoModel->setHeaderData(
             2, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Occurrences"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Occurrences"),
             Qt::DisplayRole);
         d->textInfoModel->setHeaderData(
             3, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Percents"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Percents"),
             Qt::DisplayRole);
     }
     //
@@ -339,9 +346,10 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
             std::sort(sceneTimes.begin(), sceneTimes.end());
             for (const auto& time : sceneTimes) {
                 auto timeName = createModelItem(
-                    time.isEmpty() ? QCoreApplication::translate(
-                                         "BusinessLogic::ScreenplaySummaryReport", "[UNDEFINED]")
-                                   : time);
+                    time.isEmpty()
+                        ? QCoreApplication::translate(
+                              "BusinessLogic::ScreenplaySeriesSummaryReport", "[UNDEFINED]")
+                        : time);
                 timeName->setData(u8"\U000F0766", Qt::DecorationRole);
                 timeName->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 
@@ -353,15 +361,17 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
         //
         d->scenesInfoModel->setHeaderData(
             0, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Scene time"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Scene time"),
             Qt::DisplayRole);
         d->scenesInfoModel->setHeaderData(
             1, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Occurrences"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Occurrences"),
             Qt::DisplayRole);
         d->scenesInfoModel->setHeaderData(
             2, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Percents"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Percents"),
             Qt::DisplayRole);
     }
     //
@@ -370,7 +380,13 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
     {
         QMap<QString, int> locationPlacesToCount;
         for (const auto& scene : scenes) {
-            const auto place = ScreenplaySceneHeadingParser::sceneIntro(scene);
+            auto place = ScreenplaySceneHeadingParser::sceneIntro(scene);
+            const auto locationName = ScreenplaySceneHeadingParser::location(scene);
+            const auto location = d->episodesModel->episodes().constFirst()->location(locationName);
+            if (location != nullptr && location->isSoundstage()) {
+                place = QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                                    "SOUNDSTAGE");
+            }
             if (!locationPlacesToCount.contains(place)) {
                 locationPlacesToCount.insert(place, 0);
             }
@@ -400,9 +416,10 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
             std::sort(locationPlaces.begin(), locationPlaces.end());
             for (const auto& place : locationPlaces) {
                 auto placeName = createModelItem(
-                    place.isEmpty() ? QCoreApplication::translate(
-                                          "BusinessLogic::ScreenplaySummaryReport", "[UNDEFINED]")
-                                    : place);
+                    place.isEmpty()
+                        ? QCoreApplication::translate(
+                              "BusinessLogic::ScreenplaySeriesSummaryReport", "[UNDEFINED]")
+                        : place);
                 placeName->setData(u8"\U000F0766", Qt::DecorationRole);
                 placeName->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 
@@ -414,15 +431,17 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
         //
         d->locationsInfoModel->setHeaderData(
             0, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Scene intro"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Scene intro"),
             Qt::DisplayRole);
         d->locationsInfoModel->setHeaderData(
             1, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Occurrences"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Occurrences"),
             Qt::DisplayRole);
         d->locationsInfoModel->setHeaderData(
             2, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Percents"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Percents"),
             Qt::DisplayRole);
     }
     //
@@ -465,28 +484,30 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
                   createPercentModelItem(_count * 100.0 / totalCount) });
         };
         addCharacterItemToReport(
-            QCoreApplication::translate("BusinessLogic::ScreenplaySummaryReport",
+            QCoreApplication::translate("BusinessLogic::ScreenplaySeriesSummaryReport",
                                         "More than 10 dialogues"),
             speakMore10);
         addCharacterItemToReport(
-            QCoreApplication::translate("BusinessLogic::ScreenplaySummaryReport",
+            QCoreApplication::translate("BusinessLogic::ScreenplaySeriesSummaryReport",
                                         "About 10 dialogues"),
             speakAbout10);
-        addCharacterItemToReport(
-            QCoreApplication::translate("BusinessLogic::ScreenplaySummaryReport", "Nonspeaking"),
-            nonspeaking);
+        addCharacterItemToReport(QCoreApplication::translate(
+                                     "BusinessLogic::ScreenplaySeriesSummaryReport", "Nonspeaking"),
+                                 nonspeaking);
         //
         d->charactersInfoModel->setHeaderData(
             0, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Character type"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Character type"),
             Qt::DisplayRole);
         d->charactersInfoModel->setHeaderData(
             1, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Occurrences"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                        "Occurrences"),
             Qt::DisplayRole);
         d->charactersInfoModel->setHeaderData(
             2, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Percents"),
+            QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Percents"),
             Qt::DisplayRole);
     }
 }
@@ -565,22 +586,25 @@ void ScreenplaySeriesSummaryReport::saveToPdf(const QString& _fileName) const
     cursor.setCharFormat(titleFormat);
     cursor.insertText(QString("%1 - %2").arg(
         d->episodesModel->informationModel()->name(),
-        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Summary report")));
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                    "Summary report")));
     cursor.insertBlock();
     cursor.insertBlock();
 
     cursor.insertText(
-        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Duration") + ": "
-        + TimeHelper::toString(duration()));
-    cursor.insertBlock();
-    cursor.insertText(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Pages")
-                      + ": " + QString::number(pagesCount()));
-    cursor.insertBlock();
-    cursor.insertText(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Words")
-                      + ": " + QString::number(wordsCount()));
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Duration")
+        + ": " + TimeHelper::toString(duration()));
     cursor.insertBlock();
     cursor.insertText(
-        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Pages") + ": "
+        + QString::number(pagesCount()));
+    cursor.insertBlock();
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Words") + ": "
+        + QString::number(wordsCount()));
+    cursor.insertBlock();
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
                                     "Characters with/without spaces")
         + ": "
         + QString("%1/%2").arg(charactersCount().withSpaces).arg(charactersCount().withoutSpaces));
@@ -771,26 +795,29 @@ void ScreenplaySeriesSummaryReport::saveToXlsx(const QString& _fileName) const
     //
     // Сводка
     //
-    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
                                            "Summary statistics"));
     int reportColumn = firstColumn;
-    writeHeader(reportColumn++,
-                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Duration"));
+    writeHeader(
+        reportColumn++,
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Duration"));
     writeText(reportColumn, TimeHelper::toString(duration()));
     ++reportRow;
     reportColumn = firstColumn;
-    writeHeader(reportColumn++,
-                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Pages"));
+    writeHeader(
+        reportColumn++,
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Pages"));
     writeText(reportColumn, QString::number(pagesCount()));
     ++reportRow;
     reportColumn = firstColumn;
-    writeHeader(reportColumn++,
-                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Words"));
+    writeHeader(
+        reportColumn++,
+        QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport", "Words"));
     writeText(reportColumn, QString::number(wordsCount()));
     ++reportRow;
     reportColumn = firstColumn;
     writeHeader(reportColumn++,
-                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+                QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
                                             "Characters with/without spaces"));
     writeText(
         reportColumn,
@@ -800,8 +827,8 @@ void ScreenplaySeriesSummaryReport::saveToXlsx(const QString& _fileName) const
     // Статистика по тексту
     //
     reportRow += 2;
-    writeTitle(
-        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Text statistics"));
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                           "Text statistics"));
     for (int column = firstColumn; column < firstColumn + textInfoModel()->columnCount();
          ++column) {
         writeHeader(column, textInfoModel()->headerData(column - firstColumn, Qt::Horizontal));
@@ -817,8 +844,8 @@ void ScreenplaySeriesSummaryReport::saveToXlsx(const QString& _fileName) const
     // Статистика по сценам
     //
     reportRow += 2;
-    writeTitle(
-        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Scenes statistics"));
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
+                                           "Scenes statistics"));
     for (int column = firstColumn; column < firstColumn + scenesInfoModel()->columnCount();
          ++column) {
         writeHeader(column, scenesInfoModel()->headerData(column - firstColumn, Qt::Horizontal));
@@ -834,7 +861,7 @@ void ScreenplaySeriesSummaryReport::saveToXlsx(const QString& _fileName) const
     // Статистика по локациям
     //
     reportRow += 2;
-    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
                                            "Locations statistics"));
     for (int column = firstColumn; column < firstColumn + locationsInfoModel()->columnCount();
          ++column) {
@@ -851,7 +878,7 @@ void ScreenplaySeriesSummaryReport::saveToXlsx(const QString& _fileName) const
     // Статистика по персонажам
     //
     reportRow += 2;
-    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySeriesSummaryReport",
                                            "Characters statistics"));
     for (int column = firstColumn; column < firstColumn + charactersInfoModel()->columnCount();
          ++column) {

@@ -84,6 +84,10 @@ public:
     void setLongDescription(const QString& _text);
     Q_SIGNAL void longDescriptionChanged(const QString& _text);
 
+    bool isSoundstage() const;
+    void setSoundstage(bool _soundstage);
+    Q_SIGNAL void soundstageChanged(bool _soundstage);
+
     Domain::DocumentImage mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const Domain::DocumentImage& _photo);
