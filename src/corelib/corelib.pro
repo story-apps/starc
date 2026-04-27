@@ -406,7 +406,6 @@ SOURCES += \
     ui/modules/cards/abstract_card_item.cpp \
     ui/modules/cards/cards_graphics_scene.cpp \
     ui/modules/cards/cards_graphics_view.cpp \
-    ui/modules/character_image_card/character_image_card.cpp \
     ui/modules/comments/add_comment_view.cpp \
     ui/modules/comments/comment_delegate.cpp \
     ui/modules/comments/comment_replies_view.cpp \
@@ -794,7 +793,6 @@ HEADERS += \
     ui/modules/cards/abstract_card_item.h \
     ui/modules/cards/cards_graphics_scene.h \
     ui/modules/cards/cards_graphics_view.h \
-    ui/modules/character_image_card/character_image_card.h \
     ui/modules/comments/add_comment_view.h \
     ui/modules/comments/comment_delegate.h \
     ui/modules/comments/comment_replies_view.h \
