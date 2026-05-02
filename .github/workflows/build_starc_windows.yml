@@ -56,6 +56,10 @@ jobs:
           choco install openssl --version=1.1.1.2100 --force
           choco install nsis
 
+      - name: Create OpenSSL path without spaces
+        shell: pwsh
+        run: New-Item -ItemType Junction -Path "C:\OpenSSL" -Target "C:\Program Files\OpenSSL"
+
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -65,7 +69,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/OpenSSL"
 
       - name: Build
         run: |
@@ -148,6 +152,10 @@ jobs:
           choco install openssl --version=1.1.1.2100 --forcex86
           choco install nsis
 
+      - name: Create OpenSSL path without spaces
+        shell: pwsh
+        run: New-Item -ItemType Junction -Path "C:\OpenSSL32" -Target "C:\Program Files (x86)\OpenSSL-Win32"
+
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -157,7 +165,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files (x86)/OpenSSL-Win32"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/OpenSSL32"
 
       - name: Build
         run: |
@@ -242,6 +250,10 @@ jobs:
           choco install jom
           choco install nsis
 
+      - name: Create OpenSSL path without spaces
+        shell: pwsh
+        run: New-Item -ItemType Junction -Path "C:\OpenSSL" -Target "C:\Program Files\OpenSSL"
+
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -251,7 +263,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/OpenSSL"
 
       - name: Build
         run: |
