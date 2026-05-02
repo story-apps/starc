@@ -74,8 +74,8 @@ cp $Qt5_Dir/plugins/styles/qwindowsvistastyle.dll $EXE_APP_DIR/styles/
 #
 # Copy openssl lib
 #
-OPEN_SSL_DIR="../../build/windows/openssl"
-cp $OPEN_SSL_DIR/*.dll $EXE_APP_DIR
+cp "/c/Program Files/OpenSSL-Win64/bin/"libcrypto*.dll $EXE_APP_DIR
+cp "/c/Program Files/OpenSSL-Win64/bin/"libssl*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
 #

@@ -141,11 +141,29 @@ INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/FreeType/include
 DEPENDPATH += $$PWD/../3rd_party/pdfhummus/FreeType/include
 
 #
-# Подключаем библиотеку LibAesgm
+# Подключаем библиотеку OpenSSL
 #
-LIBS += -L$$LIBSDIR/ -lLibAesgm
-INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/LibAesgm
-DEPENDPATH += $$PWD/../3rd_party/pdfhummus/LibAesgm
+linux {
+    LIBS += -lcrypto
+}
+macx {
+    OPENSSL_PREFIX = /opt/homebrew/opt/openssl@3
+    !exists($$OPENSSL_PREFIX/include/openssl/evp.h): OPENSSL_PREFIX = /opt/homebrew/opt/openssl
+    !exists($$OPENSSL_PREFIX/include/openssl/evp.h): OPENSSL_PREFIX = /usr/local/opt/openssl@3
+    !exists($$OPENSSL_PREFIX/include/openssl/evp.h): OPENSSL_PREFIX = /usr/local/opt/openssl
+    LIBS += -L$$OPENSSL_PREFIX/lib -lcrypto
+}
+win32 {
+    OPENSSL_PREFIX = $$(OPENSSL_DIR)
+    isEmpty(OPENSSL_PREFIX) {
+        contains(QMAKE_TARGET.arch, x86_64)|contains(QT_ARCH, x86_64) {
+            OPENSSL_PREFIX = "C:/Program Files/OpenSSL-Win64"
+        } else {
+            OPENSSL_PREFIX = "C:/Program Files (x86)/OpenSSL-Win32"
+        }
+    }
+    LIBS += -L$$OPENSSL_PREFIX/lib -llibcrypto
+}
 #
 
 #

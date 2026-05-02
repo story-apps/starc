@@ -48,6 +48,11 @@ jobs:
           version: 5.15.2
           target: desktop
 
+      - name: Install dependencies
+        shell: bash
+        run: |
+          brew install openssl@3
+
       - name: Run QMake
         shell: bash
         run: |
@@ -121,6 +126,11 @@ jobs:
           version: 6.10.1
           target: desktop
           modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          brew install openssl@3
 
       - name: Run QMake
         shell: bash

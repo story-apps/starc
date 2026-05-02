@@ -53,10 +53,8 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
+          choco install openssl --version=1.1.1.2100
           choco install nsis
-          mkdir -p build/windows/openssl
-          curl -O --output-dir build/windows/openssl https://starc.app/downloads/3rd_party/openssl/libcrypto-1_1-x64.dll
-          curl -O --output-dir build/windows/openssl https://starc.app/downloads/3rd_party/openssl/libssl-1_1-x64.dll
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -67,7 +65,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL-Win64"
 
       - name: Build
         run: |
@@ -159,7 +157,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files (x86)/OpenSSL-Win32"
 
       - name: Build
         run: |
@@ -253,7 +251,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL-Win64"
 
       - name: Build
         run: |
