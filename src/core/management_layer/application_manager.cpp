@@ -3716,14 +3716,14 @@ void ApplicationManager::initConnections()
     //
     connect(d->projectManager.data(), &ProjectManager::sendDocumentToReviewRequested,
             d->cloudServiceManager.data(),
-            [this](const QUuid& _documentUuid, const QString& _comment) {
+            [this](const QUuid& _documentUuid, const QString& _draftName, const QString& _comment) {
                 const auto currentProject = d->projectsManager->currentProject();
                 if (currentProject == nullptr || currentProject->isLocal()) {
                     return;
                 }
 
                 d->cloudServiceManager->sendDocumentToReview(currentProject->id(), _documentUuid,
-                                                             _comment);
+                                                             _draftName, _comment);
             });
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased,

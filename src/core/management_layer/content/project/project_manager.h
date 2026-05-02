@@ -364,7 +364,8 @@ signals:
     /**
      * @brief Запрос отправки документа на проверку
      */
-    void sendDocumentToReviewRequested(const QUuid& _documentUuid, const QString& _comment);
+    void sendDocumentToReviewRequested(const QUuid& _documentUuid, const QString& _draftName,
+                                       const QString& _comment);
 
 protected:
     /**
@@ -437,6 +438,12 @@ private:
      * @brief Обновить значение текущей модели и её представления
      */
     void updateCurrentDocument(BusinessLayer::AbstractModel* _model, const QString& _viewMimeType);
+
+    /**
+     * @brief Отправить запрос отправки документа на проверку
+     */
+    Q_SLOT void notifySendDocumentToReviewRequested(const QUuid& _documentUuid,
+                                                    const QString& _comment);
 
 private:
     class Implementation;

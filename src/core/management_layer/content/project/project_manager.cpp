@@ -5709,7 +5709,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                 "sendDocumentToReviewRequested(QUuid,QString)")
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(sendDocumentToReviewRequested(QUuid, QString)), this,
-                    SIGNAL(sendDocumentToReviewRequested(QUuid, QString)), Qt::UniqueConnection);
+                    SLOT(notifySendDocumentToReviewRequested(QUuid, QString)),
+                    Qt::UniqueConnection);
         }
     }
 
@@ -6060,6 +6061,31 @@ void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,
     d->view.activeViewMimeType = _viewMimeType;
 
     emit currentModelChanged(d->view.activeModel);
+}
+
+void ProjectManager::notifySendDocumentToReviewRequested(const QUuid& _documentUuid,
+                                                         const QString& _comment)
+{
+    QString draftName;
+    const auto documentItem = d->projectStructureModel->itemForUuid(_documentUuid);
+    switch (documentItem->type()) {
+    case Domain::DocumentObjectType::Screenplay: {
+        for (int childIndex = 0; childIndex < documentItem->childCount(); ++childIndex) {
+            const auto childItem = documentItem->childAt(childIndex);
+            if (childItem->type() == Domain::DocumentObjectType::ScreenplayText) {
+                draftName = childItem->draftName();
+                break;
+            }
+        }
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
+
+    emit sendDocumentToReviewRequested(_documentUuid, draftName, _comment);
 }
 
 } // namespace ManagementLayer
