@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          choco install openssl --version=1.1.1.2100
+          choco install openssl --version=1.1.1.2100 --force
           choco install nsis
 
       - name: Configure MSVC
@@ -238,7 +238,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          choco install openssl --version=3.1.1
+          choco install openssl --version=3.1.1 --force
           choco install jom
           choco install nsis
 

@@ -147,10 +147,12 @@ linux {
     LIBS += -lcrypto
 }
 macx {
-    OPENSSL_PREFIX = /opt/homebrew/opt/openssl@3
+    OPENSSL_PREFIX = $$(OPENSSL_PREFIX)
+    isEmpty(OPENSSL_PREFIX): OPENSSL_PREFIX = /opt/homebrew/opt/openssl@3
     !exists($$OPENSSL_PREFIX/include/openssl/evp.h): OPENSSL_PREFIX = /opt/homebrew/opt/openssl
     !exists($$OPENSSL_PREFIX/include/openssl/evp.h): OPENSSL_PREFIX = /usr/local/opt/openssl@3
     !exists($$OPENSSL_PREFIX/include/openssl/evp.h): OPENSSL_PREFIX = /usr/local/opt/openssl
+    INCLUDEPATH += $$OPENSSL_PREFIX/include
     LIBS += -L$$OPENSSL_PREFIX/lib -lcrypto
 }
 win32 {
