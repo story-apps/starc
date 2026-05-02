@@ -65,7 +65,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL-Win64"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL"
 
       - name: Build
         run: |
@@ -251,7 +251,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL-Win64"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/Program Files/OpenSSL"
 
       - name: Build
         run: |

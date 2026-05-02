@@ -156,10 +156,10 @@ macx {
     LIBS += -L$$OPENSSL_PREFIX/lib -lcrypto
 }
 win32 {
-    OPENSSL_PREFIX = $$(OPENSSL_DIR)
+    OPENSSL_PREFIX = $$OPENSSL_DIR
     isEmpty(OPENSSL_PREFIX) {
         contains(QMAKE_TARGET.arch, x86_64)|contains(QT_ARCH, x86_64) {
-            OPENSSL_PREFIX = "C:/Program Files/OpenSSL-Win64"
+            OPENSSL_PREFIX = "C:/Program Files/OpenSSL"
         } else {
             OPENSSL_PREFIX = "C:/Program Files (x86)/OpenSSL-Win32"
         }
