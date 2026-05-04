@@ -260,6 +260,10 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
     const auto textItemIndex = modelTextItems.indexOf(_textItem);
     for (; insertIndex < reviewMarks.size(); ++insertIndex) {
         const auto insertBeforeReviewMarkWrapper = reviewMarks.at(insertIndex);
+        if (insertBeforeReviewMarkWrapper.items.isEmpty()) {
+            break;
+        }
+
         const auto reviewMarkWrapperTextItemIndex
             = modelTextItems.indexOf(insertBeforeReviewMarkWrapper.items.constLast());
         //
