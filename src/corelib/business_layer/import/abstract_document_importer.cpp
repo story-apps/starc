@@ -2,6 +2,7 @@
 
 #include "import_options.h"
 
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/text_helper.h>
@@ -27,7 +28,9 @@ const QRegularExpression kPlaceContainsChecker(
 /**
  * @brief Регулярное выражение для определения блока "Время и место" по наличию слов времени
  */
-const QRegularExpression kTimeContainsChecker(
+const QRegularExpression kSceneTimeChecker(
+    "^(DAY|NIGHT|LATER|CONTINUES|УТРО|ДЕНЬ|ВЕЧЕР|НОЧЬ)( |$)");
+const QRegularExpression kSceneTimeContainsChecker(
     "[ ](DAY|NIGHT|LATER|CONTINUES|УТРО|ДЕНЬ|ВЕЧЕР|НОЧЬ)([.]|)$");
 
 /**
@@ -174,9 +177,9 @@ bool isSceneHeading(const QString& _blockText, bool _strict = false)
     const auto blockTextUppercase = TextHelper::smartToUpper(_blockText);
     return blockTextUppercase == _blockText
         && (_strict ? (blockTextUppercase.contains(kPlaceContainsChecker)
-                       || blockTextUppercase.contains(kTimeContainsChecker))
+                       || blockTextUppercase.contains(kSceneTimeContainsChecker))
                     : (blockTextUppercase.contains(kPlaceContainsChecker)
-                       || blockTextUppercase.contains(kTimeContainsChecker)
+                       || blockTextUppercase.contains(kSceneTimeContainsChecker)
                        || blockTextUppercase.contains(kStartFromNumberChecker)));
 }
 
@@ -423,7 +426,20 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             // Выполняем корректировки
             //
             simplifyTextBlock(cursor);
-            const auto paragraphText = clearBlockText(blockType, cursor.block().text());
+            auto paragraphText = clearBlockText(blockType, cursor.block().text());
+            //
+            // ... если это заголовок сцены, то исправляем кейс ". ВРЕМЯ" на " - ВРЕМЯ"
+            //
+            if (blockType == TextParagraphType::SceneHeading
+                && ScreenplaySceneHeadingParser::sceneTime(paragraphText).isEmpty()) {
+                if (const auto parts = paragraphText.split(".", Qt::SkipEmptyParts);
+                    parts.size() > 1) {
+                    const auto& sceneTime = parts.constLast();
+                    if (sceneTime.trimmed().contains(kSceneTimeChecker)) {
+                        paragraphText.replace("." + sceneTime, " - " + sceneTime.trimmed());
+                    }
+                }
+            }
 
             //
             // Формируем блок сценария
