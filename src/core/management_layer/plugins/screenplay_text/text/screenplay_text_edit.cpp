@@ -1871,6 +1871,76 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
     }
 
     //
+    // Добавим HTML
+    //
+    {
+        QByteArray text = "<!DOCTYPE html><html><head></head><body>";
+        auto printBlock = [&text](const QTextCursor& _cursor, const QString& _text) {
+            auto toString = [](Qt::Alignment _alignment) {
+                switch (_alignment) {
+                default: {
+                    return "left";
+                }
+                case Qt::AlignRight: {
+                    return "right";
+                }
+                case Qt::AlignJustify: {
+                    return "justify";
+                }
+                }
+            };
+
+            text.append(QString("<p "
+                                " align=\"%1\" "
+                                " style=\"margin-top: 0mm; margin-bottom: 0mm; "
+                                " margn-left: %2px; margin-right: %3px; "
+                                " font-family: %4; font-size: %5px;\">"
+                                "%6"
+                                "</p>\n")
+                            .arg(toString(_cursor.blockFormat().alignment()),
+                                 QString::number(_cursor.blockFormat().leftMargin(), 'f', 2),
+                                 QString::number(_cursor.blockFormat().rightMargin(), 'f', 2),
+                                 _cursor.blockCharFormat().fontFamily(),
+                                 QString::number(_cursor.blockCharFormat().font().pixelSize()),
+                                 _text)
+                            .toUtf8());
+        };
+
+        auto cursor = textCursor();
+        cursor.setPosition(selection.from);
+        do {
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+            //
+            // Для текстового представления не копируем невидимые блоки с содержанием текста
+            // сцен т.к. пользователи этого не ожидают
+            //
+            if (!cursor.block().isVisible()) {
+                continue;
+            }
+
+            if (cursor.position() > selection.to) {
+                cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
+            }
+
+            //
+            // Формируем блок
+            //
+            if (cursor.blockFormat().topMargin() > cursor.blockFormat().lineHeight() / 2.0) {
+                printBlock(cursor, "");
+            }
+            printBlock(cursor,
+                       cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
+                           ? TextHelper::smartToUpper(cursor.selectedText())
+                           : cursor.selectedText());
+        } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
+                 && cursor.movePosition(QTextCursor::NextBlock));
+        text += "</body>";
+
+        mimeData->setData("text/html", text);
+    }
+
+    //
     // Добавим фонтан
     //
     {
