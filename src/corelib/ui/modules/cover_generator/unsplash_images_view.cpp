@@ -21,8 +21,8 @@ namespace {
  */
 constexpr int kImageWidth = 200;
 
-constexpr char* kPreviewMethod = "preview";
-constexpr char* kDownloadMethod = "preview";
+const char* kPreviewMethod = "preview";
+const char* kDownloadMethod = "download";
 
 /**
  * @brief Получить ссылку на своё прокси апи для использования Unsplash
