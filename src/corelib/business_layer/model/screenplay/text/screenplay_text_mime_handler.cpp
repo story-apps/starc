@@ -257,8 +257,8 @@ QString ScreenplayTextMimeHandler::convertTextBlocksToBeats(const QString& _mime
 QString ScreenplayTextMimeHandler::convertBeatsToTextBlocks(const QString& _mime)
 {
     QString correctedMime = _mime;
-    correctedMime.remove(QRegularExpression("<beat uuid=(*.)><content>"));
-    correctedMime.remove("</content></beat>");
+    correctedMime.remove(QRegularExpression("<beat uuid=(.*)>\\n<content>"));
+    correctedMime.remove("</content>\n</beat>");
     correctedMime.replace("beat_heading", "action");
     return correctedMime;
 }

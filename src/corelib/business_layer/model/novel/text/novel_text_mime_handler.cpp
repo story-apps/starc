@@ -247,8 +247,8 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
 QString NovelTextMimeHandler::convertBeatsToTextBlocks(const QString& _mime)
 {
     QString correctedMime = _mime;
-    correctedMime.remove(QRegularExpression("<beat uuid=(*.)><content>"));
-    correctedMime.remove("</content></beat>");
+    correctedMime.remove(QRegularExpression("<beat uuid=(.*)>\\n<content>"));
+    correctedMime.remove("</content>\n</beat>");
     correctedMime.replace("beat_heading", "text");
     return correctedMime;
 }
