@@ -5,6 +5,7 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -78,6 +79,36 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
             auto cursor = _cursor;
             cursor.setPosition(block.position());
             cursor.insertText(sceneNumber, TextHelper::fineBlockCharFormat(block));
+        }
+    }
+    //
+    // ... если необходимо, добавляем номер реплики
+    //
+    else if (currentBlockType == TextParagraphType::Character
+             && exportOptions.showDialoguesNumbers) {
+        const auto blockData = static_cast<TextBlockData*>(block.userData());
+        if (blockData != nullptr) {
+            const auto characterItem = static_cast<ScreenplayTextModelTextItem*>(blockData->item());
+            const auto dialogueNumber = characterItem->number()->text + " ";
+            const auto leftMargin = block.textDirection() == Qt::LeftToRight
+                ? block.blockFormat().leftMargin()
+                : block.blockFormat().rightMargin();
+            const auto rightMargin = block.textDirection() == Qt::LeftToRight
+                ? block.blockFormat().rightMargin()
+                : block.blockFormat().leftMargin();
+            _documentXml.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
+                                    .arg(MeasurementHelper::pxToTwips(leftMargin))
+                                    .arg(MeasurementHelper::pxToTwips(rightMargin))
+                                    .arg(MeasurementHelper::pxToTwips(leftMargin)));
+
+            auto cursor = _cursor;
+            cursor.setPosition(block.position());
+            cursor.insertText(dialogueNumber, TextHelper::fineBlockCharFormat(block));
+            cursor.movePosition(TextCursor::PreviousCharacter, TextCursor::KeepAnchor);
+            auto charFormat = cursor.charFormat();
+            charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
+            charFormat.setFontLetterSpacing(leftMargin);
+            cursor.mergeCharFormat(charFormat);
         }
     }
     //

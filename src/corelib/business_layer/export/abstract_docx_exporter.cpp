@@ -656,6 +656,11 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                     if (formatRangeSourceText.isRightToLeft()) {
                         documentXml.append("<w:rtl/>");
                     }
+                    if (range.format.fontLetterSpacingType() == QFont::AbsoluteSpacing
+                        && range.format.fontLetterSpacing() > 0) {
+                        documentXml.append(QString("<w:spacing w:val=\"%1\"/>")
+                                               .arg(pxToTwips(range.format.fontLetterSpacing())));
+                    }
                     documentXml.append("</w:rPr>");
                     //
                     // Сам текст
