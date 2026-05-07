@@ -596,7 +596,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     // Определим стиль результирующего блока и сохраним его данные
     //
     TextBlockStyle targetStyle;
-    TextBlockData* targetBlockData = nullptr;
+    QTextBlock targetBlock;
     bool isTopBlockShouldBeRemoved = false;
     //
     // Если пользователь хочет удалить пустую папку, расширим выделение, чтобы полностью её удалить
@@ -621,10 +621,9 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             bottomCursorPosition = cursor.position();
             isTopBlockShouldBeRemoved = true;
         }
-        const QTextBlock targetBlock = cursor.block();
+        targetBlock = cursor.block();
         const auto targetBlockType = TextBlockStyle::forBlock(targetBlock);
         targetStyle = textTemplate().paragraphStyle(targetBlockType);
-        targetBlockData = cloneBlockData(targetBlock);
     }
     //
     // Если оба блока пусты и ни один из них не разрыв и не декорация
@@ -639,10 +638,10 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         //
         if (topParagraphType < bottomParagraphType) {
             targetStyle = topStyle;
-            targetBlockData = cloneBlockData(topBlock);
+            targetBlock = topBlock;
         } else {
             targetStyle = bottomStyle;
-            targetBlockData = cloneBlockData(bottomBlock);
+            targetBlock = bottomBlock;
             isTopBlockShouldBeRemoved = true;
         }
     }
@@ -661,7 +660,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         // ... то результирующим стилем будет стиль нижнего блока
         //
         targetStyle = bottomStyle;
-        targetBlockData = cloneBlockData(bottomBlock);
+        targetBlock = bottomBlock;
         isTopBlockShouldBeRemoved = true;
     }
     //
@@ -669,7 +668,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     //
     else {
         targetStyle = topStyle;
-        targetBlockData = cloneBlockData(topBlock);
+        targetBlock = topBlock;
     }
 
     //    //
@@ -681,6 +680,14 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     //        targetBlockData = nullptr;
     //    }
 
+    //
+    // Сохраним формат целевого блока, т.к. он мог быть кастомизирован пользователем
+    //
+    QTextBlockFormat targetBlockFormat = targetBlock.blockFormat();
+    //
+    // ... и сформируем копию данных блока для перемещения их в результирующий блок
+    //
+    TextBlockData* targetBlockData = cloneBlockData(targetBlock);
 
     //
     // Собственно удаление
@@ -727,10 +734,12 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         }
 
         //
-        // Положим корректные данные в блок
+        // Настроим формат блока и положим в него корректные данные
         //
         if (!inblockChange) {
-            cursor.setBlockFormat(targetStyle.blockFormat(cursor.inTable()));
+            auto blockFormat = targetStyle.blockFormat(cursor.inTable());
+            blockFormat.merge(targetBlockFormat);
+            cursor.setBlockFormat(blockFormat);
             cursor.setBlockCharFormat(targetStyle.charFormat());
             cursor.block().setUserData(targetBlockData);
         }
