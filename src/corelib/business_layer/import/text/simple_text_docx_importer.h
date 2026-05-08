@@ -35,8 +35,7 @@ protected:
      */
     TextParagraphType typeForTextCursor(const QTextCursor& _cursor,
                                         TextParagraphType _lastBlockType, int _prevEmptyLines,
-                                        int _minLeftMargin,
-                                        bool _beforeFirstSceneHeading = false) const override;
+                                        int _minLeftMargin) const override;
 
     /**
      * @brief Записать редакторские заметки
