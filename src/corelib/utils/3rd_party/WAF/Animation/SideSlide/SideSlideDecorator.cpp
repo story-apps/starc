@@ -16,6 +16,7 @@
 
 #include "SideSlideDecorator.h"
 
+#include <QPaintEvent>
 #include <QPainter>
 
 using WAF::SideSlideDecorator;
@@ -25,12 +26,15 @@ SideSlideDecorator::SideSlideDecorator(QWidget* _parent)
     : QWidget(_parent)
 {
     resize(_parent->size());
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_OpaquePaintEvent, false);
+    setAttribute(Qt::WA_NoSystemBackground, true);
 
     m_timeline.setDuration(260);
-    m_timeline.setUpdateInterval(40);
+    m_timeline.setUpdateInterval(16);
     m_timeline.setEasingCurve(QEasingCurve::OutQuad);
     m_timeline.setStartFrame(0);
-    m_timeline.setEndFrame(16000);
+    m_timeline.setEndFrame(100);
 
     m_decorationColor = QColor(0, 0, 0, 0);
 
@@ -38,14 +42,26 @@ SideSlideDecorator::SideSlideDecorator(QWidget* _parent)
     // Анимируем затемнение/осветление
     //
     connect(&m_timeline, &QTimeLine::frameChanged, this, [this](int _value) {
-        m_decorationColor = QColor(0, 0, 0, _value / 100);
-        update();
+        const int alpha = qBound(0, _value, 160);
+        if (m_decorationColor.alpha() != alpha) {
+            m_decorationColor.setAlpha(alpha);
+            update();
+        }
     });
 }
 
 void SideSlideDecorator::grabParentSize()
 {
-    resize(parentWidget()->size());
+    const QSize parentSize = parentWidget()->size();
+    if (size() == parentSize) {
+        return;
+    }
+
+    resize(parentSize);
+
+    // Для больших экранов снижаем частоту обновлений декоратора, чтобы уменьшить нагрузку
+    const int pixels = parentSize.width() * parentSize.height();
+    m_timeline.setUpdateInterval(pixels >= (2560 * 1440) ? 33 : 16);
 }
 
 void SideSlideDecorator::decorate(bool _dark)
@@ -61,15 +77,12 @@ void SideSlideDecorator::decorate(bool _dark)
 void SideSlideDecorator::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
-    painter.drawPixmap(0, 0, m_backgroundPixmap);
-    painter.fillRect(rect(), m_decorationColor);
-
-    QWidget::paintEvent(_event);
+    painter.fillRect(_event->rect(), m_decorationColor);
 }
 
 void SideSlideDecorator::mousePressEvent(QMouseEvent* _event)
 {
-    emit clicked();
+    Q_UNUSED(_event)
 
-    QWidget::mousePressEvent(_event);
+    emit clicked();
 }

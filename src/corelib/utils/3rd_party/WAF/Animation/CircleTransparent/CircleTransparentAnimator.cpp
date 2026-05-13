@@ -78,9 +78,9 @@ void CircleTransparentAnimator::fillIn()
     m_decorator->show();
     m_decorator->raise();
     //
-    // ... и принудительно его рисуем, чтобы отрисовка декоратора произошла как можно раньше
+    // ... и запрашиваем отрисовку без блокировки UI-потока
     //
-    m_decorator->repaint();
+    m_decorator->update();
 
     //
     // Анимируем виджет

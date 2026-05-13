@@ -32,11 +32,20 @@ int CircleFillDecorator::radius() const
 
 void CircleFillDecorator::setRadius(int _radius)
 {
-    if (m_radius != _radius) {
-        m_radius = _radius;
-
-        update();
+    if (m_radius == _radius) {
+        return;
     }
+
+    const auto updateRectForRadius = [this](int radius) {
+        constexpr int padding = 2;
+        const auto diameter = radius * 2;
+        return QRect(m_startPoint - QPoint(radius, radius), QSize(diameter, diameter))
+            .adjusted(-padding, -padding, padding, padding);
+    };
+
+    const QRect dirtyRect = updateRectForRadius(m_radius).united(updateRectForRadius(_radius));
+    m_radius = _radius;
+    update(dirtyRect);
 }
 
 void CircleFillDecorator::setFillColor(const QColor& _fillColor)

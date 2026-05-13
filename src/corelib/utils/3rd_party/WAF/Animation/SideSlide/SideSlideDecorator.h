@@ -53,11 +53,6 @@ private:
     QTimeLine m_timeline;
 
     /**
-     * @brief Фоновое изображение
-     */
-    QPixmap m_backgroundPixmap;
-
-    /**
      * @brief Цвет декорирования фона
      */
     QColor m_decorationColor;

@@ -50,9 +50,13 @@ SlideAnimator::SlideAnimator(QWidget* _widgetForSlide)
             [this](const QVariant& _value) {
                 const int value = _value.toInt();
                 if (isWidth()) {
-                    widgetForSlide()->setMaximumWidth(value);
+                    if (widgetForSlide()->maximumWidth() != value) {
+                        widgetForSlide()->setMaximumWidth(value);
+                    }
                 } else {
-                    widgetForSlide()->setMaximumHeight(value);
+                    if (widgetForSlide()->maximumHeight() != value) {
+                        widgetForSlide()->setMaximumHeight(value);
+                    }
                 }
             });
 
@@ -61,9 +65,7 @@ SlideAnimator::SlideAnimator(QWidget* _widgetForSlide)
     //
     connect(m_animation, &QVariantAnimation::finished, _widgetForSlide, [this] {
         if (widgetForSlide() != nullptr && widgetForSlide()->parentWidget() != nullptr
-            && widgetForSlide()->parentWidget()->layout() != nullptr
-            && widgetForSlide()->parentWidget()->layout()->findChildren<QWidget*>().contains(
-                widgetForSlide())) {
+            && widgetForSlide()->parentWidget()->layout() != nullptr) {
             if (isWidth()) {
                 widgetForSlide()->setMaximumWidth(QWIDGETSIZE_MAX);
             } else {

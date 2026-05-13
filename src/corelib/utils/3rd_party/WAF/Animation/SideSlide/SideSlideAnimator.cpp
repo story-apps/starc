@@ -42,7 +42,12 @@ SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide)
     m_decorator->hide();
 
     connect(m_animation, &QVariantAnimation::valueChanged, _widgetForSlide,
-            [_widgetForSlide](const QVariant& _value) { _widgetForSlide->move(_value.toPoint()); });
+            [_widgetForSlide](const QVariant& _value) {
+                const QPoint targetPosition = _value.toPoint();
+                if (_widgetForSlide->pos() != targetPosition) {
+                    _widgetForSlide->move(targetPosition);
+                }
+            });
     connect(m_animation, &QVariantAnimation::finished, this, [this] {
         setAnimatedStopped();
         if (isAnimatedBackward()) {

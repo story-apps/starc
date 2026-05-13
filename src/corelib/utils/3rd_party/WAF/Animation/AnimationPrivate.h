@@ -70,9 +70,7 @@ public:
     void saveAnimator(QWidget* _widget, AbstractAnimator* _animator, AnimatorType _animatorType)
     {
         if (!hasAnimator(_widget, _animatorType)) {
-            QMap<QWidget*, AbstractAnimator*> animators = m_animators.value(_animatorType);
-            animators.insert(_widget, _animator);
-            m_animators.insert(_animatorType, animators);
+            m_animators[_animatorType].insert(_widget, _animator);
         }
     }
 
