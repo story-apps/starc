@@ -121,7 +121,7 @@ void Database::setCurrentFile(const QString& _databaseFileName)
     //
     // Откроем базу данных, или создадим новую
     //
-    instanse();
+    instance();
 }
 
 void Database::closeCurrentFile()
@@ -133,12 +133,12 @@ void Database::closeCurrentFile()
 
 QString Database::currentFile()
 {
-    return instanse().databaseName();
+    return instance().databaseName();
 }
 
 QSqlQuery Database::query()
 {
-    return QSqlQuery(instanse());
+    return QSqlQuery(instance());
 }
 
 void Database::transaction()
@@ -147,7 +147,7 @@ void Database::transaction()
     // Для первого запроса открываем транзакцию
     //
     if (s_openedTransactions == 0) {
-        instanse().transaction();
+        instance().transaction();
     }
 
     //
@@ -167,7 +167,7 @@ void Database::commit()
     // При закрытии корневой транзакции фиксируем изменения в базе данных
     //
     if (s_openedTransactions == 0) {
-        instanse().commit();
+        instance().commit();
     }
 }
 
@@ -182,7 +182,7 @@ void Database::rollback()
     // При закрытии корневой транзакции отменяем изменения в базе данных
     //
     if (s_openedTransactions == 0) {
-        instanse().rollback();
+        instance().rollback();
     }
 }
 
@@ -194,7 +194,7 @@ void Database::vacuum()
 
 // ****
 
-QSqlDatabase Database::instanse()
+QSqlDatabase Database::instance()
 {
     QSqlDatabase database;
 

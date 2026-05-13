@@ -95,7 +95,7 @@ private:
     /**
      * @brief Получить объект текущей базы данных
      */
-    static QSqlDatabase instanse();
+    static QSqlDatabase instance();
 
     /**
      * @brief Открыть соединение с базой данных
