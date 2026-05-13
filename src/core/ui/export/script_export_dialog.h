@@ -28,7 +28,12 @@ public:
     /**
      * @brief Индекс драфта для экспорта
      */
-    int selectedDraft() const;
+    int selectedDraftIndex() const;
+
+    /**
+     * @brief Имя драфта для экспорта
+     */
+    QString selectedDraftName() const;
 
     /**
      * @brief Получить опции экспорта

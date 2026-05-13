@@ -78,6 +78,7 @@
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
+#include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
 
 #include <QDesktopServices>
@@ -198,18 +199,23 @@ void ExportManager::Implementation::exportScreenplays(
                         break;
                     }
                     }
-                    auto model = _models.at(screenplayExportDialog->selectedDraft()).second;
-                    const auto screenplayTextModel
-                        = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                    auto model = _models.at(screenplayExportDialog->selectedDraftIndex()).second;
+                    const auto textModel = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
                     const auto projectExportFolder
                         = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                    auto modelExportFile = QString("%1/%2.%3")
-                                               .arg(projectExportFolder,
-                                                    screenplayTextModel->informationModel()->name(),
-                                                    exportExtension);
+                    QString modelExportFileSuffix;
+                    if (_models.size() > 1) {
+                        modelExportFileSuffix
+                            += QString("_%1").arg(screenplayExportDialog->selectedDraftName());
+                    }
+                    modelExportFileSuffix += QString("_%1").arg(
+                        QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                    auto modelExportFile
+                        = QString("%1/%2%3.%4")
+                              .arg(projectExportFolder, textModel->informationModel()->name(),
+                                   modelExportFileSuffix, exportExtension);
                     modelExportFile
-                        = settingsValue(exportModelKey(screenplayTextModel), modelExportFile)
-                              .toString();
+                        = settingsValue(exportModelKey(textModel), modelExportFile).toString();
                     if (!modelExportFile.endsWith(exportExtension)) {
                         const auto dotIndex = modelExportFile.lastIndexOf('.');
                         if (dotIndex == -1) {
@@ -220,8 +226,8 @@ void ExportManager::Implementation::exportScreenplays(
                         modelExportFile += exportExtension;
                     }
                     auto exportFilePath = QFileDialog::getSaveFileName(
-                        topLevelWidget, tr("Choose the file to export"), modelExportFile,
-                        exportFilter);
+                        topLevelWidget, tr("Choose the file to export"),
+                        PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                     if (exportFilePath.isEmpty()) {
                         return;
                     }
@@ -229,13 +235,13 @@ void ExportManager::Implementation::exportScreenplays(
                     //
                     // Сохраним файл, в который экспортировали данную модель
                     //
-                    setSettingsValue(exportModelKey(screenplayTextModel), exportFilePath);
+                    setSettingsValue(exportModelKey(textModel), exportFilePath);
 
                     //
                     // Если файл был выбран
                     //
                     exportOptions.filePath = exportFilePath;
-                    exportScreenplay(screenplayTextModel, exportOptions);
+                    exportScreenplay(textModel, exportOptions);
 
                     //
                     // Если необходимо, откроем экспортированный документ
@@ -395,17 +401,23 @@ void ExportManager::Implementation::exportComicBooks(
                     break;
                 }
                 }
-                auto model = _models.at(comicBookExportDialog->selectedDraft()).second;
-                const auto comicBookTextModel
-                    = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
+                auto model = _models.at(comicBookExportDialog->selectedDraftIndex()).second;
+                const auto textModel = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                QString modelExportFileSuffix;
+                if (_models.size() > 1) {
+                    modelExportFileSuffix
+                        += QString("_%1").arg(screenplayExportDialog->selectedDraftName());
+                }
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
                 auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, comicBookTextModel->informationModel()->name(),
-                               exportExtension);
+                    = QString("%1/%2%3.%4")
+                          .arg(projectExportFolder, textModel->informationModel()->name(),
+                               modelExportFileSuffix, exportExtension);
                 modelExportFile
-                    = settingsValue(exportModelKey(comicBookTextModel), modelExportFile).toString();
+                    = settingsValue(exportModelKey(textModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -416,7 +428,8 @@ void ExportManager::Implementation::exportComicBooks(
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -424,7 +437,7 @@ void ExportManager::Implementation::exportComicBooks(
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(comicBookTextModel), exportFilePath);
+                setSettingsValue(exportModelKey(textModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -455,7 +468,7 @@ void ExportManager::Implementation::exportComicBooks(
                 //
                 // ... донастроим параметры экспорта
                 //
-                const auto comicBookInformation = comicBookTextModel->informationModel();
+                const auto comicBookInformation = textModel->informationModel();
                 exportOptions.templateId = comicBookInformation->templateId();
                 exportOptions.header = comicBookInformation->header();
                 exportOptions.footer = comicBookInformation->footer();
@@ -463,10 +476,10 @@ void ExportManager::Implementation::exportComicBooks(
                 // ... при необходимости подсветить персонажей, делаем это
                 //
                 if (exportOptions.highlightCharacters) {
-                    const auto charactersModel = comicBookTextModel->charactersList();
+                    const auto charactersModel = textModel->charactersList();
                     for (int row = 0; row < charactersModel->rowCount(); ++row) {
                         const auto characterName = charactersModel->index(row, 0).data().toString();
-                        const auto character = comicBookTextModel->character(characterName);
+                        const auto character = textModel->character(characterName);
                         if (character != nullptr && character->color().isValid()) {
                             exportOptions.highlightCharactersList.insert(character->name(),
                                                                          character->color());
@@ -501,7 +514,7 @@ void ExportManager::Implementation::exportComicBooks(
                 if (exporter.isNull()) {
                     return;
                 }
-                exporter->exportTo(comicBookTextModel, exportOptions);
+                exporter->exportTo(textModel, exportOptions);
 
                 //
                 // Если необходимо, откроем экспортированный документ
@@ -568,17 +581,23 @@ void ExportManager::Implementation::exportAudioplays(
                     break;
                 }
                 }
-                auto model = _models.at(audioplayExportDialog->selectedDraft()).second;
-                const auto audioplayTextModel
-                    = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
+                auto model = _models.at(audioplayExportDialog->selectedDraftIndex()).second;
+                const auto textModel = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                QString modelExportFileSuffix;
+                if (_models.size() > 1) {
+                    modelExportFileSuffix
+                        += QString("_%1").arg(screenplayExportDialog->selectedDraftName());
+                }
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
                 auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, audioplayTextModel->informationModel()->name(),
-                               exportExtension);
+                    = QString("%1/%2%3.%4")
+                          .arg(projectExportFolder, textModel->informationModel()->name(),
+                               modelExportFileSuffix, exportExtension);
                 modelExportFile
-                    = settingsValue(exportModelKey(audioplayTextModel), modelExportFile).toString();
+                    = settingsValue(exportModelKey(textModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -589,7 +608,8 @@ void ExportManager::Implementation::exportAudioplays(
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -597,7 +617,7 @@ void ExportManager::Implementation::exportAudioplays(
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(audioplayTextModel), exportFilePath);
+                setSettingsValue(exportModelKey(textModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -629,7 +649,7 @@ void ExportManager::Implementation::exportAudioplays(
                 //
                 // ... донастроим параметры экспорта
                 //
-                const auto audioplayInformation = audioplayTextModel->informationModel();
+                const auto audioplayInformation = textModel->informationModel();
                 exportOptions.templateId = audioplayInformation->templateId();
                 exportOptions.showBlockNumbers = audioplayInformation->showBlockNumbers();
                 exportOptions.header = audioplayInformation->header();
@@ -642,10 +662,10 @@ void ExportManager::Implementation::exportAudioplays(
                 // ... при необходимости подсветить персонажей, делаем это
                 //
                 if (exportOptions.highlightCharacters) {
-                    const auto charactersModel = audioplayTextModel->charactersList();
+                    const auto charactersModel = textModel->charactersList();
                     for (int row = 0; row < charactersModel->rowCount(); ++row) {
                         const auto characterName = charactersModel->index(row, 0).data().toString();
-                        const auto character = audioplayTextModel->character(characterName);
+                        const auto character = textModel->character(characterName);
                         if (character != nullptr && character->color().isValid()) {
                             exportOptions.highlightCharactersList.insert(character->name(),
                                                                          character->color());
@@ -680,7 +700,7 @@ void ExportManager::Implementation::exportAudioplays(
                 if (exporter.isNull()) {
                     return;
                 }
-                exporter->exportTo(audioplayTextModel, exportOptions);
+                exporter->exportTo(textModel, exportOptions);
 
                 //
                 // Если необходимо, откроем экспортированный документ
@@ -747,17 +767,23 @@ void ExportManager::Implementation::exportStageplays(
                     break;
                 }
                 }
-                auto model = _models.at(stageplayExportDialog->selectedDraft()).second;
-                const auto stageplayTextModel
-                    = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
+                auto model = _models.at(stageplayExportDialog->selectedDraftIndex()).second;
+                const auto textModel = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                QString modelExportFileSuffix;
+                if (_models.size() > 1) {
+                    modelExportFileSuffix
+                        += QString("_%1").arg(screenplayExportDialog->selectedDraftName());
+                }
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
                 auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, stageplayTextModel->informationModel()->name(),
-                               exportExtension);
+                    = QString("%1/%2%3.%4")
+                          .arg(projectExportFolder, textModel->informationModel()->name(),
+                               modelExportFileSuffix, exportExtension);
                 modelExportFile
-                    = settingsValue(exportModelKey(stageplayTextModel), modelExportFile).toString();
+                    = settingsValue(exportModelKey(textModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -768,7 +794,8 @@ void ExportManager::Implementation::exportStageplays(
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -776,7 +803,7 @@ void ExportManager::Implementation::exportStageplays(
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(stageplayTextModel), exportFilePath);
+                setSettingsValue(exportModelKey(textModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -808,7 +835,7 @@ void ExportManager::Implementation::exportStageplays(
                 //
                 // ... донастроим параметры экспорта
                 //
-                const auto stageplayInformation = stageplayTextModel->informationModel();
+                const auto stageplayInformation = textModel->informationModel();
                 exportOptions.templateId = stageplayInformation->templateId();
                 exportOptions.header = stageplayInformation->header();
                 exportOptions.printHeaderOnTitlePage
@@ -820,10 +847,10 @@ void ExportManager::Implementation::exportStageplays(
                 // ... при необходимости подсветить персонажей, делаем это
                 //
                 if (exportOptions.highlightCharacters) {
-                    const auto charactersModel = stageplayTextModel->charactersList();
+                    const auto charactersModel = textModel->charactersList();
                     for (int row = 0; row < charactersModel->rowCount(); ++row) {
                         const auto characterName = charactersModel->index(row, 0).data().toString();
-                        const auto character = stageplayTextModel->character(characterName);
+                        const auto character = textModel->character(characterName);
                         if (character != nullptr && character->color().isValid()) {
                             exportOptions.highlightCharactersList.insert(character->name(),
                                                                          character->color());
@@ -858,7 +885,7 @@ void ExportManager::Implementation::exportStageplays(
                 if (exporter.isNull()) {
                     return;
                 }
-                exporter->exportTo(stageplayTextModel, exportOptions);
+                exporter->exportTo(textModel, exportOptions);
 
                 //
                 // Если необходимо, откроем экспортированный документ
@@ -925,16 +952,23 @@ void ExportManager::Implementation::exportNovels(
                     break;
                 }
                 }
-                auto model = _models.at(novelExportDialog->selectedDraft()).second;
-                const auto novelTextModel = qobject_cast<BusinessLayer::NovelTextModel*>(model);
+                auto model = _models.at(novelExportDialog->selectedDraftIndex()).second;
+                const auto textModel = qobject_cast<BusinessLayer::NovelTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                QString modelExportFileSuffix;
+                if (_models.size() > 1) {
+                    modelExportFileSuffix
+                        += QString("_%1").arg(screenplayExportDialog->selectedDraftName());
+                }
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
                 auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, novelTextModel->informationModel()->name(),
-                               exportExtension);
+                    = QString("%1/%2%3.%4")
+                          .arg(projectExportFolder, textModel->informationModel()->name(),
+                               modelExportFileSuffix, exportExtension);
                 modelExportFile
-                    = settingsValue(exportModelKey(novelTextModel), modelExportFile).toString();
+                    = settingsValue(exportModelKey(textModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -945,7 +979,8 @@ void ExportManager::Implementation::exportNovels(
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -953,7 +988,7 @@ void ExportManager::Implementation::exportNovels(
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(novelTextModel), exportFilePath);
+                setSettingsValue(exportModelKey(textModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -985,7 +1020,7 @@ void ExportManager::Implementation::exportNovels(
                 //
                 // ... донастроим параметры экспорта
                 //
-                const auto novelInformation = novelTextModel->informationModel();
+                const auto novelInformation = textModel->informationModel();
                 exportOptions.templateId = novelInformation->templateId();
                 exportOptions.header = novelInformation->header();
                 exportOptions.printHeaderOnTitlePage = novelInformation->printHeaderOnTitlePage();
@@ -1019,7 +1054,7 @@ void ExportManager::Implementation::exportNovels(
                 if (exporter.isNull()) {
                     return;
                 }
-                exporter->exportTo(novelTextModel, exportOptions);
+                exporter->exportTo(textModel, exportOptions);
 
                 //
                 // Если необходимо, откроем экспортированный документ
@@ -1083,12 +1118,15 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                     break;
                 }
                 }
-                const auto simpleTextModel = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
+                const auto textModel = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, simpleTextModel->name(), exportExtension);
+                QString modelExportFileSuffix;
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                auto modelExportFile = QString("%1/%2%3.%4")
+                                           .arg(projectExportFolder, textModel->name(),
+                                                modelExportFileSuffix, exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
@@ -1100,7 +1138,8 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -1172,7 +1211,7 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                 if (exporter.isNull()) {
                     return;
                 }
-                exporter->exportTo(simpleTextModel, exportOptions);
+                exporter->exportTo(textModel, exportOptions);
 
                 //
                 // Если необходимо, откроем экспортированный документ
@@ -1230,9 +1269,12 @@ void ExportManager::Implementation::exportCharacter(BusinessLayer::AbstractModel
                 const auto characterModel = qobject_cast<BusinessLayer::CharacterModel*>(_model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, characterModel->name(), exportExtension);
+                QString modelExportFileSuffix;
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                auto modelExportFile = QString("%1/%2%3.%4")
+                                           .arg(projectExportFolder, characterModel->name(),
+                                                modelExportFileSuffix, exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
@@ -1244,7 +1286,8 @@ void ExportManager::Implementation::exportCharacter(BusinessLayer::AbstractModel
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -1363,9 +1406,12 @@ void ExportManager::Implementation::exportCharacters(BusinessLayer::AbstractMode
                 const auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(_model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, tr("Characters"), exportExtension);
+                QString modelExportFileSuffix;
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                auto modelExportFile = QString("%1/%2%3.%4")
+                                           .arg(projectExportFolder, tr("Characters"),
+                                                modelExportFileSuffix, exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
@@ -1377,7 +1423,8 @@ void ExportManager::Implementation::exportCharacters(BusinessLayer::AbstractMode
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -1497,9 +1544,12 @@ void ExportManager::Implementation::exportLocation(BusinessLayer::AbstractModel*
                 const auto locationModel = qobject_cast<BusinessLayer::LocationModel*>(_model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, locationModel->name(), exportExtension);
+                QString modelExportFileSuffix;
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                auto modelExportFile = QString("%1/%2%3.%4")
+                                           .arg(projectExportFolder, locationModel->name(),
+                                                modelExportFileSuffix, exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
@@ -1511,7 +1561,8 @@ void ExportManager::Implementation::exportLocation(BusinessLayer::AbstractModel*
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -1630,9 +1681,12 @@ void ExportManager::Implementation::exportLocations(BusinessLayer::AbstractModel
                 const auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(_model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, tr("Locations"), exportExtension);
+                QString modelExportFileSuffix;
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                auto modelExportFile = QString("%1/%2%3.%4")
+                                           .arg(projectExportFolder, tr("Locations"),
+                                                modelExportFileSuffix, exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
@@ -1644,7 +1698,8 @@ void ExportManager::Implementation::exportLocations(BusinessLayer::AbstractModel
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -1764,9 +1819,12 @@ void ExportManager::Implementation::exportWorld(BusinessLayer::AbstractModel* _m
                 const auto worldModel = qobject_cast<BusinessLayer::WorldModel*>(_model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, worldModel->name(), exportExtension);
+                QString modelExportFileSuffix;
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                auto modelExportFile = QString("%1/%2%3.%4")
+                                           .arg(projectExportFolder, worldModel->name(),
+                                                modelExportFileSuffix, exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
@@ -1778,7 +1836,8 @@ void ExportManager::Implementation::exportWorld(BusinessLayer::AbstractModel* _m
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
@@ -1896,8 +1955,12 @@ void ExportManager::Implementation::exportWorlds(BusinessLayer::AbstractModel* _
                 const auto worldsModel = qobject_cast<BusinessLayer::WorldsModel*>(_model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3").arg(projectExportFolder, tr("Worlds"), exportExtension);
+                QString modelExportFileSuffix;
+                modelExportFileSuffix += QString("_%1").arg(
+                    QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss"));
+                auto modelExportFile = QString("%1/%2%3.%4")
+                                           .arg(projectExportFolder, tr("Worlds"),
+                                                modelExportFileSuffix, exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
@@ -1909,7 +1972,8 @@ void ExportManager::Implementation::exportWorlds(BusinessLayer::AbstractModel* _
                     modelExportFile += exportExtension;
                 }
                 auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                    topLevelWidget, tr("Choose the file to export"),
+                    PlatformHelper::systemSavebleFileName(modelExportFile), exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }

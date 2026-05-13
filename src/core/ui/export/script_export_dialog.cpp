@@ -122,7 +122,7 @@ void ScriptExportDialog::setDrafts(const QVector<QString>& _drafts, int _current
     const int invalidIndex = -1;
     int draftRow = 0;
     if (!isInitialSetup) {
-        draftRow = selectedDraft();
+        draftRow = selectedDraftIndex();
     }
     model->setStringList({ _drafts.begin(), _drafts.end() });
     if (_currentDraftIndex != invalidIndex) {
@@ -142,9 +142,14 @@ void ScriptExportDialog::setDrafts(const QVector<QString>& _drafts, int _current
     d->draft->setVisible(_drafts.size() > 1);
 }
 
-int ScriptExportDialog::selectedDraft() const
+int ScriptExportDialog::selectedDraftIndex() const
 {
     return d->draft->currentIndex().row();
+}
+
+QString ScriptExportDialog::selectedDraftName() const
+{
+    return d->draft->currentText();
 }
 
 BusinessLayer::ExportOptions& ScriptExportDialog::exportOptions() const
