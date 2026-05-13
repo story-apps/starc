@@ -58,7 +58,9 @@ jobs:
 
       - name: Create OpenSSL path without spaces
         shell: pwsh
-        run: New-Item -ItemType Junction -Path "C:\OpenSSL" -Target "C:\Program Files\OpenSSL"
+        run: |
+          New-Item -ItemType Junction -Path 'C:\OpenSSL' -Target 'C:\Program Files\OpenSSL' -Force
+          "OPENSSL_PREFIX=C:\OpenSSL" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8NoBOM
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -69,7 +71,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/OpenSSL"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         run: |
@@ -154,7 +156,9 @@ jobs:
 
       - name: Create OpenSSL path without spaces
         shell: pwsh
-        run: New-Item -ItemType Junction -Path "C:\OpenSSL32" -Target "C:\Program Files (x86)\OpenSSL-Win32"
+        run: |
+          New-Item -ItemType Junction -Path 'C:\OpenSSL32' -Target 'C:\Program Files (x86)\OpenSSL-Win32' -Force
+          "OPENSSL_PREFIX=C:\OpenSSL32" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8NoBOM
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -165,7 +169,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/OpenSSL32"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         run: |
@@ -252,7 +256,9 @@ jobs:
 
       - name: Create OpenSSL path without spaces
         shell: pwsh
-        run: New-Item -ItemType Junction -Path "C:\OpenSSL" -Target "C:\Program Files\OpenSSL"
+        run: |
+          New-Item -ItemType Junction -Path 'C:\OpenSSL' -Target 'C:\Program Files\OpenSSL' -Force
+          "OPENSSL_PREFIX=C:\OpenSSL" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8NoBOM
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -263,7 +269,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" OPENSSL_DIR="C:/OpenSSL"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         run: |
