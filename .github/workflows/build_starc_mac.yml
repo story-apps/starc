@@ -139,12 +139,14 @@ jobs:
             arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
           fi
           arch -x86_64 /usr/local/bin/brew install openssl@3
-          ARM64_LIB=/opt/homebrew/opt/openssl@3/lib
+          OPENSSL_ARM64_ROOT=/opt/homebrew/opt/openssl@3
+          ARM64_LIB=${OPENSSL_ARM64_ROOT}/lib
           X86_LIB=/usr/local/opt/openssl@3/lib
           lipo -create ${ARM64_LIB}/libcrypto.a ${X86_LIB}/libcrypto.a \
                -output ${ARM64_LIB}/libcrypto.a
           lipo -create ${ARM64_LIB}/libcrypto.3.dylib ${X86_LIB}/libcrypto.3.dylib \
                -output ${ARM64_LIB}/libcrypto.3.dylib
+          echo "OPENSSL_PREFIX=${OPENSSL_ARM64_ROOT}" >> $GITHUB_ENV
 
       - name: Run QMake
         shell: bash
