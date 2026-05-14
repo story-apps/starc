@@ -80,7 +80,8 @@ cp $Qt6_DIR/plugins/tls/qschannelbackend.dll $EXE_APP_DIR/tls/
 #
 # Copy openssl lib
 #
-cp /c/Program\ Files/OpenSSL/*.dll $EXE_APP_DIR
+cp /c/OpenSSL/bin/libcrypto*.dll $EXE_APP_DIR
+cp /c/OpenSSL/bin/libssl*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
 #

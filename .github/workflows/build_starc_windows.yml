@@ -53,10 +53,14 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
+          choco install openssl --version=1.1.1.2100 --force
           choco install nsis
-          mkdir -p build/windows/openssl
-          curl -O --output-dir build/windows/openssl https://starc.app/downloads/3rd_party/openssl/libcrypto-1_1-x64.dll
-          curl -O --output-dir build/windows/openssl https://starc.app/downloads/3rd_party/openssl/libssl-1_1-x64.dll
+
+      - name: Create OpenSSL path without spaces
+        shell: pwsh
+        run: |
+          New-Item -ItemType Junction -Path 'C:\OpenSSL' -Target 'C:\Program Files\OpenSSL' -Force
+          "OPENSSL_PREFIX=C:\OpenSSL" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8NoBOM
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -150,6 +154,12 @@ jobs:
           choco install openssl --version=1.1.1.2100 --forcex86
           choco install nsis
 
+      - name: Create OpenSSL path without spaces
+        shell: pwsh
+        run: |
+          New-Item -ItemType Junction -Path 'C:\OpenSSL32' -Target 'C:\Program Files (x86)\OpenSSL-Win32' -Force
+          "OPENSSL_PREFIX=C:\OpenSSL32" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8NoBOM
+
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -240,9 +250,15 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          choco install openssl --version=3.1.1
+          choco install openssl --version=3.1.1 --force
           choco install jom
           choco install nsis
+
+      - name: Create OpenSSL path without spaces
+        shell: pwsh
+        run: |
+          New-Item -ItemType Junction -Path 'C:\OpenSSL' -Target 'C:\Program Files\OpenSSL' -Force
+          "OPENSSL_PREFIX=C:\OpenSSL" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8NoBOM
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
