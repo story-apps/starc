@@ -792,6 +792,16 @@ void ApplicationManager::Implementation::loadMissedFonts()
 
 void ApplicationManager::Implementation::askUpdateToLatestVersion()
 {
+    //
+    // Добавим флаг сигнализирующий о том, что диалог уже показан, чтобы избежать множественного
+    // отображения диалогов, если приложение продолжить стучаться на сервер
+    //
+    static bool isUpdateAlreadyOffered = false;
+    if (isUpdateAlreadyOffered) {
+        return;
+    }
+    isUpdateAlreadyOffered = true;
+
     auto dialog = new Dialog(applicationView);
     const int kCancelButtonId = 0;
     const int kYesButtonId = 1;
@@ -802,7 +812,18 @@ void ApplicationManager::Implementation::askUpdateToLatestVersion()
     QObject::connect(
         dialog, &Dialog::finished, dialog,
         [this, dialog, kCancelButtonId](const Dialog::ButtonInfo& _buttonInfo) {
+            //
+            // Если текущий проект был в облаке, то вне зависимости от решения пользователя, закроем
+            // текущий проект и вернёмся к списку проектов
+            //
+            const auto currentProject = projectsManager->currentProject();
+            if (currentProject != nullptr && currentProject->isRemote()) {
+                closeCurrentProject();
+                showProjects();
+            }
+
             dialog->hideDialog();
+            isUpdateAlreadyOffered = false;
 
             //
             // Пользователь не хочет обновляться
@@ -866,7 +887,16 @@ void ApplicationManager::Implementation::askUpdateToLatestVersion()
                         }
                     });
 
-            downloader->loadAsync(notificationsManager->lastVersionDownloadLink());
+            const auto url = notificationsManager->lastVersionDownloadLink();
+            if (!url.isEmpty()) {
+                downloader->loadAsync(url);
+            } else {
+                TaskBar::finishTask(taskId);
+                StandardDialog::information(
+                    applicationView, {},
+                    tr("Can't load url for the last version update.\n\nPlease visit our official "
+                       "website \"starc.app\" and download the last version manually."));
+            }
         });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
