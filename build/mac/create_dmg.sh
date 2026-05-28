@@ -8,6 +8,25 @@ find Story\ Architect.app -name "*.dSYM" -print0 | xargs -0 rm -rf
 macdeployqt Story\ Architect.app
 
 #
+# копируем OpenSSL в бандл приложения (macdeployqt не всегда подтягивает эти библиотеки)
+#
+APP_FRAMEWORKS_DIR="Story Architect.app/Contents/Frameworks"
+mkdir -p "${APP_FRAMEWORKS_DIR}"
+
+OPENSSL_PREFIX=""
+if command -v brew >/dev/null 2>&1; then
+  OPENSSL_PREFIX=$(brew --prefix openssl@3 2>/dev/null || true)
+  if [ -z "${OPENSSL_PREFIX}" ]; then
+    OPENSSL_PREFIX=$(brew --prefix openssl@1.1 2>/dev/null || true)
+  fi
+fi
+
+if [ -n "${OPENSSL_PREFIX}" ] && [ -d "${OPENSSL_PREFIX}/lib" ]; then
+  cp -f "${OPENSSL_PREFIX}"/lib/libcrypto*.dylib "${APP_FRAMEWORKS_DIR}/" 2>/dev/null || true
+  cp -f "${OPENSSL_PREFIX}"/lib/libssl*.dylib "${APP_FRAMEWORKS_DIR}/" 2>/dev/null || true
+fi
+
+#
 # подпишем app-файл
 #
 echo $APPLE_CERTIFICATE | base64 --decode > certificate.p12
