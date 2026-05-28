@@ -31,7 +31,7 @@ find_openssl_file() {
     /usr/local/opt/openssl/lib; do
     [ -n "${openssl_dir}" ] || continue
     [ "${openssl_dir}" != "/lib" ] || continue
-    [ -f "${openssl_dir}/${library_file}" ] || continue
+    [ -s "${openssl_dir}/${library_file}" ] || continue
     echo "${openssl_dir}/${library_file}"
     return
   done
@@ -40,7 +40,7 @@ find_openssl_file() {
 find_openssl_files() {
   local library_file="$1"
 
-  [ -f "${APP_FRAMEWORKS_DIR}/${library_file}" ] && echo "${APP_FRAMEWORKS_DIR}/${library_file}"
+  [ -s "${APP_FRAMEWORKS_DIR}/${library_file}" ] && echo "${APP_FRAMEWORKS_DIR}/${library_file}"
   for openssl_dir in \
     "${OPENSSL_PREFIX}/lib" \
     /opt/homebrew/opt/openssl@3/lib \
@@ -49,7 +49,7 @@ find_openssl_files() {
     /usr/local/opt/openssl/lib; do
     [ -n "${openssl_dir}" ] || continue
     [ "${openssl_dir}" != "/lib" ] || continue
-    [ -f "${openssl_dir}/${library_file}" ] || continue
+    [ -s "${openssl_dir}/${library_file}" ] || continue
     echo "${openssl_dir}/${library_file}"
   done | awk '!seen[$0]++'
 }
@@ -73,7 +73,7 @@ find_first_openssl_file() {
     [ -n "${openssl_dir}" ] || continue
     [ "${openssl_dir}" != "/lib" ] || continue
     [ -d "${openssl_dir}" ] || continue
-    find "${openssl_dir}" -maxdepth 1 -name "${library_pattern}" -print 2>/dev/null | head -1
+    find "${openssl_dir}" -maxdepth 1 -name "${library_pattern}" -size +0 -print 2>/dev/null | head -1
   done | head -1
 }
 
@@ -115,7 +115,7 @@ find_resolved_dependency() {
 
   while read -r dependency; do
     resolved_dependency=$(resolve_dependency_path "${target}" "${dependency}")
-    [ -f "${resolved_dependency}" ] || continue
+    [ -s "${resolved_dependency}" ] || continue
     case "${resolved_dependency}" in
       "${APP_FRAMEWORKS_DIR}"/*)
         echo "${resolved_dependency}"
@@ -149,7 +149,7 @@ copy_to_frameworks() {
     for arch in ${required_archs}; do
       selected_source=""
       while read -r candidate; do
-        [ -f "${candidate}" ] || continue
+        [ -s "${candidate}" ] || continue
         file_has_arch "${candidate}" "${arch}" || continue
         selected_source="${candidate}"
         break
@@ -169,8 +169,17 @@ EOF_CANDIDATES
     done
 
     if [ "${#selected_sources[@]}" -gt 1 ]; then
-      tmp_destination=$(mktemp "${destination}.XXXXXX")
-      lipo -create "${selected_sources[@]}" -output "${tmp_destination}"
+      tmp_destination=$(mktemp -u "${destination}.XXXXXX")
+      if ! lipo -create "${selected_sources[@]}" -output "${tmp_destination}"; then
+        rm -f "${tmp_destination}"
+        echo "Error! Failed to create universal ${library_file}."
+        exit 1
+      fi
+      if [ ! -s "${tmp_destination}" ]; then
+        rm -f "${tmp_destination}"
+        echo "Error! Created universal ${library_file} is empty."
+        exit 1
+      fi
       mv -f "${tmp_destination}" "${destination}"
       return
     fi
@@ -179,10 +188,16 @@ EOF_CANDIDATES
   fi
 
   if [ -e "${destination}" ] && [ "${source}" -ef "${destination}" ]; then
-    return
+    [ -s "${destination}" ] && return
+    echo "Error! ${destination} is empty."
+    exit 1
   fi
 
   cp -fL "${source}" "${destination}"
+  if [ ! -s "${destination}" ]; then
+    echo "Error! Copied ${library_file} is empty."
+    exit 1
+  fi
 }
 
 relink_dependencies() {
@@ -210,14 +225,14 @@ if [ -z "${CORELIB}" ] || [ ! -f "${CORELIB}" ]; then
 fi
 
 CRYPTO_SOURCE=$(find_resolved_dependency "${CORELIB}" "libcrypto")
-if [ -z "${CRYPTO_SOURCE}" ] || [ ! -f "${CRYPTO_SOURCE}" ]; then
+if [ -z "${CRYPTO_SOURCE}" ] || [ ! -s "${CRYPTO_SOURCE}" ]; then
   echo "Error! OpenSSL libcrypto dependency was not found in ${CORELIB}."
   otool -L "${CORELIB}" || true
   exit 1
 fi
 
 SSL_SOURCE=$(find_resolved_dependency "${CORELIB}" "libssl")
-if [ -z "${SSL_SOURCE}" ] || [ ! -f "${SSL_SOURCE}" ]; then
+if [ -z "${SSL_SOURCE}" ] || [ ! -s "${SSL_SOURCE}" ]; then
   SSL_SOURCE=$(find_first_openssl_file 'libssl*.dylib')
 fi
 
@@ -227,7 +242,7 @@ install_name_tool -id \
   "@executable_path/../Frameworks/${CRYPTO_LIB}" \
   "${APP_FRAMEWORKS_DIR}/${CRYPTO_LIB}"
 
-if [ -n "${SSL_SOURCE}" ] && [ -f "${SSL_SOURCE}" ]; then
+if [ -n "${SSL_SOURCE}" ] && [ -s "${SSL_SOURCE}" ]; then
   copy_to_frameworks "${SSL_SOURCE}"
   SSL_LIB=$(basename "${SSL_SOURCE}")
   install_name_tool -id \
