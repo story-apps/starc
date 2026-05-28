@@ -27,6 +27,23 @@ if [ -n "${OPENSSL_PREFIX}" ] && [ -d "${OPENSSL_PREFIX}/lib" ]; then
 fi
 
 #
+# принудительно переключаем зависимости на OpenSSL из бандла, а не из системы/Homebrew
+#
+for dylib in "${APP_FRAMEWORKS_DIR}"/libcrypto*.dylib "${APP_FRAMEWORKS_DIR}"/libssl*.dylib; do
+  [ -f "${dylib}" ] || continue
+  install_name_tool -id "@executable_path/../Frameworks/$(basename "${dylib}")" "${dylib}" || true
+done
+
+for target in "Story Architect.app/Contents/MacOS/"* \
+              "Story Architect.app/Contents/Frameworks/"*.dylib; do
+  [ -f "${target}" ] || continue
+  otool -L "${target}" 2>/dev/null | awk '/lib(ssl|crypto).*\.dylib/{print $1}' | while read -r dep; do
+    [ -n "${dep}" ] || continue
+    install_name_tool -change "${dep}" "@executable_path/../Frameworks/$(basename "${dep}")" "${target}" || true
+  done
+done
+
+#
 # подпишем app-файл
 #
 echo $APPLE_CERTIFICATE | base64 --decode > certificate.p12
