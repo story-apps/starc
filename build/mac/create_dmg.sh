@@ -14,6 +14,42 @@ APP_BUNDLE="Story Architect.app"
 APP_FRAMEWORKS_DIR="${APP_BUNDLE}/Contents/Frameworks"
 CORELIB="${APP_FRAMEWORKS_DIR}/libcorelib.dylib"
 
+print_otool_info() {
+  local target="$1"
+
+  echo "--- otool -L ${target}"
+  otool -L "${target}" 2>&1 || true
+  echo "--- otool -l ${target} (LC_RPATH only)"
+  otool -l "${target}" 2>/dev/null | awk '
+    /cmd LC_RPATH/ { in_rpath = 1; print }
+    in_rpath && /path / { print; in_rpath = 0 }
+  ' || true
+}
+
+print_openssl_diagnostics() {
+  echo "--- OpenSSL diagnostics"
+  echo "APP_BUNDLE=${APP_BUNDLE}"
+  echo "APP_FRAMEWORKS_DIR=${APP_FRAMEWORKS_DIR}"
+  echo "CORELIB=${CORELIB}"
+  echo "OPENSSL_PREFIX=${OPENSSL_PREFIX}"
+
+  echo "--- Frameworks OpenSSL files"
+  find "${APP_FRAMEWORKS_DIR}" -maxdepth 1 \( -name 'libcrypto*.dylib' -o -name 'libssl*.dylib' \) -print 2>/dev/null || true
+
+  echo "--- Common Homebrew OpenSSL files"
+  for openssl_dir in \
+    "${OPENSSL_PREFIX}/lib" \
+    /opt/homebrew/opt/openssl@3/lib \
+    /opt/homebrew/opt/openssl/lib \
+    /usr/local/opt/openssl@3/lib \
+    /usr/local/opt/openssl/lib; do
+    [ -n "${openssl_dir}" ] || continue
+    [ -d "${openssl_dir}" ] || continue
+    echo "${openssl_dir}:"
+    find "${openssl_dir}" -maxdepth 1 \( -name 'libcrypto*.dylib' -o -name 'libssl*.dylib' \) -print 2>/dev/null || true
+  done
+}
+
 find_dependency() {
   local target="$1"
   local library_name="$2"
@@ -30,13 +66,21 @@ if [ ! -f "${CORELIB}" ]; then
 fi
 if [ -z "${CORELIB}" ] || [ ! -f "${CORELIB}" ]; then
   echo "Error! corelib was not found in ${APP_FRAMEWORKS_DIR}."
+  print_openssl_diagnostics
   exit 1
 fi
+
+echo "▶ Диагностика corelib перед обработкой OpenSSL..."
+print_otool_info "${CORELIB}"
+print_openssl_diagnostics
 
 echo "▶ Определяем исходный путь OpenSSL через otool в $(basename "${CORELIB}")..."
 OLD_CRYPTO=$(find_dependency "${CORELIB}" "libcrypto")
 if [ -z "${OLD_CRYPTO}" ] || [ ! -f "${OLD_CRYPTO}" ]; then
   echo "Error! OpenSSL libcrypto dependency was not found in ${CORELIB}."
+  echo "OLD_CRYPTO=${OLD_CRYPTO}"
+  print_otool_info "${CORELIB}"
+  print_openssl_diagnostics
   exit 1
 fi
 
@@ -47,6 +91,8 @@ if [ -z "${OLD_SSL}" ]; then
 fi
 
 echo "▶ OpenSSL найден в ${OPENSSL_LIB_DIR}"
+echo "▶ OLD_CRYPTO=${OLD_CRYPTO}"
+echo "▶ OLD_SSL=${OLD_SSL}"
 
 echo "▶ Копируем OpenSSL библиотеки..."
 cp -fL "${OLD_CRYPTO}" "${APP_FRAMEWORKS_DIR}/"
@@ -59,6 +105,13 @@ if [ -n "${OLD_SSL}" ] && [ -f "${OLD_SSL}" ]; then
 else
   SSL_LIB=""
   echo "▶ Найдена: ${CRYPTO_LIB}"
+  echo "▶ libssl не найдена рядом с libcrypto, пропускаем её копирование"
+fi
+
+echo "▶ Диагностика скопированных OpenSSL библиотек..."
+print_otool_info "${APP_FRAMEWORKS_DIR}/${CRYPTO_LIB}"
+if [ -n "${SSL_LIB}" ]; then
+  print_otool_info "${APP_FRAMEWORKS_DIR}/${SSL_LIB}"
 fi
 
 echo "▶ Обновляем install_name (id)..."
@@ -96,6 +149,9 @@ if [ -n "${SSL_LIB}" ]; then
       "${CORELIB}"
   fi
 fi
+
+echo "▶ Диагностика corelib после обработки OpenSSL..."
+print_otool_info "${CORELIB}"
 
 #
 # подпишем app-файл
