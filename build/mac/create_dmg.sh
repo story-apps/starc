@@ -51,12 +51,47 @@ print_openssl_diagnostics() {
   done
 }
 
-find_dependency() {
+find_dependencies() {
   local target="$1"
   local library_name="$2"
 
   otool -L "${target}" 2>/dev/null \
-    | awk -v library_name="${library_name}" 'NR > 1 && $1 ~ library_name "([.][0-9]+)*[.]dylib$" { print $1; exit }'
+    | awk -v library_name="${library_name}" 'NR > 1 && $1 ~ library_name "([.][0-9]+)*[.]dylib$" { print $1 }' \
+    | sort -u
+}
+
+find_dependency() {
+  local target="$1"
+  local library_name="$2"
+
+  find_dependencies "${target}" "${library_name}" | head -1
+}
+
+find_resolved_dependency() {
+  local target="$1"
+  local library_name="$2"
+  local dependency=""
+  local resolved_dependency=""
+
+  find_dependencies "${target}" "${library_name}" | while read -r dependency; do
+    resolved_dependency=$(resolve_dependency_path "${target}" "${dependency}")
+    [ -f "${resolved_dependency}" ] || continue
+    echo "${resolved_dependency}"
+    break
+  done
+}
+
+relink_dependencies() {
+  local target="$1"
+  local library_name="$2"
+  local new_dependency="$3"
+  local dependency=""
+
+  find_dependencies "${target}" "${library_name}" | while read -r dependency; do
+    [ -n "${dependency}" ] || continue
+    [ "${dependency}" != "${new_dependency}" ] || continue
+    install_name_tool -change "${dependency}" "${new_dependency}" "${target}"
+  done
 }
 
 find_openssl_file_by_name() {
@@ -135,8 +170,8 @@ print_otool_info "${CORELIB}"
 print_openssl_diagnostics
 
 echo "▶ Определяем исходный путь OpenSSL через otool в $(basename "${CORELIB}")..."
-OLD_CRYPTO=$(find_dependency "${CORELIB}" "libcrypto")
-CRYPTO_SOURCE=$(resolve_dependency_path "${CORELIB}" "${OLD_CRYPTO}")
+OLD_CRYPTO=$(find_dependencies "${CORELIB}" "libcrypto" | paste -sd ' ' -)
+CRYPTO_SOURCE=$(find_resolved_dependency "${CORELIB}" "libcrypto")
 if [ -z "${OLD_CRYPTO}" ] || [ -z "${CRYPTO_SOURCE}" ] || [ ! -f "${CRYPTO_SOURCE}" ]; then
   echo "Error! OpenSSL libcrypto dependency was not found in ${CORELIB}."
   echo "OLD_CRYPTO=${OLD_CRYPTO}"
@@ -147,8 +182,8 @@ if [ -z "${OLD_CRYPTO}" ] || [ -z "${CRYPTO_SOURCE}" ] || [ ! -f "${CRYPTO_SOURC
 fi
 
 OPENSSL_LIB_DIR=$(dirname "${CRYPTO_SOURCE}")
-OLD_SSL=$(find_dependency "${CORELIB}" "libssl")
-SSL_SOURCE=$(resolve_dependency_path "${CORELIB}" "${OLD_SSL}")
+OLD_SSL=$(find_dependencies "${CORELIB}" "libssl" | paste -sd ' ' -)
+SSL_SOURCE=$(find_resolved_dependency "${CORELIB}" "libssl")
 if [ -z "${SSL_SOURCE}" ] || [ ! -f "${SSL_SOURCE}" ]; then
   SSL_SOURCE=$(ls "${OPENSSL_LIB_DIR}"/libssl*.dylib 2>/dev/null | head -1)
 fi
@@ -190,29 +225,23 @@ if [ -n "${SSL_LIB}" ]; then
     "${APP_FRAMEWORKS_DIR}/${SSL_LIB}"
 
   echo "▶ Правим зависимость ${SSL_LIB} → ${CRYPTO_LIB}..."
-  OLD_CRYPTO_IN_SSL=$(find_dependency "${APP_FRAMEWORKS_DIR}/${SSL_LIB}" "libcrypto")
-  if [ -n "${OLD_CRYPTO_IN_SSL}" ]; then
-    install_name_tool -change \
-      "${OLD_CRYPTO_IN_SSL}" \
-      "@executable_path/../Frameworks/${CRYPTO_LIB}" \
-      "${APP_FRAMEWORKS_DIR}/${SSL_LIB}"
-  fi
+  relink_dependencies \
+    "${APP_FRAMEWORKS_DIR}/${SSL_LIB}" \
+    "libcrypto" \
+    "@executable_path/../Frameworks/${CRYPTO_LIB}"
 fi
 
 echo "▶ Правим ссылки на OpenSSL в corelib..."
-install_name_tool -change \
-  "${OLD_CRYPTO}" \
-  "@executable_path/../Frameworks/${CRYPTO_LIB}" \
-  "${CORELIB}"
+relink_dependencies \
+  "${CORELIB}" \
+  "libcrypto" \
+  "@executable_path/../Frameworks/${CRYPTO_LIB}"
 
 if [ -n "${SSL_LIB}" ]; then
-  OLD_SSL_IN_CORELIB=$(find_dependency "${CORELIB}" "libssl")
-  if [ -n "${OLD_SSL_IN_CORELIB}" ]; then
-    install_name_tool -change \
-      "${OLD_SSL_IN_CORELIB}" \
-      "@executable_path/../Frameworks/${SSL_LIB}" \
-      "${CORELIB}"
-  fi
+  relink_dependencies \
+    "${CORELIB}" \
+    "libssl" \
+    "@executable_path/../Frameworks/${SSL_LIB}"
 fi
 
 echo "▶ Диагностика corelib после обработки OpenSSL..."
