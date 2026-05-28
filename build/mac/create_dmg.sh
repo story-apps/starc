@@ -11,6 +11,7 @@ macdeployqt Story\ Architect.app
 # копируем OpenSSL в бандл приложения (macdeployqt не всегда подтягивает эти библиотеки)
 #
 APP_BUNDLE="Story Architect.app"
+APP_MACOS_DIR="${APP_BUNDLE}/Contents/MacOS"
 APP_FRAMEWORKS_DIR="${APP_BUNDLE}/Contents/Frameworks"
 CORELIB="${APP_FRAMEWORKS_DIR}/libcorelib.dylib"
 
@@ -58,6 +59,65 @@ find_dependency() {
     | awk -v library_name="${library_name}" 'NR > 1 && $1 ~ library_name "([.][0-9]+)*[.]dylib$" { print $1; exit }'
 }
 
+find_openssl_file_by_name() {
+  local library_file="$1"
+
+  for openssl_dir in \
+    "${OPENSSL_PREFIX}/lib" \
+    /opt/homebrew/opt/openssl@3/lib \
+    /opt/homebrew/opt/openssl/lib \
+    /usr/local/opt/openssl@3/lib \
+    /usr/local/opt/openssl/lib; do
+    [ -n "${openssl_dir}" ] || continue
+    [ -f "${openssl_dir}/${library_file}" ] || continue
+    echo "${openssl_dir}/${library_file}"
+    return
+  done
+}
+
+resolve_dependency_path() {
+  local target="$1"
+  local dependency="$2"
+  local dependency_file=""
+
+  case "${dependency}" in
+    /*)
+      echo "${dependency}"
+      ;;
+    @executable_path/../Frameworks/*)
+      echo "${APP_FRAMEWORKS_DIR}/$(basename "${dependency}")"
+      ;;
+    @executable_path/*)
+      echo "${APP_MACOS_DIR}/${dependency#@executable_path/}"
+      ;;
+    @loader_path/*)
+      echo "$(dirname "${target}")/${dependency#@loader_path/}"
+      ;;
+    @rpath/*)
+      dependency_file=$(basename "${dependency}")
+      if [ -f "${APP_FRAMEWORKS_DIR}/${dependency_file}" ]; then
+        echo "${APP_FRAMEWORKS_DIR}/${dependency_file}"
+      else
+        find_openssl_file_by_name "${dependency_file}"
+      fi
+      ;;
+    *)
+      echo "${dependency}"
+      ;;
+  esac
+}
+
+copy_to_frameworks() {
+  local source="$1"
+  local destination="${APP_FRAMEWORKS_DIR}/$(basename "${source}")"
+
+  if [ -e "${destination}" ] && [ "${source}" -ef "${destination}" ]; then
+    echo "▶ $(basename "${source}") уже находится в Frameworks"
+  else
+    cp -fL "${source}" "${APP_FRAMEWORKS_DIR}/"
+  fi
+}
+
 echo "▶ Создаём Frameworks директорию..."
 mkdir -p "${APP_FRAMEWORKS_DIR}"
 
@@ -76,31 +136,36 @@ print_openssl_diagnostics
 
 echo "▶ Определяем исходный путь OpenSSL через otool в $(basename "${CORELIB}")..."
 OLD_CRYPTO=$(find_dependency "${CORELIB}" "libcrypto")
-if [ -z "${OLD_CRYPTO}" ] || [ ! -f "${OLD_CRYPTO}" ]; then
+CRYPTO_SOURCE=$(resolve_dependency_path "${CORELIB}" "${OLD_CRYPTO}")
+if [ -z "${OLD_CRYPTO}" ] || [ -z "${CRYPTO_SOURCE}" ] || [ ! -f "${CRYPTO_SOURCE}" ]; then
   echo "Error! OpenSSL libcrypto dependency was not found in ${CORELIB}."
   echo "OLD_CRYPTO=${OLD_CRYPTO}"
+  echo "CRYPTO_SOURCE=${CRYPTO_SOURCE}"
   print_otool_info "${CORELIB}"
   print_openssl_diagnostics
   exit 1
 fi
 
-OPENSSL_LIB_DIR=$(dirname "${OLD_CRYPTO}")
+OPENSSL_LIB_DIR=$(dirname "${CRYPTO_SOURCE}")
 OLD_SSL=$(find_dependency "${CORELIB}" "libssl")
-if [ -z "${OLD_SSL}" ]; then
-  OLD_SSL=$(ls "${OPENSSL_LIB_DIR}"/libssl*.dylib 2>/dev/null | head -1)
+SSL_SOURCE=$(resolve_dependency_path "${CORELIB}" "${OLD_SSL}")
+if [ -z "${SSL_SOURCE}" ] || [ ! -f "${SSL_SOURCE}" ]; then
+  SSL_SOURCE=$(ls "${OPENSSL_LIB_DIR}"/libssl*.dylib 2>/dev/null | head -1)
 fi
 
 echo "▶ OpenSSL найден в ${OPENSSL_LIB_DIR}"
 echo "▶ OLD_CRYPTO=${OLD_CRYPTO}"
+echo "▶ CRYPTO_SOURCE=${CRYPTO_SOURCE}"
 echo "▶ OLD_SSL=${OLD_SSL}"
+echo "▶ SSL_SOURCE=${SSL_SOURCE}"
 
 echo "▶ Копируем OpenSSL библиотеки..."
-cp -fL "${OLD_CRYPTO}" "${APP_FRAMEWORKS_DIR}/"
-CRYPTO_LIB=$(basename "${OLD_CRYPTO}")
+copy_to_frameworks "${CRYPTO_SOURCE}"
+CRYPTO_LIB=$(basename "${CRYPTO_SOURCE}")
 
-if [ -n "${OLD_SSL}" ] && [ -f "${OLD_SSL}" ]; then
-  cp -fL "${OLD_SSL}" "${APP_FRAMEWORKS_DIR}/"
-  SSL_LIB=$(basename "${OLD_SSL}")
+if [ -n "${SSL_SOURCE}" ] && [ -f "${SSL_SOURCE}" ]; then
+  copy_to_frameworks "${SSL_SOURCE}"
+  SSL_LIB=$(basename "${SSL_SOURCE}")
   echo "▶ Найдены: ${CRYPTO_LIB}, ${SSL_LIB}"
 else
   SSL_LIB=""
