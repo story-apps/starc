@@ -37,6 +37,30 @@ find_openssl_file() {
   done
 }
 
+find_openssl_files() {
+  local library_file="$1"
+
+  [ -f "${APP_FRAMEWORKS_DIR}/${library_file}" ] && echo "${APP_FRAMEWORKS_DIR}/${library_file}"
+  for openssl_dir in \
+    "${OPENSSL_PREFIX}/lib" \
+    /opt/homebrew/opt/openssl@3/lib \
+    /opt/homebrew/opt/openssl/lib \
+    /usr/local/opt/openssl@3/lib \
+    /usr/local/opt/openssl/lib; do
+    [ -n "${openssl_dir}" ] || continue
+    [ "${openssl_dir}" != "/lib" ] || continue
+    [ -f "${openssl_dir}/${library_file}" ] || continue
+    echo "${openssl_dir}/${library_file}"
+  done | awk '!seen[$0]++'
+}
+
+file_has_arch() {
+  local file="$1"
+  local arch="$2"
+
+  lipo -archs "${file}" 2>/dev/null | tr ' ' '\n' | awk -v arch="${arch}" '$0 == arch { found = 1 } END { exit !found }'
+}
+
 find_first_openssl_file() {
   local library_pattern="$1"
 
@@ -109,12 +133,56 @@ EOF_DEPENDENCIES
 copy_to_frameworks() {
   local source="$1"
   local destination="${APP_FRAMEWORKS_DIR}/$(basename "${source}")"
+  local library_file=""
+  local required_archs=""
+  local selected_source=""
+  local arch=""
+  local candidate=""
+  local tmp_destination=""
+  local source_index=0
+  local selected_sources=()
+
+  library_file=$(basename "${source}")
+  required_archs=$(lipo -archs "${CORELIB}" 2>/dev/null || true)
+
+  if [ -n "${required_archs}" ]; then
+    for arch in ${required_archs}; do
+      selected_source=""
+      while read -r candidate; do
+        [ -f "${candidate}" ] || continue
+        file_has_arch "${candidate}" "${arch}" || continue
+        selected_source="${candidate}"
+        break
+      done <<EOF_CANDIDATES
+$(find_openssl_files "${library_file}")
+EOF_CANDIDATES
+
+      if [ -z "${selected_source}" ]; then
+        echo "Error! ${library_file} for ${arch} was not found."
+        exit 1
+      fi
+
+      for source_index in "${!selected_sources[@]}"; do
+        [ "${selected_sources[${source_index}]}" != "${selected_source}" ] || selected_source=""
+      done
+      [ -n "${selected_source}" ] && selected_sources+=("${selected_source}")
+    done
+
+    if [ "${#selected_sources[@]}" -gt 1 ]; then
+      tmp_destination=$(mktemp "${destination}.XXXXXX")
+      lipo -create "${selected_sources[@]}" -output "${tmp_destination}"
+      mv -f "${tmp_destination}" "${destination}"
+      return
+    fi
+
+    source="${selected_sources[0]}"
+  fi
 
   if [ -e "${destination}" ] && [ "${source}" -ef "${destination}" ]; then
     return
   fi
 
-  cp -fL "${source}" "${APP_FRAMEWORKS_DIR}/"
+  cp -fL "${source}" "${destination}"
 }
 
 relink_dependencies() {
