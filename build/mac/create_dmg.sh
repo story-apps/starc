@@ -34,65 +34,67 @@ if [ -z "${CORELIB}" ] || [ ! -f "${CORELIB}" ]; then
 fi
 
 echo "▶ Определяем исходный путь OpenSSL через otool в $(basename "${CORELIB}")..."
-OLD_SSL=$(find_dependency "${CORELIB}" "libssl")
-if [ -z "${OLD_SSL}" ] || [ ! -f "${OLD_SSL}" ]; then
-  echo "Error! OpenSSL libssl dependency was not found in ${CORELIB}."
+OLD_CRYPTO=$(find_dependency "${CORELIB}" "libcrypto")
+if [ -z "${OLD_CRYPTO}" ] || [ ! -f "${OLD_CRYPTO}" ]; then
+  echo "Error! OpenSSL libcrypto dependency was not found in ${CORELIB}."
   exit 1
 fi
 
-OPENSSL_LIB_DIR=$(dirname "${OLD_SSL}")
-OLD_CRYPTO_IN_SSL=$(find_dependency "${OLD_SSL}" "libcrypto")
-OLD_CRYPTO_IN_CORELIB=$(find_dependency "${CORELIB}" "libcrypto")
-OLD_CRYPTO="${OLD_CRYPTO_IN_SSL}"
-if [ ! -f "${OLD_CRYPTO}" ]; then
-  OLD_CRYPTO="${OLD_CRYPTO_IN_CORELIB}"
-fi
-if [ ! -f "${OLD_CRYPTO}" ]; then
-  OLD_CRYPTO=$(ls "${OPENSSL_LIB_DIR}"/libcrypto*.dylib 2>/dev/null | head -1)
-fi
-if [ -z "${OLD_CRYPTO}" ] || [ ! -f "${OLD_CRYPTO}" ]; then
-  echo "Error! OpenSSL libcrypto dependency was not found in ${CORELIB} or ${OPENSSL_LIB_DIR}."
-  exit 1
+OPENSSL_LIB_DIR=$(dirname "${OLD_CRYPTO}")
+OLD_SSL=$(find_dependency "${CORELIB}" "libssl")
+if [ -z "${OLD_SSL}" ]; then
+  OLD_SSL=$(ls "${OPENSSL_LIB_DIR}"/libssl*.dylib 2>/dev/null | head -1)
 fi
 
 echo "▶ OpenSSL найден в ${OPENSSL_LIB_DIR}"
 
 echo "▶ Копируем OpenSSL библиотеки..."
-cp -fL "${OLD_SSL}" "${APP_FRAMEWORKS_DIR}/"
 cp -fL "${OLD_CRYPTO}" "${APP_FRAMEWORKS_DIR}/"
-
-SSL_LIB=$(basename "${OLD_SSL}")
 CRYPTO_LIB=$(basename "${OLD_CRYPTO}")
 
-echo "▶ Найдены: ${SSL_LIB}, ${CRYPTO_LIB}"
+if [ -n "${OLD_SSL}" ] && [ -f "${OLD_SSL}" ]; then
+  cp -fL "${OLD_SSL}" "${APP_FRAMEWORKS_DIR}/"
+  SSL_LIB=$(basename "${OLD_SSL}")
+  echo "▶ Найдены: ${CRYPTO_LIB}, ${SSL_LIB}"
+else
+  SSL_LIB=""
+  echo "▶ Найдена: ${CRYPTO_LIB}"
+fi
 
 echo "▶ Обновляем install_name (id)..."
-install_name_tool -id \
-  "@executable_path/../Frameworks/${SSL_LIB}" \
-  "${APP_FRAMEWORKS_DIR}/${SSL_LIB}"
 install_name_tool -id \
   "@executable_path/../Frameworks/${CRYPTO_LIB}" \
   "${APP_FRAMEWORKS_DIR}/${CRYPTO_LIB}"
 
-echo "▶ Правим зависимость ${SSL_LIB} → ${CRYPTO_LIB}..."
-OLD_CRYPTO_IN_SSL=$(find_dependency "${APP_FRAMEWORKS_DIR}/${SSL_LIB}" "libcrypto")
-if [ -n "${OLD_CRYPTO_IN_SSL}" ]; then
-  install_name_tool -change \
-    "${OLD_CRYPTO_IN_SSL}" \
-    "@executable_path/../Frameworks/${CRYPTO_LIB}" \
+if [ -n "${SSL_LIB}" ]; then
+  install_name_tool -id \
+    "@executable_path/../Frameworks/${SSL_LIB}" \
     "${APP_FRAMEWORKS_DIR}/${SSL_LIB}"
+
+  echo "▶ Правим зависимость ${SSL_LIB} → ${CRYPTO_LIB}..."
+  OLD_CRYPTO_IN_SSL=$(find_dependency "${APP_FRAMEWORKS_DIR}/${SSL_LIB}" "libcrypto")
+  if [ -n "${OLD_CRYPTO_IN_SSL}" ]; then
+    install_name_tool -change \
+      "${OLD_CRYPTO_IN_SSL}" \
+      "@executable_path/../Frameworks/${CRYPTO_LIB}" \
+      "${APP_FRAMEWORKS_DIR}/${SSL_LIB}"
+  fi
 fi
 
 echo "▶ Правим ссылки на OpenSSL в corelib..."
 install_name_tool -change \
-  "${OLD_SSL}" \
-  "@executable_path/../Frameworks/${SSL_LIB}" \
+  "${OLD_CRYPTO}" \
+  "@executable_path/../Frameworks/${CRYPTO_LIB}" \
   "${CORELIB}"
-if [ -n "${OLD_CRYPTO_IN_CORELIB}" ]; then
-  install_name_tool -change \
-    "${OLD_CRYPTO_IN_CORELIB}" \
-    "@executable_path/../Frameworks/${CRYPTO_LIB}" \
-    "${CORELIB}"
+
+if [ -n "${SSL_LIB}" ]; then
+  OLD_SSL_IN_CORELIB=$(find_dependency "${CORELIB}" "libssl")
+  if [ -n "${OLD_SSL_IN_CORELIB}" ]; then
+    install_name_tool -change \
+      "${OLD_SSL_IN_CORELIB}" \
+      "@executable_path/../Frameworks/${SSL_LIB}" \
+      "${CORELIB}"
+  fi
 fi
 
 #
