@@ -42,6 +42,7 @@ const QString kApplicationGroupKey = "application";
 const QString kApplicationConfiguredKey = kApplicationGroupKey + "/configured";
 // язык приложения
 const QString kApplicationLanguagedKey = kApplicationGroupKey + "/language";
+const QString kApplicationLanguageQtVersionKey = kApplicationGroupKey + "/language-qt-version";
 const QString kApplicationLanguagedFileKey = kApplicationGroupKey + "/language-file";
 // тема приложения
 const QString kApplicationThemeKey = kApplicationGroupKey + "/theme";

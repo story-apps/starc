@@ -58,6 +58,7 @@
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/language_helper.h>
 #include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
@@ -2550,10 +2551,39 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     TaskBar::registerTaskBar(d->applicationView, {}, {}, {});
 
     //
+    // Настраиваем язык приложения
+    //
+    auto language
+        = settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>();
+    //
+    // ... cперва осуществим маппинг языков между версиями Qt если это необходимо
+    //
+    if (const auto languageQtVersion
+        = settingsValue(DataStorageLayer::kApplicationLanguageQtVersionKey, 5).toInt();
+        languageQtVersion > 0) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        if (languageQtVersion < 6) {
+            language = static_cast<QLocale::Language>(
+                LanguageHelper::qt5LanguageIdToQt6Id(static_cast<int>(language)));
+        }
+#else
+        if (languageQtVersion == 6) {
+            language = static_cast<QLocale::Language>(
+                LanguageHelper::qt6LanguageIdToQt5Id(static_cast<int>(language)));
+        }
+#endif
+    }
+    //
+    // ... сохраняем корректный вариант языка и версию Qt в которой он был получен
+    //
+    setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, language);
+    setSettingsValue(DataStorageLayer::kApplicationLanguageQtVersionKey, (QT_VERSION >> 16) & 0xFF);
+    d->setTranslation(language);
+
+
+    //
     // Пробуем загрузить геометрию и состояние приложения
     //
-    d->setTranslation(
-        settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
     d->setDesignSystemTheme(static_cast<Ui::ApplicationTheme>(
         settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
     d->setDesignSystemCustomThemeColors(Ui::DesignSystem::Color(

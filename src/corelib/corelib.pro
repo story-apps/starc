@@ -533,6 +533,7 @@ SOURCES += \
     utils/helpers/extension_helper.cpp \
     utils/helpers/icon_helper.cpp \
     utils/helpers/image_helper.cpp \
+    utils/helpers/language_helper.cpp \
     utils/helpers/libavoid_helper.cpp \
     utils/helpers/measurement_helper.cpp \
     utils/helpers/model_helper.cpp \
@@ -927,6 +928,7 @@ HEADERS += \
     utils/helpers/extension_helper.h \
     utils/helpers/icon_helper.h \
     utils/helpers/image_helper.h \
+    utils/helpers/language_helper.h \
     utils/helpers/libavoid_helper.h \
     utils/helpers/measurement_helper.h \
     utils/helpers/model_helper.h \
