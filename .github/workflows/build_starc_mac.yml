@@ -48,15 +48,6 @@ jobs:
           version: 5.15.2
           target: desktop
 
-      - name: Install dependencies
-        shell: bash
-        run: |
-          if [ ! -f /usr/local/bin/brew ]; then
-            arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
-          fi
-          arch -x86_64 /usr/local/bin/brew install openssl@3
-          echo "OPENSSL_PREFIX=/usr/local/opt/openssl@3" >> $GITHUB_ENV
-
       - name: Run QMake
         shell: bash
         run: |
@@ -137,23 +128,6 @@ jobs:
           version: 6.10.1
           target: desktop
           modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
-
-      - name: Install dependencies
-        shell: bash
-        run: |
-          brew install openssl@3
-          if [ ! -f /usr/local/bin/brew ]; then
-            arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/null
-          fi
-          arch -x86_64 /usr/local/bin/brew install openssl@3
-          OPENSSL_ARM64_ROOT=/opt/homebrew/opt/openssl@3
-          ARM64_LIB=${OPENSSL_ARM64_ROOT}/lib
-          X86_LIB=/usr/local/opt/openssl@3/lib
-          lipo -create ${ARM64_LIB}/libcrypto.a ${X86_LIB}/libcrypto.a \
-               -output ${ARM64_LIB}/libcrypto.a
-          lipo -create ${ARM64_LIB}/libcrypto.3.dylib ${X86_LIB}/libcrypto.3.dylib \
-               -output ${ARM64_LIB}/libcrypto.3.dylib
-          echo "OPENSSL_PREFIX=${OPENSSL_ARM64_ROOT}" >> $GITHUB_ENV
 
       - name: Run QMake
         shell: bash

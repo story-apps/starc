@@ -8,11 +8,6 @@ find Story\ Architect.app -name "*.dSYM" -print0 | xargs -0 rm -rf
 macdeployqt Story\ Architect.app
 
 #
-# копируем OpenSSL в бандл приложения (macdeployqt не всегда подтягивает эти библиотеки)
-#
-./bundle_openssl.sh
-
-#
 # подпишем app-файл
 #
 echo $APPLE_CERTIFICATE | base64 --decode > certificate.p12
