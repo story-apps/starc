@@ -335,13 +335,13 @@ jobs:
             name_for_file = 'starc-setup.exe'
             file_bin = Get-Item -Path 'build\windows\starc-setup.exe'
           }
-          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish' -Method Post -Form $PublishForm
+          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish/' -Method Post -Form $PublishForm
           $NotifyForm = @{
             api_key = $env:STARC_API_KEY
             system = 'windows64'
             version = $env:BUILD_VERSION
           }
-          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/notify' -Method Post -Form $NotifyForm
+          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/notify/' -Method Post -Form $NotifyForm
 
       - name: Publish artifacts to the GitHub releases
         uses: softprops/action-gh-release@v1
