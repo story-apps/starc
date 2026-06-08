@@ -510,6 +510,7 @@ void ProjectsManager::loadProjects()
         if (isRemote) {
             project->setId(_json["id"].toInt());
             project->setTeamId(_json["team_id"].toInt());
+            project->setReviewEnabled(_json["is_review_enabled"].toBool());
             project->setOwner(_json["is_owner"].toBool());
             project->setEditingMode(static_cast<DocumentEditingMode>(_json["role"].toInt()));
 
@@ -584,6 +585,7 @@ void ProjectsManager::saveProjects()
         if (projectItem->isRemote()) {
             projectJson["id"] = projectItem->id();
             projectJson["team_id"] = projectItem->teamId();
+            projectJson["is_review_enabled"] = projectItem->isReviewEnabled();
             projectJson["is_owner"] = projectItem->isOwner();
             projectJson["role"] = static_cast<int>(projectItem->editingMode());
 
@@ -1132,6 +1134,12 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
             cloudProject->setPosterPath(posterPath);
         }
     }
+
+    //
+    // Облачные параметры всегда переписываем, т.к. они могли обновиться
+    //
+    cloudProject->setTeamId(_projectInfo.teamId);
+    cloudProject->setReviewEnabled(_projectInfo.isReviewEnabled);
     cloudProject->setCollaborators(_projectInfo.collaborators);
 
     //
@@ -1142,7 +1150,6 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
         // Определим параметры проекта
         //
         cloudProject->setId(_projectInfo.id);
-        cloudProject->setTeamId(_projectInfo.teamId);
         cloudProject->setProjectType(BusinessLayer::ProjectType::Cloud);
         cloudProject->setPath(projectPath);
         cloudProject->setRealPath(projectPath);

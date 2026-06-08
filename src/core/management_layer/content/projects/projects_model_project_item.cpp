@@ -30,6 +30,7 @@ public:
     int id = Domain::kInvalidId;
     int teamId = Domain::kInvalidId;
     bool isOwner = true;
+    bool isReviewEnabled = false;
     ManagementLayer::DocumentEditingMode editingMode = ManagementLayer::DocumentEditingMode::Edit;
     QHash<QUuid, ManagementLayer::DocumentEditingMode> editingPermissions;
     QVector<Domain::ProjectCollaboratorInfo> collaborators;
@@ -265,6 +266,16 @@ bool ProjectsModelProjectItem::isOwner() const
 void ProjectsModelProjectItem::setOwner(bool _isOwner)
 {
     d->isOwner = _isOwner;
+}
+
+bool ProjectsModelProjectItem::isReviewEnabled() const
+{
+    return d->isReviewEnabled;
+}
+
+void ProjectsModelProjectItem::setReviewEnabled(bool _enabled)
+{
+    d->isReviewEnabled = _enabled;
 }
 
 ManagementLayer::DocumentEditingMode ProjectsModelProjectItem::editingMode() const

@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/image/image_card.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/text_helper.h>
@@ -28,6 +29,8 @@ public:
 
     TextField* teamName = nullptr;
     TextField* teamDescription = nullptr;
+    CheckBox* isReviewEnabled = nullptr;
+    TextField* reviewNotificationsTelegramChatId = nullptr;
     ImageCard* teamAvatar = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -38,12 +41,16 @@ public:
 TeamDialog::Implementation::Implementation(QWidget* _parent)
     : teamName(new TextField(_parent))
     , teamDescription(new TextField(_parent))
+    , isReviewEnabled(new CheckBox(_parent))
+    , reviewNotificationsTelegramChatId(new TextField(_parent))
     , teamAvatar(new ImageCard(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , saveButton(new Button(_parent))
 {
     teamName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    reviewNotificationsTelegramChatId->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    reviewNotificationsTelegramChatId->hide();
     teamAvatar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     teamAvatar->setDecorationIcon(u8"\U000F0381");
     UiHelper::initSpellingFor(teamDescription);
@@ -79,6 +86,8 @@ TeamDialog::TeamDialog(QWidget* _parent)
     int row = 0;
     contentsLayout()->addWidget(d->teamName, row++, 0, 1, 2);
     contentsLayout()->addWidget(d->teamDescription, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->isReviewEnabled, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->reviewNotificationsTelegramChatId, row++, 0, 1, 2);
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->addWidget(d->teamAvatar, 0, 2, row++, 1, Qt::AlignTop);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 3);
@@ -88,6 +97,8 @@ TeamDialog::TeamDialog(QWidget* _parent)
 
 
     connect(d->teamName, &TextField::textChanged, d->teamName, &TextField::clearError);
+    connect(d->isReviewEnabled, &CheckBox::checkedChanged, d->reviewNotificationsTelegramChatId,
+            &TextField::setVisible);
     connect(d->cancelButton, &Button::clicked, this, &TeamDialog::hideDialog);
     connect(d->saveButton, &Button::clicked, this, &TeamDialog::savePressed);
 }
@@ -139,6 +150,26 @@ void TeamDialog::setTeamAvatar(const QPixmap& _photo)
     d->teamAvatar->setImage(_photo);
 }
 
+bool TeamDialog::isReviewEnabled() const
+{
+    return d->isReviewEnabled->isChecked();
+}
+
+void TeamDialog::setReviewEnabled(bool _enabled)
+{
+    d->isReviewEnabled->setChecked(_enabled);
+}
+
+QString TeamDialog::reviewNotificationTelegramChatId() const
+{
+    return d->reviewNotificationsTelegramChatId->text();
+}
+
+void TeamDialog::setReviewNotificationTelegramChatId(const QString& _chatId)
+{
+    d->reviewNotificationsTelegramChatId->setText(_chatId);
+}
+
 bool TeamDialog::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == d->teamAvatar && _event->type() == QEvent::Resize) {
@@ -163,6 +194,8 @@ void TeamDialog::updateTranslations()
     setTitle(d->dialogType == DialogType::CreateNew ? tr("Create new team") : tr("Edit team"));
     d->teamName->setLabel(tr("Name"));
     d->teamDescription->setLabel(tr("Description"));
+    d->isReviewEnabled->setText(tr("Enable review for documents"));
+    d->reviewNotificationsTelegramChatId->setLabel(tr("Telegram chat ID for review notifications"));
     d->teamAvatar->setSupportingText(tr("Add avatar +"), tr("Change avatar..."),
                                      tr("Do you want to delete the team's avatar?"));
     d->teamAvatar->setImageCroppingText(tr("Select an area for the team avatar"));
@@ -179,12 +212,18 @@ void TeamDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto textField : std::vector<TextField*>{
              d->teamName,
              d->teamDescription,
+             d->reviewNotificationsTelegramChatId,
          }) {
         textField->setTextColor(DesignSystem::color().onBackground());
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setDefaultMarginsEnabled(false);
+        textField->setCustomMargins({ DesignSystem::layout().px24(), 0.0, 0.0, 0.0 });
     }
-    d->teamName->setCustomMargins({ 0.0, DesignSystem::card().shadowMargins().top(), 0.0, 0.0 });
+    d->teamName->setCustomMargins(
+        { DesignSystem::layout().px24(), 0.0, 0.0, DesignSystem::compactLayout().px16() });
+
+    d->isReviewEnabled->setBackgroundColor(DesignSystem::color().background());
+    d->isReviewEnabled->setTextColor(DesignSystem::color().onBackground());
 
     d->teamAvatar->setBackgroundColor(DesignSystem::color().background());
     d->teamAvatar->setTextColor(DesignSystem::color().onBackground());
@@ -198,10 +237,9 @@ void TeamDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
                   DesignSystem::layout().px16(), DesignSystem::layout().px12())
             .toMargins());
-    contentsLayout()->setVerticalSpacing(DesignSystem::compactLayout().px16());
+    contentsLayout()->setVerticalSpacing(0);
     contentsLayout()->setHorizontalSpacing(DesignSystem::compactLayout().px16());
-    contentsLayout()->setContentsMargins(DesignSystem::layout().px24(), 0,
-                                         DesignSystem::layout().px12(), 0);
+    contentsLayout()->setContentsMargins(0, 0, DesignSystem::layout().px12(), 0);
 }
 
 } // namespace Ui

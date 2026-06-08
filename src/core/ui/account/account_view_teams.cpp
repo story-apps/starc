@@ -262,9 +262,11 @@ AccountViewTeams::AccountViewTeams(QWidget* _parent)
             });
     connect(d->sidebar, &AccountViewTeamsSidebar::teamMemberChanged, this,
             [this](const QString& _email, const QString& _nameForTeam, int _role,
-                   bool _hasAccessToAllProjects, bool _allowGrantAccessToProjects) {
+                   bool _hasAccessToAllProjects, bool _allowGrantAccessToProjects,
+                   bool _needSendReviewNotifications) {
                 emit changeMemberRequested(d->currentTeamId, _email, _nameForTeam, _role,
-                                           _hasAccessToAllProjects, _allowGrantAccessToProjects);
+                                           _hasAccessToAllProjects, _allowGrantAccessToProjects,
+                                           _needSendReviewNotifications);
             });
 }
 
@@ -319,21 +321,21 @@ void AccountViewTeams::showTeam(int _teamId)
         }
 
         //
+        // Настроим опции отображения параметров пользователей
+        //
+        d->sidebar->setOptions(team.isReviewEnabled);
+
+        //
         // Собственно список участников
         //
         members = team.members;
         //
         // Текущий
         //
-        members.prepend({
-            d->accountInfo.name,
-            d->accountInfo.email,
-            team.teamRole,
-            team.hasAccessToAllProjects,
-            team.allowGrantAccessToProjects,
-            team.nameForTeam,
-            team.color,
-        });
+        auto current = team.self;
+        current.name = d->accountInfo.name;
+        current.email = d->accountInfo.email;
+        members.prepend(current);
 
         //
         // Настроим возможность добавления участников в команду

@@ -132,6 +132,12 @@ public:
     void setOwner(bool _isOwner);
 
     /**
+     * @brief Включён ли режим отправки документов на проверку для проекта
+     */
+    bool isReviewEnabled() const;
+    void setReviewEnabled(bool _enabled);
+
+    /**
      * @brief Режим работы с проектом
      */
     ManagementLayer::DocumentEditingMode editingMode() const;

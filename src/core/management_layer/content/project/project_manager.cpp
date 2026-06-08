@@ -468,6 +468,11 @@ public:
     bool allowGrantAccessToProject = true;
 
     /**
+     * @brief Включён ли режим отправки документов на проверку в текущем проекте
+     */
+    bool isReviewEnabled = false;
+
+    /**
      * @brief Текущий режим редактирования документов
      */
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
@@ -3694,6 +3699,7 @@ void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectIte
     d->projectTeamId = _project->teamId();
     d->allowGrantAccessToProject
         = d->isProjectOwner || (projectTeam != nullptr && projectTeam->allowGrantAccessToProject());
+    d->isReviewEnabled = _project->isReviewEnabled();
     d->editingMode = _project->editingMode();
     d->editingPermissions = _project->editingPermissions();
     d->pluginsBuilder.setEditingPermissions(d->editingPermissions);
@@ -5538,9 +5544,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
     Log::trace("Set project info");
-    constexpr int testTeamId = 17;
     const bool canBeSentForChecking
-        = d->projectTeamId == testTeamId && d->editingPermissions.contains(itemForShow->uuid());
+        = d->isReviewEnabled && d->editingPermissions.contains(itemForShow->uuid());
     view->setProjectInfo(d->isProjectRemote, d->isProjectOwner, d->allowGrantAccessToProject,
                          canBeSentForChecking);
     Log::trace("Set editing mode");

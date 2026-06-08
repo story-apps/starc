@@ -18,6 +18,11 @@ public:
     ~AccountViewTeamsSidebar() override;
 
     /**
+     * @brief Задать параметры проекта, чтобы в сайдбаре корректно отображать опции пользователей
+     */
+    void setOptions(bool _isReviewEnabled);
+
+    /**
      * @brief Показать пустую страницу
      */
     void showEmptyPage();
@@ -32,7 +37,8 @@ signals:
      * @brief Параметры участника изменены
      */
     void teamMemberChanged(const QString& _email, const QString& _nameForTeam, int _role,
-                           bool _hasAccessToAllProjects, bool _allowGrantAccessToProjects);
+                           bool _hasAccessToAllProjects, bool _allowGrantAccessToProjects,
+                           bool _needSendReviewNotifications);
 
 protected:
     /**

@@ -237,6 +237,7 @@ struct TeamMemberInfo {
     int role = 0;
     bool hasAccessToAllProjects = true;
     bool allowGrantAccessToProjects = true;
+    bool needSendReviewNotifications = true;
     QString nameForTeam;
     QColor color;
 };
@@ -246,6 +247,7 @@ inline bool operator==(const TeamMemberInfo& _lhs, const TeamMemberInfo& _rhs)
     return _lhs.name == _rhs.name && _lhs.email == _rhs.email && _lhs.role == _rhs.role
         && _lhs.hasAccessToAllProjects == _rhs.hasAccessToAllProjects
         && _lhs.allowGrantAccessToProjects == _rhs.allowGrantAccessToProjects
+        && _lhs.needSendReviewNotifications == _rhs.needSendReviewNotifications
         && _lhs.nameForTeam == _rhs.nameForTeam && _lhs.color == _rhs.color;
 }
 
@@ -257,11 +259,16 @@ struct TeamInfo {
     QString name;
     QString description;
     QByteArray avatar;
-    int teamRole = 0;
-    bool hasAccessToAllProjects = true;
-    bool allowGrantAccessToProjects = true;
-    QString nameForTeam;
-    QColor color;
+    bool isReviewEnabled = false;
+    QString reviewNotiifcationsTelegramChatId;
+
+    //
+    // тут вложена инфо о текущем пользователе
+    //
+    TeamMemberInfo self;
+    //
+    // а тут инфо о сокомандниках
+    //
     QVector<TeamMemberInfo> members;
 
     bool isValid() const
@@ -272,7 +279,7 @@ struct TeamInfo {
     bool isOwner() const
     {
         constexpr int ownerRole = 0;
-        return teamRole == ownerRole;
+        return self.role == ownerRole;
     }
 };
 
@@ -306,6 +313,7 @@ struct ProjectInfo {
     QDateTime lastEditTime;
     QVector<ProjectCollaboratorInfo> collaborators;
     int teamId = kInvalidId;
+    bool isReviewEnabled = false;
 };
 
 /**

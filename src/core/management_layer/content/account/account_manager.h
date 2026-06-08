@@ -210,13 +210,15 @@ signals:
      * @brief Пользователь хочет создать команду
      */
     void createTeamRequested(const QString& _name, const QString& _description,
-                             const QByteArray& _avatar);
+                             const QByteArray& _avatar, bool _isReviewEnabled,
+                             const QString& _reviewNotificationsTelegramChatId);
 
     /**
      * @brief Пользователь хочет изменить информацию о команде
      */
     void updateTeamRequested(int _teamId, const QString& _name, const QString& _description,
-                             const QByteArray& _avatar);
+                             const QByteArray& _avatar, bool _isReviewEnabled,
+                             const QString& _reviewNotificationsTelegramChatId);
 
     /**
      * @brief Пользоваталь хочет удалить команду
@@ -239,7 +241,7 @@ signals:
      */
     void changeMemberRequested(int _teamId, const QString& _email, const QString& _nameForTeam,
                                int _role, bool _hasAccessToAllProjects,
-                               bool _allowGrantAccessToProjects);
+                               bool _allowGrantAccessToProjects, bool _needSendReviewNotifications);
 
     /**
      * @brief Пользователь хочет отписать соавтора от проекта

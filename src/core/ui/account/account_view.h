@@ -168,7 +168,7 @@ signals:
      */
     void changeMemberRequested(int _teamId, const QString& _email, const QString& _nameForTeam,
                                int _role, bool _hasAccessToAllProjects,
-                               bool _allowGrantAccessToProjects);
+                               bool _allowGrantAccessToProjects, bool _needSendReviewNotifications);
 
     /**
      * @brief Пользователь хочет отписать соавтора от проекта

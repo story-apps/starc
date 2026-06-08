@@ -49,6 +49,18 @@ public:
     QPixmap teamAvatar() const;
     void setTeamAvatar(const QPixmap& _photo);
 
+    /**
+     * @brief Нужен ли режим отправки на проверку
+     */
+    bool isReviewEnabled() const;
+    void setReviewEnabled(bool _enabled);
+
+    /**
+     * @brief Айди чата телеграма для отправки уведомлений
+     */
+    QString reviewNotificationTelegramChatId() const;
+    void setReviewNotificationTelegramChatId(const QString& _chatId);
+
 signals:
     /**
      * @brief Пользователь нажал кнопку сохранения

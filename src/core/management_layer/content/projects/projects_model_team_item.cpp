@@ -95,7 +95,7 @@ void ProjectsModelTeamItem::setAvatar(const QByteArray& _avatar)
 
 bool ProjectsModelTeamItem::allowGrantAccessToProject() const
 {
-    return d->teamInfo.allowGrantAccessToProjects;
+    return d->teamInfo.self.allowGrantAccessToProjects;
 }
 
 QVector<Domain::TeamMemberInfo> ProjectsModelTeamItem::members() const

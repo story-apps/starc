@@ -33,6 +33,8 @@ public:
     RadioButton* accessToSharedProjects = nullptr;
     CaptionLabel* permissionsTitle = nullptr;
     CheckBox* allowGrantAccessToProjects = nullptr;
+    CaptionLabel* notificationsTitle = nullptr;
+    CheckBox* needSendReviewNotifications = nullptr;
 
     Debouncer changeDebouncer;
 };
@@ -48,6 +50,8 @@ AccountViewTeamsSidebar::Implementation::Implementation(QWidget* _parent)
     , accessToSharedProjects(new RadioButton(_parent))
     , permissionsTitle(new CaptionLabel(_parent))
     , allowGrantAccessToProjects(new CheckBox(_parent))
+    , notificationsTitle(new CaptionLabel(_parent))
+    , needSendReviewNotifications(new CheckBox(_parent))
     , changeDebouncer(500)
 {
     email->setEnabled(false);
@@ -67,6 +71,8 @@ AccountViewTeamsSidebar::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(accessToSharedProjects);
     layout->addWidget(permissionsTitle);
     layout->addWidget(allowGrantAccessToProjects);
+    layout->addWidget(notificationsTitle);
+    layout->addWidget(needSendReviewNotifications);
     layout->addStretch();
     memberPage->setLayout(layout);
 }
@@ -88,16 +94,25 @@ AccountViewTeamsSidebar::AccountViewTeamsSidebar(QWidget* _parent)
     connect(&d->changeDebouncer, &Debouncer::gotWork, this, [this] {
         emit teamMemberChanged(d->email->text(), d->nameForTeam->text(), d->currentMemberRole,
                                d->accessToAllProjects->isChecked(),
-                               d->allowGrantAccessToProjects->isChecked());
+                               d->allowGrantAccessToProjects->isChecked(),
+                               d->needSendReviewNotifications->isChecked());
     });
     connect(d->nameForTeam, &TextField::textChanged, &d->changeDebouncer, &Debouncer::orderWork);
     connect(d->accessToAllProjects, &RadioButton::checkedChanged, &d->changeDebouncer,
             &Debouncer::orderWork);
     connect(d->allowGrantAccessToProjects, &CheckBox::checkedChanged, &d->changeDebouncer,
             &Debouncer::orderWork);
+    connect(d->needSendReviewNotifications, &CheckBox::checkedChanged, &d->changeDebouncer,
+            &Debouncer::orderWork);
 }
 
 AccountViewTeamsSidebar::~AccountViewTeamsSidebar() = default;
+
+void AccountViewTeamsSidebar::setOptions(bool _isReviewEnabled)
+{
+    d->notificationsTitle->setVisible(_isReviewEnabled);
+    d->needSendReviewNotifications->setVisible(_isReviewEnabled);
+}
 
 void AccountViewTeamsSidebar::showEmptyPage()
 {
@@ -137,6 +152,7 @@ void AccountViewTeamsSidebar::setTeamMember(const Domain::TeamMemberInfo& _membe
         d->accessToSharedProjects->setChecked(true);
     }
     d->allowGrantAccessToProjects->setChecked(_member.allowGrantAccessToProjects);
+    d->needSendReviewNotifications->setChecked(_member.needSendReviewNotifications);
     //
     d->changeDebouncer.setAcceptWorkOrders(true);
 
@@ -145,7 +161,7 @@ void AccountViewTeamsSidebar::setTeamMember(const Domain::TeamMemberInfo& _membe
 
 void AccountViewTeamsSidebar::updateTranslations()
 {
-    d->memberTitle->setText("Member parameters");
+    d->memberTitle->setText(tr("Member parameters"));
     d->email->setLabel(tr("Email"));
     d->nameForTeam->setLabel(tr("Name for team"));
     d->accessTitle->setText(tr("Access to team projects"));
@@ -153,6 +169,8 @@ void AccountViewTeamsSidebar::updateTranslations()
     d->accessToSharedProjects->setText(tr("Only shared projects"));
     d->permissionsTitle->setText(tr("Account permissions"));
     d->allowGrantAccessToProjects->setText(tr("Allow grant access to projects"));
+    d->notificationsTitle->setText(tr("Account notifications"));
+    d->needSendReviewNotifications->setText(tr("Notify when project sent to review"));
 }
 
 void AccountViewTeamsSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -170,6 +188,8 @@ void AccountViewTeamsSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _
              d->accessToSharedProjects,
              d->permissionsTitle,
              d->allowGrantAccessToProjects,
+             d->notificationsTitle,
+             d->needSendReviewNotifications,
          }) {
         widget->setBackgroundColor(DesignSystem::color().primary());
         widget->setTextColor(DesignSystem::color().onPrimary());
@@ -179,8 +199,13 @@ void AccountViewTeamsSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _
     const QMarginsF labelMargins(DesignSystem::layout().px24(),
                                  DesignSystem::compactLayout().px16(),
                                  DesignSystem::layout().px24(), 0);
-    d->accessTitle->setContentsMarginsF(labelMargins);
-    d->permissionsTitle->setContentsMarginsF(labelMargins);
+    for (auto title : {
+             d->accessTitle,
+             d->permissionsTitle,
+             d->notificationsTitle,
+         }) {
+        title->setContentsMarginsF(labelMargins);
+    }
 
     for (auto textField : {
              d->email,
