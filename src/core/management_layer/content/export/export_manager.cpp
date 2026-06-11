@@ -121,6 +121,16 @@ QString buildExportFilePath(BusinessLayer::ExportFileFormat _fileFormat, const Q
         exportExtension = ExtensionHelper::msOfficeOpenXml();
         break;
     }
+    case ExportFileFormat::Fdx: {
+        exportFilter = DialogHelper::finalDraftFilter();
+        exportExtension = ExtensionHelper::finalDraft();
+        break;
+    }
+    case ExportFileFormat::Fountain: {
+        exportFilter = DialogHelper::fountainFilter();
+        exportExtension = ExtensionHelper::fountain();
+        break;
+    }
     case ExportFileFormat::Markdown: {
         exportFilter = DialogHelper::markdownFilter();
         exportExtension = ExtensionHelper::markdown();
