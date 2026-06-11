@@ -567,7 +567,7 @@ void ApplicationManager::Implementation::sendStartupStatistics()
     data["action_name"] = "startup";
     data["action_content"] = QString();
     loader->setRawRequestData(QJsonDocument(data).toJson(), "application/json");
-    loader->loadAsync("https://demo.storyapps.dev/telemetry/");
+    loader->loadAsync("https://telemetry.storyapps.dev/");
 }
 
 void ApplicationManager::Implementation::sendCrashInfo()
