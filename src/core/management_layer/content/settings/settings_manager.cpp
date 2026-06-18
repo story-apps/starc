@@ -43,6 +43,12 @@ namespace ManagementLayer {
 namespace {
 
 /**
+ * @brief Ссылка на папку со словарями
+ */
+const char* kHunspellDictionariesUrl
+    = "https://github.com/story-apps/starc-language-dictionaries/raw/refs/heads/master/hunspell";
+
+/**
  * @brief Сформировать идентификатор задачи для загрузки языка проверки орфографии
  */
 QString spellCheckerLoadingTaskId(const QString& _languageId)
@@ -1864,7 +1870,7 @@ void SettingsManager::loadSpellingDictionary(const QString& _languageCode)
 void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode)
 {
     const auto hunspellDictionariesFolderUrl
-        = QString("https://starc.app/downloads/hunspell/%1/").arg(_languageCode);
+        = QString("%1/%2/").arg(kHunspellDictionariesUrl).arg(_languageCode);
     const QString affFileName = _languageCode + ".aff";
 
     //
@@ -1931,7 +1937,7 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
 void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode)
 {
     const auto hunspellDictionariesFolderUrl
-        = QString("https://starc.app/downloads/hunspell/%1/").arg(_languageCode);
+        = QString("%1/%2/").arg(kHunspellDictionariesUrl).arg(_languageCode);
     const QString dicFileName = _languageCode + ".dic";
 
     //
