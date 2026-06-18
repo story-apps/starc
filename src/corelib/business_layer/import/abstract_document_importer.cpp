@@ -28,10 +28,8 @@ const QRegularExpression kPlaceContainsChecker(
 /**
  * @brief Регулярное выражение для определения блока "Время и место" по наличию слов времени
  */
-const QRegularExpression kSceneTimeChecker(
-    "^(DAY|NIGHT|LATER|CONTINUES|УТРО|ДЕНЬ|ВЕЧЕР|НОЧЬ)( |$)");
 const QRegularExpression kSceneTimeContainsChecker(
-    "[ ](DAY|NIGHT|LATER|CONTINUES|УТРО|ДЕНЬ|ВЕЧЕР|НОЧЬ)([.]|)$");
+    "( - |[.] |[.])(DAY|NIGHT|LATER|CONTINUES|УТРО|ДЕНЬ|ВЕЧЕР|НОЧЬ)( [0-9]{1,}|)([.]|)$");
 
 /**
  * @brief Регулярное выражение для определения строки, начинающейся с номера
@@ -427,19 +425,6 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             //
             simplifyTextBlock(cursor);
             auto paragraphText = clearBlockText(blockType, cursor.block().text());
-            //
-            // ... если это заголовок сцены, то исправляем кейс ". ВРЕМЯ" на " - ВРЕМЯ"
-            //
-            if (blockType == TextParagraphType::SceneHeading
-                && ScreenplaySceneHeadingParser::sceneTime(paragraphText).isEmpty()) {
-                if (const auto parts = paragraphText.split(".", Qt::SkipEmptyParts);
-                    parts.size() > 1) {
-                    const auto& sceneTime = parts.constLast();
-                    if (sceneTime.trimmed().contains(kSceneTimeChecker)) {
-                        paragraphText.replace("." + sceneTime, " - " + sceneTime.trimmed());
-                    }
-                }
-            }
 
             //
             // Формируем блок сценария

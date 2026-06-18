@@ -10,8 +10,27 @@
 namespace BusinessLayer {
 
 namespace {
-static const QRegularExpression s_rxState("[(](.*)");
-}
+//
+// Определние состояние персонажа
+//
+static const QRegularExpression s_rxCharacterState("[(](.*)");
+
+//
+// Варианты отделения времени от локации:
+// ЛОКАЦИЯ - ДЕНЬ
+// ЛОКАЦИЯ. ДЕНЬ
+// ЛОКАЦИЯ.ДЕНЬ
+//
+// Варианты написания времени:
+// ДЕНЬ
+// ДЕНЬ 1
+// ДЕНЬ.
+// ДЕНЬ 1.
+//
+static const QRegularExpression s_rxSceneTime(
+    "( - |[.] |[.])(DAY|NIGHT|LATER|CONTINUES|УТРО|ДЕНЬ|ВЕЧЕР|НОЧЬ)( [0-9]{1,}|)([.]|)$");
+} // namespace
+
 
 ScreenplayCharacterParser::Section ScreenplayCharacterParser::section(const QString& _text)
 {
@@ -34,7 +53,7 @@ QString ScreenplayCharacterParser::name(const QString& _text)
     //
 
     QString name = _text;
-    return TextHelper::smartToUpper(name.remove(s_rxState).simplified());
+    return TextHelper::smartToUpper(name.remove(s_rxCharacterState).simplified());
 }
 
 QString ScreenplayCharacterParser::extension(const QString& _text)
@@ -44,7 +63,7 @@ QString ScreenplayCharacterParser::extension(const QString& _text)
     // эти указания даются в скобках, они нам как раз и нужны
     //
 
-    QRegularExpressionMatch match = s_rxState.match(_text);
+    QRegularExpressionMatch match = s_rxCharacterState.match(_text);
     QString state;
     if (match.hasMatch()) {
         state = match.captured(0);
@@ -89,8 +108,11 @@ QString ScreenplaySceneHeadingParser::location(const QString& _text, bool _force
 
     if (_text.split(". ").count() > 1) {
         locationName = _text.mid(_text.indexOf(". ") + 2);
+
         if (!_force) {
-            if (auto locationParts = locationName.split(" -- "); locationParts.size() > 1) {
+            if (const auto timeIndex = locationName.indexOf(s_rxSceneTime); timeIndex != -1) {
+                locationName = locationName.left(timeIndex);
+            } else if (auto locationParts = locationName.split(" -- "); locationParts.size() > 1) {
                 locationName = locationName.remove(" -- " + locationParts.constLast());
             } else {
                 const QString suffix = locationName.split(" - ").constLast();
@@ -107,12 +129,22 @@ QString ScreenplaySceneHeadingParser::sceneTime(const QString& _text)
 {
     QString timeName;
 
-    if (_text.split(" -- ").count() >= 2) {
-        timeName = _text.split(" -- ").last().simplified();
-    } else if (_text.split(" - ").count() >= 2) {
-        timeName = _text.split(" - ").last().simplified();
+    //
+    // Сначала проверяем используя регулярку
+    //
+    if (const auto match = s_rxSceneTime.match(_text); match.hasMatch()) {
+        timeName = match.captured(2) + match.captured(3);
     }
-
+    //
+    // Если регулярка не дала результата, то пробуем стандартным образом
+    //
+    else {
+        if (_text.split(" -- ").count() >= 2) {
+            timeName = _text.split(" -- ").last().simplified();
+        } else if (_text.split(" - ").count() >= 2) {
+            timeName = _text.split(" - ").last().simplified();
+        }
+    }
     return TextHelper::smartToUpper(timeName).simplified();
 }
 
