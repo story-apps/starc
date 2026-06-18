@@ -61,11 +61,15 @@ jobs:
           make -j4
 
       - name: Make dmg image
-        shell: bash
-        run: |
-          cd build/mac
-          ./create_dmg.sh ${{env.APP_VERSION}}
-          mv starc-setup.dmg starc-setup-qt5.dmg
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          retry_on: error
+          shell: bash
+          command: |
+            cd build/mac
+            ./create_dmg.sh ${{env.APP_VERSION}}
+            mv starc-setup.dmg starc-setup-qt5.dmg
         env:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
@@ -142,10 +146,14 @@ jobs:
           make -j4
 
       - name: Make dmg image
-        shell: bash
-        run: |
-          cd build/mac
-          ./create_dmg.sh ${{env.APP_VERSION}}
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          retry_on: error
+          shell: bash
+          command: |
+            cd build/mac
+            ./create_dmg.sh ${{env.APP_VERSION}}
         env:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
