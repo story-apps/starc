@@ -53,24 +53,33 @@ QVariant settingsValue(const QString& _key)
 
 QVariant settingsValue(const QString& _key, const QVariant& _defaultValue)
 {
-    return DataStorageLayer::StorageFacade::settingsStorage()->value(
-        _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application, _defaultValue);
+    return DataStorageLayer::StorageFacade::settingsStorage()->value(_key, _defaultValue);
 }
 
 QVariantMap settingsValues(const QString& _key)
 {
-    return DataStorageLayer::StorageFacade::settingsStorage()->values(
-        _key, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+    return DataStorageLayer::StorageFacade::settingsStorage()->values(_key);
 }
 
 void setSettingsValue(const QString& _key, const QVariant& _value)
 {
     DataStorageLayer::StorageFacade::settingsStorage()->setValue(
-        _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        _key, _value, DataStorageLayer::SettingsStorage::Type::Application);
 }
 
 void setSettingsValues(const QString& _key, const QVariantMap& _value)
 {
     DataStorageLayer::StorageFacade::settingsStorage()->setValues(
-        _key, _value, DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        _key, _value, DataStorageLayer::SettingsStorage::Type::Application);
+}
+
+void setSettingsValueForSession(const QString& _key, const QVariant& _value)
+{
+    DataStorageLayer::StorageFacade::settingsStorage()->setValue(
+        _key, _value, DataStorageLayer::SettingsStorage::Type::Session);
+}
+
+void resetSettingsSession()
+{
+    DataStorageLayer::StorageFacade::settingsStorage()->resetSession();
 }

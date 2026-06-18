@@ -47,18 +47,28 @@ public:
     /**
      * @brief Загрузить параметр из кэша
      */
-    QVariant cachedValue(const QString& _key, SettingsPlace _settingsPlace, bool& _ok) const;
+    QVariant cachedValue(const QString& _key, bool& _ok) const;
 
     /**
      * @brief Сохранить параметр в кэше
      */
-    void cacheValue(const QString& _key, const QVariant& _value, SettingsPlace _settingsPlace);
+    void cacheValue(const QString& _key, const QVariant& _value);
 
 
     /**
      * @brief Возможно ли сохранять параметры
      */
     bool isReadOnly = false;
+
+    /**
+     * @brief Кэшированные значения параметров
+     */
+    QVariantMap cachedValuesApp;
+
+    /**
+     * @brief Значения параметров текущей сессии
+     */
+    QVariantMap sessionValues;
 
     /**
      * @brief Настройки приложения
@@ -69,14 +79,6 @@ public:
      * @brief Значения параметров по умолчанию
      */
     QVariantMap defaultValues;
-
-    /**
-     * @brief Кэшированные значения параметров
-     */
-    /** @{ */
-    QVariantMap cachedValuesApp;
-    QVariantMap cachedValuesDb;
-    /** @} */
 };
 
 SettingsStorage::Implementation::Implementation()
@@ -1205,22 +1207,15 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kSystemUsernameKey, systemUserName());
 }
 
-QVariant SettingsStorage::Implementation::cachedValue(const QString& _key,
-                                                      SettingsStorage::SettingsPlace _settingsPlace,
-                                                      bool& _ok) const
+QVariant SettingsStorage::Implementation::cachedValue(const QString& _key, bool& _ok) const
 {
-    const QVariantMap& cachedValues
-        = _settingsPlace == SettingsPlace::Application ? cachedValuesApp : cachedValuesDb;
-    _ok = cachedValues.contains(_key);
-    return cachedValues.value(_key);
+    _ok = cachedValuesApp.contains(_key);
+    return cachedValuesApp.value(_key);
 }
 
-void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVariant& _value,
-                                                 SettingsStorage::SettingsPlace _settingsPlace)
+void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVariant& _value)
 {
-    QVariantMap& cachedValues
-        = _settingsPlace == SettingsPlace::Application ? cachedValuesApp : cachedValuesDb;
-    cachedValues.insert(_key, _value);
+    cachedValuesApp.insert(_key, _value);
 }
 
 
@@ -1230,7 +1225,7 @@ void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVar
 SettingsStorage::~SettingsStorage() = default;
 
 void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
-                               SettingsStorage::SettingsPlace _settingsPlace)
+                               SettingsStorage::Type _type)
 {
     if (d->isReadOnly) {
         return;
@@ -1239,20 +1234,20 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
     //
     // Кэшируем значение
     //
-    d->cacheValue(_key, _value, _settingsPlace);
+    d->cacheValue(_key, _value);
 
     //
     // Сохраняем его в заданное хранилище
     //
-    if (_settingsPlace == SettingsPlace::Application) {
+    if (_type == Type::Application) {
         d->appSettings.setValue(_key.toUtf8().toHex(), _value);
     } else {
-        MapperFacade::settingsMapper()->setValue(_key, _value.toString());
+        d->sessionValues[_key] = _value;
     }
 }
 
 void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& _values,
-                                SettingsStorage::SettingsPlace _settingsPlace)
+                                SettingsStorage::Type _type)
 {
     if (d->isReadOnly) {
         return;
@@ -1261,12 +1256,12 @@ void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& 
     //
     // Кэшируем значение
     //
-    d->cacheValue(_valuesGroup, _values, _settingsPlace);
+    d->cacheValue(_valuesGroup, _values);
 
     //
     // Сохраняем его в заданное хранилище
     //
-    if (_settingsPlace == SettingsPlace::Application) {
+    if (_type == Type::Application) {
         //
         // Очистим группу
         //
@@ -1285,7 +1280,7 @@ void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& 
         // Сохраним значения
         //
         for (const QString& key : _values.keys()) {
-            d->cacheValue(key, _values.value(key), _settingsPlace);
+            d->cacheValue(key, _values.value(key));
             d->appSettings.setValue(key.toUtf8().toHex(), _values.value(key));
         }
 
@@ -1298,23 +1293,18 @@ void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& 
         // Сохраняем изменения в файл
         //
         d->appSettings.sync();
-    }
-    //
-    // В базу данных карта параметров не умеет сохраняться
-    //
-    else {
-        Q_ASSERT_X(0, Q_FUNC_INFO, "Database settings can't save group of settings");
+    } else {
+        Q_ASSERT_X(0, Q_FUNC_INFO, "Session settings can't save group of settings");
     }
 }
 
-QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPlace _settingsPlace,
-                                const QVariant& _defaultValue) const
+QVariant SettingsStorage::value(const QString& _key, const QVariant& _defaultValue) const
 {
     //
     // Пробуем получить значение из кэша
     //
     bool hasCachedValue = false;
-    QVariant value = d->cachedValue(_key, _settingsPlace, hasCachedValue);
+    QVariant value = d->cachedValue(_key, hasCachedValue);
 
     //
     // Если в кэше нашлось нужное значение, вернём его
@@ -1324,12 +1314,16 @@ QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPl
     }
 
     //
-    // Если в кэше нет, то загружаем из указанного места
+    // Если в кэше нет, то смотрим в параметрах сессии
     //
-    if (_settingsPlace == SettingsPlace::Application) {
+    if (const auto iter = d->sessionValues.find(_key); iter != d->sessionValues.end()) {
+        value = iter.value();
+    }
+    //
+    // Если в сессии нет, то смотрим в настройках приложения
+    //
+    else {
         value = d->appSettings.value(_key.toUtf8().toHex(), QVariant());
-    } else {
-        value = MapperFacade::settingsMapper()->value(_key);
     }
 
     //
@@ -1339,7 +1333,7 @@ QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPl
         //
         // Сохраняем значение в кэш
         //
-        d->cacheValue(_key, value, _settingsPlace);
+        d->cacheValue(_key, value);
 
         return value;
     }
@@ -1357,23 +1351,26 @@ QVariant SettingsStorage::value(const QString& _key, SettingsStorage::SettingsPl
     return d->defaultValues.value(_key);
 }
 
-QVariantMap SettingsStorage::values(const QString& _valuesGroup,
-                                    SettingsStorage::SettingsPlace _settingsPlace)
+QVariantMap SettingsStorage::values(const QString& _valuesGroup)
 {
     //
     // Пробуем получить значение из кэша
     //
     bool hasCachedValue = false;
-    QVariantMap values = d->cachedValue(_valuesGroup, _settingsPlace, hasCachedValue).toMap();
+    QVariantMap values = d->cachedValue(_valuesGroup, hasCachedValue).toMap();
 
     if (hasCachedValue) {
         return values;
     }
 
     //
-    // Если в кэше нет, то загружаем из указанного места
+    // NOTE: реализовать сохранение групп для сессии, тогда можно будет их тут извлекать
     //
-    if (_settingsPlace == SettingsPlace::Application) {
+
+    //
+    // Если в кэше нет, то загружаем из параметров приложения
+    //
+    {
         //
         // Откроем группу для считывания
         //
@@ -1396,45 +1393,51 @@ QVariantMap SettingsStorage::values(const QString& _valuesGroup,
         //
         d->appSettings.endGroup();
     }
-    //
-    // Из базы данных карта параметров не умеет загружаться
-    //
-    else {
-        Q_ASSERT_X(0, Q_FUNC_INFO, "Database settings can't load group of settings");
-    }
 
     //
     // Сохраняем значение в кэш
     //
-    d->cacheValue(_valuesGroup, values, _settingsPlace);
+    d->cacheValue(_valuesGroup, values);
 
     return values;
 }
 
-void SettingsStorage::sync(SettingsPlace _settingsPlace)
+void SettingsStorage::sync()
 {
-    if (_settingsPlace == SettingsPlace::Application) {
-        d->appSettings.sync();
+    d->appSettings.sync();
+}
+
+void SettingsStorage::resetSession()
+{
+    //
+    // Перед тем, как сбросить, нужно убрать из кэша все параметры, которые туда попали из сессии
+    //
+    for (auto iter = d->sessionValues.begin(); iter != d->sessionValues.end(); ++iter) {
+        d->cachedValuesApp.remove(iter.key());
     }
+    //
+    // ... а только после этого очищаем параметры сессии
+    //
+    d->sessionValues.clear();
 }
 
 QString SettingsStorage::accountName() const
 {
-    auto name = value(kAccountUserNameKey, SettingsPlace::Application).toString();
+    auto name = value(kAccountUserNameKey).toString();
     if (name.isEmpty()) {
-        name = value(kSystemUsernameKey, SettingsPlace::Application).toString();
+        name = value(kSystemUsernameKey).toString();
     }
     return name;
 }
 
 QString SettingsStorage::accountEmail() const
 {
-    return value(kAccountEmailKey, SettingsPlace::Application).toString();
+    return value(kAccountEmailKey).toString();
 }
 
 QString SettingsStorage::documentFolderPath(const QString& _key) const
 {
-    QString folderPath = value(_key, SettingsPlace::Application).toString();
+    QString folderPath = value(_key).toString();
     if (folderPath.isEmpty()) {
         folderPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     }
@@ -1449,7 +1452,7 @@ QString SettingsStorage::documentFilePath(const QString& _key, const QString& _f
 
 void SettingsStorage::setDocumentFolderPath(const QString& _key, const QString& _filePath)
 {
-    setValue(_key, QFileInfo(_filePath).absoluteDir().absolutePath(), SettingsPlace::Application);
+    setValue(_key, QFileInfo(_filePath).absoluteDir().absolutePath(), Type::Application);
 }
 
 void SettingsStorage::resetToDefaults()
@@ -1458,6 +1461,11 @@ void SettingsStorage::resetToDefaults()
     // Запрещаем писать настройки до перезагрузки приложения
     //
     d->isReadOnly = true;
+
+    //
+    // Стираем все параметры сессии
+    //
+    resetSession();
 
     //
     // Стираем всё, что было изменено, кроме нескольких параметров, которые по-сути не являются

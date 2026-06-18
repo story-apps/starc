@@ -53,3 +53,5 @@ QVariant CORE_LIBRARY_EXPORT settingsValue(const QString& _key, const QVariant& 
 QVariantMap CORE_LIBRARY_EXPORT settingsValues(const QString& _key);
 void CORE_LIBRARY_EXPORT setSettingsValue(const QString& _key, const QVariant& _value);
 void CORE_LIBRARY_EXPORT setSettingsValues(const QString& _key, const QVariantMap& _value);
+void CORE_LIBRARY_EXPORT setSettingsValueForSession(const QString& _key, const QVariant& _value);
+void CORE_LIBRARY_EXPORT resetSettingsSession();

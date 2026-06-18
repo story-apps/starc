@@ -553,9 +553,12 @@ const QString kComponentsMindMapSplitterStateKey
 class CORE_LIBRARY_EXPORT SettingsStorage
 {
 public:
-    enum class SettingsPlace {
-        Application,
-        Project,
+    /**
+     * @brief Как хранить заданный параметр
+     */
+    enum class Type {
+        Application, //!< Для всего приложения
+        Session, //!< Для текущей сессии
     };
 
 public:
@@ -564,29 +567,33 @@ public:
     /**
      * @brief Сохранить значение с заданным ключём
      */
-    void setValue(const QString& _key, const QVariant& _value, SettingsPlace _settingsPlace);
+    void setValue(const QString& _key, const QVariant& _value, Type _type);
 
     /**
      * @brief Сохранить карту параметров
      */
-    void setValues(const QString& _valuesGroup, const QVariantMap& _values,
-                   SettingsPlace _settingsPlace);
+    void setValues(const QString& _valuesGroup, const QVariantMap& _values, Type _type);
 
     /**
      * @brief Получить значение по ключу
      */
-    QVariant value(const QString& _key, SettingsPlace _settingsPlace,
-                   const QVariant& _defaultValue = {}) const;
+    QVariant value(const QString& _key, const QVariant& _defaultValue = {}) const;
 
     /**
      * @brief Получить группу значений
      */
-    QVariantMap values(const QString& _valuesGroup, SettingsPlace _settingsPlace);
+    QVariantMap values(const QString& _valuesGroup);
 
     /**
      * @brief Сохранить настройки
      */
-    void sync(SettingsPlace _settingsPlace);
+    void sync();
+
+    /**
+     * @brief Сбросить настройки сессии
+     */
+    void resetSession();
+
 
     //
     // Вспомогательные функции для работы с данными о пользователе

@@ -2189,6 +2189,8 @@ void ApplicationManager::Implementation::closeCurrentProject()
 
     writingSessionManager->finishSession();
 
+    DataStorageLayer::StorageFacade::settingsStorage()->resetSession();
+
     markChangesSaved(true);
     updateWindowTitle();
 
@@ -2698,8 +2700,7 @@ bool ApplicationManager::event(QEvent* _event)
         //
         // Сохраняем настройки приложения
         //
-        DataStorageLayer::StorageFacade::settingsStorage()->sync(
-            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
+        DataStorageLayer::StorageFacade::settingsStorage()->sync();
 
         _event->accept();
         return true;
