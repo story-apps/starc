@@ -68,33 +68,11 @@ public:
     void setPrintFooterOnTitlePage(bool _print);
     Q_SIGNAL void printFooterOnTitlePageChanged(bool _print);
 
-    bool overrideCommonSettings() const;
-    void setOverrideCommonSettings(bool _override);
-    Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
-
+    /**
+     * @brief Прокси методы для получения инфомрации о параметрах работы со сценарием
+     */
     QString templateId() const;
-    void setTemplateId(const QString& _templateId);
-    Q_SIGNAL void templateIdChanged(const QString& _templateId);
-
-    bool showSceneNumbers() const;
-    void setShowSceneNumbers(bool _show);
-    Q_SIGNAL void showSceneNumbersChanged(bool _show);
-
-    bool showSceneNumbersOnLeft() const;
-    void setShowSceneNumbersOnLeft(bool _show);
-    Q_SIGNAL void showSceneNumbersOnLeftChanged(bool _show);
-
-    bool showSceneNumbersOnRight() const;
-    void setShowSceneNumbersOnRight(bool _show);
-    Q_SIGNAL void showSceneNumbersOnRightChanged(bool _show);
-
-    bool showDialoguesNumbers() const;
-    void setShowDialoguesNumbers(bool _show);
-    Q_SIGNAL void showDialoguesNumbersChanged(bool _show);
-
     ChronometerOptions chronometerOptions() const;
-    void setChronometerOptions(const ChronometerOptions& _options);
-    Q_SIGNAL void chronometerOptionsChanged(const ChronometerOptions& _options);
 
     /**
      * @brief Список персонажей отсортированных в порядке важном для разбивки этого сценария

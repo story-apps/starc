@@ -130,14 +130,6 @@ void ScreenplayParametersManager::Implementation::setModelForView(
         _view->setScenesNumbersTemplate(model->scenesNumbersTemplate());
         _view->setScenesNumberingStartAt(model->scenesNumberingStartAt());
         _view->setScenesNumbersLocked(model->isSceneNumbersLocked());
-        _view->setCanCommonSettingsBeOverridden(model->canCommonSettingsBeOverridden());
-        _view->setOverrideCommonSettings(model->overrideCommonSettings());
-        _view->setScreenplayTemplate(model->templateId());
-        _view->setShowSceneNumbers(model->showSceneNumbers());
-        _view->setShowSceneNumbersOnLeft(model->showSceneNumbersOnLeft());
-        _view->setShowSceneNumbersOnRight(model->showSceneNumbersOnRight());
-        _view->setShowDialoguesNumbers(model->showDialoguesNumbers());
-        _view->setChronometerOptions(model->chronometerOptions());
 
         connect(model, &BusinessLayer::ScreenplayInformationModel::headerChanged, _view,
                 &Ui::ScreenplayParametersView::setHeader);
@@ -153,23 +145,6 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 _view, &Ui::ScreenplayParametersView::setScenesNumberingStartAt);
         connect(model, &BusinessLayer::ScreenplayInformationModel::isSceneNumbersLockedChanged,
                 _view, &Ui::ScreenplayParametersView::setScenesNumbersLocked);
-        connect(model,
-                &BusinessLayer::ScreenplayInformationModel::canCommonSettingsBeOverriddenChanged,
-                _view, &Ui::ScreenplayParametersView::setCanCommonSettingsBeOverridden);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::overrideCommonSettingsChanged,
-                _view, &Ui::ScreenplayParametersView::setOverrideCommonSettings);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::templateIdChanged, _view,
-                &Ui::ScreenplayParametersView::setScreenplayTemplate);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged, _view,
-                &Ui::ScreenplayParametersView::setShowSceneNumbers);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnLeftChanged,
-                _view, &Ui::ScreenplayParametersView::setShowSceneNumbersOnLeft);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnRightChanged,
-                _view, &Ui::ScreenplayParametersView::setShowSceneNumbersOnRight);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::showDialoguesNumbersChanged,
-                _view, &Ui::ScreenplayParametersView::setShowDialoguesNumbers);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::chronometerOptionsChanged, _view,
-                &Ui::ScreenplayParametersView::setChronometerOptions);
         //
         connect(_view, &Ui::ScreenplayParametersView::headerChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setHeader);
@@ -185,20 +160,6 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplayInformationModel::setScenesNumberingStartAt);
         connect(_view, &Ui::ScreenplayParametersView::isScenesNumberingLockedChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setScenesNumbersLocked);
-        connect(_view, &Ui::ScreenplayParametersView::overrideCommonSettingsChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setOverrideCommonSettings);
-        connect(_view, &Ui::ScreenplayParametersView::screenplayTemplateChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setTemplateId);
-        connect(_view, &Ui::ScreenplayParametersView::showSceneNumbersChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbers);
-        connect(_view, &Ui::ScreenplayParametersView::showSceneNumbersOnLeftChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbersOnLeft);
-        connect(_view, &Ui::ScreenplayParametersView::showSceneNumbersOnRightChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbersOnRight);
-        connect(_view, &Ui::ScreenplayParametersView::showDialoguesNumbersChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setShowDialoguesNumbers);
-        connect(_view, &Ui::ScreenplayParametersView::chronometerOptionsChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setChronometerOptions);
     }
 }
 

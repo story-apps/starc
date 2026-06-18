@@ -82,17 +82,6 @@ void ScreenplaySeriesEpisodesModel::Implementation::updateEpisodesSettings()
 
     for (const auto& episode : std::as_const(episodes)) {
         auto episodeInformationModel = episode->informationModel();
-        episodeInformationModel->setCanCommonSettingsBeOverridden(false);
-        episodeInformationModel->setOverrideCommonSettings(
-            informationModel->overrideCommonSettings());
-        episodeInformationModel->setTemplateId(informationModel->templateId());
-        episodeInformationModel->setShowSceneNumbers(informationModel->showSceneNumbers());
-        episodeInformationModel->setShowSceneNumbersOnLeft(
-            informationModel->showSceneNumbersOnLeft());
-        episodeInformationModel->setShowSceneNumbersOnRight(
-            informationModel->showSceneNumbersOnRight());
-        episodeInformationModel->setShowDialoguesNumbers(informationModel->showDialoguesNumbers());
-        episodeInformationModel->setChronometerOptions(informationModel->chronometerOptions());
 
         if (initializationFinished) {
             //
@@ -185,26 +174,6 @@ void ScreenplaySeriesEpisodesModel::setInformationModel(ScreenplaySeriesInformat
     }
 
     d->informationModel = _model;
-
-    if (d->informationModel) {
-        connect(d->informationModel,
-                &ScreenplaySeriesInformationModel::overrideCommonSettingsChanged, this,
-                [this] { d->updateEpisodesSettings(); });
-        connect(d->informationModel, &ScreenplaySeriesInformationModel::templateIdChanged, this,
-                [this] { d->updateEpisodesSettings(); });
-        connect(d->informationModel, &ScreenplaySeriesInformationModel::showSceneNumbersChanged,
-                this, [this] { d->updateEpisodesSettings(); });
-        connect(d->informationModel,
-                &ScreenplaySeriesInformationModel::showSceneNumbersOnLeftChanged, this,
-                [this] { d->updateEpisodesSettings(); });
-        connect(d->informationModel,
-                &ScreenplaySeriesInformationModel::showSceneNumbersOnRightChanged, this,
-                [this] { d->updateEpisodesSettings(); });
-        connect(d->informationModel, &ScreenplaySeriesInformationModel::showDialoguesNumbersChanged,
-                this, [this] { d->updateEpisodesSettings(); });
-        connect(d->informationModel, &ScreenplaySeriesInformationModel::chronometerOptionsChanged,
-                this, [this] { d->updateEpisodesSettings(); });
-    }
 }
 
 ScreenplaySeriesInformationModel* ScreenplaySeriesEpisodesModel::informationModel() const
@@ -223,19 +192,6 @@ void ScreenplaySeriesEpisodesModel::setEpisodes(const QVector<ScreenplayTextMode
         return;
     }
 
-    //
-    // Снимаем запрет на переопределение параметров для сценариев, которые больше не в сериале
-    //
-    for (const auto& episode : std::as_const(d->episodes)) {
-        if (!_episodes.contains(episode)) {
-            episode->informationModel()->setCanCommonSettingsBeOverridden(true);
-        }
-    }
-
-    //
-    // Для сценариев, которые были добавлены в сериал включаем запрет на переопределение и
-    // синхронизируем значения параметров с параметрами сериала
-    //
     d->episodes = _episodes;
     d->updateEpisodesSettings();
 

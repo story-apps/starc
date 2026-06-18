@@ -249,10 +249,6 @@ void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
         updateFooter();
         connect(synopsisModel->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::footerChanged, this, updateFooter);
-
-        connect(synopsisModel->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::templateIdChanged, this,
-                &SimpleTextEdit::reinit);
     }
     //
     // Комикс

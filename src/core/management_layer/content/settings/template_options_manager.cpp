@@ -266,8 +266,6 @@ void TemplateOptionsManager::Implementation::savePageParameters()
 void TemplateOptionsManager::Implementation::updateTitlePageParameters()
 {
     titlePageModel.setDocument(nullptr);
-    informationModel.setOverrideCommonSettings(true);
-    informationModel.setTemplateId(currentTemplate.get().id());
     titlePageDocument->setContent(currentTemplate.get().titlePage().toUtf8());
     titlePageModel.setDocument(titlePageDocument.data());
 }

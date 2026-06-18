@@ -192,11 +192,6 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
                 &Debouncer::orderWork);
         connect(d->model, &QAbstractItemModel::dataChanged, &d->timelineUpdateDebouncer,
                 &Debouncer::orderWork);
-        if (d->model->informationModel()) {
-            connect(d->model->informationModel(),
-                    &BusinessLayer::ScreenplayInformationModel::chronometerOptionsChanged,
-                    &d->timelineUpdateDebouncer, &Debouncer::orderWork);
-        }
         d->timelineUpdateDebouncer.orderWork();
     } else {
         d->timeline->update();

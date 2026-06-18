@@ -197,10 +197,6 @@ void TitlePageEdit::initWithModel(BusinessLayer::TitlePageModel* _model)
                 updateFooter);
         connect(titlePageModel->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::footerChanged, this, updateFooter);
-
-        connect(titlePageModel->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::templateIdChanged, this,
-                &TitlePageEdit::reinit);
     }
     //
     // Комикс

@@ -362,28 +362,19 @@ void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelRein
 
 void ScreenplayTextView::Implementation::reconfigureSceneNumbersVisibility()
 {
-    if (model && model->informationModel()) {
-        textEdit->setShowSceneNumber(model->informationModel()->showSceneNumbers(),
-                                     model->informationModel()->showSceneNumbersOnLeft(),
-                                     model->informationModel()->showSceneNumbersOnRight());
-    } else {
-        textEdit->setShowSceneNumber(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)
-                .toBool(),
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
-                .toBool(),
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
-                .toBool());
-    }
+    textEdit->setShowSceneNumber(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
+            .toBool());
 }
 
 void ScreenplayTextView::Implementation::reconfigureDialoguesNumbersVisibility()
 {
     textEdit->setShowDialogueNumber(
-        model && model->informationModel()
-            ? model->informationModel()->showDialoguesNumbers()
-            : settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
-                  .toBool());
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
+            .toBool());
 }
 
 void ScreenplayTextView::Implementation::updateOptionsTranslations()
@@ -1850,22 +1841,6 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
         d->reconfigureTemplate(!reinitModel);
         d->reconfigureSceneNumbersVisibility();
         d->reconfigureDialoguesNumbersVisibility();
-
-        connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::templateIdChanged, this,
-                [this] { d->reconfigureTemplate(); });
-        connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::showSceneNumbersChanged, this,
-                [this] { d->reconfigureSceneNumbersVisibility(); });
-        connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnLeftChanged, this,
-                [this] { d->reconfigureSceneNumbersVisibility(); });
-        connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::showSceneNumbersOnRightChanged, this,
-                [this] { d->reconfigureSceneNumbersVisibility(); });
-        connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::showDialoguesNumbersChanged, this,
-                [this] { d->reconfigureDialoguesNumbersVisibility(); });
 
         connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
                 [this](const QModelIndex& _topLeft) {
