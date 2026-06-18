@@ -2947,6 +2947,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this,
             &ProjectManager::projectNameChanged);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectScreenplaySettingsChanged, this, [this] {
+        reconfigureScreenplayEditor({});
+        reconfigureScreenplayDuration();
+    });
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorInviteRequested, this,
             &ProjectManager::projectCollaboratorInviteRequested);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorUpdateRequested, this,

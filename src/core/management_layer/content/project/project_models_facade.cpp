@@ -158,6 +158,42 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 connect(projectInformationModel,
                         &BusinessLayer::ProjectInformationModel::nameChanged, this,
                         &ProjectModelsFacade::projectNameChanged, Qt::UniqueConnection);
+                //
+                connect(projectInformationModel,
+                        &BusinessLayer::ProjectInformationModel::
+                            overrideCommonSettingsForScreenplayChanged,
+                        this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                        Qt::UniqueConnection);
+                connect(projectInformationModel,
+                        &BusinessLayer::ProjectInformationModel::templateIdForScreenplayChanged,
+                        this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                        Qt::UniqueConnection);
+                connect(
+                    projectInformationModel,
+                    &BusinessLayer::ProjectInformationModel::showSceneNumbersForScreenplayChanged,
+                    this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                    Qt::UniqueConnection);
+                connect(projectInformationModel,
+                        &BusinessLayer::ProjectInformationModel::
+                            showSceneNumbersOnLeftForScreenplayChanged,
+                        this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                        Qt::UniqueConnection);
+                connect(projectInformationModel,
+                        &BusinessLayer::ProjectInformationModel::
+                            showSceneNumbersOnRightForScreenplayChanged,
+                        this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                        Qt::UniqueConnection);
+                connect(projectInformationModel,
+                        &BusinessLayer::ProjectInformationModel::
+                            showDialoguesNumbersForScreenplayChanged,
+                        this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                        Qt::UniqueConnection);
+                connect(
+                    projectInformationModel,
+                    &BusinessLayer::ProjectInformationModel::chronometerOptionsForScreenplayChanged,
+                    this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                    Qt::UniqueConnection);
+                //
                 connect(projectInformationModel,
                         &BusinessLayer::ProjectInformationModel::collaboratorInviteRequested, this,
                         &ProjectModelsFacade::projectCollaboratorInviteRequested,

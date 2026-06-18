@@ -582,7 +582,7 @@ void ProjectParametersView::setChronometerOptions(const BusinessLayer::Chronomet
 
 void ProjectParametersView::updateTranslations()
 {
-    d->overrideCommonSettings->setText(tr("Override common settings for this series"));
+    d->overrideCommonSettings->setText(tr("Override common settings for screenplays"));
     d->screenplayTemplate->setLabel(tr("Template"));
     d->showSceneNumbers->setText(tr("Print scenes numbers"));
     d->showSceneNumbersOnLeft->setText(tr("on the left"));

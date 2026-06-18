@@ -1232,6 +1232,19 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
     }
 
     //
+    // Если значение невалидно, то сбросим заданное значение
+    //
+    if (_value.isNull()) {
+        d->cachedValuesApp.remove(_key);
+        if (_type == Type::Application) {
+            d->appSettings.remove(_key.toUtf8().toHex());
+        } else {
+            d->sessionValues.remove(_key);
+        }
+        return;
+    }
+
+    //
     // Кэшируем значение
     //
     d->cacheValue(_key, _value);

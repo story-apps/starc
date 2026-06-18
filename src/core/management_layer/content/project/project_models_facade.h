@@ -108,6 +108,11 @@ signals:
     void projectCoverChanged(const QPixmap& _cover);
 
     /**
+     * @brief Изменились параметры сценария текущего проекта
+     */
+    void projectScreenplaySettingsChanged();
+
+    /**
      * @brief Пользователь хочет изменить список соавторов в проекте
      */
     void projectCollaboratorInviteRequested(const QString& _email, const QColor& _color, int _role,

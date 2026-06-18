@@ -35,6 +35,12 @@ const QLatin1String kChronomertyOptionsKey("chronmetry_options");
 class ProjectInformationModel::Implementation
 {
 public:
+    /**
+     * @brief Обновим параметры сессии в соответствии с настройками модели
+     */
+    void updateSessionSettings();
+
+
     QString name;
     QString logline;
     Domain::DocumentImage cover;
@@ -54,6 +60,91 @@ public:
     QVector<Domain::ProjectCollaboratorInfo> collaborators;
     QVector<Domain::TeamMemberInfo> teammates;
 };
+
+void ProjectInformationModel::Implementation::updateSessionSettings()
+{
+    using namespace DataStorageLayer;
+
+    if (screenplay.overrideCommonSettings) {
+        //
+        // Шаблон
+        //
+        setSettingsValueForSession(kComponentsScreenplayEditorDefaultTemplateKey,
+                                   screenplay.templateId);
+        BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(screenplay.templateId);
+        //
+        // Нумерация
+        //
+        setSettingsValueForSession(kComponentsScreenplayEditorShowSceneNumbersKey,
+                                   screenplay.showSceneNumbers);
+        setSettingsValueForSession(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
+                                   screenplay.showSceneNumbersOnLeft);
+        setSettingsValueForSession(kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
+                                   screenplay.showSceneNumbersOnRight);
+        setSettingsValueForSession(kComponentsScreenplayEditorShowDialogueNumbersKey,
+                                   screenplay.showDialoguesNumbers);
+        //
+        // Хронометраж
+        //
+        const auto& chrono = screenplay.chronometerOptions;
+        setSettingsValueForSession(kComponentsScreenplayDurationTypeKey,
+                                   static_cast<int>(chrono.type));
+        setSettingsValueForSession(kComponentsScreenplayDurationByPageDurationKey,
+                                   chrono.page.seconds);
+        setSettingsValueForSession(kComponentsScreenplayDurationByCharactersCharactersKey,
+                                   chrono.characters.characters);
+        setSettingsValueForSession(kComponentsScreenplayDurationByCharactersIncludeSpacesKey,
+                                   chrono.characters.considerSpaces);
+        setSettingsValueForSession(kComponentsScreenplayDurationByCharactersDurationKey,
+                                   chrono.characters.seconds);
+        setSettingsValueForSession(
+            kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey,
+            chrono.sophocles.secsPerAction);
+        setSettingsValueForSession(
+            kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey,
+            chrono.sophocles.secsPerEvery50Action);
+        setSettingsValueForSession(
+            kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey,
+            chrono.sophocles.secsPerDialogue);
+        setSettingsValueForSession(
+            kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey,
+            chrono.sophocles.secsPerEvery50Dialogue);
+        setSettingsValueForSession(
+            kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey,
+            chrono.sophocles.secsPerSceneHeading);
+        setSettingsValueForSession(
+            kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey,
+            chrono.sophocles.secsPerEvery50SceneHeading);
+
+    } else {
+        for (const auto& key : {
+                 kComponentsScreenplayEditorDefaultTemplateKey,
+                 kComponentsScreenplayEditorShowSceneNumbersKey,
+                 kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
+                 kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
+                 kComponentsScreenplayEditorShowDialogueNumbersKey,
+                 kComponentsScreenplayDurationTypeKey,
+                 kComponentsScreenplayDurationByPageDurationKey,
+                 kComponentsScreenplayDurationByCharactersCharactersKey,
+                 kComponentsScreenplayDurationByCharactersIncludeSpacesKey,
+                 kComponentsScreenplayDurationByCharactersDurationKey,
+                 kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey,
+                 kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey,
+                 kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey,
+                 kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey,
+                 kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey,
+                 kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey,
+             }) {
+            setSettingsValueForSession(key, {});
+        }
+
+        //
+        // ... восстановим шаблон оформления
+        //
+        BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(
+            settingsValue(kComponentsScreenplayEditorDefaultTemplateKey).toString());
+    }
+}
 
 
 // ****
@@ -201,7 +292,6 @@ void ProjectInformationModel::setOverrideCommonSettingsForScreenplay(bool _overr
     }
 
     d->screenplay.overrideCommonSettings = _override;
-    emit overrideCommonSettingsForScreenplayChanged(d->screenplay.overrideCommonSettings);
 
     //
     // При включении/выключении кастомных параметров, сбрасываем до стандартных
@@ -250,6 +340,16 @@ void ProjectInformationModel::setOverrideCommonSettingsForScreenplay(bool _overr
               kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
               .toDouble();
     setChronometerOptionsForScreenplay(options);
+
+    //
+    // Обновим параметры сессии
+    //
+    d->updateSessionSettings();
+
+    //
+    // Уведомляем клиентов
+    //
+    emit overrideCommonSettingsForScreenplayChanged(d->screenplay.overrideCommonSettings);
 }
 
 QString ProjectInformationModel::templateIdForScreenplay() const
@@ -268,6 +368,7 @@ void ProjectInformationModel::setTemplateIdForScreenplay(const QString& _templat
     }
 
     d->screenplay.templateId = _templateId;
+    d->updateSessionSettings();
     emit templateIdForScreenplayChanged(d->screenplay.templateId);
 
     // TemplatesFacade::screenplayTemplate(d->templateId).saveToFile()
@@ -289,6 +390,7 @@ void ProjectInformationModel::setShowSceneNumbersForScreenplay(bool _show)
     }
 
     d->screenplay.showSceneNumbers = _show;
+    d->updateSessionSettings();
     emit showSceneNumbersForScreenplayChanged(d->screenplay.showSceneNumbers);
 }
 
@@ -309,6 +411,7 @@ void ProjectInformationModel::setShowSceneNumbersOnLeftForScreenplay(bool _show)
     }
 
     d->screenplay.showSceneNumbersOnLeft = _show;
+    d->updateSessionSettings();
     emit showSceneNumbersOnLeftForScreenplayChanged(d->screenplay.showSceneNumbersOnLeft);
 }
 
@@ -329,6 +432,7 @@ void ProjectInformationModel::setShowSceneNumbersOnRightForScreenplay(bool _show
     }
 
     d->screenplay.showSceneNumbersOnRight = _show;
+    d->updateSessionSettings();
     emit showSceneNumbersOnRightForScreenplayChanged(d->screenplay.showSceneNumbersOnRight);
 }
 
@@ -349,6 +453,7 @@ void ProjectInformationModel::setShowDialoguesNumbersForScreenplay(bool _show)
     }
 
     d->screenplay.showDialoguesNumbers = _show;
+    d->updateSessionSettings();
     emit showDialoguesNumbersForScreenplayChanged(d->screenplay.showDialoguesNumbers);
 }
 
@@ -421,6 +526,7 @@ void ProjectInformationModel::setChronometerOptionsForScreenplay(const Chronomet
     }
 
     d->screenplay.chronometerOptions = _options;
+    d->updateSessionSettings();
     emit chronometerOptionsForScreenplayChanged(_options);
 }
 
@@ -540,6 +646,8 @@ void ProjectInformationModel::initDocument()
         }
         }
     }
+
+    d->updateSessionSettings();
 }
 
 void ProjectInformationModel::clearDocument()
@@ -710,6 +818,9 @@ ChangeCursor ProjectInformationModel::applyPatch(const QByteArray& _patch)
             std::bind(&M::setShowDialoguesNumbersForScreenplay, this, _1));
     setChronometerOptions(kChronomertyOptionsKey,
                           std::bind(&M::setChronometerOptionsForScreenplay, this, _1));
+
+
+    d->updateSessionSettings();
 
     return {};
 }
