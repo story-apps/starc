@@ -16,7 +16,7 @@ on:
 jobs:
   build_windows_64_qt5:
     name: Build Windows 64 version with qt5
-    runs-on: windows-latest
+    runs-on: windows-2022
     timeout-minutes: 60
     steps:
       - name: Checkout sources for push or create tag event
