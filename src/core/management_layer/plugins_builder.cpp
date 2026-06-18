@@ -30,6 +30,8 @@ enum ViewType {
  * @brief Майм-типы плагинов
  */
 
+const QString kProjectInformationMime = QStringLiteral("application/x-starc/editor/project/information");
+const QString kProjectParametersMime = QStringLiteral("application/x-starc/editor/project/parameters");
 const QString kProjectCollaboratorsMime = QStringLiteral("application/x-starc/editor/project/collaborators");
 
 const QString kCharactersRelationsMime = QStringLiteral("application/x-starc/editor/characters/relations");
@@ -150,7 +152,8 @@ const QHash<QString, QString> kEditorToNavigator
  * @brief Карта соответствия майм-типов документа к редакторам
  */
 const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
-    = { { "application/x-starc/document/project",    { { "application/x-starc/editor/project/information", u8"\U000f02fd" },
+    = { { "application/x-starc/document/project",    { { kProjectInformationMime, u8"\U000f02fd" },
+                                                       { kProjectParametersMime, u8"\U000f0493" } ,
                                                        { kProjectCollaboratorsMime, u8"\U000f0b58" } } },
         //
         { "application/x-starc/document/screenplay", { { "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
@@ -239,7 +242,8 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
  *       извлечения майм-типа навигатора/редактора, а подгружать точечно только то, что нужно
  */
 const QHash<QString, QString> kMimeToPlugin
-    = { { "application/x-starc/editor/project/information", "*projectinformationplugin*" },
+    = { { kProjectInformationMime, "*projectinformationplugin*" },
+        { kProjectParametersMime, "*projectparametersplugin*" },
         { kProjectCollaboratorsMime, "*projectcollaboratorsplugin*" },
         //
         { kSimpleTextFolderEditorMime, "*simpletextplugin*" },
@@ -541,8 +545,10 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
     // clang-format off
     const QHash<QString, QHash<QString, QString>> descriptions
         = { { "application/x-starc/document/project",
-              { { "application/x-starc/editor/project/information",
+              { { kProjectInformationMime,
                   QApplication::translate("ProjectPluginsBuilder", "Information about project") },
+                { kProjectParametersMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Project parameters") },
                 { kProjectCollaboratorsMime,
                   QApplication::translate("ProjectPluginsBuilder", "Project collaborators") } } },
             //

@@ -6,8 +6,14 @@
 
 
 namespace BusinessLayer {
-class StructureModel;
 
+class StructureModel;
+struct ChronometerOptions;
+
+
+/**
+ * @brief Модели информации о проекте
+ */
 class CORE_LIBRARY_EXPORT ProjectInformationModel : public AbstractModel
 {
     Q_OBJECT
@@ -15,6 +21,10 @@ class CORE_LIBRARY_EXPORT ProjectInformationModel : public AbstractModel
 public:
     explicit ProjectInformationModel(QObject* _parent = nullptr);
     ~ProjectInformationModel() override;
+
+    //
+    // Информация
+    //
 
     const QString& name() const;
     void setName(const QString& _name);
@@ -31,8 +41,47 @@ public:
     void setCover(const QUuid& _uuid, const QPixmap& _cover);
     Q_SIGNAL void coverChanged(const QPixmap& _cover);
 
+    //
+    // Параметры сценария
+    //
+
+    bool overrideCommonSettingsForScreenplay() const;
+    void setOverrideCommonSettingsForScreenplay(bool _override);
+    Q_SIGNAL void overrideCommonSettingsForScreenplayChanged(bool _override);
+
+    QString templateIdForScreenplay() const;
+    void setTemplateIdForScreenplay(const QString& _templateId);
+    Q_SIGNAL void templateIdForScreenplayChanged(const QString& _templateId);
+
+    bool showSceneNumbersForScreenplay() const;
+    void setShowSceneNumbersForScreenplay(bool _show);
+    Q_SIGNAL void showSceneNumbersForScreenplayChanged(bool _show);
+
+    bool showSceneNumbersOnLeftForScreenplay() const;
+    void setShowSceneNumbersOnLeftForScreenplay(bool _show);
+    Q_SIGNAL void showSceneNumbersOnLeftForScreenplayChanged(bool _show);
+
+    bool showSceneNumbersOnRightForScreenplay() const;
+    void setShowSceneNumbersOnRightForScreenplay(bool _show);
+    Q_SIGNAL void showSceneNumbersOnRightForScreenplayChanged(bool _show);
+
+    bool showDialoguesNumbersForScreenplay() const;
+    void setShowDialoguesNumbersForScreenplay(bool _show);
+    Q_SIGNAL void showDialoguesNumbersForScreenplayChanged(bool _show);
+
+    ChronometerOptions chronometerOptionsForScreenplay() const;
+    void setChronometerOptionsForScreenplay(const ChronometerOptions& _options);
+    Q_SIGNAL void chronometerOptionsForScreenplayChanged(const ChronometerOptions& _options);
+
+    //
+    // Модель структуры
+    //
     BusinessLayer::StructureModel* structureModel() const;
     void setStructureModel(BusinessLayer::StructureModel* _model);
+
+    //
+    // Соавторы
+    //
 
     QVector<Domain::ProjectCollaboratorInfo> collaborators() const;
     void setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
