@@ -25,6 +25,7 @@ const QLatin1String kLoglineKey("logline");
 const QLatin1String kCoverKey("cover");
 const QLatin1String kOverrideSystemSettingsKey("override_system_settings");
 const QLatin1String kTemplateIdKey("template_id");
+const QLatin1String kTemplateDataKey("template_data");
 const QLatin1String kShowSceneNumbersKey("show_scenes_numbers");
 const QLatin1String kShowSceneNumbersOnLeftKey("show_scenes_numbers_on_left");
 const QLatin1String kShowScenesNumbersOnRightKey("show_scenes_numbers_on_right");
@@ -35,6 +36,11 @@ const QLatin1String kChronomertyOptionsKey("chronmetry_options");
 class ProjectInformationModel::Implementation
 {
 public:
+    /**
+     * @brief Обновить шаблоны при необходимости
+     */
+    void updateTemplates();
+
     /**
      * @brief Обновим параметры сессии в соответствии с настройками модели
      */
@@ -48,6 +54,7 @@ public:
     struct {
         bool overrideCommonSettings = false;
         QString templateId;
+        QString templateData;
         bool showSceneNumbers = false;
         bool showSceneNumbersOnLeft = false;
         bool showSceneNumbersOnRight = false;
@@ -60,6 +67,19 @@ public:
     QVector<Domain::ProjectCollaboratorInfo> collaborators;
     QVector<Domain::TeamMemberInfo> teammates;
 };
+
+void ProjectInformationModel::Implementation::updateTemplates()
+{
+    if (!screenplay.templateData.isEmpty()) {
+        const auto appScreenplayTemplate
+            = TemplatesFacade::screenplayTemplate(screenplay.templateId);
+        auto projectScreenplayTemplate = appScreenplayTemplate;
+        projectScreenplayTemplate.load(QByteArray::fromBase64(screenplay.templateData.toUtf8()));
+        if (projectScreenplayTemplate.modifiedAt() > appScreenplayTemplate.modifiedAt()) {
+            TemplatesFacade::saveScreenplayTemplate(projectScreenplayTemplate);
+        }
+    }
+}
 
 void ProjectInformationModel::Implementation::updateSessionSettings()
 {
@@ -296,50 +316,58 @@ void ProjectInformationModel::setOverrideCommonSettingsForScreenplay(bool _overr
     //
     // При включении/выключении кастомных параметров, сбрасываем до стандартных
     //
-    using namespace DataStorageLayer;
-    setTemplateIdForScreenplay(TemplatesFacade::screenplayTemplate().id());
-    setShowSceneNumbersForScreenplay(
-        settingsValue(kComponentsScreenplayEditorShowSceneNumbersKey).toBool());
-    setShowSceneNumbersOnLeftForScreenplay(
-        settingsValue(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey).toBool());
-    setShowSceneNumbersOnRightForScreenplay(
-        settingsValue(kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool());
-    setShowDialoguesNumbersForScreenplay(
-        settingsValue(kComponentsScreenplayEditorShowDialogueNumbersKey).toBool());
-    //
-    // ...  хронометраж
-    //
-    ChronometerOptions options;
-    options.type
-        = static_cast<ChronometerType>(settingsValue(kComponentsScreenplayDurationTypeKey).toInt());
-    options.page.seconds = settingsValue(kComponentsScreenplayDurationByPageDurationKey).toInt();
-    options.characters.characters
-        = settingsValue(kComponentsScreenplayDurationByCharactersCharactersKey).toInt();
-    options.characters.considerSpaces
-        = settingsValue(kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toBool();
-    options.characters.seconds
-        = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt();
-    options.sophocles.secsPerAction
-        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey)
-              .toDouble();
-    options.sophocles.secsPerEvery50Action
-        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey)
-              .toDouble();
-    options.sophocles.secsPerDialogue
-        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey)
-              .toDouble();
-    options.sophocles.secsPerEvery50Dialogue
-        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey)
-              .toDouble();
-    options.sophocles.secsPerSceneHeading
-        = settingsValue(
-              kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey)
-              .toDouble();
-    options.sophocles.secsPerEvery50SceneHeading
-        = settingsValue(
-              kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
-              .toDouble();
-    setChronometerOptionsForScreenplay(options);
+    if (_override) {
+        using namespace DataStorageLayer;
+        setTemplateIdForScreenplay(TemplatesFacade::screenplayTemplate().id());
+        setShowSceneNumbersForScreenplay(
+            settingsValue(kComponentsScreenplayEditorShowSceneNumbersKey).toBool());
+        setShowSceneNumbersOnLeftForScreenplay(
+            settingsValue(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey).toBool());
+        setShowSceneNumbersOnRightForScreenplay(
+            settingsValue(kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool());
+        setShowDialoguesNumbersForScreenplay(
+            settingsValue(kComponentsScreenplayEditorShowDialogueNumbersKey).toBool());
+        //
+        // ...  хронометраж
+        //
+        ChronometerOptions options;
+        options.type = static_cast<ChronometerType>(
+            settingsValue(kComponentsScreenplayDurationTypeKey).toInt());
+        options.page.seconds
+            = settingsValue(kComponentsScreenplayDurationByPageDurationKey).toInt();
+        options.characters.characters
+            = settingsValue(kComponentsScreenplayDurationByCharactersCharactersKey).toInt();
+        options.characters.considerSpaces
+            = settingsValue(kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toBool();
+        options.characters.seconds
+            = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt();
+        options.sophocles.secsPerAction
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey)
+                  .toDouble();
+        options.sophocles.secsPerEvery50Action
+            = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey)
+                  .toDouble();
+        options.sophocles.secsPerDialogue
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey)
+                  .toDouble();
+        options.sophocles.secsPerEvery50Dialogue
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey)
+                  .toDouble();
+        options.sophocles.secsPerSceneHeading
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey)
+                  .toDouble();
+        options.sophocles.secsPerEvery50SceneHeading
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
+                  .toDouble();
+        setChronometerOptionsForScreenplay(options);
+    } else {
+        d->screenplay = {};
+    }
 
     //
     // Обновим параметры сессии
@@ -363,15 +391,26 @@ QString ProjectInformationModel::templateIdForScreenplay() const
 
 void ProjectInformationModel::setTemplateIdForScreenplay(const QString& _templateId)
 {
+    setTemplateForScreenplay(_templateId, {});
+}
+
+void ProjectInformationModel::setTemplateForScreenplay(const QString& _templateId,
+                                                       const QString& _templateData)
+{
     if (d->screenplay.templateId == _templateId) {
         return;
     }
 
     d->screenplay.templateId = _templateId;
+    if (!_templateData.isEmpty()) {
+        d->screenplay.templateData = _templateData;
+    } else if (const auto screenplayTemplate
+               = TemplatesFacade::screenplayTemplate(d->screenplay.templateId);
+               screenplayTemplate.isValid()) {
+        d->screenplay.templateData = screenplayTemplate.save().toUtf8().toBase64();
+    }
     d->updateSessionSettings();
     emit templateIdForScreenplayChanged(d->screenplay.templateId);
-
-    // TemplatesFacade::screenplayTemplate(d->templateId).saveToFile()
 }
 
 bool ProjectInformationModel::showSceneNumbersForScreenplay() const
@@ -599,6 +638,7 @@ void ProjectInformationModel::initDocument()
     d->screenplay.overrideCommonSettings
         = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
     d->screenplay.templateId = documentNode.firstChildElement(kTemplateIdKey).text();
+    d->screenplay.templateData = documentNode.firstChildElement(kTemplateDataKey).text();
     d->screenplay.showSceneNumbers
         = documentNode.firstChildElement(kShowSceneNumbersKey).text() == "true";
     d->screenplay.showSceneNumbersOnLeft
@@ -647,6 +687,7 @@ void ProjectInformationModel::initDocument()
         }
     }
 
+    d->updateTemplates();
     d->updateSessionSettings();
 }
 
@@ -718,6 +759,7 @@ QByteArray ProjectInformationModel::toXml() const
     writeTag(kCoverKey, d->cover.uuid.toString());
     writeBoolTag(kOverrideSystemSettingsKey, d->screenplay.overrideCommonSettings);
     writeTag(kTemplateIdKey, d->screenplay.templateId);
+    writeTag(kTemplateDataKey, d->screenplay.templateData);
     writeBoolTag(kShowSceneNumbersKey, d->screenplay.showSceneNumbers);
     writeBoolTag(kShowSceneNumbersOnLeftKey, d->screenplay.showSceneNumbersOnLeft);
     writeBoolTag(kShowScenesNumbersOnRightKey, d->screenplay.showSceneNumbersOnRight);
@@ -802,13 +844,22 @@ ChangeCursor ProjectInformationModel::applyPatch(const QByteArray& _patch)
     const auto _1 = std::placeholders::_1;
     setText(kNameKey, std::bind(&M::setName, this, _1));
     setText(kLoglineKey, std::bind(&M::setLogline, this, _1));
-    if (auto coverNode = documentNode.firstChildElement(kCoverKey); !coverNode.isNull()) {
+    if (const auto coverNode = documentNode.firstChildElement(kCoverKey); !coverNode.isNull()) {
         const auto coverUuid = QUuid(coverNode.text());
         setCover(coverUuid, imageWrapper()->load(coverUuid));
     }
     setBool(kOverrideSystemSettingsKey,
             std::bind(&M::setOverrideCommonSettingsForScreenplay, this, _1));
-    setText(kTemplateIdKey, std::bind(&M::setTemplateIdForScreenplay, this, _1));
+    if (const auto templateIdNode = documentNode.firstChildElement(kTemplateIdKey);
+        !templateIdNode.isNull()) {
+        const auto templateId = templateIdNode.text();
+        QString templateData;
+        if (const auto templateDataNode = documentNode.firstChildElement(kTemplateDataKey);
+            !templateDataNode.isNull()) {
+            templateData = templateDataNode.text();
+        }
+        setTemplateForScreenplay(templateId, templateData);
+    }
     setBool(kShowSceneNumbersKey, std::bind(&M::setShowSceneNumbersForScreenplay, this, _1));
     setBool(kShowSceneNumbersOnLeftKey,
             std::bind(&M::setShowSceneNumbersOnLeftForScreenplay, this, _1));
@@ -820,6 +871,7 @@ ChangeCursor ProjectInformationModel::applyPatch(const QByteArray& _patch)
                           std::bind(&M::setChronometerOptionsForScreenplay, this, _1));
 
 
+    d->updateTemplates();
     d->updateSessionSettings();
 
     return {};

@@ -51,6 +51,7 @@ public:
 
     QString templateIdForScreenplay() const;
     void setTemplateIdForScreenplay(const QString& _templateId);
+    void setTemplateForScreenplay(const QString& _templateId, const QString& _templateData);
     Q_SIGNAL void templateIdForScreenplayChanged(const QString& _templateId);
 
     bool showSceneNumbersForScreenplay() const;

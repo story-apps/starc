@@ -5,7 +5,9 @@
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QBuffer>
 #include <QCoreApplication>
+#include <QDateTime>
 #include <QFile>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -748,6 +750,11 @@ public:
     Implementation();
 
     /**
+     * @brief Обновить время изменения
+     */
+    void updateModifiedAt();
+
+    /**
      * @brief Тип дефолтного блока
      */
     TextParagraphType defaultParagraphType() const;
@@ -778,6 +785,11 @@ public:
      * @brief Является ли шаблон умолчальным
      */
     bool isDefault = false;
+
+    /**
+     * @brief Дата и время изменения шаблона
+     */
+    QDateTime modifiedAt;
 
     /**
      * @brief Название
@@ -843,6 +855,11 @@ public:
 TextTemplate::Implementation::Implementation()
     : id(QUuid::createUuid().toString())
 {
+}
+
+void TextTemplate::Implementation::updateModifiedAt()
+{
+    modifiedAt = QDateTime::currentDateTimeUtc();
 }
 
 TextParagraphType TextTemplate::Implementation::defaultParagraphType() const
@@ -1018,7 +1035,7 @@ TextTemplate::TextTemplate()
 TextTemplate::TextTemplate(const QString& _fromFile)
     : d(new Implementation)
 {
-    load(_fromFile);
+    loadFromFile(_fromFile);
 }
 
 TextTemplate::TextTemplate(const TextTemplate& _other)
@@ -1059,14 +1076,9 @@ TextTemplate& TextTemplate::operator=(const TextTemplate& _other)
 
 TextTemplate::~TextTemplate() = default;
 
-void TextTemplate::load(const QString& _fromFile)
+void TextTemplate::load(const QString& _template)
 {
-    QFile templateFile(_fromFile);
-    if (!templateFile.open(QIODevice::ReadOnly)) {
-        return;
-    }
-    const QString templateXml = templateFile.readAll();
-    QXmlStreamReader reader(templateXml);
+    QXmlStreamReader reader(_template);
 
     //
     // Считываем данные в соответствии с заданным форматом
@@ -1083,6 +1095,8 @@ void TextTemplate::load(const QString& _fromFile)
         d->id = templateAttributes.value("id").toString();
     }
     d->isDefault = templateAttributes.value("default").toString() == "true";
+    d->modifiedAt = QDateTime::fromString(templateAttributes.value("modified_at").toString(),
+                                          Qt::ISODateWithMs);
     d->name = templateAttributes.value("name").toString();
     d->description = templateAttributes.value("description").toString();
     d->pageSizeId = pageSizeIdFromString(templateAttributes.value("page_format").toString());
@@ -1106,7 +1120,7 @@ void TextTemplate::load(const QString& _fromFile)
         reader.skipCurrentElement();
         const auto titlePageXmlEnd = reader.characterOffset();
         d->titlePage
-            = templateXml.mid(titlePageXmlFrom, titlePageXmlEnd - titlePageXmlFrom).simplified();
+            = _template.mid(titlePageXmlFrom, titlePageXmlEnd - titlePageXmlFrom).simplified();
         reader.readNext();
     }
     reader.readNext();
@@ -1177,6 +1191,13 @@ void TextTemplate::load(const QString& _fromFile)
     //
 }
 
+void TextTemplate::loadFromFile(const QString& _fromFile)
+{
+    if (QFile templateFile(_fromFile); templateFile.open(QIODevice::ReadOnly)) {
+        load(templateFile.readAll());
+    }
+}
+
 void TextTemplate::setIsNew()
 {
     d->isDefault = false;
@@ -1185,18 +1206,18 @@ void TextTemplate::setIsNew()
     d->description.clear();
 }
 
-void TextTemplate::saveToFile(const QString& _filePath) const
+QString TextTemplate::save() const
 {
-    QFile templateFile(_filePath);
-    if (!templateFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return;
-    }
+    QByteArray xml;
+    QBuffer xmlBuffer(&xml);
+    xmlBuffer.open(QIODevice::WriteOnly);
 
-    QXmlStreamWriter writer(&templateFile);
+    QXmlStreamWriter writer(&xmlBuffer);
     writer.setAutoFormatting(true);
     writer.writeStartDocument();
     writer.writeStartElement("style");
     writer.writeAttribute("id", d->id);
+    writer.writeAttribute("modified_at", d->modifiedAt.toString(Qt::ISODateWithMs));
     writer.writeAttribute("name", d->name);
     writer.writeAttribute("description", d->description);
     writer.writeAttribute("page_format", toString(d->pageSizeId));
@@ -1243,7 +1264,17 @@ void TextTemplate::saveToFile(const QString& _filePath) const
     writer.writeEndElement(); // style
     writer.writeEndDocument();
 
-    templateFile.close();
+    xmlBuffer.close();
+    return xml;
+}
+
+void TextTemplate::saveToFile(const QString& _filePath) const
+{
+    if (QFile templateFile(_filePath);
+        templateFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        templateFile.write(save().toUtf8());
+        templateFile.close();
+    }
 }
 
 QString TextTemplate::id() const
@@ -1261,6 +1292,11 @@ bool TextTemplate::isDefault() const
     return d->isDefault;
 }
 
+QDateTime TextTemplate::modifiedAt() const
+{
+    return d->modifiedAt;
+}
+
 QString TextTemplate::name() const
 {
     return d->name;
@@ -1269,6 +1305,7 @@ QString TextTemplate::name() const
 void TextTemplate::setName(const QString& _name)
 {
     d->name = _name;
+    d->updateModifiedAt();
 }
 
 QString TextTemplate::description() const
@@ -1279,6 +1316,7 @@ QString TextTemplate::description() const
 void TextTemplate::setDescription(const QString& _description)
 {
     d->description = _description;
+    d->updateModifiedAt();
 }
 
 QPageSize::PageSizeId TextTemplate::pageSizeId() const
@@ -1289,6 +1327,7 @@ QPageSize::PageSizeId TextTemplate::pageSizeId() const
 void TextTemplate::setPageSizeId(QPageSize::PageSizeId _pageSizeId)
 {
     d->pageSizeId = _pageSizeId;
+    d->updateModifiedAt();
 }
 
 QMarginsF TextTemplate::pageMargins() const
@@ -1299,6 +1338,7 @@ QMarginsF TextTemplate::pageMargins() const
 void TextTemplate::setPageMargins(const QMarginsF& _pageMargins)
 {
     d->pageMargins = _pageMargins;
+    d->updateModifiedAt();
 }
 
 Qt::Alignment TextTemplate::pageNumbersAlignment() const
@@ -1309,6 +1349,7 @@ Qt::Alignment TextTemplate::pageNumbersAlignment() const
 void TextTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
 {
     d->pageNumbersAlignment = _alignment;
+    d->updateModifiedAt();
 }
 
 bool TextTemplate::isFirstPageNumberVisible() const
@@ -1319,6 +1360,7 @@ bool TextTemplate::isFirstPageNumberVisible() const
 void TextTemplate::setFirstPageNumberVisible(bool _visible)
 {
     d->isFirstPageNumberVisible = _visible;
+    d->updateModifiedAt();
 }
 
 int TextTemplate::leftHalfOfPageWidthPercents() const
@@ -1329,6 +1371,7 @@ int TextTemplate::leftHalfOfPageWidthPercents() const
 void TextTemplate::setLeftHalfOfPageWidthPercents(int _width)
 {
     d->leftHalfOfPageWidthPercents = _width;
+    d->updateModifiedAt();
 }
 
 bool TextTemplate::placeDialoguesInTable() const
@@ -1339,6 +1382,7 @@ bool TextTemplate::placeDialoguesInTable() const
 void TextTemplate::setPlaceDdialoguesInTable(bool _place)
 {
     d->placeDialoguesInTable = _place;
+    d->updateModifiedAt();
 }
 
 qreal TextTemplate::pageSplitterWidth() const
@@ -1382,6 +1426,7 @@ const QString& TextTemplate::titlePage() const
 void TextTemplate::setTitlePage(const QString& _titlePage)
 {
     d->titlePage = _titlePage;
+    d->updateModifiedAt();
 }
 
 const TextTemplate& TextTemplate::synopsisTemplate() const
@@ -1407,6 +1452,7 @@ const TextBlockStyle& TextTemplate::paragraphStyle(const QTextBlock& _forBlock) 
 void TextTemplate::setParagraphStyle(const TextBlockStyle& _style)
 {
     d->paragraphsStyles.insert(_style.type(), _style);
+    d->updateModifiedAt();
 
     //
     // Если сменился стиль на основе которого стоится шаблон компаньон - пересроим их

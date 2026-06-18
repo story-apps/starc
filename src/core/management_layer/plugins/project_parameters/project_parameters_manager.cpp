@@ -110,20 +110,27 @@ void ProjectParametersManager::Implementation::setModelForView(BusinessLayer::Ab
         _view->setShowDialoguesNumbers(model->showDialoguesNumbersForScreenplay());
         _view->setChronometerOptions(model->chronometerOptionsForScreenplay());
 
-        connect(model, &BusinessLayer::ProjectInformationModel::overrideCommonSettingsForScreenplayChanged,
+        connect(model,
+                &BusinessLayer::ProjectInformationModel::overrideCommonSettingsForScreenplayChanged,
                 _view, &Ui::ProjectParametersView::setOverrideCommonSettings);
-        connect(model, &BusinessLayer::ProjectInformationModel::templateIdForScreenplayChanged, _view,
-                &Ui::ProjectParametersView::setScreenplayTemplate);
-        connect(model, &BusinessLayer::ProjectInformationModel::showSceneNumbersForScreenplayChanged, _view,
-                &Ui::ProjectParametersView::setShowSceneNumbers);
-        connect(model, &BusinessLayer::ProjectInformationModel::showSceneNumbersOnLeftForScreenplayChanged,
+        connect(model, &BusinessLayer::ProjectInformationModel::templateIdForScreenplayChanged,
+                _view, &Ui::ProjectParametersView::setScreenplayTemplate);
+        connect(model,
+                &BusinessLayer::ProjectInformationModel::showSceneNumbersForScreenplayChanged,
+                _view, &Ui::ProjectParametersView::setShowSceneNumbers);
+        connect(model,
+                &BusinessLayer::ProjectInformationModel::showSceneNumbersOnLeftForScreenplayChanged,
                 _view, &Ui::ProjectParametersView::setShowSceneNumbersOnLeft);
-        connect(model, &BusinessLayer::ProjectInformationModel::showSceneNumbersOnRightForScreenplayChanged,
-                _view, &Ui::ProjectParametersView::setShowSceneNumbersOnRight);
-        connect(model, &BusinessLayer::ProjectInformationModel::showDialoguesNumbersForScreenplayChanged, _view,
-                &Ui::ProjectParametersView::setShowDialoguesNumbers);
-        connect(model, &BusinessLayer::ProjectInformationModel::chronometerOptionsForScreenplayChanged, _view,
-                &Ui::ProjectParametersView::setChronometerOptions);
+        connect(
+            model,
+            &BusinessLayer::ProjectInformationModel::showSceneNumbersOnRightForScreenplayChanged,
+            _view, &Ui::ProjectParametersView::setShowSceneNumbersOnRight);
+        connect(model,
+                &BusinessLayer::ProjectInformationModel::showDialoguesNumbersForScreenplayChanged,
+                _view, &Ui::ProjectParametersView::setShowDialoguesNumbers);
+        connect(model,
+                &BusinessLayer::ProjectInformationModel::chronometerOptionsForScreenplayChanged,
+                _view, &Ui::ProjectParametersView::setChronometerOptions);
         //
         connect(_view, &Ui::ProjectParametersView::overrideCommonSettingsChanged, model,
                 &BusinessLayer::ProjectInformationModel::setOverrideCommonSettingsForScreenplay);

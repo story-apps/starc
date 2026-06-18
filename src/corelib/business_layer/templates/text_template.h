@@ -481,14 +481,24 @@ public:
     virtual ~TextTemplate();
 
     /**
+     * @brief Загрузить шаблон
+     */
+    void load(const QString& _template);
+
+    /**
      * @brief Загрузить шаблон из файла
      */
-    void load(const QString& _fromFile);
+    void loadFromFile(const QString& _fromFile);
 
     /**
      * @brief Назначить шаблон новым
      */
     void setIsNew();
+
+    /**
+     * @brief Сохранить шаблон
+     */
+    QString save() const;
 
     /**
      * @brief Сохранить шаблон в файл
@@ -509,6 +519,11 @@ public:
      * @brief Является ли шаблон умолчальным
      */
     bool isDefault() const;
+
+    /**
+     * @brief Дата/время изменения шаблна
+     */
+    QDateTime modifiedAt() const;
 
     /**
      * @brief Название
