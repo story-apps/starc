@@ -215,10 +215,11 @@ Ui::AudioplayTextView* AudioplayTextManager::Implementation::createView(
                     groups.append(group);
                 }
                 emit q->translateDocumentRequested(groups, _languageCode,
-                                                   Domain::DocumentObjectType::AudioplayText);
+                                                   Domain::DocumentObjectType::AudioplayText,
+                                                   model->wordsCount());
             });
     connect(view, &Ui::AudioplayTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
+        emit q->generateTextRequested({}, _text, "\n\nWrite result in fountain format.");
     });
     connect(view, &Ui::AudioplayTextView::buyCreditsRequested, q,
             &AudioplayTextManager::buyCreditsRequested);

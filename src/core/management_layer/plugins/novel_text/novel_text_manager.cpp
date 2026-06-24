@@ -230,7 +230,8 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
                     groups.append(group);
                 }
                 emit q->translateDocumentRequested(groups, _languageCode,
-                                                   Domain::DocumentObjectType::NovelText);
+                                                   Domain::DocumentObjectType::NovelText,
+                                                   model->wordsCount());
             });
     connect(view, &Ui::NovelTextView::generateScriptRequested, q, [this, view] {
         const auto model = modelForView(view);

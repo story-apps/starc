@@ -210,7 +210,8 @@ Ui::SimpleTextView* SimpleTextManager::Implementation::createView(
                     groups.append(group);
                 }
                 emit q->translateDocumentRequested(groups, _languageCode,
-                                                   Domain::DocumentObjectType::SimpleText);
+                                                   Domain::DocumentObjectType::SimpleText,
+                                                   model->wordsCount());
             });
     connect(view, &Ui::SimpleTextView::generateTextRequested, q,
             [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });

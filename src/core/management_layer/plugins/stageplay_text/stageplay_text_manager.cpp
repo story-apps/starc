@@ -212,10 +212,11 @@ Ui::StageplayTextView* StageplayTextManager::Implementation::createView(
                     scenes.append(scene);
                 }
                 emit q->translateDocumentRequested(scenes, _languageCode,
-                                                   Domain::DocumentObjectType::StageplayText);
+                                                   Domain::DocumentObjectType::StageplayText,
+                                                   model->wordsCount());
             });
     connect(view, &Ui::StageplayTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
+        emit q->generateTextRequested({}, _text, "\n\nWrite result in fountain format.");
     });
     connect(view, &Ui::StageplayTextView::buyCreditsRequested, q,
             &StageplayTextManager::buyCreditsRequested);

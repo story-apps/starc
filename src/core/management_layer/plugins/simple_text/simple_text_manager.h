@@ -60,7 +60,7 @@ signals:
     void summarizeTextRequested(const QString& _text);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
     void translateDocumentRequested(const QVector<QString>& _texts, const QString& _languageCode,
-                                    Domain::DocumentObjectType _type);
+                                    Domain::DocumentObjectType _type, int _wordsRequired);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
 

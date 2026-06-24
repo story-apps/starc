@@ -5668,14 +5668,15 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                     SIGNAL(translateTextRequested(QString, QString)), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
-                "translateDocumentRequested(QVector<QString>,QString,Domain::DocumentObjectType)")
+                "translateDocumentRequested(QVector<QString>,QString,Domain::DocumentObjectType,"
+                "int)")
             != invalidSignalIndex) {
             connect(documentManager,
                     SIGNAL(translateDocumentRequested(QVector<QString>, QString,
-                                                      Domain::DocumentObjectType)),
+                                                      Domain::DocumentObjectType, int)),
                     this,
                     SIGNAL(translateDocumentRequested(QVector<QString>, QString,
-                                                      Domain::DocumentObjectType)),
+                                                      Domain::DocumentObjectType, int)),
                     Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(

@@ -212,10 +212,11 @@ Ui::ComicBookTextView* ComicBookTextManager::Implementation::createView(
                     groups.append(group);
                 }
                 emit q->translateDocumentRequested(groups, _languageCode,
-                                                   Domain::DocumentObjectType::ComicBookText);
+                                                   Domain::DocumentObjectType::ComicBookText,
+                                                   model->wordsCount());
             });
     connect(view, &Ui::ComicBookTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
+        emit q->generateTextRequested({}, _text, "\n\nWrite result in fountain format.");
     });
     connect(view, &Ui::ComicBookTextView::buyCreditsRequested, q,
             &ComicBookTextManager::buyCreditsRequested);

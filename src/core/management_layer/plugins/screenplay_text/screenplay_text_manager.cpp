@@ -256,7 +256,8 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
                     groups.append(group);
                 }
                 emit q->translateDocumentRequested(groups, _languageCode,
-                                                   Domain::DocumentObjectType::ScreenplayText);
+                                                   Domain::DocumentObjectType::ScreenplayText,
+                                                   model->wordsCount());
             });
     connect(
         view, &Ui::ScreenplayTextView::generateSynopsisRequested, q,
@@ -333,7 +334,7 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
         emit q->generateNovelRequested(scenes, model->wordsCount());
     });
     connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
+        emit q->generateTextRequested({}, _text, "\n\nWrite result in fountain format.");
     });
     connect(view, &Ui::ScreenplayTextView::buyCreditsRequested, q,
             &ScreenplayTextManager::buyCreditsRequested);
