@@ -90,7 +90,6 @@ jobs:
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup-qt5.dmg" -F "file_bin=@build/mac/starc-setup-qt5.dmg" https://starc.app/api/app/updates/publish/
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=mac" -F "qt=5" -F "version=${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}" https://starc.app/api/app/updates/notify/
 
       - name: Publish artifacts to the GitHub releases
         uses: softprops/action-gh-release@v1
@@ -129,7 +128,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.10.1
+          version: 6.10.3
           target: desktop
           modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
 
