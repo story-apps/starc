@@ -21,6 +21,11 @@ public:
     static QColor transparent(const QColor& _color, qreal _alphaF);
 
     /**
+     * @brief Сформировать непрозрачный цвет на основе прозрачного и его фона
+     */
+    static QColor flattenAlpha(const QColor& _foreground, const QColor& _background);
+
+    /**
      * @brief Получить промежуточный цвет между заданными
      */
     static QColor colorBetween(const QColor& _lhs, const QColor& _rhs);

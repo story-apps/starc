@@ -27,6 +27,25 @@ QColor ColorHelper::transparent(const QColor& _color, qreal _alphaF)
     return transparentColor;
 }
 
+QColor ColorHelper::flattenAlpha(const QColor& _foreground, const QColor& _background)
+{
+    // If the source is already fully opaque, return it as-is
+    if (_foreground.alpha() == 255) {
+        return _foreground;
+    }
+
+    // Convert alpha from 0-255 range to 0.0-1.0 float range
+    float alpha = _foreground.alphaF();
+
+    // Apply the blending formula for each channel
+    int r = qRound((_foreground.red() * alpha) + (_background.red() * (1.0f - alpha)));
+    int g = qRound((_foreground.green() * alpha) + (_background.green() * (1.0f - alpha)));
+    int b = qRound((_foreground.blue() * alpha) + (_background.blue() * (1.0f - alpha)));
+
+    // Return the new solid color with maximum alpha (255)
+    return QColor(r, g, b, 255);
+}
+
 QColor ColorHelper::colorBetween(const QColor& _lhs, const QColor& _rhs)
 {
     auto mid = [](int _lhs, int _rhs) { return (_lhs + _rhs) / 2; };
