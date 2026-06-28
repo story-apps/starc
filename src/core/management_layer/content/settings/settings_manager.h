@@ -138,6 +138,7 @@ private:
     void setApplicationUseSmartQuotes(bool _use);
     void setApplicationReplaceTwoDashesWithEmDash(bool _replace);
     void setApplicationAvoidMultipleSpaces(bool _avoid);
+    void setApplicationUseVimMode(bool _use);
     void setApplicationAiAssistantEnabled(bool _enabled);
 
     //
