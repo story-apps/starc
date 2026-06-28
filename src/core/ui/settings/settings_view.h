@@ -66,6 +66,7 @@ public:
     void setApplicationUseSmartQuotes(bool _use);
     void setApplicationReplaceTwoDashesWithEmDash(bool _replace);
     void setApplicationAvoidMultipleSpaces(bool _avoid);
+    void setApplicationUseVimMode(bool _use);
     void setApplicationAiAssistantEnabled(bool _enabled);
 
     //
@@ -207,6 +208,7 @@ signals:
     void applicationUseSmartQuotesChanged(bool _use);
     void applicationReplaceTwoDashedWithEmDashChanged(bool _replace);
     void applicationAvoidMultipleSpacesChanged(bool _avoid);
+    void applicationUseVimModeChanged(bool _use);
     void applicationAiAssistantEnabledChanged(bool _enabled);
 
     //

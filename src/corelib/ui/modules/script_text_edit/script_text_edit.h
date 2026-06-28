@@ -21,6 +21,12 @@ public:
     ~ScriptTextEdit() override;
 
     /**
+     * @brief Использовать Vim-режим редактирования
+     */
+    bool isVimModeEnabled() const;
+    void setVimModeEnabled(bool _enabled);
+
+    /**
      * @brief Показывать ли автодополнения в пустых блоках
      */
     bool showSuggestionsInEmptyBlocks() const;
@@ -55,6 +61,21 @@ protected:
      *       ScalableWrapper и координаты мыши могут несколько искажаться
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Обновить положение элементов Vim-режима
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
+    /**
+     * @brief Нарисовать дополнительные элементы поверх текста
+     */
+    void paintOverText(QPainter* _painter) override;
+
+    /**
+     * @brief Обрабатываем смену параметров текстового редактора и Vim-команды
+     */
+    bool event(QEvent* _event) override;
 
     /**
      * @brief Дополнительная функция для обработки нажатий самим редактором

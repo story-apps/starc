@@ -237,6 +237,11 @@ void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->setUseSmartQuotes(
             settingsValue(DataStorageLayer::kApplicationSmartQuotesKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseVimModeKey)) {
+        d->textEdit->setVimModeEnabled(
+            settingsValue(DataStorageLayer::kApplicationUseVimModeKey).toBool());
+    }
 }
 
 void TitlePageView::loadViewSettings()

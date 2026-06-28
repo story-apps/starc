@@ -1769,6 +1769,9 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     if (_changedSettingsKeys.isEmpty() || contains(kApplicationAvoidMultipleSpacesKey)) {
         d->textEdit->setAvoidMultipleSpaces(toBool(kApplicationAvoidMultipleSpacesKey));
     }
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationUseVimModeKey)) {
+        d->textEdit->setVimModeEnabled(toBool(kApplicationUseVimModeKey));
+    }
 }
 
 void ScreenplayTextView::loadViewSettings()
