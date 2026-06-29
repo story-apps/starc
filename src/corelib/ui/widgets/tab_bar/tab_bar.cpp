@@ -736,6 +736,10 @@ void TabBar::mousePressEvent(QMouseEvent* _event)
 
 void TabBar::mouseReleaseEvent(QMouseEvent* _event)
 {
+    if (_event->button() != Qt::LeftButton) {
+        return;
+    }
+
     const auto tab = d->tabAt(_event->pos());
     if (tab.isValid()) {
         setCurrentTab(d->tabs.indexOf(tab));
