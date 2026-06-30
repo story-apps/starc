@@ -3,11 +3,13 @@
 #include <corelib_global.h>
 
 class QPainterPath;
+class QPointF;
 class QPolygonF;
 class QRectF;
 
 namespace Avoid {
 class ConnRef;
+class Point;
 class Polygon;
 class Rectangle;
 } // namespace Avoid
@@ -19,8 +21,9 @@ class Rectangle;
 class CORE_LIBRARY_EXPORT LibavoidHelper
 {
 public:
-    static Avoid::Rectangle convertRectangle(const QRectF& rect);
-    static Avoid::Polygon convertPolygon(const QPolygonF& polygon);
+    static Avoid::Point convertPoint(const QPointF& _point);
+    static Avoid::Rectangle convertRectangle(const QRectF& _rect);
+    static Avoid::Polygon convertPolygon(const QPolygonF& _polygon);
 
-    static QPainterPath makePainterPath(Avoid::ConnRef* connection);
+    static QPainterPath makePainterPath(Avoid::ConnRef* _connection);
 };

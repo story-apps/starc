@@ -55,11 +55,11 @@ bool MindMapNode::isValid() const
     return !uuid.isNull();
 }
 
-MindMapNodeConnection MindMapNode::connectionTo(const MindMapNode& _node) const
+MindMapNodeConnection MindMapNode::connectionTo(const QUuid& _nodeUuid) const
 {
     for (const auto& connection : connections) {
-        if ((connection.fromNodeUuid == uuid && connection.toNodeUuid == _node.uuid)
-            || (connection.fromNodeUuid == _node.uuid && connection.toNodeUuid == uuid)) {
+        if ((connection.fromNodeUuid == uuid && connection.toNodeUuid == _nodeUuid)
+            || (connection.fromNodeUuid == _nodeUuid && connection.toNodeUuid == uuid)) {
             return connection;
         }
     }
@@ -83,15 +83,11 @@ bool MindMapNode::operator!=(const MindMapNode& _other) const
 // ****
 
 
-bool MindMapNodeGroup::isValid() const
-{
-    return !uuid.isNull();
-}
-
 bool MindMapNodeGroup::operator==(const MindMapNodeGroup& _other) const
 {
     return uuid == _other.uuid && name == _other.name && description == _other.description
-        && rect == _other.rect && lineType == _other.lineType && color == _other.color;
+        && position == _other.position && color == _other.color && connections == _other.connections
+        && size == _other.size && lineType == _other.lineType;
 }
 
 bool MindMapNodeGroup::operator!=(const MindMapNodeGroup& _other) const
@@ -232,143 +228,6 @@ QVector<MindMapNode> MindMapModel::nodes() const
     return d->nodes;
 }
 
-void MindMapModel::addNodeConnection(const MindMapNodeConnection& _nodeConnection)
-{
-    if (!_nodeConnection.isValid()) {
-        return;
-    }
-
-    for (int fromNodeIndex = 0; fromNodeIndex < d->nodes.size(); ++fromNodeIndex) {
-        if (d->nodes[fromNodeIndex].uuid != _nodeConnection.fromNodeUuid) {
-            continue;
-        }
-
-        for (int toNodeIndex = 0; toNodeIndex < d->nodes.size(); ++toNodeIndex) {
-            if (d->nodes[toNodeIndex].uuid != _nodeConnection.toNodeUuid) {
-                continue;
-            }
-
-
-            d->nodes[fromNodeIndex].connections.append(_nodeConnection);
-            d->nodes[toNodeIndex].connections.append(_nodeConnection);
-            emit nodeUpdated(d->nodes[fromNodeIndex]);
-            emit nodeUpdated(d->nodes[toNodeIndex]);
-            emit nodeConnectionAdded(_nodeConnection);
-            break;
-        }
-        break;
-    }
-}
-
-void MindMapModel::updateNodeConnection(const MindMapNodeConnection& _nodeConnection)
-{
-    if (!_nodeConnection.isValid()) {
-        return;
-    }
-
-    for (int fromNodeIndex = 0; fromNodeIndex < d->nodes.size(); ++fromNodeIndex) {
-        if (d->nodes[fromNodeIndex].uuid != _nodeConnection.fromNodeUuid) {
-            continue;
-        }
-
-        auto& node = d->nodes[fromNodeIndex];
-        for (int connectionIndex = 0; connectionIndex < node.connections.size();
-             ++connectionIndex) {
-            if (node.connections[connectionIndex].toNodeUuid != _nodeConnection.toNodeUuid) {
-                continue;
-            }
-
-            node.connections[connectionIndex] = _nodeConnection;
-            emit nodeUpdated(d->nodes[fromNodeIndex]);
-            break;
-        }
-
-        break;
-    }
-
-    for (int toNodeIndex = 0; toNodeIndex < d->nodes.size(); ++toNodeIndex) {
-        if (d->nodes[toNodeIndex].uuid != _nodeConnection.toNodeUuid) {
-            continue;
-        }
-
-        auto& node = d->nodes[toNodeIndex];
-        for (int connectionIndex = 0; connectionIndex < node.connections.size();
-             ++connectionIndex) {
-            if (node.connections[connectionIndex].fromNodeUuid != _nodeConnection.fromNodeUuid) {
-                continue;
-            }
-
-            node.connections[connectionIndex] = _nodeConnection;
-            emit nodeUpdated(d->nodes[toNodeIndex]);
-            break;
-        }
-
-        break;
-    }
-
-    emit nodeConnectionUpdated(_nodeConnection);
-}
-
-void MindMapModel::removeNodeConnection(const QUuid& _fromNodeUuid, const QUuid& _toNodeUuid)
-{
-    if (_fromNodeUuid.isNull() || _toNodeUuid.isNull()) {
-        return;
-    }
-
-    //
-    // Сохраним значения, т.к. после удаления соединения они станут невалидными
-    //
-    const auto fromNodeUuid = _fromNodeUuid;
-    const auto toNodeUuid = _toNodeUuid;
-
-    int fromNodeIndex = 0;
-    for (; fromNodeIndex < d->nodes.size(); ++fromNodeIndex) {
-        if (d->nodes[fromNodeIndex].uuid != _fromNodeUuid) {
-            continue;
-        }
-
-        auto& node = d->nodes[fromNodeIndex];
-        for (int connectionIndex = 0; connectionIndex < node.connections.size();
-             ++connectionIndex) {
-            if (node.connections[connectionIndex].toNodeUuid != _toNodeUuid) {
-                continue;
-            }
-
-            node.connections.removeAt(connectionIndex);
-            break;
-        }
-
-        break;
-    }
-
-    int toNodeIndex = 0;
-    for (; toNodeIndex < d->nodes.size(); ++toNodeIndex) {
-        if (d->nodes[toNodeIndex].uuid != _toNodeUuid) {
-            continue;
-        }
-
-        auto& node = d->nodes[toNodeIndex];
-        for (int connectionIndex = 0; connectionIndex < node.connections.size();
-             ++connectionIndex) {
-            if (node.connections[connectionIndex].fromNodeUuid != _fromNodeUuid) {
-                continue;
-            }
-
-            node.connections.removeAt(connectionIndex);
-            break;
-        }
-
-        break;
-    }
-
-    //
-    // Уведомляем об обновлении ячеек после того, как соединения были удалены из обеих ячеек
-    //
-    emit nodeConnectionRemoved(fromNodeUuid, toNodeUuid);
-    emit nodeUpdated(d->nodes[fromNodeIndex]);
-    emit nodeUpdated(d->nodes[toNodeIndex]);
-}
-
 void MindMapModel::addNodeGroup(const MindMapNodeGroup& _group)
 {
     d->nodeGroups.append(_group);
@@ -418,6 +277,249 @@ void MindMapModel::removeNodeGroup(const QUuid& _groupUuid)
 QVector<MindMapNodeGroup> MindMapModel::nodeGroups() const
 {
     return d->nodeGroups;
+}
+
+void MindMapModel::addNodeConnection(const MindMapNodeConnection& _nodeConnection)
+{
+    if (!_nodeConnection.isValid()) {
+        return;
+    }
+
+    constexpr int invalidIndex = -1;
+    auto fromNodeIndex = invalidIndex;
+    auto toNodeIndex = invalidIndex;
+    auto fromGroupIndex = invalidIndex;
+    auto toGroupIndex = invalidIndex;
+    auto isNodesFound = [&] {
+        int invalidIndexes = 0;
+        for (const auto& index : {
+                 fromNodeIndex,
+                 toNodeIndex,
+                 fromGroupIndex,
+                 toGroupIndex,
+             }) {
+            if (index == invalidIndex) {
+                ++invalidIndexes;
+            }
+        }
+        return invalidIndexes == 2;
+    };
+    //
+    // Сначала пробуем найти среди нод
+    //
+    for (int index = 0; index < d->nodes.size(); ++index) {
+        if (d->nodes[index].uuid == _nodeConnection.fromNodeUuid) {
+            fromNodeIndex = index;
+        } else if (d->nodes[index].uuid == _nodeConnection.toNodeUuid) {
+            toNodeIndex = index;
+        }
+
+        if (isNodesFound()) {
+            break;
+        }
+    }
+    //
+    // Если среди нод не нашлось, ищем также среди групп
+    //
+    if (fromNodeIndex == invalidIndex || toNodeIndex == invalidIndex) {
+        for (int index = 0; index < d->nodeGroups.size(); ++index) {
+            if (d->nodeGroups[index].uuid == _nodeConnection.fromNodeUuid) {
+                fromGroupIndex = index;
+            } else if (d->nodeGroups[index].uuid == _nodeConnection.toNodeUuid) {
+                toGroupIndex = index;
+            }
+
+            if (isNodesFound()) {
+                break;
+            }
+        }
+    }
+
+    //
+    // Если нашлись концы соединения, то сохраним соединение и уведомим клиентов о событии
+    //
+    if (isNodesFound()) {
+        if (fromNodeIndex != invalidIndex) {
+            d->nodes[fromNodeIndex].connections.append(_nodeConnection);
+            emit nodeUpdated(d->nodes[fromNodeIndex]);
+        } else if (fromGroupIndex != invalidIndex) {
+            d->nodeGroups[fromGroupIndex].connections.append(_nodeConnection);
+            emit nodeGroupUpdated(d->nodeGroups[fromGroupIndex]);
+        }
+        if (toNodeIndex != invalidIndex) {
+            d->nodes[toNodeIndex].connections.append(_nodeConnection);
+            emit nodeUpdated(d->nodes[toNodeIndex]);
+        } else if (toGroupIndex != invalidIndex) {
+            d->nodeGroups[toGroupIndex].connections.append(_nodeConnection);
+            emit nodeGroupUpdated(d->nodeGroups[toGroupIndex]);
+        }
+        emit nodeConnectionAdded(_nodeConnection);
+    }
+}
+
+void MindMapModel::updateNodeConnection(const MindMapNodeConnection& _nodeConnection)
+{
+    if (!_nodeConnection.isValid()) {
+        return;
+    }
+
+    auto updateNodeConnection = [this, _nodeConnection](const QUuid& _from, const QUuid& _to) {
+        for (int index = 0; index < d->nodes.size(); ++index) {
+            if (d->nodes[index].uuid != _from) {
+                continue;
+            }
+
+            auto& node = d->nodes[index];
+            for (int connectionIndex = 0; connectionIndex < node.connections.size();
+                 ++connectionIndex) {
+                if (node.connections[connectionIndex].toNodeUuid != _to) {
+                    continue;
+                }
+
+                node.connections[connectionIndex] = _nodeConnection;
+                emit nodeUpdated(d->nodes[index]);
+                break;
+            }
+
+            break;
+        }
+    };
+    updateNodeConnection(_nodeConnection.fromNodeUuid, _nodeConnection.toNodeUuid);
+    updateNodeConnection(_nodeConnection.toNodeUuid, _nodeConnection.fromNodeUuid);
+
+    auto updateNodeGroupConnection = [this, _nodeConnection](const QUuid& _from, const QUuid& _to) {
+        for (int index = 0; index < d->nodeGroups.size(); ++index) {
+            if (d->nodeGroups[index].uuid != _from) {
+                continue;
+            }
+
+            auto& group = d->nodeGroups[index];
+            for (int connectionIndex = 0; connectionIndex < group.connections.size();
+                 ++connectionIndex) {
+                if (group.connections[connectionIndex].toNodeUuid != _to) {
+                    continue;
+                }
+
+                group.connections[connectionIndex] = _nodeConnection;
+                emit nodeGroupUpdated(d->nodeGroups[index]);
+                break;
+            }
+
+            break;
+        }
+    };
+    updateNodeGroupConnection(_nodeConnection.fromNodeUuid, _nodeConnection.toNodeUuid);
+    updateNodeGroupConnection(_nodeConnection.toNodeUuid, _nodeConnection.fromNodeUuid);
+
+    emit nodeConnectionUpdated(_nodeConnection);
+}
+
+void MindMapModel::removeNodeConnection(const QUuid& _fromNodeUuid, const QUuid& _toNodeUuid)
+{
+    if (_fromNodeUuid.isNull() || _toNodeUuid.isNull()) {
+        return;
+    }
+
+    //
+    // Сохраним значения, т.к. после удаления соединения они станут невалидными
+    //
+    const auto fromNodeUuid = _fromNodeUuid;
+    const auto toNodeUuid = _toNodeUuid;
+
+    constexpr int invalidIndex = -1;
+    auto fromNodeIndex = invalidIndex;
+    auto toNodeIndex = invalidIndex;
+    auto fromGroupIndex = invalidIndex;
+    auto toGroupIndex = invalidIndex;
+    auto isNodesFound = [&] {
+        int invalidIndexes = 0;
+        for (const auto& index : {
+                 fromNodeIndex,
+                 toNodeIndex,
+                 fromGroupIndex,
+                 toGroupIndex,
+             }) {
+            if (index == invalidIndex) {
+                ++invalidIndexes;
+            }
+        }
+        return invalidIndexes == 2;
+    };
+    //
+    // Сначала пробуем найти среди нод
+    //
+    for (int index = 0; index < d->nodes.size(); ++index) {
+        if (d->nodes[index].uuid == fromNodeUuid) {
+            fromNodeIndex = index;
+        } else if (d->nodes[index].uuid == toNodeUuid) {
+            toNodeIndex = index;
+        }
+
+        if (isNodesFound()) {
+            break;
+        }
+    }
+    //
+    // Если среди нод не нашлось, ищем также среди групп
+    //
+    if (fromNodeIndex == invalidIndex || toNodeIndex == invalidIndex) {
+        for (int index = 0; index < d->nodeGroups.size(); ++index) {
+            if (d->nodeGroups[index].uuid == fromNodeUuid) {
+                fromGroupIndex = index;
+            } else if (d->nodeGroups[index].uuid == toNodeUuid) {
+                toGroupIndex = index;
+            }
+
+            if (isNodesFound()) {
+                break;
+            }
+        }
+    }
+
+    //
+    // Если нашлись концы соединения, то удаляем соединение и уведомим клиентов о событии
+    //
+    if (isNodesFound()) {
+        auto cleanNode = [this](int _index, const QUuid& _toUuid) {
+            auto& node = d->nodes[_index];
+            for (int index = 0; index < node.connections.size(); ++index) {
+                if ((node.connections[index].fromNodeUuid == node.uuid
+                     && node.connections[index].toNodeUuid == _toUuid)
+                    || (node.connections[index].fromNodeUuid == _toUuid
+                        && node.connections[index].toNodeUuid == node.uuid)) {
+                    node.connections.removeAt(index);
+                    break;
+                }
+            }
+        };
+        auto cleanNodeGroup = [this](int _index, const QUuid& _toUuid) {
+            auto& group = d->nodeGroups[_index];
+            for (int index = 0; index < group.connections.size(); ++index) {
+                if ((group.connections[index].fromNodeUuid == group.uuid
+                     && group.connections[index].toNodeUuid == _toUuid)
+                    || (group.connections[index].fromNodeUuid == _toUuid
+                        && group.connections[index].toNodeUuid == group.uuid)) {
+                    group.connections.removeAt(index);
+                    break;
+                }
+            }
+        };
+        if (fromNodeIndex != invalidIndex) {
+            cleanNode(fromNodeIndex, toNodeUuid);
+            emit nodeUpdated(d->nodes[fromNodeIndex]);
+        } else if (fromGroupIndex != invalidIndex) {
+            cleanNodeGroup(fromGroupIndex, toNodeUuid);
+            emit nodeGroupUpdated(d->nodeGroups[fromGroupIndex]);
+        }
+        if (toNodeIndex != invalidIndex) {
+            cleanNode(toNodeIndex, fromNodeUuid);
+            emit nodeUpdated(d->nodes[toNodeIndex]);
+        } else if (toGroupIndex != invalidIndex) {
+            cleanNodeGroup(toGroupIndex, fromNodeUuid);
+            emit nodeGroupUpdated(d->nodeGroups[toGroupIndex]);
+        }
+        emit nodeConnectionRemoved(fromNodeUuid, toNodeUuid);
+    }
 }
 
 void MindMapModel::initImageWrapper()
@@ -489,10 +591,29 @@ void MindMapModel::initDocument()
         group.uuid = QUuid::fromString(nodeGroupNode.attribute(kUuidKey));
         group.name = TextHelper::fromHtmlEscaped(nodeGroupNode.attribute(kNameKey));
         group.description = TextHelper::fromHtmlEscaped(nodeGroupNode.attribute(kDescriptionKey));
-        group.rect = rectFromString(nodeGroupNode.attribute(kRectKey));
+        const auto nodeRect = rectFromString(nodeGroupNode.attribute(kRectKey));
+        group.position = nodeRect.topLeft();
+        group.size = nodeRect.size();
         group.lineType = nodeGroupNode.attribute(kLineTypeKey).toInt();
         if (nodeGroupNode.hasAttribute(kColorKey)) {
             group.color = nodeGroupNode.attribute(kColorKey);
+        }
+        auto nodeConnectionNode = nodeNode.firstChildElement(kNodeConnectionKey);
+        while (!nodeConnectionNode.isNull()
+               && nodeConnectionNode.nodeName() == kNodeConnectionKey) {
+            MindMapNodeConnection connection;
+            connection.fromNodeUuid = QUuid::fromString(nodeConnectionNode.attribute(kFromUuidKey));
+            connection.toNodeUuid = QUuid::fromString(nodeConnectionNode.attribute(kToUuidKey));
+            connection.name = TextHelper::fromHtmlEscaped(nodeConnectionNode.attribute(kNameKey));
+            connection.description
+                = TextHelper::fromHtmlEscaped(nodeConnectionNode.attribute(kDescriptionKey));
+            connection.lineType = nodeConnectionNode.attribute(kLineTypeKey).toInt();
+            if (nodeConnectionNode.hasAttribute(kColorKey)) {
+                connection.color = nodeConnectionNode.attribute(kColorKey);
+            }
+            group.connections.append(connection);
+
+            nodeConnectionNode = nodeConnectionNode.nextSiblingElement();
         }
         d->nodeGroups.append(group);
 
@@ -547,15 +668,29 @@ QByteArray MindMapModel::toXml() const
         xml += QString("</%1>\n").arg(kNodeKey).toUtf8();
     }
     for (const auto& group : std::as_const(d->nodeGroups)) {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\" %12/>\n")
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\" %12>\n")
                    .arg(kNodeGroupKey, kUuidKey, group.uuid.toString(), kNameKey,
                         TextHelper::toHtmlEscaped(group.name), kDescriptionKey,
                         TextHelper::toHtmlEscaped(group.description), kRectKey,
-                        toString(group.rect), kLineTypeKey, QString::number(group.lineType),
+                        toString(QRectF(group.position, group.size)), kLineTypeKey,
+                        QString::number(group.lineType),
                         (group.color.isValid()
                              ? QString("%1=\"%2\"").arg(kColorKey, group.color.name())
                              : QString()))
                    .toUtf8();
+        for (const auto& connection : std::as_const(group.connections)) {
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\" %10=\"%11\" %12/>\n")
+                       .arg(kNodeConnectionKey, kFromUuidKey, connection.fromNodeUuid.toString(),
+                            kToUuidKey, connection.toNodeUuid.toString(), kNameKey,
+                            TextHelper::toHtmlEscaped(connection.name), kDescriptionKey,
+                            TextHelper::toHtmlEscaped(connection.description), kLineTypeKey,
+                            QString::number(connection.lineType),
+                            (connection.color.isValid()
+                                 ? QString("%1=\"%2\"").arg(kColorKey, connection.color.name())
+                                 : QString()))
+                       .toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kNodeGroupKey).toUtf8();
     }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
@@ -596,7 +731,7 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
             //
             // ... для ячеек запомним порядок связей
             //
-            if (element.nodeName() == kNodeKey) {
+            if (element.nodeName() == kNodeKey || element.nodeName() == kNodeGroupKey) {
                 QHash<QPair<QUuid, QUuid>, int> connectionsPositions;
                 int connectionPosition = 0;
                 QDomElement connectionNode = element.firstChildElement(kNodeConnectionKey);
@@ -654,7 +789,6 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         newNodes.append(node);
         nodeNode = nodeNode.nextSiblingElement();
     }
-
     //
     // Корректируем текущие ячейки
     //
@@ -731,13 +865,34 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         group.uuid = QUuid::fromString(nodeGroupNode.attribute(kUuidKey));
         group.name = TextHelper::fromHtmlEscaped(nodeGroupNode.attribute(kNameKey));
         group.description = TextHelper::fromHtmlEscaped(nodeGroupNode.attribute(kDescriptionKey));
-        group.rect = rectFromString(nodeGroupNode.attribute(kRectKey));
+        const auto nodeRect = rectFromString(nodeGroupNode.attribute(kRectKey));
+        group.position = nodeRect.topLeft();
+        group.size = nodeRect.size();
         group.lineType = nodeGroupNode.attribute(kLineTypeKey).toInt();
         if (nodeGroupNode.hasAttribute(kColorKey)) {
             group.color = nodeGroupNode.attribute(kColorKey);
         }
-        newNodeGroups.append(group);
 
+        //
+        // ... соединения ячейки
+        //
+        QDomElement connectionNode = nodeNode.firstChildElement(kNodeConnectionKey);
+        while (!connectionNode.isNull()) {
+            MindMapNodeConnection connection;
+            connection.fromNodeUuid = QUuid::fromString(connectionNode.attribute(kFromUuidKey));
+            connection.toNodeUuid = QUuid::fromString(connectionNode.attribute(kToUuidKey));
+            connection.name = TextHelper::fromHtmlEscaped(connectionNode.attribute(kNameKey));
+            connection.description
+                = TextHelper::fromHtmlEscaped(connectionNode.attribute(kDescriptionKey));
+            connection.lineType = connectionNode.attribute(kLineTypeKey).toInt();
+            if (connectionNode.hasAttribute(kColorKey)) {
+                connection.color = connectionNode.attribute(kColorKey).toInt();
+            }
+            group.connections.append(connection);
+            connectionNode = connectionNode.nextSiblingElement(kNodeConnectionKey);
+        }
+
+        newNodeGroups.append(group);
         nodeGroupNode = nodeGroupNode.nextSiblingElement();
     }
     //
@@ -746,26 +901,64 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
     for (int groupIndex = 0; groupIndex < d->nodeGroups.size(); ++groupIndex) {
         const auto& group = d->nodeGroups.at(groupIndex);
         //
-        // ... если такая группа осталось актуальной, то оставим её в списке текущих
+        // ... если такая ячейка осталась актуальной, то оставим её в списке текущих
         //     и удалим из списка новых
         //
-        if (newNodeGroups.contains(group)) {
-            updateNodeGroup(group);
+        if (int groupIndex = newNodeGroups.indexOf(group); groupIndex != -1) {
+            //
+            // ... при этом обновим список связей если необходимо
+            //
+            auto newConnections = newNodeGroups[groupIndex].connections;
+            for (int connectionIndex = 0; connectionIndex < group.connections.size();
+                 ++connectionIndex) {
+                const auto& connection = group.connections[connectionIndex];
+                //
+                // ... если такое соединение есть, то оставим его в списке текущих
+                //     и удалим из списка новых
+                //
+                if (newConnections.contains(connection)) {
+                    newConnections.removeAll(connection);
+                }
+                //
+                // ... если такого соединения нет в списке новых, то удалим его из списка текущих
+                //
+                else {
+                    removeNodeConnection(connection.fromNodeUuid, connection.toNodeUuid);
+                    --connectionIndex;
+                }
+            }
+            //
+            // ... и добавим новые связи
+            //
+            for (const auto& connection : std::as_const(newConnections)) {
+                addNodeConnection(connection);
+            }
+
             newNodeGroups.removeAll(group);
         }
         //
-        // ... если такой группы нет в списке новых, то удалим её из списка текущих
+        // ... если такой ячейки нет в списке новых, то удалим её из списка текущих со всеми
+        //     соединениями
         //
         else {
-            removeNodeGroup(group.uuid);
+            for (int i = group.connections.size() - 1; i >= 0; --i) {
+                const auto& connection = group.connections[i];
+                removeNodeConnection(connection.fromNodeUuid, connection.toNodeUuid);
+            }
+            removeNode(group.uuid);
             --groupIndex;
         }
     }
     //
-    // Добавляем новые группы
+    // Добавляем новые группы и отдельно - их соединения
     //
-    for (const auto& group : std::as_const(newNodeGroups)) {
+    for (auto& group : newNodeGroups) {
+        const auto newConnections = group.connections;
+        group.connections.clear();
         addNodeGroup(group);
+        for (const auto& connection : std::as_const(newConnections)) {
+            addNodeConnection(connection);
+        }
     }
 
     //
@@ -792,6 +985,18 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
                   [node, &nodeConnectionsPositions](const MindMapNodeConnection& _lhs,
                                                     const MindMapNodeConnection& _rhs) {
                       const auto& connectionsPositions = nodeConnectionsPositions[node.uuid];
+                      return connectionsPositions[{ _lhs.fromNodeUuid, _lhs.toNodeUuid }]
+                          < connectionsPositions[{ _rhs.fromNodeUuid, _rhs.toNodeUuid }];
+                  });
+    }
+    //
+    // Сортируем соединения групп
+    //
+    for (auto& group : d->nodeGroups) {
+        std::sort(group.connections.begin(), group.connections.end(),
+                  [group, &nodeConnectionsPositions](const MindMapNodeConnection& _lhs,
+                                                     const MindMapNodeConnection& _rhs) {
+                      const auto& connectionsPositions = nodeConnectionsPositions[group.uuid];
                       return connectionsPositions[{ _lhs.fromNodeUuid, _lhs.toNodeUuid }]
                           < connectionsPositions[{ _rhs.fromNodeUuid, _rhs.toNodeUuid }];
                   });

@@ -40,7 +40,7 @@ class CORE_LIBRARY_EXPORT MindMapNode
 public:
     bool isValid() const;
 
-    MindMapNodeConnection connectionTo(const MindMapNode& _node) const;
+    MindMapNodeConnection connectionTo(const QUuid& _nodeUuid) const;
 
     bool operator==(const MindMapNode& _other) const;
     bool operator!=(const MindMapNode& _other) const;
@@ -60,20 +60,14 @@ public:
 /**
  * @brief Группа ячеек ментальной карты
  */
-class CORE_LIBRARY_EXPORT MindMapNodeGroup
+class CORE_LIBRARY_EXPORT MindMapNodeGroup : public MindMapNode
 {
 public:
-    bool isValid() const;
-
     bool operator==(const MindMapNodeGroup& _other) const;
     bool operator!=(const MindMapNodeGroup& _other) const;
 
-    QUuid uuid;
-    QString name = {};
-    QString description = {};
-    QRectF rect = {};
+    QSizeF size = {};
     int lineType = Qt::SolidLine;
-    QColor color = {};
 };
 
 /**
@@ -105,14 +99,6 @@ public:
     Q_SIGNAL void nodeRemoved(const QUuid& _nodeUuid);
     QVector<MindMapNode> nodes() const;
 
-    void addNodeConnection(const MindMapNodeConnection& _nodeConnection);
-    Q_SIGNAL void nodeConnectionAdded(const BusinessLayer::MindMapNodeConnection& _nodeConnection);
-    void updateNodeConnection(const MindMapNodeConnection& _nodeConnection);
-    Q_SIGNAL void nodeConnectionUpdated(
-        const BusinessLayer::MindMapNodeConnection& _nodeConnection);
-    void removeNodeConnection(const QUuid& _fromNodeUuid, const QUuid& _toNodeUuid);
-    Q_SIGNAL void nodeConnectionRemoved(const QUuid& _fromNodeUuid, const QUuid& _toNodeUuid);
-
     void addNodeGroup(const BusinessLayer::MindMapNodeGroup& _group);
     Q_SIGNAL void nodeGroupAdded(const BusinessLayer::MindMapNodeGroup& _group);
     void updateNodeGroup(const MindMapNodeGroup& _group);
@@ -120,6 +106,14 @@ public:
     void removeNodeGroup(const QUuid& _groupUuid);
     Q_SIGNAL void nodeGroupRemoved(const QUuid& _groupUuid);
     QVector<MindMapNodeGroup> nodeGroups() const;
+
+    void addNodeConnection(const MindMapNodeConnection& _nodeConnection);
+    Q_SIGNAL void nodeConnectionAdded(const BusinessLayer::MindMapNodeConnection& _nodeConnection);
+    void updateNodeConnection(const MindMapNodeConnection& _nodeConnection);
+    Q_SIGNAL void nodeConnectionUpdated(
+        const BusinessLayer::MindMapNodeConnection& _nodeConnection);
+    void removeNodeConnection(const QUuid& _fromNodeUuid, const QUuid& _toNodeUuid);
+    Q_SIGNAL void nodeConnectionRemoved(const QUuid& _fromNodeUuid, const QUuid& _toNodeUuid);
 
 protected:
     /**

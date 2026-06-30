@@ -7,30 +7,35 @@
 #include <QRectF>
 
 
-Avoid::Rectangle LibavoidHelper::convertRectangle(const QRectF& rect)
+Avoid::Point LibavoidHelper::convertPoint(const QPointF& _point)
 {
-    QPointF topLeft = rect.topLeft();
-    QPointF bottomRight = rect.bottomRight();
+    return Avoid::Point(_point.x(), _point.y());
+}
+
+Avoid::Rectangle LibavoidHelper::convertRectangle(const QRectF& _rect)
+{
+    QPointF topLeft = _rect.topLeft();
+    QPointF bottomRight = _rect.bottomRight();
 
     return Avoid::Rectangle(Avoid::Point(topLeft.x(), topLeft.y()),
                             Avoid::Point(bottomRight.x(), bottomRight.y()));
 }
 
-Avoid::Polygon LibavoidHelper::convertPolygon(const QPolygonF& polygon)
+Avoid::Polygon LibavoidHelper::convertPolygon(const QPolygonF& _polygon)
 {
     Avoid::Polygon newPolygon;
     newPolygon.ps.clear();
 
-    for (int idx = 0; idx < polygon.size(); ++idx) {
-        newPolygon.ps.push_back(Avoid::Point(polygon[idx].x(), polygon[idx].y()));
+    for (int idx = 0; idx < _polygon.size(); ++idx) {
+        newPolygon.ps.push_back(Avoid::Point(_polygon[idx].x(), _polygon[idx].y()));
     }
 
     return newPolygon;
 }
 
-QPainterPath LibavoidHelper::makePainterPath(Avoid::ConnRef* connection)
+QPainterPath LibavoidHelper::makePainterPath(Avoid::ConnRef* _connection)
 {
-    const Avoid::PolyLine displayRoute = connection->displayRoute().curvedPolyline(4.0);
+    const Avoid::PolyLine displayRoute = _connection->displayRoute().curvedPolyline(4.0);
     if (displayRoute.empty()) {
         return {};
     }
