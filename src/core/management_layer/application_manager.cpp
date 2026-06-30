@@ -509,7 +509,7 @@ void ApplicationManager::Implementation::initDockMenu()
     if (dockMenu == nullptr) {
         dockMenu = new QMenu(applicationView);
         auto openNewWindow = dockMenu->addAction(tr("Open new window"));
-        connect(openNewWindow, &QAction::triggered, [=] {
+        connect(openNewWindow, &QAction::triggered, applicationView, [] {
             QString appPath = QApplication::applicationFilePath();
             appPath = appPath.split(".app").first();
             appPath += ".app";
