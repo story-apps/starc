@@ -78,8 +78,6 @@ macx {
     #
     # Форсим добавление хидера для новых macOS
     #
-    macx-clang-arm64 {
-        QMAKE_CFLAGS += -include arm_acle.h
-        QMAKE_CXXFLAGS += -include arm_acle.h
-    }
+    QMAKE_CFLAGS += -include arm_acle.h
+    QMAKE_CXXFLAGS += -include arm_acle.h
 }

@@ -27,9 +27,9 @@ const char* kDownloadMethod = "download";
 /**
  * @brief Получить ссылку на своё прокси апи для использования Unsplash
  */
-QString correctUrl(const char* _method, const QString& _sourceUrl)
+QString correctUrl(const QString& _sourceUrl)
 {
-    return QString("https://starc.app/api/services/unsplash/%1?url=").arg(_method)
+    return QString("https://starc.app/api/services/unsplash/download/?url=")
         + _sourceUrl.toUtf8().toBase64();
 };
 
@@ -152,7 +152,7 @@ void UnsplashImagesView::Implementation::loadCurrentPage()
         q, [this](const QByteArray& _response) { processImagesJson(_response); });
     connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
 
-    const QUrl url(QString("https://starc.app/api/services/unsplash/search?text=%1&page=%2")
+    const QUrl url(QString("https://starc.app/api/services/unsplash/search/?text=%1&page=%2")
                        .arg(keywords)
                        .arg(currentImagesPage)
                        .replace(' ', '-'));
@@ -170,10 +170,9 @@ void UnsplashImagesView::Implementation::processImagesJson(const QByteArray& _js
             const auto imageData = result.toObject();
             UnsplashImageInfo imageInfo;
             imageInfo.author = imageData["user"].toObject()["name"].toString();
-            imageInfo.previewUrl
-                = correctUrl(kPreviewMethod, imageData["urls"].toObject()["small"].toString());
-            imageInfo.downloadUrl = correctUrl(
-                kDownloadMethod, imageData["links"].toObject()["download_location"].toString());
+            imageInfo.previewUrl = correctUrl(imageData["urls"].toObject()["small"].toString());
+            imageInfo.downloadUrl
+                = correctUrl(imageData["links"].toObject()["download_location"].toString());
             images.insert(imageInfo.previewUrl, imageInfo);
             imagesUrlsOrdered.append(imageInfo.previewUrl);
 
@@ -368,7 +367,7 @@ void UnsplashImagesView::mouseReleaseEvent(QMouseEvent* _event)
         NetworkRequestLoader::loadAsync(
             imageInfo.downloadUrl, this, [this, imageInfo](const QByteArray& _data) {
                 const auto imageUrl = QJsonDocument::fromJson(_data).object()["url"].toString();
-                emit imageSelected(correctUrl(kPreviewMethod, imageUrl),
+                emit imageSelected(correctUrl(imageUrl),
                                    tr("Photo by %1 on Unsplash.com").arg(imageInfo.author));
             });
     }
