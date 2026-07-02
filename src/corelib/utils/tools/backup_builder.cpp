@@ -9,13 +9,21 @@
 #include <set>
 
 
-void BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
-                         const QString& _newName, int _maximumBackups)
+BackupBuilder::BackupResult BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
+                                                const QString& _newName, int _maximumBackups)
 {
+    BackupResult backupResult = { true, {} };
     //
     // Создаём папку для хранения резервных копий, если такой ещё нет
     //
-    QDir::root().mkpath(_backupDir);
+    if (QDir::root().mkpath(_backupDir) == false) {
+        backupResult.success = false;
+        backupResult.error = QObject::tr("Can't create backups folder \"%1\". Please check "
+                                         "permissions for backups filder, or create it manually.",
+                                         "BackupBuilder")
+                                 .arg(_backupDir);
+        return backupResult;
+    }
 
     //
     // Сформируем путь к резервной копии
@@ -46,13 +54,38 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
     //
     // ... копируем файл во временную резервную копию
     //
-    if (QFile::copy(_filePath, tmpBackupFileName)) {
-        //
-        // ... если скопировать удалось, переименовываем временную копию
-        //
-        const QString backupFileName = backupFileNameFor(rightNow);
-        QFile::remove(backupFileName);
-        QFile::rename(tmpBackupFileName, backupFileName);
+    if (QFile::copy(_filePath, tmpBackupFileName) == false) {
+        backupResult.success = false;
+        backupResult.error
+            = QObject::tr("Can't copy your project \"%1\" to temporary backup \"%2\". Please check "
+                          "permissions and provide ability for writing to backups folder.",
+                          "BackupBuilder")
+                  .arg(_filePath, tmpBackupFileName);
+        return backupResult;
+    }
+    //
+    // ... если скопировать удалось, переименовываем временную копию
+    //
+    const QString backupFileName = backupFileNameFor(rightNow);
+    if (QFile::exists(backupFileName) && QFile::remove(backupFileName) == false) {
+        QFile::remove(tmpBackupFileName);
+        backupResult.success = false;
+        backupResult.error
+            = QObject::tr("Can't replace existing backup \"%1\". Please check permissions and "
+                          "provide ability for writing to backups folder.",
+                          "BackupBuilder")
+                  .arg(backupFileName);
+        return backupResult;
+    }
+    if (QFile::rename(tmpBackupFileName, backupFileName) == false) {
+        QFile::remove(tmpBackupFileName);
+        backupResult.success = false;
+        backupResult.error
+            = QObject::tr("Can't rename temporary backup \"%1\" to \"%2\". Please check "
+                          "permissions and provide ability for writing to backups folder.",
+                          "BackupBuilder")
+                  .arg(tmpBackupFileName, backupFileName);
+        return backupResult;
     }
 
     //
@@ -77,4 +110,6 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
         const auto backupToRemove = backups.takeLast();
         QFile::remove(backupToRemove);
     }
+
+    return { true, {} };
 }

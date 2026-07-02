@@ -72,6 +72,7 @@
 #include <QFileDialog>
 #include <QFileSystemWatcher>
 #include <QFontDatabase>
+#include <QFutureWatcher>
 #include <QJsonDocument>
 #include <QKeyEvent>
 #include <QLocale>
@@ -1466,10 +1467,28 @@ void ApplicationManager::Implementation::saveChanges()
             baseBackupName
                 = QString("%1 [%2]").arg(currentProject->name()).arg(currentProject->id());
         }
-        QFuture<void> future = QtConcurrent::run(
+        auto backupWatcher = new QFutureWatcher<BackupBuilder::BackupResult>(q);
+        QObject::connect(
+            backupWatcher, &QFutureWatcher<BackupBuilder::BackupResult>::finished, q,
+            [this, backupWatcher] {
+                const auto result = backupWatcher->result();
+                backupWatcher->deleteLater();
+                if (result.success) {
+                    return;
+                }
+
+                Log::warning(QStringLiteral("[ApplicationManager] Backup creation failed: %1")
+                                 .arg(result.error));
+                const auto taskId = QUuid::createUuid().toString();
+                TaskBar::addTask(taskId);
+                TaskBar::setTaskTitle(taskId, result.error);
+                TaskBar::setTaskHasProgress(taskId, false);
+                QTimer::singleShot(15000, q, [taskId] { TaskBar::finishTask(taskId); });
+            });
+        backupWatcher->setFuture(QtConcurrent::run(
             BackupBuilder::save, projectsManager->currentProject()->path(),
             settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
-            baseBackupName, settingsValue(DataStorageLayer::kApplicationBackupsQtyKey).toInt());
+            baseBackupName, settingsValue(DataStorageLayer::kApplicationBackupsQtyKey).toInt()));
     }
 
     Log::info("All changes saved");
@@ -2229,7 +2248,7 @@ void ApplicationManager::Implementation::exportCurrentDocument()
         if (TaskBar::isTaskFinished(modelsLoadingTaskId)) {
             TaskBar::addTask(modelsLoadingTaskId);
             TaskBar::setTaskTitle(modelsLoadingTaskId, tr("Prepare document for exporting"));
-            TaskBar::setIndeterminate(modelsLoadingTaskId, true);
+            TaskBar::setTaskIndeterminate(modelsLoadingTaskId, true);
         }
         //
         // ... и запланируем выполнение экспорта чуть позже
