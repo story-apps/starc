@@ -37,10 +37,16 @@ public:
      * @brief Вспомогательная структура для хранения информации о процессах
      */
     struct Task {
+        /**
+         * @brief Получить высоту таска в зависимости от ширины
+         */
+        qreal heightFor(qreal _width) const;
+
         QString id;
         QString title;
         qreal progress = 0.0;
         bool isIndeterminate = false;
+        bool hasProgress = true;
     };
 
     /**
@@ -69,9 +75,15 @@ void TaskBar::Implementation::correctGeometry(QWidget* _taskBar)
             width = taskWidth;
         }
     }
+    qreal tasksHeight = 0.0;
+    for (const auto& task : std::as_const(tasks)) {
+        if (tasksHeight > 0) {
+            tasksHeight += Ui::DesignSystem::taskBar().spacing();
+        }
+        tasksHeight += task.heightFor(width);
+    }
     _taskBar->setFixedSize(width,
-                           Ui::DesignSystem::taskBar().margins().top()
-                               + Ui::DesignSystem::taskBar().taskHeight() * tasks.size()
+                           Ui::DesignSystem::taskBar().margins().top() + tasksHeight
                                + Ui::DesignSystem::taskBar().margins().bottom());
 
     const int x = _taskBar->isLeftToRight()
@@ -99,6 +111,21 @@ void TaskBar::Implementation::updateIndeterminateTimer()
     } else {
         indeterminateTimer.stop();
     }
+}
+
+qreal TaskBar::Implementation::Task::heightFor(qreal _width) const
+{
+    // высота текста
+    qreal height = TextHelper::heightForWidth(title, Ui::DesignSystem::font().caption(),
+                                              _width - Ui::DesignSystem::taskBar().margins().left()
+                                                  - Ui::DesignSystem::taskBar().margins().right());
+    // полоса прогресса
+    if (hasProgress) {
+        height += Ui::DesignSystem::taskBar().spacing()
+            + Ui::DesignSystem::progressBar().linearTrackHeight();
+    }
+
+    return height;
 }
 
 
@@ -179,6 +206,22 @@ void TaskBar::setTaskTitle(const QString& _taskId, const QString& _title)
     Implementation::instance->update();
 }
 
+void TaskBar::setTaskHasProgress(const QString& _taskId, bool _hasProgress)
+{
+    Q_ASSERT(Implementation::instance);
+
+    auto& tasks = Implementation::instance->d->tasks;
+    for (auto& task : tasks) {
+        if (task.id == _taskId) {
+            task.hasProgress = _hasProgress;
+            break;
+        }
+    }
+
+    Implementation::instance->d->correctGeometry(Implementation::instance);
+    Implementation::instance->update();
+}
+
 qreal TaskBar::taskProgress(const QString& _taskId)
 {
     Q_ASSERT(Implementation::instance);
@@ -208,7 +251,7 @@ void TaskBar::setTaskProgress(const QString& _taskId, qreal _progress)
     Implementation::instance->update();
 }
 
-void TaskBar::setIndeterminate(const QString& _taskId, bool _indeterminate)
+void TaskBar::setTaskIndeterminate(const QString& _taskId, bool _indeterminate)
 {
     Q_ASSERT(Implementation::instance);
 
@@ -309,58 +352,60 @@ void TaskBar::paintEvent(QPaintEvent* _event)
         // Заголовок
         //
         painter.setPen(textColor());
-        const QRectF titleRect(Ui::DesignSystem::taskBar().margins().left(), lastTop,
-                               width() - Ui::DesignSystem::taskBar().margins().left()
-                                   - Ui::DesignSystem::taskBar().margins().right(),
-                               Ui::DesignSystem::taskBar().taskTitleHeight());
-        painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, task.title);
+        const auto titleWidth = width() - Ui::DesignSystem::taskBar().margins().left()
+            - Ui::DesignSystem::taskBar().margins().right();
+        const QRectF titleRect(Ui::DesignSystem::taskBar().margins().left(), lastTop, titleWidth,
+                               TextHelper::heightForWidth(task.title, painter.font(), titleWidth));
+        painter.drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap,
+                         task.title);
 
         //
-        // Прогресс
+        // Если у задачи есть прогресс, то рисуем его
         //
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(d->barColor);
-        //
-        // ... подложка
-        //
-        const QRectF progressBackgroundRect(
-            titleRect.left(), titleRect.bottom() + Ui::DesignSystem::taskBar().spacing(),
-            titleRect.width(), Ui::DesignSystem::progressBar().linearTrackHeight());
-        painter.setOpacity(Ui::DesignSystem::progressBar().unfilledPartOpacity());
-        painter.drawRoundedRect(progressBackgroundRect, progressRadius, progressRadius);
-        //
-        // ... заполненная часть
-        //
-        QRectF progressRect;
-        if (!task.isIndeterminate) {
-            progressRect
-                = QRectF(progressBackgroundRect.left()
-                             + (isLeftToRight()
-                                    ? 0.0
-                                    : (progressBackgroundRect.width()
-                                       - progressBackgroundRect.width() * task.progress / 100.0)),
-                         progressBackgroundRect.top(),
-                         progressBackgroundRect.width() * task.progress / 100.0,
-                         progressBackgroundRect.height());
-        } else {
-            const auto left
-                = progressBackgroundRect.width() * std::max(0.0, task.progress - 50.0) / 100.0;
-            progressRect
-                = QRectF(progressBackgroundRect.left()
-                             + (isLeftToRight()
-                                    ? left
-                                    : (progressBackgroundRect.width()
-                                       - progressBackgroundRect.width() * task.progress / 100.0)),
-                         progressBackgroundRect.top(),
-                         progressBackgroundRect.width() * task.progress / 100.0 - left,
-                         progressBackgroundRect.height());
-            progressRect.setLeft(std::max(0.0, progressRect.left()));
-            progressRect.setRight(std::min(progressRect.right(), progressBackgroundRect.right()));
+        if (task.hasProgress) {
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(d->barColor);
+            //
+            // ... подложка
+            //
+            const QRectF progressBackgroundRect(
+                titleRect.left(), titleRect.bottom() + Ui::DesignSystem::taskBar().spacing(),
+                titleRect.width(), Ui::DesignSystem::progressBar().linearTrackHeight());
+            painter.setOpacity(Ui::DesignSystem::progressBar().unfilledPartOpacity());
+            painter.drawRoundedRect(progressBackgroundRect, progressRadius, progressRadius);
+            //
+            // ... заполненная часть
+            //
+            QRectF progressRect;
+            if (!task.isIndeterminate) {
+                progressRect = QRectF(progressBackgroundRect.left()
+                                          + (isLeftToRight() ? 0.0
+                                                             : (progressBackgroundRect.width()
+                                                                - progressBackgroundRect.width()
+                                                                    * task.progress / 100.0)),
+                                      progressBackgroundRect.top(),
+                                      progressBackgroundRect.width() * task.progress / 100.0,
+                                      progressBackgroundRect.height());
+            } else {
+                const auto left
+                    = progressBackgroundRect.width() * std::max(0.0, task.progress - 50.0) / 100.0;
+                progressRect = QRectF(progressBackgroundRect.left()
+                                          + (isLeftToRight() ? left
+                                                             : (progressBackgroundRect.width()
+                                                                - progressBackgroundRect.width()
+                                                                    * task.progress / 100.0)),
+                                      progressBackgroundRect.top(),
+                                      progressBackgroundRect.width() * task.progress / 100.0 - left,
+                                      progressBackgroundRect.height());
+                progressRect.setLeft(std::max(0.0, progressRect.left()));
+                progressRect.setRight(
+                    std::min(progressRect.right(), progressBackgroundRect.right()));
+            }
+            painter.setOpacity(1.0);
+            painter.drawRoundedRect(progressRect, progressRadius, progressRadius);
         }
-        painter.setOpacity(1.0);
-        painter.drawRoundedRect(progressRect, progressRadius, progressRadius);
 
-        lastTop += Ui::DesignSystem::taskBar().taskHeight();
+        lastTop += task.heightFor(width()) + Ui::DesignSystem::taskBar().spacing();
     }
 }
 

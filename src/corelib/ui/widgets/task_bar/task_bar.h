@@ -28,6 +28,11 @@ public:
     static void setTaskTitle(const QString& _taskId, const QString& _title);
 
     /**
+     * @brief Установить возможность отображения прогресса
+     */
+    static void setTaskHasProgress(const QString& _taskId, bool _hasProgress);
+
+    /**
      * @brief Прогресс выполнения процесса с заданным идентификатором в интервале [0.0, 100.0]
      */
     static qreal taskProgress(const QString& _taskId);
@@ -36,7 +41,7 @@ public:
     /**
      * @brief Установить неопределённое состояние задачи
      */
-    static void setIndeterminate(const QString& _taskId, bool _indeterminate);
+    static void setTaskIndeterminate(const QString& _taskId, bool _indeterminate);
 
     /**
      * @brief Завершить заданный процесс

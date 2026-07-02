@@ -1097,16 +1097,6 @@ public:
         qreal maximumWidth() const;
 
         /**
-         * @brief Высота одного процесса
-         */
-        qreal taskHeight() const;
-
-        /**
-         * @brief Высота заголовка
-         */
-        qreal taskTitleHeight() const;
-
-        /**
          * @brief Отступ между заголовком и полосой прогресса
          */
         qreal spacing() const;
