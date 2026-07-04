@@ -38,7 +38,7 @@ public:
      * @brief Идеальный размер для элемент
      */
     QSize ruleSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
-    QSize itemSizeHint(const QStyleOptionViewItem& _option) const;
+    QSize itemSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
     QSize sceneSizeHint(const QStyleOptionViewItem& _option) const;
 };
 
@@ -189,6 +189,101 @@ void ComplianceCheckResultDelegate::Implementation::paintItem(QPainter* _painter
                                                               const QStyleOptionViewItem& _option,
                                                               const QModelIndex& _index) const
 {
+    using namespace BusinessLayer;
+
+    auto backgroundColor = _option.palette.color(QPalette::Base);
+    auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
+
+    //
+    // Рисуем
+    //
+
+    //
+    // ... фон
+    //
+    const QRectF backgroundRect = _option.rect;
+    if (_option.state.testFlag(QStyle::State_Selected)) {
+        //
+        // ... для выделенных элементов
+        //
+        backgroundColor = _option.palette.color(QPalette::Highlight);
+        textColor = _option.palette.color(QPalette::HighlightedText);
+    } else if (_option.state.testFlag(QStyle::State_MouseOver)) {
+        //
+        // ... для элементов на которые наведена мышь
+        //
+        backgroundColor = _option.palette.color(QPalette::AlternateBase);
+    } else {
+        //
+        // ... для остальных элементов
+        //
+        textColor.setAlphaF(DesignSystem::inactiveTextOpacity());
+    }
+    _painter->fillRect(backgroundRect, backgroundColor);
+
+    //
+    // ... иконка
+    //
+    _painter->setPen(textColor);
+    QRectF iconRect;
+    if (_index.data(Qt::DecorationRole).isValid()) {
+        if (isLeftToRight) {
+            iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                               DesignSystem::treeOneLineItem().margins().left()),
+                                      backgroundRect.top()),
+                              QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                                     DesignSystem::treeOneLineItem().height()));
+        } else {
+            iconRect = QRectF(
+                QPointF(backgroundRect.right() - DesignSystem::treeOneLineItem().iconSize().width(),
+                        backgroundRect.top()),
+                QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                       DesignSystem::treeOneLineItem().height()));
+        }
+        _painter->setFont(DesignSystem::font().iconsMid());
+        _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
+                           _index.data(Qt::DecorationRole).toString());
+    }
+
+    //
+    // ... заголовок элемента
+    //
+    _painter->setFont(DesignSystem::font().subtitle2());
+    qreal headingLeft = 0.0;
+    qreal headingWidth = 0.0;
+    if (isLeftToRight) {
+        headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
+            - headingLeft - DesignSystem::treeOneLineItem().spacing();
+    } else {
+        headingLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
+        headingWidth = iconRect.left() - headingLeft;
+    }
+    const QRectF titleRect(
+        QPointF(headingLeft,
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QSizeF(headingWidth, DesignSystem::layout().px24()));
+    auto ruleTitle = _index.data(ComplianceCheckResultModelItemDataRole::TitleRole).toString();
+    ruleTitle = _painter->fontMetrics().elidedText(ruleTitle, Qt::ElideRight,
+                                                   static_cast<int>(titleRect.width()));
+    _painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, ruleTitle);
+
+    //
+    // ... подзаголовок элемента
+    //
+    auto subtitleText
+        = _index.data(ComplianceCheckResultModelItemDataRole::SubtitleRole).toString();
+    if (!subtitleText.isEmpty()) {
+        QRectF textRect;
+        _painter->setFont(DesignSystem::font().body2());
+        textRect = QRectF(
+            QPointF(iconRect.left(), titleRect.bottom() + DesignSystem::compactLayout().px8()),
+            QSizeF(titleRect.right() - iconRect.left(),
+                   TextHelper::fineLineSpacing(_painter->font())));
+        subtitleText = TextHelper::elidedText(subtitleText, DesignSystem::font().body2(), textRect);
+        _painter->drawText(textRect, Qt::TextWordWrap, subtitleText);
+    }
 }
 
 void ComplianceCheckResultDelegate::Implementation::paintScene(QPainter* _painter,
@@ -318,8 +413,9 @@ QSize ComplianceCheckResultDelegate::Implementation::ruleSizeHint(
 }
 
 QSize ComplianceCheckResultDelegate::Implementation::itemSizeHint(
-    const QStyleOptionViewItem& _option) const
+    const QStyleOptionViewItem& _option, const QModelIndex& _index) const
 {
+    return ruleSizeHint(_option, _index);
 }
 
 QSize ComplianceCheckResultDelegate::Implementation::sceneSizeHint(
@@ -423,7 +519,7 @@ QSize ComplianceCheckResultDelegate::sizeHint(const QStyleOptionViewItem& _optio
     }
 
     case ComplianceCheckResultModelItemType::Item: {
-        return d->itemSizeHint(_option);
+        return d->itemSizeHint(_option, _index);
     }
 
     case ComplianceCheckResultModelItemType::Scene: {

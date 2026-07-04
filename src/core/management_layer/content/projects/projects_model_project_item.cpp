@@ -324,6 +324,21 @@ void ProjectsModelProjectItem::setCollaborators(
 
 QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
 {
+    //
+    // Доступно только для конкретных проектов
+    //
+    if (d->id == 4568) {
+        return {
+            { BusinessLayer::ComplianceRuleType::TotalDuration, 23 * 60, 25 * 60, {} },
+            { BusinessLayer::ComplianceRuleType::ScenesCount, 16, 24, {} },
+            { BusinessLayer::ComplianceRuleType::SceneDuration, 40, 80, {} },
+            { BusinessLayer::ComplianceRuleType::CharacterShouldSpeakInEveryScene,
+              {},
+              {},
+              "Люба, Гриша, Максим" },
+        };
+    }
+
     return {};
 }
 

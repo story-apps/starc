@@ -20,7 +20,7 @@ enum class CORE_LIBRARY_EXPORT ComplianceRuleType {
     TotalDuration, //!< Хронометраж серии
     ScenesCount, //!< Количество сцен в серии
     SceneDuration, //!< Хронометраж сцены
-    CharacterDialoguesCount, //!< Реплики персонажа
+    CharacterShouldSpeakInEveryScene, //!< Реплики персонажа
     SceneCharactersCount, //!< Количество персонажей в сцене
     PrimaryLocationsPercent, //!< Процент сцен в основных локациях
     SecondaryLocationsCount, //!< Количество дополнительных локаций
@@ -47,6 +47,11 @@ struct CORE_LIBRARY_EXPORT ComplianceRule {
      * @brief Максимальный порог
      */
     int maximumValue = 0;
+
+    /**
+     * @brief Текстовое значение для правила
+     */
+    QString textValue;
 };
 
 /**
@@ -60,18 +65,30 @@ enum class CORE_LIBRARY_EXPORT ComplianceCheckResultItemType {
 };
 
 /**
+ * @brief Конкретный персонаж в конкретной сцене из результатов проверки
+ */
+struct CORE_LIBRARY_EXPORT ComplianceCheckResultItemSceneCharacter {
+    bool isValid() const;
+
+    QString name;
+    bool isFirstAppearance = false;
+    int totalDialogues = 0;
+};
+
+/**
  * @brief Конкретная сцена из результатов проверки
  */
 struct CORE_LIBRARY_EXPORT ComplianceCheckResultItemScene {
-    int durationInSeconds() const
-    {
-        return std::chrono::duration_cast<std::chrono::seconds>(duration).count();
-    }
+    bool isValid() const;
+    int durationInSeconds() const;
+    ComplianceCheckResultItemSceneCharacter& character(const QString& _name);
+    ComplianceCheckResultItemSceneCharacter character(const QString& _name) const;
 
     QUuid uuid;
     QString number;
     QString heading;
     std::chrono::milliseconds duration;
+    QVector<ComplianceCheckResultItemSceneCharacter> characters;
 };
 
 /**

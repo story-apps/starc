@@ -7,6 +7,52 @@
 
 namespace BusinessLayer {
 
+bool ComplianceCheckResultItemSceneCharacter::isValid() const
+{
+    return !name.isEmpty();
+}
+
+// **
+
+bool ComplianceCheckResultItemScene::isValid() const
+{
+    return !uuid.isNull();
+}
+
+int ComplianceCheckResultItemScene::durationInSeconds() const
+{
+    return std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+}
+
+ComplianceCheckResultItemSceneCharacter& ComplianceCheckResultItemScene::character(
+    const QString& _name)
+{
+    for (auto& character : characters) {
+        if (character.name == _name) {
+            return character;
+        }
+    }
+
+    characters.append({ _name });
+    return characters.last();
+}
+
+ComplianceCheckResultItemSceneCharacter ComplianceCheckResultItemScene::character(
+    const QString& _name) const
+{
+    for (const auto& character : characters) {
+        if (character.name == _name) {
+            return character;
+        }
+    }
+
+    return {};
+}
+
+
+// ****
+
+
 class ComplianceChecker::Implementation
 {
 public:

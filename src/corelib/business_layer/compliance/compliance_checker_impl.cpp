@@ -6,6 +6,7 @@
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
@@ -14,7 +15,10 @@
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
+
+#include <QRegularExpression>
 
 
 namespace BusinessLayer {
@@ -163,7 +167,7 @@ void ComplianceCheckerImpl::startChecking()
                 result.status = ComplianceCheckResultStatus::Passed;
             } else {
                 result.status = ComplianceCheckResultStatus::Failed;
-                result.subtitle = tr("%1 scenes", nullptr, scenesCount).arg(scenesCount);
+                result.subtitle = tr("%n scenes", nullptr, scenesCount);
                 if (scenesCount < rule.minimumValue) {
                     result.subtitle += " " + tr("(%1 less)").arg(rule.minimumValue - scenesCount);
                 } else {
@@ -243,9 +247,124 @@ void ComplianceCheckerImpl::startChecking()
                 result.status = ComplianceCheckResultStatus::Warning;
                 result.items.append(sceneItem);
                 result.subtitle
-                    = tr("%1% scenes out of range (%2)")
-                          .arg(QString::number(sceneItem.scenes.size() * 100 / scenes.count()),
-                               QString::number(sceneItem.scenes.size()));
+                    = tr("%1% scenes out of range (%2 from %3)")
+                          .arg(QString::number(sceneItem.scenes.size() * 100 / scenes.size()),
+                               QString::number(sceneItem.scenes.size()),
+                               QString::number(scenes.size()));
+            }
+
+            break;
+        }
+
+        case BusinessLayer::ComplianceRuleType::CharacterShouldSpeakInEveryScene: {
+            result.title = tr("Character (%1) should speak in every scene").arg(rule.textValue);
+            QVector<ComplianceCheckResultItemScene> scenes;
+            ComplianceCheckResultItemScene lastScene;
+            QSet<QString> characters;
+
+            //
+            // Собираем статистику
+            //
+            std::function<void(const TextModelItem*)> includeInReport;
+            includeInReport = [&includeInReport, &scenes, &lastScene,
+                               &characters](const TextModelItem* _item) {
+                for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                    auto childItem = _item->childAt(childIndex);
+                    switch (childItem->type()) {
+                    case TextModelItemType::Folder:
+                    case TextModelItemType::Group: {
+                        includeInReport(childItem);
+                        break;
+                    }
+
+                    case TextModelItemType::Text: {
+                        auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                        switch (textItem->paragraphType()) {
+                        case TextParagraphType::SceneHeading: {
+                            if (!lastScene.heading.isEmpty()) {
+                                scenes.append(lastScene);
+                                lastScene = ComplianceCheckResultItemScene();
+                            }
+
+                            const auto sceneItem
+                                = static_cast<ScreenplayTextModelSceneItem*>(textItem->parent());
+                            lastScene.uuid = sceneItem->uuid();
+                            lastScene.heading = sceneItem->heading();
+                            lastScene.number = sceneItem->number()->text;
+                            lastScene.duration = sceneItem->duration();
+                            break;
+                        }
+
+                        case TextParagraphType::SceneCharacters: {
+                            const auto sceneCharacters
+                                = ScreenplaySceneCharactersParser::characters(textItem->text());
+                            for (const auto& character : sceneCharacters) {
+                                auto& characterData = lastScene.character(character);
+                                if (!characters.contains(character)) {
+                                    characters.insert(character);
+                                    characterData.isFirstAppearance = true;
+                                }
+                            }
+                            break;
+                        }
+
+                        case TextParagraphType::Character: {
+                            if (!textItem->isCorrection()) {
+                                const auto character
+                                    = ScreenplayCharacterParser::name(textItem->text());
+                                auto& characterData = lastScene.character(character);
+                                ++characterData.totalDialogues;
+                                if (!characters.contains(character)) {
+                                    characters.insert(character);
+                                    characterData.isFirstAppearance = true;
+                                }
+                            }
+                            break;
+                        }
+
+                        default:
+                            break;
+                        }
+
+                        break;
+                    }
+
+                    default:
+                        break;
+                    }
+                }
+            };
+            includeInReport(d->screenplayModel->itemForIndex({}));
+            if (lastScene.isValid()) {
+                scenes.append(lastScene);
+            }
+
+            for (const auto& characterNameDirty : rule.textValue.split(',')) {
+                const auto characterName = TextHelper::smartToUpper(characterNameDirty.trimmed());
+
+                ComplianceCheckResultItem characterItem;
+                characterItem.type = ComplianceCheckResultItemType::Character;
+                characterItem.title = characterName;
+                for (const auto& scene : std::as_const(scenes)) {
+                    if (const auto character = scene.character(characterName);
+                        character.isValid()) {
+                        if (character.totalDialogues == 0) {
+                            characterItem.scenes.append(scene);
+                        }
+                    }
+                }
+
+                if (!characterItem.scenes.isEmpty()) {
+                    characterItem.title
+                        += " " + tr("(%n scenes)", nullptr, characterItem.scenes.size());
+                    result.items.append(characterItem);
+                }
+            }
+
+            if (result.items.isEmpty()) {
+                result.status = ComplianceCheckResultStatus::Passed;
+            } else {
+                result.status = ComplianceCheckResultStatus::Failed;
             }
 
             break;
