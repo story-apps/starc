@@ -785,6 +785,7 @@ void ScreenplayTextManager::setProjectInfo(
     Q_UNUSED(_canBeSentForChecking)
 
     d->complianceChecker->setRules(_complianceRules);
+    d->complianceChecker->startChecking();
 
     for (auto& viewAndModel : d->allViews) {
         if (viewAndModel.view.isNull()) {
