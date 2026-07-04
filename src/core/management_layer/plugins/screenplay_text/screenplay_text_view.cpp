@@ -1428,6 +1428,21 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 d->bookmarksModel->remove(_indexes);
             });
     //
+    connect(d->complianceCheckResultView, &ComplianceCheckResultView::sceneSelected, this,
+            [this](const QUuid& _sceneUuid) {
+                const auto index = d->model->indexForUuid(_sceneUuid);
+
+                if (d->toolbar->isItemIsolationEnabled()) {
+                    d->textEdit->setVisibleTopLevelItemIndex(index);
+                }
+
+                const auto position = d->textEdit->positionForModelIndex(index);
+                auto cursor = d->textEdit->textCursor();
+                cursor.setPosition(position);
+                d->textEdit->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    //
     connect(d->showSceneParametersAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateOptionsTranslations();
         d->sidebarTabs->setTabVisible(kSceneParametersTabIndex, _checked);

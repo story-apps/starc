@@ -24,18 +24,18 @@ public:
 
     Widget* emptyPage = nullptr;
 
-    QStandardItemModel* checkingResultsModel;
-    Tree* checkingResultsPage = nullptr;
+    QStandardItemModel* checkResultsModel = nullptr;
+    Tree* checkResultsPage = nullptr;
 };
 
 ComplianceCheckResultView::Implementation::Implementation(ComplianceCheckResultView* _q)
     : q(_q)
     , emptyPage(new Widget(q))
-    , checkingResultsModel(new QStandardItemModel(q))
-    , checkingResultsPage(new Tree(q))
+    , checkResultsModel(new QStandardItemModel(q))
+    , checkResultsPage(new Tree(q))
 {
-    checkingResultsPage->setModel(checkingResultsModel);
-    checkingResultsPage->setItemDelegate(new ComplianceCheckResultDelegate(checkingResultsPage));
+    checkResultsPage->setModel(checkResultsModel);
+    checkResultsPage->setItemDelegate(new ComplianceCheckResultDelegate(checkResultsPage));
 }
 
 
@@ -47,7 +47,16 @@ ComplianceCheckResultView::ComplianceCheckResultView(QWidget* _parent)
     , d(new Implementation(this))
 {
     setCurrentWidget(d->emptyPage);
-    addWidget(d->checkingResultsPage);
+    addWidget(d->checkResultsPage);
+
+    connect(d->checkResultsPage, &Tree::clicked, this, [this](const QModelIndex& _index) {
+        const auto uuid
+            = _index.data(BusinessLayer::ComplianceCheckResultModelItemDataRole::SceneUuidRole)
+                  .toUuid();
+        if (!uuid.isNull()) {
+            emit sceneSelected(uuid);
+        }
+    });
 }
 
 ComplianceCheckResultView::~ComplianceCheckResultView() = default;
@@ -57,7 +66,7 @@ void ComplianceCheckResultView::setCheckResults(
 {
     using namespace BusinessLayer;
 
-    d->checkingResultsModel->clear();
+    d->checkResultsModel->clear();
 
     for (const auto& result : _results) {
         auto resultItem = new QStandardItem;
@@ -120,10 +129,10 @@ void ComplianceCheckResultView::setCheckResults(
             }
         }
 
-        d->checkingResultsModel->appendRow(resultItem);
+        d->checkResultsModel->appendRow(resultItem);
     }
 
-    setCurrentWidget(d->checkingResultsPage);
+    setCurrentWidget(d->checkResultsPage);
 }
 
 void ComplianceCheckResultView::updateTranslations()
@@ -136,8 +145,8 @@ void ComplianceCheckResultView::designSystemChangeEvent(DesignSystemChangeEvent*
 
     setBackgroundColor(Ui::DesignSystem::color().primary());
     d->emptyPage->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->checkingResultsPage->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->checkingResultsPage->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->checkResultsPage->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->checkResultsPage->setTextColor(Ui::DesignSystem::color().onPrimary());
 }
 
 } // namespace Ui

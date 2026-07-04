@@ -3,6 +3,7 @@
 #include "include/custom_events.h"
 #include "project_models_facade.h"
 
+#include <business_layer/compliance/compliance_checker.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/base/title_page_model.h>
@@ -24,7 +25,6 @@
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/model/worlds/world_model.h>
 #include <business_layer/model/worlds/worlds_model.h>
-#include <business_layer/rules/compliance_checker.h>
 #include <business_layer/templates/text_template.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/document_change_storage.h>

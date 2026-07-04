@@ -1774,6 +1774,33 @@ QModelIndex TextModel::indexForItem(TextModelItem* _item) const
     return index(row, 0, parent);
 }
 
+QModelIndex TextModel::indexForUuid(const QUuid& _uuid) const
+{
+    std::function<QModelIndex(TextModelItem*)> searchItem;
+    searchItem = [this, _uuid, &searchItem](TextModelItem* _item) {
+        for (int index = 0; index < _item->childCount(); ++index) {
+            const auto child = _item->childAt(index);
+            //
+            // TODO: поиск по другим элементам
+            //
+            if (child->type() == TextModelItemType::Group) {
+                const auto group = static_cast<TextModelGroupItem*>(child);
+                if (group->uuid() == _uuid) {
+                    return indexForItem(group);
+                }
+
+                const auto childIndex = searchItem(child);
+                if (childIndex.isValid()) {
+                    return childIndex;
+                }
+            }
+        }
+
+        return QModelIndex();
+    };
+    return searchItem(d->rootItem);
+}
+
 void TextModel::setTitlePageModel(SimpleTextModel* _model)
 {
     d->titlePageModel = _model;

@@ -25,6 +25,12 @@ public:
      */
     void setCheckResults(const QVector<BusinessLayer::ComplianceCheckResult>& _results);
 
+signals:
+    /**
+     * @brief Пользователь выбрал сцену с заданным идентификатором
+     */
+    void sceneSelected(const QUuid& _sceneUuid);
+
 protected:
     /**
      * @brief Обновить переводы

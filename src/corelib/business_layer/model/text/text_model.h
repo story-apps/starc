@@ -127,6 +127,14 @@ public:
     QModelIndex indexForItem(TextModelItem* _item) const;
 
     /**
+     * @brief Получить индекс по идентификатору
+     * @note В некоторых кейсах, мы не можем получить прямой доступ к модели и её индексам,
+     *       например, когда работаем с моделью из отдельного потока, поэтому используем индексы
+     *       элементов
+     */
+    QModelIndex indexForUuid(const QUuid& _uuid) const;
+
+    /**
      * @brief Задать модель титульной страницы
      */
     void setTitlePageModel(SimpleTextModel* _model);
