@@ -46,6 +46,11 @@ public:
 
     QColor textEditor;
     QColor onTextEditor;
+
+    QColor success;
+    QColor warning;
+    QColor onSuccess;
+    QColor onWarning;
 };
 
 DesignSystem::Color::Implementation::Implementation()
@@ -66,6 +71,11 @@ DesignSystem::Color::Implementation::Implementation()
 
     textEditor = background;
     onTextEditor = onBackground;
+
+    success = QColor("#01B278");
+    warning = QColor("#F3BC2F");
+    onSuccess = onError;
+    onWarning = onError;
 }
 
 
@@ -105,6 +115,13 @@ DesignSystem::Color::Color(const QString& _color)
     setOnShadow(nextColor());
     setTextEditor(nextColor());
     setOnTextEditor(nextColor());
+    if (startIndex >= _color.length()) {
+        return;
+    }
+    setSuccess(nextColor());
+    setWarning(nextColor());
+    setOnSuccess(nextColor());
+    setOnWarning(nextColor());
 }
 
 DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _rhs)
@@ -134,6 +151,10 @@ QString DesignSystem::Color::toString() const
     colorsString += d->onShadow.name();
     colorsString += d->textEditor.name();
     colorsString += d->onTextEditor.name();
+    colorsString += d->success.name();
+    colorsString += d->warning.name();
+    colorsString += d->onSuccess.name();
+    colorsString += d->onWarning.name();
     return colorsString.remove('#');
 }
 
@@ -207,6 +228,26 @@ const QColor& DesignSystem::Color::textEditor() const
 const QColor& DesignSystem::Color::onTextEditor() const
 {
     return d->onTextEditor;
+}
+
+const QColor& DesignSystem::Color::success() const
+{
+    return d->success;
+}
+
+const QColor& DesignSystem::Color::warning() const
+{
+    return d->warning;
+}
+
+const QColor& DesignSystem::Color::onSuccess() const
+{
+    return d->onSuccess;
+}
+
+const QColor& DesignSystem::Color::onWarning() const
+{
+    return d->onWarning;
 }
 
 void DesignSystem::Color::setPrimary(const QColor& _color)
@@ -286,6 +327,26 @@ void DesignSystem::Color::setTextEditor(const QColor& _color)
 void DesignSystem::Color::setOnTextEditor(const QColor& _color)
 {
     d->onTextEditor = _color;
+}
+
+void DesignSystem::Color::setSuccess(const QColor& _color)
+{
+    d->success = _color;
+}
+
+void DesignSystem::Color::setWarning(const QColor& _color)
+{
+    d->warning = _color;
+}
+
+void DesignSystem::Color::setOnSuccess(const QColor& _color)
+{
+    d->onSuccess = _color;
+}
+
+void DesignSystem::Color::setOnWarning(const QColor& _color)
+{
+    d->onWarning = _color;
 }
 
 DesignSystem::Color::Color()
