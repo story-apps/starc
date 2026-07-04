@@ -8,7 +8,8 @@ class QUuid;
 
 namespace BusinessLayer {
 class AbstractModel;
-}
+struct ComplianceRule;
+} // namespace BusinessLayer
 
 namespace Domain {
 struct CursorInfo;
@@ -137,6 +138,13 @@ public:
     void reconfigureStageplayNavigator() const;
     void reconfigureNovelEditor(const QStringList& _changedSettingsKeys) const;
     void reconfigureNovelNavigator() const;
+
+    /**
+     * @brief Задать информацию о проекте в плагин
+     */
+    void setProjectInfo(bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject,
+                        bool _canBeSentForChecking,
+                        const QVector<BusinessLayer::ComplianceRule>& _complianceRules) const;
 
     /**
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы

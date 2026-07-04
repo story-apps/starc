@@ -19,8 +19,9 @@ public:
      */
     /** @{ */
     QWidget* asQWidget() override;
-    virtual void setProjectInfo(bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject,
-                                bool _canBeSentForChecking) override;
+    void setProjectInfo(bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject,
+                        bool _canBeSentForChecking,
+                        const QVector<BusinessLayer::ComplianceRule>& _complanceRules) override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     /** @} */
 

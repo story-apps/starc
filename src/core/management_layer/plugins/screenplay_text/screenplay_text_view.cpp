@@ -4,6 +4,7 @@
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
 #include "text/screenplay_text_scrollbar_manager.h"
+#include "ui/compliance_check_result_view.h"
 #include "ui/dictionaries_view.h"
 
 #include <business_layer/document/text/text_block_data.h>
@@ -68,6 +69,7 @@ enum {
     kAiAssistantTabIndex,
     kBookmarksTabIndex,
     kDictionariesTabIndex,
+    kComplianceCheckResultTabIndex,
 };
 
 const QString kSettingsKey = "screenplay-text";
@@ -81,6 +83,8 @@ const QString kIsItemIsolationEnabledKey = kSettingsKey + "/is-item-isolation-en
 const QString kIsSceneParametersVisibleKey = kSettingsKey + "/is-scene-parameters-visible";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kIsDictionariesVisibleKey = kSettingsKey + "/is-dictionaries-visible";
+const QString kIsComplianceCheckResultVisibleKey
+    = kSettingsKey + "/is-compliance-check-result-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
 
@@ -191,6 +195,7 @@ public:
     AiAssistantView* aiAssistantView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     DictionariesView* dictionariesView = nullptr;
+    ComplianceCheckResultView* complianceCheckResultView = nullptr;
     //
     Splitter* splitter = nullptr;
 
@@ -200,6 +205,7 @@ public:
     QAction* showSceneParametersAction = nullptr;
     QAction* showBookmarksAction = nullptr;
     QAction* showDictionariesAction = nullptr;
+    QAction* showComplianceCheckResultAction = nullptr;
 
     /**
      * @brief Группируем события об изменении положения курсора, чтобы сильно не спамить сервер
@@ -229,10 +235,12 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , aiAssistantView(new AiAssistantView(_q))
     , bookmarksView(new BookmarksView(_q))
     , dictionariesView(new DictionariesView(_q))
+    , complianceCheckResultView(new ComplianceCheckResultView(_q))
     , splitter(new Splitter(_q))
     , showSceneParametersAction(new QAction(_q))
     , showBookmarksAction(new QAction(_q))
     , showDictionariesAction(new QAction(_q))
+    , showComplianceCheckResultAction(new QAction(_q))
     , cursorChangeNotificationsDebounser(500)
 
 {
@@ -241,6 +249,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
         showSceneParametersAction,
         showBookmarksAction,
         showDictionariesAction,
+        showComplianceCheckResultAction,
     });
 
     commentsToolbar->hide();
@@ -267,6 +276,8 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarTabs->addTab({}); // dictionaries
     sidebarTabs->setTabVisible(kDictionariesTabIndex, false);
+    sidebarTabs->addTab({}); // compliance checking
+    sidebarTabs->setTabVisible(kComplianceCheckResultTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
@@ -275,6 +286,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     sidebarContent->addWidget(aiAssistantView);
     sidebarContent->addWidget(bookmarksView);
     sidebarContent->addWidget(dictionariesView);
+    sidebarContent->addWidget(complianceCheckResultView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     itemParametersView->setStartDateTimeVisible(false);
@@ -288,6 +300,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
     dictionariesView->hide();
+    complianceCheckResultView->hide();
 
     showSceneParametersAction->setCheckable(true);
     showSceneParametersAction->setIconText(u8"\U000F1A7D");
@@ -295,6 +308,8 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     showBookmarksAction->setIconText(u8"\U000F0E16");
     showDictionariesAction->setCheckable(true);
     showDictionariesAction->setIconText(u8"\U000F0EBF");
+    showComplianceCheckResultAction->setCheckable(true);
+    showComplianceCheckResultAction->setIconText(u8"\U000F05C7");
 }
 
 void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -387,6 +402,9 @@ void ScreenplayTextView::Implementation::updateOptionsTranslations()
     showDictionariesAction->setText(showDictionariesAction->isChecked()
                                         ? tr("Hide screenplay dictionaries")
                                         : tr("Show screenplay dictionaries"));
+    showComplianceCheckResultAction->setText(showComplianceCheckResultAction->isChecked()
+                                                 ? tr("Hide compliance check results")
+                                                 : tr("Show compliance check results"));
 }
 
 void ScreenplayTextView::Implementation::updateToolbarUi()
@@ -603,7 +621,7 @@ void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _conta
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
         || toolbar->isCommentsModeEnabled() || toolbar->isAiAssistantEnabled()
         || showSceneParametersAction->isChecked() || showBookmarksAction->isChecked()
-        || showDictionariesAction->isChecked();
+        || showDictionariesAction->isChecked() || showComplianceCheckResultAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -1018,6 +1036,11 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 
         case kDictionariesTabIndex: {
             d->sidebarContent->setCurrentWidget(d->dictionariesView);
+            break;
+        }
+
+        case kComplianceCheckResultTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->complianceCheckResultView);
             break;
         }
         }
@@ -1438,6 +1461,17 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->updateSideBarVisibility(this);
     });
     //
+    connect(d->showComplianceCheckResultAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsTranslations();
+        d->sidebarTabs->setTabVisible(kComplianceCheckResultTabIndex, _checked);
+        d->complianceCheckResultView->setVisible(_checked);
+        if (_checked) {
+            d->sidebarTabs->setCurrentTab(kComplianceCheckResultTabIndex);
+            d->sidebarContent->setCurrentWidget(d->complianceCheckResultView);
+        }
+        d->updateSideBarVisibility(this);
+    });
+    //
     connect(&d->cursorChangeNotificationsDebounser, &Debouncer::gotWork, this, [this] {
         emit cursorChanged(QString::number(d->textEdit->textCursor().position()).toUtf8());
     });
@@ -1689,6 +1723,24 @@ DictionariesView* ScreenplayTextView::dictionariesView() const
     return d->dictionariesView;
 }
 
+void ScreenplayTextView::setComplianceCheckResultAvailable(bool _available)
+{
+    //
+    // Если недоступно, то форсируем скрытие панели с проверками
+    //
+    if (!_available) {
+        d->showComplianceCheckResultAction->setChecked(false);
+        d->updateSideBarVisibility(this);
+    }
+
+    d->showComplianceCheckResultAction->setVisible(_available);
+}
+
+ComplianceCheckResultView* ScreenplayTextView::complianceCheckResultView() const
+{
+    return d->complianceCheckResultView;
+}
+
 void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
@@ -1796,6 +1848,9 @@ void ScreenplayTextView::loadViewSettings()
     d->showBookmarksAction->setChecked(isBookmarksListVisible);
     const auto isDictionariesVisible = settingsValue(kIsDictionariesVisibleKey, false).toBool();
     d->showDictionariesAction->setChecked(isDictionariesVisible);
+    const auto isComplianceCheckResultVisible
+        = settingsValue(kIsComplianceCheckResultVisibleKey, false).toBool();
+    d->showComplianceCheckResultAction->setChecked(isComplianceCheckResultVisible);
     const auto sidebarPanelIndex = settingsValue(kSidebarPanelIndexKey, 0).toInt();
     d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
@@ -1817,6 +1872,8 @@ void ScreenplayTextView::saveViewSettings()
     setSettingsValue(kIsSceneParametersVisibleKey, d->showSceneParametersAction->isChecked());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kIsDictionariesVisibleKey, d->showDictionariesAction->isChecked());
+    setSettingsValue(kIsComplianceCheckResultVisibleKey,
+                     d->showComplianceCheckResultAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 
     setSettingsValue(kSidebarStateKey, d->splitter->saveState());
@@ -1985,6 +2042,7 @@ void ScreenplayTextView::updateTranslations()
     d->sidebarTabs->setTabName(kAiAssistantTabIndex, tr("AI assistant"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
     d->sidebarTabs->setTabName(kDictionariesTabIndex, tr("Dictionaries"));
+    d->sidebarTabs->setTabName(kComplianceCheckResultTabIndex, tr("Checklist"));
 
     d->aiAssistantView->setGenerationPromptHint(
         tr("Start prompt from something like \"Write a screenplay about ...\", or \"Write a short "

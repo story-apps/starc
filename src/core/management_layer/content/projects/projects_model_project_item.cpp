@@ -1,5 +1,6 @@
 #include "projects_model_project_item.h"
 
+#include <business_layer/compliance/compliance_checker.h>
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <utils/helpers/image_helper.h>
@@ -319,6 +320,16 @@ void ProjectsModelProjectItem::setCollaborators(
     const QVector<Domain::ProjectCollaboratorInfo>& _collaborators)
 {
     d->collaborators = _collaborators;
+}
+
+QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
+{
+    return {};
+}
+
+void ProjectsModelProjectItem::setComplianceRules(const QVector<ComplianceRule>& _complianceRules)
+{
+    Q_UNUSED(_complianceRules)
 }
 
 bool operator==(const ProjectsModelProjectItem& _lhs, const ProjectsModelProjectItem& _rhs)

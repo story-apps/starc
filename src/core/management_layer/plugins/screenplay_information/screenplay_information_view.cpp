@@ -193,13 +193,14 @@ QWidget* ScreenplayInformationView::asQWidget()
     return this;
 }
 
-void ScreenplayInformationView::setProjectInfo(bool _isRemote, bool _isOwner,
-                                               bool _allowGrantAccessToProject,
-                                               bool _canBeSentForChecking)
+void ScreenplayInformationView::setProjectInfo(
+    bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject, bool _canBeSentForChecking,
+    const QVector<BusinessLayer::ComplianceRule>& _complanceRules)
 {
     Q_UNUSED(_isRemote)
     Q_UNUSED(_isOwner)
     Q_UNUSED(_allowGrantAccessToProject)
+    Q_UNUSED(_complanceRules)
 
     d->checkingInfo->setVisible(_canBeSentForChecking);
 }

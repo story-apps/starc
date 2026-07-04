@@ -24,6 +24,7 @@
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/model/worlds/world_model.h>
 #include <business_layer/model/worlds/worlds_model.h>
+#include <business_layer/rules/compliance_checker.h>
 #include <business_layer/templates/text_template.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/document_change_storage.h>
@@ -471,6 +472,11 @@ public:
      * @brief Включён ли режим отправки документов на проверку в текущем проекте
      */
     bool isReviewEnabled = false;
+
+    /**
+     * @brief Правила проверки для текущего проекта
+     */
+    QVector<BusinessLayer::ComplianceRule> projectComplianceRules;
 
     /**
      * @brief Текущий режим редактирования документов
@@ -3704,6 +3710,7 @@ void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectIte
     d->allowGrantAccessToProject
         = d->isProjectOwner || (projectTeam != nullptr && projectTeam->allowGrantAccessToProject());
     d->isReviewEnabled = _project->isReviewEnabled();
+    d->projectComplianceRules = _project->complianceRules();
     d->editingMode = _project->editingMode();
     d->editingPermissions = _project->editingPermissions();
     d->pluginsBuilder.setEditingPermissions(d->editingPermissions);
@@ -5550,8 +5557,9 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     Log::trace("Set project info");
     const bool canBeSentForChecking
         = d->isReviewEnabled && d->editingPermissions.contains(itemForShow->uuid());
-    view->setProjectInfo(d->isProjectRemote, d->isProjectOwner, d->allowGrantAccessToProject,
-                         canBeSentForChecking);
+    d->pluginsBuilder.setProjectInfo(d->isProjectRemote, d->isProjectOwner,
+                                     d->allowGrantAccessToProject, canBeSentForChecking,
+                                     d->projectComplianceRules);
     Log::trace("Set editing mode");
     view->setEditingMode(d->documentEditingMode(itemForShow));
     Log::trace("Set view cursors");

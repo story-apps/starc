@@ -17,6 +17,8 @@ enum class DocumentEditingMode;
 
 namespace BusinessLayer {
 
+struct ComplianceRule;
+
 /**
  * @brief Тип проекта
  */
@@ -157,6 +159,12 @@ public:
      */
     QVector<Domain::ProjectCollaboratorInfo> collaborators() const;
     void setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
+
+    /**
+     * @brief Список правил для проверки требований к документам
+     */
+    QVector<BusinessLayer::ComplianceRule> complianceRules() const;
+    void setComplianceRules(const QVector<BusinessLayer::ComplianceRule>& _complianceRules);
 
 private:
     class Implementation;

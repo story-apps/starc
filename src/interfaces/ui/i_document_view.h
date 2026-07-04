@@ -7,6 +7,10 @@ class QModelIndex;
 class QPixmap;
 class QWidget;
 
+namespace BusinessLayer {
+struct ComplianceRule;
+}
+
 namespace Domain {
 struct CursorInfo;
 }
@@ -49,7 +53,8 @@ public:
      * @brief Задать параметры проекта
      */
     virtual void setProjectInfo(bool /*_isRemote*/, bool /*_isOwner*/,
-                                bool /*_allowGrantAccessToProject*/, bool /*_canBeSentForChecking*/)
+                                bool /*_allowGrantAccessToProject*/, bool /*_canBeSentForChecking*/,
+                                const QVector<BusinessLayer::ComplianceRule>& /*_complianceRules*/)
     {
     }
 

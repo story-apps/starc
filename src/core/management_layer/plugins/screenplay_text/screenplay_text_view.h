@@ -10,6 +10,7 @@ class ScreenplayTextModel;
 
 namespace Ui {
 class DictionariesView;
+class ComplianceCheckResultView;
 
 /**
  * @brief Представление редактора документа сценария
@@ -48,6 +49,16 @@ public:
      * @brief Представление редактора справочников
      */
     DictionariesView* dictionariesView() const;
+
+    /**
+     * @brief Задать возможность отобаржения списка проверок
+     */
+    void setComplianceCheckResultAvailable(bool _available);
+
+    /**
+     * @brief Представление чеклиста проверки требований к сценарию
+     */
+    ComplianceCheckResultView* complianceCheckResultView() const;
 
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках

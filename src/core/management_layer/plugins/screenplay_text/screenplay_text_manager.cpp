@@ -1,8 +1,12 @@
 #include "screenplay_text_manager.h"
 
 #include "screenplay_text_view.h"
+#include "ui/compliance_check_result_view.h"
+#include "ui/dictionaries_view.h"
 
+#include <business_layer/compliance/compliance_checker.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
@@ -10,7 +14,6 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
-#include <ui/dictionaries_view.h>
 #include <ui/modules/bookmarks/bookmark_dialog.h>
 #include <utils/logging.h>
 
@@ -94,6 +97,11 @@ public:
     QStringListModel* dictionaryItemsModel = nullptr;
 
     /**
+     * @brief Проверяльщик требований к сценариям в проекте
+     */
+    BusinessLayer::ComplianceChecker* complianceChecker = nullptr;
+
+    /**
      * @brief Предаставление для основного окна
      */
     Ui::ScreenplayTextView* view = nullptr;
@@ -111,9 +119,10 @@ public:
 
 ScreenplayTextManager::Implementation::Implementation(ScreenplayTextManager* _q)
     : q(_q)
+    , dictionariesTypesModel(new QStringListModel(q))
+    , dictionaryItemsModel(new QStringListModel(q))
+    , complianceChecker(new BusinessLayer::ComplianceChecker(q))
 {
-    dictionariesTypesModel = new QStringListModel(view);
-    dictionaryItemsModel = new QStringListModel(view);
 }
 
 Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
@@ -438,6 +447,9 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
                 }
                 }
             });
+    //
+    connect(complianceChecker, &BusinessLayer::ComplianceChecker::checkingFinished,
+            view->complianceCheckResultView(), &Ui::ComplianceCheckResultView::setCheckResults);
 
 
     updateTranslations();
@@ -511,6 +523,15 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
         loadModelAndViewSettings(model, _view);
         updateDictionaryItemsList(kSceneIntrosIndex, _view);
         //
+        // ... выполним проверку требований
+        //
+        auto restartComplianceCheck = [this, model] {
+            complianceChecker->setScreenplay(model->informationModel()->document()->content(),
+                                             model->document()->content());
+            complianceChecker->startChecking();
+        };
+        restartComplianceCheck();
+        //
         // ... настраиваем соединения
         //
         connect(model->dictionariesModel(),
@@ -542,6 +563,12 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
                         updateDictionaryItemsList(kTransitionIndex, _view);
                     }
                 });
+        //
+        connect(model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::contentsChanged, complianceChecker,
+                restartComplianceCheck);
+        connect(model, &BusinessLayer::ScreenplayTextModel::contentsChanged, complianceChecker,
+                restartComplianceCheck);
     }
 
     Log::info("Model for view set");
@@ -745,6 +772,26 @@ void ScreenplayTextManager::saveSettings()
         }
 
         d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+    }
+}
+
+void ScreenplayTextManager::setProjectInfo(
+    bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject, bool _canBeSentForChecking,
+    const QVector<BusinessLayer::ComplianceRule>& _complianceRules)
+{
+    Q_UNUSED(_isRemote)
+    Q_UNUSED(_isOwner)
+    Q_UNUSED(_allowGrantAccessToProject)
+    Q_UNUSED(_canBeSentForChecking)
+
+    d->complianceChecker->setRules(_complianceRules);
+
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setComplianceCheckResultAvailable(!_complianceRules.isEmpty());
     }
 }
 

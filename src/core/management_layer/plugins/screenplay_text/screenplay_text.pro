@@ -31,6 +31,7 @@ DEPENDPATH += $$PWD/../../../../corelib
 #
 
 HEADERS += \
+    business_layer/compliance_check_result_model.h \
     screenplay_text_manager.h \
     screenplay_text_view.h \
     text/handlers/abstract_key_handler.h \
@@ -59,6 +60,8 @@ HEADERS += \
     text/screenplay_text_edit_shortcuts_manager.h \
     text/screenplay_text_edit_toolbar.h \
     text/screenplay_text_scrollbar_manager.h \
+    ui/compliance_check_result_delegate.h \
+    ui/compliance_check_result_view.h \
     ui/dictionaries_view.h
 
 SOURCES += \
@@ -89,6 +92,8 @@ SOURCES += \
     text/screenplay_text_edit_shortcuts_manager.cpp \
     text/screenplay_text_edit_toolbar.cpp \
     text/screenplay_text_scrollbar_manager.cpp \
+    ui/compliance_check_result_delegate.cpp \
+    ui/compliance_check_result_view.cpp \
     ui/dictionaries_view.cpp
 
 mac {

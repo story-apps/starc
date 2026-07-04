@@ -175,6 +175,8 @@ DEPENDPATH += $$PWD/../3rd_party/pdfhummus/LibTiff
 
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
+    business_layer/compliance/compliance_checker.cpp \
+    business_layer/compliance/compliance_checker_impl.cpp \
     business_layer/document/audioplay/text/audioplay_text_corrector.cpp \
     business_layer/document/audioplay/text/audioplay_text_document.cpp \
     business_layer/document/comic_book/text/comic_book_text_corrector.cpp \
@@ -539,6 +541,8 @@ SOURCES += \
 
 HEADERS += \
     business_layer/chronometry/chronometer.h \
+    business_layer/compliance/compliance_checker.h \
+    business_layer/compliance/compliance_checker_impl.h \
     business_layer/document/audioplay/text/audioplay_text_corrector.h \
     business_layer/document/audioplay/text/audioplay_text_document.h \
     business_layer/document/comic_book/text/comic_book_text_corrector.h \

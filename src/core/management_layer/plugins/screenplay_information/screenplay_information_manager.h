@@ -33,6 +33,9 @@ public:
     Ui::IDocumentView* secondaryView(BusinessLayer::AbstractModel* _model) override;
     Ui::IDocumentView* createView(BusinessLayer::AbstractModel* _model) override;
     void resetModels() override;
+    void setProjectInfo(bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject,
+                        bool _canBeSentForChecking,
+                        const QVector<BusinessLayer::ComplianceRule>& _complianceRules) override;
     void setEditingMode(DocumentEditingMode _mode) override;
     /** @} */
 

@@ -6,6 +6,10 @@
 
 #include <QObject>
 
+namespace BusinessLayer {
+struct ComplianceRule;
+}
+
 namespace Domain {
 enum class DocumentObjectType;
 }
@@ -40,6 +44,9 @@ public:
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
     void saveSettings() override;
+    void setProjectInfo(bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject,
+                        bool _canBeSentForChecking,
+                        const QVector<BusinessLayer::ComplianceRule>& _complianceRules) override;
     void setEditingMode(DocumentEditingMode _mode) override;
     void setAvailableCredits(int _credits) override;
     /** @} */

@@ -222,6 +222,20 @@ void ScreenplayInformationManager::resetModels()
     }
 }
 
+void ScreenplayInformationManager::setProjectInfo(
+    bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject, bool _canBeSentForChecking,
+    const QVector<BusinessLayer::ComplianceRule>& _complianceRules)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setProjectInfo(_isRemote, _isOwner, _allowGrantAccessToProject,
+                                          _canBeSentForChecking, _complianceRules);
+    }
+}
+
 void ScreenplayInformationManager::setEditingMode(DocumentEditingMode _mode)
 {
     for (auto& viewAndModel : d->allViews) {

@@ -1108,6 +1108,16 @@ void PluginsBuilder::reconfigureNovelNavigator() const
     reconfigurePlugin(kNovelTextNavigatorMime, {});
 }
 
+void PluginsBuilder::setProjectInfo(
+    bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject, bool _canBeSentForChecking,
+    const QVector<BusinessLayer::ComplianceRule>& _complianceRules) const
+{
+    for (auto plugin : std::as_const(d->plugins)) {
+        plugin->setProjectInfo(_isRemote, _isOwner, _allowGrantAccessToProject,
+                               _canBeSentForChecking, _complianceRules);
+    }
+}
+
 void PluginsBuilder::checkAvailabilityToEdit(bool _projectInTeam) const
 {
     d->isProjectInTeam = _projectInTeam;

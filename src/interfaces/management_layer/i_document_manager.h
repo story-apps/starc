@@ -5,7 +5,8 @@
 
 namespace BusinessLayer {
 class AbstractModel;
-}
+struct ComplianceRule;
+} // namespace BusinessLayer
 
 namespace Ui {
 class IDocumentView;
@@ -95,6 +96,15 @@ public:
      * @brief Сохранить параметры плагина
      */
     virtual void saveSettings()
+    {
+    }
+
+    /**
+     * @brief Задать параметры проекта
+     */
+    virtual void setProjectInfo(bool /*_isRemote*/, bool /*_isOwner*/,
+                                bool /*_allowGrantAccessToProject*/, bool /*_canBeSentForChecking*/,
+                                const QVector<BusinessLayer::ComplianceRule>& /*_complianceRules*/)
     {
     }
 
