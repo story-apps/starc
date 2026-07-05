@@ -1,8 +1,6 @@
 #pragma once
 
-#include <QObject>
-
-#include <corelib_global.h>
+#include "compliance_checker.h"
 
 
 namespace BusinessLayer {
@@ -13,7 +11,7 @@ struct ComplianceCheckResult;
 /**
  * @brief Проверялка для правил соответствия требованиям к сценариям
  */
-class CORE_LIBRARY_EXPORT ComplianceCheckerImpl : public QObject
+class ComplianceCheckerImpl : public QObject
 {
     Q_OBJECT
 

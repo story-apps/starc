@@ -1,7 +1,5 @@
 #include "compliance_checker_impl.h"
 
-#include "compliance_checker.h"
-
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
