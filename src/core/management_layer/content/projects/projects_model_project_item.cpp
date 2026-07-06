@@ -335,7 +335,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
             { BusinessLayer::ComplianceRuleType::CharacterShouldSpeakInEveryScene,
               {},
               {},
-              "Люба, Гриша, Максим" },
+              "Любовь, Гриша, Максим" },
         };
     }
 

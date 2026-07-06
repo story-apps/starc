@@ -68,18 +68,3 @@ win32-msvc* {
     before_build.depends = FORCE
     before_build.commands = chcp 1251
 }
-
-macx {
-    #
-    # Удляем AGL из сборки, т.к. больше не актуально для новых macOS и старых Qt
-    #
-    QMAKE_LIBS_OPENGL = -framework OpenGL
-    QMAKE_LIBS_OPENGL -= -framework AGL
-    LIBS -= -framework AGL
-
-    #
-    # Форсим добавление хидера для новых macOS
-    #
-    QMAKE_CFLAGS += -include arm_acle.h
-    QMAKE_CXXFLAGS += -include arm_acle.h
-}

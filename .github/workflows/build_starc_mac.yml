@@ -16,7 +16,7 @@ on:
 jobs:
   build_mac_qt5:
     name: Build Mac OS X version with qt5
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     timeout-minutes: 120
     steps:
       - name: Checkout sources for push or create tag event
@@ -99,7 +99,7 @@ jobs:
 
   build_mac_qt6:
     name: Build Mac OS X version with qt6
-    runs-on: macos-latest
+    runs-on: macos-15
     timeout-minutes: 120
     steps:
       - name: Checkout sources for push or create tag event
