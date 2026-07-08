@@ -174,68 +174,30 @@ TextModelItem* TextDocument::Implementation::itemFor(const TextCursor& _cursor) 
 void TextDocument::Implementation::correctPositionsToItems(
     std::map<int, TextModelItem*>::iterator _from, int _distance)
 {
-    //
-    // В режиме отладки на Windows тут происходит инвалидация итератора, когда обновляем элементы за
-    // один цикл. Спишем это на баг компилятора и будем обновлять элементы более безопасно.
-    //
-#if defined(Q_OS_WIN) && defined(QT_DEBUG)
-
-    if (_from == positionsToItems.end()) {
+    if (_from == positionsToItems.end() || _distance == 0) {
         return;
     }
 
     //
-    // Собираем элементы, которые нужно обновить
+    // Сначала атомарно вынимаем весь изменяемый хвост, корректируем ключи
     //
-    std::vector<std::pair<int, TextModelItem*>> updates;
-    if (_distance > 0) {
-        for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
-             ++iter) {
-            updates.emplace_back(iter->first + _distance, iter->second);
-        }
-    } else if (_distance < 0) {
-        for (auto iter = _from; iter != positionsToItems.end(); ++iter) {
-            updates.emplace_back(iter->first + _distance, iter->second);
-        }
+    std::vector<decltype(positionsToItems)::node_type> correctedItems;
+    correctedItems.reserve(std::distance(_from, positionsToItems.end()));
+    while (_from != positionsToItems.end()) {
+        const auto itemToCorrect = _from++;
+        auto item = positionsToItems.extract(itemToCorrect);
+        item.key() += _distance;
+        correctedItems.emplace_back(std::move(item));
     }
-
     //
-    // Удаляем старые ключи
+    // ... а потом возвращаем элементы обратно
     //
-    for (const auto& [newKey, _] : updates) {
-        const auto oldKey = newKey - _distance;
-        positionsToItems.erase(oldKey);
+    for (auto& item : correctedItems) {
+        const auto insertionResult = positionsToItems.insert(std::move(item));
+        Q_ASSERT_X(insertionResult.inserted,
+                   "TextDocument::Implementation::correctPositionsToItems",
+                   "Position correction produced duplicate item positions");
     }
-
-    //
-    // Вставляем обновлённые элементы
-    //
-    for (const auto& [newKey, value] : updates) {
-        positionsToItems.emplace(newKey, value);
-    }
-#else
-    if (_from == positionsToItems.end()) {
-        return;
-    }
-
-    if (_distance > 0) {
-        auto reversed = [](std::map<int, TextModelItem*>::iterator iter) {
-            return std::prev(std::make_reverse_iterator(iter));
-        };
-        for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
-             ++iter) {
-            auto itemToUpdate = positionsToItems.extract(iter->first);
-            itemToUpdate.key() = itemToUpdate.key() + _distance;
-            iter = reversed(positionsToItems.insert(std::move(itemToUpdate)).position);
-        }
-    } else if (_distance < 0) {
-        for (auto iter = _from; iter != positionsToItems.end(); ++iter) {
-            auto itemToUpdate = positionsToItems.extract(iter->first);
-            itemToUpdate.key() = itemToUpdate.key() + _distance;
-            iter = positionsToItems.insert(std::move(itemToUpdate)).position;
-        }
-    }
-#endif
 }
 
 void TextDocument::Implementation::correctPositionsToItems(int _fromPosition, int _distance)
