@@ -59,8 +59,25 @@ public:
     Implementation(ComplianceChecker* _q);
     ~Implementation();
 
+    /**
+     * @brief Запустить проверяющего, если он не запущен
+     */
+    void startChecker();
+
+    /**
+     * @brief Остановить проверяющего
+     */
+    void stopChecker();
+
 
     ComplianceChecker* q = nullptr;
+
+    //
+    // Держим кэш данных для проверки, чтобы не запускать проверки лишний раз, если нет правил
+    //
+    QByteArray information;
+    QByteArray screenplay;
+    QVector<ComplianceRule> rules;
 
     BusinessLayer::ComplianceCheckerImpl* checker = nullptr;
     QThread* checkerThread = nullptr;
@@ -68,17 +85,51 @@ public:
 
 ComplianceChecker::Implementation::Implementation(ComplianceChecker* _q)
     : q(_q)
-    , checker(new BusinessLayer::ComplianceCheckerImpl)
     , checkerThread(new QThread(q))
 {
-    checker->moveToThread(checkerThread);
-    connect(checkerThread, &QThread::started, checker, &ComplianceCheckerImpl::init);
-    connect(checkerThread, &QThread::finished, checker, &QObject::deleteLater);
-    checkerThread->start();
 }
 
 ComplianceChecker::Implementation::~Implementation()
 {
+    stopChecker();
+}
+
+void ComplianceChecker::Implementation::startChecker()
+{
+    if (checkerThread->isRunning()) {
+        return;
+    }
+
+    if (rules.isEmpty()) {
+        return;
+    }
+
+    checker = new BusinessLayer::ComplianceCheckerImpl;
+    checker->moveToThread(checkerThread);
+    connect(checkerThread, &QThread::started, checker, &ComplianceCheckerImpl::init);
+    connect(checkerThread, &QThread::started, q, [this] {
+        QMetaObject::invokeMethod(q, [this] {
+            checker->setScreenplay(information, screenplay);
+            checker->setRules(rules);
+            checker->startChecking();
+        });
+    });
+    connect(checkerThread, &QThread::finished, checker, [this] {
+        delete checker;
+        checker = nullptr;
+    });
+    checkerThread->start();
+
+    connect(checker, &ComplianceCheckerImpl::checkingFinished, q,
+            &ComplianceChecker::checkingFinished);
+}
+
+void ComplianceChecker::Implementation::stopChecker()
+{
+    if (checkerThread->isFinished()) {
+        return;
+    }
+
     checkerThread->quit();
     checkerThread->wait();
 }
@@ -91,27 +142,42 @@ ComplianceChecker::ComplianceChecker(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation(this))
 {
-    connect(d->checker, &ComplianceCheckerImpl::checkingFinished, this,
-            &ComplianceChecker::checkingFinished);
 }
 
 ComplianceChecker::~ComplianceChecker() = default;
 
 void ComplianceChecker::setScreenplay(const QByteArray& _information, const QByteArray& _screenplay)
 {
+    d->information = _information;
+    d->screenplay = _screenplay;
+
+    if (d->checker == nullptr) {
+        return;
+    }
+
     QMetaObject::invokeMethod(this, [this, _information, _screenplay] {
         d->checker->setScreenplay(_information, _screenplay);
+        d->checker->startChecking();
     });
 }
 
 void ComplianceChecker::setRules(const QVector<ComplianceRule>& _rules)
 {
-    QMetaObject::invokeMethod(this, [this, _rules] { d->checker->setRules(_rules); });
-}
+    d->rules = _rules;
+    if (d->rules.isEmpty()) {
+        d->stopChecker();
+        return;
+    }
 
-void ComplianceChecker::startChecking()
-{
-    QMetaObject::invokeMethod(this, [this] { d->checker->startChecking(); });
+    if (d->checker == nullptr) {
+        d->startChecker();
+        return;
+    }
+
+    QMetaObject::invokeMethod(this, [this, _rules] {
+        d->checker->setRules(_rules);
+        d->checker->startChecking();
+    });
 }
 
 } // namespace BusinessLayer

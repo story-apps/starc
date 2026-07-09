@@ -528,7 +528,6 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
         auto restartComplianceCheck = [this, model] {
             complianceChecker->setScreenplay(model->informationModel()->document()->content(),
                                              model->document()->content());
-            complianceChecker->startChecking();
         };
         restartComplianceCheck();
         //
@@ -785,7 +784,6 @@ void ScreenplayTextManager::setProjectInfo(
     Q_UNUSED(_canBeSentForChecking)
 
     d->complianceChecker->setRules(_complianceRules);
-    d->complianceChecker->startChecking();
 
     for (auto& viewAndModel : d->allViews) {
         if (viewAndModel.view.isNull()) {

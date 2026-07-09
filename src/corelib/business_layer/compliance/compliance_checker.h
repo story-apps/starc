@@ -142,11 +142,6 @@ public:
      */
     void setRules(const QVector<ComplianceRule>& _rules);
 
-    /**
-     * @brief Запустить проверку
-     */
-    void startChecking();
-
 signals:
     /**
      * @brief Проверка закончена с указанными результатами
