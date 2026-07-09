@@ -1902,7 +1902,7 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
                                  QString::number(_cursor.blockFormat().rightMargin(), 'f', 2),
                                  _cursor.blockCharFormat().fontFamily(),
                                  QString::number(_cursor.blockCharFormat().font().pixelSize()),
-                                 _text)
+                                 _text.trimmed())
                             .toUtf8());
         };
 
