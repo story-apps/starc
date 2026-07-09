@@ -491,7 +491,6 @@ SOURCES += \
     ui/widgets/text_edit/spell_check/spell_check_highlighter.cpp \
     ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp \
     ui/widgets/text_edit/spell_check/spell_checker.cpp \
-    ui/widgets/text_edit/spell_check/syntax_highlighter.cpp \
     ui/widgets/text_field/text_field.cpp \
     ui/widgets/tree/tree.cpp \
     ui/widgets/tree/tree_delegate.cpp \
@@ -885,7 +884,6 @@ HEADERS += \
     ui/widgets/text_edit/spell_check/spell_check_highlighter.h \
     ui/widgets/text_edit/spell_check/spell_check_text_edit.h \
     ui/widgets/text_edit/spell_check/spell_checker.h \
-    ui/widgets/text_edit/spell_check/syntax_highlighter.h \
     ui/widgets/text_field/text_field.h \
     ui/widgets/tree/tree.h \
     ui/widgets/tree/tree_delegate.h \

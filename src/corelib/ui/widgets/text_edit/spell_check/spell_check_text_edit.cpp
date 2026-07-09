@@ -6,12 +6,14 @@
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
+#include <utils/tools/debouncer.h>
 
 #include <QApplication>
 #include <QContextMenuEvent>
 #include <QDir>
 #include <QMenu>
 #include <QRegularExpression>
+#include <QScrollBar>
 #include <QTimer>
 #include <QtGui/private/qtextdocument_p.h>
 
@@ -52,6 +54,11 @@ public:
      */
     QTextBlock previousBlockUnderCursor;
 
+    /**
+     * @brief Дебаунсер отложенной перепроверки видимой области при прокрутке
+     */
+    Debouncer visibleBlocksRehighlightDebouncer;
+
 private:
     /**
      * @brief Подсвечивающий орфографические ошибки
@@ -61,6 +68,7 @@ private:
 
 SpellCheckTextEdit::Implementation::Implementation()
     : spellChecker(SpellChecker::instance())
+    , visibleBlocksRehighlightDebouncer(150)
 {
 }
 
@@ -83,6 +91,12 @@ SpellCheckTextEdit::SpellCheckTextEdit(QWidget* _parent)
 {
     connect(this, &SpellCheckTextEdit::cursorPositionChanged, this,
             &SpellCheckTextEdit::rehighlighWithNewCursor);
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, this,
+            &SpellCheckTextEdit::scheduleVisibleBlocksRehighlight);
+    connect(horizontalScrollBar(), &QScrollBar::valueChanged, this,
+            &SpellCheckTextEdit::scheduleVisibleBlocksRehighlight);
+    connect(&d->visibleBlocksRehighlightDebouncer, &Debouncer::gotWork, this,
+            &SpellCheckTextEdit::rehighlightVisibleBlocks);
 }
 
 SpellCheckTextEdit::~SpellCheckTextEdit() = default;
@@ -103,6 +117,15 @@ void SpellCheckTextEdit::setSpellCheckPolicy(SpellCheckPolicy _policy)
 void SpellCheckTextEdit::setUseSpellChecker(bool _use)
 {
     d->spellCheckHighlighter(document())->setUseSpellChecker(_use);
+
+    if (!useSpellChecker()) {
+        return;
+    }
+
+    //
+    // Выполним проверку орфографии, если она была включена
+    //
+    rehighlightVisibleBlocks();
 }
 
 bool SpellCheckTextEdit::useSpellChecker() const
@@ -130,7 +153,7 @@ void SpellCheckTextEdit::setSpellCheckLanguage(const QString& _languageCode)
     //
     // Заново выделим слова не проходящие проверку орфографии вновь заданного языка
     //
-    d->spellCheckHighlighter(document())->rehighlight();
+    rehighlightVisibleBlocks();
 }
 
 void SpellCheckTextEdit::prepareToClear()
@@ -305,6 +328,13 @@ bool SpellCheckTextEdit::event(QEvent* _event)
     }
 }
 
+void SpellCheckTextEdit::resizeEvent(QResizeEvent* _event)
+{
+    PageTextEdit::resizeEvent(_event);
+
+    scheduleVisibleBlocksRehighlight();
+}
+
 void SpellCheckTextEdit::ignoreWord() const
 {
     //
@@ -331,7 +361,7 @@ void SpellCheckTextEdit::ignoreWord() const
     //
     // Уберём выделение с игнорируемых слов
     //
-    d->spellCheckHighlighter(document())->rehighlight();
+    rehighlightVisibleBlocks();
 }
 
 void SpellCheckTextEdit::addWordToUserDictionary() const
@@ -360,7 +390,7 @@ void SpellCheckTextEdit::addWordToUserDictionary() const
     //
     // Уберём выделение со слов добавленных в словарь
     //
-    d->spellCheckHighlighter(document())->rehighlight();
+    rehighlightVisibleBlocks();
 }
 
 void SpellCheckTextEdit::replaceWordOnSuggestion()
@@ -377,17 +407,17 @@ void SpellCheckTextEdit::replaceWordOnSuggestion()
         setTextCursor(cursor);
         cursor.endEditBlock();
 
-        //
-        // Немного магии. Мы хотим перепроверить блок, в котором изменили слово.
-        // Беда в том, что SpellCheckHighlighter не будет проверять слово в блоке,
-        // если оно сейчас редактировалось. Причем, эта проверка идет по позиции.
-        // А значит при проверке другого блока, слово на этой позиции не проверится.
-        // Поэтому, мы ему говорим, что слово не редактировалось, проверяй весь абзац
-        // а затем восстанавливаем в прежнее состояние
-        //
-        bool isEdited = d->spellCheckHighlighter(document())->isChanged();
+        // //
+        // // Немного магии. Мы хотим перепроверить блок, в котором изменили слово.
+        // // Беда в том, что SpellCheckHighlighter не будет проверять слово в блоке,
+        // // если оно сейчас редактировалось. Причем, эта проверка идет по позиции.
+        // // А значит при проверке другого блока, слово на этой позиции не проверится.
+        // // Поэтому, мы ему говорим, что слово не редактировалось, проверяй весь абзац
+        // // а затем восстанавливаем в прежнее состояние
+        // //
+        // bool isEdited = d->spellCheckHighlighter(document())->isChanged();
         d->spellCheckHighlighter(document())->rehighlightBlock(cursor.block());
-        d->spellCheckHighlighter(document())->setChanged(isEdited);
+        // d->spellCheckHighlighter(document())->setChanged(isEdited);
     }
 }
 
@@ -469,6 +499,44 @@ void SpellCheckTextEdit::rehighlighWithNewCursor()
     // И на последок запомним, абзац, в которым был курсор
     //
     d->previousBlockUnderCursor = textCursor().block();
+}
+
+void SpellCheckTextEdit::scheduleVisibleBlocksRehighlight()
+{
+    if (!useSpellChecker()) {
+        return;
+    }
+
+    d->visibleBlocksRehighlightDebouncer.orderWork();
+}
+
+void SpellCheckTextEdit::rehighlightVisibleBlocks() const
+{
+    d->visibleBlocksRehighlightDebouncer.abortWork();
+
+    if (!useSpellChecker() || document() == nullptr || document()->isEmpty()
+        || viewport() == nullptr) {
+        return;
+    }
+
+    auto firstVisibleBlock = cursorForPosition(QPoint(0, 0)).block();
+    auto lastVisibleBlock = cursorForPosition(QPoint(0, qMax(0, viewport()->height() - 1))).block();
+
+    if (!firstVisibleBlock.isValid()) {
+        firstVisibleBlock = document()->begin();
+    }
+    if (!lastVisibleBlock.isValid()) {
+        lastVisibleBlock = document()->lastBlock();
+    }
+
+    if (firstVisibleBlock.previous().isValid()) {
+        firstVisibleBlock = firstVisibleBlock.previous();
+    }
+    if (lastVisibleBlock.next().isValid()) {
+        lastVisibleBlock = lastVisibleBlock.next();
+    }
+
+    d->spellCheckHighlighter(document())->rehighlightBlocks(firstVisibleBlock, lastVisibleBlock);
 }
 
 QString SpellCheckTextEdit::wordOnPosition(const QPoint& _position) const

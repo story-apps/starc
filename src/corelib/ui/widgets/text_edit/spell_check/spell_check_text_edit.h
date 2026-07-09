@@ -86,6 +86,11 @@ protected:
      */
     bool event(QEvent* _event) override;
 
+    /**
+     * @brief Обновить проверяемую область после изменения размера редактора
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
 private:
     /**
      * @brief Игнорировать слово под курсором
@@ -106,6 +111,16 @@ private:
      * @brief Сменилась позиция курсора
      */
     void rehighlighWithNewCursor();
+
+    /**
+     * @brief Запланировать перепроверку видимой области после прокрутки
+     */
+    void scheduleVisibleBlocksRehighlight();
+
+    /**
+     * @brief Перепроверить орфографию в видимой области и в соседних абзацах
+     */
+    void rehighlightVisibleBlocks() const;
 
     /**
      * @brief Найти слово в позиции
