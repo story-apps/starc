@@ -6,6 +6,7 @@
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/text_edit/page/page_text_edit_scroll_bar.h>
 #include <utils/tools/debouncer.h>
 
 #include <QApplication>
@@ -13,7 +14,6 @@
 #include <QDir>
 #include <QMenu>
 #include <QRegularExpression>
-#include <QScrollBar>
 #include <QTimer>
 #include <QtGui/private/qtextdocument_p.h>
 
@@ -91,9 +91,9 @@ SpellCheckTextEdit::SpellCheckTextEdit(QWidget* _parent)
 {
     connect(this, &SpellCheckTextEdit::cursorPositionChanged, this,
             &SpellCheckTextEdit::rehighlighWithNewCursor);
-    connect(verticalScrollBar(), &QScrollBar::valueChanged, this,
+    connect(verticalScrollBar(), &PageTextEditScrollBar::valueChanged, this,
             &SpellCheckTextEdit::scheduleVisibleBlocksRehighlight);
-    connect(horizontalScrollBar(), &QScrollBar::valueChanged, this,
+    connect(horizontalScrollBar(), &PageTextEditScrollBar::valueChanged, this,
             &SpellCheckTextEdit::scheduleVisibleBlocksRehighlight);
     connect(&d->visibleBlocksRehighlightDebouncer, &Debouncer::gotWork, this,
             &SpellCheckTextEdit::rehighlightVisibleBlocks);
