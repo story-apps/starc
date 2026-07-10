@@ -21,11 +21,11 @@ enum class CORE_LIBRARY_EXPORT ComplianceRuleType {
     ScenesCount, //!< Количество сцен в серии
     SceneDuration, //!< Хронометраж сцены
     CharacterShouldSpeakInEveryScene, //!< Реплики персонажа
-    SceneCharactersCount, //!< Количество персонажей в сцене
+    SceneMaxCharactersCount, //!< Количество персонажей в сцене
     PrimaryLocationsPercent, //!< Процент сцен в основных локациях
     SecondaryLocationsCount, //!< Количество дополнительных локаций
     SecondaryLocationsSceneCount, //!< Количество сцен в дополнительных локациях
-    SecondaryLocationsNightSceneCount, //!< Количество ночных сцен в дополнительных локациях
+    SecondaryLocationsNightScenePercent, //!< Количество ночных сцен в дополнительных локациях
     //
 };
 
@@ -37,6 +37,11 @@ struct CORE_LIBRARY_EXPORT ComplianceRule {
      * @brief Тип правила
      */
     ComplianceRuleType type = ComplianceRuleType::Undefined;
+
+    /**
+     * @brief Трогое ли правило (от этого зависит иконка в чекере, если не выполнено)
+     */
+    bool isStrict = true;
 
     /**
      * @brief Минимальный порог
@@ -51,7 +56,7 @@ struct CORE_LIBRARY_EXPORT ComplianceRule {
     /**
      * @brief Текстовое значение для правила
      */
-    QString textValue;
+    QStringList textValues;
 };
 
 /**
