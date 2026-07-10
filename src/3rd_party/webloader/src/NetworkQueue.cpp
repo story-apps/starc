@@ -1,39 +1,41 @@
 /*
-* Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
-* Copyright (C) 2018 Dimka Novikov, to@dimkanovikov.pro
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* Full license: http://dimkanovikov.pro/license/LGPLv3
-*/
+ * Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
+ * Copyright (C) 2018 Dimka Novikov, to@dimkanovikov.pro
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * Full license: http://dimkanovikov.pro/license/LGPLv3
+ */
 
 #include "NetworkQueue.h"
+
 #include "WebLoader.h"
 
 
-NetworkQueue* NetworkQueue::instance() {
+NetworkQueue* NetworkQueue::instance()
+{
     static NetworkQueue queue;
     return &queue;
 }
 
 WebRequest& NetworkQueue::registerRequest()
 {
-    m_requests.append(WebRequest{});
-    return m_requests.last();
+    m_requests.push_back(WebRequest{});
+    return m_requests.back();
 }
 
 WebRequestParameters& NetworkQueue::registerRequestParameters()
 {
-    m_requestParameters.append(WebRequestParameters{});
-    return m_requestParameters.last();
+    m_requestParameters.push_back(WebRequestParameters{});
+    return m_requestParameters.back();
 }
 
 void NetworkQueue::enqueue(NetworkRequest* _request)
@@ -68,8 +70,8 @@ void NetworkQueue::stop(NetworkRequest* _request)
     for (NetworkQueueEntry& entry : m_queue) {
         if (entry.request == _request) {
             entry.isNeedToLoad = false;
-            m_requests.removeAll(_request->m_request);
-            m_requestParameters.removeAll(_request->m_requestParameters);
+            m_requests.remove(_request->m_request);
+            m_requestParameters.remove(_request->m_requestParameters);
         }
     }
 }
@@ -104,8 +106,7 @@ void NetworkQueue::processQueue()
     //
     // Если нет свободных загрузчиков или запросов на загрузку, ничего и не делаем
     //
-    if (m_freeLoaders.isEmpty()
-        || m_queue.isEmpty()) {
+    if (m_freeLoaders.isEmpty() || m_queue.isEmpty()) {
         return;
     }
 
@@ -140,7 +141,8 @@ void NetworkQueue::processQueue()
     //
     // ... соединяем с запросом
     //
-    connect(loader, static_cast<void (WebLoader::*)(QByteArray, QUrl)>(&WebLoader::downloadComplete),
+    connect(loader,
+            static_cast<void (WebLoader::*)(QByteArray, QUrl)>(&WebLoader::downloadComplete),
             requestEntry.request, &NetworkRequest::downloadComplete);
     connect(loader, static_cast<void (WebLoader::*)(int, QUrl)>(&WebLoader::uploadProgress),
             requestEntry.request, &NetworkRequest::uploadProgress);

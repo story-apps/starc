@@ -1,19 +1,19 @@
 /*
-* Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
-* Copyright (C) 2018 Dimka Novikov, to@dimkanovikov.pro
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* Full license: http://dimkanovikov.pro/license/LGPLv3
-*/
+ * Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
+ * Copyright (C) 2018 Dimka Novikov, to@dimkanovikov.pro
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * Full license: http://dimkanovikov.pro/license/LGPLv3
+ */
 
 #ifndef NETWORKQUEUE_H
 #define NETWORKQUEUE_H
@@ -60,7 +60,8 @@ public:
 
     /**
      * @brief Запросить остановку запроса
-     * @note Метод не гарантирует остановку запроса, если он уже выполняется, для этого стоит использовать stopAll
+     * @note Метод не гарантирует остановку запроса, если он уже выполняется, для этого стоит
+     * использовать stopAll
      */
     void stop(NetworkRequest* _request);
 
@@ -92,12 +93,12 @@ private:
     /**
      * @brief Список зарегистрированных (потенциальных) запросов
      */
-    QList<WebRequest> m_requests;
+    std::list<WebRequest> m_requests;
 
     /**
      * @brief Список зарегистрированных параметров запросов
      */
-    QList<WebRequestParameters> m_requestParameters;
+    std::list<WebRequestParameters> m_requestParameters;
 
     /**
      * @brief Свободные загрузчики
