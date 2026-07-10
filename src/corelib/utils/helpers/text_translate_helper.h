@@ -7,7 +7,7 @@
 
 /**
  * @brief Переводчик гугл
- * @note Максимально можно делать 50 запросов в минуту
+ * @note Максимально можно делать 40 запросов в минуту и 5 запросов в секунду
  */
 class CORE_LIBRARY_EXPORT TextTranslateHelper : public QObject
 {

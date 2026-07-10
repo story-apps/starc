@@ -21,9 +21,24 @@ namespace {
 constexpr auto kMaximumCharactersPerRequest = 2500;
 
 /**
- * @brief Таймаут извлечения переводчиков из очереди (40 в минуту)
+ * @brief Максимальное количество запросов в секунду
  */
-constexpr auto kDequeTimeoutMsec = 60000 / 40;
+constexpr auto kMaximumRequestsPerSecond = 5;
+
+/**
+ * @brief Максимальное количество запросов в минуту
+ */
+constexpr auto kMaximumRequestsPerMinute = 40;
+
+/**
+ * @brief Секундное окно ограничения количества запросов
+ */
+constexpr auto kRateLimitSecondWindowMsec = 1000;
+
+/**
+ * @brief Минутное окно ограничения количества запросов
+ */
+constexpr auto kRateLimitMinuteWindowMsec = 60000;
 
 /**
  * @brief Ключ автоматического определения исходного текста
@@ -124,9 +139,14 @@ private:
     TranslationQueue() = default;
 
     /**
-     * @brief Запустить следующий переводчик из очереди
+     * @brief Запустить следующие переводчики из очереди
      */
     void deque();
+
+    /**
+     * @brief Запланировать следующую попытку извлечения переводчиков из очереди
+     */
+    void scheduleDeque(int _delayMsec);
 
 
     /**
@@ -141,9 +161,14 @@ private:
     QList<TextTranslatorInfo> m_queue;
 
     /**
-     * @brief Дата и время последнего перевода
+     * @brief Даты и время запуска переводов в текущем окне ограничения
      */
-    QDateTime m_lastTranslationDateTime;
+    QList<QDateTime> m_translationDateTimes;
+
+    /**
+     * @brief Запланирована ли следующая попытка извлечения переводчиков из очереди
+     */
+    bool m_isDequeScheduled = false;
 };
 
 void TranslationQueue::enque(TextTranslateHelper* _translator, const QString& _text,
@@ -169,6 +194,10 @@ void TranslationQueue::deque()
         return;
     }
 
+    if (m_isDequeScheduled) {
+        return;
+    }
+
     //
     // Если в очереди больше никого нет, отдыхаем
     //
@@ -176,42 +205,89 @@ void TranslationQueue::deque()
         return;
     }
 
-    //
-    // Если ещё не прошло необходимое кол-во времени до следующего запроса, отдыхаем
-    //
     const auto currentDateTime = QDateTime::currentDateTime();
-    if (m_lastTranslationDateTime.isValid()
-        && m_lastTranslationDateTime.msecsTo(currentDateTime) < kDequeTimeoutMsec) {
-        return;
+
+    //
+    // Оставляем только запросы из текущего минутного окна. Ограничение должно быть именно
+    // "не больше 40 запросов за минуту" и "не больше 5 запросов за секунду", без
+    // искусственной паузы между запросами, чтобы при необходимости можно было запустить
+    // несколько переводов одновременно.
+    //
+    while (!m_translationDateTimes.isEmpty()
+           && m_translationDateTimes.constFirst().msecsTo(currentDateTime)
+               >= kRateLimitMinuteWindowMsec) {
+        m_translationDateTimes.removeFirst();
+    }
+
+    auto requestsInSecond = 0;
+    QDateTime oldestSecondRequestDateTime;
+    const auto& translationDateTimes = m_translationDateTimes;
+    for (const auto& translationDateTime : translationDateTimes) {
+        if (translationDateTime.msecsTo(currentDateTime) < kRateLimitSecondWindowMsec) {
+            if (!oldestSecondRequestDateTime.isValid()) {
+                oldestSecondRequestDateTime = translationDateTime;
+            }
+            ++requestsInSecond;
+        }
     }
 
     //
-    // Извлечём следующий переводчик из очереди и обработаем его
+    // Запускаем столько переводчиков, сколько помещается в текущие секундный и минутный лимиты.
     //
-    auto translatorInfo = m_queue.takeFirst();
-    if (translatorInfo.translator.isNull()) {
-        //
-        // ... если переводчик умер, перейдём к следующему
-        //
+    while (!m_queue.isEmpty() && m_translationDateTimes.size() < kMaximumRequestsPerMinute
+           && requestsInSecond < kMaximumRequestsPerSecond) {
+        auto translatorInfo = m_queue.takeFirst();
+        if (translatorInfo.translator.isNull()) {
+            //
+            // ... если переводчик умер, перейдём к следующему, не расходуя лимит
+            //
+            continue;
+        }
+
+        if (!oldestSecondRequestDateTime.isValid()) {
+            oldestSecondRequestDateTime = currentDateTime;
+        }
+        ++requestsInSecond;
+        m_translationDateTimes.append(currentDateTime);
+        translatorInfo.translator->translateImpl(translatorInfo.sourceText,
+                                                 translatorInfo.sourceLanguage,
+                                                 translatorInfo.targetLanguage);
+    }
+
+    //
+    // Если очередь не опустела, значит один из лимитов исчерпан. Запланируем следующую попытку
+    // на момент, когда снова появится место и в секундном, и в минутном окне.
+    //
+    if (!m_queue.isEmpty() && !m_translationDateTimes.isEmpty()) {
+        auto delayMsec = 0;
+        if (m_translationDateTimes.size() >= kMaximumRequestsPerMinute) {
+            delayMsec = qMax(
+                delayMsec,
+                static_cast<int>(currentDateTime.msecsTo(
+                    m_translationDateTimes.constFirst().addMSecs(kRateLimitMinuteWindowMsec))));
+        }
+        if (requestsInSecond >= kMaximumRequestsPerSecond
+            && oldestSecondRequestDateTime.isValid()) {
+            delayMsec
+                = qMax(delayMsec,
+                       static_cast<int>(currentDateTime.msecsTo(
+                           oldestSecondRequestDateTime.addMSecs(kRateLimitSecondWindowMsec))));
+        }
+        scheduleDeque(qMax(0, delayMsec));
+    }
+}
+
+void TranslationQueue::scheduleDeque(int _delayMsec)
+{
+    if (m_isDequeScheduled) {
+        return;
+    }
+
+    m_isDequeScheduled = true;
+    QTimer::singleShot(_delayMsec, [this] {
+        m_isDequeScheduled = false;
         deque();
-        return;
-    }
-
-    //
-    // Если с переводчиком всё окей, то сохраняем дату и время запуска последнего из переводчиков
-    //
-    m_lastTranslationDateTime = currentDateTime;
-
-    //
-    // Собственно запускаем перевод
-    //
-    translatorInfo.translator->translateImpl(
-        translatorInfo.sourceText, translatorInfo.sourceLanguage, translatorInfo.targetLanguage);
-
-    //
-    // И готовимся к извлечению следующего переводчика из очереди
-    //
-    QTimer::singleShot(kDequeTimeoutMsec, [this] { deque(); });
+    });
 }
 
 
@@ -347,7 +423,7 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
             // При необходимости переходим к переводу следующей части
             //
             if (!m_sourceTextParts.isEmpty()) {
-                translateImpl({}, _sourceLanguage, _targetLanguage);
+                TranslationQueue::enque(this, {}, _sourceLanguage, _targetLanguage);
                 return;
             }
 
