@@ -2,7 +2,6 @@
 
 #include "unsplash_images_view.h"
 
-#include <3rd_party/webloader/src/NetworkRequestLoader.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/circular_progress_bar/circular_progress_bar.h>
@@ -15,13 +14,12 @@
 #include <ui/widgets/tab_bar/tab_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/text_translate_helper.h>
 #include <utils/helpers/ui_helper.h>
 #include <utils/tools/debouncer.h>
 
 #include <QBoxLayout>
 #include <QFontDatabase>
-#include <QJsonArray>
-#include <QJsonDocument>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QStringListModel>
@@ -245,14 +243,14 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     , colorPickerPopup(new ColorPickerPopup(_parent))
     , imagePage(new Widget(_parent))
     , searchImages(new TextField(_parent))
-    , searchDebouncer(300)
+    , searchDebouncer(500)
     , pasteImageFromClipboard(new IconButton(_parent))
     , chooseImageFile(new IconButton(_parent))
     , imagesView(new UnsplashImagesView(_parent))
     , imagesLoadingLabel(new Body2Label(_parent))
     , imagesLoadingProgress(new CircularProgressBar(_parent))
 {
-    fontsModel.setStringList(QFontDatabase().families());
+    fontsModel.setStringList(QFontDatabase::families());
 
     tabs->addTab({});
     tabs->addTab({});
@@ -465,22 +463,23 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
         //
         // Формируем английский перевод поисковой фразы
         //
-        const QUrl keywordsTranslateUrl(QString("https://translate.googleapis.com/translate_a/"
-                                                "t?client=dict-chrome-ex&sl=auto&tl=en&q=%1")
-                                            .arg(d->searchImages->text()));
-        NetworkRequestLoader::loadAsync(
-            keywordsTranslateUrl, this, [this](const QByteArray& _response) {
-                const auto translations = QJsonDocument::fromJson(_response).array();
-                if (translations.isEmpty() || translations.at(0).toArray().isEmpty()) {
-                    return;
-                }
-                const auto keywords = translations.at(0).toArray().at(0).toString();
+        auto translator = new TextTranslateHelper;
+        connect(translator, &TextTranslateHelper::translated, this,
+                [this, keywords = d->searchImages->text()](
+                    const QVector<TextTranslateHelper::Translation>& _translation) {
+                    QString result;
+                    for (const auto& translation : _translation) {
+                        result += translation.translation;
+                    }
 
-                //
-                // Запрашиваем картинки
-                //
-                d->imagesView->loadImages(keywords);
-            });
+                    //
+                    // Запрашиваем картинки
+                    //
+                    d->imagesView->loadImages(!result.isEmpty() ? result : keywords);
+                });
+        connect(translator, &TextTranslateHelper::translated, translator,
+                &TextTranslateHelper::deleteLater);
+        translator->translateToEnglish(d->searchImages->text());
     });
     connect(d->imagesScrollBar, &QScrollBar::valueChanged, this, [this](int _value) {
         if (_value == d->imagesScrollBar->maximum()) {
