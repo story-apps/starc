@@ -466,10 +466,10 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
         auto translator = new TextTranslateHelper;
         connect(translator, &TextTranslateHelper::translated, this,
                 [this, keywords = d->searchImages->text()](
-                    const QVector<TextTranslateHelper::Translation>& _translation) {
+                    const TextTranslateHelper::Translation& _translation) {
                     QString result;
-                    for (const auto& translation : _translation) {
-                        result += translation.translation;
+                    for (const auto& text : _translation.text) {
+                        result += text.translation;
                     }
 
                     //

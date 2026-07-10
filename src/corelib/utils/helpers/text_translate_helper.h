@@ -17,11 +17,25 @@ class CORE_LIBRARY_EXPORT TextTranslateHelper : public QObject
 
 public:
     /**
+     * @brief Переведённые фразы
+     */
+    struct TranslationPart {
+        QString source;
+        QString translation;
+    };
+
+    /**
      * @brief Данные перевода
      */
     struct Translation {
-        QString original;
-        QString translation;
+        bool isValid() const
+        {
+            return !sourceLanguage.isEmpty() && !translationLanguage.isEmpty() && !text.isEmpty();
+        }
+
+        QString sourceLanguage;
+        QString translationLanguage;
+        QVector<TranslationPart> text;
     };
 
 public:
@@ -53,8 +67,7 @@ signals:
     /**
      * @brief Текст был переведён
      */
-    void translated(const QVector<TextTranslateHelper::Translation>& _translation,
-                    const QString& _sourceLanguage);
+    void translated(const TextTranslateHelper::Translation& _translation);
 
 private:
     /**
@@ -72,5 +85,5 @@ private:
     /**
      * @brief Перевод текста
      */
-    QVector<Translation> m_translationParts;
+    Translation m_translation;
 };

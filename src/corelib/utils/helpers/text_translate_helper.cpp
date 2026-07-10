@@ -2,6 +2,7 @@
 
 #include <utils/tools/run_once.h>
 
+#include <QCache>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -49,6 +50,22 @@ const QLatin1String kAutoLanguage("auto");
  * @brief Ключ перевода на английский язык
  */
 const QLatin1String kEnglishLanguage("en");
+
+/**
+ * @brief Получить ключ кэша для набора параметров перевода
+ */
+QString cacheKey(const QString& _text, const QString& _sourceLanguage,
+                 const QString& _targetLanguage)
+{
+    //
+    // Не используем язык исходного текста, т.к. он может быть задан, а может определяться
+    // автоматически, но и это и не важно, потому что нам нужен перевод на конкретный язык для
+    // конкретного текста
+    //
+    Q_UNUSED(_sourceLanguage)
+
+    return _targetLanguage + QChar::Null + _text;
+}
 
 /**
  * @brief Список прокси серверов для подключения к гугл переводчику
@@ -120,7 +137,101 @@ QNetworkProxy currentProxy()
 
     return {};
 }
+
 } // namespace
+
+
+/**
+ * @brief Синглтон для работы с кэшем переводов и ожидающими переводчиками
+ */
+class TranslationCache
+{
+public:
+    /**
+     * @brief Получить инстанс синглтона
+     */
+    static TranslationCache& instance()
+    {
+        static TranslationCache instance;
+        return instance;
+    }
+
+    /**
+     * @brief Получить перевод из кэша
+     */
+    TextTranslateHelper::Translation get(const QString& _text, const QString& _sourceLanguage,
+                                         const QString& _targetLanguage);
+
+    /**
+     * @brief Добавить переводчик в список ожидающих перевода
+     * @return true, если перевод ещё не был запущен, и его нужно поставить в очередь
+     */
+    int registerPending(TextTranslateHelper* _translator, const QString& _text,
+                        const QString& _sourceLanguage, const QString& _targetLanguage);
+
+    /**
+     * @brief Сохранить перевод в кэш и уведомить всех ожидающих переводчиков
+     */
+    void cacheAndNotify(const QString& _text, const QString& _sourceLanguage,
+                        const QString& _targetLanguage,
+                        const TextTranslateHelper::Translation& _translation);
+
+private:
+    TranslationCache() = default;
+    TranslationCache(const TranslationCache&) = delete;
+    TranslationCache& operator=(const TranslationCache&) = delete;
+    TranslationCache(TranslationCache&&) = delete;
+    TranslationCache& operator=(TranslationCache&&) = delete;
+
+    /**
+     * @brief Общий для всех инстансов кэш переводов
+     */
+    QCache<QString, TextTranslateHelper::Translation> m_cache{ 200 };
+
+    /**
+     * @brief Переводчики, ожидающие завершения уже запущенных переводов
+     */
+    QHash<QString, QVector<QPointer<TextTranslateHelper>>> m_pendingWaiters;
+};
+
+TextTranslateHelper::Translation TranslationCache::get(const QString& _text,
+                                                       const QString& _sourceLanguage,
+                                                       const QString& _targetLanguage)
+{
+    const auto cachedTranslation
+        = m_cache.object(cacheKey(_text, _sourceLanguage, _targetLanguage));
+    if (cachedTranslation == nullptr) {
+        return {};
+    }
+
+    return *cachedTranslation;
+}
+
+int TranslationCache::registerPending(TextTranslateHelper* _translator, const QString& _text,
+                                      const QString& _sourceLanguage,
+                                      const QString& _targetLanguage)
+{
+    auto& waiters = m_pendingWaiters[cacheKey(_text, _sourceLanguage, _targetLanguage)];
+    waiters.append(_translator);
+    return waiters.size();
+}
+
+void TranslationCache::cacheAndNotify(const QString& _text, const QString& _sourceLanguage,
+                                      const QString& _targetLanguage,
+                                      const TextTranslateHelper::Translation& _translation)
+{
+    const auto translationKey = cacheKey(_text, _sourceLanguage, _targetLanguage);
+    m_cache.insert(translationKey, new TextTranslateHelper::Translation(_translation));
+
+    for (const auto& waiter : m_pendingWaiters.take(translationKey)) {
+        if (!waiter.isNull()) {
+            emit waiter->translated(_translation);
+        }
+    }
+}
+
+
+// ****
 
 
 /**
@@ -306,7 +417,27 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
         return;
     }
 
-    TranslationQueue::enque(this, _text, _sourceLanguage, _targetLanguage);
+    //
+    // Проверяем перевод в кэше
+    //
+    const auto translation
+        = TranslationCache::instance().get(_text, _sourceLanguage, _targetLanguage);
+    if (translation.isValid()) {
+        QTimer::singleShot(0, this, [this, translation] { emit translated(translation); });
+        return;
+    }
+
+    //
+    // Если в кэше его ещё нет, то регистрируем запрос на перевод
+    //
+    const auto sameTranslationsSize = TranslationCache::instance().registerPending(
+        this, _text, _sourceLanguage, _targetLanguage);
+    //
+    // ... и, если это первый запрос на перевод, ставим его в очередь на выполнение
+    //
+    if (sameTranslationsSize == 1) {
+        TranslationQueue::enque(this, _text, _sourceLanguage, _targetLanguage);
+    }
 }
 
 void TextTranslateHelper::translateAuto(const QString& _text, const QString& _targetLanguage)
@@ -339,7 +470,7 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
         //
         // ... очистим предыдущий перевод
         //
-        m_translationParts.clear();
+        m_translation = {};
         //
         // ... если нечего переводить, то прерываем операцию
         //
@@ -390,11 +521,11 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
         static_cast<void (NetworkRequest::*)(QByteArray, QUrl)>(&NetworkRequest::downloadComplete),
         this,
         [this, textToTranslate, _sourceLanguage, _targetLanguage](const QByteArray& _response) {
-            auto translateWithNextProxy
-                = [this, textToTranslate, _sourceLanguage, _targetLanguage] {
-                      nextProxy();
-                      translate(textToTranslate, _sourceLanguage, _targetLanguage);
-                  };
+            auto translateWithNextProxy = [this, textToTranslate, _sourceLanguage,
+                                           _targetLanguage] {
+                nextProxy();
+                TranslationQueue::enque(this, textToTranslate, _sourceLanguage, _targetLanguage);
+            };
 
             if (_response.isEmpty()) {
                 translateWithNextProxy();
@@ -404,7 +535,6 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
             const auto translationsJson = QJsonDocument::fromJson(_response).array();
             if (translationsJson.isEmpty()) {
                 qDebug() << _response;
-                return;
                 translateWithNextProxy();
                 return;
             }
@@ -415,7 +545,7 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
                 const auto targetSentence = sentenceJson.at(0).toString();
 
                 if (!sourceSentence.isEmpty() && !targetSentence.isEmpty()) {
-                    m_translationParts.append({ sourceSentence, targetSentence });
+                    m_translation.text.append({ sourceSentence, targetSentence });
                 }
             }
 
@@ -433,7 +563,10 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
             const auto sourceLanguage = _sourceLanguage == kAutoLanguage
                 ? translationsJson.at(2).toString()
                 : _sourceLanguage;
-            emit translated(m_translationParts, sourceLanguage);
+            m_translation.sourceLanguage = sourceLanguage;
+            m_translation.translationLanguage = _targetLanguage;
+            TranslationCache::instance().cacheAndNotify(textToTranslate, _sourceLanguage,
+                                                        _targetLanguage, m_translation);
         });
     connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
 

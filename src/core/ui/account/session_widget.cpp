@@ -118,10 +118,10 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
 
         auto translator = new TextTranslateHelper;
         connect(translator, &TextTranslateHelper::translated, this,
-                [this, location](const QVector<TextTranslateHelper::Translation>& _translation) {
+                [this, location](const TextTranslateHelper::Translation& _translation) {
                     QString result;
-                    for (const auto& translation : _translation) {
-                        result += translation.translation;
+                    for (const auto& text : _translation.text) {
+                        result += text.translation;
                     }
 
                     d->location->setText(!result.isEmpty() ? result : location);
