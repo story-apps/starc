@@ -5,6 +5,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/text_translate_helper.h>
 
 #include <QDateTime>
 #include <QJsonDocument>
@@ -27,6 +28,7 @@ public:
     Domain::SessionInfo sessionInfo;
 
     H6Label* deviceName = nullptr;
+    Body2Label* appVersion = nullptr;
     Body1Label* location = nullptr;
     IconsSmallLabel* lastUsedIcon = nullptr;
     Body2Label* lastUsed = nullptr;
@@ -36,6 +38,7 @@ public:
 
 SessionWidget::Implementation::Implementation(QWidget* _parent)
     : deviceName(new H6Label(_parent))
+    , appVersion(new Body2Label(_parent))
     , location(new Body1Label(_parent))
     , lastUsedIcon(new IconsSmallLabel(_parent))
     , lastUsed(new Body2Label(_parent))
@@ -47,6 +50,7 @@ SessionWidget::Implementation::Implementation(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(deviceName);
+    layout->addWidget(appVersion);
     layout->addWidget(location);
     const auto lastUsedLayout = new QHBoxLayout;
     lastUsedLayout->setContentsMargins({});
@@ -94,6 +98,7 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
     d->sessionInfo = _sessionInfo;
 
     d->deviceName->setText(d->sessionInfo.deviceName);
+    d->appVersion->setText(tr("version") + " " + d->sessionInfo.appVersion);
     d->lastUsedIcon->setVisible(d->sessionInfo.isCurrentDevice);
 
     const auto ipToLocationUrl
@@ -110,7 +115,20 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
         if (country.isEmpty()) {
             location = "Wizard's world";
         }
-        d->location->setText(location);
+
+        auto translator = new TextTranslateHelper;
+        connect(translator, &TextTranslateHelper::translated, this,
+                [this, location](const QVector<TextTranslateHelper::Translation>& _translation) {
+                    QString result;
+                    for (const auto& translation : _translation) {
+                        result += translation.translation;
+                    }
+
+                    d->location->setText(!result.isEmpty() ? result : location);
+                });
+        connect(translator, &TextTranslateHelper::translated, translator,
+                &TextTranslateHelper::deleteLater);
+        translator->translateAuto(location, QLocale::languageToCode(QLocale().language()));
     });
 
     updateTranslations();
@@ -160,6 +178,7 @@ void SessionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                                      DesignSystem::inactiveTextOpacity());
     for (auto label : std::vector<Widget*>{
              d->deviceName,
+             d->appVersion,
              d->location,
              d->lastUsed,
          }) {
@@ -172,6 +191,10 @@ void SessionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     labelMargins.setRight(0);
     labelMargins.setBottom(0);
     d->deviceName->setContentsMargins(labelMargins);
+    labelMargins.setTop(DesignSystem::layout().px4());
+    d->appVersion->setContentsMargins(labelMargins);
+    d->appVersion->setTextColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
+                                                         DesignSystem::disabledTextOpacity()));
     labelMargins.setTop(DesignSystem::layout().px8());
     d->location->setContentsMargins(labelMargins);
     labelMargins.setBottom(DesignSystem::layout().px24());

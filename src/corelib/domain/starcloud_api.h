@@ -200,6 +200,7 @@ struct SubscriptionInfo {
 struct SessionInfo {
     QString sessionKey;
     QString deviceName;
+    QString appVersion;
     QString location;
     QDateTime lastUsed;
     bool isCurrentDevice = false;
