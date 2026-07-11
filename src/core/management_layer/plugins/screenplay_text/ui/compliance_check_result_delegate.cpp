@@ -149,39 +149,39 @@ void ComplianceCheckResultDelegate::Implementation::paintRule(QPainter* _painter
     //
     _painter->setPen(textColor);
     _painter->setFont(DesignSystem::font().subtitle2());
-    qreal headingLeft = 0.0;
-    qreal headingWidth = 0.0;
+    qreal titleLeft = 0.0;
+    qreal titleWidth = 0.0;
     if (isLeftToRight) {
-        headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
-        headingWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
-            - headingLeft - DesignSystem::treeOneLineItem().spacing();
+        titleLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
+        titleWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
+            - titleLeft;
     } else {
-        headingLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
-        headingWidth = iconRect.left() - headingLeft;
+        titleLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
+        titleWidth = iconRect.left() - titleLeft;
     }
+    const auto ruleTitle
+        = _index.data(ComplianceCheckResultModelItemDataRole::TitleRole).toString();
     const QRectF titleRect(
-        QPointF(headingLeft,
-                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
-        QSizeF(headingWidth, DesignSystem::layout().px24()));
-    auto ruleTitle = _index.data(ComplianceCheckResultModelItemDataRole::TitleRole).toString();
-    ruleTitle = _painter->fontMetrics().elidedText(ruleTitle, Qt::ElideRight,
-                                                   static_cast<int>(titleRect.width()));
-    _painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter, ruleTitle);
+        QPointF(titleLeft,
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()
+                    + DesignSystem::layout().px4()),
+        QSizeF(titleWidth, TextHelper::heightForWidth(ruleTitle, _painter->font(), titleWidth)));
+    _painter->drawText(titleRect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, ruleTitle);
 
     //
     // ... подзаголовок правила
     //
-    auto subtitleText
+    const auto subtitleText
         = _index.data(ComplianceCheckResultModelItemDataRole::SubtitleRole).toString();
     if (!subtitleText.isEmpty()) {
-        QRectF textRect;
         _painter->setFont(DesignSystem::font().body2());
-        textRect = QRectF(
-            QPointF(iconRect.left(), titleRect.bottom() + DesignSystem::compactLayout().px8()),
-            QSizeF(titleRect.right() - iconRect.left(),
-                   TextHelper::fineLineSpacing(_painter->font())));
-        subtitleText = TextHelper::elidedText(subtitleText, DesignSystem::font().body2(), textRect);
-        _painter->drawText(textRect, Qt::TextWordWrap, subtitleText);
+        const auto subtitleWidth = titleRect.right() - iconRect.left();
+        const QRectF subtitleRect(
+            QPointF(iconRect.left(),
+                    titleRect.bottom() + DesignSystem::treeOneLineItem().spacing()),
+            QSizeF(subtitleWidth,
+                   TextHelper::heightForWidth(ruleTitle, _painter->font(), subtitleWidth)));
+        _painter->drawText(subtitleRect, Qt::TextWordWrap, subtitleText);
     }
 }
 
@@ -394,20 +394,28 @@ QSize ComplianceCheckResultDelegate::Implementation::ruleSizeHint(
     if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
         width = view->viewport()->width();
     }
-    width -= DesignSystem::layout().px8() + DesignSystem::layout().px16()
-        + DesignSystem::layout().px16();
+    width -= DesignSystem::tree().indicatorWidth()
+        + DesignSystem::treeOneLineItem().margins().right();
 
     //
     // Считаем высоту
     //
-    int height = DesignSystem::treeOneLineItem().height();
+    const auto title = _index.data(ComplianceCheckResultModelItemDataRole::TitleRole).toString();
+    const auto titleWidth = width - DesignSystem::treeOneLineItem().iconSize().width()
+        - DesignSystem::treeOneLineItem().spacing();
+    int height = DesignSystem::treeOneLineItem().margins().top() + DesignSystem::layout().px4()
+        + TextHelper::heightForWidth(title, DesignSystem::font().subtitle2(), titleWidth);
     //
     // ... если есть подзаголовок, добавляем высоты
     //
-    if (!_index.data(ComplianceCheckResultModelItemDataRole::SubtitleRole).toString().isEmpty()) {
-        height += DesignSystem::compactLayout().px8()
-            + TextHelper::fineLineSpacing(DesignSystem::font().body2());
+    const auto subtitle
+        = _index.data(ComplianceCheckResultModelItemDataRole::SubtitleRole).toString();
+    if (!subtitle.isEmpty()) {
+        const auto subtitleWidth = width;
+        height += DesignSystem::treeOneLineItem().spacing()
+            + TextHelper::heightForWidth(subtitle, DesignSystem::font().body2(), subtitleWidth);
     }
+    height += DesignSystem::treeOneLineItem().margins().bottom();
 
     return { width, height };
 }

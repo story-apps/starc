@@ -17,6 +17,7 @@
 #include <utils/helpers/time_helper.h>
 
 #include <QRegularExpression>
+#include <QtMath>
 
 
 namespace BusinessLayer {
@@ -373,8 +374,9 @@ void ComplianceCheckerImpl::startChecking()
         }
 
         case BusinessLayer::ComplianceRuleType::PrimaryLocationsPercent: {
-            result.title = tr("Primary locations (%1) should present in %2% of scenes")
-                               .arg(rule.textValues.join(", "), QString::number(rule.minimumValue));
+            result.title
+                = tr("Primary locations (%1) should present in %2% of scenes")
+                      .arg(rule.textValues.join(" | "), QString::number(rule.minimumValue));
 
             QSet<QString> primaryLocationsFull;
             QString primaryLocationsStartsWith;
