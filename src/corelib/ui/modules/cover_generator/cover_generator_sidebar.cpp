@@ -250,7 +250,7 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     , imagesLoadingLabel(new Body2Label(_parent))
     , imagesLoadingProgress(new CircularProgressBar(_parent))
 {
-    fontsModel.setStringList(QFontDatabase::families());
+    fontsModel.setStringList(QFontDatabase().families());
 
     tabs->addTab({});
     tabs->addTab({});

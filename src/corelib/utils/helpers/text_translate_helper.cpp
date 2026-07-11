@@ -440,6 +440,23 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
     }
 }
 
+void TextTranslateHelper::translateAuto(const QString& _text, QLocale::Language _targetLanguage)
+{
+    QString targetLanguageCode;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    targetLanguageCode = QLocale::languageToCode(_targetLanguage);
+#else
+    // Initialize QLocale with the specific language
+    QLocale locale(_targetLanguage);
+    // Returns a string like "en_US" or "fr_FR"
+    QString fullLocaleName = locale.name();
+    // Split the string by '_' to get the two-letter language code
+    targetLanguageCode = fullLocaleName.split('_').constFirst();
+#endif
+
+    translateAuto(_text, targetLanguageCode);
+}
+
 void TextTranslateHelper::translateAuto(const QString& _text, const QString& _targetLanguage)
 {
     translate(_text, kAutoLanguage, _targetLanguage);

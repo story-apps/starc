@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QLocale>
 #include <QObject>
 
 #include <corelib_global.h>
@@ -50,6 +51,7 @@ public:
     /**
      * @brief Перевести текст на заданный, автоматически определив исходный язык
      */
+    void translateAuto(const QString& _text, QLocale::Language _targetLanguage);
     void translateAuto(const QString& _text, const QString& _targetLanguage);
 
     /**

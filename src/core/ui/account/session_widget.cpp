@@ -128,7 +128,7 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
                 });
         connect(translator, &TextTranslateHelper::translated, translator,
                 &TextTranslateHelper::deleteLater);
-        translator->translateAuto(location, QLocale::languageToCode(QLocale().language()));
+        translator->translateAuto(location, QLocale().language());
     });
 
     updateTranslations();
