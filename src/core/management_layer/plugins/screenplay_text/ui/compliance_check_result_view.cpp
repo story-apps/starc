@@ -8,7 +8,9 @@
 #include <ui/widgets/tree/tree.h>
 #include <ui/widgets/tree/tree_delegate.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/tools/once.h>
 
+#include <QScrollBar>
 #include <QStandardItemModel>
 
 
@@ -34,8 +36,9 @@ ComplianceCheckResultView::Implementation::Implementation(ComplianceCheckResultV
     , checkResultsModel(new QStandardItemModel(q))
     , checkResultsPage(new Tree(q))
 {
-    checkResultsPage->setModel(checkResultsModel);
+    checkResultsPage->setAutoAdjustSize(true);
     checkResultsPage->setItemDelegate(new ComplianceCheckResultDelegate(checkResultsPage));
+    checkResultsPage->setModel(checkResultsModel);
 }
 
 
@@ -65,6 +68,10 @@ void ComplianceCheckResultView::setCheckResults(
     const QVector<BusinessLayer::ComplianceCheckResult>& _results)
 {
     using namespace BusinessLayer;
+
+    bool isInitialization = d->checkResultsModel->rowCount() == 0;
+    const auto checkResultsPageState = d->checkResultsPage->saveState();
+    const auto checkResultsPageScrollValue = d->checkResultsPage->verticalScrollBar()->value();
 
     d->checkResultsModel->clear();
 
@@ -172,6 +179,21 @@ void ComplianceCheckResultView::setCheckResults(
         }
 
         d->checkResultsModel->appendRow(resultItem);
+    }
+
+    //
+    // Если это первая установка данных, назначим текущим первый элемент модели, чтобы далее у нас
+    // корректно работало восстановление положения полосы прокрутки
+    //
+    if (isInitialization) {
+        d->checkResultsPage->setCurrentIndex(d->checkResultsModel->index(0, 0));
+    }
+    //
+    // ... в противном случае, как раз восстанавливаем состояние дерева и полосы прокрутки
+    //
+    else {
+        d->checkResultsPage->restoreState(checkResultsPageState);
+        d->checkResultsPage->verticalScrollBar()->setValue(checkResultsPageScrollValue);
     }
 
     setCurrentWidget(d->checkResultsPage);
