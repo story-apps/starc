@@ -1220,56 +1220,104 @@
 <context>
     <name>BusinessLayer::ComplianceCheckerImpl</name>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="134"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="237"/>
         <source>Script duration from %1 to %2</source>
         <translation>Хронометраж сценария от %1 до %2</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="144"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="247"/>
         <source>Duration is %1</source>
         <translation>Хронометраж равен %1</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="147"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="172"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="250"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="275"/>
         <source>(%1 less)</source>
         <translation>(на %1 меньше)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="152"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="174"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="255"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="277"/>
         <source>(%1 more)</source>
         <translation>(на %1 больше)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="163"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="266"/>
         <source>Scenes count from %1 to %2</source>
         <translation>Количество сцен от %1 до %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="170"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="273"/>
         <source>%n scenes</source>
         <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
     </message>
+    <message>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="317"/>
+        <source>Characters (%1) should speak in every scene</source>
+        <translation>Персонажи (%1) должны иметь реплики в каждой сцене</translation>
+    </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="359"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="336"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="436"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="480"/>
         <source>(%n scenes)</source>
         <translation><numerusform>(%n сцена)</numerusform><numerusform>(%n сцены)</numerusform><numerusform>(%n сцен)</numerusform><numerusform>(%n сцен)</numerusform></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="351"/>
+        <source>Scenes with more then %n characters</source>
+        <translation><numerusform>Сцены, в которых больше %n персонажа</numerusform><numerusform>Сцены, в которых больше %n персонажей</numerusform><numerusform>Сцены, в которых больше %n персонажей</numerusform><numerusform>Сцены, в которых больше %n персонажей</numerusform></translation>
+    </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="182"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="378"/>
+        <source>Primary locations (%1) should present in %2% of scenes</source>
+        <translation>Основные локации (%1) должны использоваться в %2% сцен</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="407"/>
+        <source>Needed %n more scenes</source>
+        <translation><numerusform>Не хватает %n сцены</numerusform><numerusform>Не хватает %n сцен</numerusform><numerusform>Не хватает %n сцен</numerusform><numerusform>Не хватает %n сцен</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="414"/>
+        <source>Maximum %n additional locations</source>
+        <translation><numerusform>Не более %n дополнительной локации</numerusform><numerusform>Не более %n дополнительных локаций</numerusform><numerusform>Не более %n дополнительных локаций</numerusform><numerusform>Не более %n дополнительных локаций</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="445"/>
+        <source>%n additional locations (%1 more)</source>
+        <translation><numerusform>%n дополнительная локация (на %1 больше)</numerusform><numerusform>%n дополнительные локации (на %1 больше)</numerusform><numerusform>%n дополнительных локаций (на %1 больше)</numerusform><numerusform>%n дополнительных локаций (на %1 больше)</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="454"/>
+        <source>Minimum %n scenes for additional location</source>
+        <translation><numerusform>Не менее %n сцены в дополнительной локации</numerusform><numerusform>Не менее %n сцен в дополнительной локации</numerusform><numerusform>Не менее %n сцен в дополнительной локации</numerusform><numerusform>Не менее %n сцен в дополнительной локации</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="488"/>
+        <source>%n additional locations has less scenes then needed</source>
+        <translation><numerusform>У %n дополнительной локации сцен меньше чем требуется</numerusform><numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform><numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform><numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="497"/>
+        <source>Night scenes in additional locations should be less then %1% of scenes</source>
+        <translation>Процент ночных сцен в дополнительных локациях меньше %1%</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="529"/>
+        <source>Needed %n less scenes</source>
+        <translation><numerusform>Нужно на %1 сцену меньше</numerusform><numerusform>Нужно на %1 сцены меньше</numerusform><numerusform>Нужно на %1 сцен меньше</numerusform><numerusform>Нужно на %1 сцен меньше</numerusform></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="285"/>
         <source>Scene duration from %1 to %2</source>
         <translation>Хронометраж сцен от %1 до %2</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="250"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="306"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="367"/>
         <source>%1% scenes out of range (%2 from %3)</source>
         <translation>%1% сцен не укладываются в диапазон (%2 из %3)</translation>
-    </message>
-    <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="260"/>
-        <source>Character (%1) should speak in every scene</source>
-        <translation>Персонаж (%1) должен иметь реплики в каждой сцене</translation>
     </message>
 </context>
 <context>
@@ -3766,151 +3814,151 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="631"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="632"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>Промокод с %1% скидкой активирован и будет применён к следующему платежу.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="640"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="641"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation><numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="645"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="646"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Вам предоставлен пожизненный доступ к PRO версии.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="649"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="650"/>
         <source>CLOUD version subscription activated for %n month(s).</source>
         <translation><numerusform>Подписка на CLOUD версию активирована на %n месяц.</numerusform><numerusform>Подписка на CLOUD версию активирована на %n месяца.</numerusform><numerusform>Подписка на CLOUD версию активирована на %n месяцев.</numerusform><numerusform>Подписка на CLOUD версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="654"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="655"/>
         <source>CLOUD version lifetime access granted.</source>
         <translation>Вам предоставлен пожизненный доступ к CLOUD версии.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="662"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="663"/>
         <source>%n credits were added to your balance.</source>
         <translation><numerusform>Счёт пополнен на %n кредит</numerusform><numerusform>Счёт пополнен на %n кредита</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="676"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="677"/>
         <source>The gift has been sent to the recipient&apos;s mailbox</source>
         <translation>Подарок был отправлен на электронную почту получателя</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="955"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="956"/>
         <source>Promocode is incorrect</source>
         <translation>Некорректный промокод</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="959"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="960"/>
         <source>Promocode expired</source>
         <translation>Срок годности промокода истёк</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="963"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="964"/>
         <source>Maximum number of promocode activations done</source>
         <translation>Количество доступных активаций промокода исчерпано</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="967"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="968"/>
         <source>Promocode already used</source>
         <translation>Промокод уже был активирован ранее</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1049"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1051"/>
         <source>CUT TO:</source>
         <translation>CUT TO:</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1065"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1067"/>
         <source>To use AI assistant, you need to replenish credits&apos; balance.</source>
         <translation>Чтобы использовать интеллектуального помощника, необходимо пополнить баланс кредитов.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1066"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1068"/>
         <source>Maybe later</source>
         <translation>В другой раз</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1067"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1069"/>
         <source>Replenish</source>
         <translation>Пополнить</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1674"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1676"/>
         <source>Rephrasing text</source>
         <translation>Перефразирование текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1707"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1709"/>
         <source>Expanding text</source>
         <translation>Расширение текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1738"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1740"/>
         <source>Shortening text</source>
         <translation>Сокращение текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1770"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1772"/>
         <source>Inserting text</source>
         <translation>Вставка текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1801"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1803"/>
         <source>Summarizing text</source>
         <translation>Подытоживание текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1831"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1833"/>
         <source>Translating text</source>
         <translation>Перевод текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1910"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1912"/>
         <source>Translating document</source>
         <translation>Перевод документа</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2010"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2048"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2012"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2050"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation>Генерация синопсиса (сцена %1 из %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2102"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2137"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2104"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2139"/>
         <source>Generating novel (scene %1 from %2)</source>
         <translation>Генерация романа (сцена %1 из %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2187"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2227"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2189"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2229"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation>Генерация сценария (глава %1 из %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1047"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1049"/>
         <source>INT.</source>
         <translation>ИНТ.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1048"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1050"/>
         <source>EXT.</source>
         <translation>НАТ.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2270"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2323"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2272"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2325"/>
         <source>Processing text</source>
         <translation>Обработка текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2305"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2307"/>
         <source>Generating image</source>
         <translation>Создание изображения</translation>
     </message>
@@ -5177,22 +5225,22 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>ManagementLayer::ScreenplayTextManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="611"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="610"/>
         <source>Scene intro</source>
         <translation>Место действия</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="612"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="611"/>
         <source>Scene time</source>
         <translation>Время действия</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="613"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="612"/>
         <source>Character extension</source>
         <translation>Состояние персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="614"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="613"/>
         <source>Transition</source>
         <translation>Переход</translation>
     </message>
@@ -7380,12 +7428,12 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>SpellCheckTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="243"/>
+        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="266"/>
         <source>Add to dictionary</source>
         <translation>Добавить в словарь</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="249"/>
+        <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="272"/>
         <source>Ignore word</source>
         <translation>Игнорировать</translation>
     </message>
@@ -11599,142 +11647,142 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>Ui::CoverGeneratorSidebar</name>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="610"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="609"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="611"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="610"/>
         <source>Background image</source>
         <translation>Фоновое изображение</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="612"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="611"/>
         <source>Color between text and image</source>
         <translation>Цвет между текстом и изображением</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="613"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="612"/>
         <source>black</source>
         <translation>чёрный</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="614"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="613"/>
         <source>transparent</source>
         <translation>прозрачный</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="615"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="614"/>
         <source>white</source>
         <translation>белый</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="616"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="615"/>
         <source>Text of the first top line</source>
         <translation>Текст первой линии сверху</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="617"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="616"/>
         <source>Text of the second top line</source>
         <translation>Текст второй линии сверху</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="618"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="617"/>
         <source>Text above of the project name</source>
         <translation>Текст над названием проекта</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="619"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="618"/>
         <source>Project name</source>
         <translation>Название проекта</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="620"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="619"/>
         <source>Text under the project name</source>
         <translation>Текст под названием проекта</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="621"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="620"/>
         <source>Credits</source>
         <translation>Титры</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="622"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="621"/>
         <source>Release date or coming soon</source>
         <translation>Дата выхода</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="623"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="622"/>
         <source>Website</source>
         <translation>Вебсайт</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="634"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="633"/>
         <source>Font family</source>
         <translation>Гарнитура шрифта</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="635"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="634"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="636"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="635"/>
         <source>Text color</source>
         <translation>Цвет текста</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="637"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="636"/>
         <source>Make text bold</source>
         <translation>Сделать текст полужирным</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="638"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="637"/>
         <source>Make text italic</source>
         <translation>Сделать текст курсивным</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="639"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="638"/>
         <source>Make text underlined</source>
         <translation>Сделать текст подчёркнутым</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="640"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="639"/>
         <source>Align text to the left</source>
         <translation>Выровнять по левому краю</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="641"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="640"/>
         <source>Align text to the center</source>
         <translation>Выровнять по центру</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="642"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="641"/>
         <source>Align text to the right</source>
         <translation>Выровнять текст по правому краю</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="645"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="644"/>
         <source>Search images</source>
         <translation>Найти изображения</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="646"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="645"/>
         <source>Enter keywords for search</source>
         <translation>Ключевые слова для поиска</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="648"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="647"/>
         <source>Paste image from clipboard (image file or image url)</source>
         <translation>Вставить изображение из буфера обмена (картинку или ссылку)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="649"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="648"/>
         <source>Choose file with image</source>
         <translation>Выберите файл изображения</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="650"/>
+        <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="649"/>
         <source>Loading images</source>
         <translation>Загрузка изображений</translation>
     </message>
@@ -19460,38 +19508,43 @@ STARTED</source>
 <context>
     <name>Ui::SessionWidget</name>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="128"/>
+        <location filename="../ui/account/session_widget.cpp" line="101"/>
+        <source>version</source>
+        <translation>версия</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/session_widget.cpp" line="146"/>
         <source>Current device</source>
         <translation>Текущее устройство</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="131"/>
+        <location filename="../ui/account/session_widget.cpp" line="149"/>
         <source>Online</source>
         <translation>В сети</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="137"/>
+        <location filename="../ui/account/session_widget.cpp" line="155"/>
         <source>today</source>
         <translation>сегодня</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="139"/>
+        <location filename="../ui/account/session_widget.cpp" line="157"/>
         <source>yesterday</source>
         <translation>вчера</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="146"/>
+        <location filename="../ui/account/session_widget.cpp" line="164"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user's device</extracomment>
         <translation>был активен %1 в %2</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="149"/>
+        <location filename="../ui/account/session_widget.cpp" line="167"/>
         <source>Terminate others</source>
         <translation>Отозвать остальные</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="150"/>
+        <location filename="../ui/account/session_widget.cpp" line="168"/>
         <source>Terminate</source>
         <translation>Отозвать</translation>
     </message>

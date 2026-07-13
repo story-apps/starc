@@ -325,9 +325,42 @@ void ProjectsModelProjectItem::setCollaborators(
 QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
 {
     //
-    // Доступно только для конкретных проектов
+    // TODO: Пока доступно только для конкретных проектов, вынести в параметры проекта
     //
-    if (d->id == 4568) {
+    switch (d->id) {
+    case 3661: {
+        const QStringList primaryLocations = {
+            "ШКОЛА. КАБИНЕТ ВШ",        "ШКОЛА. КАБИНЕТ ВШ. КОРИДОР",
+            "ШКОЛА. КАБИНЕТ ДИРЕКТОРА", "ШКОЛА. КАБИНЕТ ДИРЕКТОРА. КОРИДОР",
+            "ШКОЛА. КАБИНЕТ ЗАВУЧА",    "ШКОЛА. КАБИНЕТ ЗАВУЧА. КОРИДОР",
+            "ШКОЛА. УЧИТЕЛЬСКАЯ",       "ШКОЛА. УЧИТЕЛЬСКАЯ. КОРИДОР",
+        };
+        return {
+            { BusinessLayer::ComplianceRuleType::TotalDuration, true, 23 * 60, 25 * 60, {} },
+            { BusinessLayer::ComplianceRuleType::ScenesCount, true, 16, 24, {} },
+            { BusinessLayer::ComplianceRuleType::SceneDuration, true, 40, 80, {} },
+            { BusinessLayer::ComplianceRuleType::CharacterShouldSpeakInEveryScene,
+              true,
+              {},
+              {},
+              {
+                  "Димон",
+                  "Завуч",
+              } },
+            { BusinessLayer::ComplianceRuleType::SceneMaxCharactersCount, false, 0, 5, {} },
+            { BusinessLayer::ComplianceRuleType::PrimaryLocationsPercent, false, 70, 0,
+              primaryLocations },
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsCount, false, 0, 3,
+              primaryLocations },
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsSceneCount, false, 3, 0,
+              primaryLocations },
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsNightScenePercent, false, 0, 10,
+              primaryLocations },
+        };
+        break;
+    }
+
+    case 4568: {
         const QStringList primaryLocations = {
             "ТРЕШКА. *",
             "КВАРТИРА ДИМЫ. КОМНАТА ДИМЫ",
@@ -357,6 +390,8 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
             { BusinessLayer::ComplianceRuleType::SecondaryLocationsNightScenePercent, false, 0, 10,
               primaryLocations },
         };
+        break;
+    }
     }
 
     return {};
