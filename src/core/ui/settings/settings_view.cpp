@@ -331,6 +331,7 @@ public:
     CheckBox* useSmartQuotes = nullptr;
     CheckBox* replaceTwoDashesWithEmDash = nullptr;
     CheckBox* avoidMultipleSpaces = nullptr;
+    CheckBox* useVimMode = nullptr;
     //
     // ... AI assistant
     //
@@ -692,6 +693,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , useSmartQuotes(new CheckBox(applicationCard))
     , replaceTwoDashesWithEmDash(new CheckBox(applicationCard))
     , avoidMultipleSpaces(new CheckBox(applicationCard))
+    , useVimMode(new CheckBox(applicationCard))
     , applicationAiAssistantTitle(new H6Label(applicationCard))
     , enableAiAssistant(new CheckBox(applicationCard))
     //
@@ -1039,6 +1041,7 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(useTypewriterScrolling, itemIndex++, 0);
     applicationCardLayout->addWidget(focusCurrentParagraph, itemIndex++, 0);
     applicationCardLayout->addWidget(highlightCurrentLine, itemIndex++, 0);
+    applicationCardLayout->addWidget(useVimMode, itemIndex++, 0);
     applicationCardLayout->addWidget(applicationTextEditingSubtitle, itemIndex++, 0);
     applicationCardLayout->addWidget(correctDoubleCapitals, itemIndex++, 0);
     applicationCardLayout->addWidget(capitalizeSingleILetter, itemIndex++, 0);
@@ -1849,6 +1852,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationReplaceTwoDashedWithEmDashChanged);
     connect(d->avoidMultipleSpaces, &CheckBox::checkedChanged, this,
             &SettingsView::applicationAvoidMultipleSpacesChanged);
+    connect(d->useVimMode, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationUseVimModeChanged);
     connect(d->enableAiAssistant, &CheckBox::checkedChanged, this,
             &SettingsView::applicationAiAssistantEnabledChanged);
 
@@ -3312,6 +3317,11 @@ void SettingsView::setApplicationAvoidMultipleSpaces(bool _avoid)
     d->avoidMultipleSpaces->setChecked(_avoid);
 }
 
+void SettingsView::setApplicationUseVimMode(bool _use)
+{
+    d->useVimMode->setChecked(_use);
+}
+
 void SettingsView::setApplicationAiAssistantEnabled(bool _enabled)
 {
     d->enableAiAssistant->setChecked(_enabled);
@@ -4237,6 +4247,7 @@ void SettingsView::updateTranslations()
     d->useSmartQuotes->setText(tr("Replace vertical quotation marks to curly ones"));
     d->replaceTwoDashesWithEmDash->setText(tr("Replace two dashes with em dash"));
     d->avoidMultipleSpaces->setText(tr("Avoid multiple spaces"));
+    d->useVimMode->setText(tr("Use Vim mode for text editors"));
     d->applicationAiAssistantTitle->setText(tr("AI assistant"));
     d->enableAiAssistant->setText(tr("Enable AI assistant"));
 
@@ -4658,6 +4669,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->useSmartQuotes,
              d->replaceTwoDashesWithEmDash,
              d->avoidMultipleSpaces,
+             d->useVimMode,
              d->enableAiAssistant,
              //
              d->simpleTextNavigatorShowSceneText,

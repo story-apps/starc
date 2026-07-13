@@ -163,6 +163,8 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey).toBool());
     view->setApplicationAvoidMultipleSpaces(
         settingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey).toBool());
+    view->setApplicationUseVimMode(
+        settingsValue(DataStorageLayer::kApplicationUseVimModeKey).toBool());
     view->setApplicationAiAssistantEnabled(
         settingsValue(DataStorageLayer::kApplicationAiAssistantEnabledKey).toBool());
 }
@@ -1072,6 +1074,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setApplicationReplaceTwoDashesWithEmDash);
     connect(d->view, &Ui::SettingsView::applicationAvoidMultipleSpacesChanged, this,
             &SettingsManager::setApplicationAvoidMultipleSpaces);
+    connect(d->view, &Ui::SettingsView::applicationUseVimModeChanged, this,
+            &SettingsManager::setApplicationUseVimMode);
     connect(d->view, &Ui::SettingsView::applicationAiAssistantEnabledChanged, this,
             &SettingsManager::setApplicationAiAssistantEnabled);
     //
@@ -2103,6 +2107,17 @@ void SettingsManager::setApplicationAvoidMultipleSpaces(bool _avoid)
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
     emit novelEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
+}
+
+void SettingsManager::setApplicationUseVimMode(bool _use)
+{
+    setSettingsValue(DataStorageLayer::kApplicationUseVimModeKey, _use);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationUseVimModeKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationUseVimModeKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationUseVimModeKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationUseVimModeKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationUseVimModeKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationUseVimModeKey });
 }
 
 void SettingsManager::setApplicationAiAssistantEnabled(bool _enabled)
