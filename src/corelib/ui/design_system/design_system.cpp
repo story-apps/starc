@@ -448,6 +448,7 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
     auto initFont
         = [_scaleFactor, fontFamilies](QFont::Weight _weight, QFont::Capitalization _capitalization,
                                        int _pixelSize, qreal _letterSpacing, QFont& _font) {
+              _font.setFamily(fontFamilies.constFirst());
               _font.setFamilies(fontFamilies);
               _font.setWeight(_weight);
               _font.setCapitalization(_capitalization);
