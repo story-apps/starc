@@ -140,8 +140,19 @@ void AccountManager::Implementation::initNavigatorConnections()
             &AccountManager::renewCreator);
     connect(navigator, &Ui::AccountNavigator::buyCreditsPressed, q, &AccountManager::buyCredits);
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
-        q->clearAccountInfo();
-        emit q->logoutRequested();
+        auto dialog = new Dialog(view->topLevelWidget());
+        dialog->showDialog({}, tr("Are you sure you want to log out?"),
+                           { { 0, tr("Cancel"), Dialog::RejectButton },
+                             { 1, tr("Log out"), Dialog::AcceptCriticalButton } });
+        QObject::connect(dialog, &Dialog::finished, q,
+                         [this, dialog](const Dialog::ButtonInfo& _presedButton) {
+                             dialog->hideDialog();
+                             if (_presedButton.type == Dialog::AcceptCriticalButton) {
+                                 q->clearAccountInfo();
+                                 emit q->logoutRequested();
+                             }
+                         });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
     });
     //
     connect(navigator, &Ui::AccountNavigator::createTeamPressed, q, [this] {
