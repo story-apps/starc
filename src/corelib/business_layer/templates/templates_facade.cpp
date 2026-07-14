@@ -269,6 +269,13 @@ void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir
                   return _lhs.name() < _rhs.name();
               });
     for (const auto& templateItem : std::as_const(sortedTemplates)) {
+        //
+        // ... пропускаем вспомогательные шаблоны для титула, синопсиса и т.п.
+        //
+        if (templateItem.name().isEmpty() || templateItem.name().contains("#")) {
+            continue;
+        }
+
         auto item = new QStandardItem(templateItem.name());
         item->setData(templateItem.id(), kTemplateIdRole);
         templateInfo.model.appendRow(item);
