@@ -50,7 +50,8 @@ CardPopup::CardPopup(QWidget* _parent)
             [this](const QVariant& _value) { resize(width(), _value.toInt()); });
     connect(&d->heightAnimation, &QVariantAnimation::finished, this, [this] {
         if (d->heightAnimation.direction() == QVariantAnimation::Backward
-            && d->heightAnimation.currentValue().toInt() == d->heightAnimation.startValue()) {
+            && d->heightAnimation.currentValue().toInt()
+                == d->heightAnimation.startValue().toInt()) {
             hide();
         }
     });
@@ -115,10 +116,6 @@ void CardPopup::hidePopup()
 {
     if (!isVisible()) {
         return;
-    }
-
-    if (d->heightAnimation.endValue().toInt() != sizeHint().height()) {
-        d->heightAnimation.setEndValue(sizeHint().height());
     }
 
     d->positionAnimation.setDirection(QVariantAnimation::Backward);

@@ -37,7 +37,7 @@ CardPopupWithTree::CardPopupWithTree(QWidget* _parent)
     popupLayout->addWidget(d->content);
     setContentLayout(popupLayout);
 
-    connect(d->content, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
+    connect(d->content, &Tree::clicked, this, [this](const QModelIndex& _index) {
         hidePopup();
         emit currentIndexChanged(_index);
     });
