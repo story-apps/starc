@@ -651,7 +651,7 @@ public:
 };
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
-    : content(UiHelper::createScrollArea(_parent))
+    : content(UiHelper::createScrollArea(_parent, false, true))
     , contextMenu(new ContextMenu(_parent))
     //
     , applicationCard(new Card(content))
@@ -1685,8 +1685,8 @@ void SettingsView::Implementation::initAdvancedCard()
     //
     // Компоновка
     //
-    applicationCardLayout->setContentsMargins({});
-    applicationCardLayout->setSpacing(0);
+    advancedCardLayout->setContentsMargins({});
+    advancedCardLayout->setSpacing(0);
     int itemIndex = 0;
     advancedCardLayout->addWidget(advancedTitle, itemIndex++, 0);
     advancedCardLayout->addWidget(advancedUseExtendedLogging, itemIndex++, 0);
@@ -4500,6 +4500,7 @@ void SettingsView::updateTranslations()
     //
     d->advancedTitle->setText(tr("Advanced settings"));
     d->advancedUseExtendedLogging->setText(tr("Collect extended logs about application operation"));
+    d->advancedCardLayout->setContentsMargins(0, 0, 0, DesignSystem::layout().px8());
 }
 
 SettingsView::~SettingsView() = default;
@@ -4581,6 +4582,30 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         cardTitle->setTextColor(titleColor);
         cardTitle->setContentsMargins(titleMargins);
     }
+    titleMargins.setTop(DesignSystem::compactLayout().px(32));
+    for (auto cardTitle : std::vector<Widget*>{
+             d->applicationUserInterfaceTitle,
+             d->applicationSaveAndBackupTitle,
+             d->applicationTextEditingTitle,
+             d->applicationAiAssistantTitle,
+             d->simpleTextEditorTitle,
+             d->simpleTextNavigatorTitle,
+             d->screenplayEditorTitle,
+             d->screenplayNavigatorTitle,
+             d->screenplayDurationTitle,
+             d->comicBookEditorTitle,
+             d->comicBookNavigatorTitle,
+             d->audioplayEditorTitle,
+             d->audioplayNavigatorTitle,
+             d->audioplayDurationTitle,
+             d->stageplayEditorTitle,
+             d->stageplayNavigatorTitle,
+             d->novelEditorTitle,
+             d->novelNavigatorTitle,
+         }) {
+        cardTitle->setContentsMargins(titleMargins);
+    }
+    titleMargins = DesignSystem::label().margins().toMargins();
     titleMargins.setBottom(0);
     for (auto title : std::vector<Widget*>{ d->componentsTitle }) {
         title->setBackgroundColor(DesignSystem::color().surface());

@@ -158,23 +158,19 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     }
 
     if (isLeftToRight()) {
-        iconRect.setRect(margins.left(), margins.top(),
-                         Ui::DesignSystem::checkBox().iconSize().width(),
-                         Ui::DesignSystem::checkBox().iconSize().height());
+        iconRect.setRect(margins.left(), 0, Ui::DesignSystem::checkBox().iconSize().width(),
+                         height());
 
         textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
-        textRect.setRect(textRectX, margins.top(), width() - textRectX,
-                         Ui::DesignSystem::checkBox().height());
+        textRect.setRect(textRectX, 0, width() - textRectX, height());
     } else {
         const auto textWidth = width() - margins.left() - Ui::DesignSystem::checkBox().spacing()
             - Ui::DesignSystem::checkBox().iconSize().width() - margins.right();
 
         textRectX = margins.left();
-        textRect.setRect(textRectX, margins.top(), textWidth,
-                         Ui::DesignSystem::checkBox().height());
-        iconRect.setRect(textRectX + textWidth + Ui::DesignSystem::checkBox().spacing(),
-                         margins.top(), Ui::DesignSystem::checkBox().iconSize().width(),
-                         Ui::DesignSystem::checkBox().iconSize().height());
+        textRect.setRect(textRectX, 0, textWidth, height());
+        iconRect.setRect(textRectX + textWidth + Ui::DesignSystem::checkBox().spacing(), 0,
+                         Ui::DesignSystem::checkBox().iconSize().width(), height());
     }
 
     //

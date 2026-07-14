@@ -1167,6 +1167,7 @@ public:
 
 DesignSystem::CheckBox::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    // 2 для компактного и 0 для обычного
     if (_density > 0) {
         const auto delta = 4.0 * _scaleFactor * _density;
         const auto halfDelta = delta / 2.0;

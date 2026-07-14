@@ -14,6 +14,7 @@
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/ui_helper.h>
@@ -470,6 +471,8 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         widget->setTextColor(DesignSystem::color().onBackground());
         widget->setBackgroundColor(DesignSystem::color().background());
     }
+    d->advancedSettingsButton->setTextColor(ColorHelper::transparent(
+        DesignSystem::color().onBackground(), DesignSystem::inactiveItemOpacity()));
 
     for (auto textField : std::vector<TextField*>{
              d->projectType,

@@ -120,7 +120,8 @@ void UiHelper::setFocusPolicyRecursively(QWidget* _widget, Qt::FocusPolicy _poli
     }
 }
 
-QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout)
+QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout,
+                                        bool _withHorizontalScroll)
 {
     auto content = new QScrollArea(_parent);
     QPalette palette;
@@ -128,7 +129,7 @@ QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout)
     palette.setColor(QPalette::Window, Qt::transparent);
     content->setPalette(palette);
     content->setFrameShape(QFrame::NoFrame);
-    setupScrolling(content);
+    setupScrolling(content, _withHorizontalScroll);
 
     auto contentWidget = new QWidget;
     content->setWidget(contentWidget);

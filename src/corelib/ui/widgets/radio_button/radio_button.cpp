@@ -99,14 +99,12 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     QRectF iconRect;
 
     if (isLeftToRight()) {
-        iconRect.setRect(Ui::DesignSystem::radioButton().margins().left(),
-                         Ui::DesignSystem::radioButton().margins().top(),
-                         Ui::DesignSystem::radioButton().iconSize().width(),
-                         Ui::DesignSystem::radioButton().iconSize().height());
+        iconRect.setRect(Ui::DesignSystem::radioButton().margins().left(), 0,
+                         Ui::DesignSystem::radioButton().iconSize().width(), height());
 
         textRectX = iconRect.right() + Ui::DesignSystem::radioButton().spacing();
         textWidth = width() - textRectX - Ui::DesignSystem::radioButton().margins().right();
-        textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
+        textRect.setRect(textRectX, 0, width() - textRectX, height());
     } else {
         textWidth = width() - Ui::DesignSystem::radioButton().margins().left()
             - Ui::DesignSystem::radioButton().spacing()
@@ -114,11 +112,9 @@ void RadioButton::paintEvent(QPaintEvent* _event)
             - Ui::DesignSystem::radioButton().margins().right();
 
         textRectX = Ui::DesignSystem::radioButton().margins().left();
-        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
-        iconRect.setRect(textRectX + textWidth + Ui::DesignSystem::radioButton().spacing(),
-                         Ui::DesignSystem::radioButton().margins().top(),
-                         Ui::DesignSystem::radioButton().iconSize().width(),
-                         Ui::DesignSystem::radioButton().iconSize().height());
+        textRect.setRect(textRectX, 0, textWidth, height());
+        iconRect.setRect(textRectX + textWidth + Ui::DesignSystem::radioButton().spacing(), 0,
+                         Ui::DesignSystem::radioButton().iconSize().width(), height());
     }
     //
     // Рисуем декорацию переключателя
