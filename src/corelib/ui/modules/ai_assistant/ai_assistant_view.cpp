@@ -812,7 +812,8 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     auto updateRephraseWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->rephraseSourceText);
         const auto styleTextWordCount = updateWordCounter(d->rephraseStyleText);
-        d->rephraseButton->setEnabled(sourceTextWordCount <= 1000 && styleTextWordCount <= 1000);
+        d->rephraseButton->setEnabled(sourceTextWordCount <= 1000 && styleTextWordCount <= 1000
+                                      && d->availableWords > 0);
     };
     connect(d->rephraseSourceText, &TextField::textChanged, this, updateRephraseWordCounters);
     connect(d->rephraseStyleText, &TextField::textChanged, this, updateRephraseWordCounters);
@@ -828,7 +829,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     //
     auto updateExpandWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->expandSourceText);
-        d->expandButton->setEnabled(sourceTextWordCount <= 1000);
+        d->expandButton->setEnabled(sourceTextWordCount <= 1000 && d->availableWords > 0);
     };
     connect(d->expandSourceText, &TextField::textChanged, this, updateExpandWordCounters);
     connect(d->expandResultText, &TextField::textChanged, this,
@@ -842,7 +843,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     //
     auto updateShortenWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->shortenSourceText);
-        d->shortenButton->setEnabled(sourceTextWordCount <= 1000);
+        d->shortenButton->setEnabled(sourceTextWordCount <= 1000 && d->availableWords > 0);
     };
     connect(d->shortenSourceText, &TextField::textChanged, this, updateShortenWordCounters);
     connect(d->shortenResultText, &TextField::textChanged, this,
@@ -857,7 +858,8 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     auto updateInsertWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->insertAfterText);
         const auto styleTextWordCount = updateWordCounter(d->insertBeforeText);
-        d->insertButton->setEnabled(sourceTextWordCount <= 1000 && styleTextWordCount <= 1000);
+        d->insertButton->setEnabled(sourceTextWordCount <= 1000 && styleTextWordCount <= 1000
+                                    && d->availableWords > 0);
     };
     connect(d->insertAfterText, &TextField::textChanged, this, updateInsertWordCounters);
     connect(d->insertBeforeText, &TextField::textChanged, this, updateInsertWordCounters);
@@ -873,7 +875,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     //
     auto updateSummarizeWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->summarizeSourceText);
-        d->summarizeButton->setEnabled(sourceTextWordCount <= 1000);
+        d->summarizeButton->setEnabled(sourceTextWordCount <= 1000 && d->availableWords > 0);
     };
     connect(d->summarizeSourceText, &TextField::textChanged, this, updateSummarizeWordCounters);
     connect(d->summarizeResultText, &TextField::textChanged, this,
@@ -887,7 +889,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     //
     auto updateTranslateWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->translateSourceText);
-        d->translateButton->setEnabled(sourceTextWordCount <= 1000);
+        d->translateButton->setEnabled(sourceTextWordCount <= 1000 && d->availableWords > 0);
     };
     connect(d->translateSourceText, &TextField::textChanged, this, updateTranslateWordCounters);
     connect(d->translateLanguage, &TextField::textChanged, this, updateTranslateWordCounters);
@@ -941,7 +943,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     //
     auto updateGenerateTextWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->generateTextPromptText);
-        d->generateTextButton->setEnabled(sourceTextWordCount <= 1000);
+        d->generateTextButton->setEnabled(sourceTextWordCount <= 1000 && d->availableWords > 0);
     };
     connect(d->generateTextPromptText, &TextField::textChanged, this,
             updateGenerateTextWordCounters);
@@ -950,7 +952,8 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     //
     auto updateGenerateCharacterWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->generateCharacterPromptText);
-        d->generateCharacterButton->setEnabled(sourceTextWordCount <= 1000);
+        d->generateCharacterButton->setEnabled(sourceTextWordCount <= 1000
+                                               && d->availableWords > 0);
     };
     connect(d->generateCharacterPromptText, &TextField::textChanged, this,
             updateGenerateCharacterWordCounters);
@@ -1005,6 +1008,24 @@ void AiAssistantView::setReadOnly(bool _readOnly)
              d->generateMindMapPage,
          }) {
         button->setEnabled(!_readOnly);
+    }
+
+    const auto isGenerationAvailable = !d->isReadOnly && d->availableWords > 0;
+    for (auto button : {
+             d->rephraseButton,
+             d->expandButton,
+             d->shortenButton,
+             d->insertButton,
+             d->summarizeButton,
+             d->translateButton,
+             d->generateSynopsisButton,
+             d->generateNovelButton,
+             d->generateScriptButton,
+             d->generateTextButton,
+             d->generateCharacterButton,
+             d->generateMindMapButton,
+         }) {
+        button->setEnabled(isGenerationAvailable);
     }
 }
 
@@ -1172,9 +1193,27 @@ void AiAssistantView::setGenerateSynopsisResult(const QString& _text)
 void AiAssistantView::setAvailableWords(int _availableWords)
 {
     d->availableWords = _availableWords;
-    d->availableWordsLabel->setText(_availableWords > 0
-                                        ? tr("%n word(s) available", nullptr, _availableWords)
+    d->availableWordsLabel->setText(d->availableWords > 0
+                                        ? tr("%n word(s) available", nullptr, d->availableWords)
                                         : tr("No words available"));
+
+    const auto isGenerationAvailable = !d->isReadOnly && d->availableWords > 0;
+    for (auto button : {
+             d->rephraseButton,
+             d->expandButton,
+             d->shortenButton,
+             d->insertButton,
+             d->summarizeButton,
+             d->translateButton,
+             d->generateSynopsisButton,
+             d->generateNovelButton,
+             d->generateScriptButton,
+             d->generateTextButton,
+             d->generateCharacterButton,
+             d->generateMindMapButton,
+         }) {
+        button->setEnabled(isGenerationAvailable);
+    }
 }
 
 void AiAssistantView::updateTranslations()
