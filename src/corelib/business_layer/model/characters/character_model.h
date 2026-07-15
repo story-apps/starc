@@ -21,6 +21,14 @@ enum class CharacterStoryRole {
 };
 
 /**
+ * @brief Вспомогательная функция, для возможности размещения роли персонажа в хэше
+ */
+inline uint qHash(CharacterStoryRole _key)
+{
+    return ::qHash(static_cast<int>(_key));
+}
+
+/**
  * @brief Отношения с другим персонажем
  */
 class CORE_LIBRARY_EXPORT CharacterRelation
