@@ -2523,6 +2523,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
 ApplicationManager::~ApplicationManager()
 {
     //
+    // Сохраняем настройки приложения
+    //
+    DataStorageLayer::StorageFacade::settingsStorage()->sync();
+
+    //
     // Удаляем старые логи
     //
     const auto logsDirPath

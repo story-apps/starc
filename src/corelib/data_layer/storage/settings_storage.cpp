@@ -63,12 +63,17 @@ public:
     /**
      * @brief Кэшированные значения параметров
      */
-    QVariantMap cachedValuesApp;
+    QVariantMap cachedAppSettings;
 
     /**
      * @brief Значения параметров текущей сессии
      */
-    QVariantMap sessionValues;
+    QVariantMap sessionSettings;
+
+    /**
+     * @brief Изменённые значения параметров приложения, ожидающие записи на диск
+     */
+    QVariantMap pendingAppSettings;
 
     /**
      * @brief Настройки приложения
@@ -78,7 +83,7 @@ public:
     /**
      * @brief Значения параметров по умолчанию
      */
-    QVariantMap defaultValues;
+    QVariantMap defaultSettings;
 };
 
 SettingsStorage::Implementation::Implementation()
@@ -92,45 +97,45 @@ SettingsStorage::Implementation::Implementation()
     //
     // Для приложения
     //
-    defaultValues.insert(kApplicationConfiguredKey, false);
-    defaultValues.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
-    defaultValues.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::Light));
-    defaultValues.insert(
+    defaultSettings.insert(kApplicationConfiguredKey, false);
+    defaultSettings.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
+    defaultSettings.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::Light));
+    defaultSettings.insert(
         kApplicationCustomThemeColorsKey,
         "323740ffffff2ab177f8f8f2272b34f8f8f222262ef8f8f2ec3740f8f8f2000000f8f8f2272b34f8f8f2");
-    defaultValues.insert(kApplicationScaleFactorKey, 1.0);
-    defaultValues.insert(kApplicationDensityKey, 0);
-    defaultValues.insert(kApplicationUseAutoSaveKey, true);
-    defaultValues.insert(kApplicationSaveBackupsKey, true);
-    defaultValues.insert(kApplicationBackupsFolderKey,
-                         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
-                             + "/starc/backups");
-    defaultValues.insert(kApplicationBackupsQtyKey, 7);
-    defaultValues.insert(kApplicationShowDocumentsPagesKey, true);
-    defaultValues.insert(kApplicationUseTypewriterSoundKey, false);
-    defaultValues.insert(kApplicationUseSpellCheckerKey, false);
-    defaultValues.insert(kApplicationHighlightCurrentLineKey, false);
-    defaultValues.insert(kApplicationFocusCurrentParagraphKey, false);
-    defaultValues.insert(kApplicationUseTypewriterScrollingKey, false);
-    defaultValues.insert(kApplicationCorrectDoubleCapitalsKey, true);
-    defaultValues.insert(kApplicationCapitalizeSingleILetterKey, true);
-    defaultValues.insert(kApplicationReplaceThreeDotsWithEllipsisKey, true);
-    defaultValues.insert(kApplicationSmartQuotesKey, false);
-    defaultValues.insert(kApplicationReplaceTwoDashesWithEmDashKey, false);
-    defaultValues.insert(kApplicationAvoidMultipleSpacesKey, false);
-    defaultValues.insert(kApplicationAiAssistantEnabledKey, true);
-    defaultValues.insert(kApplicationShortcutsImportKey, "Alt+I");
-    defaultValues.insert(kApplicationShortcutsCurrentDocumentExportKey, "Alt+E");
-    defaultValues.insert(kApplicationLoggingLevelKey, static_cast<int>(Log::Level::Debug));
+    defaultSettings.insert(kApplicationScaleFactorKey, 1.0);
+    defaultSettings.insert(kApplicationDensityKey, 0);
+    defaultSettings.insert(kApplicationUseAutoSaveKey, true);
+    defaultSettings.insert(kApplicationSaveBackupsKey, true);
+    defaultSettings.insert(kApplicationBackupsFolderKey,
+                           QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                               + "/starc/backups");
+    defaultSettings.insert(kApplicationBackupsQtyKey, 7);
+    defaultSettings.insert(kApplicationShowDocumentsPagesKey, true);
+    defaultSettings.insert(kApplicationUseTypewriterSoundKey, false);
+    defaultSettings.insert(kApplicationUseSpellCheckerKey, false);
+    defaultSettings.insert(kApplicationHighlightCurrentLineKey, false);
+    defaultSettings.insert(kApplicationFocusCurrentParagraphKey, false);
+    defaultSettings.insert(kApplicationUseTypewriterScrollingKey, false);
+    defaultSettings.insert(kApplicationCorrectDoubleCapitalsKey, true);
+    defaultSettings.insert(kApplicationCapitalizeSingleILetterKey, true);
+    defaultSettings.insert(kApplicationReplaceThreeDotsWithEllipsisKey, true);
+    defaultSettings.insert(kApplicationSmartQuotesKey, false);
+    defaultSettings.insert(kApplicationReplaceTwoDashesWithEmDashKey, false);
+    defaultSettings.insert(kApplicationAvoidMultipleSpacesKey, false);
+    defaultSettings.insert(kApplicationAiAssistantEnabledKey, true);
+    defaultSettings.insert(kApplicationShortcutsImportKey, "Alt+I");
+    defaultSettings.insert(kApplicationShortcutsCurrentDocumentExportKey, "Alt+E");
+    defaultSettings.insert(kApplicationLoggingLevelKey, static_cast<int>(Log::Level::Debug));
 
-    defaultValues.insert(kProjectTypeKey, 0);
-    defaultValues.insert(kProjectSaveFolderKey,
-                         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
-                             + "/starc/projects");
-    defaultValues.insert(kProjectImportFolderKey,
-                         QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
-    defaultValues.insert(kProjectExportFolderKey,
-                         QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    defaultSettings.insert(kProjectTypeKey, 0);
+    defaultSettings.insert(kProjectSaveFolderKey,
+                           QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                               + "/starc/projects");
+    defaultSettings.insert(kProjectImportFolderKey,
+                           QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    defaultSettings.insert(kProjectExportFolderKey,
+                           QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
     //
     // Параметры редактора текста
     //
@@ -138,10 +143,10 @@ SettingsStorage::Implementation::Implementation()
         auto addSimpleTextEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsSimpleTextEditorKey, _actionType,
-                                                toString(_from), _actionKey),
-                                       toString(_to));
+                  defaultSettings.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                             .arg(kComponentsSimpleTextEditorKey, _actionType,
+                                                  toString(_from), _actionKey),
+                                         toString(_to));
               };
         auto addSimpleTextEditorStylesActionByTab
             = [addSimpleTextEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -237,7 +242,7 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsSimpleTextEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
@@ -251,15 +256,15 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+7");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
-        defaultValues.insert(kComponentsSimpleTextAvailableKey, true);
+        defaultSettings.insert(kComponentsSimpleTextAvailableKey, true);
         //
-        defaultValues.insert(kComponentsSimpleTextEditorDefaultTemplateKey, "mono_cp_a4");
-        defaultValues.insert(kComponentsSimpleTextEditorCorrectTextOnPageBreaksKey, false);
+        defaultSettings.insert(kComponentsSimpleTextEditorDefaultTemplateKey, "mono_cp_a4");
+        defaultSettings.insert(kComponentsSimpleTextEditorCorrectTextOnPageBreaksKey, false);
         //
         // Параметры навигатора простого текстового документа
         //
-        defaultValues.insert(kComponentsSimpleTextNavigatorShowSceneTextKey, true);
-        defaultValues.insert(kComponentsSimpleTextNavigatorSceneTextLinesKey, 1);
+        defaultSettings.insert(kComponentsSimpleTextNavigatorShowSceneTextKey, true);
+        defaultSettings.insert(kComponentsSimpleTextNavigatorSceneTextLinesKey, 1);
     }
     //
     // Параметры редактора тритмента сценария
@@ -268,10 +273,10 @@ SettingsStorage::Implementation::Implementation()
         auto addTreatmentEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsScreenplayTreatmentEditorKey,
-                                                _actionType, toString(_from), _actionKey),
-                                       toString(_to));
+                  defaultSettings.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                             .arg(kComponentsScreenplayTreatmentEditorKey,
+                                                  _actionType, toString(_from), _actionKey),
+                                         toString(_to));
               };
         auto addTreatmentEditorStylesActionByTab
             = [addTreatmentEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -344,13 +349,13 @@ SettingsStorage::Implementation::Implementation()
         addTreatmentEditorStylesChangeByEnter(TextParagraphType::ActHeading,
                                               TextParagraphType::ActHeading);
         //
-        auto addShortcut
-            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(QString("%1/shortcuts/%2")
-                                           .arg(kComponentsScreenplayTreatmentEditorKey,
-                                                BusinessLayer::toString(_type)),
-                                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
-              };
+        auto addShortcut = [this](BusinessLayer::TextParagraphType _type,
+                                  const QString& _shortcut) {
+            defaultSettings.insert(
+                QString("%1/shortcuts/%2")
+                    .arg(kComponentsScreenplayTreatmentEditorKey, BusinessLayer::toString(_type)),
+                QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+        };
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+Shift+1");
         addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
@@ -364,10 +369,10 @@ SettingsStorage::Implementation::Implementation()
         auto addScreenplayEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsScreenplayEditorKey, _actionType,
-                                                toString(_from), _actionKey),
-                                       toString(_to));
+                  defaultSettings.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                             .arg(kComponentsScreenplayEditorKey, _actionType,
+                                                  toString(_from), _actionKey),
+                                         toString(_to));
               };
         auto addScreenplayEditorStylesActionByTab
             = [addScreenplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -507,7 +512,7 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsScreenplayEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
@@ -527,74 +532,74 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::SequenceHeading, "Ctrl+Space");
         addShortcut(BusinessLayer::TextParagraphType::ActHeading, "Ctrl+Shift+Space");
         //
-        defaultValues.insert(kComponentsScreenplayAvailableKey, true);
+        defaultSettings.insert(kComponentsScreenplayAvailableKey, true);
         //
-        defaultValues.insert(kComponentsScreenplayEditorDefaultTemplateKey, "world_cp");
-        defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
-        defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorContinueDialogueKey, false);
-        defaultValues.insert(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorSaveItemsFromTextKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorShowHintsForAllItemsKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorShowHintsForPrimaryItemsKey, false);
-        defaultValues.insert(kComponentsScreenplayEditorShowHintsForSecondaryItemsKey, false);
-        defaultValues.insert(kComponentsScreenplayEditorShowHintsForTertiaryItemsKey, false);
-        defaultValues.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
-                             true);
-        defaultValues.insert(
+        defaultSettings.insert(kComponentsScreenplayEditorDefaultTemplateKey, "world_cp");
+        defaultSettings.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
+        defaultSettings.insert(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey, true);
+        defaultSettings.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
+        defaultSettings.insert(kComponentsScreenplayEditorContinueDialogueKey, false);
+        defaultSettings.insert(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey, true);
+        defaultSettings.insert(kComponentsScreenplayEditorSaveItemsFromTextKey, true);
+        defaultSettings.insert(kComponentsScreenplayEditorShowHintsForAllItemsKey, true);
+        defaultSettings.insert(kComponentsScreenplayEditorShowHintsForPrimaryItemsKey, false);
+        defaultSettings.insert(kComponentsScreenplayEditorShowHintsForSecondaryItemsKey, false);
+        defaultSettings.insert(kComponentsScreenplayEditorShowHintsForTertiaryItemsKey, false);
+        defaultSettings.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
+                               true);
+        defaultSettings.insert(
             kComponentsScreenplayEditorUseOpenParenthesisInDialogueForParentheticalKey, true);
         //
         // Параметры навигатора сценария
         //
-        defaultValues.insert(kComponentsScreenplayNavigatorShowBeatsKey, true);
-        defaultValues.insert(kComponentsScreenplayNavigatorShowBeatsInTreatmentKey, true);
-        defaultValues.insert(kComponentsScreenplayNavigatorShowBeatsInScreenplayKey, false);
-        defaultValues.insert(kComponentsScreenplayNavigatorShowSceneNumberKey, true);
-        defaultValues.insert(kComponentsScreenplayNavigatorShowSceneTextKey, true);
-        defaultValues.insert(kComponentsScreenplayNavigatorSceneTextLinesKey, 1);
+        defaultSettings.insert(kComponentsScreenplayNavigatorShowBeatsKey, true);
+        defaultSettings.insert(kComponentsScreenplayNavigatorShowBeatsInTreatmentKey, true);
+        defaultSettings.insert(kComponentsScreenplayNavigatorShowBeatsInScreenplayKey, false);
+        defaultSettings.insert(kComponentsScreenplayNavigatorShowSceneNumberKey, true);
+        defaultSettings.insert(kComponentsScreenplayNavigatorShowSceneTextKey, true);
+        defaultSettings.insert(kComponentsScreenplayNavigatorSceneTextLinesKey, 1);
         //
         // Параметры хронометража сценария
         //
-        defaultValues.insert(kComponentsScreenplayDurationTypeKey, 0);
-        defaultValues.insert(kComponentsScreenplayDurationByPageDurationKey, 60);
-        defaultValues.insert(kComponentsScreenplayDurationByCharactersCharactersKey, 1350);
-        defaultValues.insert(kComponentsScreenplayDurationByCharactersIncludeSpacesKey, true);
-        defaultValues.insert(kComponentsScreenplayDurationByCharactersDurationKey, 60);
-        defaultValues.insert(
+        defaultSettings.insert(kComponentsScreenplayDurationTypeKey, 0);
+        defaultSettings.insert(kComponentsScreenplayDurationByPageDurationKey, 60);
+        defaultSettings.insert(kComponentsScreenplayDurationByCharactersCharactersKey, 1350);
+        defaultSettings.insert(kComponentsScreenplayDurationByCharactersIncludeSpacesKey, true);
+        defaultSettings.insert(kComponentsScreenplayDurationByCharactersDurationKey, 60);
+        defaultSettings.insert(
             kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey, 1.0);
-        defaultValues.insert(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey,
-                             1.5);
-        defaultValues.insert(
+        defaultSettings.insert(
+            kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey, 1.5);
+        defaultSettings.insert(
             kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey, 2.0);
-        defaultValues.insert(
+        defaultSettings.insert(
             kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey, 2.4);
-        defaultValues.insert(
+        defaultSettings.insert(
             kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey, 2.0);
-        defaultValues.insert(
+        defaultSettings.insert(
             kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey, 0.0);
         //
         // Параметры карточек сценария
         //
-        defaultValues.insert(kComponentsScreenplayCardsLockCardsKey, true);
-        defaultValues.insert(kComponentsScreenplayCardsArrangeByRowsKey, true);
-        defaultValues.insert(kComponentsScreenplayCardsCardsSizeKey, 10);
-        defaultValues.insert(kComponentsScreenplayCardsCardsRatioKey, 2);
-        defaultValues.insert(kComponentsScreenplayCardsCardsSpacingKey, 20);
-        defaultValues.insert(kComponentsScreenplayCardsCardsInRowKey, -1);
+        defaultSettings.insert(kComponentsScreenplayCardsLockCardsKey, true);
+        defaultSettings.insert(kComponentsScreenplayCardsArrangeByRowsKey, true);
+        defaultSettings.insert(kComponentsScreenplayCardsCardsSizeKey, 10);
+        defaultSettings.insert(kComponentsScreenplayCardsCardsRatioKey, 2);
+        defaultSettings.insert(kComponentsScreenplayCardsCardsSpacingKey, 20);
+        defaultSettings.insert(kComponentsScreenplayCardsCardsInRowKey, -1);
         //
         // Параметры таймлайна сценария
         //
-        defaultValues.insert(kComponentsScreenplayTimelineArrangeHorizontalKey, true);
-        defaultValues.insert(kComponentsScreenplayTimelineCardsSizeKey, 10);
-        defaultValues.insert(kComponentsScreenplayTimelineCardsRatioKey, 2);
-        defaultValues.insert(kComponentsScreenplayTimelineCardsSpacingKey, 20);
+        defaultSettings.insert(kComponentsScreenplayTimelineArrangeHorizontalKey, true);
+        defaultSettings.insert(kComponentsScreenplayTimelineCardsSizeKey, 10);
+        defaultSettings.insert(kComponentsScreenplayTimelineCardsRatioKey, 2);
+        defaultSettings.insert(kComponentsScreenplayTimelineCardsSpacingKey, 20);
         //
         // Параметры посерийного плана
         //
-        defaultValues.insert(kComponentsScreenplaySeriesPlanCardsSizeKey, 10);
-        defaultValues.insert(kComponentsScreenplaySeriesPlanCardsRatioKey, 2);
-        defaultValues.insert(kComponentsScreenplaySeriesPlanCardsSpacingKey, 20);
+        defaultSettings.insert(kComponentsScreenplaySeriesPlanCardsSizeKey, 10);
+        defaultSettings.insert(kComponentsScreenplaySeriesPlanCardsRatioKey, 2);
+        defaultSettings.insert(kComponentsScreenplaySeriesPlanCardsSpacingKey, 20);
     }
     //
     // Параметры редактора комикса
@@ -603,10 +608,10 @@ SettingsStorage::Implementation::Implementation()
         auto addComicBookEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsComicBookEditorKey, _actionType,
-                                                toString(_from), _actionKey),
-                                       toString(_to));
+                  defaultSettings.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                             .arg(kComponentsComicBookEditorKey, _actionType,
+                                                  toString(_from), _actionKey),
+                                         toString(_to));
               };
         auto addComicBookEditorStylesActionByTab
             = [addComicBookEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -697,7 +702,7 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsComicBookEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
@@ -710,22 +715,22 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+5");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
-        defaultValues.insert(kComponentsComicBookAvailableKey, true);
+        defaultSettings.insert(kComponentsComicBookAvailableKey, true);
         //
-        defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
-        defaultValues.insert(kComponentsComicBookEditorShowDialogueNumberKey, true);
-        defaultValues.insert(kComponentsComicBookEditorSaveItemsFromTextKey, true);
-        defaultValues.insert(kComponentsComicBookEditorShowHintsForAllItemsKey, true);
-        defaultValues.insert(kComponentsComicBookEditorShowHintsForPrimaryItemsKey, false);
-        defaultValues.insert(kComponentsComicBookEditorShowHintsForSecondaryItemsKey, false);
-        defaultValues.insert(kComponentsComicBookEditorShowHintsForTertiaryItemsKey, false);
-        defaultValues.insert(kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey,
-                             false);
+        defaultSettings.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
+        defaultSettings.insert(kComponentsComicBookEditorShowDialogueNumberKey, true);
+        defaultSettings.insert(kComponentsComicBookEditorSaveItemsFromTextKey, true);
+        defaultSettings.insert(kComponentsComicBookEditorShowHintsForAllItemsKey, true);
+        defaultSettings.insert(kComponentsComicBookEditorShowHintsForPrimaryItemsKey, false);
+        defaultSettings.insert(kComponentsComicBookEditorShowHintsForSecondaryItemsKey, false);
+        defaultSettings.insert(kComponentsComicBookEditorShowHintsForTertiaryItemsKey, false);
+        defaultSettings.insert(kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey,
+                               false);
         //
         // Параметры навигатора сценария
         //
-        defaultValues.insert(kComponentsComicBookNavigatorShowSceneTextKey, true);
-        defaultValues.insert(kComponentsComicBookNavigatorSceneTextLinesKey, 1);
+        defaultSettings.insert(kComponentsComicBookNavigatorShowSceneTextKey, true);
+        defaultSettings.insert(kComponentsComicBookNavigatorSceneTextLinesKey, 1);
     }
     //
     // Параметры редактора аудиопостановки
@@ -734,10 +739,10 @@ SettingsStorage::Implementation::Implementation()
         auto addAudioplayEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsAudioplayEditorKey, _actionType,
-                                                toString(_from), _actionKey),
-                                       toString(_to));
+                  defaultSettings.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                             .arg(kComponentsAudioplayEditorKey, _actionType,
+                                                  toString(_from), _actionKey),
+                                         toString(_to));
               };
         auto addAudioplayEditorStylesActionByTab
             = [addAudioplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -823,7 +828,7 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsAudioplayEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
@@ -837,29 +842,29 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Cue, "Ctrl+6");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
-        defaultValues.insert(kComponentsAudioplayAvailableKey, true);
+        defaultSettings.insert(kComponentsAudioplayAvailableKey, true);
         //
-        defaultValues.insert(kComponentsAudioplayEditorDefaultTemplateKey, "bbc_scene");
-        defaultValues.insert(kComponentsAudioplayEditorShowBlockNumbersKey, false);
-        defaultValues.insert(kComponentsAudioplayEditorContinueBlockNumbersKey, true);
-        defaultValues.insert(kComponentsAudioplayEditorSaveItemsFromTextKey, true);
-        defaultValues.insert(kComponentsAudioplayEditorShowHintsForAllItemsKey, true);
-        defaultValues.insert(kComponentsAudioplayEditorShowHintsForPrimaryItemsKey, false);
-        defaultValues.insert(kComponentsAudioplayEditorShowHintsForSecondaryItemsKey, false);
-        defaultValues.insert(kComponentsAudioplayEditorShowHintsForTertiaryItemsKey, false);
-        defaultValues.insert(kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey,
-                             false);
+        defaultSettings.insert(kComponentsAudioplayEditorDefaultTemplateKey, "bbc_scene");
+        defaultSettings.insert(kComponentsAudioplayEditorShowBlockNumbersKey, false);
+        defaultSettings.insert(kComponentsAudioplayEditorContinueBlockNumbersKey, true);
+        defaultSettings.insert(kComponentsAudioplayEditorSaveItemsFromTextKey, true);
+        defaultSettings.insert(kComponentsAudioplayEditorShowHintsForAllItemsKey, true);
+        defaultSettings.insert(kComponentsAudioplayEditorShowHintsForPrimaryItemsKey, false);
+        defaultSettings.insert(kComponentsAudioplayEditorShowHintsForSecondaryItemsKey, false);
+        defaultSettings.insert(kComponentsAudioplayEditorShowHintsForTertiaryItemsKey, false);
+        defaultSettings.insert(kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey,
+                               false);
         //
         // Параметры навигатора сценария
         //
-        defaultValues.insert(kComponentsAudioplayNavigatorShowSceneNumberKey, true);
-        defaultValues.insert(kComponentsAudioplayNavigatorShowSceneTextKey, true);
-        defaultValues.insert(kComponentsAudioplayNavigatorSceneTextLinesKey, 1);
+        defaultSettings.insert(kComponentsAudioplayNavigatorShowSceneNumberKey, true);
+        defaultSettings.insert(kComponentsAudioplayNavigatorShowSceneTextKey, true);
+        defaultSettings.insert(kComponentsAudioplayNavigatorSceneTextLinesKey, 1);
         //
         // Параметры хронометража сценария
         //
-        defaultValues.insert(kComponentsAudioplayDurationByWordsWordsKey, 140);
-        defaultValues.insert(kComponentsAudioplayDurationByWordsDurationKey, 60);
+        defaultSettings.insert(kComponentsAudioplayDurationByWordsWordsKey, 140);
+        defaultSettings.insert(kComponentsAudioplayDurationByWordsDurationKey, 60);
     }
     //
     // Параметры редактора пьес
@@ -868,10 +873,10 @@ SettingsStorage::Implementation::Implementation()
         auto addStageplayEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsStageplayEditorKey, _actionType,
-                                                toString(_from), _actionKey),
-                                       toString(_to));
+                  defaultSettings.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                             .arg(kComponentsStageplayEditorKey, _actionType,
+                                                  toString(_from), _actionKey),
+                                         toString(_to));
               };
         auto addStageplayEditorStylesActionByTab
             = [addStageplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -961,7 +966,7 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsStageplayEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
@@ -974,22 +979,22 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+5");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
-        defaultValues.insert(kComponentsStageplayAvailableKey, true);
+        defaultSettings.insert(kComponentsStageplayAvailableKey, true);
         //
-        defaultValues.insert(kComponentsStageplayEditorDefaultTemplateKey, "bbc");
-        defaultValues.insert(kComponentsStageplayEditorSaveItemsFromTextKey, true);
-        defaultValues.insert(kComponentsStageplayEditorShowHintsForAllItemsKey, true);
-        defaultValues.insert(kComponentsStageplayEditorShowHintsForPrimaryItemsKey, false);
-        defaultValues.insert(kComponentsStageplayEditorShowHintsForSecondaryItemsKey, false);
-        defaultValues.insert(kComponentsStageplayEditorShowHintsForTertiaryItemsKey, false);
-        defaultValues.insert(kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey,
-                             false);
+        defaultSettings.insert(kComponentsStageplayEditorDefaultTemplateKey, "bbc");
+        defaultSettings.insert(kComponentsStageplayEditorSaveItemsFromTextKey, true);
+        defaultSettings.insert(kComponentsStageplayEditorShowHintsForAllItemsKey, true);
+        defaultSettings.insert(kComponentsStageplayEditorShowHintsForPrimaryItemsKey, false);
+        defaultSettings.insert(kComponentsStageplayEditorShowHintsForSecondaryItemsKey, false);
+        defaultSettings.insert(kComponentsStageplayEditorShowHintsForTertiaryItemsKey, false);
+        defaultSettings.insert(kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey,
+                               false);
         //
         // Параметры навигатора сценария
         //
-        defaultValues.insert(kComponentsStageplayNavigatorShowSceneNumberKey, true);
-        defaultValues.insert(kComponentsStageplayNavigatorShowSceneTextKey, true);
-        defaultValues.insert(kComponentsStageplayNavigatorSceneTextLinesKey, 1);
+        defaultSettings.insert(kComponentsStageplayNavigatorShowSceneNumberKey, true);
+        defaultSettings.insert(kComponentsStageplayNavigatorShowSceneTextKey, true);
+        defaultSettings.insert(kComponentsStageplayNavigatorSceneTextLinesKey, 1);
     }
     //
     // Параметры редактора плана романа
@@ -998,10 +1003,10 @@ SettingsStorage::Implementation::Implementation()
         auto addNovelOutlineEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsNovelOutlineEditorKey, _actionType,
-                                                toString(_from), _actionKey),
-                                       toString(_to));
+                  defaultSettings.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                             .arg(kComponentsNovelOutlineEditorKey, _actionType,
+                                                  toString(_from), _actionKey),
+                                         toString(_to));
               };
         auto addNovelOutlineEditorStylesActionByTab
             = [addNovelOutlineEditorStylesAction](const QString& _actionType,
@@ -1070,7 +1075,7 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsNovelOutlineEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
@@ -1087,7 +1092,7 @@ SettingsStorage::Implementation::Implementation()
         auto addNovelEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/styles-%2/from-%3-by-%4")
                           .arg(kComponentsNovelEditorKey, _actionType, toString(_from), _actionKey),
                       toString(_to));
@@ -1166,7 +1171,7 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
+                  defaultSettings.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsNovelEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
@@ -1179,43 +1184,43 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading, "Ctrl+Space");
         addShortcut(BusinessLayer::TextParagraphType::PartHeading, "Ctrl+Shift+Space");
         //
-        defaultValues.insert(kComponentsNovelAvailableKey, true);
+        defaultSettings.insert(kComponentsNovelAvailableKey, true);
         //
-        defaultValues.insert(kComponentsNovelEditorDefaultTemplateKey, "manuscript_t_a4");
-        defaultValues.insert(kComponentsNovelEditorCorrectTextOnPageBreaksKey, false);
+        defaultSettings.insert(kComponentsNovelEditorDefaultTemplateKey, "manuscript_t_a4");
+        defaultSettings.insert(kComponentsNovelEditorCorrectTextOnPageBreaksKey, false);
         //
         // Параметры навигатора
         //
-        defaultValues.insert(kComponentsNovelNavigatorShowBeatsKey, true);
-        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInOutlineKey, true);
-        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInTextKey, false);
-        defaultValues.insert(kComponentsNovelNavigatorShowSceneTextKey, true);
-        defaultValues.insert(kComponentsNovelNavigatorSceneTextLinesKey, 1);
-        defaultValues.insert(kComponentsNovelNavigatorCounterTypeKey, 0);
+        defaultSettings.insert(kComponentsNovelNavigatorShowBeatsKey, true);
+        defaultSettings.insert(kComponentsNovelNavigatorShowBeatsInOutlineKey, true);
+        defaultSettings.insert(kComponentsNovelNavigatorShowBeatsInTextKey, false);
+        defaultSettings.insert(kComponentsNovelNavigatorShowSceneTextKey, true);
+        defaultSettings.insert(kComponentsNovelNavigatorSceneTextLinesKey, 1);
+        defaultSettings.insert(kComponentsNovelNavigatorCounterTypeKey, 0);
         //
         // Параметры карточек сценария
         //
-        defaultValues.insert(kComponentsNovelCardsLockCardsKey, true);
-        defaultValues.insert(kComponentsNovelCardsArrangeByRowsKey, true);
-        defaultValues.insert(kComponentsNovelCardsCardsSizeKey, 10);
-        defaultValues.insert(kComponentsNovelCardsCardsRatioKey, 2);
-        defaultValues.insert(kComponentsNovelCardsCardsSpacingKey, 20);
-        defaultValues.insert(kComponentsNovelCardsCardsInRowKey, -1);
+        defaultSettings.insert(kComponentsNovelCardsLockCardsKey, true);
+        defaultSettings.insert(kComponentsNovelCardsArrangeByRowsKey, true);
+        defaultSettings.insert(kComponentsNovelCardsCardsSizeKey, 10);
+        defaultSettings.insert(kComponentsNovelCardsCardsRatioKey, 2);
+        defaultSettings.insert(kComponentsNovelCardsCardsSpacingKey, 20);
+        defaultSettings.insert(kComponentsNovelCardsCardsInRowKey, -1);
     }
 
 
-    defaultValues.insert(kSystemUsernameKey, systemUserName());
+    defaultSettings.insert(kSystemUsernameKey, systemUserName());
 }
 
 QVariant SettingsStorage::Implementation::cachedValue(const QString& _key, bool& _ok) const
 {
-    _ok = cachedValuesApp.contains(_key);
-    return cachedValuesApp.value(_key);
+    _ok = cachedAppSettings.contains(_key);
+    return cachedAppSettings.value(_key);
 }
 
 void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVariant& _value)
 {
-    cachedValuesApp.insert(_key, _value);
+    cachedAppSettings.insert(_key, _value);
 }
 
 
@@ -1231,15 +1236,20 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
         return;
     }
 
+    if (value(_key) == _value) {
+        return;
+    }
+
     //
     // Если значение невалидно, то сбросим заданное значение
     //
     if (_value.isNull()) {
-        d->cachedValuesApp.remove(_key);
+        d->cachedAppSettings.remove(_key);
         if (_type == Type::Application) {
+            d->pendingAppSettings.remove(_key);
             d->appSettings.remove(_key.toUtf8().toHex());
         } else {
-            d->sessionValues.remove(_key);
+            d->sessionSettings.remove(_key);
         }
         return;
     }
@@ -1253,9 +1263,9 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
     // Сохраняем его в заданное хранилище
     //
     if (_type == Type::Application) {
-        d->appSettings.setValue(_key.toUtf8().toHex(), _value);
+        d->pendingAppSettings.insert(_key, _value);
     } else {
-        d->sessionValues[_key] = _value;
+        d->sessionSettings[_key] = _value;
     }
 }
 
@@ -1329,7 +1339,7 @@ QVariant SettingsStorage::value(const QString& _key, const QVariant& _defaultVal
     //
     // Если в кэше нет, то смотрим в параметрах сессии
     //
-    if (const auto iter = d->sessionValues.find(_key); iter != d->sessionValues.end()) {
+    if (const auto iter = d->sessionSettings.find(_key); iter != d->sessionSettings.end()) {
         value = iter.value();
     }
     //
@@ -1361,7 +1371,7 @@ QVariant SettingsStorage::value(const QString& _key, const QVariant& _defaultVal
     //
     // В конце концов пробуем вытащить что-нибудь из предустановленных умолчальных значений
     //
-    return d->defaultValues.value(_key);
+    return d->defaultSettings.value(_key);
 }
 
 QVariantMap SettingsStorage::values(const QString& _valuesGroup)
@@ -1417,6 +1427,19 @@ QVariantMap SettingsStorage::values(const QString& _valuesGroup)
 
 void SettingsStorage::sync()
 {
+    Log::info("[SettingsStorage] Sync settings");
+
+    //
+    // Перенесём все параметры из временного хранилища в постоянное
+    //
+    for (auto iter = d->pendingAppSettings.cbegin(); iter != d->pendingAppSettings.cend(); ++iter) {
+        d->appSettings.setValue(iter.key().toUtf8().toHex(), iter.value());
+    }
+    d->pendingAppSettings.clear();
+
+    //
+    // Пишем в файл
+    //
     d->appSettings.sync();
 }
 
@@ -1425,13 +1448,13 @@ void SettingsStorage::resetSession()
     //
     // Перед тем, как сбросить, нужно убрать из кэша все параметры, которые туда попали из сессии
     //
-    for (auto iter = d->sessionValues.begin(); iter != d->sessionValues.end(); ++iter) {
-        d->cachedValuesApp.remove(iter.key());
+    for (auto iter = d->sessionSettings.begin(); iter != d->sessionSettings.end(); ++iter) {
+        d->cachedAppSettings.remove(iter.key());
     }
     //
     // ... а только после этого очищаем параметры сессии
     //
-    d->sessionValues.clear();
+    d->sessionSettings.clear();
 }
 
 QString SettingsStorage::accountName() const
@@ -1479,6 +1502,11 @@ void SettingsStorage::resetToDefaults()
     // Стираем все параметры сессии
     //
     resetSession();
+
+    //
+    // Очищаем всё, что не успело записаться
+    //
+    d->pendingAppSettings.clear();
 
     //
     // Стираем всё, что было изменено, кроме нескольких параметров, которые по-сути не являются
