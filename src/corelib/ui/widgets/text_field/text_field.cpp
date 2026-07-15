@@ -988,8 +988,10 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     if (!d->trailingIcon.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().iconsMid());
-        painter.setPen(d->trailingIconColor.isValid() ? d->trailingIconColor
-                                                      : palette().color(QPalette::Text));
+        painter.setPen(d->trailingIconColor.isValid()
+                           ? d->trailingIconColor
+                           : ColorHelper::transparent(palette().color(QPalette::Text),
+                                                      Ui::DesignSystem::inactiveItemOpacity()));
         const auto iconRect = d->trailingIconRect();
         painter.drawText(iconRect.toRect(), Qt::AlignCenter,
                          IconHelper::directedIcon(d->trailingIcon));
@@ -1052,8 +1054,10 @@ void TextField::paintEvent(QPaintEvent* _event)
     if (!d->trailingIcon.isEmpty()
         && d->iconDecorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(d->trailingIconColor.isValid() ? d->trailingIconColor
-                                                        : palette().color(QPalette::Text));
+        painter.setBrush(d->trailingIconColor.isValid()
+                             ? d->trailingIconColor
+                             : ColorHelper::transparent(palette().color(QPalette::Text),
+                                                        Ui::DesignSystem::inactiveItemOpacity()));
         painter.setOpacity(d->iconDecorationAnimation.opacity());
         const auto radius = d->iconDecorationAnimation.radius();
         painter.drawEllipse(d->trailingIconRect().center(), radius, radius);
@@ -1087,7 +1091,8 @@ void TextField::focusInEvent(QFocusEvent* _event)
     // анимировать отображение декораций
     //
 
-    if (d->labelColorAnimation.endValue() != Ui::DesignSystem::color().accent()) {
+    if (d->labelColorAnimation.currentValue().isNull()
+        || d->labelColorAnimation.endValue() != Ui::DesignSystem::color().accent()) {
         d->labelColorAnimation.setStartValue(d->textDisabledColor);
         d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().accent());
         d->labelColorAnimation.start();
