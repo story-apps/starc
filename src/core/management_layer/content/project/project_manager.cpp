@@ -2445,10 +2445,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             case Domain::DocumentObjectType::World: {
                 auto worldsDocument = DataStorageLayer::StorageFacade::documentStorage()->document(
                     Domain::DocumentObjectType::Worlds);
-                auto locationsModel = qobject_cast<BusinessLayer::WorldsModel*>(
+                auto worldsModel = qobject_cast<BusinessLayer::WorldsModel*>(
                     d->modelsFacade.modelFor(worldsDocument));
-                auto locationModel = qobject_cast<BusinessLayer::WorldModel*>(documentModel);
-                locationsModel->addWorldModel(locationModel);
+                auto worldModel = qobject_cast<BusinessLayer::WorldModel*>(documentModel);
+                worldsModel->addWorldModel(worldModel);
 
                 break;
             }
