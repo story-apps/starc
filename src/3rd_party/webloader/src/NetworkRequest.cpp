@@ -1,21 +1,20 @@
 /*
-* Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
-* Copyright (C) 2018 Dimka Novikov, to@dimkanovikov.pro
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* Full license: http://dimkanovikov.pro/license/LGPLv3
-*/
+ * Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
+ * Copyright (C) 2018 Dimka Novikov, to@dimkanovikov.pro
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
 
 #include "NetworkRequest.h"
+
 #include "NetworkQueue.h"
 #include "WebLoader.h"
 #include "WebRequest.h"
@@ -82,15 +81,15 @@ int NetworkRequest::loadingTimeout() const
     return m_requestParameters.loadingTimeout();
 }
 
-QByteArray NetworkRequest::authToken() const
+QPair<QByteArray, QByteArray> NetworkRequest::authToken() const
 {
     return m_request.authToken();
 }
 
-void NetworkRequest::setAuthToken(const QByteArray& _token)
+void NetworkRequest::setAuthToken(const QByteArray& _header, const QByteArray& _token)
 {
     stop();
-    m_request.setAuthToken(_token);
+    m_request.setAuthToken(_header, _token);
 }
 
 void NetworkRequest::clearRequestAttributes()
@@ -138,7 +137,32 @@ void NetworkRequest::loadAsync(const QUrl& _urlToLoad, const QUrl& _referer)
     //
     // Настраиваем параметры и кладем в очередь
     //
-    m_request.setUrlToLoad(_urlToLoad);
+    auto url = _urlToLoad;
+    //
+    // ... если у нас идёт GET-запрос, то кладём параметры в query ссылки
+    //
+    if (m_requestParameters.requestMethod() == NetworkRequestMethod::Get) {
+        auto requestUrlQuery = m_request.urlQuery();
+        //
+        // ... при этом проверяем, если оригинальная ссылка задана со свои query
+        //
+        if (url.hasQuery()) {
+            //
+            // ... то объединим их
+            //
+            if (!requestUrlQuery.isEmpty()) {
+                requestUrlQuery.append("&");
+            }
+            requestUrlQuery.append(url.query());
+        }
+        //
+        // ... если сформировался новый query, то установим его для ссылки
+        //
+        if (!requestUrlQuery.isEmpty()) {
+            url.setQuery(requestUrlQuery);
+        }
+    }
+    m_request.setUrlToLoad(url);
     m_request.setUrlReferer(_referer);
     NetworkQueue::instance()->enqueue(this);
 }

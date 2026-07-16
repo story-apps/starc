@@ -1,19 +1,17 @@
 /*
-* Copyright (C) 2015-2018 Dimka Novikov, to@dimkanovikov.pro
-* Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* Full license: http://dimkanovikov.pro/license/LGPLv3
-*/
+ * Copyright (C) 2015-2018 Dimka Novikov, to@dimkanovikov.pro
+ * Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
 
 #ifndef WEBREQUEST_H
 #define WEBREQUEST_H
@@ -63,8 +61,8 @@ public:
     /**
      * @brief Токен авторизации
      */
-    QByteArray authToken() const;
-    void setAuthToken(const QByteArray& _token);
+    QPair<QByteArray, QByteArray> authToken() const;
+    void setAuthToken(const QByteArray& _header, const QByteArray& _token);
 
     /**
      * @brief Очистить список атрибутов
@@ -96,7 +94,7 @@ public:
     /**
      * @brief Сформировать объект класса QNetworkRequest
      */
-    QNetworkRequest networkRequest(bool _addContentHeaders = false);
+    QNetworkRequest networkRequest(bool _isPostRequest = false);
 
     /**
      * @breif Получить данные запроса
@@ -138,9 +136,9 @@ private:
     QUrl m_urlReferer;
 
     /**
-     * @brief Токен авторизации
+     * @brief Токен авторизации <название заголовка, данные>
      */
-    QByteArray m_authToken;
+    QPair<QByteArray, QByteArray> m_authToken;
 
     /**
      * @brief Список параметров-атрибутов запроса

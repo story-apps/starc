@@ -1,21 +1,20 @@
 /*
-* Copyright (C) 2015-2018 Dimka Novikov, to@dimkanovikov.pro
-* Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* Full license: http://dimkanovikov.pro/license/LGPLv3
-*/
+ * Copyright (C) 2015-2018 Dimka Novikov, to@dimkanovikov.pro
+ * Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
 
 #include "WebRequest.h"
+
 #include "HttpMultiPart.h"
 
 #include <QDebug>
@@ -93,14 +92,14 @@ void WebRequest::setUrlReferer(const QUrl& _url)
     m_urlReferer = _url;
 }
 
-QByteArray WebRequest::authToken() const
+QPair<QByteArray, QByteArray> WebRequest::authToken() const
 {
     return m_authToken;
 }
 
-void WebRequest::setAuthToken(const QByteArray& _token)
+void WebRequest::setAuthToken(const QByteArray& _header, const QByteArray& _token)
 {
-    m_authToken = _token;
+    m_authToken = { _header, _token };
 }
 
 void WebRequest::clearAttributes()
@@ -151,7 +150,7 @@ void WebRequest::setRawData(const QByteArray& _data, const QString& _mime)
     m_mimeRawData = _mime;
 }
 
-QNetworkRequest WebRequest::networkRequest(bool _addContentHeaders)
+QNetworkRequest WebRequest::networkRequest(bool _isPostRequest)
 {
     QNetworkRequest request(urlToLoad());
 
@@ -164,7 +163,7 @@ QNetworkRequest WebRequest::networkRequest(bool _addContentHeaders)
     }
     //
     request.setHeader(QNetworkRequest::ContentTypeHeader, kContentTypeDefault);
-    if (_addContentHeaders) {
+    if (_isPostRequest) {
         if (m_useRawData) {
             request.setHeader(QNetworkRequest::ContentTypeHeader, m_mimeRawData);
         } else {
@@ -173,8 +172,8 @@ QNetworkRequest WebRequest::networkRequest(bool _addContentHeaders)
         request.setHeader(QNetworkRequest::ContentLengthHeader, multiPartData().size());
     }
     //
-    if (!m_authToken.isEmpty()) {
-        request.setRawHeader("Authorization", m_authToken);
+    if (!m_authToken.first.isEmpty()) {
+        request.setRawHeader(m_authToken.first, m_authToken.second);
     }
 
     return request;

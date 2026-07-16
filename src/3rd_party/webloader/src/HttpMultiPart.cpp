@@ -1,35 +1,34 @@
 /*
-* Copyright (C) 2015 Dimka Novikov, to@dimkanovikov.pro
-* Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU Lesser General Public
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* Lesser General Public License for more details.
-*
-* Full license: http://dimkanovikov.pro/license/LGPLv3
-*/
+ * Copyright (C) 2015 Dimka Novikov, to@dimkanovikov.pro
+ * Copyright (C) 2016 Alexey Polushkin, armijo38@yandex.ru
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
 
 #include "HttpMultiPart.h"
+
 #include "QMimeDatabase"
-#include <QtCore/QStringList>
+
 #include <QtCore/QFile>
+#include <QtCore/QStringList>
 
 
-HttpPart::HttpPart(HttpPartType _type) :
-    m_type( _type )
+HttpPart::HttpPart(HttpPartType _type)
+    : m_type(_type)
 {
-
 }
 
 HttpPart::HttpPartType HttpPart::type() const
 {
-	return m_type;
+    return m_type;
 }
 
 void HttpPart::setText(const QString& _name, const QString& _value)
@@ -46,24 +45,23 @@ void HttpPart::setFile(const QString& _name, const QString& _filePath)
 
 QString HttpPart::name() const
 {
-	return m_name;
+    return m_name;
 }
 
 QString HttpPart::value() const
 {
-	return m_value;
+    return m_value;
 }
 
 QString HttpPart::fileName() const
 {
-	return value();
+    return value();
 }
 
 QString HttpPart::filePath() const
 {
-	return m_filePath;
+    return m_filePath;
 }
-
 
 
 void HttpPart::setName(const QString& _name)
@@ -89,11 +87,8 @@ void HttpPart::setFilePath(const QString& _filePath)
         m_filePath = _filePath;
         QString fileName = _filePath.split('/').last();
         setFileName(fileName);
-	}
+    }
 }
-
-
-
 
 
 HttpMultiPart::HttpMultiPart()
@@ -114,56 +109,55 @@ void HttpMultiPart::addPart(const HttpPart& _part)
 
 QByteArray HttpMultiPart::data()
 {
-	QByteArray multiPartData;
-	foreach ( HttpPart httpPart, parts() ) {
-		QByteArray partData = makeDataFromPart( httpPart );
-		multiPartData.append( partData );
-	}
-	// Добавление отметки о завершении данных
-	{
-		QByteArray endData = makeEndData();
-		multiPartData.append( endData );
-	}
-	return multiPartData;
+    QByteArray multiPartData;
+    foreach (HttpPart httpPart, parts()) {
+        QByteArray partData = makeDataFromPart(httpPart);
+        multiPartData.append(partData);
+    }
+    // Добавление отметки о завершении данных
+    {
+        QByteArray endData = makeEndData();
+        multiPartData.append(endData);
+    }
+    return multiPartData;
 }
 
 QByteArray HttpMultiPart::makeDataFromPart(const HttpPart& _part)
 {
-	QByteArray partData;
+    QByteArray partData;
     switch (_part.type()) {
-	case HttpPart::Text: {
-        partData = makeDataFromTextPart( _part );
-		break;
-	}
-	case HttpPart::File: {
-        partData = makeDataFromFilePart( _part );
-		break;
-	}
-	}
-	return partData;
+    case HttpPart::Text: {
+        partData = makeDataFromTextPart(_part);
+        break;
+    }
+    case HttpPart::File: {
+        partData = makeDataFromFilePart(_part);
+        break;
+    }
+    }
+    return partData;
 }
 
 QByteArray HttpMultiPart::makeDataFromTextPart(const HttpPart& _part)
 {
-	QByteArray partData;
+    QByteArray partData;
 
     partData.append("--");
     partData.append(boundary());
     partData.append(crlf());
 
-	partData.append(
-                QString("Content-Disposition: form-data; name=\"%1\"%3%3%2")
-                .arg(_part.name(), _part.value(), crlf()).toUtf8()
-				);
+    partData.append(QString("Content-Disposition: form-data; name=\"%1\"%3%3%2")
+                        .arg(_part.name(), _part.value(), crlf())
+                        .toUtf8());
 
     partData.append(crlf());
 
-	return partData;
+    return partData;
 }
 
 QByteArray HttpMultiPart::makeDataFromFilePart(const HttpPart& _part)
 {
-	QByteArray partData;
+    QByteArray partData;
 
     partData.append("--");
     partData.append(boundary());
@@ -174,44 +168,39 @@ QByteArray HttpMultiPart::makeDataFromFilePart(const HttpPart& _part)
         QMimeDatabase mimeTypeDetector;
         QString contentType = mimeTypeDetector.mimeTypeForFile(_part.filePath()).name();
 
-		partData.append(
-                    QString("Content-Disposition: form-data; name=\"%1\"; filename=\"%2\"%4"
-							 "Content-Type: %3%4%4"
-							 )
-                    .arg(_part.name(),
-                          _part.fileName(),
-						  contentType,
-                          crlf()).toUtf8()
-					);
+        partData.append(QString("Content-Disposition: form-data; name=\"%1\"; filename=\"%2\"%4"
+                                "Content-Type: %3%4%4")
+                            .arg(_part.name(), _part.fileName(), contentType, crlf())
+                            .toUtf8());
 
         QFile uploadFile(_part.filePath());
         uploadFile.open(QIODevice::ReadOnly);
         while (!uploadFile.atEnd()) {
-			QByteArray readed = uploadFile.read(1024);
+            QByteArray readed = uploadFile.read(1024);
             partData.append(readed);
-		}
-		uploadFile.close();
-	}
+        }
+        uploadFile.close();
+    }
 
     partData.append(crlf());
-	return partData;
+    return partData;
 }
 
 QByteArray HttpMultiPart::makeEndData()
 {
-	QByteArray partData;
+    QByteArray partData;
 
     partData.append("--");
-	partData.append(boundary());
+    partData.append(boundary());
     partData.append("--");
     partData.append(crlf());
 
-	return partData;
+    return partData;
 }
 
 QByteArray HttpMultiPart::boundary() const
 {
-	return m_boundary;
+    return m_boundary;
 }
 
 QByteArray HttpMultiPart::crlf() const
@@ -221,5 +210,5 @@ QByteArray HttpMultiPart::crlf() const
 
 QList<HttpPart> HttpMultiPart::parts() const
 {
-	return m_parts;
+    return m_parts;
 }

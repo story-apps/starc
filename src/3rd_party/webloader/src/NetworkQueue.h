@@ -11,8 +11,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- *
- * Full license: http://dimkanovikov.pro/license/LGPLv3
  */
 
 #ifndef NETWORKQUEUE_H
