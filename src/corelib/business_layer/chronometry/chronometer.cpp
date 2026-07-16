@@ -150,9 +150,12 @@ public:
     {
         Q_UNUSED(_textTemplate)
 
-        const auto blockType = _type;
-        if (blockType != TextParagraphType::SceneHeading && blockType != TextParagraphType::Action
-            && blockType != TextParagraphType::Dialogue && blockType != TextParagraphType::Lyrics) {
+        if (_text.isEmpty()) {
+            return std::chrono::seconds{ 0 };
+        }
+
+        if (_type != TextParagraphType::SceneHeading && _type != TextParagraphType::Action
+            && _type != TextParagraphType::Dialogue && _type != TextParagraphType::Lyrics) {
             return std::chrono::seconds{ 0 };
         }
 
@@ -162,11 +165,10 @@ public:
         qreal secondsForParagraph = 0.0;
         qreal secondsForEvery50 = 0.0;
 
-        if (blockType == TextParagraphType::Action) {
+        if (_type == TextParagraphType::Action) {
             secondsForParagraph = m_options.sophocles.secsPerAction;
             secondsForEvery50 = m_options.sophocles.secsPerEvery50Action;
-        } else if (blockType == TextParagraphType::Dialogue
-                   || blockType == TextParagraphType::Lyrics) {
+        } else if (_type == TextParagraphType::Dialogue || _type == TextParagraphType::Lyrics) {
             secondsForParagraph = m_options.sophocles.secsPerDialogue;
             secondsForEvery50 = m_options.sophocles.secsPerEvery50Dialogue;
         } else {
