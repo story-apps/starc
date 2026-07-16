@@ -22,6 +22,7 @@ public:
      */
     enum {
         FolderDurationRole = TextModelFolderItem::FolderUserRole + 1,
+        FolderEightsRole,
     };
 
 public:
@@ -42,6 +43,11 @@ public:
      * @brief Длительность папки
      */
     std::chrono::milliseconds duration() const;
+
+    /**
+     * @brief Восьмушность папки
+     */
+    qreal eights() const;
 
     /**
      * @brief Определяем интерфейс получения данных папки

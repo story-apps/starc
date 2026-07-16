@@ -22,6 +22,7 @@ public:
      */
     enum {
         SceneDurationRole = TextModelGroupItem::GroupUserRole + 1,
+        SceneEightsRole,
         SceneDescriptionRole,
     };
 
@@ -40,6 +41,11 @@ public:
      * @brief Длительность сцены
      */
     std::chrono::milliseconds duration() const;
+
+    /**
+     * @brief Восьмушность сцены
+     */
+    qreal eights() const;
 
     /**
      * @brief Список битов

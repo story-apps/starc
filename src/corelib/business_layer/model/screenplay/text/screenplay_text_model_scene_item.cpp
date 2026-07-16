@@ -32,6 +32,11 @@ public:
      * @brief Длительность сцены
      */
     std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
+
+    /**
+     * @brief Сколько восьмушек занимает сцена
+     */
+    qreal eights = 0.0;
 };
 
 
@@ -117,6 +122,11 @@ std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
     return d->duration;
 }
 
+qreal ScreenplayTextModelSceneItem::eights() const
+{
+    return d->eights;
+}
+
 QVector<QString> ScreenplayTextModelSceneItem::beats() const
 {
     QVector<QString> beats;
@@ -164,6 +174,10 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
     case SceneDurationRole: {
         const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
         return duration;
+    }
+
+    case SceneEightsRole: {
+        return d->eights;
     }
 
     case SceneDescriptionRole: {
@@ -302,6 +316,7 @@ void ScreenplayTextModelSceneItem::handleChange()
     setWordsCount(0);
     setCharactersCount({});
     d->duration = std::chrono::seconds{ 0 };
+    d->eights = 0.0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         const auto child = childAt(childIndex);
@@ -316,6 +331,7 @@ void ScreenplayTextModelSceneItem::handleChange()
                 { charactersCount().first + childGroupItem->charactersCount().first,
                   charactersCount().second + childGroupItem->charactersCount().second });
             d->duration += childGroupItem->duration();
+            d->eights += childGroupItem->eights();
             break;
         }
 
@@ -364,11 +380,12 @@ void ScreenplayTextModelSceneItem::handleChange()
             //
             // Собираем счётчики
             //
-            d->duration += childTextItem->duration();
             setWordsCount(wordsCount() + childTextItem->wordsCount());
             setCharactersCount(
                 { charactersCount().first + childTextItem->charactersCount().first,
                   charactersCount().second + childTextItem->charactersCount().second });
+            d->duration += childTextItem->duration();
+            d->eights += childTextItem->eights();
             break;
         }
 

@@ -183,6 +183,47 @@ public:
     }
 };
 
+/**
+ * @brief Расчёт хронометража по количеству страниц
+ */
+class PageEightCalculator
+{
+public:
+    PageEightCalculator() = default;
+
+    qreal eights(TextParagraphType _type, const QString& _text,
+                 const TextTemplate& _textTemplate) const
+    {
+        const auto mmPageSize
+            = QPageSize(_textTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
+        const bool x = true, y = false;
+        const auto pxPageSize = QSizeF(MeasurementHelper::mmToPx(mmPageSize.width(), x),
+                                       MeasurementHelper::mmToPx(mmPageSize.height(), y));
+        const auto mmPageMargins = _textTemplate.pageMargins();
+        const auto pxPageMargins = QMarginsF(MeasurementHelper::mmToPx(mmPageMargins.left(), x),
+                                             MeasurementHelper::mmToPx(mmPageMargins.top(), y),
+                                             MeasurementHelper::mmToPx(mmPageMargins.right(), x),
+                                             MeasurementHelper::mmToPx(mmPageMargins.bottom(), y));
+        const auto pageHeight = pxPageSize.height() - pxPageMargins.top() - pxPageMargins.bottom();
+
+        const auto& blockStyle = _textTemplate.paragraphStyle(_type);
+        const auto mmBlockMargins = blockStyle.margins();
+        const auto pxBlockMargins
+            = QMarginsF(MeasurementHelper::mmToPx(mmBlockMargins.left(), x),
+                        MeasurementHelper::mmToPx(mmBlockMargins.top(), y),
+                        MeasurementHelper::mmToPx(mmBlockMargins.right(), x),
+                        MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
+        const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
+            - pxBlockMargins.left() - pxBlockMargins.right();
+        const auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
+        const auto textHeight = TextHelper::heightForWidth(_text, blockStyle.font(), textWidth)
+            + pxBlockMargins.top() + pxBlockMargins.bottom()
+            + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
+
+        return textHeight / (pageHeight / 8.0);
+    }
+};
+
 } // namespace
 
 
@@ -211,6 +252,13 @@ std::chrono::milliseconds ScreenplayChronometer::duration(TextParagraphType _typ
         return {};
     }
     }
+}
+
+qreal ScreenplayChronometer::eights(TextParagraphType _type, const QString& _text,
+                                    const QString& _templateId, const ChronometerOptions& _options)
+{
+    const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(_templateId);
+    return PageEightCalculator().eights(_type, _text, screenplayTemplate);
 }
 
 std::chrono::milliseconds AudioplayChronometer::duration(TextParagraphType _type,

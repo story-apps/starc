@@ -27,6 +27,11 @@ public:
      * @brief Длительность папки
      */
     std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
+
+    /**
+     * @brief Сколько восьмушек занимает папка
+     */
+    qreal eights = 0.0;
 };
 
 
@@ -62,12 +67,21 @@ std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
     return d->duration;
 }
 
+qreal ScreenplayTextModelFolderItem::eights() const
+{
+    return d->eights;
+}
+
 QVariant ScreenplayTextModelFolderItem::data(int _role) const
 {
     switch (_role) {
     case FolderDurationRole: {
         const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
         return duration;
+    }
+
+    case FolderEightsRole: {
+        return d->eights;
     }
 
     default: {
@@ -104,6 +118,7 @@ void ScreenplayTextModelFolderItem::handleChange()
     setWordsCount(0);
     setCharactersCount({});
     d->duration = std::chrono::seconds{ 0 };
+    d->eights = 0.0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -114,6 +129,7 @@ void ScreenplayTextModelFolderItem::handleChange()
             setCharactersCount({ charactersCount().first + folderItem->charactersCount().first,
                                  charactersCount().second + folderItem->charactersCount().second });
             d->duration += folderItem->duration();
+            d->eights += folderItem->eights();
             break;
         }
 
@@ -126,6 +142,7 @@ void ScreenplayTextModelFolderItem::handleChange()
                     { charactersCount().first + sceneItem->charactersCount().first,
                       charactersCount().second + sceneItem->charactersCount().second });
                 d->duration += sceneItem->duration();
+                d->eights += sceneItem->eights();
             } else {
                 const auto beatItem = static_cast<ScreenplayTextModelBeatItem*>(childItem);
                 setWordsCount(wordsCount() + beatItem->wordsCount());
@@ -133,6 +150,7 @@ void ScreenplayTextModelFolderItem::handleChange()
                     { charactersCount().first + beatItem->charactersCount().first,
                       charactersCount().second + beatItem->charactersCount().second });
                 d->duration += beatItem->duration();
+                d->eights += beatItem->eights();
             }
             break;
         }
@@ -143,10 +161,15 @@ void ScreenplayTextModelFolderItem::handleChange()
                 || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
                 setHeading(childItem->text());
             }
+
+            //
+            // Собираем счётчики
+            //
             setWordsCount(wordsCount() + childItem->wordsCount());
             setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
                                  charactersCount().second + childItem->charactersCount().second });
             d->duration += childItem->duration();
+            d->eights += childItem->eights();
             break;
         }
 

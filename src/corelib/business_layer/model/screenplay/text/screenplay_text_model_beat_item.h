@@ -20,6 +20,7 @@ public:
      */
     enum {
         BeatDurationRole = TextModelGroupItem::GroupUserRole + 1,
+        BeatEightsRole,
     };
 
 public:
@@ -30,6 +31,11 @@ public:
      * @brief Длительность бита
      */
     std::chrono::milliseconds duration() const;
+
+    /**
+     * @brief Восьмушность бита
+     */
+    qreal eights() const;
 
     /**
      * @brief Определяем интерфейс получения данных бита

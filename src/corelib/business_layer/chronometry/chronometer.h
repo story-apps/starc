@@ -102,6 +102,12 @@ public:
     static std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
                                               const QString& _templateId,
                                               const ChronometerOptions& _options);
+
+    /**
+     * @brief Определить сколько от восьмушки страницы занимает заданный блок
+     */
+    static qreal eights(TextParagraphType _type, const QString& _text, const QString& _templateId,
+                        const ChronometerOptions& _options);
 };
 
 /**

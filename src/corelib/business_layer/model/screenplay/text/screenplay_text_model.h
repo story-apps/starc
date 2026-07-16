@@ -106,6 +106,11 @@ public:
     std::chrono::milliseconds duration() const;
 
     /**
+     * @brief Восьмушность сценария
+     */
+    qreal eights() const;
+
+    /**
      * @brief Получить цвета элементов сценария
      */
     std::map<std::chrono::milliseconds, QColor> itemsColors() const;

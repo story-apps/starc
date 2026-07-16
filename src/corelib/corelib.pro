@@ -512,6 +512,7 @@ SOURCES += \
     utils/diff_match_patch/diff_match_patch_controller.cpp \
     utils/helpers/color_helper.cpp \
     utils/helpers/dialog_helper.cpp \
+    utils/helpers/eights_helper.cpp \
     utils/helpers/extension_helper.cpp \
     utils/helpers/icon_helper.cpp \
     utils/helpers/image_helper.cpp \
@@ -908,6 +909,7 @@ HEADERS += \
     utils/diff_match_patch/diff_match_patch_controller.h \
     utils/helpers/color_helper.h \
     utils/helpers/dialog_helper.h \
+    utils/helpers/eights_helper.h \
     utils/helpers/extension_helper.h \
     utils/helpers/icon_helper.h \
     utils/helpers/image_helper.h \

@@ -17,9 +17,14 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
-     * @brief Длительность сцены
+     * @brief Длительность абзаца
      */
     std::chrono::milliseconds duration() const;
+
+    /**
+     * @brief Восьмушность абзаца
+     */
+    qreal eights() const;
 
     /**
      * @brief Обновить счётчики
