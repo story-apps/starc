@@ -168,13 +168,19 @@ void TextHelper::updateFontHinting(QFont& _font)
 #endif
 }
 
-qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)
+qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width,
+                                 qreal _lineHeight)
 {
     const QFontMetricsF metrics(_font);
-    return metrics
-        .boundingRect(QRectF(0, 0, _width, 0), // width constraint, height=0 means unlimited
-                      Qt::TextWordWrap | Qt::AlignLeft, _text)
-        .height();
+    auto height
+        = metrics
+              .boundingRect(QRectF(0, 0, _width, 0), // width constraint, height=0 means unlimited
+                            Qt::TextWordWrap | Qt::AlignLeft, _text)
+              .height();
+    if (!qFuzzyCompare(_lineHeight, -1)) {
+        height *= _lineHeight / fineLineSpacing(_font);
+    }
+    return height;
 }
 
 QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal _width)

@@ -71,8 +71,27 @@ public:
                         MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
         const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
             - pxBlockMargins.left() - pxBlockMargins.right();
-        const auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
-        const auto textHeight = TextHelper::heightForWidth(_text, blockStyle.font(), textWidth)
+        auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
+        switch (blockStyle.lineSpacingType()) {
+        case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
+            textLineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());
+            break;
+        }
+        case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
+            textLineHeight *= 2.0;
+            break;
+        }
+        case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
+            textLineHeight *= 1.5;
+            break;
+        }
+        case TextBlockStyle::LineSpacingType::SingleLineSpacing:
+        default: {
+            break;
+        }
+        }
+        const auto textHeight
+            = TextHelper::heightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
             + pxBlockMargins.top() + pxBlockMargins.bottom()
             + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
 
@@ -215,8 +234,27 @@ public:
                         MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
         const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
             - pxBlockMargins.left() - pxBlockMargins.right();
-        const auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
-        const auto textHeight = TextHelper::heightForWidth(_text, blockStyle.font(), textWidth)
+        auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
+        switch (blockStyle.lineSpacingType()) {
+        case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
+            textLineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());
+            break;
+        }
+        case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
+            textLineHeight *= 2.0;
+            break;
+        }
+        case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
+            textLineHeight *= 1.5;
+            break;
+        }
+        case TextBlockStyle::LineSpacingType::SingleLineSpacing:
+        default: {
+            break;
+        }
+        }
+        const auto textHeight
+            = TextHelper::heightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
             + pxBlockMargins.top() + pxBlockMargins.bottom()
             + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
 

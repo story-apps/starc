@@ -43,10 +43,10 @@ public:
      * @param text Текст
      * @param font Шрифт, которым рисуется текст
      * @param width Ширина фигуры (она останется неизменной)
-     * @param option Параметры отображения
-     * @return Размер прямоугольника.
+     * @param _lineHeight Высота строки, если -1, то используется дефолтная
      */
-    static qreal heightForWidth(const QString& _text, const QFont& _font, qreal _width);
+    static qreal heightForWidth(const QString& _text, const QFont& _font, qreal _width,
+                                qreal _lineHeight = -1);
 
     /**
      * @brief Определить последнюю строку для текста в блоке заданной ширины
