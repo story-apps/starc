@@ -15,6 +15,11 @@ public:
     ~ScreenplayTextStructureDelegate() override;
 
     /**
+     * @brief Задать необходимость отображать длительность сцены в восьмушках
+     */
+    void showSceneEights(bool _show);
+
+    /**
      * @brief Задать необходимость отображать номер сцены
      */
     void showSceneNumber(bool _show);

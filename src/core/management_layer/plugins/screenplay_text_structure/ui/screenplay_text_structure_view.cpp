@@ -182,6 +182,10 @@ void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _mappe
 
 void ScreenplayTextStructureView::reconfigure()
 {
+    const bool showSceneEights
+        = settingsValue(DataStorageLayer::kComponentsScreenplayDurationUseEightsKey).toBool();
+    d->contentDelegate->showSceneEights(showSceneEights);
+
     const bool showSceneNumber
         = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey)
               .toBool();

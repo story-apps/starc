@@ -578,6 +578,7 @@ SettingsStorage::Implementation::Implementation()
             kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey, 2.0);
         defaultSettings.insert(
             kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey, 0.0);
+        defaultSettings.insert(kComponentsScreenplayDurationUseEightsKey, false);
         //
         // Параметры карточек сценария
         //

@@ -5,6 +5,7 @@
 #include <business_layer/screenplay_text_structure_model.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/eights_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
@@ -27,7 +28,7 @@ public:
      * @brief Нарисовать хронометраж
      */
     QRectF paintItemDuration(QPainter* _painter, const QStyleOptionViewItem& _option,
-                             const std::chrono::seconds& _duration) const;
+                             const QString& _duration) const;
 
     /**
      * @brief Нарисовать элемент
@@ -47,6 +48,7 @@ public:
     QSize textSizeHint(const QStyleOptionViewItem& _option) const;
 
 
+    bool showSceneEights = false;
     bool showSceneNumber = true;
     int textLines = 2;
 };
@@ -126,14 +128,13 @@ void ScreenplayTextStructureDelegate::Implementation::paintItemColor(
 }
 
 QRectF ScreenplayTextStructureDelegate::Implementation::paintItemDuration(
-    QPainter* _painter, const QStyleOptionViewItem& _option,
-    const std::chrono::seconds& _duration) const
+    QPainter* _painter, const QStyleOptionViewItem& _option, const QString& _duration) const
 {
     using namespace BusinessLayer;
 
     _painter->setFont(DesignSystem::font().subtitle2());
 
-    const auto durationText = QString("%1").arg(TimeHelper::toString(_duration));
+    const auto durationText = QString("%1").arg(_duration);
     const qreal durationWidth = TextHelper::fineTextWidthF(durationText, _painter->font());
 
     const QRectF backgroundRect = _option.rect;
@@ -218,10 +219,17 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(
     //
     // ... хронометраж
     //
-    const std::chrono::seconds duration{
-        _index.data(ScreenplayTextModelFolderItem::FolderDurationRole).toInt()
-    };
-    const auto durationRect = paintItemDuration(_painter, _option, duration);
+    QString durationText;
+    if (showSceneEights) {
+        const auto duration = _index.data(ScreenplayTextModelFolderItem::FolderEightsRole).toReal();
+        durationText = EightsHelper::toStringWithPostfix(duration);
+    } else {
+        const std::chrono::seconds duration{
+            _index.data(ScreenplayTextModelFolderItem::FolderDurationRole).toInt()
+        };
+        durationText = TimeHelper::toString(duration);
+    }
+    const auto durationRect = paintItemDuration(_painter, _option, durationText);
 
     //
     // ... название папки
@@ -316,10 +324,17 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     //
     // ... хронометраж
     //
-    const std::chrono::seconds duration{
-        _index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()
-    };
-    const auto durationRect = paintItemDuration(_painter, _option, duration);
+    QString durationText;
+    if (showSceneEights) {
+        const auto duration = _index.data(ScreenplayTextModelSceneItem::SceneEightsRole).toReal();
+        durationText = EightsHelper::toStringWithPostfix(duration);
+    } else {
+        const std::chrono::seconds duration{
+            _index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()
+        };
+        durationText = TimeHelper::toString(duration);
+    }
+    const auto durationRect = paintItemDuration(_painter, _option, durationText);
 
     //
     // ... заголовок сцены
@@ -587,6 +602,11 @@ ScreenplayTextStructureDelegate::ScreenplayTextStructureDelegate(QObject* _paren
 }
 
 ScreenplayTextStructureDelegate::~ScreenplayTextStructureDelegate() = default;
+
+void ScreenplayTextStructureDelegate::showSceneEights(bool _show)
+{
+    d->showSceneEights = _show;
+}
 
 void ScreenplayTextStructureDelegate::showSceneNumber(bool _show)
 {

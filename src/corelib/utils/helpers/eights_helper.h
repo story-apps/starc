@@ -11,5 +11,6 @@ class QString;
 class CORE_LIBRARY_EXPORT EightsHelper
 {
 public:
-    static QString toString(qreal _eights);
+    static QString toString(qreal _eights, bool _withPostfix = false);
+    static QString toStringWithPostfix(qreal _eights);
 };

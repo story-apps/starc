@@ -412,6 +412,7 @@ public:
     // ... Screenplay duration
     //
     H6Label* screenplayDurationTitle = nullptr;
+    //
     RadioButton* screenplayDurationByPage = nullptr;
     TextField* screenplayDurationByPagePage = nullptr;
     TextField* screenplayDurationByPageDuration = nullptr;
@@ -434,6 +435,8 @@ public:
     TextField* screenplayDurationConfigurablePerParagraphForSceneHeading = nullptr;
     Body1Label* screenplayDurationConfigurableForSceneHeadingPlus = nullptr;
     TextField* screenplayDurationConfigurablePerEvery50ForSceneHeading = nullptr;
+    //
+    RadioButton* screenplayDurationUseEights = nullptr;
     //
     int screenplayCardBottomSpacerIndex = 0;
     //
@@ -764,6 +767,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayDurationConfigurablePerParagraphForSceneHeading(new TextField(screenplayCard))
     , screenplayDurationConfigurableForSceneHeadingPlus(new Body1Label(screenplayCard))
     , screenplayDurationConfigurablePerEvery50ForSceneHeading(new TextField(screenplayCard))
+    , screenplayDurationUseEights(new RadioButton(screenplayCard))
     //
     , comicBookCard(new Card(content))
     , comicBookCardLayout(new QGridLayout)
@@ -1148,6 +1152,7 @@ void SettingsView::Implementation::initScreenplayCard()
     durationGroup->add(screenplayDurationByPage);
     durationGroup->add(screenplayDurationByCharacters);
     durationGroup->add(screenplayDurationConfigurable);
+    durationGroup->add(screenplayDurationUseEights);
     screenplayDurationByPage->setChecked(true);
     screenplayDurationByPagePage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByPagePage->setText("1");
@@ -1313,6 +1318,7 @@ void SettingsView::Implementation::initScreenplayCard()
         layout->setColumnStretch(column, 1);
         screenplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    screenplayCardLayout->addWidget(screenplayDurationUseEights, itemIndex++, 0);
     //
     screenplayCardBottomSpacerIndex = itemIndex;
     screenplayCard->setContentLayout(screenplayCardLayout);
@@ -2025,6 +2031,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayDurationConfigurablePerParagraphForSceneHeading,
                  d->screenplayDurationConfigurableForSceneHeadingPlus,
                  d->screenplayDurationConfigurablePerEvery50ForSceneHeading,
+                 d->screenplayDurationUseEights,
                  d->shortcutsForScreenplayTitle,
                  d->shortcutsForScreenplay,
              }) {
@@ -2345,6 +2352,8 @@ SettingsView::SettingsView(QWidget* _parent)
                 emit screenplayDurationConfigurablePerEvery50ForSceneHeadingChanged(
                     d->screenplayDurationConfigurablePerEvery50ForSceneHeading->text().toDouble());
             });
+    connect(d->screenplayDurationUseEights, &RadioButton::checkedChanged, this,
+            &SettingsView::screenplayDurationUseEightsChanged);
     //
     // ... Редактор комикса
     //
@@ -3523,6 +3532,11 @@ void SettingsView::setScreenplayDurationConfigurablePerEvery50ForSceneHeading(qr
         QString::number(_duration, 'f', 1));
 }
 
+void SettingsView::setScreenplayDurationUseEights(bool _use)
+{
+    d->screenplayDurationUseEights->setChecked(_use);
+}
+
 void SettingsView::setComicBookAvailable(bool _available)
 {
     d->comicBookAvailable->setChecked(_available);
@@ -4321,6 +4335,7 @@ void SettingsView::updateTranslations()
     d->screenplayDurationConfigurablePerParagraphForSceneHeading->setSuffix(tr("seconds"));
     d->screenplayDurationConfigurableForSceneHeadingPlus->setText(tr("+"));
     d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setSuffix(tr("seconds"));
+    d->screenplayDurationUseEights->setText(tr("Use page eighths as a duration metrics"));
     //
     d->comicBookTitle->setText(tr("Comic book module"));
     d->comicBookAvailable->setToolTip(tr("Turn on/off comic book module"));
@@ -4760,6 +4775,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayDurationByPage,
              d->screenplayDurationByCharacters,
              d->screenplayDurationConfigurable,
+             d->screenplayDurationUseEights,
              //
              d->comicBookNavigatorSceneDescriptionLines1,
              d->comicBookNavigatorSceneDescriptionLines2,
@@ -4906,6 +4922,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->screenplayCardLayout->setRowMinimumHeight(
         screenplayDurationConfigurableRow,
         d->screenplayAvailable->isChecked() ? DesignSystem::compactLayout().px62() : 0.0);
+    const auto screenplayDurationUseEightsRow
+        = d->screenplayCardLayout->indexOf(d->screenplayDurationUseEights);
+    d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationUseEightsRow,
+                                                 DesignSystem::compactLayout().px62());
     //
     d->comicBookCardLayout->setRowMinimumHeight(d->comicBookCardBottomSpacerIndex,
                                                 d->comicBookAvailable->isChecked()
