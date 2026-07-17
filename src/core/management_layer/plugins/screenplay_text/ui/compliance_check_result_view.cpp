@@ -128,6 +128,9 @@ void ComplianceCheckResultView::setCheckResults(
                     resultSceneItem->setData(
                         resultScene.durationInSeconds(),
                         ComplianceCheckResultModelItemDataRole::SceneDurationRole);
+                    resultSceneItem->setData(
+                        resultScene.eights,
+                        ComplianceCheckResultModelItemDataRole::SceneEightsRole);
                     resultSceneItem->setEditable(false);
                     _item->appendRow(resultSceneItem);
                 }

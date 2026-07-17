@@ -27,6 +27,10 @@ enum class CORE_LIBRARY_EXPORT ComplianceRuleType {
     SecondaryLocationsSceneCount, //!< Количество сцен в дополнительных локациях
     SecondaryLocationsNightScenePercent, //!< Количество ночных сцен в дополнительных локациях
     //
+    // RCode дополнительные по моей инициативе 2026-07-16
+    //
+    TotalPages, //!< Количество страниц серии
+    ScenesDistributionByLocationsAndCharacters, //!< Распределение сцен по группам локаций
 };
 
 /**
@@ -37,6 +41,11 @@ struct CORE_LIBRARY_EXPORT ComplianceRule {
      * @brief Тип правила
      */
     ComplianceRuleType type = ComplianceRuleType::Undefined;
+
+    /**
+     * @brief Кастомное название правила
+     */
+    QString name;
 
     /**
      * @brief Трогое ли правило (от этого зависит иконка в чекере, если не выполнено)
@@ -67,6 +76,7 @@ enum class CORE_LIBRARY_EXPORT ComplianceCheckResultItemType {
     Scene,
     Character,
     Location,
+    Other,
 };
 
 /**
@@ -93,6 +103,7 @@ struct CORE_LIBRARY_EXPORT ComplianceCheckResultItemScene {
     QString number;
     QString heading;
     std::chrono::milliseconds duration;
+    qreal eights = 0.0;
     QVector<ComplianceCheckResultItemSceneCharacter> characters;
 };
 

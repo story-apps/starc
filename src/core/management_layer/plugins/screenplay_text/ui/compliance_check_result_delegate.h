@@ -15,6 +15,11 @@ public:
     ~ComplianceCheckResultDelegate() override;
 
     /**
+     * @brief Задать необходимость отображать длительность сцены в восьмушках
+     */
+    void showSceneEights(bool _show);
+
+    /**
      * @brief Реализуем собственную отрисовку
      */
     void paint(QPainter* _painter, const QStyleOptionViewItem& _option,

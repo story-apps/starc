@@ -13,14 +13,57 @@
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/eights_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QRegularExpression>
 #include <QtMath>
 
 
 namespace BusinessLayer {
+
+namespace {
+/**
+ * @brief Проверяющий по списку локаций
+ */
+struct LocationChecker {
+    /**
+     * @brief Входит ли сцена в список локаций данной проверки
+     */
+    bool contains(const ComplianceCheckResultItemScene& _scene) const
+    {
+        const auto sceneLocation = ScreenplaySceneHeadingParser::location(_scene.heading);
+        return locationsFull.contains(sceneLocation)
+            || (!locationsStartsWith.isEmpty()
+                && sceneLocation.contains(QRegularExpression(locationsStartsWith)));
+    }
+
+    QSet<QString> locationsFull;
+    QString locationsStartsWith;
+};
+
+/**
+ * @brief Параметры линии
+ */
+struct Line {
+    /**
+     * @brief Валидна ли линия
+     */
+    bool isValid() const
+    {
+        return !name.isEmpty();
+    }
+
+    QString name;
+    LocationChecker locations;
+    QSet<QString> characters;
+};
+} // namespace
+
 class ComplianceCheckerImpl::Implementation
 {
 public:
@@ -155,6 +198,7 @@ void ComplianceCheckerImpl::startChecking()
                     lastScene.heading = sceneItem->heading();
                     lastScene.number = sceneItem->number()->text;
                     lastScene.duration = sceneItem->duration();
+                    lastScene.eights = sceneItem->eights();
                     break;
                 }
 
@@ -202,33 +246,65 @@ void ComplianceCheckerImpl::startChecking()
     }
 
     //
-    // Далее формируем результаты проверок
+    // Вспомогательные вещи
     //
-    QVector<ComplianceCheckResult> results;
     auto failedStatus = [](const ComplianceRule& _rule) {
         return _rule.isStrict ? ComplianceCheckResultStatus::Failed
                               : ComplianceCheckResultStatus::Warning;
     };
-    auto fillPrimaryLocations
-        = [](const ComplianceRule& _rule, QSet<QString>& _primaryLocationsFull,
-             QString& _primaryLocationsStartsWith) {
-              for (const auto& location : _rule.textValues) {
-                  if (location.endsWith("*")) {
-                      if (_primaryLocationsStartsWith.isEmpty()) {
-                          _primaryLocationsStartsWith += "^(";
-                      } else {
-                          _primaryLocationsStartsWith += "|";
-                      }
-                      _primaryLocationsStartsWith += location.chopped(1);
-                  } else {
-                      _primaryLocationsFull.insert(TextHelper::smartToUpper(location.trimmed()));
-                  }
-              }
-              if (!_primaryLocationsStartsWith.isEmpty()) {
-                  _primaryLocationsStartsWith += ")";
-                  _primaryLocationsStartsWith.replace(".", "[.]");
-              }
-          };
+    auto fillLocations = [](const QStringList& _values) {
+        LocationChecker result;
+        for (const auto& location : _values) {
+            if (location.endsWith("*")) {
+                if (result.locationsStartsWith.isEmpty()) {
+                    result.locationsStartsWith += "^(";
+                } else {
+                    result.locationsStartsWith += "|";
+                }
+                result.locationsStartsWith += location.chopped(1);
+            } else {
+                result.locationsFull.insert(TextHelper::smartToUpper(location.trimmed()));
+            }
+        }
+        if (!result.locationsStartsWith.isEmpty()) {
+            result.locationsStartsWith += ")";
+            result.locationsStartsWith.replace(".", "[.]");
+        }
+        return result;
+    };
+    auto fillLines = [&fillLocations](const ComplianceRule& _rule) {
+        QVector<Line> lines;
+        for (const auto& lineJsonData :
+             QJsonDocument::fromJson(_rule.textValues.constLast().toUtf8()).array()) {
+            const auto lineJson = lineJsonData.toObject();
+            Line line;
+            line.name = lineJson["name"].toString();
+            QStringList locations;
+            for (const auto& locationJsonData : lineJson["locations"].toArray()) {
+                locations.append(locationJsonData.toString());
+            }
+            line.locations = fillLocations(locations);
+            for (const auto& characterJsonData : lineJson["characters"].toArray()) {
+                line.characters.insert(characterJsonData.toString());
+            }
+
+            lines.append(line);
+        }
+        return lines;
+    };
+    auto scenesEights = [](const QVector<ComplianceCheckResultItemScene>& _scenes) {
+        qreal eights = 0.0;
+        for (const auto& scene : _scenes) {
+            eights += scene.eights;
+        }
+        return eights;
+    };
+
+
+    //
+    // Далее формируем результаты проверок
+    //
+    QVector<ComplianceCheckResult> results;
     for (const auto& rule : std::as_const(d->rules)) {
         ComplianceCheckResult result;
         switch (rule.type) {
@@ -254,7 +330,7 @@ void ComplianceCheckerImpl::startChecking()
                     result.subtitle += " "
                         + tr("(%1 more)")
                               .arg(TimeHelper::toString(
-                                  totalDuration - std::chrono::seconds{ rule.minimumValue }));
+                                  totalDuration - std::chrono::seconds{ rule.maximumValue }));
                 }
             }
 
@@ -378,18 +454,12 @@ void ComplianceCheckerImpl::startChecking()
                 = tr("Primary locations (%1) should present in %2% of scenes")
                       .arg(rule.textValues.join(" | "), QString::number(rule.minimumValue));
 
-            QSet<QString> primaryLocationsFull;
-            QString primaryLocationsStartsWith;
-            fillPrimaryLocations(rule, primaryLocationsFull, primaryLocationsStartsWith);
+            const auto primaryLocationsChecker = fillLocations(rule.textValues);
 
             ComplianceCheckResultItem sceneItem;
             sceneItem.type = ComplianceCheckResultItemType::Scene;
             for (const auto& scene : std::as_const(scenes)) {
-                const auto sceneLocation = ScreenplaySceneHeadingParser::location(scene.heading);
-                if (!primaryLocationsFull.contains(sceneLocation)
-                    && (!primaryLocationsStartsWith.isEmpty()
-                        && !sceneLocation.contains(
-                            QRegularExpression(primaryLocationsStartsWith)))) {
+                if (!primaryLocationsChecker.contains(scene)) {
                     sceneItem.scenes.append(scene);
                 }
             }
@@ -413,17 +483,13 @@ void ComplianceCheckerImpl::startChecking()
         case BusinessLayer::ComplianceRuleType::SecondaryLocationsCount: {
             result.title = tr("Maximum %n additional locations", nullptr, rule.maximumValue);
 
-            QSet<QString> primaryLocationsFull;
-            QString primaryLocationsStartsWith;
-            fillPrimaryLocations(rule, primaryLocationsFull, primaryLocationsStartsWith);
+            const auto primaryLocationsChecker = fillLocations(rule.textValues);
 
             QMap<QString, ComplianceCheckResultItem> additionalLocations;
             for (const auto& scene : std::as_const(scenes)) {
-                const auto sceneLocation = ScreenplaySceneHeadingParser::location(scene.heading);
-                if (!primaryLocationsFull.contains(sceneLocation)
-                    && (!primaryLocationsStartsWith.isEmpty()
-                        && !sceneLocation.contains(
-                            QRegularExpression(primaryLocationsStartsWith)))) {
+                if (!primaryLocationsChecker.contains(scene)) {
+                    const auto sceneLocation
+                        = ScreenplaySceneHeadingParser::location(scene.heading);
                     auto& locationItem = additionalLocations[sceneLocation];
                     if (locationItem.type == ComplianceCheckResultItemType::Undefined) {
                         locationItem.type = ComplianceCheckResultItemType::Location;
@@ -453,17 +519,13 @@ void ComplianceCheckerImpl::startChecking()
             result.title
                 = tr("Minimum %n scenes for additional location", nullptr, rule.minimumValue);
 
-            QSet<QString> primaryLocationsFull;
-            QString primaryLocationsStartsWith;
-            fillPrimaryLocations(rule, primaryLocationsFull, primaryLocationsStartsWith);
+            const auto primaryLocationsChecker = fillLocations(rule.textValues);
 
             QMap<QString, ComplianceCheckResultItem> additionalLocations;
             for (const auto& scene : std::as_const(scenes)) {
-                const auto sceneLocation = ScreenplaySceneHeadingParser::location(scene.heading);
-                if (!primaryLocationsFull.contains(sceneLocation)
-                    && (!primaryLocationsStartsWith.isEmpty()
-                        && !sceneLocation.contains(
-                            QRegularExpression(primaryLocationsStartsWith)))) {
+                if (!primaryLocationsChecker.contains(scene)) {
+                    const auto sceneLocation
+                        = ScreenplaySceneHeadingParser::location(scene.heading);
                     auto& locationItem = additionalLocations[sceneLocation];
                     if (locationItem.type == ComplianceCheckResultItemType::Undefined) {
                         locationItem.type = ComplianceCheckResultItemType::Location;
@@ -497,18 +559,12 @@ void ComplianceCheckerImpl::startChecking()
                 = tr("Night scenes in additional locations should be less then %1% of scenes")
                       .arg(rule.maximumValue);
 
-            QSet<QString> primaryLocationsFull;
-            QString primaryLocationsStartsWith;
-            fillPrimaryLocations(rule, primaryLocationsFull, primaryLocationsStartsWith);
+            const auto primaryLocationsChecker = fillLocations(rule.textValues);
 
             ComplianceCheckResultItem sceneItem;
             sceneItem.type = ComplianceCheckResultItemType::Scene;
             for (const auto& scene : std::as_const(scenes)) {
-                const auto sceneLocation = ScreenplaySceneHeadingParser::location(scene.heading);
-                if (!primaryLocationsFull.contains(sceneLocation)
-                    && (!primaryLocationsStartsWith.isEmpty()
-                        && !sceneLocation.contains(
-                            QRegularExpression(primaryLocationsStartsWith)))) {
+                if (!primaryLocationsChecker.contains(scene)) {
                     const auto sceneTime = ScreenplaySceneHeadingParser::sceneTime(scene.heading);
                     if (sceneTime.contains(QRegularExpression("(NIGHT|НОЧЬ)"))) {
                         sceneItem.scenes.append(scene);
@@ -527,6 +583,138 @@ void ComplianceCheckerImpl::startChecking()
                     = nightScenesInSecondaryLocationsPercent - rule.maximumValue;
                 const auto deltaScenesAmount = qCeil(deltaPercent * scenes.size() / 100.0);
                 result.subtitle = tr("Needed %n less scenes", nullptr, deltaScenesAmount);
+            }
+
+            break;
+        }
+
+        case BusinessLayer::ComplianceRuleType::TotalPages: {
+            result.title
+                = tr("Script pages count from %1 to %2")
+                      .arg(QString::number(rule.minimumValue), QString::number(rule.maximumValue));
+            const auto totalEights = d->screenplayModel->eights();
+            const int totalPages = qCeil(totalEights / 8.0);
+            if (totalPages >= rule.minimumValue && totalPages <= rule.maximumValue) {
+                result.status = ComplianceCheckResultStatus::Passed;
+            } else {
+                result.status = failedStatus(rule);
+                result.subtitle = tr("Page count is %1").arg(totalPages);
+                if (totalPages < rule.minimumValue) {
+                    result.subtitle += " " + tr("(%1 less)").arg(rule.minimumValue - totalPages);
+                } else {
+                    result.subtitle += " " + tr("(%1 more)").arg(totalPages - rule.maximumValue);
+                }
+            }
+
+            break;
+        }
+
+        case BusinessLayer::ComplianceRuleType::ScenesDistributionByLocationsAndCharacters: {
+            //
+            // Считать параметры линий
+            //
+            const auto lines = fillLines(rule);
+            QHash<QString, QVector<ComplianceCheckResultItemScene>> linesToScenes;
+            QVector<ComplianceCheckResultItemScene> otherScenes;
+
+            //
+            // Определить распределение сцен по линиям
+            //
+            for (const auto& scene : std::as_const(scenes)) {
+                bool sceneDistributed = false;
+                //
+                // ... если сцена происходит в локации конкретной линии
+                //
+                for (const auto& line : lines) {
+                    if (line.locations.contains(scene)) {
+                        linesToScenes[line.name].append(scene);
+                        sceneDistributed = true;
+                        break;
+                    }
+                }
+                if (sceneDistributed) {
+                    continue;
+                }
+
+                //
+                // ... если в сцене преобладают персонажи конкретной линии
+                //
+                Line lineWithMostCharacters;
+                int lineWithMostCharactersCount = 0;
+                for (const auto& line : lines) {
+                    int lineCharactersCount = 0;
+                    for (const auto& character : line.characters) {
+                        if (scene.character(character).isValid()) {
+                            ++lineCharactersCount;
+                        }
+                    }
+
+                    if (lineCharactersCount > lineWithMostCharactersCount) {
+                        lineWithMostCharacters = line;
+                    }
+                }
+                if (lineWithMostCharacters.isValid()) {
+                    linesToScenes[lineWithMostCharacters.name].append(scene);
+                    continue;
+                }
+
+                //
+                // ... остальное откладываем в список несортированных сцен
+                //
+                otherScenes.append(scene);
+            }
+
+            //
+            // Сформировать результат проверки для необходимой линии
+            //
+            result.title
+                = tr("%1 pages amount from %2% to %3% of all pages")
+                      .arg(rule.textValues.constFirst(), QString::number(rule.minimumValue),
+                           QString::number(rule.maximumValue));
+
+            const auto totalScenesEights = scenesEights(scenes);
+            const auto targetLineScenesEights
+                = scenesEights(linesToScenes[rule.textValues.constFirst()]);
+            const auto targetLineScenesEightsPercent
+                = targetLineScenesEights * 100 / totalScenesEights;
+            if (targetLineScenesEightsPercent >= rule.minimumValue
+                && targetLineScenesEightsPercent <= rule.maximumValue) {
+                result.status = ComplianceCheckResultStatus::Passed;
+            } else {
+                result.status = failedStatus(rule);
+                for (const auto& line : lines) {
+                    ComplianceCheckResultItem lineItem;
+                    lineItem.type = ComplianceCheckResultItemType::Other;
+                    lineItem.scenes = linesToScenes[line.name];
+                    lineItem.title = line.name + " "
+                        + QString("(%1)").arg(
+                            EightsHelper::toStringWithPostfix(scenesEights(lineItem.scenes)));
+                    result.items.append(lineItem);
+                }
+                if (!otherScenes.isEmpty()) {
+                    ComplianceCheckResultItem lineItem;
+                    lineItem.type = ComplianceCheckResultItemType::Other;
+                    lineItem.scenes = otherScenes;
+                    lineItem.title = tr("Other") + " "
+                        + QString("(%1)").arg(
+                            EightsHelper::toStringWithPostfix(scenesEights(otherScenes)));
+                    result.items.append(lineItem);
+                }
+                if (targetLineScenesEightsPercent < rule.minimumValue) {
+                    const auto deltaPercent = rule.minimumValue - targetLineScenesEightsPercent;
+                    const auto deltaScenesEights = deltaPercent * totalScenesEights / 100.0;
+                    result.subtitle
+                        = tr("%1% (needed %2 more)")
+                              .arg(QString::number(targetLineScenesEightsPercent, 'f', 2))
+                              .arg(EightsHelper::toStringWithPostfix(deltaScenesEights));
+                } else {
+                    const auto deltaPercent = targetLineScenesEightsPercent - rule.maximumValue;
+                    const auto deltaScenesEights = deltaPercent * totalScenesEights / 100.0;
+                    result.subtitle
+                        = tr("%1% (needed %2 less)")
+                              .arg(QString::number(targetLineScenesEightsPercent, 'f', 2))
+                              .arg(EightsHelper::toStringWithPostfix(deltaScenesEights));
+                }
             }
 
             break;

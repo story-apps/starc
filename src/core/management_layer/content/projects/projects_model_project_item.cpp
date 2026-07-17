@@ -8,6 +8,9 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QPixmap>
 
 
@@ -336,10 +339,11 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
             "ШКОЛА. УЧИТЕЛЬСКАЯ",       "ШКОЛА. УЧИТЕЛЬСКАЯ. КОРИДОР",
         };
         return {
-            { BusinessLayer::ComplianceRuleType::TotalDuration, true, 23 * 60, 25 * 60, {} },
-            { BusinessLayer::ComplianceRuleType::ScenesCount, true, 16, 24, {} },
-            { BusinessLayer::ComplianceRuleType::SceneDuration, true, 40, 80, {} },
+            { BusinessLayer::ComplianceRuleType::TotalDuration, {}, true, 23 * 60, 25 * 60, {} },
+            { BusinessLayer::ComplianceRuleType::ScenesCount, {}, true, 16, 24, {} },
+            { BusinessLayer::ComplianceRuleType::SceneDuration, {}, true, 40, 80, {} },
             { BusinessLayer::ComplianceRuleType::CharacterShouldSpeakInEveryScene,
+              {},
               true,
               {},
               {},
@@ -347,14 +351,30 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
                   "Димон",
                   "Завуч",
               } },
-            { BusinessLayer::ComplianceRuleType::SceneMaxCharactersCount, false, 0, 5, {} },
-            { BusinessLayer::ComplianceRuleType::PrimaryLocationsPercent, false, 70, 0,
+            { BusinessLayer::ComplianceRuleType::SceneMaxCharactersCount, {}, false, 0, 5, {} },
+            { BusinessLayer::ComplianceRuleType::PrimaryLocationsPercent,
+              {},
+              false,
+              70,
+              0,
               primaryLocations },
-            { BusinessLayer::ComplianceRuleType::SecondaryLocationsCount, false, 0, 3,
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsCount,
+              {},
+              false,
+              0,
+              3,
               primaryLocations },
-            { BusinessLayer::ComplianceRuleType::SecondaryLocationsSceneCount, false, 3, 0,
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsSceneCount,
+              {},
+              false,
+              3,
+              0,
               primaryLocations },
-            { BusinessLayer::ComplianceRuleType::SecondaryLocationsNightScenePercent, false, 0, 10,
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsNightScenePercent,
+              {},
+              false,
+              0,
+              10,
               primaryLocations },
         };
         break;
@@ -368,10 +388,11 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
             "ЗАВОД. КАБИНЕТ КАДРОВИЧКИ",
         };
         return {
-            { BusinessLayer::ComplianceRuleType::TotalDuration, true, 23 * 60, 25 * 60, {} },
-            { BusinessLayer::ComplianceRuleType::ScenesCount, true, 16, 24, {} },
-            { BusinessLayer::ComplianceRuleType::SceneDuration, true, 40, 80, {} },
+            { BusinessLayer::ComplianceRuleType::TotalDuration, {}, true, 23 * 60, 25 * 60, {} },
+            { BusinessLayer::ComplianceRuleType::ScenesCount, {}, true, 16, 24, {} },
+            { BusinessLayer::ComplianceRuleType::SceneDuration, {}, true, 40, 80, {} },
             { BusinessLayer::ComplianceRuleType::CharacterShouldSpeakInEveryScene,
+              {},
               true,
               {},
               {},
@@ -380,16 +401,101 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
                   "Гриша",
                   "Максим",
               } },
-            { BusinessLayer::ComplianceRuleType::SceneMaxCharactersCount, false, 0, 5, {} },
-            { BusinessLayer::ComplianceRuleType::PrimaryLocationsPercent, false, 70, 0,
+            { BusinessLayer::ComplianceRuleType::SceneMaxCharactersCount, {}, false, 0, 5, {} },
+            { BusinessLayer::ComplianceRuleType::PrimaryLocationsPercent,
+              {},
+              false,
+              70,
+              0,
               primaryLocations },
-            { BusinessLayer::ComplianceRuleType::SecondaryLocationsCount, false, 0, 3,
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsCount,
+              {},
+              false,
+              0,
+              3,
               primaryLocations },
-            { BusinessLayer::ComplianceRuleType::SecondaryLocationsSceneCount, false, 3, 0,
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsSceneCount,
+              {},
+              false,
+              3,
+              0,
               primaryLocations },
-            { BusinessLayer::ComplianceRuleType::SecondaryLocationsNightScenePercent, false, 0, 10,
+            { BusinessLayer::ComplianceRuleType::SecondaryLocationsNightScenePercent,
+              {},
+              false,
+              0,
+              10,
               primaryLocations },
         };
+        break;
+    }
+
+    case 4566: {
+        QJsonArray line1Locations;
+        line1Locations.append("ДОМ НИКОЛАЯ. *");
+        QJsonArray line1Characters;
+        line1Characters.append("НИКОЛАЙ");
+        line1Characters.append("АННА");
+        line1Characters.append("МУРАТОВ");
+        line1Characters.append("КНЯГИНЯ");
+        line1Characters.append("АПОЛЛИНАРИЯ");
+        line1Characters.append("МУРАВИНСКИЙ");
+        QJsonObject line1;
+        line1["name"] = "Линия 1";
+        line1["locations"] = line1Locations;
+        line1["characters"] = line1Characters;
+        //
+        QJsonArray line2Locations;
+        line2Locations.append("ДОМ АВЕРИНЫХ. *");
+        line2Locations.append("ДОМ СПИЦИНЫХ. *");
+        line2Locations.append("КОНЮШНЯ");
+        line2Locations.append("МАГАЗИН ОДЕЖДЫ");
+        QJsonArray line2Characters;
+        line2Characters.append("ЕЛЕНА");
+        line2Characters.append("ЕКАТЕРИНА");
+        line2Characters.append("РОМА");
+        line2Characters.append("ЮЛЯ");
+        line2Characters.append("АВЕРИН");
+        line2Characters.append("СПИЦИН");
+        line2Characters.append("СМИРНОВ");
+        QJsonObject line2;
+        line2["name"] = "Линия 2";
+        line2["locations"] = line2Locations;
+        line2["characters"] = line2Characters;
+        //
+        QJsonArray lines;
+        lines.append(line1);
+        lines.append(line2);
+        //
+        const QString linesRequirements = QJsonDocument(lines).toJson(QJsonDocument::Compact);
+
+        /*
+
+ 1. Процент по линиям (50-52% 1 линия 48%-50% 2 линия)
+ 2. Длинна серии 46-48 страниц старк
+ 3. Процент длинных сцен в линии 1 (от 2 страниц) 50% от линии
+ 3. Процент длинных сцен в 2 линии (от 2 страниц) 80% от линии
+         */
+
+        return {
+            { BusinessLayer::ComplianceRuleType::TotalPages, {}, true, 46, 48, {} },
+            { BusinessLayer::ComplianceRuleType::ScenesDistributionByLocationsAndCharacters,
+              {},
+              false,
+              50,
+              52,
+              { line1["name"].toString(), linesRequirements } },
+            { BusinessLayer::ComplianceRuleType::ScenesDistributionByLocationsAndCharacters,
+              {},
+              false,
+              48,
+              50,
+              { line2["name"].toString(), linesRequirements } },
+        };
+        break;
+    }
+
+    default: {
         break;
     }
     }

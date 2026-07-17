@@ -6,6 +6,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/eights_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
@@ -22,7 +23,7 @@ public:
      * @brief Нарисовать хронометраж
      */
     QRectF paintItemDuration(QPainter* _painter, const QStyleOptionViewItem& _option,
-                             const std::chrono::seconds& _duration) const;
+                             const QString& _duration) const;
 
     /**
      * @brief Нарисовать элемент
@@ -40,17 +41,19 @@ public:
     QSize ruleSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
     QSize itemSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
     QSize sceneSizeHint(const QStyleOptionViewItem& _option) const;
+
+
+    bool showSceneEights = false;
 };
 
 QRectF ComplianceCheckResultDelegate::Implementation::paintItemDuration(
-    QPainter* _painter, const QStyleOptionViewItem& _option,
-    const std::chrono::seconds& _duration) const
+    QPainter* _painter, const QStyleOptionViewItem& _option, const QString& _duration) const
 {
     using namespace BusinessLayer;
 
     _painter->setFont(DesignSystem::font().subtitle2());
 
-    const auto durationText = QString("%1").arg(TimeHelper::toString(_duration));
+    const auto durationText = QString("%1").arg(_duration);
     const qreal durationWidth = TextHelper::fineTextWidthF(durationText, _painter->font());
 
     const QRectF backgroundRect = _option.rect;
@@ -350,10 +353,18 @@ void ComplianceCheckResultDelegate::Implementation::paintScene(QPainter* _painte
     //
     // ... хронометраж
     //
-    const std::chrono::seconds duration{
-        _index.data(ComplianceCheckResultModelItemDataRole::SceneDurationRole).toInt()
-    };
-    const auto durationRect = paintItemDuration(_painter, _option, duration);
+    QString durationText;
+    if (showSceneEights) {
+        const auto duration
+            = _index.data(ComplianceCheckResultModelItemDataRole::SceneEightsRole).toReal();
+        durationText = EightsHelper::toStringWithPostfix(duration);
+    } else {
+        const std::chrono::seconds duration{
+            _index.data(ComplianceCheckResultModelItemDataRole::SceneDurationRole).toInt()
+        };
+        durationText = TimeHelper::toString(duration);
+    }
+    const auto durationRect = paintItemDuration(_painter, _option, durationText);
 
     //
     // ... заголовок сцены
@@ -456,6 +467,10 @@ QSize ComplianceCheckResultDelegate::Implementation::sceneSizeHint(
 ComplianceCheckResultDelegate::ComplianceCheckResultDelegate(QObject* _parent)
     : QStyledItemDelegate(_parent)
     , d(new Implementation)
+{
+}
+
+void ComplianceCheckResultDelegate::showSceneEights(bool _show)
 {
 }
 

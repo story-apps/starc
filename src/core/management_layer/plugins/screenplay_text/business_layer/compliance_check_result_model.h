@@ -34,6 +34,7 @@ enum ComplianceCheckResultModelItemDataRole {
     SceneNumberRole,
     SceneHeadingRole,
     SceneDurationRole,
+    SceneEightsRole,
 };
 
 } // namespace BusinessLayer
