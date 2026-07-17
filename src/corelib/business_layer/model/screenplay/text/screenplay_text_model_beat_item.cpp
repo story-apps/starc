@@ -25,7 +25,7 @@ public:
     /**
      * @brief Сколько восьмушек занимает бит
      */
-    qreal eights = 0.0;
+    qreal eighths = 0.0;
 };
 
 
@@ -46,9 +46,9 @@ std::chrono::milliseconds ScreenplayTextModelBeatItem::duration() const
     return d->duration;
 }
 
-qreal ScreenplayTextModelBeatItem::eights() const
+qreal ScreenplayTextModelBeatItem::eighths() const
 {
-    return d->eights;
+    return d->eighths;
 }
 
 QVariant ScreenplayTextModelBeatItem::data(int _role) const
@@ -63,8 +63,8 @@ QVariant ScreenplayTextModelBeatItem::data(int _role) const
         return duration;
     }
 
-    case BeatEightsRole: {
-        return d->eights;
+    case BeatEighthsRole: {
+        return d->eighths;
     }
 
     default: {
@@ -82,7 +82,7 @@ void ScreenplayTextModelBeatItem::handleChange()
     setWordsCount(0);
     setCharactersCount({});
     d->duration = std::chrono::seconds{ 0 };
-    d->eights = 0.0;
+    d->eighths = 0.0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -132,7 +132,7 @@ void ScreenplayTextModelBeatItem::handleChange()
         setCharactersCount({ charactersCount().first + childTextItem->charactersCount().first,
                              charactersCount().second + childTextItem->charactersCount().second });
         d->duration += childTextItem->duration();
-        d->eights += childTextItem->eights();
+        d->eighths += childTextItem->eighths();
     }
 
     setHeading(heading);

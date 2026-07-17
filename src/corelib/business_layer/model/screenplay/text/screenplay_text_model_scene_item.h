@@ -22,7 +22,7 @@ public:
      */
     enum {
         SceneDurationRole = TextModelGroupItem::GroupUserRole + 1,
-        SceneEightsRole,
+        SceneEighthsRole,
         SceneDescriptionRole,
     };
 
@@ -45,7 +45,7 @@ public:
     /**
      * @brief Восьмушность сцены
      */
-    qreal eights() const;
+    qreal eighths() const;
 
     /**
      * @brief Список битов

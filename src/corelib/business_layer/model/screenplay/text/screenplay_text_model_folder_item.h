@@ -22,7 +22,7 @@ public:
      */
     enum {
         FolderDurationRole = TextModelFolderItem::FolderUserRole + 1,
-        FolderEightsRole,
+        FolderEighthsRole,
     };
 
 public:
@@ -47,7 +47,7 @@ public:
     /**
      * @brief Восьмушность папки
      */
-    qreal eights() const;
+    qreal eighths() const;
 
     /**
      * @brief Определяем интерфейс получения данных папки

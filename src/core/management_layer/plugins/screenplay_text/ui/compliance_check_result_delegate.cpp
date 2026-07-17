@@ -6,7 +6,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
-#include <utils/helpers/eights_helper.h>
+#include <utils/helpers/eighths_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
@@ -43,7 +43,7 @@ public:
     QSize sceneSizeHint(const QStyleOptionViewItem& _option) const;
 
 
-    bool showSceneEights = false;
+    bool showSceneEighths = false;
 };
 
 QRectF ComplianceCheckResultDelegate::Implementation::paintItemDuration(
@@ -354,10 +354,10 @@ void ComplianceCheckResultDelegate::Implementation::paintScene(QPainter* _painte
     // ... хронометраж
     //
     QString durationText;
-    if (showSceneEights) {
+    if (showSceneEighths) {
         const auto duration
-            = _index.data(ComplianceCheckResultModelItemDataRole::SceneEightsRole).toReal();
-        durationText = EightsHelper::toStringWithPostfix(duration);
+            = _index.data(ComplianceCheckResultModelItemDataRole::SceneEighthsRole).toReal();
+        durationText = EighthsHelper::toStringWithPostfix(duration);
     } else {
         const std::chrono::seconds duration{
             _index.data(ComplianceCheckResultModelItemDataRole::SceneDurationRole).toInt()
@@ -470,7 +470,7 @@ ComplianceCheckResultDelegate::ComplianceCheckResultDelegate(QObject* _parent)
 {
 }
 
-void ComplianceCheckResultDelegate::showSceneEights(bool _show)
+void ComplianceCheckResultDelegate::showSceneEighths(bool _show)
 {
 }
 

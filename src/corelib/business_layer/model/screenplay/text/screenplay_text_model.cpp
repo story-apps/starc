@@ -600,9 +600,9 @@ std::chrono::milliseconds ScreenplayTextModel::duration() const
     return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->duration();
 }
 
-qreal ScreenplayTextModel::eights() const
+qreal ScreenplayTextModel::eighths() const
 {
-    return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->eights();
+    return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->eighths();
 }
 
 std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsColors() const

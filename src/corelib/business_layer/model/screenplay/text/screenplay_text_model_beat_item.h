@@ -20,7 +20,7 @@ public:
      */
     enum {
         BeatDurationRole = TextModelGroupItem::GroupUserRole + 1,
-        BeatEightsRole,
+        BeatEighthsRole,
     };
 
 public:
@@ -35,7 +35,7 @@ public:
     /**
      * @brief Восьмушность бита
      */
-    qreal eights() const;
+    qreal eighths() const;
 
     /**
      * @brief Определяем интерфейс получения данных бита

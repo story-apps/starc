@@ -103,7 +103,7 @@ struct CORE_LIBRARY_EXPORT ComplianceCheckResultItemScene {
     QString number;
     QString heading;
     std::chrono::milliseconds duration;
-    qreal eights = 0.0;
+    qreal eighths = 0.0;
     QVector<ComplianceCheckResultItemSceneCharacter> characters;
 };
 

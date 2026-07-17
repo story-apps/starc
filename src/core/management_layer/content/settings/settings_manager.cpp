@@ -286,8 +286,8 @@ void SettingsManager::Implementation::loadScreenplaySettings()
             DataStorageLayer::
                 kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
             .toDouble());
-    view->setScreenplayDurationUseEights(
-        settingsValue(DataStorageLayer::kComponentsScreenplayDurationUseEightsKey).toBool());
+    view->setScreenplayDurationUseEighths(
+        settingsValue(DataStorageLayer::kComponentsScreenplayDurationUseEighthsKey).toBool());
 }
 
 void SettingsManager::Implementation::loadComicBookSettings()
@@ -1145,8 +1145,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->view,
             &Ui::SettingsView::screenplayDurationConfigurablePerEvery50ForSceneHeadingChanged, this,
             &SettingsManager::setScreenplayDurationConfigurablePerEvery50ForSceneHeading);
-    connect(d->view, &Ui::SettingsView::screenplayDurationUseEightsChanged, this,
-            &SettingsManager::setScreenplayDurationUseEights);
+    connect(d->view, &Ui::SettingsView::screenplayDurationUseEighthsChanged, this,
+            &SettingsManager::setScreenplayDurationUseEighths);
     //
     // ... комиксы
     //
@@ -2336,9 +2336,9 @@ void SettingsManager::setScreenplayDurationConfigurablePerEvery50ForSceneHeading
     emit screenplayDurationChanged();
 }
 
-void SettingsManager::setScreenplayDurationUseEights(bool _use)
+void SettingsManager::setScreenplayDurationUseEighths(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationUseEightsKey, _use);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationUseEighthsKey, _use);
     emit screenplayNavigatorChanged();
     emit screenplayDurationChanged();
 }

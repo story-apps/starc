@@ -28,7 +28,7 @@ public:
     /**
      * @brief Восьмушки
      */
-    qreal eights = 0.0;
+    qreal eighths = 0.0;
 };
 
 ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const ScreenplayTextModel* _model)
@@ -44,9 +44,9 @@ std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
     return d->duration;
 }
 
-qreal ScreenplayTextModelTextItem::eights() const
+qreal ScreenplayTextModelTextItem::eighths() const
 {
-    return d->eights;
+    return d->eighths;
 }
 
 void ScreenplayTextModelTextItem::updateCounters(bool _force)
@@ -88,7 +88,7 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     const auto duration = ScreenplayChronometer::duration(
         paragraphType(), text(), screenplayModel->informationModel()->templateId(),
         screenplayModel->informationModel()->chronometerOptions());
-    const auto eights = ScreenplayChronometer::eights(
+    const auto eighths = ScreenplayChronometer::eighths(
         paragraphType(), text(), screenplayModel->informationModel()->templateId(),
         screenplayModel->informationModel()->chronometerOptions());
 
@@ -97,12 +97,12 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     //
     if (wordsCount() == currentWordsCount
         && charactersCount() == QPair<int, int>(charactersCountFirst, charactersCountSecond)
-        && d->duration == duration && qFuzzyCompare(d->eights, eights)) {
+        && d->duration == duration && qFuzzyCompare(d->eighths, eighths)) {
         return;
     }
 
     d->duration = duration;
-    d->eights = eights;
+    d->eighths = eighths;
     setWordsCount(currentWordsCount);
     setCharactersCount(QPair<int, int>(charactersCountFirst, charactersCountSecond));
 

@@ -36,7 +36,7 @@ public:
     /**
      * @brief Сколько восьмушек занимает сцена
      */
-    qreal eights = 0.0;
+    qreal eighths = 0.0;
 };
 
 
@@ -122,9 +122,9 @@ std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
     return d->duration;
 }
 
-qreal ScreenplayTextModelSceneItem::eights() const
+qreal ScreenplayTextModelSceneItem::eighths() const
 {
-    return d->eights;
+    return d->eighths;
 }
 
 QVector<QString> ScreenplayTextModelSceneItem::beats() const
@@ -176,8 +176,8 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
         return duration;
     }
 
-    case SceneEightsRole: {
-        return d->eights;
+    case SceneEighthsRole: {
+        return d->eighths;
     }
 
     case SceneDescriptionRole: {
@@ -316,7 +316,7 @@ void ScreenplayTextModelSceneItem::handleChange()
     setWordsCount(0);
     setCharactersCount({});
     d->duration = std::chrono::seconds{ 0 };
-    d->eights = 0.0;
+    d->eighths = 0.0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         const auto child = childAt(childIndex);
@@ -331,7 +331,7 @@ void ScreenplayTextModelSceneItem::handleChange()
                 { charactersCount().first + childGroupItem->charactersCount().first,
                   charactersCount().second + childGroupItem->charactersCount().second });
             d->duration += childGroupItem->duration();
-            d->eights += childGroupItem->eights();
+            d->eighths += childGroupItem->eighths();
             break;
         }
 
@@ -385,7 +385,7 @@ void ScreenplayTextModelSceneItem::handleChange()
                 { charactersCount().first + childTextItem->charactersCount().first,
                   charactersCount().second + childTextItem->charactersCount().second });
             d->duration += childTextItem->duration();
-            d->eights += childTextItem->eights();
+            d->eighths += childTextItem->eighths();
             break;
         }
 

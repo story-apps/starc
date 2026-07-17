@@ -5,7 +5,7 @@
 #include <business_layer/screenplay_text_structure_model.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
-#include <utils/helpers/eights_helper.h>
+#include <utils/helpers/eighths_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
@@ -48,7 +48,7 @@ public:
     QSize textSizeHint(const QStyleOptionViewItem& _option) const;
 
 
-    bool showSceneEights = false;
+    bool showSceneEighths = false;
     bool showSceneNumber = true;
     int textLines = 2;
 };
@@ -220,9 +220,9 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(
     // ... хронометраж
     //
     QString durationText;
-    if (showSceneEights) {
-        const auto duration = _index.data(ScreenplayTextModelFolderItem::FolderEightsRole).toReal();
-        durationText = EightsHelper::toStringWithPostfix(duration);
+    if (showSceneEighths) {
+        const auto duration = _index.data(ScreenplayTextModelFolderItem::FolderEighthsRole).toReal();
+        durationText = EighthsHelper::toStringWithPostfix(duration);
     } else {
         const std::chrono::seconds duration{
             _index.data(ScreenplayTextModelFolderItem::FolderDurationRole).toInt()
@@ -325,9 +325,9 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     // ... хронометраж
     //
     QString durationText;
-    if (showSceneEights) {
-        const auto duration = _index.data(ScreenplayTextModelSceneItem::SceneEightsRole).toReal();
-        durationText = EightsHelper::toStringWithPostfix(duration);
+    if (showSceneEighths) {
+        const auto duration = _index.data(ScreenplayTextModelSceneItem::SceneEighthsRole).toReal();
+        durationText = EighthsHelper::toStringWithPostfix(duration);
     } else {
         const std::chrono::seconds duration{
             _index.data(ScreenplayTextModelSceneItem::SceneDurationRole).toInt()
@@ -603,9 +603,9 @@ ScreenplayTextStructureDelegate::ScreenplayTextStructureDelegate(QObject* _paren
 
 ScreenplayTextStructureDelegate::~ScreenplayTextStructureDelegate() = default;
 
-void ScreenplayTextStructureDelegate::showSceneEights(bool _show)
+void ScreenplayTextStructureDelegate::showSceneEighths(bool _show)
 {
-    d->showSceneEights = _show;
+    d->showSceneEighths = _show;
 }
 
 void ScreenplayTextStructureDelegate::showSceneNumber(bool _show)

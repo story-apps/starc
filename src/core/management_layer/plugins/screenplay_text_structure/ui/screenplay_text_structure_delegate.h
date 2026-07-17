@@ -17,7 +17,7 @@ public:
     /**
      * @brief Задать необходимость отображать длительность сцены в восьмушках
      */
-    void showSceneEights(bool _show);
+    void showSceneEighths(bool _show);
 
     /**
      * @brief Задать необходимость отображать номер сцены

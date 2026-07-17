@@ -24,7 +24,7 @@ public:
     /**
      * @brief Восьмушность абзаца
      */
-    qreal eights() const;
+    qreal eighths() const;
 
     /**
      * @brief Обновить счётчики

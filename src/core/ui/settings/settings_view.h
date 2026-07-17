@@ -107,7 +107,7 @@ public:
     void setScreenplayDurationConfigurablePerEvery50ForDialogue(qreal _duration);
     void setScreenplayDurationConfigurablePerParagraphForSceneHeading(qreal _duration);
     void setScreenplayDurationConfigurablePerEvery50ForSceneHeading(qreal _duration);
-    void setScreenplayDurationUseEights(bool _use);
+    void setScreenplayDurationUseEighths(bool _use);
 
     //
     // Задание параметров редактора комикса
@@ -239,7 +239,7 @@ signals:
     void screenplayNavigatorShowSceneNumberChanged(bool _show);
     void screenplayNavigatorShowSceneTextChanged(bool _show, int _lines);
     //
-    void screenplayDurationUseEightsChanged(bool _use);
+    void screenplayDurationUseEighthsChanged(bool _use);
     void screenplayDurationTypeChanged(int _type);
     void screenplayDurationByPageDurationChanged(int _duration);
     void screenplayDurationByCharactersCharactersChanged(int _characters);

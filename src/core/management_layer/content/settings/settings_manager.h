@@ -178,7 +178,7 @@ private:
     void setScreenplayDurationConfigurablePerEvery50ForDialogue(qreal _duration);
     void setScreenplayDurationConfigurablePerParagraphForSceneHeading(qreal _duration);
     void setScreenplayDurationConfigurablePerEvery50ForSceneHeading(qreal _duration);
-    void setScreenplayDurationUseEights(bool _use);
+    void setScreenplayDurationUseEighths(bool _use);
 
     //
     // Сохранение параметров редактора комикса

@@ -258,8 +258,8 @@ const QString kComponentsScreenplayNavigatorSceneTextLinesKey
 // ... хронометраж
 const QString kComponentsScreenplayDurationKey
     = kComponentsScreenplayKey + QStringLiteral("/duration");
-const QString kComponentsScreenplayDurationUseEightsKey
-    = kComponentsScreenplayDurationKey + QStringLiteral("/use-eights");
+const QString kComponentsScreenplayDurationUseEighthsKey
+    = kComponentsScreenplayDurationKey + QStringLiteral("/use-eighths");
 const QString kComponentsScreenplayDurationTypeKey
     = kComponentsScreenplayDurationKey + QStringLiteral("/type");
 const QString kComponentsScreenplayDurationByPageDurationKey

@@ -108,7 +108,7 @@ public:
     /**
      * @brief Восьмушность сценария
      */
-    qreal eights() const;
+    qreal eighths() const;
 
     /**
      * @brief Получить цвета элементов сценария

@@ -13,7 +13,7 @@
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
-#include <utils/helpers/eights_helper.h>
+#include <utils/helpers/eighths_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
@@ -198,7 +198,7 @@ void ComplianceCheckerImpl::startChecking()
                     lastScene.heading = sceneItem->heading();
                     lastScene.number = sceneItem->number()->text;
                     lastScene.duration = sceneItem->duration();
-                    lastScene.eights = sceneItem->eights();
+                    lastScene.eighths = sceneItem->eighths();
                     break;
                 }
 
@@ -292,12 +292,12 @@ void ComplianceCheckerImpl::startChecking()
         }
         return lines;
     };
-    auto scenesEights = [](const QVector<ComplianceCheckResultItemScene>& _scenes) {
-        qreal eights = 0.0;
+    auto scenesEighths = [](const QVector<ComplianceCheckResultItemScene>& _scenes) {
+        qreal eighths = 0.0;
         for (const auto& scene : _scenes) {
-            eights += scene.eights;
+            eighths += scene.eighths;
         }
-        return eights;
+        return eighths;
     };
 
 
@@ -592,8 +592,8 @@ void ComplianceCheckerImpl::startChecking()
             result.title
                 = tr("Script pages count from %1 to %2")
                       .arg(QString::number(rule.minimumValue), QString::number(rule.maximumValue));
-            const auto totalEights = d->screenplayModel->eights();
-            const int totalPages = qCeil(totalEights / 8.0);
+            const auto totalEighths = d->screenplayModel->eighths();
+            const int totalPages = qCeil(totalEighths / 8.0);
             if (totalPages >= rule.minimumValue && totalPages <= rule.maximumValue) {
                 result.status = ComplianceCheckResultStatus::Passed;
             } else {
@@ -672,13 +672,13 @@ void ComplianceCheckerImpl::startChecking()
                       .arg(rule.textValues.constFirst(), QString::number(rule.minimumValue),
                            QString::number(rule.maximumValue));
 
-            const auto totalScenesEights = scenesEights(scenes);
-            const auto targetLineScenesEights
-                = scenesEights(linesToScenes[rule.textValues.constFirst()]);
-            const auto targetLineScenesEightsPercent
-                = targetLineScenesEights * 100 / totalScenesEights;
-            if (targetLineScenesEightsPercent >= rule.minimumValue
-                && targetLineScenesEightsPercent <= rule.maximumValue) {
+            const auto totalScenesEighths = scenesEighths(scenes);
+            const auto targetLineScenesEighths
+                = scenesEighths(linesToScenes[rule.textValues.constFirst()]);
+            const auto targetLineScenesEighthsPercent
+                = targetLineScenesEighths * 100 / totalScenesEighths;
+            if (targetLineScenesEighthsPercent >= rule.minimumValue
+                && targetLineScenesEighthsPercent <= rule.maximumValue) {
                 result.status = ComplianceCheckResultStatus::Passed;
             } else {
                 result.status = failedStatus(rule);
@@ -688,7 +688,7 @@ void ComplianceCheckerImpl::startChecking()
                     lineItem.scenes = linesToScenes[line.name];
                     lineItem.title = line.name + " "
                         + QString("(%1)").arg(
-                            EightsHelper::toStringWithPostfix(scenesEights(lineItem.scenes)));
+                            EighthsHelper::toStringWithPostfix(scenesEighths(lineItem.scenes)));
                     result.items.append(lineItem);
                 }
                 if (!otherScenes.isEmpty()) {
@@ -697,23 +697,23 @@ void ComplianceCheckerImpl::startChecking()
                     lineItem.scenes = otherScenes;
                     lineItem.title = tr("Other") + " "
                         + QString("(%1)").arg(
-                            EightsHelper::toStringWithPostfix(scenesEights(otherScenes)));
+                            EighthsHelper::toStringWithPostfix(scenesEighths(otherScenes)));
                     result.items.append(lineItem);
                 }
-                if (targetLineScenesEightsPercent < rule.minimumValue) {
-                    const auto deltaPercent = rule.minimumValue - targetLineScenesEightsPercent;
-                    const auto deltaScenesEights = deltaPercent * totalScenesEights / 100.0;
+                if (targetLineScenesEighthsPercent < rule.minimumValue) {
+                    const auto deltaPercent = rule.minimumValue - targetLineScenesEighthsPercent;
+                    const auto deltaScenesEighths = deltaPercent * totalScenesEighths / 100.0;
                     result.subtitle
                         = tr("%1% (needed %2 more)")
-                              .arg(QString::number(targetLineScenesEightsPercent, 'f', 2))
-                              .arg(EightsHelper::toStringWithPostfix(deltaScenesEights));
+                              .arg(QString::number(targetLineScenesEighthsPercent, 'f', 2))
+                              .arg(EighthsHelper::toStringWithPostfix(deltaScenesEighths));
                 } else {
-                    const auto deltaPercent = targetLineScenesEightsPercent - rule.maximumValue;
-                    const auto deltaScenesEights = deltaPercent * totalScenesEights / 100.0;
+                    const auto deltaPercent = targetLineScenesEighthsPercent - rule.maximumValue;
+                    const auto deltaScenesEighths = deltaPercent * totalScenesEighths / 100.0;
                     result.subtitle
                         = tr("%1% (needed %2 less)")
-                              .arg(QString::number(targetLineScenesEightsPercent, 'f', 2))
-                              .arg(EightsHelper::toStringWithPostfix(deltaScenesEights));
+                              .arg(QString::number(targetLineScenesEighthsPercent, 'f', 2))
+                              .arg(EighthsHelper::toStringWithPostfix(deltaScenesEighths));
                 }
             }
 
