@@ -17,7 +17,7 @@ public:
     /**
      * @brief Задать необходимость отображать длительность сцены в восьмушках
      */
-    void showSceneEighths(bool _show);
+    void setUseEighths(bool _use);
 
     /**
      * @brief Реализуем собственную отрисовку

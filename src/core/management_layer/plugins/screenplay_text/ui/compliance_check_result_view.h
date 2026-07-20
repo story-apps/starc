@@ -21,6 +21,11 @@ public:
     ~ComplianceCheckResultView() override;
 
     /**
+     * @brief Использовать восьмушки, или время для отображение длительности сцен
+     */
+    void setUseEighths(bool _use);
+
+    /**
      * @brief Задать список с результатами проверок
      */
     void setCheckResults(const QVector<BusinessLayer::ComplianceCheckResult>& _results);

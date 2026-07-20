@@ -30,7 +30,8 @@ enum class CORE_LIBRARY_EXPORT ComplianceRuleType {
     // RCode дополнительные по моей инициативе 2026-07-16
     //
     TotalPages, //!< Количество страниц серии
-    ScenesDistributionByLocationsAndCharacters, //!< Распределение сцен по группам локаций
+    ScenesDistributionByLocationsAndCharacters, //!< Распределение сцен по линиям
+    LongScenesByLocationsAndCharacters, //!< Длительность сцен в линиях
 };
 
 /**

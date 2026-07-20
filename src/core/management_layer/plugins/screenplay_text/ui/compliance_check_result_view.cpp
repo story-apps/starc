@@ -28,6 +28,7 @@ public:
 
     QStandardItemModel* checkResultsModel = nullptr;
     Tree* checkResultsPage = nullptr;
+    ComplianceCheckResultDelegate* checkResultsDelegate = nullptr;
 };
 
 ComplianceCheckResultView::Implementation::Implementation(ComplianceCheckResultView* _q)
@@ -35,9 +36,10 @@ ComplianceCheckResultView::Implementation::Implementation(ComplianceCheckResultV
     , emptyPage(new Widget(q))
     , checkResultsModel(new QStandardItemModel(q))
     , checkResultsPage(new Tree(q))
+    , checkResultsDelegate(new ComplianceCheckResultDelegate(checkResultsPage))
 {
     checkResultsPage->setAutoAdjustSize(true);
-    checkResultsPage->setItemDelegate(new ComplianceCheckResultDelegate(checkResultsPage));
+    checkResultsPage->setItemDelegate(checkResultsDelegate);
     checkResultsPage->setModel(checkResultsModel);
 }
 
@@ -63,6 +65,11 @@ ComplianceCheckResultView::ComplianceCheckResultView(QWidget* _parent)
 }
 
 ComplianceCheckResultView::~ComplianceCheckResultView() = default;
+
+void ComplianceCheckResultView::setUseEighths(bool _use)
+{
+    d->checkResultsDelegate->setUseEighths(_use);
+}
 
 void ComplianceCheckResultView::setCheckResults(
     const QVector<BusinessLayer::ComplianceCheckResult>& _results)

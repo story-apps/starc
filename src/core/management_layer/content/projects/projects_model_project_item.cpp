@@ -442,6 +442,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         line1Characters.append("МУРАВИНСКИЙ");
         QJsonObject line1;
         line1["name"] = "Линия 1";
+        line1["long_scene_threshold"] = 2 * 8; // две минуты в восьмушках
         line1["locations"] = line1Locations;
         line1["characters"] = line1Characters;
         //
@@ -460,6 +461,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         line2Characters.append("СМИРНОВ");
         QJsonObject line2;
         line2["name"] = "Линия 2";
+        line2["long_scene_threshold"] = 2 * 8; // две минуты в восьмушках
         line2["locations"] = line2Locations;
         line2["characters"] = line2Characters;
         //
@@ -468,15 +470,6 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         lines.append(line2);
         //
         const QString linesRequirements = QJsonDocument(lines).toJson(QJsonDocument::Compact);
-
-        /*
-
- 1. Процент по линиям (50-52% 1 линия 48%-50% 2 линия)
- 2. Длинна серии 46-48 страниц старк
- 3. Процент длинных сцен в линии 1 (от 2 страниц) 50% от линии
- 3. Процент длинных сцен в 2 линии (от 2 страниц) 80% от линии
-         */
-
         return {
             { BusinessLayer::ComplianceRuleType::TotalPages, {}, true, 46, 48, {} },
             { BusinessLayer::ComplianceRuleType::ScenesDistributionByLocationsAndCharacters,
@@ -490,6 +483,18 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
               false,
               48,
               50,
+              { line2["name"].toString(), linesRequirements } },
+            { BusinessLayer::ComplianceRuleType::LongScenesByLocationsAndCharacters,
+              {},
+              false,
+              50,
+              0,
+              { line1["name"].toString(), linesRequirements } },
+            { BusinessLayer::ComplianceRuleType::LongScenesByLocationsAndCharacters,
+              {},
+              false,
+              80,
+              0,
               { line2["name"].toString(), linesRequirements } },
         };
         break;

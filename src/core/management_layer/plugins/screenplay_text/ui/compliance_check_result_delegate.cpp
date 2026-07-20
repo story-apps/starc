@@ -43,7 +43,7 @@ public:
     QSize sceneSizeHint(const QStyleOptionViewItem& _option) const;
 
 
-    bool showSceneEighths = false;
+    bool useEighths = false;
 };
 
 QRectF ComplianceCheckResultDelegate::Implementation::paintItemDuration(
@@ -354,7 +354,7 @@ void ComplianceCheckResultDelegate::Implementation::paintScene(QPainter* _painte
     // ... хронометраж
     //
     QString durationText;
-    if (showSceneEighths) {
+    if (useEighths) {
         const auto duration
             = _index.data(ComplianceCheckResultModelItemDataRole::SceneEighthsRole).toReal();
         durationText = EighthsHelper::toStringWithPostfix(duration);
@@ -470,11 +470,12 @@ ComplianceCheckResultDelegate::ComplianceCheckResultDelegate(QObject* _parent)
 {
 }
 
-void ComplianceCheckResultDelegate::showSceneEighths(bool _show)
-{
-}
-
 ComplianceCheckResultDelegate::~ComplianceCheckResultDelegate() = default;
+
+void ComplianceCheckResultDelegate::setUseEighths(bool _use)
+{
+    d->useEighths = _use;
+}
 
 void ComplianceCheckResultDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
                                           const QModelIndex& _index) const

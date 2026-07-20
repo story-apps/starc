@@ -59,6 +59,7 @@ struct Line {
     }
 
     QString name;
+    int longSceneThreshold = 0;
     LocationChecker locations;
     QSet<QString> characters;
 };
@@ -274,17 +275,21 @@ void ComplianceCheckerImpl::startChecking()
     };
     auto fillLines = [&fillLocations](const ComplianceRule& _rule) {
         QVector<Line> lines;
-        for (const auto& lineJsonData :
-             QJsonDocument::fromJson(_rule.textValues.constLast().toUtf8()).array()) {
+        const auto linesJson
+            = QJsonDocument::fromJson(_rule.textValues.constLast().toUtf8()).array();
+        for (const auto& lineJsonData : linesJson) {
             const auto lineJson = lineJsonData.toObject();
             Line line;
             line.name = lineJson["name"].toString();
+            line.longSceneThreshold = lineJson["long_scene_threshold"].toInt();
             QStringList locations;
-            for (const auto& locationJsonData : lineJson["locations"].toArray()) {
+            const auto locationsJson = lineJson["locations"].toArray();
+            for (const auto& locationJsonData : locationsJson) {
                 locations.append(locationJsonData.toString());
             }
             line.locations = fillLocations(locations);
-            for (const auto& characterJsonData : lineJson["characters"].toArray()) {
+            const auto charactersJson = lineJson["characters"].toArray();
+            for (const auto& characterJsonData : charactersJson) {
                 line.characters.insert(characterJsonData.toString());
             }
 
@@ -705,16 +710,122 @@ void ComplianceCheckerImpl::startChecking()
                     const auto deltaScenesEighths = deltaPercent * totalScenesEighths / 100.0;
                     result.subtitle
                         = tr("%1% (needed %2 more)")
-                              .arg(QString::number(targetLineScenesEighthsPercent, 'f', 2))
-                              .arg(EighthsHelper::toStringWithPostfix(deltaScenesEighths));
+                              .arg(QString::number(targetLineScenesEighthsPercent, 'f', 2),
+                                   EighthsHelper::toStringWithPostfix(deltaScenesEighths));
                 } else {
                     const auto deltaPercent = targetLineScenesEighthsPercent - rule.maximumValue;
                     const auto deltaScenesEighths = deltaPercent * totalScenesEighths / 100.0;
                     result.subtitle
                         = tr("%1% (needed %2 less)")
-                              .arg(QString::number(targetLineScenesEighthsPercent, 'f', 2))
-                              .arg(EighthsHelper::toStringWithPostfix(deltaScenesEighths));
+                              .arg(QString::number(targetLineScenesEighthsPercent, 'f', 2),
+                                   EighthsHelper::toStringWithPostfix(deltaScenesEighths));
                 }
+            }
+
+            break;
+        }
+
+        case BusinessLayer::ComplianceRuleType::LongScenesByLocationsAndCharacters: {
+            //
+            // Считать параметры линий
+            //
+            const auto lines = fillLines(rule);
+            QHash<QString, QVector<ComplianceCheckResultItemScene>> linesToScenes;
+            QVector<ComplianceCheckResultItemScene> otherScenes;
+
+            //
+            // Определить распределение сцен по линиям
+            //
+            for (const auto& scene : std::as_const(scenes)) {
+                bool sceneDistributed = false;
+                //
+                // ... если сцена происходит в локации конкретной линии
+                //
+                for (const auto& line : lines) {
+                    if (line.locations.contains(scene)) {
+                        linesToScenes[line.name].append(scene);
+                        sceneDistributed = true;
+                        break;
+                    }
+                }
+                if (sceneDistributed) {
+                    continue;
+                }
+
+                //
+                // ... если в сцене преобладают персонажи конкретной линии
+                //
+                Line lineWithMostCharacters;
+                int lineWithMostCharactersCount = 0;
+                for (const auto& line : lines) {
+                    int lineCharactersCount = 0;
+                    for (const auto& character : line.characters) {
+                        if (scene.character(character).isValid()) {
+                            ++lineCharactersCount;
+                        }
+                    }
+
+                    if (lineCharactersCount > lineWithMostCharactersCount) {
+                        lineWithMostCharacters = line;
+                    }
+                }
+                if (lineWithMostCharacters.isValid()) {
+                    linesToScenes[lineWithMostCharacters.name].append(scene);
+                    continue;
+                }
+
+                //
+                // ... остальное откладываем в список несортированных сцен
+                //
+                otherScenes.append(scene);
+            }
+
+            //
+            // Сформировать результат проверки для необходимой линии
+            //
+            auto longSceneThreshold = 0;
+            for (const auto& line : lines) {
+                if (line.name == rule.textValues.constFirst()) {
+                    longSceneThreshold = line.longSceneThreshold;
+                    break;
+                }
+            }
+            result.title = tr("Long scenes of %1 (from %2) shouldn't be less %3%")
+                               .arg(rule.textValues.constFirst(),
+                                    EighthsHelper::toStringWithPostfix(longSceneThreshold),
+                                    QString::number(rule.minimumValue));
+
+            //
+            // Собираем длительность длинных сцен
+            //
+            QVector<ComplianceCheckResultItemScene> shortScenes;
+            QVector<ComplianceCheckResultItemScene> longScenes;
+            for (const auto& scene : linesToScenes[rule.textValues.constFirst()]) {
+                if (scene.eighths < longSceneThreshold) {
+                    shortScenes.append(scene);
+                } else {
+                    longScenes.append(scene);
+                }
+            }
+
+            const auto totalScenesEighths
+                = scenesEighths(linesToScenes[rule.textValues.constFirst()]);
+            const auto longScenesEighths = scenesEighths(longScenes);
+            const auto longScenesEighthsPercent = longScenesEighths * 100 / totalScenesEighths;
+            if (longScenesEighthsPercent >= rule.minimumValue) {
+                result.status = ComplianceCheckResultStatus::Passed;
+            } else {
+                result.status = failedStatus(rule);
+                ComplianceCheckResultItem lineItem;
+                lineItem.type = ComplianceCheckResultItemType::Scene;
+                lineItem.scenes = shortScenes;
+                result.items.append(lineItem);
+
+                const auto deltaPercent = rule.minimumValue - longScenesEighthsPercent;
+                const auto deltaScenesEighths = deltaPercent * totalScenesEighths / 100.0;
+                result.subtitle = tr("%1% (needed %2 more)")
+                                      .arg(QString::number(longScenesEighthsPercent, 'f', 2))
+                                      .arg(EighthsHelper::toStringWithPostfix(deltaScenesEighths));
             }
 
             break;
