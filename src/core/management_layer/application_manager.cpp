@@ -3131,8 +3131,11 @@ void ApplicationManager::initConnections()
             });
     connect(d->settingsManager.data(), &SettingsManager::screenplayNavigatorChanged, this,
             [this] { d->projectManager->reconfigureScreenplayNavigator(); });
-    connect(d->settingsManager.data(), &SettingsManager::screenplayDurationChanged, this,
-            [this] { d->projectManager->reconfigureScreenplayDuration(); });
+    connect(d->settingsManager.data(), &SettingsManager::screenplayDurationChanged, this, [this] {
+        d->projectManager->reconfigureScreenplayEditor({});
+        d->projectManager->reconfigureScreenplayNavigator();
+        d->projectManager->reconfigureScreenplayDuration();
+    });
     //
     connect(d->settingsManager.data(), &SettingsManager::comicBookEditorChanged, this,
             [this](const QStringList& _changedSettingsKeys) {

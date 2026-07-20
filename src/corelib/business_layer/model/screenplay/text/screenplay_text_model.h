@@ -114,11 +114,13 @@ public:
      * @brief Получить цвета элементов сценария
      */
     std::map<std::chrono::milliseconds, QColor> itemsColors() const;
+    std::map<qreal, QColor> itemsColorsForEighths() const;
 
     /**
      * @brief Получить цвета заладок элементов сценария
      */
     std::map<std::chrono::milliseconds, QColor> itemsBookmarks() const;
+    std::map<qreal, QColor> itemsBookmarksForEighths() const;
 
     /**
      * @brief Обновить номера сцен и реплик

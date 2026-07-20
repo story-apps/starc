@@ -184,7 +184,7 @@ void ScreenplayTextStructureView::reconfigure()
 {
     const bool showSceneEighths
         = settingsValue(DataStorageLayer::kComponentsScreenplayDurationUseEighthsKey).toBool();
-    d->contentDelegate->showSceneEighths(showSceneEighths);
+    d->contentDelegate->setUseEighths(showSceneEighths);
 
     const bool showSceneNumber
         = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey)

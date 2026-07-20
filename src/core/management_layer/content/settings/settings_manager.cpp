@@ -2339,7 +2339,6 @@ void SettingsManager::setScreenplayDurationConfigurablePerEvery50ForSceneHeading
 void SettingsManager::setScreenplayDurationUseEighths(bool _use)
 {
     setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationUseEighthsKey, _use);
-    emit screenplayNavigatorChanged();
     emit screenplayDurationChanged();
 }
 

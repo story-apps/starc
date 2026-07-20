@@ -48,7 +48,7 @@ public:
     QSize textSizeHint(const QStyleOptionViewItem& _option) const;
 
 
-    bool showSceneEighths = false;
+    bool useEighths = false;
     bool showSceneNumber = true;
     int textLines = 2;
 };
@@ -220,7 +220,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(
     // ... хронометраж
     //
     QString durationText;
-    if (showSceneEighths) {
+    if (useEighths) {
         const auto duration = _index.data(ScreenplayTextModelFolderItem::FolderEighthsRole).toReal();
         durationText = EighthsHelper::toStringWithPostfix(duration);
     } else {
@@ -325,7 +325,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     // ... хронометраж
     //
     QString durationText;
-    if (showSceneEighths) {
+    if (useEighths) {
         const auto duration = _index.data(ScreenplayTextModelSceneItem::SceneEighthsRole).toReal();
         durationText = EighthsHelper::toStringWithPostfix(duration);
     } else {
@@ -603,9 +603,9 @@ ScreenplayTextStructureDelegate::ScreenplayTextStructureDelegate(QObject* _paren
 
 ScreenplayTextStructureDelegate::~ScreenplayTextStructureDelegate() = default;
 
-void ScreenplayTextStructureDelegate::showSceneEighths(bool _show)
+void ScreenplayTextStructureDelegate::setUseEighths(bool _use)
 {
-    d->showSceneEighths = _show;
+    d->useEighths = _use;
 }
 
 void ScreenplayTextStructureDelegate::showSceneNumber(bool _show)

@@ -1836,6 +1836,13 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     if (_changedSettingsKeys.isEmpty() || contains(kApplicationAvoidMultipleSpacesKey)) {
         d->textEdit->setAvoidMultipleSpaces(toBool(kApplicationAvoidMultipleSpacesKey));
     }
+
+    if (_changedSettingsKeys.isEmpty() || contains(kComponentsScreenplayDurationUseEighthsKey)) {
+        const auto useEighths = toBool(kComponentsScreenplayDurationUseEighthsKey);
+        d->screenplayTextScrollbarManager->setScrollBarType(useEighths ? ScrollBarType::Pageline
+                                                                       : ScrollBarType::Timeline);
+        d->complianceCheckResultView->setUseEighths(useEighths);
+    }
 }
 
 void ScreenplayTextView::loadViewSettings()
