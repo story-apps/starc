@@ -5,6 +5,8 @@
 #include <QAbstractScrollArea>
 #include <QScrollBar>
 
+#include <corelib_global.h>
+
 
 namespace BusinessLayer {
 class ScreenplayTextModel;
@@ -15,7 +17,7 @@ namespace Ui {
 /**
  * @brief Тип полосы прокрутки
  */
-enum class ScrollBarType {
+enum class CORE_LIBRARY_EXPORT ScrollBarType {
     Timeline,
     Pageline,
 };
@@ -28,7 +30,7 @@ enum class ScrollBarType {
  *       и видимого таймлайна, который будет прилипать к правой стороне виджета и действовать
  *       синхронно со скролбаром для управления самим виджетом
  */
-class ScreenplayTextScrollBarManager : public QObject
+class CORE_LIBRARY_EXPORT ScreenplayTextScrollBarManager : public QObject
 {
     Q_OBJECT
 
