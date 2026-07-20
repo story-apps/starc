@@ -547,9 +547,16 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             int heading = qBound(1, attributes.value("w:val").toString().toInt() + 1, 6);
             style.block_format.setProperty(QTextFormat::UserProperty, heading);
         } else if ((m_xml.qualifiedName() == QLatin1String("w:pStyle")) && allowstyles) {
-            Style pstyle = m_styles.value(value.toString());
-            pstyle.merge(style);
-            style = pstyle;
+            //
+            // В оригинальном коде тут мержатся стиль, который пришёл в параметрах и заданный,
+            // приходит обычно дефолтный стиль, но это противоречит логике построения стилей - если
+            // указано, что стиль наследуется от другого, то они мержатся ещё на этапе сбора стилей,
+            // а тут получается у нас целевой стиль начинает обладать параметрами, которые ему не
+            // должны быть свойственны (например, если дефольный стиль имел отступы сбоку, а целевой
+            // не имеет отступов), поэтому объединение стилей было убрано и теперь используем
+            // целевой стиль, как есть
+            //
+            style = m_styles.value(value.toString());
         } else if (m_xml.qualifiedName() == QLatin1String("w:rPr")) {
             readRunProperties(style);
             continue;
@@ -627,11 +634,9 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
 
     while (m_xml.readNextStartElement()) {
         const auto value = m_xml.attributes().value("w:val");
-        if ((m_xml.qualifiedName() == QLatin1String("w:b"))
-            || (m_xml.qualifiedName() == QLatin1String("w:bCs"))) {
+        if (m_xml.qualifiedName() == QLatin1String("w:b")) {
             style.char_format.setFontWeight(readBool(value) ? QFont::Bold : QFont::Normal);
-        } else if ((m_xml.qualifiedName() == QLatin1String("w:i"))
-                   || (m_xml.qualifiedName() == QLatin1String("w:iCs"))) {
+        } else if (m_xml.qualifiedName() == QLatin1String("w:i")) {
             style.char_format.setFontItalic(readBool(value));
         } else if (m_xml.qualifiedName() == QLatin1String("w:u")) {
             if (value == QLatin1String("single")) {
