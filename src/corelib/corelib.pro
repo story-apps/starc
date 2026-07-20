@@ -430,6 +430,7 @@ SOURCES += \
     ui/modules/script_text_edit/script_text_edit.cpp \
     ui/modules/search_toolbar/search_manager.cpp \
     ui/modules/search_toolbar/search_toolbar.cpp \
+    ui/modules/text_scrollbar_manager/screenplay_text_scrollbar_manager.cpp \
     ui/widgets/animations/click_animation.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
@@ -820,6 +821,7 @@ HEADERS += \
     ui/modules/script_text_edit/script_text_edit.h \
     ui/modules/search_toolbar/search_manager.h \
     ui/modules/search_toolbar/search_toolbar.h \
+    ui/modules/text_scrollbar_manager/screenplay_text_scrollbar_manager.h \
     ui/widgets/animations/click_animation.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \

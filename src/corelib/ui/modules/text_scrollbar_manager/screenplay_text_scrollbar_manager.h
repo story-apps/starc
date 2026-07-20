@@ -13,6 +13,14 @@ class ScreenplayTextModel;
 namespace Ui {
 
 /**
+ * @brief Тип полосы прокрутки
+ */
+enum class ScrollBarType {
+    Timeline,
+    Pageline,
+};
+
+/**
  * @brief Управляющий таймлайном сценария
  * @note Тут хитрая тема, т.к. по-сути скролбар не может иметь фиксированного размера ползунка,
  *       являя собой процентное представление возможности прокрутки документа, будем использовать
@@ -37,6 +45,11 @@ public:
      * @brief Задать модель сценария
      */
     void setModel(BusinessLayer::ScreenplayTextModel* _model);
+
+    /**
+     * @brief Задать тип полосы прокрутки (true - время, false - страницы)
+     */
+    void setScrollBarType(ScrollBarType _type);
 
     /**
      * @brief Настроить видимость скролбара
@@ -110,6 +123,106 @@ signals:
      * @brief Значение слайдера изменилось
      */
     void valueChanged(std::chrono::milliseconds _value);
+
+    /**
+     * @brief Запрос на обновление значения ползунка
+     */
+    void updateValueRequested();
+
+protected:
+    /**
+     * @brief Переопределяем для собственной отрисовки
+     */
+    void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для установки позиции ползунка в месте указанном пользователем
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для обработки изменения позиции ползунка
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для определения момента отпускания мыши и скрытия области клика
+     */
+    void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Прокидываем событие прокрутки в виджет, к которому привязан таймлайн, чтобы не
+     * обрабатывать вручную
+     */
+    void wheelEvent(QWheelEvent* _event) override;
+
+    /**
+     * @brief Обновляем виджет при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
+private:
+    /**
+     * @brief Обновить значение в соответствии с позицией мыши
+     */
+    void updateValue(const QPoint& _mousePosition);
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
+};
+
+/**
+ * @brief Виджет пейджлайна
+ */
+class ScreenplayTextPageline : public Widget
+{
+    Q_OBJECT
+
+public:
+    explicit ScreenplayTextPageline(QWidget* _parent = nullptr);
+    ~ScreenplayTextPageline() override;
+
+    /**
+     * @brief Установить возможность прокручивания таймлайна
+     */
+    void setScrollable(bool _scrollable);
+
+    /**
+     * @brief Задать максимальное значение слайдера
+     */
+    void setMaximum(qreal _maximum);
+
+    /**
+     * @brief Задать текущее значение слайдера
+     */
+    void setValue(qreal _value);
+
+    /**
+     * @brief Задать размер отображаемой области
+     */
+    void setDisplayRange(qreal _value);
+
+    /**
+     * @brief Задать цвета слайдера
+     */
+    void setColors(const std::map<qreal, QColor>& _colors);
+
+    /**
+     * @brief Задать цвета закладок
+     */
+    void setBookmarks(const std::map<qreal, QColor>& _bookmarks);
+
+    /**
+     * @brief Переопределяем для корректного подсчёта размера в компоновщиках
+     */
+    QSize sizeHint() const override;
+
+signals:
+    /**
+     * @brief Значение слайдера изменилось
+     */
+    void valueChanged(qreal _value);
 
     /**
      * @brief Запрос на обновление значения ползунка

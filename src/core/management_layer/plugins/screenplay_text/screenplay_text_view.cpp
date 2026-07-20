@@ -3,7 +3,6 @@
 #include "text/screenplay_text_edit.h"
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
-#include "text/screenplay_text_scrollbar_manager.h"
 #include "ui/compliance_check_result_view.h"
 #include "ui/dictionaries_view.h"
 
@@ -31,6 +30,7 @@
 #include <ui/modules/comments/comments_view.h>
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/modules/search_toolbar/search_manager.h>
+#include <ui/modules/text_scrollbar_manager/screenplay_text_scrollbar_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
