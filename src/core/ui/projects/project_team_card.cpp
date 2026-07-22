@@ -287,7 +287,7 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
     const QRectF avatarRect(
         isLeftToRight ? iconRect.right() + Ui::DesignSystem::layout().px8()
                       : backgroundRect.left() + Ui::DesignSystem::layout().px16(),
-        backgroundRect.top() + decorationHeight + Ui::DesignSystem::layout().px12() - heightDelta,
+        backgroundRect.top() + decorationHeight + Ui::DesignSystem::layout().px8() - heightDelta,
         DesignSystem::treeOneLineItem().iconSize().width(),
         DesignSystem::treeOneLineItem().iconSize().height());
     _painter->drawPixmap(avatarRect, avatar, avatar.rect());
