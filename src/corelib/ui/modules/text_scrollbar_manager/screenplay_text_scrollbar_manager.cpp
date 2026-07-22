@@ -1050,10 +1050,9 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
             painter.drawText(markTextRect, Qt::AlignCenter,
                              markIndex == 0 ? "0" : EighthsHelper::toString(durationAtMark));
             if (markTextRect.intersects(handleLeftTextRect)
-                || markTextRect.intersects(handleRightTextRect)) {
-                painter.setOpacity(opacity());
-            }
+                || markTextRect.intersects(handleRightTextRect)) { }
         }
+        painter.setOpacity(opacity());
 
         left += marksDefaultSpacing;
     }

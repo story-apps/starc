@@ -221,7 +221,8 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(
     //
     QString durationText;
     if (useEighths) {
-        const auto duration = _index.data(ScreenplayTextModelFolderItem::FolderEighthsRole).toReal();
+        const auto duration
+            = _index.data(ScreenplayTextModelFolderItem::FolderEighthsRole).toReal();
         durationText = EighthsHelper::toStringWithPostfix(duration);
     } else {
         const std::chrono::seconds duration{

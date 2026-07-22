@@ -211,7 +211,7 @@ public:
     PageEightCalculator() = default;
 
     qreal eighths(TextParagraphType _type, const QString& _text,
-                 const TextTemplate& _textTemplate) const
+                  const TextTemplate& _textTemplate) const
     {
         const auto mmPageSize
             = QPageSize(_textTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
@@ -293,7 +293,7 @@ std::chrono::milliseconds ScreenplayChronometer::duration(TextParagraphType _typ
 }
 
 qreal ScreenplayChronometer::eighths(TextParagraphType _type, const QString& _text,
-                                    const QString& _templateId, const ChronometerOptions& _options)
+                                     const QString& _templateId, const ChronometerOptions& _options)
 {
     const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(_templateId);
     return PageEightCalculator().eighths(_type, _text, screenplayTemplate);
