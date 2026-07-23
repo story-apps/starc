@@ -258,7 +258,11 @@ public:
             + pxBlockMargins.top() + pxBlockMargins.bottom()
             + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
 
-        return textHeight / (pageHeight / 8.0);
+        //
+        // Добавляем небольшую дельту, т.к. из-за приблизительности рассчётов не удаётся попадать
+        // точно в страницы
+        //
+        return textHeight / (pageHeight / 8.0) * 1.01;
     }
 };
 

@@ -10,6 +10,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -166,6 +168,10 @@ void ComplianceCheckerImpl::startChecking()
     ScreenplayTextDocument screenplayDocument;
     screenplayTextEdit.setDocument(&screenplayDocument);
     screenplayDocument.setModel(d->screenplayModel);
+    screenplayDocument.setCorrectionOptions(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
+            .toBool());
     //
     // ... и собираем статистику
     //

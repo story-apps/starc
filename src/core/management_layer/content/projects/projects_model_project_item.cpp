@@ -380,7 +380,8 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         break;
     }
 
-    case 4568: {
+    case 4568:
+    case 4702: {
         const QStringList primaryLocations = {
             "ТРЕШКА. *",
             "КВАРТИРА ДИМЫ. КОМНАТА ДИМЫ",

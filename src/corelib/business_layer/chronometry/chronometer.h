@@ -107,7 +107,7 @@ public:
      * @brief Определить сколько от восьмушки страницы занимает заданный блок
      */
     static qreal eighths(TextParagraphType _type, const QString& _text, const QString& _templateId,
-                        const ChronometerOptions& _options);
+                         const ChronometerOptions& _options);
 };
 
 /**
