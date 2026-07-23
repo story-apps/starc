@@ -623,12 +623,10 @@ void TextField::setText(const QString& _text)
     document()->clearUndoRedoStacks();
 
     //
-    // Анимируем только в случае, когда текста не было и его установили
+    // Обязательно ставим лейбл в верхнее положение
     //
-    if (needAnimate) {
-        d->animateLabelToTop();
-        d->finishAnimation();
-    }
+    d->animateLabelToTop();
+    d->finishAnimation();
 }
 
 QString TextField::selectedText() const
