@@ -10,6 +10,11 @@ class CORE_LIBRARY_EXPORT MeasurementHelper
 {
 public:
     /**
+     * @brief Задать необходимость использования системных метрик для определения физических единиц
+     */
+    static void setAccurateMetricsHandling(bool _accurate);
+
+    /**
      * @brief Перевести миллиметры в пикселы и обратно
      * @param _x указывает направление (горизонтальное - true или вертикальное - false), в котором
      * необходимо произвести рассчёт
@@ -44,4 +49,10 @@ public:
      */
     static int mmToTwips(qreal _mm);
     static int pxToTwips(qreal _px, bool _x = true);
+
+private:
+    /**
+     * @brief Необходимо ли использовать системных метрик шрифтов
+     */
+    static bool m_accurateMetricsHandling;
 };

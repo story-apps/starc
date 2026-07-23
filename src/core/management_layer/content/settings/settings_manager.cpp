@@ -896,6 +896,8 @@ void SettingsManager::Implementation::loadShortcutsForNovelSettings()
 
 void SettingsManager::Implementation::loadAdvancedSettings()
 {
+    view->setAdvancedAccurateMetricsHandling(
+        settingsValue(DataStorageLayer::kApplicationAdvancedAccurateMetricsHandlingKey).toBool());
     view->setAdvancedUseExtendedLogging(
         settingsValue(DataStorageLayer::kApplicationLoggingLevelKey).toInt()
         == static_cast<int>(Log::Level::Trace));
@@ -1676,6 +1678,47 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Дополнительные параметры
     //
+    connect(
+        d->view, &Ui::SettingsView::advancedAccurateMetricsHandlingChanged, this,
+        [this](bool _accurate) {
+            //
+            // Уведомим пользователя о том, что для применения настройки нужно перезапустить
+            // приложение, а также предложим ему перезапуститься сразу же
+            //
+            auto dialog = new Dialog(d->view->topLevelWidget());
+            const int kCancelButtonId = 0;
+            const int kYesButtonId = 1;
+            dialog->showDialog(
+                {},
+                tr("Restart needed to apply metrics handling change. Restart the app right now?"),
+                { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+                  { kYesButtonId, tr("Restart"), Dialog::AcceptButton } });
+            QObject::connect(
+                dialog, &Dialog::finished, dialog,
+                [this, dialog, kCancelButtonId, _accurate](const Dialog::ButtonInfo& _buttonInfo) {
+                    dialog->hideDialog();
+
+                    //
+                    // Если пользователь не хочет применять настройку, то отменяем её
+                    //
+                    if (_buttonInfo.id == kCancelButtonId) {
+                        QSignalBlocker signalBlocker(d->view);
+                        d->view->setAdvancedAccurateMetricsHandling(!_accurate);
+                        return;
+                    }
+
+                    //
+                    // Вызываем сигнал о желании пользователя сбросить настройки после
+                    // того, как диалог завершится, чтобы в него не прилетели события о
+                    // смене дизайн системы
+                    //
+                    connect(
+                        dialog, &Dialog::disappeared, this,
+                        [this, _accurate] { setAdvancedAccurateMetricsHandling(_accurate); },
+                        Qt::QueuedConnection);
+                });
+            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        });
     connect(d->view, &Ui::SettingsView::advancedUseExtendedLoggingChanged, this,
             &SettingsManager::setAdvancedUseExtendedLogging);
 }
@@ -2676,6 +2719,12 @@ void SettingsManager::setShortcutsForNovelEdit(const QString& _blockType, const 
     ShortcutsHelper::setNovelChangeByEnter(
         blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
     emit novelEditorChanged({ DataStorageLayer::kComponentsNovelEditorShortcutsKey });
+}
+
+void SettingsManager::setAdvancedAccurateMetricsHandling(bool _accurate)
+{
+    setSettingsValue(DataStorageLayer::kApplicationAdvancedAccurateMetricsHandlingKey, _accurate);
+    emit advancedAccurateMetricsHandlingChanged(_accurate);
 }
 
 void SettingsManager::setAdvancedUseExtendedLogging(bool _use)

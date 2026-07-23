@@ -108,6 +108,12 @@ const QString kApplicationShortcutsImportKey = kApplicationShortcutsKey + "/impo
 const QString kApplicationShortcutsCurrentDocumentExportKey
     = kApplicationShortcutsKey + "/current-document-export";
 //
+// дополнительные
+const QString kApplicationAdvancedKey = kApplicationGroupKey + "/advanced";
+// способ преобразования пикселей в миллиметры
+const QString kApplicationAdvancedAccurateMetricsHandlingKey
+    = kApplicationAdvancedKey + "/accurate-metrics-handling";
+//
 // логгирование
 const QString kApplicationLoggingKey = kApplicationGroupKey + "/logging";
 // уровень логгирования

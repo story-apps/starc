@@ -93,6 +93,7 @@ signals:
     /**
      * @brief Изменились расширенные параметры приложения
      */
+    void advancedAccurateMetricsHandlingChanged(bool _use);
     void advancedUseExtendingLoggingChanged(bool _use);
 
     /**
@@ -259,6 +260,7 @@ private:
     //
     // Сохранение расширенных параметров
     //
+    void setAdvancedAccurateMetricsHandling(bool _accurate);
     void setAdvancedUseExtendedLogging(bool _use);
 
 private:

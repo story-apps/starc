@@ -9,6 +9,7 @@
 #include <cmath>
 
 namespace {
+
 static QFont trueCourier()
 {
     QFont courierNewFont("Courier New");
@@ -39,40 +40,62 @@ static QFont trueCourier()
     }
 #endif
 }
+
 } // namespace
 
 
+void MeasurementHelper::setAccurateMetricsHandling(bool _accurate)
+{
+    m_accurateMetricsHandling = _accurate;
+}
+
 qreal MeasurementHelper::mmToPx(qreal _mm, bool _x)
 {
-#ifndef ACCURATE_METRICS_HANDLING
-    static qreal xCoefficient = [] {
-        const auto courierFont = trueCourier();
-        const QFontMetricsF courierNewMetrics(courierFont);
-        const qreal xCoefficient
-            = courierNewMetrics.horizontalAdvance(QString().fill('W', 60)) / 60.0 / 2.53;
-        return xCoefficient;
-    }();
-    static qreal yCoefficient = [] {
-        const auto courierFont = trueCourier();
-        const QFontMetricsF courierNewMetrics(courierFont);
-        const qreal coefficient = courierFont.family() == "Courier New" ? 4.8 : 4.26;
-        const qreal yCoefficient = courierNewMetrics.lineSpacing() / coefficient;
-        return yCoefficient;
-    }();
-#else
-    static qreal xCoefficient = [] {
-        const auto density = QApplication::primaryScreen()->physicalDotsPerInchX();
-        const auto pageSize = QPageSize(QPageSize::A4);
-        return pageSize.sizePixels(density).width() / pageSize.size(QPageSize::Millimeter).width();
-    }();
-    static qreal yCoefficient = [] {
-        const auto density = QApplication::primaryScreen()->physicalDotsPerInchY();
-        const auto pageSize = QPageSize(QPageSize::A4);
-        return pageSize.sizePixels(density).height()
-            / pageSize.size(QPageSize::Millimeter).height();
-    }();
-#endif
-    return _mm * (_x ? xCoefficient : yCoefficient);
+    qreal finalXCoefficient = 1.0;
+    qreal finalYCoefficient = 1.0;
+
+    //
+    // Используем параметры экрана и пляшем от этого
+    //
+    if (m_accurateMetricsHandling) {
+        static qreal xCoefficient = [] {
+            const auto density = QApplication::primaryScreen()->physicalDotsPerInchX();
+            const auto pageSize = QPageSize(QPageSize::A4);
+            return pageSize.sizePixels(density).width()
+                / pageSize.size(QPageSize::Millimeter).width();
+        }();
+        finalXCoefficient = xCoefficient;
+        static qreal yCoefficient = [] {
+            const auto density = QApplication::primaryScreen()->physicalDotsPerInchY();
+            const auto pageSize = QPageSize(QPageSize::A4);
+            return pageSize.sizePixels(density).height()
+                / pageSize.size(QPageSize::Millimeter).height();
+        }();
+        finalYCoefficient = yCoefficient;
+    }
+    //
+    // Отталкиваемся от метрик шрифтов, которые нам известны
+    //
+    else {
+        static qreal xCoefficient = [] {
+            const auto courierFont = trueCourier();
+            const QFontMetricsF courierNewMetrics(courierFont);
+            const qreal xCoefficient
+                = courierNewMetrics.horizontalAdvance(QString().fill('W', 60)) / 60.0 / 2.53;
+            return xCoefficient;
+        }();
+        finalXCoefficient = xCoefficient;
+        static qreal yCoefficient = [] {
+            const auto courierFont = trueCourier();
+            const QFontMetricsF courierNewMetrics(courierFont);
+            const qreal coefficient = courierFont.family() == "Courier New" ? 4.8 : 4.26;
+            const qreal yCoefficient = courierNewMetrics.lineSpacing() / coefficient;
+            return yCoefficient;
+        }();
+        finalYCoefficient = yCoefficient;
+    }
+
+    return _mm * (_x ? finalXCoefficient : finalYCoefficient);
 }
 
 qreal MeasurementHelper::pxToMm(qreal _px, bool _x)
@@ -128,3 +151,5 @@ int MeasurementHelper::pxToTwips(qreal _px, bool _x)
 {
     return mmToTwips(pxToMm(_px, _x));
 }
+
+bool MeasurementHelper::m_accurateMetricsHandling = false;

@@ -59,6 +59,7 @@
 #include <utils/helpers/extension_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/language_helper.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
@@ -108,6 +109,20 @@ enum class ApplicationState {
     Working,
     Importing,
 };
+
+/**
+ * @brief Перезапустить приложение
+ */
+void restartApplication()
+{
+    QApplication::quit();
+
+    const auto arguments = QApplication::arguments();
+    if (!arguments.isEmpty()) {
+        QProcess::startDetached(arguments.constFirst(), {});
+    }
+}
+
 } // namespace
 
 class ApplicationManager::Implementation
@@ -115,6 +130,11 @@ class ApplicationManager::Implementation
 public:
     explicit Implementation(ApplicationManager* _q);
     ~Implementation();
+
+    /**
+     * @brief Настроить способ работы с конвертацией метрик
+     */
+    void initMeasurementMetrics();
 
     /**
      * @brief Настроить логгирование
@@ -452,6 +472,12 @@ ApplicationManager::Implementation::~Implementation()
          }) {
         object->disconnect();
     }
+}
+
+void ApplicationManager::Implementation::initMeasurementMetrics()
+{
+    MeasurementHelper::setAccurateMetricsHandling(
+        settingsValue(DataStorageLayer::kApplicationAdvancedAccurateMetricsHandlingKey).toBool());
 }
 
 void ApplicationManager::Implementation::initLogging()
@@ -2440,6 +2466,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     PlatformHelper::initConsoleOutput();
 
     //
+    // Настраиваем способ конвертации пикселей в миллиметры
+    //
+    d->initMeasurementMetrics();
+
+    //
     // Первым делом настраиваем сбор логов
     //
     d->initLogging();
@@ -3167,6 +3198,24 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::novelNavigatorChanged, this,
             [this] { d->projectManager->reconfigureNovelNavigator(); });
     //
+    connect(d->settingsManager.data(), &SettingsManager::advancedAccurateMetricsHandlingChanged,
+            this, [this] {
+                //
+                // Метрики нельзя переключить на лету, так что если пользователь сюда пришёл,
+                // перезапускаем прилжоение
+                //
+                // ... закроем текущий проект
+                //
+                d->closeCurrentProject();
+                //
+                // ... сохраним настройки, чтобы они успешно считались следующей копией приложения
+                //
+                DataStorageLayer::StorageFacade::settingsStorage()->sync();
+                //
+                // ... перезапустим приложение
+                //
+                restartApplication();
+            });
     connect(d->settingsManager.data(), &SettingsManager::advancedUseExtendingLoggingChanged, this,
             [this] { d->initLogging(); });
     //
@@ -3180,12 +3229,9 @@ void ApplicationManager::initConnections()
         //
         DataStorageLayer::StorageFacade::settingsStorage()->resetToDefaults();
         //
-        // Перезапустим приложение
+        // ... перезапустим приложение
         //
-        QApplication::quit();
-        if (QApplication::arguments().size() > 0) {
-            QProcess::startDetached(QApplication::arguments().constFirst(), {});
-        }
+        restartApplication();
     });
 
     //

@@ -650,6 +650,7 @@ public:
     Card* advancedCard = nullptr;
     QGridLayout* advancedCardLayout = nullptr;
     H5Label* advancedTitle = nullptr;
+    CheckBox* advancedAccurateMetricsHandling = nullptr;
     CheckBox* advancedUseExtendedLogging = nullptr;
 };
 
@@ -918,6 +919,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , advancedCard(new Card(content))
     , advancedCardLayout(new QGridLayout)
     , advancedTitle(new H5Label(advancedCard))
+    , advancedAccurateMetricsHandling(new CheckBox(advancedCard))
     , advancedUseExtendedLogging(new CheckBox(advancedCard))
 {
     scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
@@ -1695,6 +1697,7 @@ void SettingsView::Implementation::initAdvancedCard()
     advancedCardLayout->setSpacing(0);
     int itemIndex = 0;
     advancedCardLayout->addWidget(advancedTitle, itemIndex++, 0);
+    advancedCardLayout->addWidget(advancedAccurateMetricsHandling, itemIndex++, 0);
     advancedCardLayout->addWidget(advancedUseExtendedLogging, itemIndex++, 0);
     //
     advancedCard->setContentLayout(advancedCardLayout);
@@ -3025,6 +3028,8 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // Соединения дополнительных параметров
     //
+    connect(d->advancedAccurateMetricsHandling, &CheckBox::checkedChanged, this,
+            &SettingsView::advancedAccurateMetricsHandlingChanged);
     connect(d->advancedUseExtendedLogging, &CheckBox::checkedChanged, this,
             &SettingsView::advancedUseExtendedLoggingChanged);
 }
@@ -4077,6 +4082,11 @@ void SettingsView::setShortcutsForNovelModel(HierarchicalModel* _model)
         });
 }
 
+void SettingsView::setAdvancedAccurateMetricsHandling(bool _accurate)
+{
+    d->advancedAccurateMetricsHandling->setChecked(_accurate);
+}
+
 void SettingsView::setAdvancedUseExtendedLogging(bool _use)
 {
     d->advancedUseExtendedLogging->setChecked(_use);
@@ -4514,6 +4524,8 @@ void SettingsView::updateTranslations()
     d->novelParagraphChangeTypeDelegate->setLabel(tr("Change to"));
     //
     d->advancedTitle->setText(tr("Advanced settings"));
+    d->advancedAccurateMetricsHandling->setText(
+        tr("Use advanced handling to convert pixels to millimeters"));
     d->advancedUseExtendedLogging->setText(tr("Collect extended logs about application operation"));
     d->advancedCardLayout->setContentsMargins(0, 0, 0, DesignSystem::layout().px8());
 }
@@ -4754,6 +4766,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->novelNavigatorShowSceneText,
              d->novelNavigatorCounterType,
              //
+             d->advancedAccurateMetricsHandling,
              d->advancedUseExtendedLogging,
          }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
