@@ -511,7 +511,7 @@ void ApplicationManager::Implementation::initLogging()
 #endif
     Log::init(loggingLevel, logFilePath);
 
-    QString applicationVersion = "0.8.2";
+    QString applicationVersion = "0.8.3";
 #if defined(DEV_BUILD) && DEV_BUILD > 0
     applicationVersion += QString(" dev %1").arg(DEV_BUILD);
 #endif
