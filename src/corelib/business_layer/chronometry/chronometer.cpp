@@ -91,7 +91,7 @@ public:
         }
         }
         const auto textHeight
-            = TextHelper::heightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
+            = TextHelper::layoutHeightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
             + pxBlockMargins.top() + pxBlockMargins.bottom()
             + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
 
@@ -254,7 +254,7 @@ public:
         }
         }
         const auto textHeight
-            = TextHelper::heightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
+            = TextHelper::layoutHeightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
             + pxBlockMargins.top() + pxBlockMargins.bottom()
             + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
 

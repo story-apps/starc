@@ -168,18 +168,49 @@ void TextHelper::updateFontHinting(QFont& _font)
 #endif
 }
 
-qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width,
-                                 qreal _lineHeight)
+qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)
 {
     const QFontMetricsF metrics(_font);
-    auto height
-        = metrics
-              .boundingRect(QRectF(0, 0, _width, 0), // width constraint, height=0 means unlimited
-                            Qt::TextWordWrap | Qt::AlignLeft, _text)
-              .height();
-    if (!qFuzzyCompare(_lineHeight, -1)) {
-        height *= _lineHeight / fineLineSpacing(_font);
+    return metrics
+        .boundingRect(QRectF(0, 0, _width, 0), // width constraint, height=0 means unlimited
+                      Qt::TextWordWrap | Qt::AlignLeft, _text)
+        .height();
+}
+
+qreal TextHelper::layoutHeightForWidth(const QString& _text, const QFont& _font, qreal _width,
+                                       qreal _lineHeight)
+{
+    if (_text.isEmpty() || _width <= 0.0) {
+        return 0.0;
     }
+
+    const auto lineHeight = qFuzzyCompare(_lineHeight, -1) ? fineLineSpacing(_font) : _lineHeight;
+    if (lineHeight <= 0.0) {
+        return 0.0;
+    }
+
+    auto correctedText = _text;
+    correctedText.replace(QLatin1Char('\n'), QChar::LineSeparator);
+
+    QTextLayout textLayout(correctedText, _font);
+    QTextOption textOption;
+    textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    textLayout.setTextOption(textOption);
+
+    qreal height = 0.0;
+    textLayout.beginLayout();
+    while (true) {
+        auto line = textLayout.createLine();
+        if (!line.isValid()) {
+            break;
+        }
+
+        line.setLineWidth(_width);
+        line.setPosition(QPointF(0.0, height));
+        height += lineHeight;
+    }
+    textLayout.endLayout();
+
     return height;
 }
 
