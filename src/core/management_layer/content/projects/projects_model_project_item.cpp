@@ -451,7 +451,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         //
         QJsonArray line2Locations;
         line2Locations.append("ДОМ АВЕРИНЫХ. *");
-        line2Locations.append("ДОМ СПИЦИНЫХ. *");
+        line2Locations.append("ДОМ СПИЦЫНЫХ. *");
         line2Locations.append("КОНЮШНЯ");
         line2Locations.append("МАГАЗИН ОДЕЖДЫ");
         QJsonArray line2Characters;
@@ -460,7 +460,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         line2Characters.append("РОМА");
         line2Characters.append("ЮЛЯ");
         line2Characters.append("АВЕРИН");
-        line2Characters.append("СПИЦИН");
+        line2Characters.append("СПИЦЫН");
         line2Characters.append("СМИРНОВ");
         QJsonObject line2;
         line2["name"] = "Линия 2";
