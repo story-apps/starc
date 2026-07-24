@@ -613,8 +613,6 @@ void TextField::setText(const QString& _text)
         return;
     }
 
-    const bool needAnimate = text().isEmpty() && !_text.isEmpty();
-
     QTextCursor cursor = textCursor();
     cursor.beginEditBlock();
     cursor.select(QTextCursor::Document);

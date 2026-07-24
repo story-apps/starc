@@ -160,7 +160,7 @@ void ComboBox::setModel(QAbstractItemModel* _model)
     d->popup->setContentModel(_model);
 
     if (_model != nullptr && _model->rowCount() > 0) {
-        d->popup->setCurrentIndex(_model->index(0, 0));
+        setCurrentIndex(_model->index(0, 0));
         connect(_model, &QAbstractItemModel::dataChanged, this, [this](const QModelIndex& _index) {
             if (d->popup->currentIndex() == _index) {
                 setText(_index.data().toString());
