@@ -441,6 +441,8 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         line1Characters.append("КНЯГИНЯ");
         line1Characters.append("АПОЛЛИНАРИЯ");
         line1Characters.append("МУРАВИНСКИЙ");
+        line1Characters.append("СИМКА");
+        line1Characters.append("ПОТАП");
         QJsonObject line1;
         line1["name"] = "Линия 1";
         line1["long_scene_threshold"] = 2 * 8; // две минуты в восьмушках

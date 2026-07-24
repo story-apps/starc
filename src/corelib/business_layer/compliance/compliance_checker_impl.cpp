@@ -604,16 +604,22 @@ void ComplianceCheckerImpl::startChecking()
                 = tr("Script pages count from %1 to %2")
                       .arg(QString::number(rule.minimumValue), QString::number(rule.maximumValue));
             const auto totalEighths = d->screenplayModel->eighths();
-            const int totalPages = qCeil(totalEighths / 8.0);
-            if (totalPages >= rule.minimumValue && totalPages <= rule.maximumValue) {
+            //
+            // Минимальная граница должна полностью соблюдаться, а для верхней есть допуск в 1/8
+            //
+            const qreal minimumValue = rule.minimumValue * 8.0;
+            const qreal maximumValue = rule.maximumValue * 8.0 + 1.0 / 8.0;
+            if (totalEighths >= minimumValue && totalEighths <= maximumValue) {
                 result.status = ComplianceCheckResultStatus::Passed;
             } else {
                 result.status = failedStatus(rule);
-                result.subtitle = tr("Page count is %1").arg(totalPages);
-                if (totalPages < rule.minimumValue) {
-                    result.subtitle += " " + tr("(%1 less)").arg(rule.minimumValue - totalPages);
+                result.subtitle = tr("Page count is %1").arg(EighthsHelper::toString(totalEighths));
+                if (totalEighths < minimumValue) {
+                    result.subtitle += " "
+                        + tr("(%1 less)").arg(EighthsHelper::toString(minimumValue - totalEighths));
                 } else {
-                    result.subtitle += " " + tr("(%1 more)").arg(totalPages - rule.maximumValue);
+                    result.subtitle += " "
+                        + tr("(%1 more)").arg(EighthsHelper::toString(totalEighths - maximumValue));
                 }
             }
 
