@@ -17,6 +17,7 @@ public:
     static QString finalDraft();
     static QString finalDraftTemplate();
     static QString trelby();
+    static QString richTextFormat();
     static QString msOfficeBinary();
     static QString msOfficeOpenXml();
     static QString openDocumentXml();

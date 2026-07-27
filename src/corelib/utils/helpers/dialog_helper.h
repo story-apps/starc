@@ -20,6 +20,7 @@ public:
     static QString finalDraftFilter();
     static QString finalDraftTemplateFilter();
     static QString trelbyFilter();
+    static QString richTextFormatFilter();
     static QString msWordFilter();
     static QString openDocumentXmlFilter();
     static QString fountainFilter();

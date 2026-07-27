@@ -82,6 +82,7 @@ void ImportManager::Implementation::showImportDialogFor(const QStringList& _path
         ExtensionHelper::finalDraft(),
         ExtensionHelper::finalDraftTemplate(),
         ExtensionHelper::trelby(),
+        ExtensionHelper::richTextFormat(),
         ExtensionHelper::msOfficeOpenXml(),
         ExtensionHelper::openDocumentXml(),
         ExtensionHelper::fountain(),
@@ -255,7 +256,8 @@ void ImportManager::Implementation::importSimpleText(const BusinessLayer::Import
     QScopedPointer<BusinessLayer::AbstractSimpleTextImporter> importer;
     {
         const auto importFilePath = _options.filePath.toLower();
-        if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
+        if (importFilePath.endsWith(ExtensionHelper::richTextFormat())
+            || importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
             || importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
             importer.reset(new BusinessLayer::SimpleTextDocxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::fountain())
@@ -380,7 +382,8 @@ void ImportManager::Implementation::importScreenplay(
             importer.reset(new BusinessLayer::ScreenplayFdxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::trelby())) {
             importer.reset(new BusinessLayer::ScreenplayTrelbyImporter);
-        } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
+        } else if (importFilePath.endsWith(ExtensionHelper::richTextFormat())
+                   || importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
                    || importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
             importer.reset(new BusinessLayer::ScreenplayDocxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {

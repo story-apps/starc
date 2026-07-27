@@ -64,6 +64,12 @@ QString DialogHelper::trelbyFilter()
                       ExtensionHelper::trelby());
 }
 
+QString DialogHelper::richTextFormatFilter()
+{
+    return makeFilter(QApplication::translate("DialogHelper", "Rich Text Format"),
+                      ExtensionHelper::openDocumentXml());
+}
+
 QString DialogHelper::msWordFilter()
 {
     return makeFilter(QApplication::translate("DialogHelper", "Office Open XML"),
@@ -144,6 +150,7 @@ QString DialogHelper::filtersForImport()
                                      ExtensionHelper::finalDraft(),
                                      ExtensionHelper::finalDraftTemplate(),
                                      ExtensionHelper::trelby(),
+                                     ExtensionHelper::richTextFormat(),
                                      ExtensionHelper::msOfficeBinary(),
                                      ExtensionHelper::msOfficeOpenXml(),
                                      ExtensionHelper::openDocumentXml(),
@@ -158,6 +165,7 @@ QString DialogHelper::filtersForImport()
              finalDraftFilter(),
              finalDraftTemplateFilter(),
              trelbyFilter(),
+             richTextFormatFilter(),
              msWordFilter(),
              openDocumentXmlFilter(),
              fountainFilter(),

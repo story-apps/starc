@@ -29,40 +29,37 @@
 #include <QTextCodec>
 #include <QTextDecoder>
 
-#include <cmath>
-
 //-----------------------------------------------------------------------------
 
-namespace
+namespace {
+QTextCodec* codecForCodePage(qint32 value, QByteArray* codepage = nullptr)
 {
-    QTextCodec* codecForCodePage(qint32 value, QByteArray* codepage = nullptr)
-    {
-        QByteArray name = "CP" + QByteArray::number(value);
-        QByteArray codec;
-        if (value == 932) {
-            codec = "Shift-JIS";
-        } else if (value == 10000) {
-            codec = "Apple Roman";
-        } else if (value == 65001) {
-            codec = "UTF-8";
-        } else {
-            codec = name;
-        }
-        if (codepage) {
-            *codepage = name;
-        }
-        return QTextCodec::codecForName(codec);
+    QByteArray name = "CP" + QByteArray::number(value);
+    QByteArray codec;
+    if (value == 932) {
+        codec = "Shift-JIS";
+    } else if (value == 10000) {
+        codec = "Apple Roman";
+    } else if (value == 65001) {
+        codec = "UTF-8";
+    } else {
+        codec = name;
     }
+    if (codepage) {
+        *codepage = name;
+    }
+    return QTextCodec::codecForName(codec);
 }
+} // namespace
 
 //-----------------------------------------------------------------------------
 
 class RtfReader::FunctionTable
 {
 public:
-    FunctionTable() :
-        m_group_end_func(nullptr),
-        m_insert_text_func(nullptr)
+    FunctionTable()
+        : m_group_end_func(nullptr)
+        , m_insert_text_func(nullptr)
     {
     }
 
@@ -120,9 +117,9 @@ private:
     class Function
     {
     public:
-        Function(void (RtfReader::*func)(qint32) = nullptr, qint32 value = 0) :
-            m_func(func),
-            m_value(value)
+        Function(void (RtfReader::*func)(qint32) = nullptr, qint32 value = 0)
+            : m_func(func)
+            , m_value(value)
         {
         }
 
@@ -136,17 +133,14 @@ private:
         qint32 m_value;
     };
     QHash<QByteArray, Function> m_functions;
-}
-functions,
-stylesheet_functions,
-heading_functions;
+} functions, stylesheet_functions, fonttable_functions, heading_functions;
 
 //-----------------------------------------------------------------------------
 
-RtfReader::RtfReader() :
-    m_in_block(true),
-    m_codec(0),
-    m_decoder(0)
+RtfReader::RtfReader()
+    : m_in_block(true)
+    , m_codec(0)
+    , m_decoder(0)
 {
     if (functions.isEmpty()) {
         functions.setInsertText(&RtfReader::insertText);
@@ -191,12 +185,22 @@ RtfReader::RtfReader() :
         functions.set("ql", &RtfReader::setBlockAlignment, Qt::AlignLeft | Qt::AlignAbsolute);
         functions.set("qr", &RtfReader::setBlockAlignment, Qt::AlignRight | Qt::AlignAbsolute);
 
+        functions.set("fi", &RtfReader::setBlockFirstLineIndent);
+        functions.set("li", &RtfReader::setBlockIndent);
+        functions.set("lin", &RtfReader::setBlockIndent);
+        functions.set("ri", &RtfReader::setBlockRightIndent);
+        functions.set("rin", &RtfReader::setBlockRightIndent);
+        functions.set("sa", &RtfReader::setBlockSpaceAfter);
+        functions.set("sb", &RtfReader::setBlockSpaceBefore);
+
         functions.set("li", &RtfReader::setBlockIndent);
 
         functions.set("ltrpar", &RtfReader::setBlockDirection, Qt::LeftToRight);
         functions.set("rtlpar", &RtfReader::setBlockDirection, Qt::RightToLeft);
 
         functions.set("b", &RtfReader::setTextBold, true);
+        functions.set("caps", &RtfReader::setTextCapitalization, true);
+        functions.set("fs", &RtfReader::setTextFontSize);
         functions.set("i", &RtfReader::setTextItalic, true);
         functions.set("strike", &RtfReader::setTextStrikeOut, true);
         functions.set("striked", &RtfReader::setTextStrikeOut, true);
@@ -213,8 +217,10 @@ RtfReader::RtfReader() :
         functions.set("ululdbwave", &RtfReader::setTextUnderline, true);
 
         functions.set("sub", &RtfReader::setTextVerticalAlignment, QTextCharFormat::AlignSubScript);
-        functions.set("super", &RtfReader::setTextVerticalAlignment, QTextCharFormat::AlignSuperScript);
-        functions.set("nosupersub", &RtfReader::setTextVerticalAlignment, QTextCharFormat::AlignNormal);
+        functions.set("super", &RtfReader::setTextVerticalAlignment,
+                      QTextCharFormat::AlignSuperScript);
+        functions.set("nosupersub", &RtfReader::setTextVerticalAlignment,
+                      QTextCharFormat::AlignNormal);
 
         functions.set("outlinelevel", &RtfReader::setOutlineLevel, 0);
 
@@ -234,7 +240,7 @@ RtfReader::RtfReader() :
 
         functions.set("filetbl", &RtfReader::ignoreGroup);
         functions.set("colortbl", &RtfReader::ignoreGroup);
-        functions.set("fonttbl", &RtfReader::ignoreText);
+        functions.set("fonttbl", &RtfReader::startFontTable);
         functions.set("info", &RtfReader::ignoreGroup);
         functions.set("pict", &RtfReader::ignoreGroup);
         functions.set("*", &RtfReader::ignoreGroup);
@@ -247,15 +253,25 @@ RtfReader::RtfReader() :
 
         stylesheet_functions.set("qc", &RtfReader::setBlockAlignment, Qt::AlignHCenter);
         stylesheet_functions.set("qj", &RtfReader::setBlockAlignment, Qt::AlignJustify);
-        stylesheet_functions.set("ql", &RtfReader::setBlockAlignment, Qt::AlignLeft | Qt::AlignAbsolute);
-        stylesheet_functions.set("qr", &RtfReader::setBlockAlignment, Qt::AlignRight | Qt::AlignAbsolute);
+        stylesheet_functions.set("ql", &RtfReader::setBlockAlignment,
+                                 Qt::AlignLeft | Qt::AlignAbsolute);
+        stylesheet_functions.set("qr", &RtfReader::setBlockAlignment,
+                                 Qt::AlignRight | Qt::AlignAbsolute);
 
+        stylesheet_functions.set("fi", &RtfReader::setBlockFirstLineIndent);
         stylesheet_functions.set("li", &RtfReader::setBlockIndent);
+        stylesheet_functions.set("lin", &RtfReader::setBlockIndent);
+        stylesheet_functions.set("ri", &RtfReader::setBlockRightIndent);
+        stylesheet_functions.set("rin", &RtfReader::setBlockRightIndent);
+        stylesheet_functions.set("sa", &RtfReader::setBlockSpaceAfter);
+        stylesheet_functions.set("sb", &RtfReader::setBlockSpaceBefore);
 
         stylesheet_functions.set("ltrpar", &RtfReader::setBlockDirection, Qt::LeftToRight);
         stylesheet_functions.set("rtlpar", &RtfReader::setBlockDirection, Qt::RightToLeft);
 
         stylesheet_functions.set("b", &RtfReader::setTextBold, true);
+        stylesheet_functions.set("caps", &RtfReader::setTextCapitalization, true);
+        stylesheet_functions.set("fs", &RtfReader::setTextFontSize);
         stylesheet_functions.set("i", &RtfReader::setTextItalic, true);
         stylesheet_functions.set("strike", &RtfReader::setTextStrikeOut, true);
         stylesheet_functions.set("striked", &RtfReader::setTextStrikeOut, true);
@@ -271,11 +287,22 @@ RtfReader::RtfReader() :
         stylesheet_functions.set("ulhwave", &RtfReader::setTextUnderline, true);
         stylesheet_functions.set("ululdbwave", &RtfReader::setTextUnderline, true);
 
-        stylesheet_functions.set("sub", &RtfReader::setTextVerticalAlignment, QTextCharFormat::AlignSubScript);
-        stylesheet_functions.set("super", &RtfReader::setTextVerticalAlignment, QTextCharFormat::AlignSuperScript);
-        stylesheet_functions.set("nosupersub", &RtfReader::setTextVerticalAlignment, QTextCharFormat::AlignNormal);
+        stylesheet_functions.set("sub", &RtfReader::setTextVerticalAlignment,
+                                 QTextCharFormat::AlignSubScript);
+        stylesheet_functions.set("super", &RtfReader::setTextVerticalAlignment,
+                                 QTextCharFormat::AlignSuperScript);
+        stylesheet_functions.set("nosupersub", &RtfReader::setTextVerticalAlignment,
+                                 QTextCharFormat::AlignNormal);
 
         stylesheet_functions.set("outlinelevel", &RtfReader::setOutlineLevel, 0);
+    }
+
+    if (fonttable_functions.isEmpty()) {
+        fonttable_functions.set("f", &RtfReader::setFont);
+        fonttable_functions.set("cpg", &RtfReader::setFontCodepage);
+        fonttable_functions.set("fcharset", &RtfReader::setFontCharset);
+        fonttable_functions.set("*", &RtfReader::ignoreGroup);
+        fonttable_functions.setInsertText(&RtfReader::setFontName);
     }
 
     if (heading_functions.isEmpty()) {
@@ -311,6 +338,25 @@ bool RtfReader::canRead(QIODevice* device)
 
 void RtfReader::readData(QIODevice* device)
 {
+    m_error.clear();
+    m_states.clear();
+    m_styles.clear();
+    m_codepages.clear();
+    m_font_names.clear();
+    m_in_block = true;
+    delete m_decoder;
+    m_decoder = nullptr;
+    m_codec = nullptr;
+    m_state = State();
+    m_state.ignore_control_word = false;
+    m_state.ignore_text = false;
+    m_state.skip = 1;
+    m_state.active_codepage = 0;
+    m_state.functions = &functions;
+    m_state.style = 0;
+    stylesheet_functions.setGroupEnd(nullptr);
+    setCodepage(1252);
+
     try {
         // Use theme spacings
         m_block_format = m_cursor.blockFormat();
@@ -355,6 +401,9 @@ void RtfReader::readData(QIODevice* device)
                     m_state.functions->insertText(this, m_decoder->toUnicode(m_token.text()));
                 }
             }
+        }
+        if (!m_states.isEmpty()) {
+            throw tr("Unexpectedly reached end of file.");
         }
     } catch (const QString& error) {
         m_error = error;
@@ -409,10 +458,10 @@ void RtfReader::insertText(const QString& text)
 
 void RtfReader::insertUnicodeSymbol(qint32 value)
 {
-    if (value)
-    {
-        m_cursor.insertText(QChar(value));
-    }
+    // RTF \u parameters are signed 16-bit UTF-16 code units. Converting via
+    // quint16 preserves values in the range -32768..-1 as required by the
+    // specification, and also deliberately preserves U+0000.
+    m_cursor.insertText(QChar(static_cast<quint16>(value)));
 
     for (int i = m_state.skip; i > 0;) {
         m_token.readNext();
@@ -497,7 +546,39 @@ void RtfReader::setBlockDirection(qint32 value)
 
 void RtfReader::setBlockIndent(qint32 value)
 {
-    m_state.block_format.setIndent(std::lround(static_cast<double>(value) / 720.0));
+    m_state.block_format.setLeftMargin(static_cast<qreal>(value) / 20.0);
+    m_cursor.mergeBlockFormat(m_state.block_format);
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::setBlockFirstLineIndent(qint32 value)
+{
+    m_state.block_format.setTextIndent(static_cast<qreal>(value) / 20.0);
+    m_cursor.mergeBlockFormat(m_state.block_format);
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::setBlockRightIndent(qint32 value)
+{
+    m_state.block_format.setRightMargin(static_cast<qreal>(value) / 20.0);
+    m_cursor.mergeBlockFormat(m_state.block_format);
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::setBlockSpaceAfter(qint32 value)
+{
+    m_state.block_format.setBottomMargin(static_cast<qreal>(value) / 20.0);
+    m_cursor.mergeBlockFormat(m_state.block_format);
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::setBlockSpaceBefore(qint32 value)
+{
+    m_state.block_format.setTopMargin(static_cast<qreal>(value) / 20.0);
     m_cursor.mergeBlockFormat(m_state.block_format);
 }
 
@@ -507,6 +588,24 @@ void RtfReader::setTextBold(qint32 value)
 {
     m_state.char_format.setFontWeight(value ? QFont::Bold : QFont::Normal);
     m_cursor.mergeCharFormat(m_state.char_format);
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::setTextCapitalization(qint32 value)
+{
+    m_state.char_format.setFontCapitalization(value ? QFont::AllUppercase : QFont::MixedCase);
+    m_cursor.mergeCharFormat(m_state.char_format);
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::setTextFontSize(qint32 value)
+{
+    if (value > 0) {
+        m_state.char_format.setFontPointSize(static_cast<qreal>(value) / 2.0);
+        m_cursor.mergeCharFormat(m_state.char_format);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -545,7 +644,8 @@ void RtfReader::setTextVerticalAlignment(qint32 value)
 
 void RtfReader::setSkipCharacters(qint32 value)
 {
-    m_state.skip = value;
+    // The RTF 1.9.1 grammar limits \ucN to the range 0..255.
+    m_state.skip = qBound(0, value, 255);
 }
 
 //-----------------------------------------------------------------------------
@@ -565,7 +665,20 @@ void RtfReader::setCodepage(qint32 value)
 
 void RtfReader::setFont(qint32 value)
 {
+    // RTF numeric parameters are signed 16-bit values. Apart from rejecting
+    // invalid font identifiers, this prevents a malformed file from forcing
+    // an unbounded allocation in m_codepages.
+    if (value < 0 || value > 32767) {
+        return;
+    }
+
     m_state.active_codepage = value;
+
+    const QString family = m_font_names.value(value);
+    if (!family.isEmpty() && m_state.functions != &fonttable_functions) {
+        m_state.char_format.setFontFamily(family);
+        m_cursor.mergeCharFormat(m_state.char_format);
+    }
 
     if (value < m_codepages.count()) {
         setCodec(m_codepages[value]);
@@ -576,6 +689,26 @@ void RtfReader::setFont(qint32 value)
 
     if (!m_codec) {
         setCodec(m_codepage);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::startFontTable(qint32)
+{
+    m_state.functions = &fonttable_functions;
+}
+
+//-----------------------------------------------------------------------------
+
+void RtfReader::setFontName(const QString& name)
+{
+    const int terminator = name.indexOf(';');
+    if (terminator >= 0) {
+        const QString family = name.left(terminator).trimmed();
+        if (!family.isEmpty()) {
+            m_font_names[m_state.active_codepage] = family;
+        }
     }
 }
 
@@ -594,8 +727,10 @@ void RtfReader::setFontCodepage(qint32 value)
         m_codepages[m_state.active_codepage] = codec;
         setCodec(codec);
     }
-    m_state.ignore_control_word = true;
-    m_state.ignore_text = true;
+    if (m_state.functions != &fonttable_functions) {
+        m_state.ignore_control_word = true;
+        m_state.ignore_text = true;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -609,31 +744,70 @@ void RtfReader::setFontCharset(qint32 value)
 
     if (m_codepages[m_state.active_codepage]) {
         setCodec(m_codepages[m_state.active_codepage]);
-        m_state.ignore_text = true;
+        if (m_state.functions != &fonttable_functions) {
+            m_state.ignore_text = true;
+        }
         return;
     }
 
     QByteArray charset;
     switch (value) {
-    case 0: charset = "CP1252"; break;
-    case 1: charset = "CP1252"; break;
-    case 77: charset = "Apple Roman"; break;
-    case 128: charset = "Shift-JIS"; break;
-    case 129: charset = "eucKR"; break;
-    case 130: charset = "CP1361"; break;
-    case 134: charset = "GB2312"; break;
-    case 136: charset = "Big5-HKSCS"; break;
-    case 161: charset = "CP1253"; break;
-    case 162: charset = "CP1254"; break;
-    case 163: charset = "CP1258"; break;
-    case 177: charset = "CP1255"; break;
-    case 178: charset = "CP1256"; break;
-    case 186: charset = "CP1257"; break;
-    case 204: charset = "CP1251"; break;
-    case 222: charset = "CP874"; break;
-    case 238: charset = "CP1250"; break;
-    case 255: charset = "CP850"; break;
-    default: return;
+    case 0:
+        charset = "CP1252";
+        break;
+    case 1:
+        charset = "CP1252";
+        break;
+    case 77:
+        charset = "Apple Roman";
+        break;
+    case 128:
+        charset = "Shift-JIS";
+        break;
+    case 129:
+        charset = "eucKR";
+        break;
+    case 130:
+        charset = "CP1361";
+        break;
+    case 134:
+        charset = "GB2312";
+        break;
+    case 136:
+        charset = "Big5-HKSCS";
+        break;
+    case 161:
+        charset = "CP1253";
+        break;
+    case 162:
+        charset = "CP1254";
+        break;
+    case 163:
+        charset = "CP1258";
+        break;
+    case 177:
+        charset = "CP1255";
+        break;
+    case 178:
+        charset = "CP1256";
+        break;
+    case 186:
+        charset = "CP1257";
+        break;
+    case 204:
+        charset = "CP1251";
+        break;
+    case 222:
+        charset = "CP874";
+        break;
+    case 238:
+        charset = "CP1250";
+        break;
+    case 255:
+        charset = "CP850";
+        break;
+    default:
+        return;
     }
 
     QTextCodec* codec = QTextCodec::codecForName(charset);
@@ -641,7 +815,9 @@ void RtfReader::setFontCharset(qint32 value)
         m_codepages[m_state.active_codepage] = codec;
         setCodec(codec);
     }
-    m_state.ignore_text = true;
+    if (m_state.functions != &fonttable_functions) {
+        m_state.ignore_text = true;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -679,7 +855,11 @@ void RtfReader::setStyle(qint32 value)
         m_state.char_format.merge(style->char_format);
         m_cursor.mergeCharFormat(m_state.char_format);
 
-        m_state.functions = style->functions;
+        // A style can be present only as a forward reference from \sbasedon
+        // and therefore not have been fully defined yet. Such entries have a
+        // null function table; keep parsing them with the normal RTF function
+        // table instead of dereferencing the null pointer on the next token.
+        m_state.functions = style->functions ? style->functions : &functions;
     }
 }
 
@@ -753,7 +933,7 @@ void RtfReader::setStyleEnd()
         child.block_format = block_format;
 
         QTextCharFormat char_format = style.char_format;
-        char_format.merge(child.block_format);
+        char_format.merge(child.char_format);
         child.char_format = char_format;
     }
 

@@ -63,8 +63,14 @@ private:
     void resetTextFormatting(qint32);
     void setBlockAlignment(qint32 value);
     void setBlockDirection(qint32 value);
+    void setBlockFirstLineIndent(qint32 value);
     void setBlockIndent(qint32 value);
+    void setBlockRightIndent(qint32 value);
+    void setBlockSpaceAfter(qint32 value);
+    void setBlockSpaceBefore(qint32 value);
     void setTextBold(qint32 value);
+    void setTextCapitalization(qint32 value);
+    void setTextFontSize(qint32 value);
     void setTextItalic(qint32 value);
     void setTextStrikeOut(qint32 value);
     void setTextUnderline(qint32 value);
@@ -74,6 +80,8 @@ private:
     void setFont(qint32 value);
     void setFontCharset(qint32 value);
     void setFontCodepage(qint32 value);
+    void startFontTable(qint32);
+    void setFontName(const QString& name);
     void setCodec(QTextCodec* codec);
     void setOutlineLevel(qint32 value);
     void setStyle(qint32 value);
@@ -91,8 +99,7 @@ private:
 
     class FunctionTable;
 
-    struct Style
-    {
+    struct Style {
         QTextCharFormat char_format;
         QTextBlockFormat block_format;
         const FunctionTable* functions;
@@ -100,8 +107,7 @@ private:
     };
     QHash<int, Style> m_styles;
 
-    struct State
-    {
+    struct State {
         QTextBlockFormat block_format;
         QTextCharFormat char_format;
         bool ignore_control_word;
@@ -119,6 +125,7 @@ private:
     QTextDecoder* m_decoder;
     QTextCodec* m_codepage;
     QVector<QTextCodec*> m_codepages;
+    QHash<int, QString> m_font_names;
 };
 
 #endif

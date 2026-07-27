@@ -102,7 +102,8 @@ QVector<Domain::DocumentObjectType> importTypesForFile(const QString& _path)
     //
     // Бинарные форматы
     //
-    if (fileIs(ExtensionHelper::msOfficeOpenXml()) || fileIs(ExtensionHelper::openDocumentXml())) {
+    if (fileIs(ExtensionHelper::richTextFormat()) || fileIs(ExtensionHelper::msOfficeOpenXml())
+        || fileIs(ExtensionHelper::openDocumentXml())) {
         return {
             DocumentObjectType::SimpleText,
             DocumentObjectType::Screenplay,

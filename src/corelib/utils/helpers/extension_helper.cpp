@@ -33,6 +33,11 @@ QString ExtensionHelper::trelby()
     return QLatin1String("trelby");
 }
 
+QString ExtensionHelper::richTextFormat()
+{
+    return QLatin1String("rtf");
+}
+
 QString ExtensionHelper::msOfficeBinary()
 {
     return QLatin1String("doc");

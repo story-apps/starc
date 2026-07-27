@@ -24,69 +24,63 @@
 #include <QCoreApplication>
 class QIODevice;
 
-enum RtfTokenType
-{
-	StartGroupToken,
-	EndGroupToken,
-	ControlWordToken,
-	TextToken
-};
+enum RtfTokenType { StartGroupToken, EndGroupToken, ControlWordToken, TextToken };
 
 class RtfTokenizer
 {
-	Q_DECLARE_TR_FUNCTIONS(RtfTokenizer)
+    Q_DECLARE_TR_FUNCTIONS(RtfTokenizer)
 
 public:
-	RtfTokenizer();
+    RtfTokenizer();
 
-	bool hasNext() const;
-	bool hasValue() const;
-	QByteArray hex() const;
-	QByteArray text() const;
-	RtfTokenType type() const;
-	qint32 value() const;
+    bool hasNext() const;
+    bool hasValue() const;
+    QByteArray hex() const;
+    QByteArray text() const;
+    RtfTokenType type() const;
+    qint32 value() const;
 
-	void readNext();
-	void setDevice(QIODevice* device);
-
-private:
-	char next();
+    void readNext();
+    void setDevice(QIODevice* device);
 
 private:
-	QIODevice* m_device;
-	QByteArray m_buffer;
-	int m_position;
+    char next();
 
-	RtfTokenType m_type;
-	QByteArray m_hex;
-	QByteArray m_text;
-	qint32 m_value;
-	bool m_has_value;
+private:
+    QIODevice* m_device;
+    QByteArray m_buffer;
+    int m_position;
+
+    RtfTokenType m_type;
+    QByteArray m_hex;
+    QByteArray m_text;
+    qint32 m_value;
+    bool m_has_value;
 };
 
 inline bool RtfTokenizer::hasValue() const
 {
-	return m_has_value;
+    return m_has_value;
 }
 
 inline QByteArray RtfTokenizer::hex() const
 {
-	return m_hex;
+    return m_hex;
 }
 
 inline QByteArray RtfTokenizer::text() const
 {
-	return m_text;
+    return m_text;
 }
 
 inline RtfTokenType RtfTokenizer::type() const
 {
-	return m_type;
+    return m_type;
 }
 
 inline qint32 RtfTokenizer::value() const
 {
-	return m_value;
+    return m_value;
 }
 
 #endif
