@@ -642,7 +642,7 @@ public:
     /**
      * @brief Сбросить все заданные пользователем настройки (по-сути удаляем файл с настройками)
      */
-    void resetToDefaults();
+    void resetToDefaults(bool _fullReset);
 
 private:
     SettingsStorage();

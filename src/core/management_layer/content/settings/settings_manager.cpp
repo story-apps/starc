@@ -958,14 +958,21 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->navigator, &Ui::SettingsNavigator::resetToDefaultsPressed, this, [this] {
         auto dialog = new Dialog(d->view->topLevelWidget());
         const int kCancelButtonId = 0;
-        const int kYesButtonId = 1;
-        dialog->showDialog({},
-                           tr("Do you want to revert all changes in settings to the default state? "
-                              "This action can't be undone."),
-                           { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
-                             { kYesButtonId, tr("Reset"), Dialog::AcceptButton } });
+        const int kResetButtonId = 1;
+        const int kResetAllButtonId = 2;
+        dialog->showDialog(
+            {},
+            tr("Do you want to revert all changes in settings to the default state? "
+               "This action can't be undone.\n\n"
+               "\"Reset\" button reset only application settings except account and project "
+               "info.\n\n"
+               "\"Reset all settings\" button reset all settings related to the app."),
+            { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+              { kResetButtonId, tr("Reset"), Dialog::AcceptButton },
+              { kResetAllButtonId, tr("Reset all settings"), Dialog::AcceptCriticalButton } });
         QObject::connect(dialog, &Dialog::finished, dialog,
-                         [this, dialog, kCancelButtonId](const Dialog::ButtonInfo& _buttonInfo) {
+                         [this, dialog, kCancelButtonId,
+                          kResetAllButtonId](const Dialog::ButtonInfo& _buttonInfo) {
                              dialog->hideDialog();
 
                              if (_buttonInfo.id == kCancelButtonId) {
@@ -977,9 +984,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                              // того, как диалог завершится, чтобы в него не прилетели события о
                              // смене дизайн системы
                              //
-                             connect(dialog, &Dialog::disappeared, this,
-                                     &SettingsManager::resetToDefaultsRequested,
-                                     Qt::QueuedConnection);
+                             connect(
+                                 dialog, &Dialog::disappeared, this,
+                                 [this, fullReset = _buttonInfo.id == kResetAllButtonId] {
+                                     emit resetToDefaultsRequested(fullReset);
+                                 },
+                                 Qt::QueuedConnection);
                          });
         QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
     });

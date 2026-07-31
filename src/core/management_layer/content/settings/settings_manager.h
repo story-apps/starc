@@ -99,7 +99,7 @@ signals:
     /**
      * @brief Пользователь хочет сбросить настройки к заводским
      */
-    void resetToDefaultsRequested();
+    void resetToDefaultsRequested(bool _fullReset);
 
 protected:
     /**

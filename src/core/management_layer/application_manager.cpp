@@ -3219,20 +3219,21 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::advancedUseExtendingLoggingChanged, this,
             [this] { d->initLogging(); });
     //
-    connect(d->settingsManager.data(), &SettingsManager::resetToDefaultsRequested, this, [this] {
-        //
-        // Если пользователь хочет сбросить все настройки, закроем текущий проект
-        //
-        d->closeCurrentProject();
-        //
-        // ... сбросим все настройки
-        //
-        DataStorageLayer::StorageFacade::settingsStorage()->resetToDefaults();
-        //
-        // ... перезапустим приложение
-        //
-        restartApplication();
-    });
+    connect(d->settingsManager.data(), &SettingsManager::resetToDefaultsRequested, this,
+            [this](bool _fullReset) {
+                //
+                // Если пользователь хочет сбросить все настройки, закроем текущий проект
+                //
+                d->closeCurrentProject();
+                //
+                // ... сбросим настройки
+                //
+                DataStorageLayer::StorageFacade::settingsStorage()->resetToDefaults(_fullReset);
+                //
+                // ... перезапустим приложение
+                //
+                restartApplication();
+            });
 
     //
     // Менеджер статистики по сессиям работы с программой

@@ -1493,7 +1493,7 @@ void SettingsStorage::setDocumentFolderPath(const QString& _key, const QString& 
     setValue(_key, QFileInfo(_filePath).absoluteDir().absolutePath(), Type::Application);
 }
 
-void SettingsStorage::resetToDefaults()
+void SettingsStorage::resetToDefaults(bool _fullReset)
 {
     //
     // Запрещаем писать настройки до перезагрузки приложения
@@ -1511,22 +1511,27 @@ void SettingsStorage::resetToDefaults()
     d->pendingAppSettings.clear();
 
     //
-    // Стираем всё, что было изменено, кроме нескольких параметров, которые по-сути не являются
-    // настройками приложения и пользователь не ожидает, что они будут удалены при сбросе параметров
+    // Стираем все настройки
     //
     QHash<QString, QVariant> settings;
-    for (const auto& key : d->appSettings.allKeys()) {
-        const QString realKey = QByteArray::fromHex(key.toUtf8());
-        if (realKey == kDeviceUuidKey || realKey == kApplicationProjectsKey
-            || realKey.startsWith(kAccountGroupKey) || realKey.startsWith(kProjectGroupKey)
-            || realKey.startsWith(QLatin1String("starc"))) {
-            settings.insert(key, d->appSettings.value(key));
+    if (!_fullReset) {
+        //
+        // ... если стирание не полное, то оставляем несколько параметров, которые по-сути не
+        //     являются настройками приложения и пользователь не ожидает, что они будут удалены
+        //
+        for (const auto& key : d->appSettings.allKeys()) {
+            const QString realKey = QByteArray::fromHex(key.toUtf8());
+            if (realKey == kDeviceUuidKey || realKey == kApplicationProjectsKey
+                || realKey.startsWith(kAccountGroupKey) || realKey.startsWith(kProjectGroupKey)
+                || realKey.startsWith(QLatin1String("starc"))) {
+                settings.insert(key, d->appSettings.value(key));
+            }
         }
     }
     d->appSettings.clear();
 
     //
-    // Восстанавливаем необходимые параметры
+    // Восстанавливаем параметры, если есть необходимость
     //
     for (auto iter = settings.begin(); iter != settings.end(); ++iter) {
         d->appSettings.setValue(iter.key(), iter.value());
