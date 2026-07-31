@@ -43,6 +43,7 @@
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/logging.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
@@ -762,6 +763,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextEdit::redo);
     connect(d->toolbar, &ScreenplayTextEditToolbar::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
+                if (!_index.isValid()) {
+                    return;
+                }
+
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
                 d->textEdit->setCurrentParagraphType(type);
@@ -1048,6 +1053,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     //
     connect(d->fastFormatWidget, &FastFormatWidget::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
+                if (!_index.isValid()) {
+                    return;
+                }
+
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
                 d->textEdit->setCurrentParagraphType(type);
@@ -1903,7 +1912,10 @@ void ScreenplayTextView::saveViewSettings()
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
+    Log::debug("[ScreenplayTextView] Set model");
+
     if (d->model) {
+        Log::trace("[ScreenplayTextView] Disconnect previous model");
         d->model->disconnect(this);
         if (d->model->informationModel()) {
             d->model->informationModel()->disconnect(this);
@@ -1916,11 +1928,15 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
     // Отслеживаем изменения некоторых параметров
     //
     if (d->model && d->model->informationModel()) {
+        Log::trace("[ScreenplayTextView] Reconfigure template");
         const bool reinitModel = true;
         d->reconfigureTemplate(!reinitModel);
+        Log::trace("[ScreenplayTextView] Reconfigure scene numbers visibility");
         d->reconfigureSceneNumbersVisibility();
+        Log::trace("[ScreenplayTextView] Reconfigure dialogue numbers visibility");
         d->reconfigureDialoguesNumbersVisibility();
 
+        Log::trace("[ScreenplayTextView] Connect model signals");
         connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
                 [this](const QModelIndex& _topLeft) {
                     auto updatedItem = d->model->itemForIndex(_topLeft);
@@ -1987,13 +2003,21 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
             Qt::QueuedConnection);
     }
 
+    Log::trace("[ScreenplayTextView] Reset collaborators cursors");
     d->textEdit->setCollaboratorsCursors({});
+    Log::trace("[ScreenplayTextView] Initialize text editor model");
     d->textEdit->initWithModel(d->model);
+    Log::trace("[ScreenplayTextView] Initialize scrollbar model");
     d->screenplayTextScrollbarManager->setModel(d->model);
+    Log::trace("[ScreenplayTextView] Initialize comments model");
     d->commentsModel->setTextModel(d->model);
+    Log::trace("[ScreenplayTextView] Initialize bookmarks model");
     d->bookmarksModel->setTextModel(d->model);
 
+    Log::trace("[ScreenplayTextView] Update toolbar paragraph type");
     d->updateToolBarCurrentParagraphTypeName();
+
+    Log::debug("[ScreenplayTextView] Model set");
 }
 
 QModelIndex ScreenplayTextView::currentModelIndex() const

@@ -16,6 +16,7 @@
 #include <domain/document_object.h>
 #include <ui/modules/bookmarks/bookmark_dialog.h>
 #include <utils/logging.h>
+#include <utils/shugar.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -462,7 +463,7 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
 void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
                                                             Ui::ScreenplayTextView* _view)
 {
-    Log::info("Set model for view");
+    Log::info("[ScreenplayTextManager] Set model for view");
 
     constexpr int invalidIndex = -1;
     int viewIndex = invalidIndex;
@@ -481,6 +482,7 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
     // Если модель была задана
     //
     if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        Log::debug("[ScreenplayTextManager] Disconnect old model");
         //
         // ... сохраняем параметры
         //
@@ -497,8 +499,54 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
     //
     // Определяем новую модель
     //
+    Log::debug("[ScreenplayTextManager] Init new model");
     auto model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
+    if (_model != nullptr) {
+        if (model == nullptr) {
+            Log::critical("[ScreenplayTextManager] Can't init model: unexpected model type");
+        } else {
+            bool isModelComplete = false;
+            do {
+                Log::trace("[ScreenplayTextManager] Check model document");
+                if (model->document() == nullptr) {
+                    Log::critical("[ScreenplayTextManager] Model document is null");
+                    break;
+                }
+
+                Log::trace("[ScreenplayTextManager] Check model information model");
+                if (model->informationModel() == nullptr) {
+                    Log::critical("[ScreenplayTextManager] Model information model is null");
+                    break;
+                }
+
+                Log::trace("[ScreenplayTextManager] Check model information model document");
+                if (model->informationModel()->document() == nullptr) {
+                    Log::critical(
+                        "[ScreenplayTextManager] Model information model document is null");
+                    break;
+                }
+
+                Log::trace("[ScreenplayTextManager] Check model dictionaries model");
+                if (model->dictionariesModel() == nullptr) {
+                    Log::critical("[ScreenplayTextManager] Model dictionaries model is null");
+                    break;
+                }
+
+                isModelComplete = true;
+            }
+            once;
+
+            if (!isModelComplete) {
+                Log::critical("[ScreenplayTextManager] Can't init model: incomplete model data");
+                model = nullptr;
+            }
+        }
+    }
+
+    Log::debug("[ScreenplayTextManager] Set model for view");
     _view->setModel(model);
+
+    Log::debug("[ScreenplayTextManager] Add model and view to views list");
 
     //
     // Обновляем связь представления с моделью
@@ -517,6 +565,7 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
     // Если новая модель задана
     //
     if (model != nullptr) {
+        Log::debug("[ScreenplayTextManager] Setup new model");
         //
         // ... загрузим параметры
         //
