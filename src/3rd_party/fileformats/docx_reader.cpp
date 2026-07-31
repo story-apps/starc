@@ -684,9 +684,10 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
         else if (m_xml.qualifiedName() == QLatin1String("w:shd")) {
             const QColor color("#" + m_xml.attributes().value("w:fill").toString());
             //
-            // Игнорируем белый
+            // Игнорируем белый и отдаём приоритет маркеру (т.е. маркет в блоке важнее заливки)
             //
-            if (color.isValid() && !isWhite(color)) {
+            if (color.isValid() && !isWhite(color)
+                && !style.char_format.property(Docx::IsHighlight).toBool()) {
                 style.char_format.setProperty(Docx::IsBackground, true);
                 style.char_format.setBackground(color);
                 style.char_format.setForeground(Qt::black);
