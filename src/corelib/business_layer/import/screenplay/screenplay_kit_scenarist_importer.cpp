@@ -183,6 +183,15 @@ public:
 AbstractScreenplayImporter::Screenplay ScreenplayKitScenaristImporter::Implementation::
     readScreenplay(const QString& _kitScreenplayXml)
 {
+    //
+    // Перед тем, как считывать сценарий, очищаем переменные от предыдущего импорта
+    //
+    alreadyInScene = false;
+    bookmarkName.clear();
+    bookmarkColor.clear();
+    beatsBuffer.clear();
+
+
     AbstractScreenplayImporter::Screenplay screenplay;
 
     //
@@ -712,6 +721,13 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayKitScenaristImporter::
                 result.append(screenplay);
             }
 
+            const auto defaultKitScreenplay = "<?xml version=\"1.0\"?>\n"
+                                              "<scenario version=\"1.0\">\n"
+                                              "<scene_heading uuid=\"{000000-0000000-000000}\">\n"
+                                              "<v><![CDATA[]]></v>\n"
+                                              "</scene_heading>\n"
+                                              "</scenario>\n";
+
             //
             // Читаем черновик
             //
@@ -719,13 +735,6 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayKitScenaristImporter::
                 query.exec("SELECT text FROM scenario WHERE is_draft = 1");
                 query.next();
                 const auto kitScreenplayXml = query.record().value("text").toString();
-                const auto defaultKitScreenplay
-                    = "<?xml version=\"1.0\"?>\n"
-                      "<scenario version=\"1.0\">\n"
-                      "<scene_heading uuid=\"{000000-0000000-000000}\">\n"
-                      "<v><![CDATA[]]></v>\n"
-                      "</scene_heading>\n"
-                      "</scenario>\n";
                 if (kitScreenplayXml != defaultKitScreenplay) {
                     auto screenplay = d->readScreenplay(kitScreenplayXml);
                     screenplay.name = QString("%1 (%2)").arg(
@@ -733,6 +742,23 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayKitScenaristImporter::
                         //: Draft screenplay imported from KIT Scenarist file
                         QApplication::translate("BusinessLayer::KitScenaristImporter", "draft"));
                     result.append(screenplay);
+                }
+            }
+
+            //
+            // Читаем версии сценария (драфты)
+            //
+            {
+                query.exec("SELECT name, script_text FROM script_versions");
+                while (query.next()) {
+                    const auto versionName = query.record().value("name").toString();
+                    const auto kitScreenplayXml = query.record().value("script_text").toString();
+                    if (!kitScreenplayXml.isEmpty() && kitScreenplayXml != defaultKitScreenplay) {
+                        auto screenplay = d->readScreenplay(kitScreenplayXml);
+                        screenplay.name
+                            = QString("%1 (version %2)").arg(screenplayName, versionName);
+                        result.append(screenplay);
+                    }
                 }
             }
         }
