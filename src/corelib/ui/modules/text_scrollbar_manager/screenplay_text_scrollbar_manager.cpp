@@ -162,7 +162,14 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
         d->lineOpacityAnimation.start();
     });
     connect(&d->lineOpacityAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) { d->timeline->setOpacity(_value.toReal()); });
+            [this](const QVariant& _value) {
+                if (!d->timeline.isNull()) {
+                    d->timeline->setOpacity(_value.toReal());
+                }
+                if (!d->pageline.isNull()) {
+                    d->pageline->setOpacity(_value.toReal());
+                }
+            });
     connect(&d->lineUpdateDebouncer, &Debouncer::gotWork, this, [this] {
         if (d->model == nullptr) {
             return;
