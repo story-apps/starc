@@ -107,6 +107,14 @@ public:
     void addParagraph(BusinessLayer::TextParagraphType _type, const QTextCursor& _cursor);
 
     /**
+     * @brief Insert Fountain source through STARC's native screenplay parser
+     *
+     * Unlike plain-text insertion, this preserves scene headings, action, character cues,
+     * parentheticals, dialogue, shots, and transitions as native screenplay blocks.
+     */
+    bool insertFountainText(const QString& _text);
+
+    /**
      * @brief Установить тип текущего блока
      * @param Тип блока
      */

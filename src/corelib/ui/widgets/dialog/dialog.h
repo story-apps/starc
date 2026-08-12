@@ -37,6 +37,14 @@ public:
     void showDialog(const QString& _title, const QString& _supportingText,
                     const QVector<ButtonInfo>& _buttons, bool _placeButtonsSideBySide = true);
 
+    /**
+     * @brief Поместить поясняющий текст в прокручиваемую область
+     *
+     * Используется для длинных документов, которые нужно прочитать целиком, не скрывая кнопки
+     * диалога за пределами окна.
+     */
+    void enableSupportingTextScrolling();
+
 signals:
     /**
      * @brief Диалог завершился с установленным выбором пользователя

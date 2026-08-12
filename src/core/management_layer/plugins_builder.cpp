@@ -114,6 +114,51 @@ const QString kMindMapMime = QStringLiteral("application/x-starc/editor/mind_map
 const QString kImagesGalleryMime = QStringLiteral("application/x-starc/editor/images/images-gallery");
 const QString kPresentationMime = QStringLiteral("application/x-starc/view/presentation");
 
+bool usesLegacyDocumentManagerAbi(const QString& _mimeType)
+{
+    // These plugins are distributed as prebuilt modules because their source
+    // repositories are not part of the public checkout. They were compiled
+    // against the IDocumentManager layout from before setEditingPermissions()
+    // and setAvailableCredits() were appended. Calls to those two virtual
+    // methods must therefore stay on views (whose relevant ABI is stable) and
+    // never be dispatched through these legacy managers.
+    static const QSet<QString> legacyMimeTypes{
+        kProjectCollaboratorsMime,
+        kCharactersRelationsMime,
+        kCharacterEditorMime,
+        kCharacterDialoguesMime,
+        kLocationsMapMime,
+        kLocationEditorMime,
+        kLocationScenesMime,
+        kWorldsMapMime,
+        kWorldEditorMime,
+        kScreenplayTreatmentCardsMime,
+        kScreenplayTextCardsMime,
+        kScreenplayTextTimelineMime,
+        kScreenplayTextBreakdownMime,
+        kScreenplayBreakdownNavigatorMime,
+        kScreenplayStatisticsViewMime,
+        kScreenplaySeriesEpisodesPlanEditorMime,
+        kScreenplaySeriesTreatmentCardsMime,
+        kScreenplaySeriesTextCardsMime,
+        kScreenplaySeriesTextTimelineMime,
+        kScreenplaySeriesTextBreakdownMime,
+        kScreenplaySeriesBreakdownNavigatorMime,
+        kScreenplaySeriesStatisticsViewMime,
+        kComicBookStatisticsViewMime,
+        kAudioplayStatisticsViewMime,
+        kStageplayStatisticsViewMime,
+        kNovelOutlineCardsMime,
+        kNovelTextCardsMime,
+        kNovelTextTimelineMime,
+        kNovelStatisticsViewMime,
+        kMindMapMime,
+        kImagesGalleryMime,
+        kPresentationMime,
+    };
+    return legacyMimeTypes.contains(_mimeType);
+}
+
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
  */
@@ -437,10 +482,18 @@ bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
     QObject* pluginObject = pluginLoader.instance();
     if (pluginObject == nullptr) {
         qDebug() << pluginLoader.errorString();
+        return false;
     }
 
     auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
-    plugin->setAvailableCredits(availableCredits);
+    if (plugin == nullptr) {
+        qCritical() << "Plugin doesn't implement IDocumentManager:" << pluginPath;
+        return false;
+    }
+
+    if (!usesLegacyDocumentManagerAbi(_mimeType)) {
+        plugin->setAvailableCredits(availableCredits);
+    }
     plugins.insert(_mimeType, plugin);
 
     return true;
@@ -490,11 +543,15 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     // Настроим доступность для редактирования в плагине
     //
     plugin->checkAvailabilityToEdit(isProjectInTeam);
-    plugin->setEditingPermissions(editingPermissions);
+    if (!usesLegacyDocumentManagerAbi(_mimeType)) {
+        plugin->setEditingPermissions(editingPermissions);
+    }
     //
     // ... а также доступные кредиты для работы с ИИ
     //
-    view->setAvailableCredits(availableCredits);
+    if (view != nullptr) {
+        view->setAvailableCredits(availableCredits);
+    }
 
     return view;
 }
@@ -1134,8 +1191,11 @@ void PluginsBuilder::setEditingPermissions(
     }
 
     d->editingPermissions = _permissions;
-    for (auto plugin : std::as_const(d->plugins)) {
-        plugin->setEditingPermissions(d->editingPermissions);
+    for (auto plugin = d->plugins.cbegin(); plugin != d->plugins.cend(); ++plugin) {
+        if (usesLegacyDocumentManagerAbi(plugin.key())) {
+            continue;
+        }
+        plugin.value()->setEditingPermissions(d->editingPermissions);
     }
 }
 
@@ -1146,8 +1206,11 @@ void PluginsBuilder::setAvailableCredits(int _credits) const
     }
 
     d->availableCredits = _credits;
-    for (auto plugin : std::as_const(d->plugins)) {
-        plugin->setAvailableCredits(d->availableCredits);
+    for (auto plugin = d->plugins.cbegin(); plugin != d->plugins.cend(); ++plugin) {
+        if (usesLegacyDocumentManagerAbi(plugin.key())) {
+            continue;
+        }
+        plugin.value()->setAvailableCredits(d->availableCredits);
     }
 }
 

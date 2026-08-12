@@ -5305,6 +5305,22 @@ void ProjectManager::setGeneratedImage(const QPixmap& _image)
     }
 }
 
+void ProjectManager::setAiAssistantInProgress(bool _inProgress)
+{
+    auto view = d->activeDocumentView();
+    if (view != nullptr) {
+        view->setAiAssistantInProgress(_inProgress);
+    }
+}
+
+void ProjectManager::setAiAssistantStatus(const QString& _status)
+{
+    auto view = d->activeDocumentView();
+    if (view != nullptr) {
+        view->setAiAssistantStatus(_status);
+    }
+}
+
 QString ProjectManager::projectName() const
 {
     const auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
@@ -5711,6 +5727,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(generateTextRequested(QString, QString, QString)), this,
                     SIGNAL(generateTextRequested(QString, QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("cancelAssistantRequested()")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(cancelAssistantRequested()), this,
+                    SIGNAL(cancelAssistantRequested()), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
                 "generateImageRequested(QString,QString,QString)")

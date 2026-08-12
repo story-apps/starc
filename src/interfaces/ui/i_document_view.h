@@ -126,6 +126,12 @@ public:
     virtual void setGeneratedImage(const QPixmap& /*_image*/)
     {
     }
+    virtual void setAiAssistantInProgress(bool /*_inProgress*/)
+    {
+    }
+    virtual void setAiAssistantStatus(const QString& /*_status*/)
+    {
+    }
 
 
     //

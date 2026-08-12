@@ -1187,7 +1187,7 @@ void TextField::mouseMoveEvent(QMouseEvent* _event)
 void TextField::keyPressEvent(QKeyEvent* _event)
 {
     if ((_event->key() == Qt::Key_Enter || _event->key() == Qt::Key_Return)
-        && !d->isEnterMakesNewLine) {
+        && !d->isEnterMakesNewLine && !_event->modifiers().testFlag(Qt::ShiftModifier)) {
         _event->ignore();
         emit enterPressed();
         return;

@@ -56,8 +56,9 @@ public:
     /**
      * @brief Создать виджет скролареи с настроенной палитрой и скролбаром
      */
-    static QScrollArea* createScrollArea(QWidget* _parent, bool _withGridLayout = false,
-                                         bool _withHorizontalScroll = false);
+    static QScrollArea* createScrollArea(QWidget* _parent, bool _withGridLayout = false);
+    static QScrollArea* createScrollArea(QWidget* _parent, bool _withGridLayout,
+                                         bool _withHorizontalScroll);
     static QScrollArea* createScrollAreaWithGridLayout(QWidget* _parent);
 
     /**

@@ -28,6 +28,11 @@ public:
     void setMessages(const QVector<ChatMessage>& _messages);
 
     /**
+     * @brief Use the cleaner, role-focused layout intended for the story assistant
+     */
+    void setAssistantStyle(bool _enabled);
+
+    /**
      * @brief Получить необходимую высоту в зависимости от ширины
      */
     int heightForWidth(int _width) const override;

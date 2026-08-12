@@ -466,6 +466,20 @@ void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
     addParagraph(_type, textCursor());
 }
 
+bool ScreenplayTextEdit::insertFountainText(const QString& _text)
+{
+    const auto text = TextHelper::removeControlCharacters(_text).trimmed();
+    if (text.isEmpty() || isReadOnly()) {
+        return false;
+    }
+
+    const auto textBeforeInsertion = document()->toPlainText();
+    QMimeData mimeData;
+    mimeData.setText(text);
+    insertFromMimeData(&mimeData);
+    return document()->toPlainText() != textBeforeInsertion;
+}
+
 void ScreenplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type,
                                       const QTextCursor& _cursor)
 {

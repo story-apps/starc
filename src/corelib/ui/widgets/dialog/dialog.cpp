@@ -6,6 +6,8 @@
 #include <utils/helpers/ui_helper.h>
 
 #include <QHBoxLayout>
+#include <QScrollArea>
+#include <QVBoxLayout>
 
 namespace {
 const char* kButtonRole = "button-role";
@@ -18,6 +20,7 @@ public:
     Implementation(QWidget* _parent);
 
     Body1Label* supportingText;
+    QScrollArea* supportingTextScrollArea = nullptr;
     QHBoxLayout* buttonsSideBySideLayout = nullptr;
     QVBoxLayout* buttonsStackedLayout = nullptr;
     QVector<Button*> buttons;
@@ -48,6 +51,26 @@ Dialog::Dialog(QWidget* _parent)
 }
 
 Dialog::~Dialog() = default;
+
+void Dialog::enableSupportingTextScrolling()
+{
+    if (d->supportingTextScrollArea != nullptr) {
+        return;
+    }
+
+    contentsLayout()->removeWidget(d->supportingText);
+    d->supportingTextScrollArea = UiHelper::createScrollArea(this);
+    d->supportingTextScrollArea->setFocusPolicy(Qt::StrongFocus);
+    d->supportingTextScrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
+    d->supportingTextScrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->supportingText->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    auto scrollContentLayout
+        = qobject_cast<QVBoxLayout*>(d->supportingTextScrollArea->widget()->layout());
+    Q_ASSERT(scrollContentLayout);
+    scrollContentLayout->addWidget(d->supportingText);
+    scrollContentLayout->addStretch();
+    contentsLayout()->addWidget(d->supportingTextScrollArea, 0, 0);
+}
 
 void Dialog::showDialog(const QString& _title, const QString& _supportingText,
                         const QVector<ButtonInfo>& _buttons, bool _placeButtonsSideBySide)
@@ -92,7 +115,9 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
 
 QWidget* Dialog::focusedWidgetAfterShow() const
 {
-    return d->supportingText;
+    return d->supportingTextScrollArea != nullptr
+        ? static_cast<QWidget*>(d->supportingTextScrollArea)
+        : static_cast<QWidget*>(d->supportingText);
 }
 
 QWidget* Dialog::lastFocusableWidget() const

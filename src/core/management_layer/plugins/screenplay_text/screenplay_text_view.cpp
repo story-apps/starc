@@ -18,6 +18,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/document_object.h>
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
@@ -32,6 +33,7 @@
 #include <ui/modules/search_toolbar/search_manager.h>
 #include <ui/modules/text_scrollbar_manager/screenplay_text_scrollbar_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
@@ -47,10 +49,7 @@
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
-#include <QCoreApplication>
-#include <QElapsedTimer>
 #include <QPointer>
-#include <QRandomGenerator>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -169,6 +168,12 @@ public:
     ScalableWrapper* scalableWrapper = nullptr;
     ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
     std::optional<int> pendingCursorPosition;
+    int aiEditSelectionStart = -1;
+    int aiEditSelectionEnd = -1;
+    QString aiEditSelectionText;
+    int aiEditInsertionPosition = -1;
+    int aiEditDocumentRevision = -1;
+    bool aiEditApplyConfirmed = false;
 
     //
     // Панели инструментов
@@ -1404,8 +1409,12 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::generateSynopsisRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateNovelRequested, this,
             &ScreenplayTextView::generateNovelRequested);
-    connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::generateChatTextRequested, this,
             &ScreenplayTextView::generateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::cancelGenerationRequested, this, [this] {
+        clearAssistantSelection();
+        emit cancelAssistantRequested();
+    });
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
     connect(d->aiAssistantView, &AiAssistantView::buyCreditsPressed, this,
@@ -1559,6 +1568,16 @@ void ScreenplayTextView::setAvailableCredits(int _credits)
     d->aiAssistantView->setAvailableWords(_credits);
 }
 
+void ScreenplayTextView::setAiAssistantInProgress(bool _inProgress)
+{
+    d->aiAssistantView->setGenerationInProgress(_inProgress);
+}
+
+void ScreenplayTextView::setAiAssistantStatus(const QString& _status)
+{
+    d->aiAssistantView->setGenerationStatus(_status);
+}
+
 void ScreenplayTextView::setRephrasedText(const QString& _text)
 {
     d->aiAssistantView->setRephraseResult(_text);
@@ -1634,112 +1653,123 @@ void ScreenplayTextView::setGeneratedSynopsis(const QString& _text)
 
 void ScreenplayTextView::setGeneratedText(const QString& _text)
 {
+    auto fountainText = _text.trimmed();
+    if (fountainText.startsWith("```")) {
+        const auto firstLineEnd = fountainText.indexOf('\n');
+        const auto lastFence = fountainText.lastIndexOf("```");
+        if (firstLineEnd >= 0 && lastFence > firstLineEnd) {
+            fountainText
+                = fountainText.mid(firstLineEnd + 1, lastFence - firstLineEnd - 1).trimmed();
+        }
+    }
+
+    const auto hasEditTarget
+        = d->aiEditSelectionStart >= 0 && d->aiEditSelectionEnd > d->aiEditSelectionStart;
+    const auto hasInsertionTarget = d->aiEditInsertionPosition >= 0;
+    const auto isScreenplayChange = hasEditTarget || hasInsertionTarget;
+    if (!isScreenplayChange) {
+        d->aiAssistantView->appendAssistantMessage(_text);
+        return;
+    }
+    if (fountainText.isEmpty()) {
+        clearAssistantSelection();
+        d->aiAssistantView->appendAssistantMessage(
+            tr("Codex did not return usable screenplay text, so nothing was changed."));
+        return;
+    }
+    if (!d->aiEditApplyConfirmed) {
+        auto dialog = new Dialog(this);
+        dialog->setContentFixedWidth(Ui::DesignSystem::dialog().maximumWidth());
+        const auto availableReviewHeight
+            = qMax(240, height() - (Ui::DesignSystem::layout().px48() * 2));
+        dialog->setContentFixedHeight(qMin(720, availableReviewHeight));
+        dialog->enableSupportingTextScrolling();
+        const auto originalPreview
+            = QString(d->aiEditSelectionText).replace(QChar::ParagraphSeparator, '\n');
+        const auto reviewMessage
+            = hasEditTarget
+            ? tr("The selected passage will be replaced using STARC's native screenplay "
+                 "formatter.\n\nBEFORE\n%1\n\nPROPOSED\n%2")
+                  .arg(originalPreview, fountainText)
+            : tr("Codex prepared a screenplay change for the editor. Approving it will parse the "
+                 "Fountain source into native scene headings, action, characters, parentheticals, "
+                 "dialogue, shots, and transitions.\n\nPROPOSED\n%1")
+                  .arg(fountainText);
+        dialog->showDialog(
+            tr("Review Codex screenplay change"), reviewMessage,
+            { { 0, tr("Discard"), Dialog::RejectButton },
+              { 1, hasEditTarget ? tr("Replace selection") : tr("Apply to screenplay"),
+                Dialog::AcceptButton } });
+        connect(dialog, &Dialog::finished, this,
+                [this, dialog, text = fountainText](const Dialog::ButtonInfo& _button) {
+                    dialog->hideDialog();
+                    if (_button.type == Dialog::AcceptButton) {
+                        d->aiEditApplyConfirmed = true;
+                        setGeneratedText(text);
+                    } else {
+                        clearAssistantSelection();
+                        d->aiAssistantView->appendAssistantMessage(
+                            tr("The proposed screenplay change was discarded. Nothing was edited."));
+                    }
+                });
+        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        return;
+    }
+
+    if (hasEditTarget) {
+        QTextCursor editCursor(d->textEdit->document());
+        editCursor.setPosition(d->aiEditSelectionStart);
+        editCursor.setPosition(d->aiEditSelectionEnd, QTextCursor::KeepAnchor);
+        if (editCursor.selectedText() != d->aiEditSelectionText) {
+            d->aiEditSelectionStart = -1;
+            d->aiEditSelectionEnd = -1;
+            d->aiEditSelectionText.clear();
+            d->aiEditInsertionPosition = -1;
+            d->aiEditDocumentRevision = -1;
+            d->aiEditApplyConfirmed = false;
+            auto dialog = new Dialog(this);
+            dialog->showDialog(tr("Codex edit not applied"),
+                               tr("The selected passage changed while Codex was working. Select it "
+                                  "again and retry so no newer writing is overwritten."),
+                               { { 0, tr("OK"), Dialog::AcceptButton } });
+            connect(dialog, &Dialog::finished, dialog, [dialog] { dialog->hideDialog(); });
+            connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+            return;
+        }
+        d->textEdit->setTextCursor(editCursor);
+    } else {
+        if (d->textEdit->document()->revision() != d->aiEditDocumentRevision
+            || d->aiEditInsertionPosition > d->textEdit->document()->characterCount() - 1) {
+            clearAssistantSelection();
+            auto dialog = new Dialog(this);
+            dialog->showDialog(
+                tr("Codex change not applied"),
+                tr("The screenplay changed while Codex was working. Run the request again so the "
+                   "new writing is inserted at the correct place."),
+                { { 0, tr("OK"), Dialog::AcceptButton } });
+            connect(dialog, &Dialog::finished, dialog, [dialog] { dialog->hideDialog(); });
+            connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+            return;
+        }
+        QTextCursor insertionCursor(d->textEdit->document());
+        insertionCursor.setPosition(d->aiEditInsertionPosition);
+        d->textEdit->setTextCursor(insertionCursor);
+    }
+
     const QLatin1String textWritingTaskKey("text-writing-task");
     TaskBar::addTask(textWritingTaskKey);
-    TaskBar::setTaskTitle(textWritingTaskKey, tr("Writing text"));
-
-    //
-    // Отключим отображение всплывающих подсказок
-    //
-    d->textEdit->setCompleterActive(false);
-
-    //
-    // Переходим в конец позицию вставки, а затем переводим его на новую строку, или сдвигаем
-    // последующий текст, чтобы помещать текст в новом блоке
-    //
-    switch (d->aiAssistantView->textInsertPosition()) {
-    case AiAssistantView::TextInsertPosition::AtBeginning: {
-        d->textEdit->moveCursor(QTextCursor::Start);
-        d->textEdit->addParagraph(d->textEdit->currentParagraphType());
-        d->textEdit->moveCursor(QTextCursor::Start);
-        break;
-    }
-
-    case AiAssistantView::TextInsertPosition::AtCursorPosition: {
-        d->textEdit->moveCursor(QTextCursor::EndOfBlock);
-        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
-        break;
-    }
-
-    case AiAssistantView::TextInsertPosition::AtEnd: {
-        d->textEdit->moveCursor(QTextCursor::End);
-        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
-        break;
-    }
-    }
-
-    QElapsedTimer timer;
-    int progress = 0;
-    auto waitForNextOperation = [&timer, &progress, maximum = _text.length(), textWritingTaskKey] {
-        timer.restart();
-        const auto delay = QRandomGenerator::global()->bounded(10, 60);
-        while (!timer.hasExpired(delay)) {
-            QCoreApplication::processEvents();
-        }
-
-        ++progress;
-        TaskBar::setTaskProgress(textWritingTaskKey, progress * 100 / static_cast<qreal>(maximum));
-    };
-
-    auto lines = _text.split('\n', Qt::SkipEmptyParts);
-    bool nextBlockShoudBeDialogue = false;
-    for (auto& line : lines) {
-        if (line == TextHelper::smartToUpper(line)) {
-            if (line.contains('.') && (line.contains('-') || line.contains("–"))) {
-                d->textEdit->setCurrentParagraphType(
-                    BusinessLayer::TextParagraphType::SceneHeading);
-                nextBlockShoudBeDialogue = false;
-            } else if (line == lines.constFirst() || line == lines.constLast()
-                       || line.trimmed().endsWith(':')) {
-                //
-                // TODO: добавить проверку на стандартные переходы и кадры
-                //
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Shot);
-                nextBlockShoudBeDialogue = false;
-            } else {
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Character);
-                nextBlockShoudBeDialogue = true;
-            }
-        } else {
-            if (line.startsWith('(') && line.endsWith(')')) {
-                d->textEdit->setCurrentParagraphType(
-                    BusinessLayer::TextParagraphType::Parenthetical);
-                nextBlockShoudBeDialogue = true;
-            } else if (nextBlockShoudBeDialogue || line.endsWith(':')) {
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Dialogue);
-                nextBlockShoudBeDialogue = false;
-                if (line.endsWith(':')) {
-                    line.chop(1);
-                }
-            } else {
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Action);
-                nextBlockShoudBeDialogue = false;
-            }
-        }
-
-        for (int index = 0; index < line.length(); ++index) {
-            QCoreApplication::postEvent(d->textEdit,
-                                        new QKeyEvent(QEvent::KeyPress, Qt::Key_unknown,
-                                                      Qt::NoModifier, line.mid(index, 1)));
-            QCoreApplication::postEvent(d->textEdit,
-                                        new QKeyEvent(QEvent::KeyRelease, Qt::Key_unknown,
-                                                      Qt::NoModifier, line.mid(index, 1)));
-            waitForNextOperation();
-        }
-
-        QCoreApplication::postEvent(
-            d->textEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
-        QCoreApplication::postEvent(
-            d->textEdit, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Return, Qt::NoModifier));
-        waitForNextOperation();
-    }
-
-    //
-    // Возвращаем возможность использования всплывающих подсказок
-    //
+    TaskBar::setTaskTitle(textWritingTaskKey, tr("Applying Codex screenplay change"));
     d->textEdit->setCompleterActive(true);
-
+    const auto applied = d->textEdit->insertFountainText(fountainText);
+    clearAssistantSelection();
     TaskBar::finishTask(textWritingTaskKey);
+    d->aiAssistantView->appendAssistantMessage(
+        applied ? (hasEditTarget
+                       ? tr("Applied the approved replacement directly to the screenplay with "
+                            "native formatting. You can restore it with Undo.")
+                       : tr("Applied the approved writing directly to the screenplay with native "
+                            "formatting. You can restore it with Undo."))
+                : tr("STARC could not apply the proposed screenplay change, so nothing was edited."));
 }
 
 DictionariesView* ScreenplayTextView::dictionariesView() const
@@ -1923,6 +1953,10 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
     }
 
     d->model = _model;
+    d->aiAssistantView->setConversationStorageKey(
+        d->model != nullptr && d->model->document() != nullptr
+            ? d->model->document()->uuid().toString(QUuid::WithoutBraces)
+            : QString());
 
     //
     // Отслеживаем изменения некоторых параметров
@@ -2030,6 +2064,106 @@ int ScreenplayTextView::cursorPosition() const
     return d->textEdit->textCursor().position();
 }
 
+QString ScreenplayTextView::selectedTextForAssistant() const
+{
+    auto text = d->textEdit->textCursor().selectedText();
+    text.replace(QChar::ParagraphSeparator, '\n');
+    return text.trimmed();
+}
+
+void ScreenplayTextView::captureAssistantSelection()
+{
+    const auto cursor = d->textEdit->textCursor();
+    if (!cursor.hasSelection()) {
+        d->aiEditSelectionStart = -1;
+        d->aiEditSelectionEnd = -1;
+        d->aiEditSelectionText.clear();
+        return;
+    }
+
+    d->aiEditSelectionStart = cursor.selectionStart();
+    d->aiEditSelectionEnd = cursor.selectionEnd();
+    d->aiEditSelectionText = cursor.selectedText();
+    d->aiEditInsertionPosition = -1;
+    d->aiEditDocumentRevision = d->textEdit->document()->revision();
+    d->aiEditApplyConfirmed = false;
+}
+
+void ScreenplayTextView::captureAssistantInsertionPoint(bool _atBeginning, bool _atEnd)
+{
+    auto cursor = d->textEdit->textCursor();
+    if (_atBeginning) {
+        cursor.movePosition(QTextCursor::Start);
+    } else if (_atEnd) {
+        cursor.movePosition(QTextCursor::End);
+    }
+    d->aiEditSelectionStart = -1;
+    d->aiEditSelectionEnd = -1;
+    d->aiEditSelectionText.clear();
+    d->aiEditInsertionPosition = cursor.position();
+    d->aiEditDocumentRevision = d->textEdit->document()->revision();
+    d->aiEditApplyConfirmed = false;
+}
+
+void ScreenplayTextView::clearAssistantSelection()
+{
+    d->aiEditSelectionStart = -1;
+    d->aiEditSelectionEnd = -1;
+    d->aiEditSelectionText.clear();
+    d->aiEditInsertionPosition = -1;
+    d->aiEditDocumentRevision = -1;
+    d->aiEditApplyConfirmed = false;
+}
+
+void ScreenplayTextView::showAssistantNotice(const QString& _message)
+{
+    auto dialog = new Dialog(this);
+    dialog->showDialog(tr("Codex needs an edit target"), _message,
+                       { { 0, tr("OK"), Dialog::AcceptButton } });
+    connect(dialog, &Dialog::finished, dialog, [dialog] { dialog->hideDialog(); });
+    connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
+void ScreenplayTextView::requestAssistantClearScreenplay()
+{
+    if (d->model == nullptr || d->textEdit->document()->isEmpty()) {
+        d->aiAssistantView->appendAssistantMessage(
+            tr("The screenplay is already empty, so no edit was needed."));
+        return;
+    }
+
+    const int wordsToRemove = d->model->wordsCount();
+    auto dialog = new Dialog(this);
+    dialog->showDialog(
+        tr("Clear the entire screenplay?"),
+        tr("Codex will remove all %n word(s) from the screenplay as one undoable editor action. "
+           "Synopsis, treatment, characters, locations, and project metadata will not be removed.",
+           nullptr, wordsToRemove),
+        { { 0, tr("Cancel"), Dialog::RejectButton },
+          { 1, tr("Clear screenplay"), Dialog::AcceptButton } });
+    connect(dialog, &Dialog::finished, this,
+            [this, dialog, wordsToRemove](const Dialog::ButtonInfo& _button) {
+                dialog->hideDialog();
+                if (_button.type != Dialog::AcceptButton) {
+                    d->aiAssistantView->appendAssistantMessage(
+                        tr("I left the screenplay unchanged."));
+                    return;
+                }
+
+                auto cursor = d->textEdit->textCursor();
+                cursor.beginEditBlock();
+                cursor.select(QTextCursor::Document);
+                cursor.removeSelectedText();
+                cursor.endEditBlock();
+                d->textEdit->setTextCursor(cursor);
+                d->aiAssistantView->appendAssistantMessage(
+                    tr("Removed all %n screenplay word(s). This was one editor action, so you can "
+                       "restore it with Undo.",
+                       nullptr, wordsToRemove));
+            });
+    connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
 void ScreenplayTextView::setCursorPosition(int _position)
 {
     if (d->pendingCursorPosition.has_value()) {
@@ -2091,8 +2225,8 @@ void ScreenplayTextView::updateTranslations()
     d->sidebarTabs->setTabName(kComplianceCheckResultTabIndex, tr("Checklist"));
 
     d->aiAssistantView->setGenerationPromptHint(
-        tr("Start prompt from something like \"Write a screenplay about ...\", or \"Write a short "
-           "movie screenplay about ...\""));
+        tr("Ask Codex to write screenplay text, or create storyboard artifacts from the complete "
+           "screenplay. Try \"Create a nine-beat storyboard for this screenplay\"."));
 
     d->updateOptionsTranslations();
 

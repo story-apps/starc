@@ -459,6 +459,7 @@ SOURCES += \
     ui/widgets/floating_tool_bar/floating_tool_bar.cpp \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.cpp \
     ui/widgets/icon_button/icon_button.cpp \
+    ui/widgets/image/character_image_card.cpp \
     ui/widgets/image/image_card.cpp \
     ui/widgets/image/image_cropping_dialog.cpp \
     ui/widgets/image_cropper/image_cropper.cpp \
@@ -850,6 +851,7 @@ HEADERS += \
     ui/widgets/floating_tool_bar/floating_tool_bar.h \
     ui/widgets/floating_tool_bar/floating_toolbar_animator.h \
     ui/widgets/icon_button/icon_button.h \
+    ui/widgets/image/character_image_card.h \
     ui/widgets/image/image_card.h \
     ui/widgets/image/image_cropping_dialog.h \
     ui/widgets/image_cropper/image_cropper.h \

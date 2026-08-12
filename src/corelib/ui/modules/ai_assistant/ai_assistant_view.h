@@ -102,6 +102,22 @@ public:
     void setGenerationPrompt(const QString& _prompt);
 
     /**
+     * @brief Load and persist this assistant's project-specific conversation
+     */
+    void setConversationStorageKey(const QString& _key);
+
+    /**
+     * @brief Update the visible state of a long-running local AI request
+     */
+    void setGenerationInProgress(bool _inProgress);
+    void setGenerationStatus(const QString& _status);
+
+    /**
+     * @brief Add Codex's completed reply to the visible conversation
+     */
+    void appendAssistantMessage(const QString& _text);
+
+    /**
      * @brief Куда нужно вставлять сгенерированный текст
      */
     TextInsertPosition textInsertPosition() const;
@@ -173,6 +189,12 @@ signals:
      * @brief Пользователь хочет сгенерировать текст по запросу
      */
     void generateTextRequested(const QString& _text);
+    void generateChatTextRequested(const QString& _text, const QString& _conversationContext);
+
+    /**
+     * @brief Пользователь хочет остановить текущую генерацию
+     */
+    void cancelGenerationRequested();
 
     /**
      * @brief Пользователь хочет сгенерировать параметры персонажа

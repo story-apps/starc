@@ -79,6 +79,7 @@ signals:
     void generateNovelRequested(const QVector<QString>& _scenes, int _wordsRequired);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
+    void cancelAssistantRequested();
 
     /**
      * @brief Пользователь хочет докупить кредитов

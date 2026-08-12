@@ -129,12 +129,15 @@ bool StructureProxyModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _s
     switch (item->type()) {
 
     //
-    // Отображаем группирующие элементы только если есть дети
+    // Keep the story-bible workspaces visible even before their first item is
+    // created. Hiding an empty Characters/Locations/Worlds container makes it
+    // impossible to discover and open the corresponding editor from a new
+    // screenplay.
     //
     case Domain::DocumentObjectType::Characters:
     case Domain::DocumentObjectType::Locations:
     case Domain::DocumentObjectType::Worlds: {
-        return item->hasChildren();
+        return true;
     }
 
     //

@@ -230,6 +230,8 @@ public:
     void setGeneratedSynopsis(const QString& _text);
     void setGeneratedText(const QString& _text);
     void setGeneratedImage(const QPixmap& _image);
+    void setAiAssistantInProgress(bool _inProgress);
+    void setAiAssistantStatus(const QString& _status);
 
     /**
      * @brief Получить информацию о проекте
@@ -346,6 +348,7 @@ signals:
     void generateScriptRequested(const QVector<QString>& _chapters, int _wordsRequired);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
+    void cancelAssistantRequested();
     void generateImageRequested(const QString& _promptPrefix, const QString& _prompt,
                                 const QString& _promptSuffix);
 

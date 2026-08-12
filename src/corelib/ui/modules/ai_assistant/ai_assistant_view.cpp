@@ -3,6 +3,9 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/chat/chat_message.h>
+#include <ui/widgets/chat/chat_messages_view.h>
+#include <ui/widgets/chat/user.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/icon_button/icon_button.h>
@@ -19,9 +22,20 @@
 #include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
+#include <QElapsedTimer>
+#include <QDateTime>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QRegularExpression>
 #include <QScrollArea>
+#include <QScrollBar>
+#include <QSet>
+#include <QSettings>
 #include <QStandardItemModel>
 #include <QTimer>
+
+#include <algorithm>
 
 
 namespace Ui {
@@ -29,6 +43,21 @@ namespace Ui {
 using ShadowWodget = Shadow;
 
 namespace {
+
+bool isWholeScreenplayDeletionCommand(const QString& _text)
+{
+    const auto text = _text.toLower().simplified();
+    static const QRegularExpression deletionVerb(
+        QStringLiteral("\\b(?:delete|remove|erase|clear|wipe)\\b"));
+    static const QRegularExpression wholeTarget(QStringLiteral(
+        "\\b(?:(?:all(?:\\s+of)?(?:\\s+the)?|entire|whole|full)\\s+"
+        "(?:(?:screenplay|script|document)(?:\\s+(?:text|content))?|text|content|words)"
+        "|everything)\\b"));
+    static const QRegularExpression explicitClear(QStringLiteral(
+        "\\b(?:clear|wipe)\\s+(?:the\\s+)?(?:screenplay|script|document)\\b"));
+    return deletionVerb.match(text).hasMatch()
+        && (wholeTarget.match(text).hasMatch() || explicitClear.match(text).hasMatch());
+}
 
 /**
  * @brief Класс странички с конкретной функцией ИИ помощника
@@ -41,6 +70,7 @@ public:
         , backButton(new IconButton(_parent))
         , titleLabel(new Subtitle2Label(_parent))
         , contentsLayout(new QVBoxLayout)
+        , titleLayout(new QHBoxLayout)
     {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::transparent);
@@ -56,7 +86,6 @@ public:
 
         contentsLayout->setContentsMargins({});
         contentsLayout->setSpacing(0);
-        auto titleLayout = new QHBoxLayout;
         titleLayout->setContentsMargins({});
         titleLayout->setSpacing(0);
         titleLayout->addWidget(backButton);
@@ -72,6 +101,7 @@ public:
     IconButton* backButton = nullptr;
     Subtitle2Label* titleLabel = nullptr;
     QVBoxLayout* contentsLayout = nullptr;
+    QHBoxLayout* titleLayout = nullptr;
 };
 
 } // namespace
@@ -168,15 +198,35 @@ public:
     QHBoxLayout* generateScriptButtonsLayout = nullptr;
 
     GenerationViewType generationViewType = GenerationViewType::Text;
+    bool generationInProgress = false;
+    QString generationStatus;
+    QElapsedTimer generationElapsed;
+    QTimer generationTimer;
+    QVector<ChatMessage> conversation;
+    QVector<ChatMessage> memory;
+    QString conversationStorageKey;
+    User conversationUser = User("You", "local-writer@starc");
+    User conversationAssistant = User("Codex", "codex@openai");
+
+    void saveConversation() const;
+    void loadConversation();
+    void appendConversationMessage(const ChatMessage& _message);
 
     Page* generateTextPage = nullptr;
     Body1Label* generateTextPromptHintLabel = nullptr;
+    Body2Label* generateTextEmptyHintLabel = nullptr;
+    ChatMessagesView* generateTextMessages = nullptr;
+    QScrollArea* generateTextMessagesContainer = nullptr;
     TextField* generateTextPromptText = nullptr;
+    Body2Label* generationStatusLabel = nullptr;
     Body2Label* generateTextInsertLabel = nullptr;
     RadioButton* generateTextInsertAtBegin = nullptr;
     RadioButton* generateTextInsertAtCursor = nullptr;
     RadioButton* generateTextInsertAtEnd = nullptr;
+    Button* generateTextNewChatButton = nullptr;
+    Button* generateTextInsertResponseButton = nullptr;
     Button* generateTextButton = nullptr;
+    QHBoxLayout* generateTextComposerLayout = nullptr;
     QHBoxLayout* generateTextButtonsLayout = nullptr;
 
     Page* generateCharacterPage = nullptr;
@@ -201,6 +251,87 @@ public:
     Body2LinkLabel* buyCreditsLabel = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
 };
+
+void AiAssistantView::Implementation::saveConversation() const
+{
+    if (conversationStorageKey.isEmpty()) {
+        return;
+    }
+
+    auto serialize = [this](const QVector<ChatMessage>& _messages) {
+        QJsonArray result;
+        for (const auto& message : _messages) {
+            result.append(QJsonObject{
+                { "timestamp", message.dateTime().toUTC().toString(Qt::ISODateWithMs) },
+                { "role", message.author() == conversationAssistant ? "assistant" : "writer" },
+                { "text", message.text() },
+            });
+        }
+        return result;
+    };
+
+    const QJsonObject state{
+        { "version", 1 },
+        { "session", serialize(conversation) },
+        { "memory", serialize(memory) },
+    };
+    QSettings settings;
+    settings.setValue(QString("codex/project-memory/%1").arg(conversationStorageKey),
+                      QJsonDocument(state).toJson(QJsonDocument::Compact));
+}
+
+void AiAssistantView::Implementation::loadConversation()
+{
+    conversation.clear();
+    memory.clear();
+    if (conversationStorageKey.isEmpty()) {
+        return;
+    }
+
+    QSettings settings;
+    const auto state = QJsonDocument::fromJson(
+                           settings.value(QString("codex/project-memory/%1")
+                                              .arg(conversationStorageKey))
+                               .toByteArray())
+                           .object();
+    auto deserialize = [this](const QJsonArray& _messages) {
+        QVector<ChatMessage> result;
+        result.reserve(_messages.size());
+        for (const auto& value : _messages) {
+            const auto message = value.toObject();
+            const auto text = message.value("text").toString().trimmed();
+            if (text.isEmpty()) {
+                continue;
+            }
+            auto timestamp
+                = QDateTime::fromString(message.value("timestamp").toString(), Qt::ISODateWithMs);
+            if (!timestamp.isValid()) {
+                timestamp = QDateTime::currentDateTime();
+            }
+            result.append({ timestamp.toLocalTime(), text,
+                            message.value("role").toString() == "assistant"
+                                ? conversationAssistant
+                                : conversationUser });
+        }
+        return result;
+    };
+    conversation = deserialize(state.value("session").toArray());
+    memory = deserialize(state.value("memory").toArray());
+    if (memory.isEmpty()) {
+        memory = conversation;
+    }
+}
+
+void AiAssistantView::Implementation::appendConversationMessage(const ChatMessage& _message)
+{
+    conversation.append(_message);
+    memory.append(_message);
+    constexpr int maximumRememberedMessages = 2000;
+    if (memory.size() > maximumRememberedMessages) {
+        memory.remove(0, memory.size() - maximumRememberedMessages);
+    }
+    saveConversation();
+}
 
 AiAssistantView::Implementation::Implementation(QWidget* _parent)
     : pages(new StackWidget(_parent))
@@ -286,12 +417,19 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     //
     , generateTextPage(new Page(pages))
     , generateTextPromptHintLabel(new Body1Label(generateTextPage))
+    , generateTextEmptyHintLabel(new Body2Label(generateTextPage))
+    , generateTextMessages(new ChatMessagesView)
+    , generateTextMessagesContainer(new QScrollArea(generateTextPage))
     , generateTextPromptText(new TextField(generateTextPage))
+    , generationStatusLabel(new Body2Label(generateTextPage))
     , generateTextInsertLabel(new Body2Label(generateTextPage))
     , generateTextInsertAtBegin(new RadioButton(generateTextPage))
     , generateTextInsertAtCursor(new RadioButton(generateTextPage))
     , generateTextInsertAtEnd(new RadioButton(generateTextPage))
+    , generateTextNewChatButton(new Button(generateTextPage))
+    , generateTextInsertResponseButton(new Button(generateTextPage))
     , generateTextButton(new Button(generateTextPage))
+    , generateTextComposerLayout(new QHBoxLayout)
     , generateTextButtonsLayout(new QHBoxLayout)
     //
     , generateCharacterPage(new Page(pages))
@@ -576,24 +714,62 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         insertButtonsGroup->add(generateTextInsertAtCursor);
         insertButtonsGroup->add(generateTextInsertAtEnd);
 
-        generateTextPromptText->setEnterMakesNewLine(true);
-        generateTextPromptText->setWordCount("0/1000");
+        generateTextPage->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        generateTextPromptHintLabel->hide();
+        generateTextEmptyHintLabel->setAlignment(Qt::AlignCenter);
+        generateTextPromptText->setEnterMakesNewLine(false);
+        generateTextPromptText->setTrailingIcon(u8"\U000F048A");
+        generateTextPromptText->setTrailingIconColor(Ui::DesignSystem::color().accent());
+        generateTextPromptText->setLabelVisible(false);
+        generateTextPromptText->setUnderlineDecorationVisible(false);
+        generateTextPromptText->setDefaultMarginsEnabled(false);
+        generateTextPromptText->setCustomMargins(
+            { Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12(),
+              Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12() });
+        generateTextPromptText->setBackgroundColor(
+            ColorHelper::nearby(Ui::DesignSystem::color().surface()));
+        generateTextPromptText->setPlaceholderText("Ask about the story or request a rewrite…");
+        generateTextMessages->setCurrentUser(conversationUser);
+        generateTextMessages->setAssistantStyle(true);
+        generateTextMessagesContainer->setFrameShape(QFrame::NoFrame);
+        generateTextMessagesContainer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        generateTextMessagesContainer->setVerticalScrollBar(new ScrollBar);
+        generateTextMessagesContainer->setWidget(generateTextMessages);
+        generateTextMessagesContainer->setWidgetResizable(true);
+        generateTextMessagesContainer->setMinimumHeight(Ui::DesignSystem::layout().px48() * 5);
+        generateTextInsertLabel->hide();
+        generateTextInsertAtBegin->hide();
+        generateTextInsertAtCursor->hide();
+        generateTextInsertAtEnd->hide();
+        generateTextInsertResponseButton->hide();
+        generationStatusLabel->hide();
+        generationStatusLabel->setTextColor(Ui::DesignSystem::color().accent());
+        generateTextNewChatButton->setFlat(true);
+        generateTextInsertResponseButton->setFlat(true);
+        generateTextButton->setContained(true);
+        generateTextButton->hide();
+        generateTextButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+        generateTextButton->setTextColor(Ui::DesignSystem::color().onAccent());
         generateTextInsertAtCursor->setChecked(true);
+
+        generateTextPage->titleLayout->addWidget(generateTextNewChatButton);
+        generateTextComposerLayout->setContentsMargins({});
+        generateTextComposerLayout->setSpacing(Ui::DesignSystem::layout().px8());
+        generateTextComposerLayout->addWidget(generateTextPromptText, 1);
+        generateTextComposerLayout->addWidget(generateTextButton, 0, Qt::AlignBottom);
         generateTextButtonsLayout->setContentsMargins({});
-        generateTextButtonsLayout->setSpacing(0);
+        generateTextButtonsLayout->setSpacing(Ui::DesignSystem::layout().px8());
+        generateTextButtonsLayout->addWidget(generateTextInsertResponseButton);
         generateTextButtonsLayout->addStretch();
-        generateTextButtonsLayout->addWidget(generateTextButton);
 
 
         auto layout = generateTextPage->contentsLayout;
         layout->addWidget(generateTextPromptHintLabel);
-        layout->addWidget(generateTextPromptText);
-        layout->addWidget(generateTextInsertLabel);
-        layout->addWidget(generateTextInsertAtBegin);
-        layout->addWidget(generateTextInsertAtCursor);
-        layout->addWidget(generateTextInsertAtEnd);
+        layout->addWidget(generateTextEmptyHintLabel);
+        layout->addWidget(generateTextMessagesContainer, 1);
+        layout->addWidget(generationStatusLabel);
         layout->addLayout(generateTextButtonsLayout);
-        layout->addStretch();
+        layout->addLayout(generateTextComposerLayout);
     }
 
     {
@@ -685,6 +861,16 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->pages, 1);
     layout->addLayout(d->buttonsLayout);
+
+    d->generationTimer.setInterval(1000);
+    connect(&d->generationTimer, &QTimer::timeout, this, [this] {
+        if (!d->generationInProgress) {
+            return;
+        }
+        const auto seconds = d->generationElapsed.elapsed() / 1000;
+        d->generationStatusLabel->setText(
+            tr("●  %1  ·  %2s").arg(d->generationStatus).arg(seconds));
+    });
 
     connect(d->openRephraseButton, &Button::clicked, this, [this] {
         d->rephraseSourceText->clear();
@@ -941,14 +1127,150 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     connect(d->generateScriptButton, &Button::clicked, this,
             [this] { emit generateScriptRequested(); });
     //
-    auto updateGenerateTextWordCounters = [this, updateWordCounter] {
-        const auto sourceTextWordCount = updateWordCounter(d->generateTextPromptText);
-        d->generateTextButton->setEnabled(sourceTextWordCount <= 1000 && d->availableWords > 0);
+    auto updateGenerateTextWordCounters = [this] {
+        const auto sourceTextWordCount = TextHelper::wordsCount(d->generateTextPromptText->text());
+        const bool isLocalEditorCommand
+            = isWholeScreenplayDeletionCommand(d->generateTextPromptText->text());
+        const bool canSend = sourceTextWordCount <= 1000
+            && (d->availableWords > 0 || isLocalEditorCommand);
+        d->generateTextButton->setEnabled(!d->isReadOnly && canSend);
+        d->generateTextPromptText->setWordCount({});
+        d->generateTextPromptText->setTrailingIconColor(
+            canSend ? Ui::DesignSystem::color().accent()
+                    : ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                               Ui::DesignSystem::inactiveTextOpacity()));
     };
     connect(d->generateTextPromptText, &TextField::textChanged, this,
             updateGenerateTextWordCounters);
-    connect(d->generateTextButton, &Button::clicked, this,
-            [this] { emit generateTextRequested(d->generateTextPromptText->text()); });
+    connect(d->generateTextNewChatButton, &Button::clicked, this, [this] {
+        if (d->generationInProgress) {
+            return;
+        }
+        d->conversation.clear();
+        d->saveConversation();
+        d->generateTextMessages->setMessages({});
+        d->generateTextEmptyHintLabel->show();
+        d->generateTextInsertLabel->hide();
+        d->generateTextInsertAtBegin->hide();
+        d->generateTextInsertAtCursor->hide();
+        d->generateTextInsertAtEnd->hide();
+        d->generateTextInsertResponseButton->hide();
+        d->generateTextPromptText->clear();
+        d->generateTextPromptText->setFocus();
+    });
+    connect(d->generateTextInsertResponseButton, &Button::clicked, this, [this] {
+        for (auto index = d->conversation.size() - 1; index >= 0; --index) {
+            const auto& message = d->conversation.at(index);
+            if (message.author() == d->conversationAssistant) {
+                emit insertTextRequested(message.text());
+                return;
+            }
+        }
+    });
+    auto submitOrCancelGeneration = [this] {
+        if (d->generationInProgress) {
+            emit cancelGenerationRequested();
+        } else {
+            const auto text = d->generateTextPromptText->text().trimmed();
+            const bool isLocalEditorCommand = isWholeScreenplayDeletionCommand(text);
+            if (text.isEmpty() || TextHelper::wordsCount(text) > 1000
+                || (d->availableWords <= 0 && !isLocalEditorCommand)) {
+                return;
+            }
+
+            // Always carry recent project history, then retrieve older messages that share
+            // meaningful terms with the current request. This keeps decisions made weeks ago
+            // available without sending an unbounded transcript on every request.
+            QSet<int> contextIndexes;
+            const int recentStart = std::max(0, static_cast<int>(d->memory.size()) - 24);
+            for (int index = recentStart; index < d->memory.size(); ++index) {
+                contextIndexes.insert(index);
+            }
+
+            const auto queryParts
+                = text.toLower().split(QRegularExpression("[^\\p{L}\\p{N}]+"),
+                                       Qt::SkipEmptyParts);
+            QSet<QString> queryTerms;
+            const QSet<QString> ignoredTerms{
+                "about", "after", "again", "could", "from", "have", "into", "please",
+                "should", "that", "their", "then", "there", "these", "this", "those",
+                "what", "when", "where", "which", "with", "would", "write", "story",
+            };
+            for (const auto& part : queryParts) {
+                if (part.size() >= 4 && !ignoredTerms.contains(part)) {
+                    queryTerms.insert(part);
+                }
+            }
+
+            QVector<QPair<int, int>> relevantMemory;
+            for (int index = 0; index < recentStart; ++index) {
+                const auto messageText = d->memory.at(index).text().toLower();
+                int score = 0;
+                for (const auto& term : queryTerms) {
+                    if (messageText.contains(term)) {
+                        ++score;
+                    }
+                }
+                if (score > 0) {
+                    relevantMemory.append({ score, index });
+                }
+            }
+            std::sort(relevantMemory.begin(), relevantMemory.end(), [](const auto& _left,
+                                                                       const auto& _right) {
+                return _left.first == _right.first ? _left.second > _right.second
+                                                   : _left.first > _right.first;
+            });
+            for (int index = 0;
+                 index < std::min(8, static_cast<int>(relevantMemory.size())); ++index) {
+                contextIndexes.insert(relevantMemory.at(index).second);
+            }
+
+            auto orderedIndexes = contextIndexes.values();
+            std::sort(orderedIndexes.begin(), orderedIndexes.end());
+            QStringList contextLines;
+            int contextLength = 0;
+            for (const auto index : orderedIndexes) {
+                const auto& message = d->memory.at(index);
+                const auto line
+                    = QString("[%1] %2: %3")
+                          .arg(message.dateTime().date().toString(Qt::ISODate),
+                               message.author() == d->conversationAssistant ? QString("CODEX")
+                                                                            : QString("WRITER"),
+                               message.text().left(4000));
+                if (contextLength + line.size() > 30000) {
+                    continue;
+                }
+                contextLines.append(line);
+                contextLength += line.size();
+            }
+
+            d->appendConversationMessage(
+                { QDateTime::currentDateTime(), text, d->conversationUser });
+            d->generateTextMessages->setMessages(d->conversation);
+            d->generateTextEmptyHintLabel->hide();
+            d->generateTextInsertLabel->hide();
+            d->generateTextInsertAtBegin->hide();
+            d->generateTextInsertAtCursor->hide();
+            d->generateTextInsertAtEnd->hide();
+            d->generateTextInsertResponseButton->hide();
+            d->generateTextPromptText->clear();
+            QTimer::singleShot(0, d->generateTextMessagesContainer, [this] {
+                d->generateTextMessages->setMinimumHeight(std::max(
+                    static_cast<int>(Ui::DesignSystem::layout().px48() * 5),
+                    d->generateTextMessages->heightForWidth(
+                        d->generateTextMessagesContainer->viewport()->width())));
+                d->generateTextMessagesContainer->verticalScrollBar()->setValue(
+                    d->generateTextMessagesContainer->verticalScrollBar()->maximum());
+            });
+            emit generateTextRequested(text);
+            emit generateChatTextRequested(text, contextLines.join("\n\n"));
+        }
+    };
+    connect(d->generateTextPromptText, &TextField::trailingIconPressed, this,
+            submitOrCancelGeneration);
+    connect(d->generateTextPromptText, &TextField::enterPressed, this,
+            submitOrCancelGeneration);
+    connect(d->generateTextButton, &Button::clicked, this, submitOrCancelGeneration);
     //
     auto updateGenerateCharacterWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->generateCharacterPromptText);
@@ -978,7 +1300,10 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
             &AiAssistantView::buyCreditsPressed);
 }
 
-AiAssistantView::~AiAssistantView() = default;
+AiAssistantView::~AiAssistantView()
+{
+    d->saveConversation();
+}
 
 bool AiAssistantView::isReadOnly() const
 {
@@ -1038,6 +1363,7 @@ void AiAssistantView::setInsertionAvailable(bool _available)
              d->insertInsertButton,
              d->summarizeInsertButton,
              d->translateInsertButton,
+             d->generateTextInsertResponseButton,
          }) {
         button->setEnabled(_available);
     }
@@ -1129,6 +1455,85 @@ void AiAssistantView::setGenerationPrompt(const QString& _prompt)
         break;
     }
     }
+}
+
+void AiAssistantView::setConversationStorageKey(const QString& _key)
+{
+    if (d->conversationStorageKey == _key) {
+        return;
+    }
+
+    d->saveConversation();
+    d->conversationStorageKey = _key;
+    d->loadConversation();
+    d->generateTextMessages->setMessages(d->conversation);
+    d->generateTextEmptyHintLabel->setVisible(d->conversation.isEmpty());
+    const bool hasAssistantResponse
+        = std::any_of(d->conversation.crbegin(), d->conversation.crend(), [this](const auto& _item) {
+              return _item.author() == d->conversationAssistant;
+          });
+    d->generateTextInsertResponseButton->setVisible(hasAssistantResponse);
+}
+
+void AiAssistantView::setGenerationInProgress(bool _inProgress)
+{
+    if (d->generationInProgress == _inProgress) {
+        return;
+    }
+
+    d->generationInProgress = _inProgress;
+    d->generateTextPromptText->setEnabled(!_inProgress);
+    d->generateTextNewChatButton->setEnabled(!_inProgress);
+    d->generateTextInsertResponseButton->setEnabled(!_inProgress);
+    if (_inProgress) {
+        d->generationElapsed.start();
+        d->generationTimer.start();
+        d->generationStatusLabel->show();
+        d->generateTextButton->setEnabled(true);
+        d->generateTextButton->show();
+        d->generateTextButton->setText(tr("Stop"));
+        setGenerationStatus(tr("Preparing request…"));
+    } else {
+        d->generationTimer.stop();
+        d->generationStatusLabel->hide();
+        d->generateTextButton->hide();
+        d->generateTextButton->setText(tr("Send"));
+        const auto sourceTextWordCount
+            = TextHelper::wordsCount(d->generateTextPromptText->text());
+        d->generateTextButton->setEnabled(sourceTextWordCount <= 1000 && d->availableWords > 0);
+    }
+}
+
+void AiAssistantView::setGenerationStatus(const QString& _status)
+{
+    d->generationStatus = _status;
+    if (!d->generationInProgress) {
+        return;
+    }
+    const auto seconds = d->generationElapsed.elapsed() / 1000;
+    d->generationStatusLabel->setText(
+        tr("●  %1  ·  %2s").arg(d->generationStatus).arg(seconds));
+}
+
+void AiAssistantView::appendAssistantMessage(const QString& _text)
+{
+    const auto text = _text.trimmed();
+    if (text.isEmpty()) {
+        return;
+    }
+    d->appendConversationMessage(
+        { QDateTime::currentDateTime(), text, d->conversationAssistant });
+    d->generateTextMessages->setMessages(d->conversation);
+    d->generateTextEmptyHintLabel->hide();
+    d->generateTextInsertResponseButton->show();
+    QTimer::singleShot(0, d->generateTextMessagesContainer, [this] {
+        d->generateTextMessages->setMinimumHeight(std::max(
+            static_cast<int>(Ui::DesignSystem::layout().px48() * 5),
+            d->generateTextMessages->heightForWidth(
+                d->generateTextMessagesContainer->viewport()->width())));
+        d->generateTextMessagesContainer->verticalScrollBar()->setValue(
+            d->generateTextMessagesContainer->verticalScrollBar()->maximum());
+    });
 }
 
 AiAssistantView::TextInsertPosition AiAssistantView::textInsertPosition() const
@@ -1446,13 +1851,20 @@ void AiAssistantView::updateTranslations()
     d->generateNovelButton->setText(tr("Generate"));
     d->generateScriptPage->titleLabel->setText(tr("Generate script"));
     d->generateScriptButton->setText(tr("Generate"));
-    d->generateTextPage->titleLabel->setText(tr("Generate"));
-    d->generateTextPromptText->setLabel(tr("Prompt"));
-    d->generateTextInsertLabel->setText(tr("Insert result"));
+    d->generateTextPage->titleLabel->setText(tr("Story Assistant"));
+    d->generateTextEmptyHintLabel->setText(
+        tr("Ask about your story, develop ideas, or select a passage and request a rewrite."));
+    d->generateTextPromptText->setLabel(tr("Message"));
+    d->generateTextPromptText->setPlaceholderText(
+        tr("Ask about the story or request a rewrite…"));
+    d->generateTextPromptText->setTrailingIconToolTip(tr("Send message"));
+    d->generateTextInsertLabel->setText(tr("Insert response"));
     d->generateTextInsertAtBegin->setText(tr("at the beginning of the document"));
     d->generateTextInsertAtCursor->setText(tr("at the cursor position"));
     d->generateTextInsertAtEnd->setText(tr("at the end of the document"));
-    d->generateTextButton->setText(tr("Generate"));
+    d->generateTextNewChatButton->setText(tr("New chat"));
+    d->generateTextInsertResponseButton->setText(tr("Insert response"));
+    d->generateTextButton->setText(d->generationInProgress ? tr("Stop") : tr("Send"));
     d->generateCharacterPage->titleLabel->setText(tr("Generate"));
     d->generateCharacterPromptText->setLabel(tr("Prompt"));
     d->generateCharacterPersonalInfo->setText(tr("Personal info"));
@@ -1631,6 +2043,36 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->generateTextInsertLabel->setContentsMargins(DesignSystem::layout().px24(),
                                                    DesignSystem::compactLayout().px4(),
                                                    DesignSystem::layout().px24(), 0);
+
+    // The story chat uses a compact, fixed-composer layout rather than the form styling shared by
+    // the other generation tools.
+    d->generateTextPage->contentsLayout->setContentsMargins(
+        DesignSystem::layout().px8(), DesignSystem::layout().px8(),
+        DesignSystem::layout().px8(), DesignSystem::layout().px12());
+    d->generateTextPage->contentsLayout->setSpacing(DesignSystem::layout().px8());
+    d->generateTextMessages->setBackgroundColor(DesignSystem::color().primary());
+    d->generateTextMessages->setTextColor(DesignSystem::color().onPrimary());
+    d->generateTextEmptyHintLabel->setBackgroundColor(DesignSystem::color().primary());
+    d->generateTextEmptyHintLabel->setTextColor(ColorHelper::transparent(
+        DesignSystem::color().onPrimary(), DesignSystem::inactiveTextOpacity()));
+    d->generateTextEmptyHintLabel->setContentsMargins(
+        DesignSystem::layout().px24(), DesignSystem::layout().px12(),
+        DesignSystem::layout().px24(), DesignSystem::layout().px8());
+    d->generationStatusLabel->setBackgroundColor(DesignSystem::color().primary());
+    d->generationStatusLabel->setTextColor(DesignSystem::color().accent());
+    d->generateTextPromptText->setBackgroundColor(
+        ColorHelper::nearby(DesignSystem::color().primary()));
+    d->generateTextPromptText->setTextColor(DesignSystem::color().onPrimary());
+    d->generateTextNewChatButton->setBackgroundColor(DesignSystem::color().primary());
+    d->generateTextNewChatButton->setTextColor(DesignSystem::color().accent());
+    d->generateTextInsertResponseButton->setBackgroundColor(DesignSystem::color().primary());
+    d->generateTextInsertResponseButton->setTextColor(DesignSystem::color().accent());
+    d->generateTextButton->setBackgroundColor(DesignSystem::color().accent());
+    d->generateTextButton->setTextColor(DesignSystem::color().onAccent());
+    d->generateTextComposerLayout->setContentsMargins(
+        DesignSystem::layout().px8(), 0, DesignSystem::layout().px8(), 0);
+    d->generateTextButtonsLayout->setContentsMargins(
+        DesignSystem::layout().px8(), 0, DesignSystem::layout().px8(), 0);
 
     d->availableWordsLabel->setBackgroundColor(DesignSystem::color().primary());
     d->availableWordsLabel->setTextColor(ColorHelper::transparent(
