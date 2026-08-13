@@ -11,6 +11,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -259,6 +261,12 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
 
                 const bool kCanChangeModel = false;
                 screenplayDocument.setModel(episode, kCanChangeModel);
+                screenplayDocument.setCorrectionOptions(
+                    settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
+                        .toBool(),
+                    settingsValue(
+                        DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
+                        .toBool());
 
                 return screenplayDocument.pageCount();
             }();
