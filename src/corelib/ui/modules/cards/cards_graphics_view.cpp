@@ -1697,6 +1697,24 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
     }
 
     //
+    // Делаем верхнеуровневые папки одинаковой высоты
+    //
+    QSizeF topLevelCardSize;
+    for (auto card : std::as_const(cardsItems)) {
+        if (card->isContainer() && card->isTopLevel() && card->isVisible()) {
+            topLevelCardSize = { std::max(topLevelCardSize.width(), card->rect().width()),
+                                 std::max(topLevelCardSize.height(), card->rect().height()) };
+        }
+    }
+    for (auto card : std::as_const(cardsItems)) {
+        if (card->isContainer() && card->isTopLevel() && card->rect().size() != topLevelCardSize) {
+            auto rect = card->rect();
+            rect.setSize(topLevelCardSize);
+            card->setRect(rect);
+        }
+    }
+
+    //
     // Корректируем размер, чтобы все карточки персонажей были видны
     //
     scene->fitToContents();
@@ -2020,6 +2038,11 @@ CardsGraphicsView::CardsGraphicsView(CardsGraphicsScene* _scene, QWidget* _paren
 
     setVerticalScrollBar(new ScrollBar(this));
     setHorizontalScrollBar(new ScrollBar(this));
+
+    // Do not enlarge every dirty region to compensate for antialiasing. Cards
+    // already include their shadows in boundingRect(), so the extra margin only
+    // causes neighbouring cards to be repainted while selecting and dragging.
+    setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing);
 
     viewport()->installEventFilter(this);
 

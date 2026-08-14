@@ -45,6 +45,10 @@ CardsGraphicsScene::CardsGraphicsScene(QObject* _parent)
     : QGraphicsScene(_parent)
     , d(new Implementation)
 {
+    // The cards are moved and rearranged much more often than they are searched by
+    // an arbitrary scene rectangle. Updating the BSP index for every intermediate
+    // mouse position becomes increasingly expensive as the screenplay grows.
+    setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
 CardsGraphicsScene::~CardsGraphicsScene() = default;
@@ -76,6 +80,10 @@ void CardsGraphicsScene::fitToContents()
         const auto items = this->items();
         newSceneRect = sceneRect();
         for (auto item : items) {
+            if (!item->isVisible()) {
+                continue;
+            }
+
             const QRectF movedItemRect(item->scenePos(), item->boundingRect().size());
 
             const auto epsilon = 0;
@@ -131,11 +139,18 @@ void CardsGraphicsScene::fitToContents()
                            + DesignSystem::projectCard().margins().right(),
                        viewSize.width());
         const auto items = this->items();
+        qreal maxX = 0.0;
         qreal maxY = 0.0;
         for (auto item : items) {
+            if (!item->isVisible()) {
+                continue;
+            }
+
+            maxX = std::max(item->pos().x() + item->boundingRect().width(), maxX);
             maxY = std::max(item->pos().y() + item->boundingRect().height(), maxY);
         }
-        newSceneRect.setRight(sceneRectWidth);
+        newSceneRect.setRight(
+            std::max(sceneRectWidth, maxX + DesignSystem::projectCard().margins().right()));
         newSceneRect.setBottom(
             std::max(viewSize.height(), maxY + DesignSystem::projectCard().margins().bottom()));
     }
