@@ -10,6 +10,7 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QQueue>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QTimer>
 #include <QDebug>
@@ -18,6 +19,19 @@
 namespace ManagementLayer {
 
 namespace {
+
+const QString kStoryAssistantSkillSettingsKey = "codex/story-assistant/skill";
+const QString kDefaultStoryAssistantSkill = "edit-story";
+const QString kEricEdsonStorySkill = "eric-edson-story-skill";
+
+QString selectedStoryAssistantSkill()
+{
+    const auto selected
+        = QSettings().value(kStoryAssistantSkillSettingsKey,
+                            kDefaultStoryAssistantSkill).toString();
+    return selected == kEricEdsonStorySkill ? kEricEdsonStorySkill
+                                            : kDefaultStoryAssistantSkill;
+}
 
 QString joinedSections(const QVector<QString>& _sections, const QString& _label)
 {
@@ -91,6 +105,8 @@ public:
         Operation operation = Operation::GenerateText;
         QString prompt;
         int expectedSections = 0;
+        QString storySkill = kDefaultStoryAssistantSkill;
+        bool usesStoryActionProtocol = false;
     };
 
     explicit Implementation(CodexServiceManager* _q)
@@ -184,9 +200,13 @@ public:
         return QDir(workspacePath()).filePath(".agents/skills/create-storyboard/SKILL.md");
     }
 
-    QString editStorySkillPath() const
+    QString storySkillPath(const QString& _skillName) const
     {
-        return QDir(workspacePath()).filePath(".agents/skills/edit-story/SKILL.md");
+        const auto skillName = _skillName == kEricEdsonStorySkill
+            ? kEricEdsonStorySkill
+            : kDefaultStoryAssistantSkill;
+        return QDir(workspacePath()).filePath(
+            QString(".agents/skills/%1/SKILL.md").arg(skillName));
     }
 
     void setActivity(const QString& _activity)
@@ -280,7 +300,10 @@ public:
                        "You are the local Codex assistant embedded in Story Architect. Follow the "
                        "requested writing operation exactly. Preserve screenplay facts and return "
                        "only the requested content. Do not wrap ordinary text or Fountain output "
-                       "in Markdown fences. When a storyboard skill is attached, follow it and "
+                       "in Markdown fences. For screenplay output, use real Fountain scene "
+                       "headings such as 'INT. KITCHEN - NIGHT' or 'EXT. CITY STREET - DAY'. "
+                       "Never use Markdown or numbered labels such as '# Scene 1' as screenplay "
+                       "content. When a storyboard skill is attached, follow it and "
                        "finish with a concise report containing the artifact path." },
                  } } });
     }
@@ -307,11 +330,14 @@ public:
             }
         } else if (currentTask.operation == Operation::StoryAssist
                    || currentTask.operation == Operation::StoryEdit) {
-            const auto skillPath = editStorySkillPath();
+            const auto skillName = currentTask.storySkill == kEricEdsonStorySkill
+                ? kEricEdsonStorySkill
+                : kDefaultStoryAssistantSkill;
+            const auto skillPath = storySkillPath(skillName);
             if (QFileInfo::exists(skillPath)) {
                 input.append(QJsonObject{
                     { "type", "skill" },
-                    { "name", "edit-story" },
+                    { "name", skillName },
                     { "path", skillPath },
                 });
             }
@@ -342,6 +368,118 @@ public:
                             } },
                       } },
                     { "required", QJsonArray{ "sections" } },
+                    { "additionalProperties", false },
+                });
+        } else if (currentTask.usesStoryActionProtocol) {
+            params.insert(
+                "outputSchema",
+                QJsonObject{
+                    { "type", "object" },
+                    { "properties",
+                      QJsonObject{
+                          { "version", QJsonObject{ { "type", "integer" },
+                                                     { "enum", QJsonArray{ 3 } } } },
+                          { "action",
+                            QJsonObject{
+                                { "type", "string" },
+                                { "enum",
+                                  QJsonArray{
+                                      "answer",
+                                      "suggest_ideas",
+                                      "insert_screenplay",
+                                      "replace_selection",
+                                      "delete_selection",
+                                      "clear_screenplay",
+                                      "update_logline",
+                                      "replace_synopsis",
+                                      "revise_treatment",
+                                      "create_character",
+                                      "update_character",
+                                      "remove_character",
+                                      "merge_character",
+                                      "update_character_relationship",
+                                      "update_story_memory",
+                                      "request_clarification",
+                                  } },
+                            } },
+                          { "target",
+                            QJsonObject{
+                                { "type", "string" },
+                                { "enum",
+                                  QJsonArray{ "none", "selection", "cursor", "beginning",
+                                              "end", "logline", "synopsis", "treatment",
+                                              "characters", "character_relationships",
+                                              "story_memory" } },
+                            } },
+                          { "content", QJsonObject{ { "type", "string" } } },
+                          { "summary", QJsonObject{ { "type", "string" } } },
+                          { "requiresApproval", QJsonObject{ { "type", "boolean" } } },
+                          { "entityId", QJsonObject{ { "type", "string" } } },
+                          { "entityName", QJsonObject{ { "type", "string" } } },
+                          { "fieldChanges",
+                            QJsonObject{
+                                { "type", "array" },
+                                { "maxItems", 24 },
+                                { "items",
+                                  QJsonObject{
+                                      { "type", "object" },
+                                      { "properties",
+                                        QJsonObject{
+                                            { "field",
+                                              QJsonObject{
+                                                  { "type", "string" },
+                                                  { "enum",
+                                                    QJsonArray{
+                                                        "name", "story_role", "age", "nickname",
+                                                        "one_sentence_description",
+                                                        "long_description", "family", "personality",
+                                                        "motivation", "moral", "greatest_fear",
+                                                        "secrets", "short_term_goal", "long_term_goal",
+                                                        "initial_beliefs", "changed_beliefs",
+                                                        "plot_involvement", "conflict", "speech",
+                                                        "related_character_id",
+                                                        "merge_source_character_id", "feeling",
+                                                        "details",
+                                                    } },
+                                              } },
+                                            { "value", QJsonObject{ { "type", "string" } } },
+                                        } },
+                                      { "required", QJsonArray{ "field", "value" } },
+                                      { "additionalProperties", false },
+                                  } },
+                            } },
+                          { "impactSummary", QJsonObject{ { "type", "string" } } },
+                          { "continuityChecks",
+                            QJsonObject{
+                                { "type", "array" },
+                                { "maxItems", 12 },
+                                { "items",
+                                  QJsonObject{
+                                      { "type", "object" },
+                                      { "properties",
+                                        QJsonObject{
+                                            { "severity",
+                                              QJsonObject{
+                                                  { "type", "string" },
+                                                  { "enum",
+                                                    QJsonArray{ "critical", "caution",
+                                                                "suggestion" } },
+                                              } },
+                                            { "category", QJsonObject{ { "type", "string" } } },
+                                            { "issue", QJsonObject{ { "type", "string" } } },
+                                            { "evidence", QJsonObject{ { "type", "string" } } },
+                                        } },
+                                      { "required",
+                                        QJsonArray{ "severity", "category", "issue",
+                                                    "evidence" } },
+                                      { "additionalProperties", false },
+                                  } },
+                            } },
+                      } },
+                    { "required",
+                      QJsonArray{ "version", "action", "target", "content", "summary",
+                                  "requiresApproval", "entityId", "entityName", "fieldChanges",
+                                  "impactSummary", "continuityChecks" } },
                     { "additionalProperties", false },
                 });
         }
@@ -769,7 +907,10 @@ void CodexServiceManager::aiGenerateScript(const QVector<QString>& _chapters, in
     Q_UNUSED(_wordsRequired)
     d->enqueue({ Implementation::Operation::Script,
                  QString("Adapt the complete source below into a production-ready screenplay in "
-                         "Fountain format. Preserve story facts. Return only Fountain text.\n\n%1")
+                         "Fountain format. Preserve story facts. Begin every scene with a full "
+                         "scene heading such as 'INT. LOCATION - TIME' or 'EXT. LOCATION - TIME'. "
+                         "Never use '# Scene 1', 'Scene 1', or another numbered section label in "
+                         "place of a scene heading. Return only Fountain text.\n\n%1")
                      .arg(joinedSections(_chapters, "CHAPTER")) });
 }
 
@@ -788,20 +929,97 @@ void CodexServiceManager::aiGenerateText(const QString& _promptPrefix, const QSt
         return;
     }
 
-    const bool replacesSelection = _promptPrefix.contains("SELECTED EDIT TARGET");
+    const bool usesStoryActionProtocol = _promptPrefix.contains("STARC_ACTION_PROTOCOL_V3");
+    const bool replacesSelection
+        = !usesStoryActionProtocol && _promptPrefix.contains("SELECTED EDIT TARGET");
     const auto operation = replacesSelection ? Implementation::Operation::StoryEdit
                                              : Implementation::Operation::StoryAssist;
+    const auto storySkill = selectedStoryAssistantSkill();
+    const auto skillInvocation = QString("$%1").arg(storySkill);
     const auto operationInstruction
-        = replacesSelection
-        ? QString("$edit-story Revise only SELECTED EDIT TARGET. Treat the complete screenplay as "
+        = usesStoryActionProtocol
+        ? QString(
+              "%1 Use the complete story package and screenplay as canon, preserve the author's "
+              "voice and continuity, and classify the user's intent using "
+              "STARC_ACTION_PROTOCOL_V3. Return exactly one schema-valid action object. Use "
+              "answer for story questions, suggest_ideas for collaborative possibilities, "
+              "insert_screenplay for new Fountain-formatted screenplay writing, "
+              "replace_selection only when an editor selection exists, delete_selection only "
+              "when an editor selection exists, clear_screenplay only when the user explicitly "
+              "asks to remove the whole screenplay, update_logline for a direct logline change, "
+              "replace_synopsis for a direct synopsis change, revise_treatment for a direct "
+              "revision of the existing Treatment-tab outline, and request_clarification when a "
+              "safe target or essential detail is missing. Use create_character to add one new "
+              "native Character-tab record, update_character to change fields on one existing "
+              "character, remove_character to move one existing native character to STARC's "
+              "Recycle Bin, and update_character_relationship to create or update one native "
+              "relationship. Use merge_character only to merge one duplicate character into one "
+              "surviving character. For an existing character, copy its Stable ID exactly into entityId "
+              "and its live Name into entityName. For creation, entityId must be empty and "
+              "entityName is the new unique name. Character fieldChanges may use only the schema "
+              "fields and must contain only fields the writer asked to change; an empty string "
+              "intentionally clears a field. story_role values are primary, secondary, tertiary, "
+              "or undefined. Relationship fieldChanges must include related_character_id copied "
+              "from the other character's Stable ID and may include feeling and details. Never "
+              "invent an ID, permanently delete a character, delete a relationship, or merge "
+              "characters. remove_character must use the live Stable ID and Name, empty content, "
+              "and an empty fieldChanges array; the app will inventory dependencies and preserve "
+              "all screenplay text. For merge_character, entityId and entityName identify the "
+              "survivor; fieldChanges must include merge_source_character_id containing the "
+              "duplicate's live Stable ID. For every supported story field where the duplicate "
+              "has a meaningful value different from the survivor, include that field with the "
+              "final value the survivor should keep. If both values are non-empty and the writer "
+              "has not supplied a precedence or a safe way to combine them, return "
+              "request_clarification instead of guessing. Keep content empty. The app will plan "
+              "relationship and photo transfers, reassign native script cues, and preserve the "
+              "duplicate in Recycle Bin. "
+              "For revise_treatment, content must "
+              "contain exactly one line for every existing editable treatment paragraph, in the "
+              "same order, with no numbering, labels, blank wrapper lines, or commentary; never "
+              "add or remove scenes through that action. Targets must be none for conversational actions, "
+              "none for clear_screenplay, selection for selection actions, and cursor, beginning, "
+              "or end for insertion. Targets must be logline for update_logline, synopsis for "
+              "replace_synopsis, treatment for revise_treatment, and story_memory for "
+              "update_story_memory. Targets must be characters for create_character, "
+              "update_character, and remove_character, and character_relationships for "
+              "update_character_relationship. merge_character also targets characters. "
+              "For all non-character actions, return empty entityId, empty entityName, and an "
+              "empty fieldChanges array. Use update_story_memory only when explicitly asked to build "
+              "or refresh Story Memory. Its content must be an evidence-based continuity record "
+              "with these headings: CHARACTERS & RELATIONSHIPS, CHARACTER KNOWLEDGE, TIMELINE, "
+              "PLOT THREADS, SETUPS & PAYOFFS, WORLD RULES, VOICE & STYLE, CONTINUITY RISKS. "
+              "Distinguish confirmed canon from inference and cite scene headings or STARC tabs "
+              "as evidence. Never invent missing facts. "
+              "For every editor-changing action, perform a Continuity Gate self-audit against "
+              "the live screenplay, linked STARC tabs, and Story Memory. Put a concise description "
+              "of story consequences in impactSummary. Put each finding in continuityChecks with "
+              "severity critical only for a direct conflict with confirmed canon, caution for a "
+              "likely inconsistency or weak motivation, and suggestion for optional improvement. "
+              "Use character knowledge, chronology, location, world rules, setups/payoffs, and "
+              "voice as categories where relevant. Evidence must cite a scene heading or linked "
+              "STARC tab; explicitly say when evidence is only inference. Return an empty checks "
+              "array for conversational actions and when no issue is found. "
+              "Put conversational text in content. Put only production-ready Fountain in content "
+              "for insert_screenplay and replace_selection—never an introduction or Markdown "
+              "fence. Use complete Fountain scene headings such as 'INT. KITCHEN - NIGHT', never "
+              "'# Scene 1'. Set requiresApproval true for every editor-changing action and false "
+              "for every conversational action. The app, not you, will preview and apply editor "
+              "changes. Set requiresApproval true for logline, synopsis, and treatment changes too.")
+              .arg(skillInvocation)
+        : replacesSelection
+        ? QString("%1 Revise only SELECTED EDIT TARGET. Treat the complete screenplay as "
                   "canon and preserve the author's established voice, character knowledge, "
-                  "relationships, timeline, world rules, setups, and payoffs.")
-        : QString("$edit-story Use the complete screenplay as canon. Follow the user's request while "
+                  "relationships, timeline, world rules, setups, and payoffs.").arg(skillInvocation)
+        : QString("%1 Use the complete screenplay as canon. Follow the user's request while "
                   "preserving the author's established voice and the story's character, plot, "
-                  "timeline, theme, and world continuity.");
-    d->enqueue({ operation,
-                 QString("%1\n\n%2\n\nUSER REQUEST:\n%3\n\n%4")
-                     .arg(operationInstruction, _promptPrefix, _prompt, _promptSuffix) });
+                  "timeline, theme, and world continuity.").arg(skillInvocation);
+    Implementation::Task task;
+    task.operation = operation;
+    task.prompt = QString("%1\n\n%2\n\nUSER REQUEST:\n%3\n\n%4")
+                      .arg(operationInstruction, _promptPrefix, _prompt, _promptSuffix);
+    task.storySkill = storySkill;
+    task.usesStoryActionProtocol = usesStoryActionProtocol;
+    d->enqueue(std::move(task));
 }
 
 } // namespace ManagementLayer

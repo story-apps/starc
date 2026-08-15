@@ -11,11 +11,13 @@ built_app="$1"
 installed_app="$2"
 built_corelib="$built_app/Contents/Frameworks/libcorelib.1.0.0.dylib"
 built_coreplugin="$built_app/Contents/PlugIns/libcoreplugin.dylib"
+built_screenplay_plugin="$built_app/Contents/PlugIns/libscreenplaytextplugin.dylib"
 installed_corelib="$installed_app/Contents/Frameworks/libcorelib.1.0.0.dylib"
 installed_coreplugin="$installed_app/Contents/PlugIns/libcoreplugin.dylib"
+installed_screenplay_plugin="$installed_app/Contents/PlugIns/libscreenplaytextplugin.dylib"
 
 for required_file in "$built_corelib" "$built_coreplugin" "$installed_corelib" \
-    "$installed_coreplugin"; do
+    "$installed_coreplugin" "$built_screenplay_plugin" "$installed_screenplay_plugin"; do
     if [[ ! -f "$required_file" ]]; then
         print -u2 "Required file is missing: $required_file"
         exit 1
@@ -24,6 +26,7 @@ done
 
 /bin/cp "$built_corelib" "$installed_corelib"
 /bin/cp "$built_coreplugin" "$installed_coreplugin"
+/bin/cp "$built_screenplay_plugin" "$installed_screenplay_plugin"
 
 patch_qt_dependencies() {
     local binary="$1"
@@ -39,8 +42,10 @@ patch_qt_dependencies() {
 
 patch_qt_dependencies "$installed_corelib"
 patch_qt_dependencies "$installed_coreplugin"
+patch_qt_dependencies "$installed_screenplay_plugin"
 
 if /usr/bin/otool -L "$installed_corelib" "$installed_coreplugin" \
+    "$installed_screenplay_plugin" \
     | /usr/bin/grep -Eq '^[[:space:]]+/.*Qt[^/]*\.framework/Versions/A/Qt'; then
     print -u2 "A non-bundled Qt framework dependency remains after patching."
     exit 1

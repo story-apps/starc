@@ -99,11 +99,17 @@ public:
      * @brief Capture a selected passage as the target of the next Codex edit
      */
     QString selectedTextForAssistant() const;
+    void captureAssistantRequestContext();
     void captureAssistantSelection();
     void captureAssistantInsertionPoint(bool _atBeginning = false, bool _atEnd = false);
     void clearAssistantSelection();
     void showAssistantNotice(const QString& _message);
     void requestAssistantClearScreenplay();
+    void showAssistantEditHistory(int _entryOffset = 0);
+    void showAssistantStoryMemory();
+    void requestAssistantStoryMemoryRefresh();
+    void handleCharacterMergeRollbackFinished(const QString& _transactionId, bool _success,
+                                               const QString& _message);
 
 signals:
     /**
@@ -148,6 +154,7 @@ signals:
     void generateNovelRequested();
     void generateTextRequested(const QString& _text, const QString& _conversationContext);
     void cancelAssistantRequested();
+    void characterMergeRollbackRequested(const QString& _transactionId);
 
     /**
      * @brief Пользователь хочет докупить кредитов

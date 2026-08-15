@@ -45,6 +45,11 @@ public:
      */
     void enableSupportingTextScrolling();
 
+    /**
+     * @brief Highlight lines prefixed with + and - as additions and removals
+     */
+    void enableDiffHighlighting();
+
 signals:
     /**
      * @brief Диалог завершился с установленным выбором пользователя

@@ -47,6 +47,8 @@ public:
     QGridLayout* contentsLayout = nullptr;
     Button* acceptButton = nullptr;
     Button* rejectButton = nullptr;
+    bool rejectOnEscape = true;
+    bool dismissOnOutsideClick = true;
 
     QVariantAnimation opacityAnimation;
     QVariantAnimation contentPosAnimation;
@@ -268,6 +270,16 @@ void AbstractDialog::setRejectButton(Button* _button)
     d->rejectButton = _button;
 }
 
+void AbstractDialog::setRejectOnEscape(bool _enabled)
+{
+    d->rejectOnEscape = _enabled;
+}
+
+void AbstractDialog::setDismissOnOutsideClick(bool _enabled)
+{
+    d->dismissOnOutsideClick = _enabled;
+}
+
 QString AbstractDialog::title() const
 {
     return d->title->text();
@@ -332,7 +344,8 @@ bool AbstractDialog::event(QEvent* _event)
             && (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)) {
             d->acceptButton->click();
             return true;
-        } else if (d->rejectButton != nullptr && d->rejectButton->isEnabled()
+        } else if (d->rejectOnEscape && d->rejectButton != nullptr
+                   && d->rejectButton->isEnabled()
                    && keyEvent->key() == Qt::Key_Escape) {
             d->rejectButton->click();
             return true;
@@ -367,7 +380,8 @@ void AbstractDialog::mousePressEvent(QMouseEvent* _event)
     // и при этом окно не было активировано посредством клика в этой области,
     // и есть кнопка отмены, то используем её
     //
-    if (!d->title->rect().contains(d->title->mapFromGlobal(_event->globalPos()))
+    if (d->dismissOnOutsideClick
+        && !d->title->rect().contains(d->title->mapFromGlobal(_event->globalPos()))
         && !d->content->rect().contains(d->content->mapFromGlobal(_event->globalPos()))
         && !d->sApplicationActivityChangingTimer.isActive() && d->rejectButton != nullptr
         && d->rejectButton->isEnabled()) {

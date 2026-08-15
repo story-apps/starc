@@ -8,17 +8,77 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QApplication>
+#include <QClipboard>
+#include <QLabel>
+#include <QMenu>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QResizeEvent>
 
 
 class ChatMessagesView::Implementation
 {
 public:
+    struct AssistantMessageLayout {
+        QRectF bubbleRect;
+        QRectF roleRect;
+        QRectF textRect;
+        bool isUser = false;
+    };
+
+    QVector<AssistantMessageLayout> assistantMessageLayouts(int _width) const;
+
     User currectUser;
     QVector<ChatMessage> messages;
+    QVector<QLabel*> assistantTextLabels;
     bool assistantStyle = false;
 };
+
+QVector<ChatMessagesView::Implementation::AssistantMessageLayout>
+ChatMessagesView::Implementation::assistantMessageLayouts(int _width) const
+{
+    QVector<AssistantMessageLayout> result;
+    result.reserve(messages.size());
+
+    const auto& layout = Ui::DesignSystem::layout();
+    const auto textFont = Ui::DesignSystem::font().body2();
+    const auto roleFont = Ui::DesignSystem::font().caption();
+    qreal y = layout.px8();
+    ChatMessage previousMessage;
+    for (const auto& message : messages) {
+        const bool isUser = message.author() == currectUser;
+        const bool isAuthorChanged = previousMessage.author() != message.author();
+        const qreal widthRatio = isUser ? 0.76 : 0.84;
+        const qreal maximumBubbleWidth = std::max<qreal>(
+            layout.px62(), std::min(_width - layout.px24(), _width * widthRatio));
+        const qreal maximumTextWidth = maximumBubbleWidth - layout.px24();
+        const auto naturalTextWidth
+            = TextHelper::fineTextWidthF(message.text(), textFont) + layout.px2();
+        const auto textWidth
+            = std::max<qreal>(layout.px48(), std::min(maximumTextWidth, naturalTextWidth));
+        const auto textHeight = TextHelper::heightForWidth(message.text(), textFont, textWidth);
+        const auto bubbleWidth = textWidth + layout.px24();
+        const auto bubbleHeight = textHeight + layout.px16() + layout.px4();
+        const auto x = isUser ? _width - layout.px12() - bubbleWidth : layout.px12();
+
+        y += isAuthorChanged ? layout.px12() : layout.px4();
+        QRectF roleRect;
+        if (!isUser && isAuthorChanged) {
+            const auto roleHeight = TextHelper::fineLineSpacing(roleFont);
+            roleRect = QRectF(x, y, bubbleWidth, roleHeight);
+            y += roleHeight + layout.px4();
+        }
+
+        const QRectF bubbleRect(x, y, bubbleWidth, bubbleHeight);
+        const auto textRect = bubbleRect.adjusted(layout.px12(), layout.px8() + layout.px2(),
+                                                  -layout.px12(), -layout.px8() - layout.px2());
+        result.append({ bubbleRect, roleRect, textRect, isUser });
+        y = bubbleRect.bottom();
+        previousMessage = message;
+    }
+    return result;
+}
 
 
 // ****
@@ -29,12 +89,17 @@ ChatMessagesView::ChatMessagesView(QWidget* _parent)
     , d(new Implementation)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setFocusPolicy(Qt::StrongFocus);
     auto sizePolicy = this->sizePolicy();
     sizePolicy.setHeightForWidth(true);
     setSizePolicy(sizePolicy);
 
     connect(
         this, &ChatMessagesView::customContextMenuRequested, this, [this](const QPoint& _position) {
+            if (d->assistantStyle) {
+                return;
+            }
+
             const auto titleFont = Ui::DesignSystem::font().subtitle2();
             const auto titleFontLineSpacing = TextHelper::fineLineSpacing(titleFont);
             const auto textFont = Ui::DesignSystem::font().body2();
@@ -94,6 +159,7 @@ ChatMessagesView::~ChatMessagesView() = default;
 void ChatMessagesView::setCurrentUser(const User& _user)
 {
     d->currectUser = _user;
+    updateAssistantTextLabels();
     updateGeometry();
     update();
 }
@@ -101,6 +167,7 @@ void ChatMessagesView::setCurrentUser(const User& _user)
 void ChatMessagesView::setMessages(const QVector<ChatMessage>& _messages)
 {
     d->messages = _messages;
+    updateAssistantTextLabels();
     updateGeometry();
     update();
 }
@@ -111,39 +178,70 @@ void ChatMessagesView::setAssistantStyle(bool _enabled)
         return;
     }
     d->assistantStyle = _enabled;
+    updateAssistantTextLabels();
     updateGeometry();
     update();
+}
+
+void ChatMessagesView::updateAssistantTextLabels()
+{
+    while (d->assistantTextLabels.size() < d->messages.size()) {
+        auto label = new QLabel(this);
+        label->setTextFormat(Qt::PlainText);
+        label->setWordWrap(true);
+        label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+        label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+        label->setFocusPolicy(Qt::ClickFocus);
+        label->setCursor(Qt::IBeamCursor);
+        label->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(label, &QLabel::customContextMenuRequested, label, [label](const QPoint& _position) {
+            QMenu menu(label);
+            auto copySelectionAction = menu.addAction(ChatMessagesView::tr("Copy selection"));
+            copySelectionAction->setEnabled(label->hasSelectedText());
+            if (menu.exec(label->mapToGlobal(_position)) == copySelectionAction
+                && label->hasSelectedText()) {
+                QApplication::clipboard()->setText(label->selectedText());
+            }
+        });
+        d->assistantTextLabels.append(label);
+    }
+
+    const auto messageLayouts = d->assistantMessageLayouts(width());
+    const auto textFont = Ui::DesignSystem::font().body2();
+    const auto userTextColor = Ui::DesignSystem::color().onAccent();
+    for (int index = 0; index < d->assistantTextLabels.size(); ++index) {
+        auto label = d->assistantTextLabels.at(index);
+        const bool isVisible = d->assistantStyle && index < d->messages.size();
+        label->setVisible(isVisible);
+        if (!isVisible) {
+            continue;
+        }
+
+        const auto& message = d->messages.at(index);
+        const auto& messageLayout = messageLayouts.at(index);
+        if (label->text() != message.text()) {
+            label->setText(message.text());
+        }
+        label->setFont(textFont);
+        label->setGeometry(messageLayout.textRect.toAlignedRect());
+        auto palette = label->palette();
+        palette.setColor(QPalette::WindowText,
+                         messageLayout.isUser ? userTextColor : textColor());
+        label->setPalette(palette);
+        label->setAutoFillBackground(false);
+        label->raise();
+    }
 }
 
 int ChatMessagesView::heightForWidth(int _width) const
 {
     if (d->assistantStyle) {
-        const auto& layout = Ui::DesignSystem::layout();
-        const auto textFont = Ui::DesignSystem::font().body2();
-        const auto roleFont = Ui::DesignSystem::font().caption();
-        qreal height = layout.px8();
-        ChatMessage previousMessage;
-        for (const auto& message : std::as_const(d->messages)) {
-            const bool isUser = message.author() == d->currectUser;
-            const bool isAuthorChanged = previousMessage.author() != message.author();
-            const qreal widthRatio = isUser ? 0.76 : 0.84;
-            const qreal maximumBubbleWidth
-                = std::max<qreal>(layout.px62(), std::min(_width - layout.px24(), _width * widthRatio));
-            const qreal maximumTextWidth = maximumBubbleWidth - layout.px24();
-            const qreal naturalTextWidth
-                = TextHelper::fineTextWidthF(message.text(), textFont) + layout.px2();
-            const qreal textWidth = std::max<qreal>(layout.px48(),
-                                                    std::min(maximumTextWidth, naturalTextWidth));
-
-            height += isAuthorChanged ? layout.px12() : layout.px4();
-            if (!isUser && isAuthorChanged) {
-                height += TextHelper::fineLineSpacing(roleFont) + layout.px4();
-            }
-            height += TextHelper::heightForWidth(message.text(), textFont, textWidth)
-                + layout.px16() + layout.px4();
-            previousMessage = message;
+        const auto layouts = d->assistantMessageLayouts(_width);
+        if (layouts.isEmpty()) {
+            return Ui::DesignSystem::layout().px24();
         }
-        return static_cast<int>(height + layout.px12());
+        return static_cast<int>(layouts.constLast().bubbleRect.bottom()
+                                + Ui::DesignSystem::layout().px12());
     }
 
     //
@@ -202,65 +300,43 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
         painter.fillRect(_event->rect(), backgroundColor());
 
         const auto& layout = Ui::DesignSystem::layout();
-        const auto textFont = Ui::DesignSystem::font().body2();
         const auto roleFont = Ui::DesignSystem::font().caption();
         const auto accent = Ui::DesignSystem::color().accent();
-        const auto userTextColor = Ui::DesignSystem::color().onAccent();
         const auto assistantBubbleColor = ColorHelper::nearby(backgroundColor());
         const auto assistantOutlineColor = ColorHelper::transparent(textColor(), 0.10);
-        qreal y = layout.px8();
         ChatMessage previousMessage;
 
-        for (const auto& message : std::as_const(d->messages)) {
-            const bool isUser = message.author() == d->currectUser;
+        const auto messageLayouts = d->assistantMessageLayouts(width());
+        for (int messageIndex = 0; messageIndex < d->messages.size(); ++messageIndex) {
+            const auto& message = d->messages.at(messageIndex);
+            const auto& messageLayout = messageLayouts.at(messageIndex);
+            const bool isUser = messageLayout.isUser;
             const bool isAuthorChanged = previousMessage.author() != message.author();
-            const qreal widthRatio = isUser ? 0.76 : 0.84;
-            const qreal maximumBubbleWidth = std::max<qreal>(
-                layout.px62(), std::min(width() - layout.px24(), width() * widthRatio));
-            const qreal maximumTextWidth = maximumBubbleWidth - layout.px24();
-            const auto naturalTextWidth
-                = TextHelper::fineTextWidthF(message.text(), textFont) + layout.px2();
-            const auto textWidth = std::max<qreal>(layout.px48(),
-                                                   std::min(maximumTextWidth, naturalTextWidth));
-            const auto textHeight
-                = TextHelper::heightForWidth(message.text(), textFont, textWidth);
-            const auto bubbleWidth = textWidth + layout.px24();
-            const auto bubbleHeight = textHeight + layout.px16() + layout.px4();
-            const auto x = isUser ? width() - layout.px12() - bubbleWidth : layout.px12();
-
-            y += isAuthorChanged ? layout.px12() : layout.px4();
 
             if (!isUser && isAuthorChanged) {
-                const auto roleHeight = TextHelper::fineLineSpacing(roleFont);
                 const auto dotSize = layout.px8();
-                const QRectF dotRect(x + layout.px4(), y + (roleHeight - dotSize) / 2.0,
-                                     dotSize, dotSize);
+                const QRectF dotRect(
+                    messageLayout.roleRect.left() + layout.px4(),
+                    messageLayout.roleRect.top()
+                        + (messageLayout.roleRect.height() - dotSize) / 2.0,
+                    dotSize, dotSize);
                 painter.setPen(Qt::NoPen);
                 painter.setBrush(accent);
                 painter.drawEllipse(dotRect);
 
                 painter.setFont(roleFont);
                 painter.setPen(ColorHelper::transparent(textColor(), 0.72));
-                const QRectF roleRect(dotRect.right() + layout.px8(), y,
-                                      bubbleWidth - layout.px16(), roleHeight);
+                const QRectF roleRect(dotRect.right() + layout.px8(),
+                                      messageLayout.roleRect.top(),
+                                      messageLayout.roleRect.width() - layout.px16(),
+                                      messageLayout.roleRect.height());
                 painter.drawText(roleRect, Qt::AlignLeft | Qt::AlignVCenter, tr("Codex"));
-                y += roleHeight + layout.px4();
             }
 
-            const QRectF bubbleRect(x, y, bubbleWidth, bubbleHeight);
-            painter.setPen(isUser ? Qt::NoPen : QPen(assistantOutlineColor, 1.0));
+            const auto bubbleRect = messageLayout.bubbleRect;
+            painter.setPen(isUser ? QPen(Qt::NoPen) : QPen(assistantOutlineColor, 1.0));
             painter.setBrush(isUser ? accent : assistantBubbleColor);
             painter.drawRoundedRect(bubbleRect, layout.px16(), layout.px16());
-
-            painter.setFont(textFont);
-            painter.setPen(isUser ? userTextColor : textColor());
-            QTextOption option;
-            option.setAlignment(Qt::AlignLeft | Qt::AlignTop);
-            option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-            painter.drawText(bubbleRect.adjusted(layout.px12(), layout.px8() + layout.px2(),
-                                                 -layout.px12(), -layout.px8() - layout.px2()),
-                             message.text(), option);
-            y = bubbleRect.bottom();
             previousMessage = message;
         }
         return;
@@ -419,4 +495,16 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
     //
     isAuthorChanged = true;
     drawAvatar();
+}
+
+void ChatMessagesView::resizeEvent(QResizeEvent* _event)
+{
+    Widget::resizeEvent(_event);
+    updateAssistantTextLabels();
+}
+
+void ChatMessagesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Widget::designSystemChangeEvent(_event);
+    updateAssistantTextLabels();
 }

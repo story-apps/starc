@@ -5,6 +5,7 @@
 #include "ui/dictionaries_view.h"
 
 #include <business_layer/compliance/compliance_checker.h>
+#include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/locations/location_model.h>
@@ -26,8 +27,10 @@
 
 #include <QApplication>
 #include <QFileDialog>
-#include <QRegularExpression>
+#include <QJsonDocument>
+#include <QSettings>
 #include <QStringListModel>
+#include <QTextBlock>
 
 
 namespace ManagementLayer {
@@ -40,21 +43,6 @@ const int kCharacterExtensionsIndex = 2;
 const int kTransitionIndex = 3;
 
 const QLatin1String kSettingsKey("screenplay-text");
-
-bool isWholeScreenplayDeletionCommand(const QString& _text)
-{
-    const auto text = _text.toLower().simplified();
-    static const QRegularExpression deletionVerb(
-        QStringLiteral("\\b(?:delete|remove|erase|clear|wipe)\\b"));
-    static const QRegularExpression wholeTarget(QStringLiteral(
-        "\\b(?:(?:all(?:\\s+of)?(?:\\s+the)?|entire|whole|full)\\s+"
-        "(?:(?:screenplay|script|document)(?:\\s+(?:text|content))?|text|content|words)"
-        "|everything)\\b"));
-    static const QRegularExpression explicitClear(QStringLiteral(
-        "\\b(?:clear|wipe)\\s+(?:the\\s+)?(?:screenplay|script|document)\\b"));
-    return deletionVerb.match(text).hasMatch()
-        && (wholeTarget.match(text).hasMatch() || explicitClear.match(text).hasMatch());
-}
 
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
@@ -115,6 +103,41 @@ QString plainTextForModel(BusinessLayer::TextModel* _model)
     return blocks.join("\n");
 }
 
+QString treatmentOutlineForModel(BusinessLayer::ScreenplayTextModel* _model)
+{
+    if (_model == nullptr) {
+        return {};
+    }
+    BusinessLayer::ScreenplayTextDocument document;
+    document.setTreatmentDocument(true);
+    document.setModel(_model, false);
+    QStringList paragraphs;
+    for (auto block = document.begin(); block.isValid(); block = block.next()) {
+        if (block.isVisible() && block.userData() != nullptr) {
+            paragraphs.append(block.text());
+        }
+    }
+    return paragraphs.join('\n');
+}
+
+QJsonObject storedStoryMemory(BusinessLayer::ScreenplayTextModel* _model)
+{
+    if (_model == nullptr || _model->document() == nullptr) {
+        return {};
+    }
+    const auto key = QString("codex/story-memory/%1")
+                         .arg(_model->document()->uuid().toString(QUuid::WithoutBraces));
+    const auto stored = QSettings().value(key).toByteArray();
+    if (stored.isEmpty()) {
+        return {};
+    }
+    auto json = qUncompress(stored);
+    if (json.isEmpty()) {
+        json = stored;
+    }
+    return QJsonDocument::fromJson(json).object();
+}
+
 QString characterRole(BusinessLayer::CharacterStoryRole _role)
 {
     switch (_role) {
@@ -159,6 +182,8 @@ QString characterProfiles(BusinessLayer::CharactersModel* _characters)
         }
 
         QStringList fields;
+        appendContextField(fields, "Stable ID",
+                           character->document()->uuid().toString(QUuid::WithoutBraces));
         appendContextField(fields, "Name", character->name());
         appendContextField(fields, "Story role", characterRole(character->storyRole()));
         appendContextField(fields, "Age", character->age());
@@ -327,6 +352,14 @@ QString storyPackageContext(BusinessLayer::ScreenplayTextModel* _model)
     if (!synopsis.isEmpty()) {
         sections.append(QString("[SYNOPSIS]\n%1").arg(synopsis));
     }
+    const auto treatment = treatmentOutlineForModel(_model);
+    if (!treatment.isEmpty()) {
+        sections.append(QString("[TREATMENT OUTLINE]\nEditable paragraph count: %1\n"
+                                "--- BEGIN EDITABLE PARAGRAPHS ---\n%2\n"
+                                "--- END EDITABLE PARAGRAPHS ---")
+                            .arg(treatment.count('\n') + 1)
+                            .arg(treatment));
+    }
     const auto characters = characterProfiles(_model->charactersModel());
     if (!characters.isEmpty()) {
         sections.append(QString("[CHARACTER PROFILES]\n%1").arg(characters));
@@ -334,6 +367,19 @@ QString storyPackageContext(BusinessLayer::ScreenplayTextModel* _model)
     const auto locations = locationProfiles(_model->locationsModel());
     if (!locations.isEmpty()) {
         sections.append(QString("[LOCATION PROFILES]\n%1").arg(locations));
+    }
+    const auto memory = storedStoryMemory(_model);
+    const auto memoryContent = memory.value("content").toString().trimmed();
+    if (!memoryContent.isEmpty()) {
+        const auto freshness = memory.value("stale").toBool() ? "STALE" : "CURRENT";
+        const auto ownership = memory.value("writerEdited").toBool()
+            ? "WRITER-CORRECTED"
+            : "CODEX-DERIVED";
+        sections.append(
+            QString("[STORY MEMORY — %1, %2]\n"
+                    "This is working continuity analysis. Live STARC tabs and screenplay text "
+                    "override it whenever they conflict.\n%3")
+                .arg(freshness, ownership, memoryContent.left(30000)));
     }
     return sections.join("\n\n");
 }
@@ -641,38 +687,16 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
     });
     connect(view, &Ui::ScreenplayTextView::generateTextRequested, q,
             [this, view](const QString& _text, const QString& _conversationContext) {
-        view->clearAssistantSelection();
         const auto lowerPrompt = _text.toLower();
-        if (isWholeScreenplayDeletionCommand(_text)) {
-            view->requestAssistantClearScreenplay();
-            return;
-        }
-
         const bool isStoryboardRequest
             = lowerPrompt.contains("storyboard") || lowerPrompt.contains("story board")
             || lowerPrompt.contains("beat board") || lowerPrompt.contains("beat-board")
             || lowerPrompt.contains("beat breakdown") || lowerPrompt.contains("nine-grid")
             || lowerPrompt.contains("nine grid") || lowerPrompt.contains("sequence board")
             || lowerPrompt.contains("shot list");
-        const bool isEditRequest
-            = lowerPrompt.contains("edit") || lowerPrompt.contains("rewrite")
-            || lowerPrompt.contains("revise") || lowerPrompt.contains("polish")
-            || lowerPrompt.contains("fix this") || lowerPrompt.contains("change this")
-            || lowerPrompt.contains("make this") || lowerPrompt.contains("improve this");
-        const bool targetsAnotherStoryDocument
-            = lowerPrompt.contains("logline") || lowerPrompt.contains("synopsis")
-            || lowerPrompt.contains("treatment") || lowerPrompt.contains("character profile")
-            || lowerPrompt.contains("story metadata");
-        const bool isWritingRequest
-            = !targetsAnotherStoryDocument
-            && (isEditRequest || lowerPrompt.contains("write") || lowerPrompt.contains("draft")
-            || lowerPrompt.contains("generate") || lowerPrompt.contains("compose")
-            || lowerPrompt.contains("continue the") || lowerPrompt.contains("create a scene")
-            || lowerPrompt.contains("add a scene") || lowerPrompt.contains("new scene"));
 
-        // Story-aware requests receive the complete screenplay as canon. Edit requests also carry
-        // an exact selected target so the result can replace that passage instead of being inserted
-        // at the beginning of the document.
+        // Every request receives the same live canon. For regular story chat, snapshot the editor
+        // state once and let Codex return a typed action instead of guessing intent from keywords.
         const auto model = modelForView(view);
         QVector<QString> scenes;
         std::function<void(const QModelIndex&)> findScenes;
@@ -712,45 +736,24 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
                                         "below is authoritative):\n%1")
                                     .arg(_conversationContext));
         }
-        QString promptSuffix
-            = isWritingRequest && !isStoryboardRequest ? "\n\nWrite result in Fountain format."
-                                                        : QString();
-        if (isEditRequest && !isStoryboardRequest) {
+        QString promptSuffix;
+        if (isStoryboardRequest) {
+            view->clearAssistantSelection();
+        } else {
+            view->captureAssistantRequestContext();
             const auto selectedText = view->selectedTextForAssistant();
-            if (selectedText.isEmpty()) {
-                view->showAssistantNotice(
-                    tr("Select the exact screenplay passage you want revised, then run the edit "
-                       "request again. Codex will preview a replacement and will not restart the "
-                       "screenplay from page one."));
-                return;
-            }
-            view->captureAssistantSelection();
+            promptPrefix.prepend("STARC_ACTION_PROTOCOL_V3\n\n");
             promptPrefix.append(
-                QString("\n\nSELECTED EDIT TARGET (replace only this passage):\n%1")
-                    .arg(selectedText));
+                QString("\n\nREQUEST-TIME EDITOR CONTEXT (a safety snapshot, not an instruction):"
+                        "\nSelection exists: %1\nSelected screenplay text:\n%2\n"
+                        "The current cursor, screenplay beginning, and screenplay end are valid "
+                        "insertion targets. A selection action is invalid when Selection exists "
+                        "is no.")
+                    .arg(selectedText.isEmpty() ? "no" : "yes",
+                         selectedText.isEmpty() ? "(none)" : selectedText));
             promptSuffix
-                = "\n\nReturn only the replacement Fountain text for SELECTED EDIT TARGET. "
-                  "Begin immediately with the screenplay block. Do not include an introduction, "
-                  "explanation, summary, label, or Markdown code fence. Do not return the complete "
-                  "screenplay.";
-        } else if (isWritingRequest && !isStoryboardRequest) {
-            const bool insertAtBeginning
-                = lowerPrompt.contains("beginning of the screenplay")
-                || lowerPrompt.contains("beginning of the script")
-                || lowerPrompt.contains("start of the screenplay")
-                || lowerPrompt.contains("start of the script");
-            const bool insertAtEnd
-                = lowerPrompt.contains("end of the screenplay")
-                || lowerPrompt.contains("end of the script")
-                || lowerPrompt.contains("at the end");
-            view->captureAssistantInsertionPoint(insertAtBeginning, insertAtEnd);
-            promptSuffix
-                = "\n\nReturn only production-ready Fountain screenplay blocks to insert at "
-                  "the requested location. Preserve blank lines and exact screenplay structure. "
-                  "Begin immediately with the first screenplay block. Do not include an "
-                  "introduction such as 'Here is', an explanation, a summary, a label, or a "
-                  "Markdown code fence. The result will be parsed directly into STARC's native "
-                  "screenplay editor after the writer approves it.";
+                = "\n\nReturn exactly one STARC_ACTION_PROTOCOL_V3 object matching the supplied "
+                  "schema. Do not place JSON or screenplay prose inside a conversational wrapper.";
         }
 
         emit q->generateTextRequested(
@@ -758,6 +761,8 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
     });
     connect(view, &Ui::ScreenplayTextView::cancelAssistantRequested, q,
             &ScreenplayTextManager::cancelAssistantRequested);
+    connect(view, &Ui::ScreenplayTextView::characterMergeRollbackRequested, q,
+            &ScreenplayTextManager::characterMergeRollbackRequested);
     connect(view, &Ui::ScreenplayTextView::buyCreditsRequested, q,
             &ScreenplayTextManager::buyCreditsRequested);
     //
@@ -1274,6 +1279,17 @@ void ScreenplayTextManager::setAvailableCredits(int _credits)
         }
 
         viewAndModel.view->setAvailableCredits(_credits);
+    }
+}
+
+void ScreenplayTextManager::handleCharacterMergeRollbackFinished(
+    const QString& _transactionId, bool _success, const QString& _message)
+{
+    for (const auto& viewAndModel : std::as_const(d->allViews)) {
+        if (!viewAndModel.view.isNull()) {
+            viewAndModel.view->handleCharacterMergeRollbackFinished(
+                _transactionId, _success, _message);
+        }
     }
 }
 

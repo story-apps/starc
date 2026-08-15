@@ -44,6 +44,11 @@ using ShadowWodget = Shadow;
 
 namespace {
 
+const QString kStoryAssistantSkillSettingsKey = "codex/story-assistant/skill";
+const QString kWritersRoomSettingsKey = "codex/story-assistant/writers-room-enabled";
+const QString kDefaultStoryAssistantSkill = "edit-story";
+const QString kEricEdsonStorySkill = "eric-edson-story-skill";
+
 bool isWholeScreenplayDeletionCommand(const QString& _text)
 {
     const auto text = _text.toLower().simplified();
@@ -214,6 +219,9 @@ public:
 
     Page* generateTextPage = nullptr;
     Body1Label* generateTextPromptHintLabel = nullptr;
+    ComboBox* generateTextStoryMethod = nullptr;
+    QStandardItemModel* generateTextStoryMethodModel = nullptr;
+    CheckBox* generateTextWritersRoom = nullptr;
     Body2Label* generateTextEmptyHintLabel = nullptr;
     ChatMessagesView* generateTextMessages = nullptr;
     QScrollArea* generateTextMessagesContainer = nullptr;
@@ -223,6 +231,8 @@ public:
     RadioButton* generateTextInsertAtBegin = nullptr;
     RadioButton* generateTextInsertAtCursor = nullptr;
     RadioButton* generateTextInsertAtEnd = nullptr;
+    Button* generateTextHistoryButton = nullptr;
+    Button* generateTextMemoryButton = nullptr;
     Button* generateTextNewChatButton = nullptr;
     Button* generateTextInsertResponseButton = nullptr;
     Button* generateTextButton = nullptr;
@@ -417,6 +427,9 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     //
     , generateTextPage(new Page(pages))
     , generateTextPromptHintLabel(new Body1Label(generateTextPage))
+    , generateTextStoryMethod(new ComboBox(generateTextPage))
+    , generateTextStoryMethodModel(new QStandardItemModel(generateTextStoryMethod))
+    , generateTextWritersRoom(new CheckBox(generateTextPage))
     , generateTextEmptyHintLabel(new Body2Label(generateTextPage))
     , generateTextMessages(new ChatMessagesView)
     , generateTextMessagesContainer(new QScrollArea(generateTextPage))
@@ -426,6 +439,8 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , generateTextInsertAtBegin(new RadioButton(generateTextPage))
     , generateTextInsertAtCursor(new RadioButton(generateTextPage))
     , generateTextInsertAtEnd(new RadioButton(generateTextPage))
+    , generateTextHistoryButton(new Button(generateTextPage))
+    , generateTextMemoryButton(new Button(generateTextPage))
     , generateTextNewChatButton(new Button(generateTextPage))
     , generateTextInsertResponseButton(new Button(generateTextPage))
     , generateTextButton(new Button(generateTextPage))
@@ -716,6 +731,26 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
 
         generateTextPage->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         generateTextPromptHintLabel->hide();
+        auto continuityItem = new QStandardItem("Story continuity (current)");
+        continuityItem->setData(kDefaultStoryAssistantSkill, Qt::UserRole);
+        continuityItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        generateTextStoryMethodModel->appendRow(continuityItem);
+        auto ericEdsonItem = new QStandardItem("Eric Edson method");
+        ericEdsonItem->setData(kEricEdsonStorySkill, Qt::UserRole);
+        ericEdsonItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        generateTextStoryMethodModel->appendRow(ericEdsonItem);
+        generateTextStoryMethod->setModel(generateTextStoryMethodModel);
+        generateTextStoryMethod->setPopupMaxItems(2);
+        const auto savedStorySkill
+            = QSettings().value(kStoryAssistantSkillSettingsKey,
+                                kDefaultStoryAssistantSkill).toString();
+        const auto selectedStorySkillRow = savedStorySkill == kEricEdsonStorySkill ? 1 : 0;
+        generateTextStoryMethod->setCurrentIndex(
+            generateTextStoryMethodModel->index(selectedStorySkillRow, 0));
+        generateTextWritersRoom->setChecked(
+            QSettings().value(kWritersRoomSettingsKey, false).toBool());
+        generateTextWritersRoom->setToolTip(
+            "Offer a short story note after meaningful screenplay changes and a quiet period.");
         generateTextEmptyHintLabel->setAlignment(Qt::AlignCenter);
         generateTextPromptText->setEnterMakesNewLine(false);
         generateTextPromptText->setTrailingIcon(u8"\U000F048A");
@@ -744,6 +779,10 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         generateTextInsertResponseButton->hide();
         generationStatusLabel->hide();
         generationStatusLabel->setTextColor(Ui::DesignSystem::color().accent());
+        generateTextHistoryButton->setFlat(true);
+        generateTextHistoryButton->hide();
+        generateTextMemoryButton->setFlat(true);
+        generateTextMemoryButton->hide();
         generateTextNewChatButton->setFlat(true);
         generateTextInsertResponseButton->setFlat(true);
         generateTextButton->setContained(true);
@@ -752,6 +791,8 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         generateTextButton->setTextColor(Ui::DesignSystem::color().onAccent());
         generateTextInsertAtCursor->setChecked(true);
 
+        generateTextPage->titleLayout->addWidget(generateTextHistoryButton);
+        generateTextPage->titleLayout->addWidget(generateTextMemoryButton);
         generateTextPage->titleLayout->addWidget(generateTextNewChatButton);
         generateTextComposerLayout->setContentsMargins({});
         generateTextComposerLayout->setSpacing(Ui::DesignSystem::layout().px8());
@@ -765,6 +806,8 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
 
         auto layout = generateTextPage->contentsLayout;
         layout->addWidget(generateTextPromptHintLabel);
+        layout->addWidget(generateTextStoryMethod);
+        layout->addWidget(generateTextWritersRoom);
         layout->addWidget(generateTextEmptyHintLabel);
         layout->addWidget(generateTextMessagesContainer, 1);
         layout->addWidget(generationStatusLabel);
@@ -1142,6 +1185,23 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     };
     connect(d->generateTextPromptText, &TextField::textChanged, this,
             updateGenerateTextWordCounters);
+    connect(d->generateTextStoryMethod, &ComboBox::currentIndexChanged, this,
+            [](const QModelIndex& _index) {
+                const auto skillName = _index.data(Qt::UserRole).toString();
+                if (skillName == kDefaultStoryAssistantSkill
+                    || skillName == kEricEdsonStorySkill) {
+                    QSettings().setValue(kStoryAssistantSkillSettingsKey, skillName);
+                }
+            });
+    connect(d->generateTextWritersRoom, &CheckBox::checkedChanged, this,
+            [this](bool _enabled) {
+                QSettings().setValue(kWritersRoomSettingsKey, _enabled);
+                emit writersRoomModeChanged(_enabled);
+            });
+    connect(d->generateTextHistoryButton, &Button::clicked, this,
+            &AiAssistantView::editHistoryRequested);
+    connect(d->generateTextMemoryButton, &Button::clicked, this,
+            &AiAssistantView::storyMemoryRequested);
     connect(d->generateTextNewChatButton, &Button::clicked, this, [this] {
         if (d->generationInProgress) {
             return;
@@ -1475,6 +1535,16 @@ void AiAssistantView::setConversationStorageKey(const QString& _key)
     d->generateTextInsertResponseButton->setVisible(hasAssistantResponse);
 }
 
+void AiAssistantView::setEditHistoryAvailable(bool _available)
+{
+    d->generateTextHistoryButton->setVisible(_available);
+}
+
+void AiAssistantView::setStoryMemoryAvailable(bool _available)
+{
+    d->generateTextMemoryButton->setVisible(_available);
+}
+
 void AiAssistantView::setGenerationInProgress(bool _inProgress)
 {
     if (d->generationInProgress == _inProgress) {
@@ -1483,6 +1553,9 @@ void AiAssistantView::setGenerationInProgress(bool _inProgress)
 
     d->generationInProgress = _inProgress;
     d->generateTextPromptText->setEnabled(!_inProgress);
+    d->generateTextStoryMethod->setEnabled(!_inProgress);
+    d->generateTextHistoryButton->setEnabled(!_inProgress);
+    d->generateTextMemoryButton->setEnabled(!_inProgress);
     d->generateTextNewChatButton->setEnabled(!_inProgress);
     d->generateTextInsertResponseButton->setEnabled(!_inProgress);
     if (_inProgress) {
@@ -1513,6 +1586,11 @@ void AiAssistantView::setGenerationStatus(const QString& _status)
     const auto seconds = d->generationElapsed.elapsed() / 1000;
     d->generationStatusLabel->setText(
         tr("●  %1  ·  %2s").arg(d->generationStatus).arg(seconds));
+}
+
+bool AiAssistantView::isWritersRoomEnabled() const
+{
+    return d->generateTextWritersRoom->isChecked();
 }
 
 void AiAssistantView::appendAssistantMessage(const QString& _text)
@@ -1852,6 +1930,12 @@ void AiAssistantView::updateTranslations()
     d->generateScriptPage->titleLabel->setText(tr("Generate script"));
     d->generateScriptButton->setText(tr("Generate"));
     d->generateTextPage->titleLabel->setText(tr("Story Assistant"));
+    d->generateTextStoryMethod->setLabel(tr("Story method"));
+    d->generateTextStoryMethodModel->item(0)->setText(tr("Story continuity (current)"));
+    d->generateTextStoryMethodModel->item(1)->setText(tr("Eric Edson method"));
+    d->generateTextWritersRoom->setText(tr("Writer's Room suggestions"));
+    d->generateTextWritersRoom->setToolTip(
+        tr("Offer a short story note after meaningful screenplay changes and a quiet period."));
     d->generateTextEmptyHintLabel->setText(
         tr("Ask about your story, develop ideas, or select a passage and request a rewrite."));
     d->generateTextPromptText->setLabel(tr("Message"));
@@ -1862,6 +1946,8 @@ void AiAssistantView::updateTranslations()
     d->generateTextInsertAtBegin->setText(tr("at the beginning of the document"));
     d->generateTextInsertAtCursor->setText(tr("at the cursor position"));
     d->generateTextInsertAtEnd->setText(tr("at the end of the document"));
+    d->generateTextHistoryButton->setText(tr("History"));
+    d->generateTextMemoryButton->setText(tr("Memory"));
     d->generateTextNewChatButton->setText(tr("New chat"));
     d->generateTextInsertResponseButton->setText(tr("Insert response"));
     d->generateTextButton->setText(d->generationInProgress ? tr("Stop") : tr("Send"));
@@ -2009,6 +2095,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->generateNovelHintLabel,
              d->generateScriptHintLabel,
              d->generateTextPromptHintLabel,
+             d->generateTextWritersRoom,
              d->generateTextInsertLabel,
              d->generateTextInsertAtBegin,
              d->generateTextInsertAtCursor,
@@ -2063,6 +2150,14 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->generateTextPromptText->setBackgroundColor(
         ColorHelper::nearby(DesignSystem::color().primary()));
     d->generateTextPromptText->setTextColor(DesignSystem::color().onPrimary());
+    d->generateTextStoryMethod->setBackgroundColor(
+        ColorHelper::nearby(DesignSystem::color().primary()));
+    d->generateTextStoryMethod->setTextColor(DesignSystem::color().onPrimary());
+    d->generateTextStoryMethod->setPopupBackgroundColor(DesignSystem::color().surface());
+    d->generateTextHistoryButton->setBackgroundColor(DesignSystem::color().primary());
+    d->generateTextHistoryButton->setTextColor(DesignSystem::color().accent());
+    d->generateTextMemoryButton->setBackgroundColor(DesignSystem::color().primary());
+    d->generateTextMemoryButton->setTextColor(DesignSystem::color().accent());
     d->generateTextNewChatButton->setBackgroundColor(DesignSystem::color().primary());
     d->generateTextNewChatButton->setTextColor(DesignSystem::color().accent());
     d->generateTextInsertResponseButton->setBackgroundColor(DesignSystem::color().primary());

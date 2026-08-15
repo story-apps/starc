@@ -49,7 +49,15 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    /**
+     * @brief Keep selectable assistant message text aligned with the painted bubbles
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
+    void updateAssistantTextLabels();
+
     class Implementation;
     QScopedPointer<Implementation> d;
 };

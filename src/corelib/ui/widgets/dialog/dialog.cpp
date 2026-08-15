@@ -6,7 +6,10 @@
 #include <utils/helpers/ui_helper.h>
 
 #include <QHBoxLayout>
-#include <QScrollArea>
+#include <QFontDatabase>
+#include <QPlainTextEdit>
+#include <QTextBlock>
+#include <QTextEdit>
 #include <QVBoxLayout>
 
 namespace {
@@ -18,9 +21,11 @@ class Dialog::Implementation
 {
 public:
     Implementation(QWidget* _parent);
+    void applyDiffHighlighting();
 
     Body1Label* supportingText;
-    QScrollArea* supportingTextScrollArea = nullptr;
+    QPlainTextEdit* supportingTextEdit = nullptr;
+    bool diffHighlightingEnabled = false;
     QHBoxLayout* buttonsSideBySideLayout = nullptr;
     QVBoxLayout* buttonsStackedLayout = nullptr;
     QVector<Button*> buttons;
@@ -52,24 +57,65 @@ Dialog::Dialog(QWidget* _parent)
 
 Dialog::~Dialog() = default;
 
+void Dialog::Implementation::applyDiffHighlighting()
+{
+    if (supportingTextEdit == nullptr || !diffHighlightingEnabled) {
+        return;
+    }
+
+    auto diffFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    diffFont.setPointSizeF(Ui::DesignSystem::font().body1().pointSizeF());
+    supportingTextEdit->setFont(diffFont);
+
+    QColor additionColor = Ui::DesignSystem::color().success();
+    QColor removalColor = Ui::DesignSystem::color().error();
+    additionColor.setAlpha(45);
+    removalColor.setAlpha(45);
+    QList<QTextEdit::ExtraSelection> selections;
+    for (auto block = supportingTextEdit->document()->begin(); block.isValid();
+         block = block.next()) {
+        const auto text = block.text();
+        if (!text.startsWith("+ ") && !text.startsWith(QString::fromUtf8("− "))
+            && !text.startsWith("- ")) {
+            continue;
+        }
+        QTextEdit::ExtraSelection selection;
+        selection.cursor = QTextCursor(block);
+        selection.cursor.select(QTextCursor::BlockUnderCursor);
+        selection.format.setBackground(text.startsWith("+ ") ? additionColor : removalColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selections.append(selection);
+    }
+    supportingTextEdit->setExtraSelections(selections);
+}
+
 void Dialog::enableSupportingTextScrolling()
 {
-    if (d->supportingTextScrollArea != nullptr) {
+    if (d->supportingTextEdit != nullptr) {
         return;
     }
 
     contentsLayout()->removeWidget(d->supportingText);
-    d->supportingTextScrollArea = UiHelper::createScrollArea(this);
-    d->supportingTextScrollArea->setFocusPolicy(Qt::StrongFocus);
-    d->supportingTextScrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
-    d->supportingTextScrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->supportingText->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    auto scrollContentLayout
-        = qobject_cast<QVBoxLayout*>(d->supportingTextScrollArea->widget()->layout());
-    Q_ASSERT(scrollContentLayout);
-    scrollContentLayout->addWidget(d->supportingText);
-    scrollContentLayout->addStretch();
-    contentsLayout()->addWidget(d->supportingTextScrollArea, 0, 0);
+    d->supportingText->hide();
+
+    d->supportingTextEdit = new QPlainTextEdit(this);
+    d->supportingTextEdit->setReadOnly(true);
+    d->supportingTextEdit->setUndoRedoEnabled(false);
+    d->supportingTextEdit->setFrameShape(QFrame::NoFrame);
+    d->supportingTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+    d->supportingTextEdit->setFocusPolicy(Qt::StrongFocus);
+    d->supportingTextEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->supportingTextEdit->setPlainText(d->supportingText->text());
+    UiHelper::setupScrolling(d->supportingTextEdit);
+    contentsLayout()->addWidget(d->supportingTextEdit, 0, 0);
+
+    designSystemChangeEvent(nullptr);
+}
+
+void Dialog::enableDiffHighlighting()
+{
+    d->diffHighlightingEnabled = true;
+    d->applyDiffHighlighting();
 }
 
 void Dialog::showDialog(const QString& _title, const QString& _supportingText,
@@ -79,6 +125,11 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
 
     setTitle(_title);
     d->supportingText->setText(_supportingText);
+    if (d->supportingTextEdit != nullptr) {
+        d->supportingTextEdit->setPlainText(_supportingText);
+        d->supportingTextEdit->moveCursor(QTextCursor::Start);
+        d->applyDiffHighlighting();
+    }
     if (_placeButtonsSideBySide) {
         contentsLayout()->removeItem(d->buttonsStackedLayout);
         d->buttonsStackedLayout->deleteLater();
@@ -115,8 +166,8 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
 
 QWidget* Dialog::focusedWidgetAfterShow() const
 {
-    return d->supportingTextScrollArea != nullptr
-        ? static_cast<QWidget*>(d->supportingTextScrollArea)
+    return d->supportingTextEdit != nullptr
+        ? static_cast<QWidget*>(d->supportingTextEdit)
         : static_cast<QWidget*>(d->supportingText);
 }
 
@@ -136,6 +187,19 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
             .toMargins());
     d->supportingText->setBackgroundColor(Qt::transparent);
     d->supportingText->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    if (d->supportingTextEdit != nullptr) {
+        d->supportingTextEdit->setFont(Ui::DesignSystem::font().body1());
+        auto palette = d->supportingTextEdit->palette();
+        palette.setColor(QPalette::Base, Qt::transparent);
+        palette.setColor(QPalette::Text, Ui::DesignSystem::color().onBackground());
+        palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().accent());
+        palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onAccent());
+        d->supportingTextEdit->setPalette(palette);
+        d->supportingTextEdit->document()->setDocumentMargin(
+            Ui::DesignSystem::layout().px24());
+        d->applyDiffHighlighting();
+    }
 
     for (auto button : std::as_const(d->buttons)) {
         UiHelper::ButtonRole buttonRole = UiHelper::DialogDefault;
