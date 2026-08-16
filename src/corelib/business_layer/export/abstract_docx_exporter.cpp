@@ -71,8 +71,8 @@ public:
     /**
      * @brief Сформировать строку DOCX-стиля из стиля блока
      */
-    QString docxBlockStyle(const TextBlockStyle& _style, const QString& _defaultFontFamily,
-                           bool _onHalfPage = false) const;
+    QString docxBlockStyle(const TextTemplate& _template, const TextBlockStyle& _style,
+                           const QString& _defaultFontFamily, bool _onHalfPage = false) const;
 
     /**
      * @brief Является ли заданный формат открывающим комментарий
@@ -158,7 +158,8 @@ QString AbstractDocxExporter::Implementation::docxAlignment(Qt::Alignment _align
     return alignment;
 }
 
-QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextBlockStyle& _style,
+QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextTemplate& _template,
+                                                             const TextBlockStyle& _style,
                                                              const QString& _defaultFontFamily,
                                                              bool _onHalfPage) const
 {
@@ -214,9 +215,14 @@ QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextBlockStyl
     //
     // ... интервалы
     //
-    blockStyle.append(QString("<w:spacing w:before=\"%1\" w:after=\"%2\" ")
-                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).topMargin(), false))
-                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).bottomMargin(), false)));
+    if (_template.exportParagraphsWithMargins()) {
+        blockStyle.append(
+            QString("<w:spacing w:before=\"%1\" w:after=\"%2\" ")
+                .arg(pxToTwips(_style.blockFormat(_onHalfPage).topMargin(), false))
+                .arg(pxToTwips(_style.blockFormat(_onHalfPage).bottomMargin(), false)));
+    } else {
+        blockStyle.append("<w:spacing w:before=\"0\" w:after=\"0\" ");
+    }
     // ... межстрочный
     int lineSpacing = 240;
     QString lineSpacingType = "auto";
@@ -549,12 +555,24 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
             }
         }
 
+        const QString suffix = _cursor.inTable() ? "_splitted" : "";
+        const auto styleName = paragraphTypeName(correctedBlockType, suffix);
+
+        //
+        // ... при необходимости добавляем пустые строки после абзаца
+        //
+        if (!documentTemplate.exportParagraphsWithMargins()) {
+            for (int line = 0;
+                 line < documentTemplate.paragraphStyle(correctedBlockType).linesBefore(); ++line) {
+                documentXml.append(
+                    QString("<w:p><w:pPr><w:pStyle w:val=\"%1\"/><w:rPr/></w:pPr><w:t></w:t></w:p>")
+                        .arg(styleName));
+            }
+        }
         //
         // ... пишем стиль блока
         //
-        const QString suffix = _cursor.inTable() ? "_splitted" : "";
-        documentXml.append(QString("<w:p><w:pPr><w:pStyle w:val=\"%1\"/>")
-                               .arg(paragraphTypeName(correctedBlockType, suffix)));
+        documentXml.append(QString("<w:p><w:pPr><w:pStyle w:val=\"%1\"/>").arg(styleName));
         //
         // ... признак RTL и разворачиваем отступы
         //
@@ -792,6 +810,18 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         // ... закрываем абзац
         //
         documentXml.append("</w:p>");
+
+        //
+        // ... при необходимости добавляем пустые строки после абзаца
+        //
+        if (!documentTemplate.exportParagraphsWithMargins()) {
+            for (int line = 0;
+                 line < documentTemplate.paragraphStyle(correctedBlockType).linesAfter(); ++line) {
+                documentXml.append(
+                    QString("<w:p><w:pPr><w:pStyle w:val=\"%1\"/><w:rPr/></w:pPr><w:t></w:t></w:p>")
+                        .arg(styleName));
+            }
+        }
     }
 
     return documentXml;
@@ -942,9 +972,10 @@ void AbstractDocxExporter::Implementation::writeStyles(QtZipWriter* _zip,
         = documentTemplate.paragraphStyle(TextParagraphType::Description).font().family();
     for (const auto& paragraphType : q->paragraphTypes()) {
         const auto& blockStyle = documentTemplate.paragraphStyle(paragraphType);
-        styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily));
+        styleXml.append(docxBlockStyle(documentTemplate, blockStyle, defaultFontFamily));
         const auto onHalfPage = true;
-        styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily, onHalfPage));
+        styleXml.append(
+            docxBlockStyle(documentTemplate, blockStyle, defaultFontFamily, onHalfPage));
     }
 
     styleXml.append("</w:styles>");

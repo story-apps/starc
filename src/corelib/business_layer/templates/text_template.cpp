@@ -832,6 +832,11 @@ public:
     bool placeDialoguesInTable = false;
 
     /**
+     * @brief Нобходимо ли экспортировать абзацы в ворд с пустыми строками вместо отступов
+     */
+    bool exportingParagraphsWithMargins = true;
+
+    /**
      * @brief Шаблон-компаньён, используемый для титульной страницы
      */
     QScopedPointer<TextTemplate> titlePageTemplate;
@@ -1051,6 +1056,7 @@ TextTemplate::TextTemplate(const TextTemplate& _other)
     d->isFirstPageNumberVisible = _other.d->isFirstPageNumberVisible;
     d->leftHalfOfPageWidthPercents = _other.d->leftHalfOfPageWidthPercents;
     d->placeDialoguesInTable = _other.d->placeDialoguesInTable;
+    d->exportingParagraphsWithMargins = _other.d->exportingParagraphsWithMargins;
     d->titlePage = _other.d->titlePage;
     d->paragraphsStyles = _other.d->paragraphsStyles;
 }
@@ -1068,6 +1074,7 @@ TextTemplate& TextTemplate::operator=(const TextTemplate& _other)
         d->isFirstPageNumberVisible = _other.d->isFirstPageNumberVisible;
         d->leftHalfOfPageWidthPercents = _other.d->leftHalfOfPageWidthPercents;
         d->placeDialoguesInTable = _other.d->placeDialoguesInTable;
+        d->exportingParagraphsWithMargins = _other.d->exportingParagraphsWithMargins;
         d->titlePage = _other.d->titlePage;
         d->paragraphsStyles = _other.d->paragraphsStyles;
     }
@@ -1108,6 +1115,10 @@ void TextTemplate::load(const QString& _template)
     d->leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
     d->placeDialoguesInTable
         = templateAttributes.value("place_dialogues_in_table").toString() == "true";
+    if (templateAttributes.hasAttribute("export_paragraphs_with_margins")) {
+        d->exportingParagraphsWithMargins
+            = templateAttributes.value("export_paragraphs_with_margins").toString() == "true";
+    }
 
     //
     // Считываем титульную страницу
@@ -1226,6 +1237,8 @@ QString TextTemplate::save() const
     writer.writeAttribute("is_first_page_number_visible", ::toString(d->isFirstPageNumberVisible));
     writer.writeAttribute("left_half_of_page_width", ::toString(d->leftHalfOfPageWidthPercents));
     writer.writeAttribute("place_dialogues_in_table", ::toString(d->placeDialoguesInTable));
+    writer.writeAttribute("export_paragraphs_with_margins",
+                          ::toString(d->exportingParagraphsWithMargins));
     writer.writeStartElement("titlepage");
     writer.writeCharacters(""); // это нужно, чтобы корректно записался открывающий тэг титула
     writer.device()->write(d->titlePage.toUtf8());
@@ -1396,6 +1409,11 @@ qreal TextTemplate::pageSplitterWidth() const
 bool TextTemplate::canMergeParagraph() const
 {
     return true;
+}
+
+bool TextTemplate::exportParagraphsWithMargins() const
+{
+    return d->exportingParagraphsWithMargins;
 }
 
 TextParagraphType TextTemplate::defaultParagraphType() const
