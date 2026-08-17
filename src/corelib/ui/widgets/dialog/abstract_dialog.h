@@ -52,6 +52,12 @@ public:
      */
     void setRejectButton(Button* _button);
 
+    /**
+     * @brief Configure whether incidental dismissal gestures may reject the dialog
+     */
+    void setRejectOnEscape(bool _enabled);
+    void setDismissOnOutsideClick(bool _enabled);
+
 protected:
     /**
      * @brief Получить текст заголовка окна

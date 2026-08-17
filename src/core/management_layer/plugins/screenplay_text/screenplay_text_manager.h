@@ -79,6 +79,8 @@ signals:
     void generateNovelRequested(const QVector<QString>& _scenes, int _wordsRequired);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
+    void cancelAssistantRequested();
+    void characterMergeRollbackRequested(const QString& _transactionId);
 
     /**
      * @brief Пользователь хочет докупить кредитов
@@ -102,6 +104,9 @@ private:
      * @brief Установить курсор во всех редакторах в заданный индекс
      */
     Q_SLOT void setCurrentModelIndex(const QModelIndex& _index);
+
+    Q_SLOT void handleCharacterMergeRollbackFinished(const QString& _transactionId, bool _success,
+                                                      const QString& _message);
 
 private:
     class Implementation;

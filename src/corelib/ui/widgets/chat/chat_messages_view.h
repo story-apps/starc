@@ -28,6 +28,11 @@ public:
     void setMessages(const QVector<ChatMessage>& _messages);
 
     /**
+     * @brief Use the cleaner, role-focused layout intended for the story assistant
+     */
+    void setAssistantStyle(bool _enabled);
+
+    /**
      * @brief Получить необходимую высоту в зависимости от ширины
      */
     int heightForWidth(int _width) const override;
@@ -44,7 +49,15 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    /**
+     * @brief Keep selectable assistant message text aligned with the painted bubbles
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
+    void updateAssistantTextLabels();
+
     class Implementation;
     QScopedPointer<Implementation> d;
 };

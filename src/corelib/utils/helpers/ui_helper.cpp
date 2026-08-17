@@ -120,6 +120,11 @@ void UiHelper::setFocusPolicyRecursively(QWidget* _widget, Qt::FocusPolicy _poli
     }
 }
 
+QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout)
+{
+    return createScrollArea(_parent, _withGridLayout, false);
+}
+
 QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout,
                                         bool _withHorizontalScroll)
 {

@@ -144,7 +144,7 @@ public:
 signals:
     /**
      * @brief Был нажат энтер
-     * @note Сигнал срабатывает только в случае, когда @b setEnterMakesNewLine задан в @b true
+     * @note The signal fires when Enter is configured to submit; Shift+Enter remains a new line
      */
     void enterPressed();
 

@@ -15,6 +15,8 @@
 
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
+#else
+#include "content/codex/codex_service_manager.h"
 #endif
 
 // #define PRINT_DOCUMENT_HISTORY
@@ -389,6 +391,8 @@ public:
     QScopedPointer<NotificationsManager> notificationsManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
+#else
+    QScopedPointer<CodexServiceManager> codexServiceManager;
 #endif
 
     /**
@@ -432,6 +436,8 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , notificationsManager(new NotificationsManager)
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
+#else
+    , codexServiceManager(new CodexServiceManager)
 #endif
 {
     initDockMenu();
@@ -442,6 +448,9 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
 
 #ifdef CLOUD_SERVICE_MANAGER
     projectManager->setBlockedDocumentTypes(cloudServiceManager->blockedDocumentTypes());
+#else
+    // Local Codex uses the user's own plan, so STARC's cloud-credit gate is not applicable.
+    projectManager->setAvailableCredits(1000000);
 #endif
 
     settingsManager->setThemeSetupView(applicationView->themeSetupView());
@@ -468,6 +477,8 @@ ApplicationManager::Implementation::~Implementation()
              writingSessionManager.data(),
 #ifdef CLOUD_SERVICE_MANAGER
              cloudServiceManager.data(),
+#else
+             codexServiceManager.data(),
 #endif
          }) {
         object->disconnect();
@@ -3908,6 +3919,118 @@ void ApplicationManager::initConnections()
             d->projectManager.data(), &ProjectManager::setGeneratedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::imageGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedImage);
+#endif
+
+#ifndef CLOUD_SERVICE_MANAGER
+    //
+    // Local Codex AI service. Results still flow through ProjectManager and the
+    // active editor, preserving STARC's normal undo/redo and insertion behavior.
+    //
+    connect(d->projectManager.data(), &ProjectManager::rephraseTextRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiRephraseText);
+    connect(d->projectManager.data(), &ProjectManager::expandTextRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiExpandText);
+    connect(d->projectManager.data(), &ProjectManager::shortenTextRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiShortenText);
+    connect(d->projectManager.data(), &ProjectManager::insertTextRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiInsertText);
+    connect(d->projectManager.data(), &ProjectManager::summarizeTextRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiSummarizeText);
+    connect(d->projectManager.data(), &ProjectManager::translateTextRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiTranslateText);
+    connect(d->projectManager.data(), &ProjectManager::translateDocumentRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiTranslateDocument);
+    connect(d->projectManager.data(), &ProjectManager::generateSynopsisRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiGenerateSynopsis);
+    connect(d->projectManager.data(), &ProjectManager::generateNovelRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiGenerateNovel);
+    connect(d->projectManager.data(), &ProjectManager::generateScriptRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiGenerateScript);
+    connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::aiGenerateText);
+    connect(d->projectManager.data(), &ProjectManager::cancelAssistantRequested,
+            d->codexServiceManager.data(), &CodexServiceManager::cancelCurrentTask);
+
+    const QLatin1String codexTaskKey("codex-assistant-task");
+    connect(d->codexServiceManager.data(), &CodexServiceManager::busyChanged, this,
+            [this, codexTaskKey](bool _busy) {
+                d->projectManager->setAiAssistantInProgress(_busy);
+                if (_busy) {
+                    TaskBar::addTask(codexTaskKey);
+                    TaskBar::setTaskTitle(codexTaskKey, tr("Codex: Preparing request…"));
+                    TaskBar::setTaskIndeterminate(codexTaskKey, true);
+                } else if (!TaskBar::isTaskFinished(codexTaskKey)) {
+                    TaskBar::finishTask(codexTaskKey);
+                }
+            });
+    connect(d->codexServiceManager.data(), &CodexServiceManager::activityChanged, this,
+            [this, codexTaskKey](const QString& _activity) {
+                d->projectManager->setAiAssistantStatus(_activity);
+                if (!_activity.isEmpty() && !TaskBar::isTaskFinished(codexTaskKey)) {
+                    TaskBar::setTaskTitle(codexTaskKey, tr("Codex: %1").arg(_activity));
+                }
+            });
+
+    connect(d->codexServiceManager.data(), &CodexServiceManager::textRephrased,
+            d->projectManager.data(), &ProjectManager::setRephrasedText);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::textExpanded,
+            d->projectManager.data(), &ProjectManager::setExpandedText);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::textShortened,
+            d->projectManager.data(), &ProjectManager::setShortenedText);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::textInserted,
+            d->projectManager.data(), &ProjectManager::setInsertedText);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::textSummarizeed,
+            d->projectManager.data(), &ProjectManager::setSummarizeedText);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::textTranslated,
+            d->projectManager.data(), &ProjectManager::setTranslatedText);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::documentTranslated,
+            d->projectManager.data(), &ProjectManager::setTranslatedDocument);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::synopsisGenerated,
+            d->projectManager.data(), &ProjectManager::setGeneratedSynopsis);
+    connect(d->codexServiceManager.data(), &CodexServiceManager::novelGenerated, this,
+            [this](const QString& _text) {
+                const auto novelFilePath
+                    = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+                    + QDir::separator() + tr("Novel") + ".md";
+                QFile file(novelFilePath);
+                if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                    file.write(_text.toUtf8());
+                    file.close();
+                    d->importManager->importNovel(novelFilePath);
+                }
+            });
+    connect(d->codexServiceManager.data(), &CodexServiceManager::scriptGenerated, this,
+            [this](const QString& _text) {
+                const auto scriptFilePath
+                    = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+                    + QDir::separator() + tr("Screenplay") + ".fountain";
+                QFile file(scriptFilePath);
+                if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                    file.write(_text.toUtf8());
+                    file.close();
+                    const bool importDocuments = false;
+                    d->importManager->importScreenplay(scriptFilePath, importDocuments);
+                }
+            });
+    connect(d->codexServiceManager.data(), &CodexServiceManager::textGenerated,
+            d->projectManager.data(), &ProjectManager::setGeneratedText);
+
+    auto showCodexMessage = [this](const QString& _title, const QString& _message) {
+        auto dialog = new Dialog(d->applicationView);
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->showDialog(_title, _message,
+                           { { 0, tr("OK"), Dialog::AcceptButton } });
+        connect(dialog, &Dialog::finished, dialog, [dialog] { dialog->hideDialog(); });
+        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    };
+    connect(d->codexServiceManager.data(), &CodexServiceManager::storyboardGenerated, this,
+            [showCodexMessage](const QString& _summary) {
+                showCodexMessage(tr("Codex storyboard complete"), _summary);
+            });
+    connect(d->codexServiceManager.data(), &CodexServiceManager::errorOccurred, this,
+            [showCodexMessage](const QString& _message) {
+                showCodexMessage(tr("Codex error"), _message);
+            });
 #endif
 }
 

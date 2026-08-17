@@ -63,6 +63,11 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QHBoxLayout>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QSettings>
+#include <QScopedValueRollback>
 #include <QSet>
 #include <QShortcut>
 #include <QTimer>
@@ -77,6 +82,34 @@ namespace {
 const QLatin1String kCurrentViewMimeTypeKey("view-mime-type");
 const QLatin1String kCurrentDraftKey("current-draft");
 constexpr int kCollaboratorsUpdateTimeoutMs = 60 * 1000;
+
+QString characterMergeLatestTransactionKey(const QUuid& _sourceId)
+{
+    return QString("codex/character-merge/latest/%1")
+        .arg(_sourceId.toString(QUuid::WithoutBraces));
+}
+
+QString characterMergeTransactionKey(const QString& _transactionId)
+{
+    return QString("codex/character-merge/transactions/%1").arg(_transactionId);
+}
+
+QJsonObject loadCharacterMergeTransaction(const QString& _transactionId)
+{
+    const auto stored
+        = QSettings().value(characterMergeTransactionKey(_transactionId)).toByteArray();
+    if (stored.isEmpty()) return {};
+    auto json = qUncompress(stored);
+    if (json.isEmpty()) json = stored;
+    return QJsonDocument::fromJson(json).object();
+}
+
+void saveCharacterMergeTransaction(const QString& _transactionId, const QJsonObject& _transaction)
+{
+    QSettings().setValue(
+        characterMergeTransactionKey(_transactionId),
+        qCompress(QJsonDocument(_transaction).toJson(QJsonDocument::Compact), 9));
+}
 
 /**
  * @brief Является ли заданный элемент текстовым
@@ -437,6 +470,11 @@ public:
      * @brief Фасад доступа к моделям проекта
      */
     ProjectModelsFacade modelsFacade;
+
+    /**
+     * @brief Prevent character document restoration from triggering native cue renames.
+     */
+    bool characterMergeRollbackInProgress = false;
 
     /**
      * @brief Фабрика для создания плагинов-редакторов к моделям
@@ -2971,8 +3009,76 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(&d->modelsFacade, &ProjectModelsFacade::characterNameChanged, this,
             [this](BusinessLayer::AbstractModel* _character, const QString& _newName,
                    const QString& _oldName) {
-                if (_character == nullptr || _oldName.isEmpty()) {
+                if (_character == nullptr || _oldName.isEmpty()
+                    || d->characterMergeRollbackInProgress) {
                     return;
+                }
+
+                const auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+                    d->modelsFacade.modelFor(Domain::DocumentObjectType::Characters));
+                const auto sameNameCharacters = charactersModel != nullptr
+                    ? charactersModel->characters(_newName)
+                    : QVector<BusinessLayer::CharacterModel*>();
+                const bool isDuplicateMerge = sameNameCharacters.size() > 1;
+                QString mergeTransactionId;
+                if (isDuplicateMerge && _character->document() != nullptr) {
+                    BusinessLayer::CharacterModel* survivor = nullptr;
+                    for (auto candidate : sameNameCharacters) {
+                        if (candidate != _character) {
+                            survivor = candidate;
+                            break;
+                        }
+                    }
+                    const auto sourceItem = d->projectStructureModel->itemForUuid(
+                        _character->document()->uuid());
+                    if (survivor != nullptr && survivor->document() != nullptr
+                        && sourceItem != nullptr) {
+                        mergeTransactionId
+                            = QUuid::createUuid().toString(QUuid::WithoutBraces);
+                        QJsonArray documents;
+                        const QVector<Domain::DocumentObjectType> snapshotTypes{
+                            Domain::DocumentObjectType::Character,
+                            Domain::DocumentObjectType::ScreenplayText,
+                            Domain::DocumentObjectType::ComicBookText,
+                            Domain::DocumentObjectType::AudioplayText,
+                            Domain::DocumentObjectType::StageplayText,
+                        };
+                        for (const auto type : snapshotTypes) {
+                            const auto models = d->modelsFacade.modelsFor(type);
+                            for (auto model : models) {
+                                if (model == nullptr || model->document() == nullptr) continue;
+                                // The source rename signal arrives before its debounced document
+                                // write. Its stored content is therefore the exact original card.
+                                if (model != _character) model->saveChanges();
+                                documents.append(QJsonObject{
+                                    { "uuid", model->document()->uuid().toString(
+                                                  QUuid::WithoutBraces) },
+                                    { "content", QString::fromLatin1(
+                                                     model->document()->content().toBase64()) },
+                                });
+                            }
+                        }
+                        QJsonObject transaction{
+                            { "version", 1 },
+                            { "status", "prepared" },
+                            { "createdAt", QDateTime::currentDateTimeUtc().toString(
+                                               Qt::ISODateWithMs) },
+                            { "projectPath", d->projectPath },
+                            { "sourceId", _character->document()->uuid().toString(
+                                                QUuid::WithoutBraces) },
+                            { "sourceName", _oldName },
+                            { "survivorId", survivor->document()->uuid().toString(
+                                                  QUuid::WithoutBraces) },
+                            { "survivorName", _newName },
+                            { "sourceIndex",
+                              d->projectStructureModel->indexForItem(sourceItem).row() },
+                            { "documents", documents },
+                        };
+                        saveCharacterMergeTransaction(mergeTransactionId, transaction);
+                        QSettings().setValue(
+                            characterMergeLatestTransactionKey(_character->document()->uuid()),
+                            mergeTransactionId);
+                    }
                 }
 
                 //
@@ -3008,11 +3114,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
 
                 //
-                // Если персонаж переименовывается в другого существующего, то удалим дубль
+                // Если персонаж переименовывается в другого существующего, сохраняем дубль в
+                // корзине. Это позволяет безопасному объединению переназначить ссылки в текстах,
+                // не уничтожая исходную карточку персонажа безвозвратно.
                 //
-                const auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
-                    d->modelsFacade.modelFor(Domain::DocumentObjectType::Characters));
-                if (charactersModel->characters(_newName).size() > 1) {
+                if (isDuplicateMerge) {
                     auto document = _character->document();
                     if (document == nullptr) {
                         return;
@@ -3023,11 +3129,30 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     //
                     const auto characterToSelectName = _newName;
                     const auto item = d->projectStructureModel->itemForUuid(document->uuid());
-                    charactersModel->removeCharacterModel(
-                        qobject_cast<BusinessLayer::CharacterModel*>(_character));
-                    d->modelsFacade.removeModelFor(document);
-                    DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-                    d->projectStructureModel->removeItem(item);
+                    d->projectStructureModel->moveItemToRecycleBin(item);
+                    d->projectStructureModel->setItemName(item, _oldName);
+
+                    if (!mergeTransactionId.isEmpty()) {
+                        auto transaction = loadCharacterMergeTransaction(mergeTransactionId);
+                        for (const auto value : transaction.value("documents").toArray()) {
+                            const auto snapshot = value.toObject();
+                            if (snapshot.value("uuid").toString()
+                                != document->uuid().toString(QUuid::WithoutBraces)) {
+                                continue;
+                            }
+                            const auto originalContent = QByteArray::fromBase64(
+                                snapshot.value("content").toString().toLatin1());
+                            QScopedValueRollback rollbackGuard(
+                                d->characterMergeRollbackInProgress, true);
+                            _character->mergeDocumentChanges(originalContent, {});
+                            break;
+                        }
+                        transaction.insert("status", "committed");
+                        transaction.insert("committedAt",
+                                           QDateTime::currentDateTimeUtc().toString(
+                                               Qt::ISODateWithMs));
+                        saveCharacterMergeTransaction(mergeTransactionId, transaction);
+                    }
 
                     if (!d->navigator->currentIndex().isValid()) {
                         const auto item = d->projectStructureModel->itemForUuid(
@@ -3865,6 +3990,112 @@ void ProjectManager::saveChanges()
     // Сохраняем все изменения документов
     //
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
+}
+
+void ProjectManager::rollbackCharacterMerge(const QString& _transactionId)
+{
+    auto transaction = loadCharacterMergeTransaction(_transactionId);
+    if (transaction.isEmpty()) {
+        emit characterMergeRollbackFinished(
+            _transactionId, false,
+            tr("STARC could not find the saved merge transaction. No documents were changed."));
+        return;
+    }
+    if (transaction.value("projectPath").toString() != d->projectPath) {
+        emit characterMergeRollbackFinished(
+            _transactionId, false,
+            tr("That merge belongs to a different project. No documents were changed."));
+        return;
+    }
+    if (transaction.value("status").toString() == "rolled_back") {
+        emit characterMergeRollbackFinished(
+            _transactionId, false, tr("That character merge has already been rolled back."));
+        return;
+    }
+    if (transaction.value("status").toString() != "committed") {
+        emit characterMergeRollbackFinished(
+            _transactionId, false,
+            tr("The saved merge transaction is incomplete. No documents were changed."));
+        return;
+    }
+
+    struct ModelSnapshot {
+        BusinessLayer::AbstractModel* model = nullptr;
+        QByteArray beforeRollback;
+        QByteArray preMerge;
+    };
+    QVector<ModelSnapshot> snapshots;
+    bool canRestore = true;
+    for (const auto value : transaction.value("documents").toArray()) {
+        const auto object = value.toObject();
+        auto model = d->modelsFacade.modelFor(QUuid(object.value("uuid").toString()));
+        const auto preMerge
+            = QByteArray::fromBase64(object.value("content").toString().toLatin1());
+        if (model == nullptr || model->document() == nullptr || preMerge.isEmpty()) {
+            canRestore = false;
+            break;
+        }
+        model->saveChanges();
+        snapshots.append({ model, model->document()->content(), preMerge });
+    }
+
+    const auto sourceId = QUuid(transaction.value("sourceId").toString());
+    auto sourceItem = d->projectStructureModel->itemForUuid(sourceId);
+    auto charactersItem
+        = d->projectStructureModel->itemForType(Domain::DocumentObjectType::Characters);
+    auto recycleBinItem
+        = d->projectStructureModel->itemForType(Domain::DocumentObjectType::RecycleBin);
+    if (!canRestore || sourceItem == nullptr || charactersItem == nullptr
+        || recycleBinItem == nullptr || sourceItem->parent() != recycleBinItem) {
+        emit characterMergeRollbackFinished(
+            _transactionId, false,
+            tr("The project no longer matches the saved merge transaction. Nothing was restored."));
+        return;
+    }
+
+    QScopedValueRollback rollbackGuard(d->characterMergeRollbackInProgress, true);
+    QVector<ModelSnapshot*> restoredSnapshots;
+    for (auto& snapshot : snapshots) {
+        if (!snapshot.model->mergeDocumentChanges(snapshot.preMerge, {})) {
+            canRestore = false;
+            break;
+        }
+        restoredSnapshots.append(&snapshot);
+    }
+
+    bool sourceRestored = false;
+    if (canRestore) {
+        const int sourceIndex = qBound(0, transaction.value("sourceIndex").toInt(),
+                                       charactersItem->childCount());
+        d->projectStructureModel->moveItem(sourceItem, charactersItem, sourceIndex);
+        sourceRestored = sourceItem->parent() == charactersItem;
+        canRestore = sourceRestored;
+    }
+
+    if (!canRestore) {
+        if (sourceRestored) {
+            d->projectStructureModel->moveItem(sourceItem, recycleBinItem);
+        }
+        for (auto snapshot : restoredSnapshots) {
+            snapshot->model->mergeDocumentChanges(snapshot->beforeRollback, {});
+        }
+        emit characterMergeRollbackFinished(
+            _transactionId, false,
+            tr("STARC could not restore every affected document, so it put all attempted "
+               "restorations back. The current merge remains unchanged."));
+        return;
+    }
+
+    transaction.insert("status", "rolled_back");
+    transaction.insert("rolledBackAt",
+                       QDateTime::currentDateTimeUtc().toString(Qt::ISODateWithMs));
+    saveCharacterMergeTransaction(_transactionId, transaction);
+    saveChanges();
+    emit characterMergeRollbackFinished(
+        _transactionId, true,
+        tr("Rolled back the complete character merge. The duplicate profile, survivor profile, "
+           "photos, relationships, and all affected script cues are back at their pre-merge "
+           "state."));
 }
 
 void ProjectManager::storeCharacter(const QString& _name, const QString& _content)
@@ -5305,6 +5536,22 @@ void ProjectManager::setGeneratedImage(const QPixmap& _image)
     }
 }
 
+void ProjectManager::setAiAssistantInProgress(bool _inProgress)
+{
+    auto view = d->activeDocumentView();
+    if (view != nullptr) {
+        view->setAiAssistantInProgress(_inProgress);
+    }
+}
+
+void ProjectManager::setAiAssistantStatus(const QString& _status)
+{
+    auto view = d->activeDocumentView();
+    if (view != nullptr) {
+        view->setAiAssistantStatus(_status);
+    }
+}
+
 QString ProjectManager::projectName() const
 {
     const auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
@@ -5719,6 +5966,25 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(generateTextRequested(QString, QString, QString)), this,
                     SIGNAL(generateTextRequested(QString, QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal(
+                "characterMergeRollbackRequested(QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(characterMergeRollbackRequested(QString)), this,
+                    SLOT(rollbackCharacterMerge(QString)), Qt::UniqueConnection);
+            if (documentManager->metaObject()->indexOfSlot(
+                    "handleCharacterMergeRollbackFinished(QString,bool,QString)")
+                != invalidSignalIndex) {
+                connect(this, SIGNAL(characterMergeRollbackFinished(QString, bool, QString)),
+                        documentManager,
+                        SLOT(handleCharacterMergeRollbackFinished(QString, bool, QString)),
+                        Qt::UniqueConnection);
+            }
+        }
+        if (documentManager->metaObject()->indexOfSignal("cancelAssistantRequested()")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(cancelAssistantRequested()), this,
+                    SIGNAL(cancelAssistantRequested()), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
                 "generateImageRequested(QString,QString,QString)")

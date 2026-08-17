@@ -102,6 +102,37 @@ public:
     void setGenerationPrompt(const QString& _prompt);
 
     /**
+     * @brief Load and persist this assistant's project-specific conversation
+     */
+    void setConversationStorageKey(const QString& _key);
+
+    /**
+     * @brief Show or hide screenplay-specific Codex edit history controls
+     */
+    void setEditHistoryAvailable(bool _available);
+
+    /**
+     * @brief Show or hide screenplay-specific structured story memory controls
+     */
+    void setStoryMemoryAvailable(bool _available);
+
+    /**
+     * @brief Update the visible state of a long-running local AI request
+     */
+    void setGenerationInProgress(bool _inProgress);
+    void setGenerationStatus(const QString& _status);
+
+    /**
+     * @brief Whether the opt-in background story collaborator is active
+     */
+    bool isWritersRoomEnabled() const;
+
+    /**
+     * @brief Add Codex's completed reply to the visible conversation
+     */
+    void appendAssistantMessage(const QString& _text);
+
+    /**
      * @brief Куда нужно вставлять сгенерированный текст
      */
     TextInsertPosition textInsertPosition() const;
@@ -173,6 +204,27 @@ signals:
      * @brief Пользователь хочет сгенерировать текст по запросу
      */
     void generateTextRequested(const QString& _text);
+    void generateChatTextRequested(const QString& _text, const QString& _conversationContext);
+
+    /**
+     * @brief Пользователь хочет остановить текущую генерацию
+     */
+    void cancelGenerationRequested();
+
+    /**
+     * @brief The writer enabled or disabled periodic, suggestion-only story reviews
+     */
+    void writersRoomModeChanged(bool _enabled);
+
+    /**
+     * @brief The writer wants to browse or restore approved Codex screenplay edits
+     */
+    void editHistoryRequested();
+
+    /**
+     * @brief The writer wants to inspect, refresh, or correct structured story memory
+     */
+    void storyMemoryRequested();
 
     /**
      * @brief Пользователь хочет сгенерировать параметры персонажа

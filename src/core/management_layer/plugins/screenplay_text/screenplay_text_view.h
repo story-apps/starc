@@ -43,6 +43,8 @@ public:
     void setTranslatedDocument(const QVector<QString>& _text) override;
     void setGeneratedSynopsis(const QString& _text) override;
     void setGeneratedText(const QString& _text) override;
+    void setAiAssistantInProgress(bool _inProgress) override;
+    void setAiAssistantStatus(const QString& _status) override;
     /** @} */
 
     /**
@@ -93,6 +95,22 @@ public:
     int verticalScroll() const;
     void setVerticalScroll(int _value);
 
+    /**
+     * @brief Capture a selected passage as the target of the next Codex edit
+     */
+    QString selectedTextForAssistant() const;
+    void captureAssistantRequestContext();
+    void captureAssistantSelection();
+    void captureAssistantInsertionPoint(bool _atBeginning = false, bool _atEnd = false);
+    void clearAssistantSelection();
+    void showAssistantNotice(const QString& _message);
+    void requestAssistantClearScreenplay();
+    void showAssistantEditHistory(int _entryOffset = 0);
+    void showAssistantStoryMemory();
+    void requestAssistantStoryMemoryRefresh();
+    void handleCharacterMergeRollbackFinished(const QString& _transactionId, bool _success,
+                                               const QString& _message);
+
 signals:
     /**
      * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)
@@ -134,7 +152,9 @@ signals:
     void translateDocumentRequested(const QString& _languageCode);
     void generateSynopsisRequested(int _maxWordsPerScene);
     void generateNovelRequested();
-    void generateTextRequested(const QString& _text);
+    void generateTextRequested(const QString& _text, const QString& _conversationContext);
+    void cancelAssistantRequested();
+    void characterMergeRollbackRequested(const QString& _transactionId);
 
     /**
      * @brief Пользователь хочет докупить кредитов
