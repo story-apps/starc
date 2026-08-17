@@ -2881,7 +2881,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             //
             // Для любого драфта, кроме сравнения, показываем опции редактирования и удаления
             //
-            if (_draftIndex == 0 || !item->drafts().at(realDraftIndex)->isComparison()) {
+            if (_draftIndex == 0
+                || (_draftIndex > 0 && !item->drafts().at(realDraftIndex)->isComparison())) {
                 auto editDraftAction = new QAction;
                 editDraftAction->setIconText(u8"\U000F090C");
                 editDraftAction->setText(tr("Edit"));
