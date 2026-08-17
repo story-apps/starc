@@ -5554,9 +5554,17 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         d->view.active->setDraftsVisible(false);
         return;
     }
+
+    //
+    // Для отправки на проверку, нужно, чтобы у проекта был задан соответствующий параметр
+    // и документ доступен пользователю для редактирования либо в рамках базового разрешения
+    // на весь проект, либо на конкретный документ
+    //
     Log::trace("Set project info");
-    const bool canBeSentForChecking
-        = d->isReviewEnabled && d->editingPermissions.contains(itemForShow->uuid());
+    const bool canBeSentForChecking = d->isReviewEnabled
+        && (d->editingMode == DocumentEditingMode::Edit
+            || d->editingPermissions.value(itemForShow->uuid(), DocumentEditingMode::Read)
+                == DocumentEditingMode::Edit);
     d->pluginsBuilder.setProjectInfo(d->isProjectRemote, d->isProjectOwner,
                                      d->allowGrantAccessToProject, canBeSentForChecking,
                                      d->projectComplianceRules);
