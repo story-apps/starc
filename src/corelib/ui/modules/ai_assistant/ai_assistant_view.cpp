@@ -904,7 +904,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                 d->translateLanguage->currentIndex().data(Qt::UserRole).toString());
         } else {
             auto dialog = new Dialog(topLevelWidget());
-            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
             dialog->showDialog({},
                                tr("Translation will be loaded in the current document and fully "
                                   "replaced content. Do you want to continue?"),

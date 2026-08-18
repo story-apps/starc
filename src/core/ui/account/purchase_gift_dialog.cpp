@@ -142,7 +142,7 @@ void PurchaseGiftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(DesignSystem::dialog().maximumWidth());
+    setContentFixedWidth(DesignSystem::dialog().normalWidth());
 
     d->content->setBackgroundColor(DesignSystem::color().background());
 

@@ -268,7 +268,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     //
                     if (!d->isUserAuthorized) {
                         auto dialog = new Dialog(d->view->topLevelWidget());
-                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
                         dialog->showDialog(
                             {}, tr("To move a project to the cloud, you should be authorized."),
                             { { 0, tr("Maybe later"), Dialog::RejectButton },
@@ -289,7 +289,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     //
                     else if (!d->canCreateCloudProject) {
                         auto dialog = new Dialog(d->view->topLevelWidget());
-                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
                         dialog->showDialog({},
                                            tr("To move a project to the cloud, you need to upgrade "
                                               "to the CREATOR version."),

@@ -227,7 +227,7 @@ void ImportManager::Implementation::showImportDialogFor(const QStringList& _path
                 + filesList(otherFiles));
         }
         auto dialog = new Dialog(topLevelWidget);
-        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
         dialog->showDialog(tr("File format not supported"), errorMessage,
                            { { 0, StandardDialog::generateOkTerm(), Dialog::RejectButton } });
         //

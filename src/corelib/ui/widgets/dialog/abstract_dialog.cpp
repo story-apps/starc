@@ -218,11 +218,21 @@ void AbstractDialog::hideDialog()
     QTimer::singleShot(d->opacityAnimation.duration(), this, &AbstractDialog::hide);
 }
 
+int AbstractDialog::contentMinimumWidth() const
+{
+    return d->content->minimumWidth();
+}
+
 void AbstractDialog::setContentMinimumWidth(int _width)
 {
     d->content->setMinimumWidth(_width);
     d->isContentMinimumWidthChanged = true;
     updateGeometry();
+}
+
+int AbstractDialog::contentMaximumWidth() const
+{
+    return d->content->maximumWidth();
 }
 
 void AbstractDialog::setContentMaximumWidth(int _width)
@@ -383,7 +393,7 @@ void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
     }
     if (!d->isContentMaximumWidthChanged) {
-        d->content->setMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().maximumWidth()));
+        d->content->setMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().normalWidth()));
     }
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());
     d->title->setBackgroundColor(Qt::transparent);

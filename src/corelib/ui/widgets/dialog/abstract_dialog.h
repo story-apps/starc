@@ -29,9 +29,11 @@ public:
     void hideDialog();
 
     /**
-     * @brief Настроить ширину контента диалога
+     * @brief Ширина контента диалога
      */
+    int contentMinimumWidth() const;
     void setContentMinimumWidth(int _width);
+    int contentMaximumWidth() const;
     void setContentMaximumWidth(int _width);
     void setContentFixedWidth(int _width);
 

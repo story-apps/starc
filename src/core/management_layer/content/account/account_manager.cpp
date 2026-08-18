@@ -594,7 +594,7 @@ bool AccountManager::tryProForFree()
     //
     if (freeOption.isValid()) {
         auto dialog = new Dialog(d->view->topLevelWidget());
-        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
         dialog->showDialog(
             tr("Try PRO version for free"),
             tr("You can try all the features of the PRO version during 30 days for free. After "
@@ -716,7 +716,7 @@ bool AccountManager::tryCreatorForFree()
     //
     if (freeOption.isValid()) {
         auto dialog = new Dialog(d->view->topLevelWidget());
-        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
         dialog->showDialog(
             tr("Try CREATOR version for free"),
             tr("You can try all the features of the CREATOR version during 30 days for free. After "

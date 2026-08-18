@@ -344,7 +344,7 @@ void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent
     AbstractDialog::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().background());
-    setContentMinimumWidth(DesignSystem::dialog().maximumWidth());
+    setContentMinimumWidth(DesignSystem::dialog().normalWidth());
     setContentMaximumWidth(parentWidget()->width() * 0.6);
 
     for (auto label : std::vector<Widget*>{

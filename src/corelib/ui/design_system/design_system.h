@@ -1074,6 +1074,11 @@ public:
         qreal minimumWidth() const;
 
         /**
+         * @brief Средняя ширина информационного диалога
+         */
+        qreal normalWidth() const;
+
+        /**
          * @brief Максимальная ширина информационного диалога
          */
         qreal maximumWidth() const;

@@ -31,7 +31,7 @@ QString StandardDialog::generateOkTerm()
 void StandardDialog::information(QWidget* _parent, const QString& _title, const QString& _text)
 {
     auto dialog = new Dialog(_parent);
-    dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+    dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
     dialog->showDialog(_title, _text, { { 0, generateOkTerm(), Dialog::AcceptButton } });
     QObject::connect(dialog, &Dialog::finished, dialog, &Dialog::hideDialog);
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);

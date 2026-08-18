@@ -312,10 +312,9 @@ ImportDialog::Implementation::Implementation(const QStringList& _importFilePaths
 
 void ImportDialog::Implementation::updateDialogWidth()
 {
-    q->setContentFixedWidth(
-        filesOptions.size() > 1
-            ? std::max(q->topLevelWidget()->width() * 0.5, DesignSystem::dialog().maximumWidth())
-            : DesignSystem::dialog().maximumWidth());
+    q->setContentFixedWidth(filesOptions.size() > 1 ? std::max(q->topLevelWidget()->width() * 0.5,
+                                                               DesignSystem::dialog().normalWidth())
+                                                    : DesignSystem::dialog().normalWidth());
 }
 
 BusinessLayer::ImportOptions ImportDialog::Implementation::currentOptions() const

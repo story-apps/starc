@@ -1414,7 +1414,7 @@ void ApplicationManager::Implementation::saveChanges()
             // ... то у нас случилась какая-то внутренняя ошибка базы данных
             //
             auto dialog = new Dialog(applicationView->topLevelWidget());
-            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
             dialog->showDialog(
                 tr("Saving error"),
                 tr("Changes can't be written. There is an internal database error: \"%1\" "
@@ -1950,7 +1950,7 @@ bool ApplicationManager::Implementation::tryLockProjectOnOpen(const QString& _pa
         // даём возможность форсировать открытие путём удаления протухшего файла
         //
         auto dialog = new Dialog(applicationView->topLevelWidget());
-        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().normalWidth());
         dialog->showDialog({},
                            tr("This file can't be open at this moment, because it is already open "
                               "in another copy of the application."),

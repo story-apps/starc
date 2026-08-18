@@ -217,7 +217,7 @@ void PurchaseDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(DesignSystem::dialog().maximumWidth());
+    setContentFixedWidth(DesignSystem::dialog().normalWidth());
 
     d->descriptionLabel->setBackgroundColor(DesignSystem::color().background());
     d->descriptionLabel->setTextColor(DesignSystem::color().onBackground());
