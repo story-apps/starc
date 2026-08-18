@@ -126,6 +126,21 @@ void ImagesGalleryModel::removePhoto(const QUuid& _photoUuid)
     }
 }
 
+void ImagesGalleryModel::setPhotosOrder(const QVector<QUuid>& _photoUuids)
+{
+    if (_photoUuids.isEmpty() || _photoUuids.size() != d->photos.size()) {
+        return;
+    }
+
+    QVector<Domain::DocumentImage> photosOrdered;
+    photosOrdered.resize(d->photos.size());
+    for (const auto& photo : std::as_const(d->photos)) {
+        photosOrdered[_photoUuids.indexOf(photo.uuid)] = photo;
+    }
+    d->photos = photosOrdered;
+    emit photosChanged(d->photos);
+}
+
 void ImagesGalleryModel::initImageWrapper()
 {
     connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
@@ -158,9 +173,11 @@ void ImagesGalleryModel::initDocument()
     if (!photosNode.isNull()) {
         auto photoNode = photosNode.firstChildElement(kPhotoKey);
         while (!photoNode.isNull()) {
-            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
-            if (!uuid.isNull()) {
-                d->photos.append({ uuid, imageWrapper()->load(uuid) });
+            if (const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+                !uuid.isNull()) {
+                if (const auto photo = imageWrapper()->load(uuid); !photo.isNull()) {
+                    d->photos.append({ uuid, photo });
+                }
             }
 
             photoNode = photoNode.nextSiblingElement();

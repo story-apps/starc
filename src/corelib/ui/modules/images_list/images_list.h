@@ -2,6 +2,8 @@
 
 #include <ui/widgets/widget/widget.h>
 
+#include <QUuid>
+
 namespace Domain {
 struct DocumentImage;
 }
@@ -37,6 +39,11 @@ public:
     void setImageSpacing(qreal _spacing);
 
     /**
+     * @brief Задать возможность менять порядок изображений перетаскиванием мышью
+     */
+    void setImagesReorderingEnabled(bool _enabled);
+
+    /**
      * @brief Задать список изображений
      */
     void setImages(const QVector<Domain::DocumentImage>& _images);
@@ -67,6 +74,11 @@ signals:
      * @brief Пользователь удалил заданное изображение
      */
     void imageRemoved(const QUuid& _imageUuid);
+
+    /**
+     * @brief Пользователь изменил порядок изображений
+     */
+    void imagesOrderChanged(const QVector<QUuid>& _imageUuids);
 
 protected:
     /**

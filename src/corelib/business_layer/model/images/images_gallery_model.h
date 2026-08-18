@@ -32,6 +32,7 @@ public:
     void addPhoto(const Domain::DocumentImage& _photo);
     void addPhotos(const QVector<QPixmap>& _photos);
     void removePhoto(const QUuid& _photoUuid);
+    void setPhotosOrder(const QVector<QUuid>& _photoUuids);
     Q_SIGNAL void photosChanged(const QVector<Domain::DocumentImage>& _images);
 
 protected:

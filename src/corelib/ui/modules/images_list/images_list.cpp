@@ -9,6 +9,7 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QApplication>
 #include <QFileDialog>
 #include <QMimeData>
 #include <QPaintEvent>
@@ -89,6 +90,27 @@ public:
      */
     void updateImagesAnimations();
 
+    /**
+     * @brief Плавно раздвинуть изображения по сторонам от текущего места вставки
+     *
+     * Исходное изображение при расчёте соседей не учитывается: его место остаётся свободным,
+     * пока само изображение следует за курсором.
+     */
+    void updateInsertionAnimation();
+
+    /**
+     * @brief Запустить общую анимацию перемещения изображений к заданным позициям
+     *
+     * Текущие визуальные позиции используются как начальные, поэтому при смене места вставки
+     * уже запущенная анимация продолжается без скачка.
+     */
+    void startImagesMoveAnimation(const QVector<QPointF>& _targetPositions);
+
+    /**
+     * @brief Зафиксировать новый порядок после завершения анимации отпускания
+     */
+    void finishReordering();
+
 
     ImagesList* q = nullptr;
 
@@ -101,6 +123,11 @@ public:
      * @brief Видна ли кнопка добавления изображений
      */
     bool isAddButtonVisible = true;
+
+    /**
+     * @brief Можно ли менять порядок изображений перетаскиванием мышью
+     */
+    bool isImagesReorderingEnabled = false;
 
     /**
      * @brief Параметры внешнего вида изображений
@@ -122,6 +149,29 @@ public:
     QHash<int, QVariantAnimation*> imageToOverlayAnimation;
 
     /**
+     * @brief Параметры изменения порядка изображений мышью
+     */
+    QPoint dragStartPosition; //!< Точка нажатия для проверки системного порога перетаскивания
+    QPoint dragPosition; //!< Текущее положение курсора внутри виджета
+    QPointF dragImageOffset; //!< Смещение точки захвата относительно левого верхнего угла картинки
+    int draggedImageIndex = kInvalidImageIndex; //!< Индекс захваченного изображения
+    int targetImageIndex = kInvalidImageIndex; //!< Индекс изображения после будущей вставки
+    bool isImageReorderingActive = false; //!< Идёт ли сейчас интерактивное перетаскивание
+    bool isDropAnimationActive = false; //!< Летят ли изображения в финальные позиции
+    bool isOrderChanged = false; //!< Отличается ли итоговый порядок от исходного
+
+    /**
+     * @brief Визуальные координаты изображений во время перетаскивания и анимации отпускания
+     *
+     * Все три вектора индексируются по исходному индексу изображения. Это позволяет не менять
+     * модели @a images и @a displayImages до полного завершения анимации.
+     */
+    QVector<QPointF> imagePositions;
+    QVector<QPointF> imageStartPositions;
+    QVector<QPointF> imageTargetPositions;
+    QVariantAnimation imagesMoveAnimation; //!< Общий прогресс перемещения всех изображений
+
+    /**
      * @brief Параметры визуализации затаскивания картинок на виджет мышкой
      */
     bool isDragActive = false;
@@ -141,6 +191,37 @@ ImagesList::Implementation::Implementation(ImagesList* _q)
     dragIndicationOpacityAnimation.setEndValue(1.0);
     dragIndicationOpacityAnimation.setDuration(240);
     dragIndicationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+
+    imagesMoveAnimation.setDuration(220);
+    imagesMoveAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    imagesMoveAnimation.setStartValue(0.0);
+    imagesMoveAnimation.setEndValue(1.0);
+    connect(&imagesMoveAnimation, &QVariantAnimation::valueChanged, q,
+            [this](const QVariant& _value) {
+                const auto progress = _value.toReal();
+                for (int index = 0; index < imagePositions.size(); ++index) {
+                    //
+                    // Пока кнопка мыши зажата, позицию захваченной картинки задаёт курсор. После
+                    // отпускания флаг isDropAnimationActive разрешает анимировать и её тоже.
+                    //
+                    if (isImageReorderingActive && !isDropAnimationActive
+                        && index == draggedImageIndex) {
+                        continue;
+                    }
+                    imagePositions[index] = imageStartPositions[index]
+                        + (imageTargetPositions[index] - imageStartPositions[index]) * progress;
+                }
+                q->update();
+            });
+    connect(&imagesMoveAnimation, &QVariantAnimation::finished, q, [this] {
+        //
+        // Перемещения при выборе новой точки вставки не меняют данные. Фиксируем порядок только
+        // после отдельной анимации, запущенной отпусканием кнопки мыши.
+        //
+        if (isDropAnimationActive) {
+            finishReordering();
+        }
+    });
 }
 
 QSizeF ImagesList::Implementation::finalImageSize() const
@@ -262,6 +343,107 @@ void ImagesList::Implementation::updateImagesAnimations()
     }
 }
 
+void ImagesList::Implementation::startImagesMoveAnimation(const QVector<QPointF>& _targetPositions)
+{
+    //
+    // stop() сохраняет уже рассчитанные imagePositions. Они становятся началом следующего
+    // перехода, благодаря чему частые перемещения курсора не возвращают картинки рывком назад.
+    //
+    imagesMoveAnimation.stop();
+    imageStartPositions = imagePositions;
+    imageTargetPositions = _targetPositions;
+    imagesMoveAnimation.start();
+}
+
+void ImagesList::Implementation::updateInsertionAnimation()
+{
+    //
+    // По умолчанию каждая картинка стремится вернуться в свою обычную ячейку списка.
+    //
+    QVector<QPointF> targetPositions;
+    targetPositions.reserve(images.size());
+    for (int index = 0; index < images.size(); ++index) {
+        targetPositions.append(imageRect(index).topLeft());
+    }
+
+    //
+    // Захваченную картинку исключаем из виртуального порядка. Так её исходная ячейка остаётся
+    // пустой, а индексы previousIndex и nextIndex описывают именно границу будущей вставки.
+    //
+    QVector<int> remainingImages;
+    for (int index = 0; index < images.size(); ++index) {
+        if (index != draggedImageIndex) {
+            remainingImages.append(index);
+        }
+    }
+
+    const int previousIndex
+        = targetImageIndex > 0 ? remainingImages.at(targetImageIndex - 1) : kInvalidImageIndex;
+    const int nextIndex = targetImageIndex < remainingImages.size()
+        ? remainingImages.at(targetImageIndex)
+        : kInvalidImageIndex;
+    //
+    // Раздвигаем соседей вдоль линии между центрами их ячеек. Это работает и при переносе через
+    // границу строки, где направление перестаёт быть строго горизонтальным.
+    //
+    QPointF direction(1.0, 0.0);
+    if (previousIndex != kInvalidImageIndex && nextIndex != kInvalidImageIndex) {
+        direction = imageRect(nextIndex).center() - imageRect(previousIndex).center();
+        const auto length = std::hypot(direction.x(), direction.y());
+        if (!qFuzzyIsNull(length)) {
+            direction /= length;
+        }
+    }
+    //
+    // Небольшого отступа достаточно, чтобы обозначить место вставки, не создавая полноценную
+    // пустую ячейку и не перестраивая весь список до отпускания мыши.
+    //
+    const auto insertionOffset = DesignSystem::layout().px8();
+    if (previousIndex != kInvalidImageIndex) {
+        targetPositions[previousIndex] -= direction * insertionOffset;
+    }
+    if (nextIndex != kInvalidImageIndex) {
+        targetPositions[nextIndex] += direction * insertionOffset;
+    }
+    startImagesMoveAnimation(targetPositions);
+}
+
+void ImagesList::Implementation::finishReordering()
+{
+    //
+    // До этой точки менялись только координаты отрисовки. Теперь визуальная анимация закончилась,
+    // поэтому можно безопасно синхронно переставить исходные данные и готовые миниатюры.
+    //
+    const bool orderChanged = isOrderChanged;
+    if (orderChanged) {
+        images.move(draggedImageIndex, targetImageIndex);
+        displayImages.move(draggedImageIndex, targetImageIndex);
+    }
+    preview->setImages(images);
+
+    QVector<QUuid> imageOrder;
+    for (const auto& image : std::as_const(images)) {
+        imageOrder.append(image.uuid);
+    }
+
+    //
+    // Возвращаем виджет в обычное состояние до отправки сигнала: обработчик сигнала может сразу
+    // передать в setImages новый список, и он уже не должен считаться перетаскиваемым.
+    //
+    draggedImageIndex = kInvalidImageIndex;
+    targetImageIndex = kInvalidImageIndex;
+    isImageReorderingActive = false;
+    isDropAnimationActive = false;
+    isOrderChanged = false;
+    imagePositions.clear();
+    q->unsetCursor();
+    q->update();
+
+    if (orderChanged) {
+        emit q->imagesOrderChanged(imageOrder);
+    }
+}
+
 
 // ****
 
@@ -325,6 +507,30 @@ void ImagesList::setImageSpacing(qreal _spacing)
     d->imageSpacing = _spacing;
     updateGeometry();
     update();
+}
+
+void ImagesList::setImagesReorderingEnabled(bool _enabled)
+{
+    if (d->isImagesReorderingEnabled == _enabled) {
+        return;
+    }
+
+    d->isImagesReorderingEnabled = _enabled;
+
+    //
+    // Настройка может измениться прямо во время перемещения. Поэтому останавливаем анимацию,
+    // отбрасываем только временные координаты и оставляем исходный порядок неизменным
+    //
+    if (!_enabled) {
+        d->draggedImageIndex = kInvalidImageIndex;
+        d->targetImageIndex = kInvalidImageIndex;
+        d->isImageReorderingActive = false;
+        d->isDropAnimationActive = false;
+        d->imagesMoveAnimation.stop();
+        d->imagePositions.clear();
+        unsetCursor();
+        update();
+    }
 }
 
 void ImagesList::setImages(const QVector<Domain::DocumentImage>& _images)
@@ -436,16 +642,33 @@ void ImagesList::paintEvent(QPaintEvent* _event)
     const auto radius = DesignSystem::button().borderRadius();
     auto x = contentsRect().x();
     auto y = contentsRect().y();
-    for (int index = 0; index < d->images.size(); ++index) {
-        const QRectF imageRect(x, y, size.width(), size.height());
-        ImageHelper::drawRoundedImage(
-            painter, imageRect,
-            d->displayImages.at(index).scaled(
-                imageRect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::FastTransformation),
-            radius);
+    for (int imageIndex = 0; imageIndex < d->images.size(); ++imageIndex) {
+        //
+        // ... во время перемещения берём координаты из анимируемого массива. В обычном режиме
+        //     продолжаем использовать последовательную раскладку, не добавляя накладных расходов
+        //
+        const bool isDraggedImage
+            = d->isImageReorderingActive && imageIndex == d->draggedImageIndex;
+        const QPointF imagePosition
+            = d->isImageReorderingActive ? d->imagePositions.at(imageIndex) : QPointF(x, y);
+        const QRectF imageRect(imagePosition, size);
+        //
+        // ... пока изображение находится под курсором, его исходная ячейка остаётся пустой, а после
+        //     отпускания оно рисуется в общем цикле и летит к целевой ячейке вместе с соседями
+        //
+        if (!isDraggedImage || d->isDropAnimationActive) {
+            ImageHelper::drawRoundedImage(painter, imageRect,
+                                          d->displayImages.at(imageIndex)
+                                              .scaled(imageRect.size().toSize(),
+                                                      Qt::KeepAspectRatioByExpanding,
+                                                      Qt::FastTransformation),
+                                          radius);
+        }
 
-        const auto imageOverlayAnimationIter = d->imageToOverlayAnimation.find(index);
-        if (imageOverlayAnimationIter != d->imageToOverlayAnimation.end()) {
+        const auto imageOverlayAnimationIter = d->imageToOverlayAnimation.find(imageIndex);
+        if (!d->isImageReorderingActive
+            && imageOverlayAnimationIter != d->imageToOverlayAnimation.end()) {
+
             //
             // ... затемнение сверху изображения
             //
@@ -495,6 +718,25 @@ void ImagesList::paintEvent(QPaintEvent* _event)
             painter.setPen(Ui::DesignSystem::color().accent());
             painter.drawText(addButtonRect, Qt::AlignCenter, u8"\U000F0EDB");
         }
+        painter.setOpacity(1.0);
+    }
+
+    //
+    // Перетаскиваемое изображение остаётся под курсором, пока остальные изображения
+    // показывают место, в которое оно будет вставлено.
+    //
+    if (d->isImageReorderingActive && !d->isDropAnimationActive) {
+        const QRectF draggedImageRect(QPointF(d->dragPosition) - d->dragImageOffset, size);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(ColorHelper::transparent(DesignSystem::color().shadow(), 0.4));
+        painter.drawRoundedRect(draggedImageRect.translated(0, DesignSystem::layout().px4()),
+                                radius, radius);
+        ImageHelper::drawRoundedImage(painter, draggedImageRect,
+                                      d->displayImages.at(d->draggedImageIndex)
+                                          .scaled(draggedImageRect.size().toSize(),
+                                                  Qt::KeepAspectRatioByExpanding,
+                                                  Qt::FastTransformation),
+                                      radius);
     }
 
     //
@@ -538,11 +780,99 @@ void ImagesList::leaveEvent(QEvent* _event)
 
 void ImagesList::mousePressEvent(QMouseEvent* _event)
 {
+    Widget::mousePressEvent(_event);
+
+    //
+    // Пока предыдущая картинка долетает до нового места, не разрешаем начать новое перемещение
+    //
+    if (d->isDropAnimationActive) {
+        return;
+    }
+
+    d->draggedImageIndex = kInvalidImageIndex;
+    d->targetImageIndex = kInvalidImageIndex;
+    d->isImageReorderingActive = false;
+    if (!d->isImagesReorderingEnabled || d->isReadOnly || _event->button() != Qt::LeftButton) {
+        return;
+    }
+
+    //
+    // Кнопки добавления и удаления сохраняют обычное поведение и никогда не становятся
+    // источником перестановки.
+    //
+    const auto buttonInfo = d->buttonInfo(_event->pos());
+    if (!buttonInfo.isValid || buttonInfo.isAddButton || buttonInfo.isRemoveButton) {
+        return;
+    }
+
+    //
+    // Запоминаем не только изображение, но и локальную точку захвата, чтобы миниатюра не
+    // перескакивала центром под курсор после начала движения
+    //
+    d->draggedImageIndex = buttonInfo.imageIndex;
+    d->targetImageIndex = buttonInfo.imageIndex;
+    d->dragStartPosition = _event->pos();
+    d->dragPosition = _event->pos();
+    d->dragImageOffset = _event->pos() - buttonInfo.imageRect.topLeft();
 }
 
 void ImagesList::mouseMoveEvent(QMouseEvent* _event)
 {
     Widget::mouseMoveEvent(_event);
+
+    if (d->isDropAnimationActive) {
+        return;
+    }
+
+    if (d->draggedImageIndex != kInvalidImageIndex && (_event->buttons() & Qt::LeftButton)) {
+        if (!d->isImageReorderingActive
+            && (_event->pos() - d->dragStartPosition).manhattanLength()
+                >= QApplication::startDragDistance()) {
+            //
+            // До преодоления startDragDistance событие остаётся обычным кликом и по отпусканию
+            // откроет предпросмотр. Только здесь переключаем виджет в режим перестановки.
+            //
+            d->isImageReorderingActive = true;
+            d->preview->hidePreview();
+            d->currentImageIndex = kInvalidImageIndex;
+            d->updateImagesAnimations();
+
+            //
+            // Начинаем с фактических координат текущей раскладки. Захваченное изображение сразу
+            // переносим под курсор, а его исходная позиция благодаря paintEvent остаётся пустой.
+            //
+            d->imagePositions.clear();
+            for (int index = 0; index < d->images.size(); ++index) {
+                d->imagePositions.append(d->imageRect(index).topLeft());
+            }
+            d->imagePositions[d->draggedImageIndex] = QPointF(_event->pos()) - d->dragImageOffset;
+            d->updateInsertionAnimation();
+            setCursor(Qt::ClosedHandCursor);
+        }
+
+        if (d->isImageReorderingActive) {
+            //
+            // Захваченная миниатюра следует за каждым событием мыши напрямую, без запаздывания.
+            // Анимация используется только для окружающих её изображений.
+            //
+            d->dragPosition = _event->pos();
+            d->imagePositions[d->draggedImageIndex] = QPointF(_event->pos()) - d->dragImageOffset;
+
+            //
+            // Наведение на кнопку добавления трактуется как вставка в самый конец. Сама кнопка
+            // при этом не участвует в перестановке и по-прежнему остаётся последним элементом.
+            //
+            const auto buttonInfo = d->buttonInfo(_event->pos());
+            const int targetImageIndex
+                = buttonInfo.isAddButton ? d->images.size() - 1 : buttonInfo.imageIndex;
+            if (buttonInfo.isValid && d->targetImageIndex != targetImageIndex) {
+                d->targetImageIndex = targetImageIndex;
+                d->updateInsertionAnimation();
+            }
+            update();
+            return;
+        }
+    }
 
     //
     // Если навели на изображение или кнопку добавления
@@ -604,6 +934,47 @@ void ImagesList::mouseMoveEvent(QMouseEvent* _event)
 void ImagesList::mouseReleaseEvent(QMouseEvent* _event)
 {
     Widget::mouseReleaseEvent(_event);
+
+    if (d->isImageReorderingActive) {
+        //
+        // Фиксируем последнюю позицию курсора: между последним mouseMove и mouseRelease могло быть
+        // небольшое движение, которое тоже должно стать началом финального полёта.
+        //
+        d->imagePositions[d->draggedImageIndex] = QPointF(_event->pos()) - d->dragImageOffset;
+        QVector<QPointF> targetPositions;
+        targetPositions.reserve(d->images.size());
+        for (int index = 0; index < d->images.size(); ++index) {
+            //
+            // Рассчитываем конечную ячейку для каждого элемента, не меняя сами массивы. Элементы
+            // между исходной и целевой позициями сдвигаются на одну ячейку навстречу
+            // освободившемуся месту, а захваченное изображение направляется непосредственно в
+            // targetImageIndex.
+            //
+            int finalIndex = index;
+            if (index == d->draggedImageIndex) {
+                finalIndex = d->targetImageIndex;
+            } else if (d->draggedImageIndex < d->targetImageIndex && index > d->draggedImageIndex
+                       && index <= d->targetImageIndex) {
+                --finalIndex;
+            } else if (d->draggedImageIndex > d->targetImageIndex && index >= d->targetImageIndex
+                       && index < d->draggedImageIndex) {
+                ++finalIndex;
+            }
+            targetPositions.append(d->imageRect(finalIndex).topLeft());
+        }
+
+        //
+        // Даже если пользователь вернул картинку на исходное место, проигрываем короткий возврат
+        // из-под курсора в ячейку, но после него не переставляем данные и не отправляем сигнал.
+        //
+        d->isOrderChanged = d->targetImageIndex != d->draggedImageIndex;
+        d->isDropAnimationActive = true;
+        d->startImagesMoveAnimation(targetPositions);
+        return;
+    }
+
+    d->draggedImageIndex = kInvalidImageIndex;
+    d->targetImageIndex = kInvalidImageIndex;
 
     if (!contentsRect().contains(_event->pos())) {
         return;
