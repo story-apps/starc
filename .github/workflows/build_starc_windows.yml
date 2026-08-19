@@ -91,54 +91,19 @@ jobs:
           cd src
           nmake
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Setup Rust
-        shell: bash
-        run: |
-          rustup default stable
-          rustc --version
-          cargo --version
-
-      - name: Install dependencies for node-dump-syms
-        shell: bash
-        run: |
-          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
-
-      - name: Install node-dump-syms
-        run: |
-          npm i -g node-dump-syms
-
       - name: Upload debug symbols from _build folder
         if: startsWith(github.ref, 'refs/tags/')
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}
-          files: "*.{pdb,exe,dll}"
-          directory: "src/_build"
-          node-version: "22"
-          dumpSyms: true
-
-      - name: Upload debug symbols from _build/plugins folder
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}
-          files: "*.{pdb,dll}"
-          directory: "src/_build/plugins"
-          node-version: "22"
-          dumpSyms: true
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://app.bugsplat.com/download/symbol-upload-windows.exe" -OutFile "symbol-upload-windows.exe"
+          .\symbol-upload-windows.exe `
+            -b "${{ secrets.BUGSPLAT_DATABASE }}" `
+            -a "starcapp-win" `
+            -v "${{ env.BUGSPLAT_VERSION }}" `
+            -d "src/_build" `
+            -f "**/*.{pdb,exe,dll}" `
+            -i "${{ secrets.BUGSPLAT_USER }}" `
+            -s "${{ secrets.BUGSPLAT_PASSWORD }}"
 
       - name: Prepare installer folder
         shell: bash
@@ -254,54 +219,19 @@ jobs:
           cd src
           nmake
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Setup Rust
-        shell: bash
-        run: |
-          rustup default stable
-          rustc --version
-          cargo --version
-
-      - name: Install dependencies for node-dump-syms
-        shell: bash
-        run: |
-          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
-
-      - name: Install node-dump-syms
-        run: |
-          npm i -g node-dump-syms
-
       - name: Upload debug symbols from _build folder
         if: startsWith(github.ref, 'refs/tags/')
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}-x32
-          files: "*.{pdb,exe,dll}"
-          directory: "src/_build"
-          node-version: "22"
-          dumpSyms: true
-
-      - name: Upload debug symbols from _build/plugins folder
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}-x32
-          files: "*.{pdb,dll}"
-          directory: "src/_build/plugins"
-          node-version: "22"
-          dumpSyms: true
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://app.bugsplat.com/download/symbol-upload-windows.exe" -OutFile "symbol-upload-windows.exe"
+          .\symbol-upload-windows.exe `
+            -b "${{ secrets.BUGSPLAT_DATABASE }}" `
+            -a "starcapp-win" `
+            -v "${{ env.BUGSPLAT_VERSION }}-x32" `
+            -d "src/_build" `
+            -f "**/*.{pdb,exe,dll}" `
+            -i "${{ secrets.BUGSPLAT_USER }}" `
+            -s "${{ secrets.BUGSPLAT_PASSWORD }}"
 
       - name: Prepare installer folder
         shell: bash
@@ -416,39 +346,19 @@ jobs:
           cd src
           jom -j4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Setup Rust
-        shell: bash
-        run: |
-          rustup default stable
-          rustc --version
-          cargo --version
-
-      - name: Install dependencies for node-dump-syms
-        shell: bash
-        run: |
-          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
-
-      - name: Install node-dump-syms
-        run: |
-          npm i -g node-dump-syms
-
       - name: Upload debug symbols from _build folder
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-win"
-          version: ${{env.BUGSPLAT_VERSION}}
-          files: "**/*.{pdb,exe,dll}"
-          directory: "src/_build"
-          node-version: "22"
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://app.bugsplat.com/download/symbol-upload-windows.exe" -OutFile "symbol-upload-windows.exe"
+          .\symbol-upload-windows.exe `
+            -b "${{ secrets.BUGSPLAT_DATABASE }}" `
+            -a "starcapp-win" `
+            -v "${{ env.BUGSPLAT_VERSION }}" `
+            -d "src/_build" `
+            -f "**/*.{pdb,exe,dll}" `
+            -i "${{ secrets.BUGSPLAT_USER }}" `
+            -s "${{ secrets.BUGSPLAT_PASSWORD }}"
 
       - name: Prepare installer folder
         shell: bash

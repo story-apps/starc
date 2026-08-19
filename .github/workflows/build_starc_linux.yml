@@ -79,60 +79,20 @@ jobs:
           cd src
           make -j$(nproc)
 
-      - name: Setup Rust
+      - name: Upload debug symbols
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source $HOME/.cargo/env
-          echo "PATH=$PATH:$HOME/.cargo/bin" >> $GITHUB_ENV
-
-      - name: Verify Rust
-        run: |
-          source $HOME/.cargo/env
-          cargo --version
-          rustc --version
-
-      - name: Install dependencies for Node.js
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3
-          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install node-dump-syms
-        run: |
-          npm i -g node-dump-syms
-
-      - name: Upload Symbols for .so files
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-linux"
-          version: "${{ env.BUGSPLAT_VERSION }}"
-          files: "**/*.so"
-          directory: "src/_build"
-          node-version: "22"
-          dumpSyms: true
-
-      - name: Upload Symbols for starcapp
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-linux"
-          version: "${{ env.BUGSPLAT_VERSION }}"
-          files: "starcapp"
-          directory: "src/_build"
-          node-version: "22"
-          dumpSyms: true
+          curl -sL -O "https://app.bugsplat.com/download/symbol-upload-linux"
+          chmod +x symbol-upload-linux
+          ./symbol-upload-linux \
+            -b "${{ secrets.BUGSPLAT_DATABASE }}" \
+            -a "starcapp-linux" \
+            -v "${{ env.BUGSPLAT_VERSION }}" \
+            -d "src/_build" \
+            -f "**/*.debug" \
+            -i "${{ secrets.BUGSPLAT_USER }}" \
+            -s "${{ secrets.BUGSPLAT_PASSWORD }}" \
+            -m
 
       - name: Make AppImage
         shell: bash
@@ -219,60 +179,20 @@ jobs:
           cd src
           make -j$(nproc)
 
-      - name: Setup Rust
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source $HOME/.cargo/env
-          echo "PATH=$PATH:$HOME/.cargo/bin" >> $GITHUB_ENV
-
-      - name: Verify Rust
-        run: |
-          source $HOME/.cargo/env
-          cargo --version
-          rustc --version
-
-      - name: Install dependencies for Node.js
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3
-          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install node-dump-syms
-        run: |
-          npm i -g node-dump-syms
-
-      - name: Upload Symbols for .so files
+      - name: Upload debug symbols
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-linux"
-          version: "${{ env.BUGSPLAT_VERSION }}"
-          files: "**/*.{so.1,so}"
-          directory: "src/_build"
-          node-version: "22"
-          dumpSyms: true
-
-      - name: Upload Symbols for starcapp
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
-        uses: BugSplat-Git/symbol-upload@main
-        with:
-          clientId: "${{ secrets.BUGSPLAT_USER }}"
-          clientSecret: "${{ secrets.BUGSPLAT_PASSWORD }}"
-          database: "${{ secrets.BUGSPLAT_DATABASE }}"
-          application: "starcapp-linux"
-          version: "${{ env.BUGSPLAT_VERSION }}"
-          files: "starcapp"
-          directory: "src/_build"
-          node-version: "22"
-          dumpSyms: true
+        run: |
+          curl -sL -O "https://app.bugsplat.com/download/symbol-upload-linux"
+          chmod +x symbol-upload-linux
+          ./symbol-upload-linux \
+            -b "${{ secrets.BUGSPLAT_DATABASE }}" \
+            -a "starcapp-linux" \
+            -v "${{ env.BUGSPLAT_VERSION }}" \
+            -d "src/_build" \
+            -f "**/*.debug" \
+            -i "${{ secrets.BUGSPLAT_USER }}" \
+            -s "${{ secrets.BUGSPLAT_PASSWORD }}" \
+            -m
 
       - name: Make AppImage
         shell: bash
