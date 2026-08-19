@@ -73,6 +73,23 @@ jobs:
           cd src
           make -j4
 
+      - name: Setup Rust
+        shell: bash
+        run: |
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Install dependencies for Node.js
+        shell: bash
+        run: |
+          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Upload debug symbols
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
         uses: BugSplat-Git/symbol-upload@main
@@ -82,7 +99,7 @@ jobs:
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-mac"
           version: "${{ env.BUGSPLAT_VERSION }}"
-          files: "starcapp.app/Contents/MacOS/*"
+          files: "**/*.dSYM"
           directory: "src/_build"
           node-version: "22"
           dumpSyms: true
@@ -183,6 +200,27 @@ jobs:
         run: |
           cd src
           make -j4
+
+      - name: Setup Rust
+        shell: bash
+        run: |
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Install dependencies for Node.js
+        shell: bash
+        run: |
+          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install node-dump-syms
+        run: |
+          npm i -g node-dump-syms
 
       - name: Upload debug symbols
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'

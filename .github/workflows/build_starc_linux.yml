@@ -115,7 +115,7 @@ jobs:
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-linux"
           version: "${{ env.BUGSPLAT_VERSION }}"
-          files: "**/*.so"
+          files: "**/*.{so.1,so}"
           directory: "src/_build"
           node-version: "22"
           dumpSyms: true
@@ -274,11 +274,24 @@ jobs:
           node-version: "22"
           dumpSyms: true
 
+      - name: DEBUG - build-id before packaging
+        shell: bash
+        run: readelf -n src/_build/libcorelib.so.1 | grep -A1 "Build ID"
+
       - name: Make AppImage
         shell: bash
         run: |
           cd build/linux
           ./make-starc-app-image.sh ${{env.APP_VERSION}}
+
+      - name: DEBUG - build-id after packaging
+        shell: bash
+        run: |
+          cd build/linux
+          ./starc-setup.AppImage --appimage-extract >/dev/null
+          SHIPPED_LIB=$(find squashfs-root -iname 'libcorelib*' | head -1)
+          echo "Shipped lib path: $SHIPPED_LIB"
+          readelf -n "$SHIPPED_LIB" | grep -A1 "Build ID"
 
       - name: Collect artifacts
         uses: actions/upload-artifact@v4
