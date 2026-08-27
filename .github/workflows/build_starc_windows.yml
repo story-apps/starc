@@ -347,7 +347,7 @@ jobs:
           jom -j4
 
       - name: Upload debug symbols from _build folder
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://app.bugsplat.com/download/symbol-upload-windows.exe" -OutFile "symbol-upload-windows.exe"

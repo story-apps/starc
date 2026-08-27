@@ -74,7 +74,7 @@ jobs:
           make -j4
 
       - name: Upload debug symbols
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
           curl -sL -O "https://app.bugsplat.com/download/symbol-upload-macos-intel"
           xattr -r -d com.apple.quarantine ./symbol-upload-macos-intel || true
@@ -187,7 +187,7 @@ jobs:
           make -j4
 
       - name: Upload debug symbols
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
           curl -sL -O "https://app.bugsplat.com/download/symbol-upload-macos"
           xattr -r -d com.apple.quarantine ./symbol-upload-macos || true

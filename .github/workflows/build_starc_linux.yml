@@ -80,7 +80,7 @@ jobs:
           make -j$(nproc)
 
       - name: Upload debug symbols
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           curl -sL -O "https://app.bugsplat.com/download/symbol-upload-linux"
           chmod +x symbol-upload-linux
@@ -180,7 +180,7 @@ jobs:
           make -j$(nproc)
 
       - name: Upload debug symbols
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/bugsplat'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
           curl -sL -O "https://app.bugsplat.com/download/symbol-upload-linux"
           chmod +x symbol-upload-linux
