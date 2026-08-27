@@ -348,17 +348,17 @@ jobs:
 
       - name: Upload debug symbols from _build folder
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://app.bugsplat.com/download/symbol-upload-windows.exe" -OutFile "symbol-upload-windows.exe"
-          .\symbol-upload-windows.exe `
-            -b "${{ secrets.BUGSPLAT_DATABASE }}" `
-            -a "starcapp-win" `
-            -v "${{ env.BUGSPLAT_VERSION }}" `
-            -d "src/_build" `
-            -f "**/*.{pdb,exe,dll}" `
-            -i "${{ secrets.BUGSPLAT_USER }}" `
-            -s "${{ secrets.BUGSPLAT_PASSWORD }}"
+        uses: BugSplat-Git/symbol-upload@v11
+        with:
+          clientId: ${{ secrets.BUGSPLAT_USER }}
+          clientSecret: ${{ secrets.BUGSPLAT_PASSWORD }}
+          database: ${{ secrets.BUGSPLAT_DATABASE }}
+          application: starcapp-win
+          version: ${{ env.BUGSPLAT_VERSION }}
+          directory: src/_build
+          files: "**/*.{pdb,exe,dll}"
+          dumpSyms: false
+          node-version: 24
 
       - name: Prepare installer folder
         shell: bash

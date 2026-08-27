@@ -186,21 +186,31 @@ jobs:
           cd src
           make -j4
 
-      - name: Upload debug symbols
+      - name: Set up Node.js for symbol upload
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dump_syms
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
-          curl -sL -O "https://app.bugsplat.com/download/symbol-upload-macos"
-          xattr -r -d com.apple.quarantine ./symbol-upload-macos || true
-          chmod +x symbol-upload-macos
-          ./symbol-upload-macos \
-            -b "${{ secrets.BUGSPLAT_DATABASE }}" \
-            -a "starcapp-mac" \
-            -v "${{ env.BUGSPLAT_VERSION }}" \
-            -d "src/_build" \
-            -f "**/*.dSYM" \
-            -i "${{ secrets.BUGSPLAT_USER }}" \
-            -s "${{ secrets.BUGSPLAT_PASSWORD }}" \
-            -m
+          npm i -g @mapbox/node-pre-gyp
+          npm i -g node-dump-syms
+
+      - name: Upload debug symbols
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        uses: BugSplat-Git/symbol-upload@v11
+        with:
+          clientId: ${{ secrets.BUGSPLAT_USER }}
+          clientSecret: ${{ secrets.BUGSPLAT_PASSWORD }}
+          database: ${{ secrets.BUGSPLAT_DATABASE }}
+          application: starcapp-mac
+          version: ${{ env.BUGSPLAT_VERSION }}
+          directory: src/_build
+          files: "**/*.dSYM"
+          dumpSyms: true
+          node-version: 24
 
       - name: Make dmg image
         uses: nick-fields/retry@v3
