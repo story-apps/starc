@@ -10,6 +10,7 @@
 APP_IMAGE_DIR="appdir"
 mkdir $APP_IMAGE_DIR/lib
 mkdir $APP_IMAGE_DIR/plugins
+mkdir $APP_IMAGE_DIR/crashpad
 ls -l $APP_IMAGE_DIR
 
 #
@@ -20,6 +21,17 @@ ls -l $APP_BIN_DIR
 cp $APP_BIN_DIR/starcapp $APP_IMAGE_DIR/starc
 cp $APP_BIN_DIR/libcorelib.so.1 $APP_IMAGE_DIR/lib/
 cp $APP_BIN_DIR/plugins/*.so $APP_IMAGE_DIR/plugins/
+
+#
+# Copy crashpad_handler
+#
+if [ ! -f "$APP_BIN_DIR/crashpad/crashpad_handler" ]; then
+    echo "Error: crashpad_handler not found in $APP_BIN_DIR/crashpad/"
+    echo "Make sure crashpad was built and copied during the build process."
+    exit 1
+fi
+cp $APP_BIN_DIR/crashpad/crashpad_handler $APP_IMAGE_DIR/crashpad/
+chmod +x $APP_IMAGE_DIR/crashpad/crashpad_handler
 
 #
 # Copy flathub required files
@@ -33,5 +45,5 @@ cp -R $FLATHUB_DIR $APP_IMAGE_DIR
 #
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
 chmod a+x linuxdeployqt
-./linuxdeployqt appdir/starc -no-copy-copyright-files -no-translations -always-overwrite -exclude-libs=libqsqlmimer,libqsqloci -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration -executable=appdir/plugins/libcoreplugin.so -appimage
+./linuxdeployqt appdir/starc -no-copy-copyright-files -no-translations -always-overwrite -exclude-libs=libqsqlmimer,libqsqloci -extra-plugins=platforms,wayland-decoration-client,wayland-graphics-integration-client,wayland-shell-integration -executable=appdir/plugins/libcoreplugin.so -appimage -unsupported-allow-new-glibc
 mv *.AppImage starc-setup.AppImage

@@ -35,18 +35,31 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
         run: |
-          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+          DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          echo "DEV_BUILD=$DEV_BUILD" >> $GITHUB_ENV
+          if [ "$DEV_BUILD" -gt "0" ]; then
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD-qt5" >> $GITHUB_ENV
+          else
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}-qt5" >> $GITHUB_ENV
+          fi
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: 5.15.2
           target: desktop
+
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh
 
       - name: Run QMake
         shell: bash
@@ -59,6 +72,22 @@ jobs:
         run: |
           cd src
           make -j4
+
+      - name: Upload debug symbols
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        run: |
+          curl -sL -O "https://app.bugsplat.com/download/symbol-upload-macos-intel"
+          xattr -r -d com.apple.quarantine ./symbol-upload-macos-intel || true
+          chmod +x symbol-upload-macos-intel
+          ./symbol-upload-macos-intel \
+            -b "${{ secrets.BUGSPLAT_DATABASE }}" \
+            -a "starcapp-mac" \
+            -v "${{ env.BUGSPLAT_VERSION }}" \
+            -d "src/_build" \
+            -f "**/*.dSYM" \
+            -i "${{ secrets.BUGSPLAT_USER }}" \
+            -s "${{ secrets.BUGSPLAT_PASSWORD }}" \
+            -m
 
       - name: Make dmg image
         uses: nick-fields/retry@v3
@@ -118,12 +147,18 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
         run: |
-          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+          DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          echo "DEV_BUILD=$DEV_BUILD" >> $GITHUB_ENV
+          if [ "$DEV_BUILD" -gt "0" ]; then
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD-qt6" >> $GITHUB_ENV
+          else
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}-qt6" >> $GITHUB_ENV
+          fi
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -132,17 +167,40 @@ jobs:
           target: desktop
           modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
 
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh -u
+
       - name: Run QMake
         shell: bash
         run: |
           cd src
-          qmake starc.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" CRASHPAD_ARCH=universal DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         shell: bash
         run: |
           cd src
           make -j4
+
+      - name: Upload debug symbols
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        run: |
+          curl -sL -O "https://app.bugsplat.com/download/symbol-upload-macos"
+          xattr -r -d com.apple.quarantine ./symbol-upload-macos || true
+          chmod +x symbol-upload-macos
+          ./symbol-upload-macos \
+            -b "${{ secrets.BUGSPLAT_DATABASE }}" \
+            -a "starcapp-mac" \
+            -v "${{ env.BUGSPLAT_VERSION }}" \
+            -d "src/_build" \
+            -f "**/*.dSYM" \
+            -i "${{ secrets.BUGSPLAT_USER }}" \
+            -s "${{ secrets.BUGSPLAT_PASSWORD }}" \
+            -m
 
       - name: Make dmg image
         uses: nick-fields/retry@v3
