@@ -15,7 +15,7 @@ namespace BackupBuilder {
  */
 struct CORE_LIBRARY_EXPORT BackupResult {
     bool success = false;
-    QString error;
+    QString status;
 };
 
 

@@ -239,3 +239,19 @@ bool PlatformHelper::showInGraphicalShell(const QString& _path)
     }
 #endif
 }
+
+QString PlatformHelper::normalizePath(const QString& _path)
+{
+#ifdef Q_OS_MAC
+    //
+    // В маке делаем нормализацию для имён файлов, т.к. он любит разделять некоторые буквы и далее
+    // не получается их корректно сравнивать с обычными строками,
+    //
+    // например: "й" и "й" - это две разные буквы! Первую даёт нам мак, когда открываешь файл через
+    // двойной щелчок на нём
+    //
+    return _path.normalized(QString::NormalizationForm_C);
+#else
+    return _path;
+#endif
+}

@@ -32,4 +32,9 @@ public:
      * https://github.com/qbittorrent/qBittorrent/blob/e42fa0e027fddde1d4518d2d90d06bf2a64269d8/src/gui/utils.cpp
      */
     static bool showInGraphicalShell(const QString& _path);
+
+    /**
+     * @brief Нормализовать путь к файлу для дальнейшей работы со строками
+     */
+    static QString normalizePath(const QString& _path);
 };

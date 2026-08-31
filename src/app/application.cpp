@@ -10,19 +10,22 @@
 
 namespace {
 /**
- * @brief Подготовить путь к файлу для сохранения
+ * @brief Нормализовать путь к файлу для дальнейшей работы со строками
  */
-static QString preparePath(const QString& _path)
+static QString normalizePath(const QString& _path)
 {
-    QString newPath = _path;
 #ifdef Q_OS_MAC
     //
-    // Это две разные буквы!
-    // Первую даёт нам мак, когда открываешь файл через двойной щелчок на нём
+    // В маке делаем нормализацию для имён файлов, т.к. он любит разделять некоторые буквы и далее
+    // не получается их корректно сравнивать с обычными строками,
     //
-    newPath.replace("й", "й");
+    // например: "й" и "й" - это две разные буквы! Первую даёт нам мак, когда открываешь файл через
+    // двойной щелчок на нём
+    //
+    return _path.normalized(QString::NormalizationForm_C);
+#else
+    return _path;
 #endif
-    return newPath;
 }
 
 } // namespace
@@ -203,9 +206,9 @@ bool Application::event(QEvent* _event)
         QFileOpenEvent* fileOpenEvent = static_cast<QFileOpenEvent*>(_event);
         if (auto manager
             = qobject_cast<ManagementLayer::IApplicationManager*>(d->applicationManager)) {
-            manager->openProject(preparePath(fileOpenEvent->file()));
+            manager->openProject(normalizePath(fileOpenEvent->file()));
         } else {
-            d->fileToOpen = preparePath(fileOpenEvent->file());
+            d->fileToOpen = normalizePath(fileOpenEvent->file());
         }
 
         return true;

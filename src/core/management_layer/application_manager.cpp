@@ -1762,14 +1762,16 @@ void ApplicationManager::Implementation::saveChanges()
                 const auto result = backupWatcher->result();
                 backupWatcher->deleteLater();
                 if (result.success) {
+                    Log::info(QStringLiteral("[ApplicationManager] Backup creation succeded: %1")
+                                  .arg(result.status));
                     return;
                 }
 
                 Log::warning(QStringLiteral("[ApplicationManager] Backup creation failed: %1")
-                                 .arg(result.error));
+                                 .arg(result.status));
                 const auto taskId = QUuid::createUuid().toString();
                 TaskBar::addTask(taskId);
-                TaskBar::setTaskTitle(taskId, result.error);
+                TaskBar::setTaskTitle(taskId, result.status);
                 TaskBar::setTaskHasProgress(taskId, false);
                 QTimer::singleShot(15000, q, [taskId] { TaskBar::finishTask(taskId); });
             });
