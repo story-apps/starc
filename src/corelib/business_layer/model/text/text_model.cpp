@@ -143,7 +143,7 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _document) c
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         auto childItem = rootItem->childAt(childIndex);
         if (childItem->type() == TextModelItemType::Text) {
-            xml += static_cast<TextModelItem*>(childItem);
+            xml += childItem;
         } else {
             xml += childItem->toXml();
         }

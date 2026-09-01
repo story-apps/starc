@@ -537,6 +537,7 @@ SOURCES += \
     utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
     utils/tools/model_index_path.cpp \
+    utils/tools/performance_monitor.cpp \
     utils/tools/run_once.cpp \
     utils/validators/email_validator.cpp
 
@@ -937,6 +938,7 @@ HEADERS += \
     utils/tools/debouncer.h \
     utils/tools/model_index_path.h \
     utils/tools/once.h \
+    utils/tools/performance_monitor.h \
     utils/tools/run_once.h \
     utils/validators/email_validator.h
 
