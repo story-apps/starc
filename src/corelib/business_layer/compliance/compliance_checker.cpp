@@ -108,11 +108,9 @@ void ComplianceChecker::Implementation::startChecker()
     checker->moveToThread(checkerThread);
     connect(checkerThread, &QThread::started, checker, &ComplianceCheckerImpl::init);
     connect(checkerThread, &QThread::started, q, [this] {
-        QMetaObject::invokeMethod(q, [this] {
-            checker->setScreenplay(information, screenplay);
-            checker->setRules(rules);
-            checker->startChecking();
-        });
+        checker->setScreenplay(information, screenplay);
+        checker->setRules(rules);
+        checker->startChecking();
     });
     connect(checkerThread, &QThread::finished, checker, [this] {
         delete checker;
@@ -155,9 +153,9 @@ void ComplianceChecker::setScreenplay(const QByteArray& _information, const QByt
         return;
     }
 
-    QMetaObject::invokeMethod(this, [this, _information, _screenplay] {
-        d->checker->setScreenplay(_information, _screenplay);
-        d->checker->startChecking();
+    QMetaObject::invokeMethod(d->checker, [checker = d->checker, _information, _screenplay] {
+        checker->setScreenplay(_information, _screenplay);
+        checker->startChecking();
     });
 }
 
@@ -174,9 +172,9 @@ void ComplianceChecker::setRules(const QVector<ComplianceRule>& _rules)
         return;
     }
 
-    QMetaObject::invokeMethod(this, [this, _rules] {
-        d->checker->setRules(_rules);
-        d->checker->startChecking();
+    QMetaObject::invokeMethod(d->checker, [checker = d->checker, _rules] {
+        checker->setRules(_rules);
+        checker->startChecking();
     });
 }
 
