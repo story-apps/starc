@@ -62,5 +62,5 @@ SOURCES += \
 
 mac {
     load(resolve_target)
-    QMAKE_POST_LINK += install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET
+    QMAKE_POST_LINK += install_name_tool -change libcorelib.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET
 }

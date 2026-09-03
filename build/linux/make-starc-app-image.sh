@@ -19,7 +19,7 @@ ls -l $APP_IMAGE_DIR
 APP_BIN_DIR="../../src/_build"
 ls -l $APP_BIN_DIR
 cp $APP_BIN_DIR/starcapp $APP_IMAGE_DIR/starc
-cp $APP_BIN_DIR/libcorelib.so.1 $APP_IMAGE_DIR/lib/
+cp $APP_BIN_DIR/libcorelib.so $APP_IMAGE_DIR/lib/
 cp $APP_BIN_DIR/plugins/*.so $APP_IMAGE_DIR/plugins/
 
 #

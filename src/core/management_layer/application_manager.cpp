@@ -195,11 +195,6 @@ public:
     void sendCrashInfo();
 
     /**
-     * @brief Вызвать тестовый краш для проверки системы краш-репортов
-     */
-    void testCrash();
-
-    /**
      * @brief Загрузить недостающие шрифты
      */
     void loadMissedFonts();
@@ -952,11 +947,6 @@ void ApplicationManager::Implementation::sendCrashInfo()
     // Отображаем диалог
     //
     dialog->showDialog();
-}
-
-void ApplicationManager::Implementation::testCrash()
-{
-    *(volatile int*)0 = 0;
 }
 
 void ApplicationManager::Implementation::loadMissedFonts()
@@ -3115,16 +3105,6 @@ void ApplicationManager::initConnections()
     QShortcut* fullScreenShortcut = new QShortcut(QKeySequence::FullScreen, d->applicationView);
     fullScreenShortcut->setContext(Qt::ApplicationShortcut);
     connect(fullScreenShortcut, &QShortcut::activated, this, [this] { d->toggleFullScreen(); });
-    //
-    // Тестовый краш
-    //
-#ifdef Q_OS_MACOS
-    QShortcut* testCrashShortcut = new QShortcut(QKeySequence("Meta+Shift+C"), d->applicationView);
-#else
-    QShortcut* testCrashShortcut = new QShortcut(QKeySequence("Ctrl+Shift+C"), d->applicationView);
-#endif
-    testCrashShortcut->setContext(Qt::ApplicationShortcut);
-    connect(testCrashShortcut, &QShortcut::activated, this, [this] { d->testCrash(); });
 
     //
     // Представление приложения
