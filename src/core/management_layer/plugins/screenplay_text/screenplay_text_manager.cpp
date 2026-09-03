@@ -483,17 +483,20 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
     //
     if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
         Log::debug("[ScreenplayTextManager] Disconnect old model");
+        auto model = allViews[viewIndex].model;
         //
         // ... сохраняем параметры
         //
-        saveModelAndViewSettings(allViews[viewIndex].model, _view);
+        saveModelAndViewSettings(model, _view);
         //
         // ... разрываем соединения
         //
-        _view->disconnect(allViews[viewIndex].model);
-        _view->disconnect(allViews[viewIndex].model->dictionariesModel());
-        allViews[viewIndex].model->disconnect(_view);
-        allViews[viewIndex].model->dictionariesModel()->disconnect(_view);
+        _view->disconnect(model);
+        _view->disconnect(model->dictionariesModel());
+        model->disconnect(_view);
+        model->disconnect(complianceChecker);
+        model->dictionariesModel()->disconnect(_view);
+        model->informationModel()->disconnect(complianceChecker);
     }
 
     //

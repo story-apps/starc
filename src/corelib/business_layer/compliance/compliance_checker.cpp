@@ -2,10 +2,18 @@
 
 #include "compliance_checker_impl.h"
 
+#include <QPointer>
 #include <QThread>
 
 
 namespace BusinessLayer {
+
+bool operator==(const ComplianceRule& _lhs, const ComplianceRule& _rhs)
+{
+    return _lhs.type == _rhs.type && _lhs.name == _rhs.name && _lhs.isStrict == _rhs.isStrict
+        && _lhs.minimumValue == _rhs.minimumValue && _lhs.maximumValue == _rhs.maximumValue
+        && _lhs.textValues == _rhs.textValues;
+}
 
 bool ComplianceCheckResultItemSceneCharacter::isValid() const
 {
@@ -79,7 +87,7 @@ public:
     QByteArray screenplay;
     QVector<ComplianceRule> rules;
 
-    BusinessLayer::ComplianceCheckerImpl* checker = nullptr;
+    QPointer<BusinessLayer::ComplianceCheckerImpl> checker;
     QThread* checkerThread = nullptr;
 };
 
@@ -108,18 +116,19 @@ void ComplianceChecker::Implementation::startChecker()
     checker->moveToThread(checkerThread);
     connect(checkerThread, &QThread::started, checker, &ComplianceCheckerImpl::init);
     connect(checkerThread, &QThread::started, q, [this] {
-        checker->setScreenplay(information, screenplay);
-        checker->setRules(rules);
-        checker->startChecking();
+        emit q->screenplayChanged(information, screenplay);
+        emit q->rulesChanged(rules);
     });
-    connect(checkerThread, &QThread::finished, checker, [this] {
-        delete checker;
-        checker = nullptr;
-    });
-    checkerThread->start();
 
+    connect(q, &ComplianceChecker::screenplayChanged, checker,
+            &ComplianceCheckerImpl::setScreenplay);
+    connect(q, &ComplianceChecker::rulesChanged, checker, &ComplianceCheckerImpl::setRules);
     connect(checker, &ComplianceCheckerImpl::checkingFinished, q,
             &ComplianceChecker::checkingFinished);
+
+    connect(checkerThread, &QThread::finished, checker, &ComplianceChecker::deleteLater);
+
+    checkerThread->start();
 }
 
 void ComplianceChecker::Implementation::stopChecker()
@@ -140,42 +149,48 @@ ComplianceChecker::ComplianceChecker(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation(this))
 {
+    qRegisterMetaType<QVector<ComplianceRule>>("QVector<ComplianceRule>");
+    qRegisterMetaType<QVector<ComplianceCheckResult>>("QVector<ComplianceCheckResult>");
 }
 
 ComplianceChecker::~ComplianceChecker() = default;
 
 void ComplianceChecker::setScreenplay(const QByteArray& _information, const QByteArray& _screenplay)
 {
+    //
+    // Не делаем проверок на идентичность данных, т.к. они могут быть большими и это нам ни к чему,
+    // пусть проще отдельный поток молотит эти данные, так что вообще не паримся о них
+    //
     d->information = _information;
     d->screenplay = _screenplay;
-
-    if (d->checker == nullptr) {
-        return;
-    }
-
-    QMetaObject::invokeMethod(d->checker, [checker = d->checker, _information, _screenplay] {
-        checker->setScreenplay(_information, _screenplay);
-        checker->startChecking();
-    });
+    emit screenplayChanged(d->information, d->screenplay);
 }
 
 void ComplianceChecker::setRules(const QVector<ComplianceRule>& _rules)
 {
+    if (d->rules == _rules) {
+        return;
+    }
+
     d->rules = _rules;
+    emit rulesChanged(d->rules);
+
+
+    //
+    // Если больше нет правил, то останавливаем чекер
+    //
     if (d->rules.isEmpty()) {
         d->stopChecker();
         return;
     }
 
+    //
+    // Если правила есть и чекер не был запущен, то запускаем его
+    //
     if (d->checker == nullptr) {
         d->startChecker();
         return;
     }
-
-    QMetaObject::invokeMethod(d->checker, [checker = d->checker, _rules] {
-        checker->setRules(_rules);
-        checker->startChecking();
-    });
 }
 
 } // namespace BusinessLayer

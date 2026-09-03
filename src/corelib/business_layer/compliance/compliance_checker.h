@@ -70,6 +70,11 @@ struct CORE_LIBRARY_EXPORT ComplianceRule {
 };
 
 /**
+ * @brief Определим оператор сравнения правил
+ */
+bool operator==(const ComplianceRule& _lhs, const ComplianceRule& _rhs);
+
+/**
  * @brief Тип элемента результата проверки
  */
 enum class CORE_LIBRARY_EXPORT ComplianceCheckResultItemType {
@@ -140,6 +145,7 @@ struct CORE_LIBRARY_EXPORT ComplianceCheckResult {
 
 /**
  * @brief Фасад для управления проверяющим требования
+ * @note Так как проверяющий работает в отдельном потоке, то всё общение строится через сигналы
  */
 class CORE_LIBRARY_EXPORT ComplianceChecker : public QObject
 {
@@ -161,6 +167,16 @@ public:
 
 signals:
     /**
+     * @brief Изменились данные сценария
+     */
+    void screenplayChanged(const QByteArray& _information, const QByteArray& _screenplay);
+
+    /**
+     * @brief Изменились требования
+     */
+    void rulesChanged(const QVector<ComplianceRule>& _rules);
+
+    /**
      * @brief Проверка закончена с указанными результатами
      */
     void checkingFinished(const QVector<ComplianceCheckResult>& _results);
@@ -171,3 +187,8 @@ private:
 };
 
 } // namespace BusinessLayer
+
+Q_DECLARE_METATYPE(BusinessLayer::ComplianceRule)
+Q_DECLARE_METATYPE(QVector<BusinessLayer::ComplianceRule>)
+Q_DECLARE_METATYPE(BusinessLayer::ComplianceCheckResult)
+Q_DECLARE_METATYPE(QVector<BusinessLayer::ComplianceCheckResult>)

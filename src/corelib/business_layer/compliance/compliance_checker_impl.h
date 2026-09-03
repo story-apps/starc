@@ -35,16 +35,17 @@ public:
      */
     void setRules(const QVector<ComplianceRule>& _rules);
 
-    /**
-     * @brief Запустить проверку
-     */
-    void startChecking();
-
 signals:
     /**
      * @brief Проверка закончена с указанными результатами
      */
     void checkingFinished(const QVector<ComplianceCheckResult>& _results);
+
+private:
+    /**
+     * @brief Запустить проверку
+     */
+    void startChecking();
 
 private:
     class Implementation;

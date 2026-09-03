@@ -127,7 +127,6 @@ ComplianceCheckerImpl::Implementation::Implementation(ComplianceCheckerImpl* _q)
 ComplianceCheckerImpl::ComplianceCheckerImpl(QObject* _parent)
     : QObject(_parent)
 {
-    qRegisterMetaType<QVector<ComplianceCheckResult>>("QVector<RuleResult>");
 }
 
 void ComplianceCheckerImpl::init()
@@ -142,11 +141,15 @@ void ComplianceCheckerImpl::setScreenplay(const QByteArray& _information,
 {
     d->informationModel->setDocumentContent(_information);
     d->screenplayModel->setDocumentContent(_screenplay);
+
+    startChecking();
 }
 
 void ComplianceCheckerImpl::setRules(const QVector<ComplianceRule>& _rules)
 {
     d->rules = _rules;
+
+    startChecking();
 }
 
 void ComplianceCheckerImpl::startChecking()
