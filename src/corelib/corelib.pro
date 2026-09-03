@@ -428,6 +428,8 @@ SOURCES += \
     ui/modules/promo_widget/module_promo_toolbar.cpp \
     ui/modules/promo_widget/module_promo_widget.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
+    ui/modules/script_text_edit/vim_motions.cpp \
+    ui/modules/script_text_edit/vim_registers.cpp \
     ui/modules/script_text_edit/vim_text_edit_controller.cpp \
     ui/modules/search_toolbar/search_manager.cpp \
     ui/modules/search_toolbar/search_toolbar.cpp \
@@ -821,6 +823,8 @@ HEADERS += \
     ui/modules/promo_widget/module_promo_toolbar.h \
     ui/modules/promo_widget/module_promo_widget.h \
     ui/modules/script_text_edit/script_text_edit.h \
+    ui/modules/script_text_edit/vim_motions.h \
+    ui/modules/script_text_edit/vim_registers.h \
     ui/modules/script_text_edit/vim_text_edit_controller.h \
     ui/modules/search_toolbar/search_manager.h \
     ui/modules/search_toolbar/search_toolbar.h \

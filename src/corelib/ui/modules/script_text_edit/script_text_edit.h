@@ -27,6 +27,11 @@ public:
     void setVimModeEnabled(bool _enabled);
 
     /**
+     * @brief Прокрутить редактор по вертикали на заданное количество пикселей
+     */
+    void scrollVerticallyBy(int _delta);
+
+    /**
      * @brief Показывать ли автодополнения в пустых блоках
      */
     bool showSuggestionsInEmptyBlocks() const;
