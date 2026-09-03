@@ -32,6 +32,7 @@ public:
     static bool hasError();
     static QString lastError();
     static void setLastError(const QString& _error);
+    static void clearLastError();
     /** @} */
 
     /**

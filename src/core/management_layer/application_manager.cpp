@@ -1645,17 +1645,51 @@ void ApplicationManager::Implementation::saveChanges()
 
     Log::info("Save changes triggered");
 
-    //
-    // Управляющие должны сохранить все изменения
-    //
-    DatabaseLayer::Database::transaction();
-    projectsManager->saveChanges();
-    projectManager->saveChanges();
-    DatabaseLayer::Database::commit();
+    constexpr int maximumSaveAttempts = 3;
+    for (int attempt = 1; attempt <= maximumSaveAttempts; ++attempt) {
+        //
+        // Очищаем ошибку предыдущей транзакции
+        //
+        DatabaseLayer::Database::clearLastError();
+
+        //
+        // Управляющие должны сохранить все изменения
+        //
+        DatabaseLayer::Database::transaction();
+        projectsManager->saveChanges();
+        projectManager->saveChanges();
+        DatabaseLayer::Database::commit();
+
+        //
+        // Если всё сохранилось без ошибок, продолжаем выполнение в обычном режиме
+        //
+        if (!DatabaseLayer::Database::hasError()) {
+            break;
+        }
+
+        //
+        // Если сохранение не удалось, то логгируем ошибку и пробуем переподключиться к проекту
+        //
+        Log::warning(QStringLiteral("Saving attempt %1 of %2 failed: %3")
+                         .arg(attempt)
+                         .arg(maximumSaveAttempts)
+                         .arg(DatabaseLayer::Database::lastError()));
+
+        //
+        // Ошибка SQLite 14 может быть вызвана временной недоступностью каталога проекта (например,
+        // на внешнем или сетевом диске, флешке). Перед повторной попыткой откроем соединение
+        // заново, так как существующий дескриптор SQLite может оставаться недоступным даже после
+        // восстановления доступа к каталогу
+        //
+        if (const auto currentProjectFile = DatabaseLayer::Database::currentFile();
+            QFile::exists(currentProjectFile) && attempt < maximumSaveAttempts) {
+            DatabaseLayer::Database::setCurrentFile(currentProjectFile);
+        }
+    }
 
     //
-    // Если произошла ошибка сохранения, то делаем дополнительные проверки и работаем с
-    // пользователем
+    // Если все попытки сохранения завершились с ошибкой, то делаем дополнительные проверки и
+    // работаем с пользователем
     //
     if (DatabaseLayer::Database::hasError()) {
         //

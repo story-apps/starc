@@ -103,6 +103,11 @@ void Database::setLastError(const QString& _error)
     }
 }
 
+void Database::clearLastError()
+{
+    s_lastError.clear();
+}
+
 void Database::setCurrentFile(const QString& _databaseFileName)
 {
     //
