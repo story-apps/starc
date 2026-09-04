@@ -96,6 +96,8 @@ const QString kApplicationReplaceTwoDashesWithEmDashKey
     = kApplicationGroupKey + "/replace-two-dashes-with-em-dash";
 // запретить вводить несколько пробелов подряд
 const QString kApplicationAvoidMultipleSpacesKey = kApplicationGroupKey + "/avoid-multiple-spaces";
+// использовать Vim-режим для текстовых редакторов
+const QString kApplicationUseVimModeKey = kApplicationGroupKey + "/use-vim-mode";
 // доступен ли ИИ помощник
 const QString kApplicationAiAssistantEnabledKey = kApplicationGroupKey + "/ai-assistant-enabled";
 // список недавних проектов
