@@ -28,6 +28,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 mac {
     DESTDIR = ../_build/starcapp.app/Contents/Frameworks
+
+    # Qt's resolve_target feature ignores unversioned_libname on macOS, while
+    # the makefile generator honours it. Correct the resolved path before
+    # separate_debug_info uses it to build the dsymutil and strip commands.
+    load(resolve_target)
+    QMAKE_RESOLVED_TARGET = $$absolute_path($$DESTDIR, $$OUT_PWD)/lib$${TARGET}.$${QMAKE_EXTENSION_SHLIB}
 } else {
     DESTDIR = ../_build
 }
