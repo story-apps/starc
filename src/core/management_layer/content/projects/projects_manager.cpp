@@ -1065,6 +1065,13 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     }
 
     //
+    // Если никаких изменений не было, то нечего и обновлять
+    //
+    if (cloudProject->lastEditTime() == _projectInfo.lastEditTime) {
+        return;
+    }
+
+    //
     // Сформируем путь к файлу
     //
     const auto projectDir
