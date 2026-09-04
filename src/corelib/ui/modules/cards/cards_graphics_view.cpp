@@ -1308,11 +1308,15 @@ void CardsGraphicsView::Implementation::reorderCardsInRows()
                     moveAnimation = new QVariantAnimation(scene);
                     moveAnimation->setDuration(220);
                     moveAnimation->setEasingCurve(QEasingCurve::OutQuad);
-                    QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
-                                     [this, card](const QVariant& _value) {
-                                         QSignalBlocker signalBlocker(scene);
-                                         card->setPos(_value.toPointF());
-                                     });
+                    QObject::connect(
+                        moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
+                        [this, index = card->modelItemIndex()](const QVariant& _value) {
+                            auto card = modelItemsToCards.value(index.internalPointer());
+                            if (card != nullptr) {
+                                QSignalBlocker signalBlocker(scene);
+                                card->setPos(_value.toPointF());
+                            }
+                        });
                     QObject::connect(moveAnimation.data(), &QVariantAnimation::finished, q,
                                      [this] { scene->fitToContents(); });
                 }
@@ -1611,11 +1615,15 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
                     moveAnimation = new QVariantAnimation(scene);
                     moveAnimation->setDuration(220);
                     moveAnimation->setEasingCurve(QEasingCurve::OutQuad);
-                    QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, q,
-                                     [this, card](const QVariant& _value) {
-                                         QSignalBlocker signalBlocker(scene);
-                                         card->setPos(_value.toPointF());
-                                     });
+                    QObject::connect(
+                        moveAnimation.data(), &QVariantAnimation::valueChanged, q,
+                        [this, index = card->modelItemIndex()](const QVariant& _value) {
+                            auto card = modelItemsToCards.value(index.internalPointer());
+                            if (card != nullptr) {
+                                QSignalBlocker signalBlocker(scene);
+                                card->setPos(_value.toPointF());
+                            }
+                        });
                     QObject::connect(moveAnimation.data(), &QVariantAnimation::finished, q,
                                      [this] { scene->fitToContents(); });
                 }
@@ -1821,11 +1829,15 @@ void CardsGraphicsView::Implementation::reorderCardsInHorizontalLines()
                     moveAnimation = new QVariantAnimation(scene);
                     moveAnimation->setDuration(220);
                     moveAnimation->setEasingCurve(QEasingCurve::OutQuad);
-                    QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
-                                     [this, card](const QVariant& _value) {
-                                         QSignalBlocker signalBlocker(scene);
-                                         card->setPos(_value.toPointF());
-                                     });
+                    QObject::connect(
+                        moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
+                        [this, index = card->modelItemIndex()](const QVariant& _value) {
+                            auto card = modelItemsToCards.value(index.internalPointer());
+                            if (card != nullptr) {
+                                QSignalBlocker signalBlocker(scene);
+                                card->setPos(_value.toPointF());
+                            }
+                        });
                     QObject::connect(moveAnimation.data(), &QVariantAnimation::finished, q,
                                      [this] { scene->fitToContents(); });
                 }
@@ -1972,11 +1984,15 @@ void CardsGraphicsView::Implementation::reorderCardsInVerticalLines()
                     moveAnimation = new QVariantAnimation(scene);
                     moveAnimation->setDuration(220);
                     moveAnimation->setEasingCurve(QEasingCurve::OutQuad);
-                    QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
-                                     [this, card](const QVariant& _value) {
-                                         QSignalBlocker signalBlocker(scene);
-                                         card->setPos(_value.toPointF());
-                                     });
+                    QObject::connect(
+                        moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
+                        [this, index = card->modelItemIndex()](const QVariant& _value) {
+                            auto card = modelItemsToCards.value(index.internalPointer());
+                            if (card != nullptr) {
+                                QSignalBlocker signalBlocker(scene);
+                                card->setPos(_value.toPointF());
+                            }
+                        });
                     QObject::connect(moveAnimation.data(), &QVariantAnimation::finished, q,
                                      [this] { scene->fitToContents(); });
                 }
