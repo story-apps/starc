@@ -598,6 +598,10 @@ void ProjectsManager::saveProjects()
                 permissionsJson.append(documentAccess);
             }
             projectJson["permissions"] = permissionsJson;
+
+            //
+            // TODO: сохранять производственные ограничения
+            //
         }
         projectJson["type"] = static_cast<int>(projectItem->projectType());
         projectJson["uuid"] = projectItem->uuid().toString();
@@ -1067,7 +1071,12 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     // Если никаких изменений не было, то нечего и обновлять
     //
-    if (cloudProject->lastEditTime() == _projectInfo.lastEditTime) {
+    // NOTE: мы не можем завязаться только на время последнего изменения, т.к. список соавторов
+    //       может быть изменён извне и это не приведёт напрямую к обновлению времени изменения
+    //       проекта, ведь это не изменение самого проекта, а скорее обвязка вокруг него
+    //
+    if (cloudProject->lastEditTime() == _projectInfo.lastEditTime
+        && cloudProject->collaborators() == _projectInfo.collaborators) {
         return;
     }
 
