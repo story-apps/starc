@@ -2611,6 +2611,12 @@ QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant arg
 {
     Q_D(const PageTextEdit);
     switch (query) {
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    case Qt::ImEnabled:
+        return isEnabled() && !isReadOnly();
+    case Qt::ImReadOnly:
+        return isReadOnly();
+#endif
     case Qt::ImHints:
     case Qt::ImInputItemClipRectangle:
         return QWidget::inputMethodQuery(query);
@@ -2619,17 +2625,17 @@ QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant arg
     }
 
     const QPointF offset(-d->horizontalOffset(), -d->verticalOffset());
-    switch (argument.type()) {
-    case QVariant::RectF:
+    switch (argument.userType()) {
+    case QMetaType::QRectF:
         argument = argument.toRectF().translated(-offset);
         break;
-    case QVariant::PointF:
+    case QMetaType::QPointF:
         argument = argument.toPointF() - offset;
         break;
-    case QVariant::Rect:
+    case QMetaType::QRect:
         argument = argument.toRect().translated(-offset.toPoint());
         break;
-    case QVariant::Point:
+    case QMetaType::QPoint:
         argument = argument.toPoint() - offset;
         break;
     default:
@@ -2637,14 +2643,14 @@ QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant arg
     }
 
     const QVariant v = d->control->inputMethodQuery(query, argument);
-    switch (v.type()) {
-    case QVariant::RectF:
+    switch (v.userType()) {
+    case QMetaType::QRectF:
         return v.toRectF().translated(offset);
-    case QVariant::PointF:
+    case QMetaType::QPointF:
         return v.toPointF() + offset;
-    case QVariant::Rect:
+    case QMetaType::QRect:
         return v.toRect().translated(offset.toPoint());
-    case QVariant::Point:
+    case QMetaType::QPoint:
         return v.toPoint() + offset.toPoint();
     default:
         break;
