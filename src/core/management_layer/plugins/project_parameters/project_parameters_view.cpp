@@ -474,6 +474,21 @@ void ProjectParametersView::setEditingMode(ManagementLayer::DocumentEditingMode 
     d->showSceneNumbersOnLeft->setEnabled(enabled);
     d->showSceneNumbersOnRight->setEnabled(enabled);
     d->showDialoguesNumbers->setEnabled(enabled);
+    d->screenplayDurationByPage->setEnabled(enabled);
+    d->screenplayDurationByPage->setEnabled(enabled);
+    d->screenplayDurationByPagePage->setEnabled(enabled);
+    d->screenplayDurationByPageDuration->setEnabled(enabled);
+    d->screenplayDurationByCharacters->setEnabled(enabled);
+    d->screenplayDurationByCharactersCharacters->setEnabled(enabled);
+    d->screenplayDurationByCharactersIncludingSpaces->setEnabled(enabled);
+    d->screenplayDurationByCharactersDuration->setEnabled(enabled);
+    d->screenplayDurationConfigurable->setEnabled(enabled);
+    d->screenplayDurationConfigurablePerParagraphForAction->setEnabled(enabled);
+    d->screenplayDurationConfigurablePerEvery50ForAction->setEnabled(enabled);
+    d->screenplayDurationConfigurablePerParagraphForDialogue->setEnabled(enabled);
+    d->screenplayDurationConfigurablePerEvery50ForDialogue->setEnabled(enabled);
+    d->screenplayDurationConfigurablePerParagraphForSceneHeading->setEnabled(enabled);
+    d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setEnabled(enabled);
 }
 
 void ProjectParametersView::setOverrideCommonSettings(bool _override)
