@@ -1238,7 +1238,13 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
         return;
     }
 
-    if (value(_key) == _value) {
+    //
+    // Проверяем, изменилось ли устанавливаемое значение
+    //
+    if ((_type == Type::Application
+         && (d->pendingAppSettings.value(_key) == _value
+             || d->appSettings.value(_key.toUtf8().toHex()) == _value))
+        || (_type == Type::Session && d->sessionSettings.value(_key) == _value)) {
         return;
     }
 
@@ -1257,9 +1263,14 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
     }
 
     //
-    // Кэшируем значение
+    // Кэшируем значение которое задано:
+    // - для всего приложения, если сессия его не переопределяет
+    // - для сессии, каждый раз
     //
-    d->cacheValue(_key, _value);
+    if ((_type == Type::Application && !d->sessionSettings.contains(_key))
+        || (_type == Type::Session)) {
+        d->cacheValue(_key, _value);
+    }
 
     //
     // Сохраняем его в заданное хранилище
@@ -1348,7 +1359,19 @@ QVariant SettingsStorage::value(const QString& _key, const QVariant& _defaultVal
     // Если в сессии нет, то смотрим в настройках приложения
     //
     else {
-        value = d->appSettings.value(_key.toUtf8().toHex(), QVariant());
+        //
+        // ... подготовленные к записи
+        //
+        if (const auto iter = d->pendingAppSettings.find(_key);
+            iter != d->pendingAppSettings.end()) {
+            value = iter.value();
+        }
+        //
+        // ... сохранённые
+        //
+        else {
+            value = d->appSettings.value(_key.toUtf8().toHex(), QVariant());
+        }
     }
 
     //
@@ -1364,7 +1387,7 @@ QVariant SettingsStorage::value(const QString& _key, const QVariant& _defaultVal
     }
 
     //
-    // Если параметр не задан, то используем заданное значение по умолчанию
+    // Если не удалось загрузить, то используем заданное значение по умолчанию
     //
     if (!_defaultValue.isNull()) {
         return _defaultValue;
