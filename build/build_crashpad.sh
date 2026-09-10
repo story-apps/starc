@@ -75,10 +75,12 @@ else
 fi
 export PATH="$DEPOT_TOOLS_DIR:$PATH"
 
+echo "[*] Updating depot_tools..."
+cd "$DEPOT_TOOLS_DIR"
 if [ "$PLATFORM" = "win" ]; then
-    echo "[*] Updating depot_tools..."
-    cd "$DEPOT_TOOLS_DIR"
     ./update_depot_tools.bat
+else
+    ./update_depot_tools
 fi
 
 # 3. Скачиваем crashpad, если нет
