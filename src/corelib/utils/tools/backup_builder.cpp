@@ -99,12 +99,19 @@ BackupBuilder::BackupResult BackupBuilder::save(const QString& _filePath, const 
     auto normalizedAndEscaped = [&normalized](const QString& _text) {
         return TextHelper::toRxEscaped(normalized(_text));
     };
+    //
+    // Ищем файлы которые соответствуют имени проекта, а также учитываем кейс с файлами, которые
+    // были выгружены в iCloud для macOS, у таких файлов добавляется точка в начале имени и .icloud
+    // в конце
+    //
     const QRegularExpression backupNamePattern(
-        QStringLiteral("^%1_(.*)[.]%2$")
+        QStringLiteral("^(|[.])%1_(.*)%2(|.icloud)$")
             .arg(normalizedAndEscaped(backupBaseName),
                  normalizedAndEscaped(fileInfo.completeSuffix())));
     QVector<QString> backups;
-    const auto files = QDir(_backupDir).entryInfoList(QDir::Files);
+    const auto files
+        = QDir(_backupDir)
+              .entryInfoList(QDir::Files | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot);
     for (const auto& file : files) {
         if (backupNamePattern.match(normalized(file.fileName())).hasMatch()) {
             backups.append(file.absoluteFilePath());
@@ -114,7 +121,20 @@ BackupBuilder::BackupResult BackupBuilder::save(const QString& _filePath, const 
     //
     // ... помещаем сверху актуальные, а внизу старые
     //
-    std::sort(backups.begin(), backups.end(), std::greater<QString>());
+    std::sort(backups.begin(), backups.end(), [](const QString& _lhs, const QString& _rhs) {
+        //
+        // ... учитываем скрытые копии из iCloud
+        //
+        auto clearName = [](const QString& _path) {
+            const auto fileName = QFileInfo(_path).fileName();
+            const QLatin1String icloudSuffix(".icloud");
+            if (fileName.startsWith('.') && fileName.endsWith(icloudSuffix)) {
+                return fileName.mid(1, fileName.size() - 1 - icloudSuffix.size());
+            }
+            return fileName;
+        };
+        return clearName(_lhs) > clearName(_rhs);
+    });
 
     //
     // Удаляем старые
