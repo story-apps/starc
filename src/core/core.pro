@@ -13,6 +13,13 @@ QT += concurrent widgets multimedia network sql xml
 
 TARGET = coreplugin
 
+#
+# Some of the statically linked third-party objects do not provide a
+# .note.GNU-stack section.  Do not let that make the plugin request an
+# executable stack: hardened Linux kernels refuse to load such libraries.
+#
+linux:QMAKE_LFLAGS += -Wl,-z,noexecstack
+
 exists("../cloud/cloud.pri") {
     include(../cloud/cloud.pri)
 }
