@@ -57,10 +57,22 @@ int ApplicationStyle::pixelMetric(QStyle::PixelMetric _metric, const QStyleOptio
 void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QStyleOption* _option,
                                      QPainter* _painter, const QWidget* _widget) const
 {
+    switch (_element) {
+    //
+    // Fusion рисует PE_PanelTipLabel вместе с однопиксельной рамкой. Обрезать её только маской
+    // недостаточно: на экранах macOS с дробным коэффициентом масштабирования при переводе маски
+    // в физические пиксели часть рамки может остаться видимой. Поэтому фон тултипа рисуем сами.
+    // Скругление по-прежнему задаётся маской в styleHint().
+    //
+    case PE_PanelTipLabel: {
+        _painter->fillRect(_option->rect, _option->palette.brush(QPalette::ToolTipBase));
+        break;
+    }
+
     //
     // Отрисовка индикатора вставки/перемещения элементов при драг&дропе
     //
-    if (_element == PE_IndicatorItemViewItemDrop) {
+    case PE_IndicatorItemViewItemDrop: {
         _painter->setRenderHint(QPainter::Antialiasing, true);
 
         QColor indicatorColor(_widget->palette().text().color());
@@ -137,11 +149,13 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
             _painter->drawRoundedRect(rect, Ui::DesignSystem::layout().px(2.0),
                                       Ui::DesignSystem::layout().px(2.0));
         }
+        break;
     }
+
     //
     // Рисуем индикатор элемента в дереве (открытый/закрытый)
     //
-    else if (_element == PE_IndicatorBranch) {
+    case PE_IndicatorBranch: {
         _painter->setRenderHint(QPainter::Antialiasing, true);
 
         //
@@ -228,12 +242,16 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
             //
             _painter->drawPolygon(triangle);
         }
+        break;
     }
+
     //
     // Всё остальное рисуем стандартным образом
     //
-    else {
+    default: {
         QProxyStyle::drawPrimitive(_element, _option, _painter, _widget);
+        break;
+    }
     }
 }
 
@@ -243,11 +261,10 @@ int ApplicationStyle::styleHint(QStyle::StyleHint _hint, const QStyleOption* _op
     if (_hint == QStyle::SH_ToolTip_Mask) {
         if (auto mask = qstyleoption_cast<QStyleHintReturnMask*>(_returnData)) {
             //
-            // Обрезаем регион на единичку, чтобы не рисовалась рамка,
-            // и срезаем края, чтобы получить эффект закруглённых углов
+            // Срезаем края, чтобы получить эффект закруглённых углов
             //
             int x, y, w, h;
-            _option->rect.adjusted(1, 1, -1, -1).getRect(&x, &y, &w, &h);
+            _option->rect.getRect(&x, &y, &w, &h);
             QRegion toolTipRegion(x + 4, y + 0, w - 4 * 2, h - 0 * 2);
             toolTipRegion += QRegion(x + 0, y + 4, w - 0 * 2, h - 4 * 2);
             toolTipRegion += QRegion(x + 2, y + 1, w - 2 * 2, h - 1 * 2);
