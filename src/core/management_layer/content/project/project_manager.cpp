@@ -2833,7 +2833,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
         connect(view, &Ui::ProjectView::showDraftContextMenuPressed, this, [this](int _draftIndex) {
             const auto currentItemIndex
                 = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
-            const auto item = d->projectStructureModel->itemForIndex(currentItemIndex);
+            const auto item = d->aliasedItemForIndex(currentItemIndex);
             const auto isCurrentDraft = _draftIndex == 0;
             const auto realDraftIndex = _draftIndex - 1;
             const auto hasActualDrafts
