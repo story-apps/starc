@@ -118,7 +118,7 @@ QString NovelMarkdownExporter::formatSymbols(TextSelectionTypes _type) const
         return "**";
     }
     case TextSelectionTypes::Italic: {
-        return "_";
+        return "*";
     }
     case TextSelectionTypes::StrikeOut: {
         return "~~";

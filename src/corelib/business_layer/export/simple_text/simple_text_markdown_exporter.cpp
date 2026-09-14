@@ -79,7 +79,7 @@ QString SimpleTextMarkdownExporter::formatSymbols(TextSelectionTypes _type) cons
         return "**";
     }
     case TextSelectionTypes::Italic: {
-        return "_";
+        return "*";
     }
     case TextSelectionTypes::StrikeOut: {
         return "~~";
