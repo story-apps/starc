@@ -215,12 +215,12 @@ AccountViewTeams::AccountViewTeams(QWidget* _parent)
             return;
         }
 
-        if (!EmailValidator::isValid(d->email->text())) {
+        const auto email = d->email->text().trimmed();
+        if (!EmailValidator::isValid(email)) {
             d->email->setError(tr("Email invalid"));
             return;
         }
 
-        const auto email = d->email->text();
         d->email->clear();
         const auto nameForTeam = d->nameForTeam->text();
         d->nameForTeam->clear();
