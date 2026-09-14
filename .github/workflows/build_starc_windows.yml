@@ -346,6 +346,18 @@ jobs:
           cd src
           jom -j4
 
+      - name: Set up Node.js for symbol upload
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dump_syms
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        run: |
+          npm i -g @mapbox/node-pre-gyp
+          npm i -g node-dump-syms
+
       - name: Upload debug symbols from _build folder
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         uses: BugSplat-Git/symbol-upload@v11
@@ -357,7 +369,7 @@ jobs:
           version: ${{ env.BUGSPLAT_VERSION }}
           directory: src/_build
           files: "**/*.{pdb,exe,dll}"
-          dumpSyms: false
+          dumpSyms: true
           node-version: 24
 
       - name: Prepare installer folder
