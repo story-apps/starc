@@ -503,7 +503,8 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         break;
     }
 
-    case 4805: {
+    case 4805:
+    case 4827: {
         return {
             { BusinessLayer::ComplianceRuleType::TotalDuration, {}, true, 23 * 60, 25 * 60, {} },
             { BusinessLayer::ComplianceRuleType::ScenesCount, {}, true, 16, 24, {} },
