@@ -15,6 +15,10 @@
 #include <NetworkRequestLoader.h>
 
 
+namespace {
+const QLatin1String kToken("d087a94d581cf036ba24f3b7c003ed427f252d946a25a81997c44529bbf9fcfb");
+}
+
 namespace Ui {
 
 class SessionWidget::Implementation
@@ -102,17 +106,24 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
     d->lastUsedIcon->setVisible(d->sessionInfo.isCurrentDevice);
 
     const auto ipToLocationUrl
-        = QString("https://reallyfreegeoip.org/json/%1").arg(d->sessionInfo.location);
+        = QString("https://geo2ip.storyapps.dev/%1?token=%2").arg(d->sessionInfo.location, kToken);
     NetworkRequestLoader::loadAsync(ipToLocationUrl, this, [this](const QByteArray& _data) {
         const auto json = QJsonDocument::fromJson(_data).object();
-        const auto country = json["country_name"].toString();
-        const auto region = json["region_name"].toString();
+        const auto country = json["country"].toString();
+        const auto region = json["region"].toString();
         const auto city = json["city"].toString();
-        QString location = country + ", " + region;
-        if (region != city) {
+        QString location;
+        const char* unknown = "unknown";
+        if (country != unknown) {
+            location += country;
+        }
+        if (region != unknown) {
+            location += ", " + region;
+        }
+        if (city != unknown && city != region) {
             location += ", " + city;
         }
-        if (country.isEmpty()) {
+        if (location.isEmpty()) {
             location = "Wizard's world";
         }
 
