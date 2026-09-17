@@ -156,11 +156,9 @@ BackupBuilder::BackupResult BackupBuilder::save(const QString& _filePath, const 
         ++removedBackupsAmount;
     }
 
-    backupResult.status
-        = QObject::tr("Backup created: path=\"%1\", matching backups=%2, removed=%3",
-                      "BackupBuilder")
-              .arg(backupFileName)
-              .arg(foundBackupsAmount)
-              .arg(removedBackupsAmount);
+    backupResult.status = QString("Backup created: path=\"%1\", matching backups=%2, removed=%3")
+                              .arg(backupFileName)
+                              .arg(foundBackupsAmount)
+                              .arg(removedBackupsAmount);
     return backupResult;
 }
