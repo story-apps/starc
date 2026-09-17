@@ -535,6 +535,7 @@ SOURCES += \
     utils/helpers/dialog_helper.cpp \
     utils/helpers/eighths_helper.cpp \
     utils/helpers/extension_helper.cpp \
+    utils/helpers/hunspell_helper.cpp \
     utils/helpers/icon_helper.cpp \
     utils/helpers/image_helper.cpp \
     utils/helpers/language_helper.cpp \
@@ -934,6 +935,7 @@ HEADERS += \
     utils/helpers/dialog_helper.h \
     utils/helpers/eighths_helper.h \
     utils/helpers/extension_helper.h \
+    utils/helpers/hunspell_helper.h \
     utils/helpers/icon_helper.h \
     utils/helpers/image_helper.h \
     utils/helpers/language_helper.h \

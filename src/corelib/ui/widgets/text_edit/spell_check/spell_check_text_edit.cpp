@@ -139,12 +139,15 @@ void SpellCheckTextEdit::setSpellCheckLanguage(const QString& _languageCode)
         return;
     }
 
-    d->spellCheckerLanguage = _languageCode;
-
     //
     // Установим язык проверяющего
     //
-    d->spellChecker.setSpellingLanguage(_languageCode);
+    const auto isLanguageSet = d->spellChecker.setSpellingLanguage(_languageCode);
+    if (!isLanguageSet) {
+        return;
+    }
+
+    d->spellCheckerLanguage = _languageCode;
 
     if (!useSpellChecker()) {
         return;

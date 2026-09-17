@@ -25,6 +25,7 @@
 #include <ui/widgets/tree/tree_header_view.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
+#include <utils/helpers/hunspell_helper.h>
 #include <utils/helpers/shortcuts_helper.h>
 #include <utils/logging.h>
 
@@ -61,7 +62,7 @@ QString spellCheckerLoadingTaskId(const QString& _languageId)
 class SettingsManager::Implementation
 {
 public:
-    explicit Implementation(QObject* _parent, QWidget* _parentWidget,
+    explicit Implementation(SettingsManager* _q, QWidget* _parentWidget,
                             const PluginsBuilder& _pluginsBuilder,
                             ShortcutsManager* _shortcutsManager);
 
@@ -99,6 +100,14 @@ public:
      */
     void reloadSettings();
 
+    /**
+     * @brief Завершить прогресс загрузки словарей проверки орфографии для заданного языка
+     */
+    void finishSpellCheckingDictionaryLoadingTask(const QString& _languageCode,
+                                                  bool _showError = true,
+                                                  const QString& _errorDetails = {});
+
+    SettingsManager* q = nullptr;
 
     Ui::SettingsToolBar* toolBar = nullptr;
     Ui::SettingsNavigator* navigator = nullptr;
@@ -109,13 +118,14 @@ public:
     ShortcutsManager* shortcutsManager = nullptr;
 };
 
-SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _parentWidget,
+SettingsManager::Implementation::Implementation(SettingsManager* _q, QWidget* _parentWidget,
                                                 const PluginsBuilder& _pluginsBuilder,
                                                 ShortcutsManager* _shortcutsManager)
-    : toolBar(new Ui::SettingsToolBar(_parentWidget))
+    : q(_q)
+    , toolBar(new Ui::SettingsToolBar(_parentWidget))
     , navigator(new Ui::SettingsNavigator(_parentWidget))
     , view(new Ui::SettingsView(_parentWidget))
-    , templateOptionsManager(new TemplateOptionsManager(_parent, _parentWidget, _pluginsBuilder))
+    , templateOptionsManager(new TemplateOptionsManager(_q, _parentWidget, _pluginsBuilder))
     , shortcutsManager(_shortcutsManager)
 {
     toolBar->hide();
@@ -909,6 +919,27 @@ void SettingsManager::Implementation::reloadSettings()
     loadComponentsSettings();
     loadShortcutsSettings();
     loadAdvancedSettings();
+}
+
+void SettingsManager::Implementation::finishSpellCheckingDictionaryLoadingTask(
+    const QString& _languageCode, bool _showError, const QString& _errorDetails)
+{
+    if (TaskBar::isTaskFinished(spellCheckerLoadingTaskId(_languageCode))) {
+        return;
+    }
+
+    if (_showError) {
+        const auto errorDetails = !_errorDetails.isEmpty()
+            ? QString("\n\n%1 %2").arg(tr("Error details:"), _errorDetails)
+            : "";
+        StandardDialog::information(
+            view->topLevelWidget(), tr("Dictionary loading error"),
+            tr("For some reason dictionary file isn't loaded. Please check internet "
+               "connection and firewall/anitivirus settings, and try to reload "
+               "dictionary.")
+                + errorDetails);
+    }
+    TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
 }
 
 
@@ -1765,6 +1796,23 @@ void SettingsManager::updateScaleFactor()
         settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
 }
 
+void SettingsManager::validateSpellCheckerDictionaries()
+{
+    //
+    // Установим язык проверки орфографии, чтобы выполнить дополнительные проверки файлов словарей
+    // перед тем, как приложение попробует их использовать
+    //
+    // NOTE: Нужно это потому что, после того, как у нас забрали сервер, в новой версии словари
+    // лежат в другом месте, а старая версия приложения не проверяла файлы словарей при загрузке и
+    // могла сохранить херню, в результате ханспел пытается считать из них данные и валится, потому
+    // что в файлах не то, что он ожидает увидеть.
+    //
+    if (settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool()) {
+        setApplicationSpellCheckerLanguage(
+            settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString());
+    }
+}
+
 void SettingsManager::reloadSettings()
 {
     d->reloadSettings();
@@ -1886,9 +1934,23 @@ void SettingsManager::setApplicationSpellCheckerLanguage(const QString& _languag
     const QFileInfo dicFileInfo(hunspellDictionariesFolderPath + dicFileName);
 
     //
-    // Если словарь установлен, просто будем использовать его
+    // Если словарь установлен, проверим валидность файлов
     //
-    if (affFileInfo.exists() && dicFileInfo.exists()) {
+    if (const auto validationError = HunspellHelper::validateDictionaryFiles(
+            affFileInfo.absoluteFilePath(), dicFileInfo.absoluteFilePath());
+        !validationError.isEmpty()) {
+        Log::warning("[SettingsManager] Spell checker dictionaries is not valid: %1",
+                     validationError);
+        //
+        // ... если они не валидны, то удалим старые кривые версии
+        //
+        QFile::remove(affFileInfo.absolutePath());
+        QFile::remove(dicFileInfo.absoluteFilePath());
+    }
+    //
+    // ... если всё ок, то просто будем использовать этот словарь
+    //
+    else {
         emit applicationSpellCheckerLanguageChanged(_languageCode);
         return;
     }
@@ -1945,14 +2007,7 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
         dictionaryLoader, &NetworkRequest::downloadComplete, this,
         [this, _languageCode, affFileName](const QByteArray& _data) {
             if (_data.isEmpty()) {
-                if (!TaskBar::isTaskFinished(spellCheckerLoadingTaskId(_languageCode))) {
-                    StandardDialog::information(
-                        d->view->topLevelWidget(), tr("Dictionary loading error"),
-                        tr("For some reason dictionary file isn't loaded. Please check internet "
-                           "connection and firewall/anitivirus settings, and try to reload "
-                           "dictionary."));
-                    TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
-                }
+                d->finishSpellCheckingDictionaryLoadingTask(_languageCode);
                 return;
             }
 
@@ -1968,19 +2023,26 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
             affFile.close();
 
             //
+            // Валидируем файл
+            //
+            if (const auto validationError = HunspellHelper::validateAffFile(affFile.fileName());
+                !validationError.isEmpty()) {
+                Log::warning("[SettingsManager] Downloaded spell checker aff file is not valid: %1",
+                             validationError);
+                d->finishSpellCheckingDictionaryLoadingTask(_languageCode);
+                affFile.remove();
+                return;
+            }
+
+            //
             // Загрузим следующий файл
             //
             loadSpellingDictionaryDicFile(_languageCode);
         });
     connect(dictionaryLoader, &NetworkRequest::error, this,
             [this, _languageCode](const QString& _error) {
-                StandardDialog::information(
-                    d->view->topLevelWidget(), tr("Dictionary loading error"),
-                    _error + "\n\n"
-                        + tr("Please check internet connection and firewall/anitivirus settings, "
-                             "and try to reload dictionary.")
-                              .arg(_error));
-                TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
+                const auto showError = true;
+                d->finishSpellCheckingDictionaryLoadingTask(_languageCode, showError, _error);
             });
     connect(dictionaryLoader, &NetworkRequest::finished, dictionaryLoader,
             &NetworkRequest::deleteLater);
@@ -2012,32 +2074,38 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
         dictionaryLoader, &NetworkRequest::downloadComplete, this,
         [this, _languageCode, dicFileName](const QByteArray& _data) {
             if (_data.isEmpty()) {
-                if (!TaskBar::isTaskFinished(spellCheckerLoadingTaskId(_languageCode))) {
-                    StandardDialog::information(
-                        d->view->topLevelWidget(), tr("Dictionary loading error"),
-                        tr("For some reason dictionary file isn't loaded. Please check internet "
-                           "connection and firewall/anitivirus settings, and try to reload "
-                           "dictionary."));
-                    TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
-                }
+                d->finishSpellCheckingDictionaryLoadingTask(_languageCode);
                 return;
             }
 
             //
             // Сохраняем файл
             //
-            QFile affFile(
+            QFile dicFile(
                 QString("%1/hunspell/%2")
                     .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                          dicFileName));
-            affFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-            affFile.write(_data);
-            affFile.close();
+            dicFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            dicFile.write(_data);
+            dicFile.close();
+
+            //
+            // Валидируем файл
+            //
+            if (const auto validationError = HunspellHelper::validateDicFile(dicFile.fileName());
+                !validationError.isEmpty()) {
+                Log::warning("[SettingsManager] Downloaded spell checker aff file is not valid: %1",
+                             validationError);
+                d->finishSpellCheckingDictionaryLoadingTask(_languageCode);
+                dicFile.remove();
+                return;
+            }
 
             //
             // Cкрываем прогресс
             //
-            TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
+            const auto showError = false;
+            d->finishSpellCheckingDictionaryLoadingTask(_languageCode, showError);
 
             //
             // Уведимим клиентов, что теперь можно использовать данный словарь
@@ -2046,13 +2114,8 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
         });
     connect(dictionaryLoader, &NetworkRequest::error, this,
             [this, _languageCode](const QString& _error) {
-                StandardDialog::information(
-                    d->view->topLevelWidget(), tr("Dictionary loading error"),
-                    _error + "\n\n"
-                        + tr("Please check internet connection and firewall/anitivirus settings, "
-                             "and try to reload dictionary.")
-                              .arg(_error));
-                TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
+                const auto showError = true;
+                d->finishSpellCheckingDictionaryLoadingTask(_languageCode, showError, _error);
             });
     connect(dictionaryLoader, &NetworkRequest::finished, dictionaryLoader,
             &NetworkRequest::deleteLater);

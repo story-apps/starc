@@ -38,7 +38,7 @@ public:
      * @brief Язык для проверки орфографии
      */
     QString spellingLanguage() const;
-    void setSpellingLanguage(const QString& _languageCode);
+    bool setSpellingLanguage(const QString& _languageCode);
 
     /**
      * @brief Проверить орфографию слова

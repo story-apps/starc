@@ -1,6 +1,8 @@
 #include "spell_checker.h"
 
 #include <hunspell/hunspell.hxx>
+#include <utils/helpers/hunspell_helper.h>
+#include <utils/logging.h>
 
 #include <QDir>
 #include <QFile>
@@ -134,11 +136,11 @@ QString SpellChecker::spellingLanguage() const
     return d->languageCode;
 }
 
-void SpellChecker::setSpellingLanguage(const QString& _languageCode)
+bool SpellChecker::setSpellingLanguage(const QString& _languageCode)
 {
     if (d->languageCode == _languageCode && !d->checker.isNull()
         && d->checkerTextCodec != nullptr) {
-        return;
+        return false;
     }
 
     //
@@ -154,13 +156,18 @@ void SpellChecker::setSpellingLanguage(const QString& _languageCode)
         d->hunspellFilePath(_languageCode, SpellCheckerFileType::Dictionary));
     if (!affFileInfo.exists() || affFileInfo.size() == 0 || !dicFileInfo.exists()
         || dicFileInfo.size() == 0) {
-        return;
+        return false;
     }
 
     //
-    // Сохраняем значение установленного языка, только если файлы со словарями существуют
+    // Валидируем файлы
     //
-    d->languageCode = _languageCode;
+    if (const auto validationError = HunspellHelper::validateDictionaryFiles(
+            affFileInfo.absoluteFilePath(), dicFileInfo.absoluteFilePath());
+        !validationError.isEmpty()) {
+        Log::warning("[SpellChecker] Spell checker dictionaries is not valid: %1", validationError);
+        return false;
+    }
 
     //
     // Создаём нового проверяющего
@@ -168,13 +175,19 @@ void SpellChecker::setSpellingLanguage(const QString& _languageCode)
     d->checker.reset(new Hunspell(affFileInfo.absoluteFilePath().toLocal8Bit().constData(),
                                   dicFileInfo.absoluteFilePath().toLocal8Bit().constData()));
     if (d->checker.isNull()) {
-        return;
+        return false;
     }
     //
     d->checkerTextCodec = QTextCodec::codecForName(d->checker->get_dic_encoding());
     if (d->checkerTextCodec == nullptr) {
-        return;
+        return false;
     }
+
+    //
+    // Сохраняем значение установленного языка, только если файлы со словарями существуют и прошли
+    // все проверки
+    //
+    d->languageCode = _languageCode;
 
     //
     // Загружаем слова из пользовательского словаря
@@ -189,6 +202,8 @@ void SpellChecker::setSpellingLanguage(const QString& _languageCode)
             userDictonaryFile.close();
         }
     }
+
+    return true;
 }
 
 bool SpellChecker::spellCheckWord(const QString& _word) const

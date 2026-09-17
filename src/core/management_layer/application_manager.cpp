@@ -2998,6 +2998,11 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
             d->loadMissedFonts();
 
             //
+            // Проверяем словари проверки орфографии
+            //
+            d->settingsManager->validateSpellCheckerDictionaries();
+
+            //
             // Переводим состояние приложение в рабочий режим
             //
             d->state = ApplicationState::Working;
