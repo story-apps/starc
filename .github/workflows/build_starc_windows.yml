@@ -91,19 +91,31 @@ jobs:
           cd src
           nmake
 
+      - name: Set up Node.js for symbol upload
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dump_syms
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          npm i -g @mapbox/node-pre-gyp
+          npm i -g node-dump-syms
+
       - name: Upload debug symbols from _build folder
         if: startsWith(github.ref, 'refs/tags/')
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://app.bugsplat.com/download/symbol-upload-windows.exe" -OutFile "symbol-upload-windows.exe"
-          .\symbol-upload-windows.exe `
-            -b "${{ secrets.BUGSPLAT_DATABASE }}" `
-            -a "starcapp-win" `
-            -v "${{ env.BUGSPLAT_VERSION }}" `
-            -d "src/_build" `
-            -f "**/*.{pdb,exe,dll}" `
-            -i "${{ secrets.BUGSPLAT_USER }}" `
-            -s "${{ secrets.BUGSPLAT_PASSWORD }}"
+        uses: BugSplat-Git/symbol-upload@v11
+        with:
+          clientId: ${{ secrets.BUGSPLAT_USER }}
+          clientSecret: ${{ secrets.BUGSPLAT_PASSWORD }}
+          database: ${{ secrets.BUGSPLAT_DATABASE }}
+          application: starcapp-win
+          version: ${{ env.BUGSPLAT_VERSION }}
+          directory: src
+          files: "**/*.{pdb,exe,dll}"
+          dumpSyms: true
+          node-version: 24
 
       - name: Prepare installer folder
         shell: bash
@@ -219,19 +231,31 @@ jobs:
           cd src
           nmake
 
+      - name: Set up Node.js for symbol upload
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dump_syms
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          npm i -g @mapbox/node-pre-gyp
+          npm i -g node-dump-syms
+
       - name: Upload debug symbols from _build folder
         if: startsWith(github.ref, 'refs/tags/')
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://app.bugsplat.com/download/symbol-upload-windows.exe" -OutFile "symbol-upload-windows.exe"
-          .\symbol-upload-windows.exe `
-            -b "${{ secrets.BUGSPLAT_DATABASE }}" `
-            -a "starcapp-win" `
-            -v "${{ env.BUGSPLAT_VERSION }}-x32" `
-            -d "src/_build" `
-            -f "**/*.{pdb,exe,dll}" `
-            -i "${{ secrets.BUGSPLAT_USER }}" `
-            -s "${{ secrets.BUGSPLAT_PASSWORD }}"
+        uses: BugSplat-Git/symbol-upload@v11
+        with:
+          clientId: ${{ secrets.BUGSPLAT_USER }}
+          clientSecret: ${{ secrets.BUGSPLAT_PASSWORD }}
+          database: ${{ secrets.BUGSPLAT_DATABASE }}
+          application: starcapp-win
+          version: ${{ env.BUGSPLAT_VERSION }}
+          directory: src
+          files: "**/*.{pdb,exe,dll}"
+          dumpSyms: true
+          node-version: 24
 
       - name: Prepare installer folder
         shell: bash
@@ -367,7 +391,7 @@ jobs:
           database: ${{ secrets.BUGSPLAT_DATABASE }}
           application: starcapp-win
           version: ${{ env.BUGSPLAT_VERSION }}
-          directory: src/_build
+          directory: src
           files: "**/*.{pdb,exe,dll}"
           dumpSyms: true
           node-version: 24
