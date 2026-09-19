@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QDebug>
 #include <QFile>
 
 #include <corelib_global.h>
@@ -106,6 +107,14 @@ public:
 
     static void qtOutputHandler(QtMsgType _type, const QMessageLogContext& _context,
                                 const QString& _message);
+
+    template<typename T>
+    static QString toDebugString(const T& _value)
+    {
+        QString result;
+        QDebug(&result).nospace() << _value;
+        return result;
+    }
 
 private:
     /**
