@@ -7,18 +7,27 @@
 
 #include <iostream>
 
-namespace {
-static QFile s_logFile;
-static QElapsedTimer s_dayTimer;
-} // namespace
 
-Log::Level Log::s_logLevel = Log::Level::Warning;
+//
+// The Qt message handler remains installed until process termination and can be called while
+// static objects from other DLLs are being destroyed. In particular, Qt may log from a plugin
+// destructor after this library's static destructors have already run on Windows. Keep the
+// handler's storage alive for the lifetime of the process instead of declaring QFile and
+// QElapsedTimer as direct static members, whose destructors would recreate the original bug.
+//
+struct Log::Storage {
+    QFile file;
+    QElapsedTimer dayTimer;
+    Level level = Level::Warning;
+};
+Log::Storage* Log::s_storage = new Log::Storage;
+
 
 void Log::init(Log::Level _level, const QString& _filePath)
 {
     qInstallMessageHandler(qtOutputHandler);
 
-    s_logLevel = _level;
+    s_storage->level = _level;
 
     if (!_filePath.isEmpty()) {
         const QFileInfo logFileInfo(_filePath);
@@ -32,15 +41,15 @@ void Log::init(Log::Level _level, const QString& _filePath)
             return;
         }
 
-        s_logFile.setFileName(_filePath);
-        const auto isFileOpened = s_logFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        s_storage->file.setFileName(_filePath);
+        const auto isFileOpened = s_storage->file.open(QIODevice::WriteOnly | QIODevice::Truncate);
         if (!isFileOpened) {
             warning("Can't open file \"%1\" to writing log. Error is \"%2\"", _filePath,
-                    s_logFile.errorString());
+                    s_storage->file.errorString());
             return;
         }
 
-        s_dayTimer.start();
+        s_storage->dayTimer.start();
     }
 
     trace("Logger initialized with \"%1\" level and \"%2\" log file path",
@@ -62,20 +71,20 @@ void Log::printBuildInfo()
 
 QString Log::logFilePath()
 {
-    return s_logFile.fileName();
+    return s_storage->file.fileName();
 }
 
 void Log::message(const QString& _message, Level _logLevel)
 {
-    if (_logLevel < s_logLevel) {
+    if (_logLevel < s_storage->level) {
         return;
     }
 
-    if (s_logFile.isOpen() && s_dayTimer.hasExpired(24 * 60 * 60 * 1000)) {
-        const auto logPath = s_logFile.fileName();
-        s_logFile.close();
-        s_logFile.rename(QDate::currentDate().addDays(-1).toString(Qt::ISODate) + ".log");
-        init(s_logLevel, logPath);
+    if (s_storage->file.isOpen() && s_storage->dayTimer.hasExpired(24 * 60 * 60 * 1000)) {
+        const auto logPath = s_storage->file.fileName();
+        s_storage->file.close();
+        s_storage->file.rename(QDate::currentDate().addDays(-1).toString(Qt::ISODate) + ".log");
+        init(s_storage->level, logPath);
     }
 
     const QString time = QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz");
@@ -87,10 +96,10 @@ void Log::message(const QString& _message, Level _logLevel)
 
     std::cout << logEntry.toStdString() << std::endl;
 
-    if (s_logFile.isOpen()) {
-        s_logFile.write(logEntry.toUtf8());
-        s_logFile.write("\r\n");
-        s_logFile.flush();
+    if (s_storage->file.isOpen()) {
+        s_storage->file.write(logEntry.toUtf8());
+        s_storage->file.write("\r\n");
+        s_storage->file.flush();
     }
 }
 
@@ -119,4 +128,9 @@ void Log::qtOutputHandler(QtMsgType _type, const QMessageLogContext& _context,
         fatal(message);
         abort();
     }
+}
+
+Log::Level Log::logLevel()
+{
+    return s_storage->level;
 }

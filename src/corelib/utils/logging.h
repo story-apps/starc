@@ -48,7 +48,7 @@ public:
     template<typename... Args>
     static void trace(const QString& _message, Args... _args)
     {
-        if (s_logLevel > Level::Trace) {
+        if (logLevel() > Level::Trace) {
             return;
         }
 
@@ -58,7 +58,7 @@ public:
     template<typename... Args>
     static void debug(const QString& _message, Args... _args)
     {
-        if (s_logLevel > Level::Debug) {
+        if (logLevel() > Level::Debug) {
             return;
         }
 
@@ -68,7 +68,7 @@ public:
     template<typename... Args>
     static void info(const QString& _message, Args... _args)
     {
-        if (s_logLevel > Level::Info) {
+        if (logLevel() > Level::Info) {
             return;
         }
 
@@ -78,7 +78,7 @@ public:
     template<typename... Args>
     static void warning(const QString& _message, Args... _args)
     {
-        if (s_logLevel > Level::Warning) {
+        if (logLevel() > Level::Warning) {
             return;
         }
 
@@ -88,7 +88,7 @@ public:
     template<typename... Args>
     static void critical(const QString& _message, Args... _args)
     {
-        if (s_logLevel > Level::Critical) {
+        if (logLevel() > Level::Critical) {
             return;
         }
 
@@ -98,7 +98,7 @@ public:
     template<typename... Args>
     static void fatal(const QString& _message, Args... _args)
     {
-        if (s_logLevel > Level::Fatal) {
+        if (logLevel() > Level::Fatal) {
             return;
         }
 
@@ -108,6 +108,9 @@ public:
     static void qtOutputHandler(QtMsgType _type, const QMessageLogContext& _context,
                                 const QString& _message);
 
+    /**
+     * @brief Additional method to convert any value to it's text representation
+     */
     template<typename T>
     static QString toDebugString(const T& _value)
     {
@@ -138,8 +141,15 @@ private:
     }
 
 private:
+    struct Storage;
+
     /**
-     * @brief Loging level
+     * @brief Storage that must outlive static destruction while the Qt handler is installed
      */
-    static Level s_logLevel;
+    static Storage* s_storage;
+
+    /**
+     * @brief Current logging level stored in the process-lifetime storage
+     */
+    static Level logLevel();
 };
