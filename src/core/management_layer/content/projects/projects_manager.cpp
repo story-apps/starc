@@ -1066,6 +1066,7 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     if (cloudProject == nullptr) {
         cloudProject = new BusinessLayer::ProjectsModelProjectItem;
+        cloudProject->setLastEditTime(QDateTime::currentDateTime());
     }
 
     //
