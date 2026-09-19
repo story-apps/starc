@@ -1684,11 +1684,12 @@ bool NovelTextEdit::canInsertFromMimeData(const QMimeData* _source) const
 
 QMimeData* NovelTextEdit::createMimeDataFromSelection() const
 {
+    auto mimeData = new QMimeData;
+
     if (!textCursor().hasSelection()) {
-        return {};
+        return mimeData;
     }
 
-    QMimeData* mimeData = new QMimeData;
     BusinessLayer::TextCursor cursor = textCursor();
     const auto selection = cursor.selectionInterval();
 

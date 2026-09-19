@@ -1351,11 +1351,12 @@ bool ScreenplayTreatmentEdit::canInsertFromMimeData(const QMimeData* _source) co
 
 QMimeData* ScreenplayTreatmentEdit::createMimeDataFromSelection() const
 {
+    auto mimeData = new QMimeData;
+
     if (!textCursor().hasSelection()) {
-        return {};
+        return mimeData;
     }
 
-    QMimeData* mimeData = new QMimeData;
     BusinessLayer::TextCursor cursor = textCursor();
     auto selection = cursor.selectionInterval();
     //

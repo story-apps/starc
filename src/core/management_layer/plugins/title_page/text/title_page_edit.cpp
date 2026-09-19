@@ -638,11 +638,12 @@ bool TitlePageEdit::canInsertFromMimeData(const QMimeData* _source) const
 
 QMimeData* TitlePageEdit::createMimeDataFromSelection() const
 {
+    auto mimeData = new QMimeData;
+
     if (!textCursor().hasSelection()) {
-        return {};
+        return mimeData;
     }
 
-    QMimeData* mimeData = new QMimeData;
     TextCursor cursor = textCursor();
     const auto selection = cursor.selectionInterval();
 
