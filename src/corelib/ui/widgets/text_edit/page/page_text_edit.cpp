@@ -32,7 +32,6 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
-#include <utils/logging.h>
 
 #include <qapplication.h>
 #include <qdatetime.h>
@@ -2611,10 +2610,6 @@ QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery property) const
 QVariant PageTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant argument) const
 {
     Q_D(const PageTextEdit);
-
-    Log::debug("[PageTextEdit] Input method query info: query = %1, argument = %2",
-               Log::toDebugString(query), Log::toDebugString(argument));
-
     switch (query) {
 #if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
     case Qt::ImEnabled:
