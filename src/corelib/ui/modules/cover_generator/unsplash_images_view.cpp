@@ -294,7 +294,7 @@ int UnsplashImagesView::heightForWidth(int _width) const
         return kImageWidth;
     }
 
-    const int columns = _width / kImageWidth + (_width % kImageWidth > 0 ? 1 : 0);
+    const int columns = std::max(1, _width / kImageWidth + (_width % kImageWidth > 0 ? 1 : 0));
     const int rows = d->images.size() / columns + (d->images.size() % columns > 0 ? 1 : 0);
     const auto imageSize = _width / static_cast<qreal>(columns);
     return rows * imageSize;
