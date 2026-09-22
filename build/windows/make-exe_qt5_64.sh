@@ -31,48 +31,48 @@ cp $APP_BIN_DIR/crashpad/crashpad_handler.exe $EXE_APP_DIR/crashpad
 #
 # Copy Qt libraries
 #
-cp $Qt5_Dir/bin/d3dcompiler_47.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/libEGL.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/libGLESv2.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/opengl32sw.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Concurrent.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Core.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5DBus.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Gui.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Multimedia.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Network.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5PrintSupport.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Sql.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Svg.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5WebSockets.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Widgets.dll $EXE_APP_DIR/
-cp $Qt5_Dir/bin/Qt5Xml.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/d3dcompiler_47.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/libEGL.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/libGLESv2.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/opengl32sw.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Concurrent.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Core.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5DBus.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Gui.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Multimedia.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Network.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5PrintSupport.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Sql.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Svg.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5WebSockets.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Widgets.dll $EXE_APP_DIR/
+cp $QT_ROOT_DIR/bin/Qt5Xml.dll $EXE_APP_DIR/
 #
 # Copy Qt plugins
 #
 mkdir $EXE_APP_DIR/audio
-cp $Qt5_Dir/plugins/audio/qtaudio_wasapi.dll $EXE_APP_DIR/audio/
-cp $Qt5_Dir/plugins/audio/qtaudio_windows.dll $EXE_APP_DIR/audio/
+cp $QT_ROOT_DIR/plugins/audio/qtaudio_wasapi.dll $EXE_APP_DIR/audio/
+cp $QT_ROOT_DIR/plugins/audio/qtaudio_windows.dll $EXE_APP_DIR/audio/
 mkdir $EXE_APP_DIR/iconengines
-cp $Qt5_Dir/plugins/iconengines/qsvgicon.dll $EXE_APP_DIR/iconengines/
+cp $QT_ROOT_DIR/plugins/iconengines/qsvgicon.dll $EXE_APP_DIR/iconengines/
 mkdir $EXE_APP_DIR/imageformats
-cp $Qt5_Dir/plugins/imageformats/qgif.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qicns.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qico.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qjpeg.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qsvg.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qtga.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qtiff.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qwbmp.dll $EXE_APP_DIR/imageformats/
-cp $Qt5_Dir/plugins/imageformats/qwebp.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qgif.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qicns.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qico.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qjpeg.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qsvg.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qtga.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qtiff.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qwbmp.dll $EXE_APP_DIR/imageformats/
+cp $QT_ROOT_DIR/plugins/imageformats/qwebp.dll $EXE_APP_DIR/imageformats/
 mkdir $EXE_APP_DIR/platforms
-cp $Qt5_Dir/plugins/platforms/qwindows.dll $EXE_APP_DIR/platforms/
+cp $QT_ROOT_DIR/plugins/platforms/qwindows.dll $EXE_APP_DIR/platforms/
 mkdir $EXE_APP_DIR/printsupport
-cp $Qt5_Dir/plugins/printsupport/windowsprintersupport.dll $EXE_APP_DIR/printsupport/
+cp $QT_ROOT_DIR/plugins/printsupport/windowsprintersupport.dll $EXE_APP_DIR/printsupport/
 mkdir $EXE_APP_DIR/sqldrivers
-cp $Qt5_Dir/plugins/sqldrivers/qsqlite.dll $EXE_APP_DIR/sqldrivers/
+cp $QT_ROOT_DIR/plugins/sqldrivers/qsqlite.dll $EXE_APP_DIR/sqldrivers/
 mkdir $EXE_APP_DIR/styles
-cp $Qt5_Dir/plugins/styles/qwindowsvistastyle.dll $EXE_APP_DIR/styles/
+cp $QT_ROOT_DIR/plugins/styles/qwindowsvistastyle.dll $EXE_APP_DIR/styles/
 #
 # Copy openssl lib
 #

@@ -73,21 +73,31 @@ jobs:
           cd src
           make -j4
 
-      - name: Upload debug symbols
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+      - name: Set up Node.js for symbol upload
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dump_syms
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
-          curl -sL -O "https://app.bugsplat.com/download/symbol-upload-macos-intel"
-          xattr -r -d com.apple.quarantine ./symbol-upload-macos-intel || true
-          chmod +x symbol-upload-macos-intel
-          ./symbol-upload-macos-intel \
-            -b "${{ secrets.BUGSPLAT_DATABASE }}" \
-            -a "starcapp-mac" \
-            -v "${{ env.BUGSPLAT_VERSION }}" \
-            -d "src/_build" \
-            -f "**/*.dSYM" \
-            -i "${{ secrets.BUGSPLAT_USER }}" \
-            -s "${{ secrets.BUGSPLAT_PASSWORD }}" \
-            -m
+          npm i -g @mapbox/node-pre-gyp
+          npm i -g node-dump-syms
+
+      - name: Upload debug symbols
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: BugSplat-Git/symbol-upload@v11
+        with:
+          clientId: ${{ secrets.BUGSPLAT_USER }}
+          clientSecret: ${{ secrets.BUGSPLAT_PASSWORD }}
+          database: ${{ secrets.BUGSPLAT_DATABASE }}
+          application: starcapp-mac
+          version: ${{ env.BUGSPLAT_VERSION }}
+          directory: src/_build
+          files: "**/*.dSYM"
+          dumpSyms: true
+          node-version: 24
 
       - name: Make dmg image
         uses: nick-fields/retry@v3
@@ -115,7 +125,7 @@ jobs:
           path: build/mac/starc-setup-qt5.dmg
 
       - name: Publish artifacts to the dev stream and notify clients
-        if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') != true && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup-qt5.dmg" -F "file_bin=@build/mac/starc-setup-qt5.dmg" https://starc.app/api/app/updates/publish/
@@ -187,19 +197,19 @@ jobs:
           make -j4
 
       - name: Set up Node.js for symbol upload
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/master') || startsWith(github.ref, 'refs/tags/')
         uses: actions/setup-node@v6
         with:
           node-version: 24
 
       - name: Install dump_syms
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/master') || startsWith(github.ref, 'refs/tags/')
         run: |
           npm i -g @mapbox/node-pre-gyp
           npm i -g node-dump-syms
 
       - name: Upload debug symbols
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/master') || startsWith(github.ref, 'refs/tags/')
         uses: BugSplat-Git/symbol-upload@v11
         with:
           clientId: ${{ secrets.BUGSPLAT_USER }}
@@ -237,7 +247,7 @@ jobs:
           path: build/mac/starc-setup.dmg
 
       - name: Publish artifacts to the dev stream and notify clients
-        if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') != true && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup.dmg" -F "file_bin=@build/mac/starc-setup.dmg" https://starc.app/api/app/updates/publish/
