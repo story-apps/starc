@@ -4505,7 +4505,8 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     case Domain::DocumentObjectType::Project:
     case Domain::DocumentObjectType::ScreenplayDictionaries:
     case Domain::DocumentObjectType::Characters:
-    case Domain::DocumentObjectType::Locations: {
+    case Domain::DocumentObjectType::Locations:
+    case Domain::DocumentObjectType::Worlds: {
         document = DataStorageLayer::StorageFacade::documentStorage()->document(documentType);
         DataStorageLayer::StorageFacade::documentStorage()->updateDocumentUuid(document->uuid(),
                                                                                _documentInfo.uuid);

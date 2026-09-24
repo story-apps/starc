@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QSqlDatabase>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QStringList>
@@ -231,6 +232,8 @@ void Database::open(QSqlDatabase& _database, const QString& _connectionName,
         createEnums(_database);
     if (states.testFlag(OldVersionFlag))
         updateDatabase(_database);
+
+    validateDatabase(_database);
 }
 
 // Проверка состояния базы данных
@@ -609,6 +612,79 @@ void Database::updateDatabaseTo_0_6_2(QSqlDatabase& _database)
 
     q_updater.exec("ALTER TABLE documents ADD synced_at TEXT DEFAULT(NULL)");
 
+    _database.commit();
+}
+
+void Database::validateDatabase(QSqlDatabase& _database)
+{
+    //
+    // Валидируем базу, чтобы документы заданных типов были в единственном экземпляре
+    // NOTE: После некоторых проблемных ситуаций такое могло происходить, например после
+    //       восстановления работы облачного сервиса с проектами, с которыми работали до утраты
+    //       данных и в то же время после утраты
+    // TODO: Выпилить в версии 1.0
+    //
+    const QVector<int> singletonDocumentTypes = {
+        1, // Domain::DocumentObjectType::Structure
+        10001, // Domain::DocumentObjectType::RecycleBin
+        10000, // Domain::DocumentObjectType::Project
+        10105, // Domain::DocumentObjectType::ScreenplayDictionaries
+        30000, // Domain::DocumentObjectType::Characters
+        40000, // Domain::DocumentObjectType::Locations
+        50000, // Domain::DocumentObjectType::Wolrds
+    };
+
+    _database.transaction();
+    for (const auto& documentType : singletonDocumentTypes) {
+        QSqlQuery documentsQuery(_database);
+        documentsQuery.prepare(
+            "SELECT documents.id, documents.uuid "
+            "FROM documents "
+            "LEFT JOIN documents_changes "
+            "ON documents_changes.fk_document_uuid = documents.uuid "
+            "WHERE documents.type = ? "
+            "GROUP BY documents.id "
+            "ORDER BY COALESCE(MAX(documents_changes.date_time), documents.synced_at, '') DESC, "
+            "documents.id DESC");
+        documentsQuery.addBindValue(static_cast<int>(documentType));
+        if (!documentsQuery.exec()) {
+            _database.rollback();
+            setLastError(documentsQuery.lastError().text());
+            return;
+        }
+
+        QVector<QPair<QVariant, QVariant>> duplicateDocuments;
+        bool keepDocument = true;
+        while (documentsQuery.next()) {
+            if (keepDocument) {
+                keepDocument = false;
+                continue;
+            }
+
+            duplicateDocuments.append({ documentsQuery.value("id"), documentsQuery.value("uuid") });
+        }
+        documentsQuery.finish();
+
+        for (const auto& [documentId, documentUuid] : std::as_const(duplicateDocuments)) {
+            QSqlQuery removeChangesQuery(_database);
+            removeChangesQuery.prepare("DELETE FROM documents_changes WHERE fk_document_uuid = ?");
+            removeChangesQuery.addBindValue(documentUuid);
+            if (!removeChangesQuery.exec()) {
+                _database.rollback();
+                setLastError(removeChangesQuery.lastError().text());
+                return;
+            }
+
+            QSqlQuery removeDocumentQuery(_database);
+            removeDocumentQuery.prepare("DELETE FROM documents WHERE id = ?");
+            removeDocumentQuery.addBindValue(documentId);
+            if (!removeDocumentQuery.exec()) {
+                _database.rollback();
+                setLastError(removeDocumentQuery.lastError().text());
+                return;
+            }
+        }
+    }
     _database.commit();
 }
 
