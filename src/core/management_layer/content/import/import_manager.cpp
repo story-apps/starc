@@ -270,6 +270,14 @@ void ImportManager::Implementation::importSimpleText(const BusinessLayer::Import
     }
 
     //
+    // Если закинули какую-то хрень, то просто игнорируем дальнейшее выполнение
+    //
+    if (importer.isNull()) {
+        Log::warning("Unsupporter file type (%1) for simple text exporting", _options.filePath);
+        return;
+    }
+
+    //
     // Импортируем текстовый документ
     //
     const auto document = importer->importSimpleText(_options);
@@ -291,6 +299,14 @@ void ImportManager::Implementation::importAudioplay(const BusinessLayer::ImportO
             || importFilePath.endsWith(ExtensionHelper::plainText())) {
             importer.reset(new BusinessLayer::AudioplayFountainImporter);
         }
+    }
+
+    //
+    // Если закинули какую-то хрень, то просто игнорируем дальнейшее выполнение
+    //
+    if (importer.isNull()) {
+        Log::warning("Unsupporter file type (%1) for audioplay exporting", _options.filePath);
+        return;
     }
 
     //
@@ -326,6 +342,14 @@ void ImportManager::Implementation::importComicBook(const BusinessLayer::ImportO
     }
 
     //
+    // Если закинули какую-то хрень, то просто игнорируем дальнейшее выполнение
+    //
+    if (importer.isNull()) {
+        Log::warning("Unsupporter file type (%1) for comic book exporting", _options.filePath);
+        return;
+    }
+
+    //
     // Импортируем персонажей
     //
     const auto documents = importer->importDocuments(_options);
@@ -358,6 +382,14 @@ void ImportManager::Implementation::importNovel(const BusinessLayer::ImportOptio
     }
 
     //
+    // Если закинули какую-то хрень, то просто игнорируем дальнейшее выполнение
+    //
+    if (importer.isNull()) {
+        Log::warning("Unsupporter file type (%1) for novel exporting", _options.filePath);
+        return;
+    }
+
+    //
     // Импортируем текст романа
     //
     const auto novel = importer->importNovel(_options);
@@ -366,15 +398,14 @@ void ImportManager::Implementation::importNovel(const BusinessLayer::ImportOptio
     emit q->novelImported(novelName, novel.text);
 }
 
-void ImportManager::Implementation::importScreenplay(
-    const BusinessLayer::ImportOptions& _importOptions)
+void ImportManager::Implementation::importScreenplay(const BusinessLayer::ImportOptions& _options)
 {
     //
     // Определим нужный импортер
     //
     QScopedPointer<BusinessLayer::AbstractScreenplayImporter> importer;
     {
-        const auto importFilePath = _importOptions.filePath.toLower();
+        const auto importFilePath = _options.filePath.toLower();
         if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
             importer.reset(new BusinessLayer::ScreenplayKitScenaristImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())
@@ -389,6 +420,7 @@ void ImportManager::Implementation::importScreenplay(
         } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {
             importer.reset(new BusinessLayer::ScreenplayCeltxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::fountain())
+                   || importFilePath.endsWith(ExtensionHelper::markdown())
                    || importFilePath.endsWith(ExtensionHelper::plainText())) {
             importer.reset(new BusinessLayer::ScreenplayFountainImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::pdf())) {
@@ -397,9 +429,17 @@ void ImportManager::Implementation::importScreenplay(
     }
 
     //
+    // Если закинули какую-то хрень, то просто игнорируем дальнейшее выполнение
+    //
+    if (importer.isNull()) {
+        Log::warning("Unsupporter file type (%1) for screenplay exporting", _options.filePath);
+        return;
+    }
+
+    //
     // Импортируем документы
     //
-    const auto documents = importer->importDocuments(_importOptions);
+    const auto documents = importer->importDocuments(_options);
     for (const auto& character : documents.characters) {
         emit q->characterImported(character.name, character.content);
     }
@@ -413,11 +453,11 @@ void ImportManager::Implementation::importScreenplay(
     //
     // Импортируем текст сценариев
     //
-    const auto screenplays = importer->importScreenplays(_importOptions);
+    const auto screenplays = importer->importScreenplays(_options);
     for (const auto& screenplay : screenplays) {
         const auto screenplayName = !screenplay.name.isEmpty()
             ? screenplay.name
-            : QFileInfo(_importOptions.filePath).completeBaseName();
+            : QFileInfo(_options.filePath).completeBaseName();
         emit q->screenplayImported(screenplayName, screenplay.titlePage, screenplay.synopsis,
                                    screenplay.treatment, screenplay.text);
     }
@@ -435,6 +475,14 @@ void ImportManager::Implementation::importStageplay(const BusinessLayer::ImportO
             || importFilePath.endsWith(ExtensionHelper::plainText())) {
             importer.reset(new BusinessLayer::StageplayFountainImporter);
         }
+    }
+
+    //
+    // Если закинули какую-то хрень, то просто игнорируем дальнейшее выполнение
+    //
+    if (importer.isNull()) {
+        Log::warning("Unsupporter file type (%1) for stageplay exporting", _options.filePath);
+        return;
     }
 
     //
