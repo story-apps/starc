@@ -970,6 +970,9 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
     //
     for (int row = 0; row < charactersModel()->rowCount(); ++row) {
         const auto character = charactersModel()->character(row);
+        if (character == nullptr) {
+            return;
+        }
 
         //
         // ... фильтруем по ролям, если необходимо
@@ -1011,6 +1014,9 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
     //
     for (int row = 0; row < locationsModel()->rowCount(); ++row) {
         const auto location = locationsModel()->location(row);
+        if (location == nullptr) {
+            continue;
+        }
 
         //
         // ... фильтруем по ролям, если необходимо
