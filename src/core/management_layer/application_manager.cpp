@@ -780,7 +780,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
     //
 
     auto dialog = new Ui::CrashReportDialog(applicationView);
-    dialog->setContactEmail(settingsValue(DataStorageLayer::kAccountEmailKey).toString());
+    dialog->setContactEmail(DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
 
     //
     // Настраиваем соединения диалога
@@ -829,9 +829,10 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 appVersion += "-x32";
 #endif
                 loader->addRequestAttribute("version", appVersion);
-                loader->addRequestAttribute("qt", QString("Qt") + QT_VERSION_STR);
                 loader->addRequestAttribute("arch", QSysInfo::currentCpuArchitecture());
-                loader->addRequestAttribute("user", dialog->contactEmail());
+                loader->addRequestAttribute(
+                    "user", DataStorageLayer::StorageFacade::settingsStorage()->accountName());
+                loader->addRequestAttribute("email", dialog->contactEmail());
                 loader->addRequestAttribute("list_annotations", annotationsText);
                 loader->addRequestAttributeFile("upload_file_minidump", dmpPath);
 
