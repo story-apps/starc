@@ -34,6 +34,36 @@ namespace BusinessLayer {
 namespace {
 
 /**
+ * @brief Направление удаления блока
+ */
+enum class BlockDeleteDirection { Forward, Backward };
+
+/**
+ * @brief Удалить границу блока, сохранив данные и формат блока, который остаётся в документе
+ */
+void deleteBlock(TextCursor& _cursor, BlockDeleteDirection _direction)
+{
+    const auto blockToKeep = _direction == BlockDeleteDirection::Forward
+        ? _cursor.block().next()
+        : _cursor.block().previous();
+    TextBlockData* blockData = nullptr;
+    if (blockToKeep.userData() != nullptr) {
+        blockData = new TextBlockData(static_cast<TextBlockData*>(blockToKeep.userData()));
+    }
+    const auto blockFormat = blockToKeep.blockFormat();
+
+    if (_direction == BlockDeleteDirection::Forward) {
+        _cursor.deleteChar();
+    } else {
+        _cursor.deletePreviousChar();
+    }
+
+    _cursor.block().setUserData(blockData);
+    _cursor.setBlockFormat(blockFormat);
+}
+
+
+/**
  * @brief Найти предыдущий элемент, который можно изолировать
  */
 TextModelItem* previousVisibleItem(TextModelItem* _item)
@@ -1139,7 +1169,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 // Если это не конец документа, удалим перенос строки
                 //
                 if (!cursor.atEnd()) {
-                    cursor.deleteChar();
+                    deleteBlock(cursor, BlockDeleteDirection::Forward);
                 }
                 //
                 // А если конец (документ остаётся пустым), то затрём данные блока
@@ -1178,26 +1208,14 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     // ... если же дальше есть блоки, удаляем перенос строки и действуем стандартно
                     //
                     else {
-                        cursor.deleteChar();
+                        deleteBlock(cursor, BlockDeleteDirection::Forward);
                     }
                 }
                 //
                 // ... в остальных случаях берём на один символ назад, чтобы удалить сам блок
                 //
                 else {
-                    //
-                    // ... и при этом нужно сохранить данные блока и его формат
-                    //
-                    const auto previousBlock = cursor.block().previous();
-                    TextBlockData* previousBlockData = nullptr;
-                    if (previousBlock.userData() != nullptr) {
-                        previousBlockData = new TextBlockData(
-                            static_cast<TextBlockData*>(previousBlock.userData()));
-                    }
-                    const auto previousBlockFormat = previousBlock.blockFormat();
-                    cursor.deletePreviousChar();
-                    cursor.block().setUserData(previousBlockData);
-                    cursor.setBlockFormat(previousBlockFormat);
+                    deleteBlock(cursor, BlockDeleteDirection::Backward);
                 }
             }
             cursor.endEditBlock();
