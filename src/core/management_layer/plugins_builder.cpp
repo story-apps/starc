@@ -436,7 +436,8 @@ bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
     QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(pluginPath));
     QObject* pluginObject = pluginLoader.instance();
     if (pluginObject == nullptr) {
-        qDebug() << pluginLoader.errorString();
+        qCritical() << pluginLoader.errorString();
+        return false;
     }
 
     auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
