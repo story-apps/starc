@@ -102,8 +102,17 @@ gclient syn
 
 # Устанавливаем deployment target для macOS
 if [ "$PLATFORM" = "mac" ]; then
-    export MACOSX_DEPLOYMENT_TARGET=10.13
     echo "[*] Set MACOSX_DEPLOYMENT_TARGET=10.13"
+    export MACOSX_DEPLOYMENT_TARGET=10.13
+    if [ "$UNIVERSAL_BUILD" = false ]; then
+        echo "[*] Patch crashpad sources to use kIOMasterPortDefault"
+        sed -i '' 's/kIOMainPortDefault/kIOMasterPortDefault/g' ./util/mac/mac_util.cc
+        # 1. Отключаем варнинг в самом верху проблемного файла
+        perl -pi -e 'print "#pragma clang diagnostic ignored \"-Wdeprecated-declarations\"\n" if $. == 1;' ./util/mac/mac_util.cc
+        # 2. Подменяем символ на совместимый с macOS 10.13
+        perl -pi -e 's/kIOMainPortDefault/kIOMasterPortDefault/g' ./util/mac/mac_util.cc
+
+    fi
 fi
 
 # 5. Генерируем билд через gn
