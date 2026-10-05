@@ -1,0 +1,15 @@
+#
+# Настраиваем сборку под старые macOS специальным образом, чтобы новые тулчейны не использовали
+# функционал библиотек, который не был доступен в более ранних версиях
+#
+macx {
+    equals(QT_MAJOR_VERSION, 5) {
+        # 1. Принудительный Deployment Target для всего дерева subdirs
+        QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
+        # 2. Флаги компилятора (совместимость libc++ и игнорирование депрекейтов)
+        QMAKE_CXXFLAGS += -mmacosx-version-min=10.13 -Wno-error=deprecated-declarations
+        QMAKE_CFLAGS   += -mmacosx-version-min=10.13
+        # 3. Флаги линкера (строго связываем со старыми символами системной libc++)
+        QMAKE_LFLAGS   += -mmacosx-version-min=10.13
+    }
+}

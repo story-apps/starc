@@ -70,8 +70,8 @@ if [ ! -d "$DEPOT_TOOLS_DIR" ]; then
 else
     echo "[*] depot_tools already exists, updating..."
     cd "$DEPOT_TOOLS_DIR"
-	git checkout main
-	git pull
+    git checkout main
+    git pull
 fi
 export PATH="$DEPOT_TOOLS_DIR:$PATH"
 
@@ -85,10 +85,10 @@ fi
 
 # 3. Скачиваем crashpad, если нет
 if [ ! -d "$CRASHPAD_DIR" ]; then
-	echo "[*] Getting the crashpad source..."
+    echo "[*] Getting the crashpad source..."
     mkdir -p "$(dirname "$CRASHPAD_DIR")"
     cd "$(dirname "$CRASHPAD_DIR")"
-	fetch crashpad
+    fetch crashpad
 else
     echo "[*] crashpad already exists"
 fi
@@ -98,29 +98,14 @@ echo "[*] Syncing crashpad..."
 cd "$CRASHPAD_DIR"
 git checkout main
 git pull -r
-gclient syn
-
-# Устанавливаем deployment target для macOS
-if [ "$PLATFORM" = "mac" ]; then
-    echo "[*] Set MACOSX_DEPLOYMENT_TARGET=10.13"
-    export MACOSX_DEPLOYMENT_TARGET=10.13
-    if [ "$UNIVERSAL_BUILD" = false ]; then
-        echo "[*] Patch crashpad sources to use kIOMasterPortDefault"
-        sed -i '' 's/kIOMainPortDefault/kIOMasterPortDefault/g' ./util/mac/mac_util.cc
-        # 1. Отключаем варнинг в самом верху проблемного файла
-        perl -pi -e 'print "#pragma clang diagnostic ignored \"-Wdeprecated-declarations\"\n" if $. == 1;' ./util/mac/mac_util.cc
-        # 2. Подменяем символ на совместимый с macOS 10.13
-        perl -pi -e 's/kIOMainPortDefault/kIOMasterPortDefault/g' ./util/mac/mac_util.cc
-
-    fi
-fi
+gclient sync
 
 # 5. Генерируем билд через gn
 BASE_OUT_DIR="$SCRIPT_DIR/../bin/crashpad"
 
 if [ "$UNIVERSAL_BUILD" = true ] && [ "$PLATFORM" = "mac" ]; then
     echo "[*] Building universal binary (x64 + arm64)..."
-    
+
     # Собираем для x64
     echo "[*] Building for x64..."
     OUT_DIR_X64="$BASE_OUT_DIR/${BUILD_MODE}_x64"
@@ -130,7 +115,7 @@ if [ "$UNIVERSAL_BUILD" = true ] && [ "$PLATFORM" = "mac" ]; then
     cat "$OUT_DIR_X64/args.gn"
     gn gen "$OUT_DIR_X64"
     ninja -C "$OUT_DIR_X64"
-    
+
     # Собираем для arm64
     echo "[*] Building for arm64..."
     OUT_DIR_ARM64="$BASE_OUT_DIR/${BUILD_MODE}_arm64"
@@ -140,14 +125,14 @@ if [ "$UNIVERSAL_BUILD" = true ] && [ "$PLATFORM" = "mac" ]; then
     cat "$OUT_DIR_ARM64/args.gn"
     gn gen "$OUT_DIR_ARM64"
     ninja -C "$OUT_DIR_ARM64"
-    
+
     # Объединяем библиотеки в универсальные бинарники
     echo "[*] Creating universal binaries..."
     OUT_DIR="$BASE_OUT_DIR/${BUILD_MODE}_universal"
     mkdir -p "$OUT_DIR/obj/client"
     mkdir -p "$OUT_DIR/obj/util"
     mkdir -p "$OUT_DIR/obj/third_party/mini_chromium/mini_chromium/base"
-    
+
     # Объединяем статические библиотеки
     for lib in common client util base; do
         if [ "$lib" = "base" ]; then
@@ -157,11 +142,11 @@ if [ "$UNIVERSAL_BUILD" = true ] && [ "$PLATFORM" = "mac" ]; then
         else
             LIB_PATH="util"
         fi
-        
+
         LIB_X64="$OUT_DIR_X64/obj/$LIB_PATH/lib${lib}.a"
         LIB_ARM64="$OUT_DIR_ARM64/obj/$LIB_PATH/lib${lib}.a"
         LIB_UNIVERSAL="$OUT_DIR/obj/$LIB_PATH/lib${lib}.a"
-        
+
         if [ -f "$LIB_X64" ] && [ -f "$LIB_ARM64" ]; then
             lipo -create "$LIB_X64" "$LIB_ARM64" -output "$LIB_UNIVERSAL"
             echo "    Created universal lib${lib}.a"
@@ -169,7 +154,7 @@ if [ "$UNIVERSAL_BUILD" = true ] && [ "$PLATFORM" = "mac" ]; then
             echo "    Warning: Missing library for $lib (x64: $([ -f "$LIB_X64" ] && echo "yes" || echo "no"), arm64: $([ -f "$LIB_ARM64" ] && echo "yes" || echo "no"))"
         fi
     done
-    
+
     # Объединяем mig_output
     MIG_X64="$OUT_DIR_X64/obj/util/libmig_output.a"
     MIG_ARM64="$OUT_DIR_ARM64/obj/util/libmig_output.a"
@@ -178,7 +163,7 @@ if [ "$UNIVERSAL_BUILD" = true ] && [ "$PLATFORM" = "mac" ]; then
         lipo -create "$MIG_X64" "$MIG_ARM64" -output "$MIG_UNIVERSAL"
         echo "    Created universal libmig_output.a"
     fi
-    
+
     # Объединяем crashpad_handler
     HANDLER_X64="$OUT_DIR_X64/crashpad_handler"
     HANDLER_ARM64="$OUT_DIR_ARM64/crashpad_handler"
@@ -188,7 +173,7 @@ if [ "$UNIVERSAL_BUILD" = true ] && [ "$PLATFORM" = "mac" ]; then
         chmod +x "$HANDLER_UNIVERSAL"
         echo "    Created universal crashpad_handler"
     fi
-    
+
     TARGET_CPU="universal"
 else
     # Обычная сборка для одной архитектуры
@@ -197,6 +182,7 @@ else
     mkdir -p "$OUT_DIR"
     echo "[*] Output directory: $OUT_DIR (absolute: $(pwd)/$OUT_DIR)"
 
+    # Настройки для Windows
     if [ "$PLATFORM" = "win" ]; then
         if [ "$BUILD_MODE" = "debug" ]; then
             echo extra_cflags=\"/MDd\" > "$OUT_DIR/args.gn"
@@ -204,9 +190,30 @@ else
             echo extra_cflags=\"/MD\" > "$OUT_DIR/args.gn"
         fi
     fi
+
     echo target_cpu=\"$TARGET_CPU\" >> "$OUT_DIR/args.gn"
 
-    # Выводим содержимое args.gn для отладки 
+    # Специальные доработки совместимости только для Mac-сборки под старые ОС
+    if [ "$PLATFORM" = "mac" ]; then
+        echo "[*] Applying macOS backward compatibility fixes (10.13)..."
+
+        MAC_MIN_VERSION="10.13"
+        export MACOSX_DEPLOYMENT_TARGET=$MAC_MIN_VERSION
+
+        # 1. Патчим код IOKit и глушим предупреждения компилятора в mac_util.cc
+        perl -pi -e 'print "#pragma clang diagnostic ignored \"-Wdeprecated-declarations\"\n" if $. == 1;' ./util/mac/mac_util.cc
+        perl -pi -e 's/kIOMainPortDefault/kIOMasterPortDefault/g' ./util/mac/mac_util.cc
+
+        # 2. ЖЕСТКО заставляем GN выставить Deployment Target = MAC_MIN_VERSION
+        echo "mac_deployment_target=\"$MAC_MIN_VERSION\"" >> "$OUT_DIR/args.gn"
+
+        # 3. Передаем макросы контроля экспорта ABI libc++
+#        echo 'extra_cflags="-fvisibility=hidden -fvisibility-inlines-hidden -D_LIBCPP_DISABLE_AVAILABILITY -D_LIBCPP_BUILDING_LIBRARY -D_LIBCPP_SHARED_TEMPLATE_INLINE_VISIBILITY=hidden -Wno-error=deprecated-declarations"' >> "$OUT_DIR/args.gn"
+        echo "extra_cflags=\"-mmacosx-version-min=$MAC_MIN_VERSION -Wno-error=deprecated-declarations\"" >> "$OUT_DIR/args.gn"
+        echo "extra_ldflags=\"-mmacosx-version-min=$MAC_MIN_VERSION\"" >> "$OUT_DIR/args.gn"
+    fi
+
+    # Выводим содержимое args.gn для отладки
     echo "[*] Contents of args.gn:"
     cat "$OUT_DIR/args.gn"
 
@@ -226,3 +233,27 @@ else
     echo "    crashpad_handler: $OUT_DIR/crashpad_handler"
     echo "    Architecture: $TARGET_CPU"
 fi
+
+echo "=================================================="
+echo "[*] RUNNING BACKWARD COMPATIBILITY DIAGNOSTICS"
+echo "=================================================="
+
+# 1. Проверяем, в каком файле сидит неопределенный символ basic_ostringstream
+echo "[1] Searching for undefined basic_ostringstream in output libs:"
+# Ищем во всех скомпилированных статических библиотеках Crashpad
+find "$OUT_DIR" -name "*.a" -o -name "*.o" | while read -r file; do
+    if nm "$file" 2>/dev/null | grep -q "basic_ostringstream"; then
+        echo "    -> Found in Crashpad file: $file"
+        # Выведем конкретные символы, которые там нашлись
+        nm "$file" 2>/dev/null | grep "basic_ostringstream" | sed 's/^/       /'
+    fi
+done
+
+# 2. Проверяем минимальную версию ОС в бинарниках Crashpad
+echo
+echo "[2] Checking LC_VERSION_MIN / LC_BUILD_VERSION in crashpad_handler:"
+if [ -f "$OUT_DIR/crashpad_handler" ]; then
+    otool -l "$OUT_DIR/crashpad_handler" | grep -A 4 -E "LC_VERSION_MIN_MACOSX|LC_BUILD_VERSION" || true
+fi
+
+echo "=================================================="
