@@ -774,6 +774,21 @@ void ApplicationManager::Implementation::sendCrashInfo()
         return;
     }
 
+    //
+    // Если работаем в дебаг версии, то не отправляем дампы, а просто удаляем их
+    //
+
+#ifdef QT_DEBUG
+    for (auto& report : reportsToSend) {
+        //
+        // Проверим наличие файла дампа
+        //
+        const QString dmpPath = QString::fromStdString(report.file_path.value());
+        QFile::remove(dmpPath);
+    }
+    return;
+#endif
+
 
     //
     // Если есть дампы для отправки, то предложим пользователю отправить отчёт об ошибке
