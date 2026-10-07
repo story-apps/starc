@@ -1242,7 +1242,7 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
     // Проверяем, изменилось ли устанавливаемое значение
     //
     if ((_type == Type::Application
-         && (d->pendingAppSettings.value(_key) == _value
+         && ((d->pendingAppSettings.contains(_key) && d->pendingAppSettings.value(_key) == _value)
              || d->appSettings.value(_key.toUtf8().toHex()) == _value))
         || (_type == Type::Session && d->sessionSettings.value(_key) == _value)) {
         return;
