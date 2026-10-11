@@ -2,7 +2,6 @@
 
 #include <QClipboard>
 #include <QGuiApplication>
-#include <QMimeData>
 
 namespace Ui {
 namespace Vim {
@@ -195,6 +194,15 @@ RegisterContent Registers::setContent(QChar _name, const RegisterContent& _conte
             content.linewise = linewise;
 
             //
+            // ... начертание дописанного фрагмента сдвигается вслед за его текстом
+            //
+            content.formats = existingContent.formats;
+            for (auto format : _content.formats) {
+                format.from += text.size();
+                content.formats.append(format);
+            }
+
+            //
             // ... типы абзацев сохраняются, только если оба фрагмента построчные и скопированы
             //     из документов одного вида
             //
@@ -205,12 +213,6 @@ RegisterContent Registers::setContent(QChar _name, const RegisterContent& _conte
                 content.paragraphTypes.clear();
                 content.documentKind.clear();
             }
-
-            //
-            // ... а форматированные фрагменты так не склеить
-            //
-            content.richMimeType.clear();
-            content.richMimeData.clear();
         }
     }
 
@@ -221,17 +223,7 @@ RegisterContent Registers::setContent(QChar _name, const RegisterContent& _conte
 void Registers::syncToClipboard(const RegisterContent& _content)
 {
     m_clipboardContent = _content;
-
-    //
-    // ... вместе с текстом кладём и форматированный фрагмент, чтобы при вставке средствами
-    //     самого редактора он вставлялся так же, как и скопированный редактором
-    //
-    auto mimeData = new QMimeData;
-    mimeData->setText(_content.text);
-    if (!_content.richMimeType.isEmpty()) {
-        mimeData->setData(_content.richMimeType, _content.richMimeData);
-    }
-    QGuiApplication::clipboard()->setMimeData(mimeData);
+    QGuiApplication::clipboard()->setText(_content.text);
 }
 
 RegisterContent Registers::clipboardContent() const
@@ -248,20 +240,9 @@ RegisterContent Registers::clipboardContent() const
     text.replace('\r', '\n');
 
     //
-    // ... текст, скопированный в другом приложении целыми строками, вставляем построчно, а
-    //     скопированный самим редактором - вместе с форматированием
+    // ... текст, скопированный в другом приложении целыми строками, вставляем построчно
     //
-    RegisterContent content(text, text.endsWith('\n'));
-    if (const auto mimeData = QGuiApplication::clipboard()->mimeData()) {
-        for (const auto& format : mimeData->formats()) {
-            if (format.startsWith(QStringLiteral("application/x-starc/"))) {
-                content.richMimeType = format;
-                content.richMimeData = mimeData->data(format);
-                break;
-            }
-        }
-    }
-    return content;
+    return RegisterContent(text, text.endsWith('\n'));
 }
 
 } // namespace Vim

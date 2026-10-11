@@ -214,6 +214,7 @@ private:
     void enterVisualMode(Mode _mode, int _anchor, int _cursor);
     void leaveVisualMode();
     void restoreLastVisualSelection();
+    void clampVisualPositions();
     void updateVisualSelection();
     Vim::TextRange visualRange() const;
     int visualLinesCount() const;
@@ -295,9 +296,10 @@ private:
 
     bool canEdit() const;
     bool isEditableRange(int _from, int _to) const;
+    bool isProtectedSelectionEdit(QKeyEvent* _event) const;
     bool removeText(int _from, int _to);
     bool insertText(int _position, const QString& _text);
-    bool replaceText(int _from, int _to, const QString& _text);
+    bool replaceText(int _from, int _to, const QString& _text, int* _textPosition = nullptr);
     bool openLine(bool _below);
     void deleteCharacters(int _count, bool _previous);
     void replaceCharacters(const QString& _character, int _count);
@@ -310,13 +312,14 @@ private:
     void pasteLines(const Vim::RegisterContent& _content, bool _before, int _count,
                     bool _cursorAfter = false);
     void restoreParagraphTypes(int _position, const Vim::RegisterContent& _content, int _count);
-    bool canInsertRich(const Vim::RegisterContent& _content) const;
-    bool insertRich(int _position, const Vim::RegisterContent& _content);
+    void applyTextFormats(int _position, const QString& _text,
+                          const QVector<Vim::RegisterContent::TextFormat>& _formats);
     void replaceVisualWithRegister(QChar _registerName, bool _keepRegisters, int _count);
     void undo(int _count);
     void redo(int _count);
     void triggerEditorShortcut(QKeySequence::StandardKey _key);
-    void sendKeyPressToEditor(int _key, const QString& _text);
+    void sendKeyPressToEditor(int _key, const QString& _text,
+                              Qt::KeyboardModifiers _modifiers = Qt::NoModifier);
     void commitUndoStep();
 
     //
@@ -480,8 +483,8 @@ private:
     bool m_commandKeysOverflow = false;
 
     /**
-     * @brief Изменения, сделанные зажатой клавишей, сохраняются одним шагом отмены, когда она
-     *        будет отпущена, иначе на каждое повторение приходилось бы сохранять весь документ
+     * @brief Изменения, сделанные зажатой клавишей, сохраняются одним шагом отмены перед
+     *        следующей командой, иначе на каждое повторение приходилось бы сохранять весь документ
      */
     bool m_isAutoRepeat = false;
     bool m_hasUncommittedChange = false;

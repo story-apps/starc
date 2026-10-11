@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QByteArray>
 #include <QChar>
 #include <QHash>
 #include <QString>
+#include <QTextCharFormat>
 #include <QVector>
 
 
@@ -29,11 +29,15 @@ struct RegisterContent {
     QString documentKind;
 
     /**
-     * @brief Фрагмент в формате, в котором его копирует сам редактор, - вместе с форматированием,
-     *        редакторскими заметками и структурой документа
+     * @brief Начертание участков текста, отличающееся от стиля их абзацев
+     * @note Позиции считаются в тексте фрагмента, участок не выходит за пределы строки
      */
-    QString richMimeType;
-    QByteArray richMimeData;
+    struct TextFormat {
+        int from = 0;
+        int length = 0;
+        QTextCharFormat format;
+    };
+    QVector<TextFormat> formats;
 
     bool isEmpty() const;
 };

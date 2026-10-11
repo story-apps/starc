@@ -2288,20 +2288,23 @@ QRegularExpression regularExpression(const QString& _pattern)
                 result += QStringLiteral("[^A-Za-z]");
                 continue;
             }
+            //
+            // ... классы строчных и прописных букв не зависят от поиска без учёта регистра
+            //
             case 'l': {
-                result += QStringLiteral("[a-z]");
+                result += QStringLiteral("(?-i:[a-z])");
                 continue;
             }
             case 'L': {
-                result += QStringLiteral("[^a-z]");
+                result += QStringLiteral("(?-i:[^a-z])");
                 continue;
             }
             case 'u': {
-                result += QStringLiteral("[A-Z]");
+                result += QStringLiteral("(?-i:[A-Z])");
                 continue;
             }
             case 'U': {
-                result += QStringLiteral("[^A-Z]");
+                result += QStringLiteral("(?-i:[^A-Z])");
                 continue;
             }
             case 'x': {
@@ -2342,8 +2345,16 @@ QRegularExpression regularExpression(const QString& _pattern)
                 result += QStringLiteral("\\w");
                 continue;
             }
+            case 'F': {
+                result += QStringLiteral("[A-Za-z_]");
+                continue;
+            }
             case 'p': {
                 result += QStringLiteral("\\P{C}");
+                continue;
+            }
+            case 'P': {
+                result += QStringLiteral("[^\\p{C}0-9]");
                 continue;
             }
             case 't': {

@@ -68,6 +68,11 @@ public:
     AbstractLabel* vimStatusLabel = nullptr;
 
     /**
+     * @brief Полный текст строки состояния, в метке он может быть сокращён по ширине редактора
+     */
+    QString vimStatusText;
+
+    /**
      * @brief Применены ли к редактору настройки внешнего вида Vim-режима
      * @note Нужно, чтобы не выполнять лишнюю работу, когда Vim-режим отключён
      */
@@ -77,6 +82,11 @@ public:
      * @brief Нужно ли перенастроить виджет с названием режима
      */
     bool vimModeLabelNeedUpdate = true;
+
+    /**
+     * @brief Нарисован ли сейчас курсор-блок
+     */
+    bool isVimBlockCursorPainted = false;
 
     /**
      * @brief Последнее положение мыши
@@ -131,6 +141,7 @@ void ScriptTextEdit::Implementation::refreshVimModeUi()
         vimStatusLabel->hide();
         q->setCursorWidth(DesignSystem::layout().px2());
         q->setExtraSelections({});
+        isVimBlockCursorPainted = false;
         q->viewport()->update();
         return;
     }
@@ -175,8 +186,9 @@ void ScriptTextEdit::Implementation::updateVimStatusLabel()
         return;
     }
 
-    const bool needReconfigure = vimModeLabelNeedUpdate || vimStatusLabel->text() != statusText;
+    const bool needReconfigure = vimModeLabelNeedUpdate || vimStatusText != statusText;
     if (needReconfigure) {
+        vimStatusText = statusText;
         vimStatusLabel->setText(statusText);
         configureVimLabel(vimStatusLabel, DesignSystem::color().background(),
                           DesignSystem::color().onBackground());
@@ -222,12 +234,23 @@ void ScriptTextEdit::Implementation::updateVimModeLabelGeometry()
                               labelSize.width(), labelSize.height());
 
     //
-    // ... строка ввода команды располагается справа от индикатора режима
+    // ... строка ввода команды располагается справа от индикатора режима, а если она туда не
+    //     помещается, то сокращаем её посередине, чтобы были видны и начало сообщения, и конец
+    //     набираемой команды
     //
-    const QSize statusSize = vimLabelSize(vimStatusLabel);
     const int statusLeft = vimModeLabel->geometry().right() + 1 + margin;
-    const int statusWidth
-        = qMin(statusSize.width(), qMax(0, visibleRect.right() + 1 - statusLeft - margin));
+    const int availableWidth = qMax(0, visibleRect.right() + 1 - statusLeft - margin);
+    const QFontMetricsF metrics(DesignSystem::font().caption());
+    const qreal padding = DesignSystem::layout().px16();
+    const auto statusText = metrics.horizontalAdvance(vimStatusText) + padding > availableWidth
+        ? metrics.elidedText(vimStatusText, Qt::ElideMiddle,
+                             qMax(0.0, availableWidth - padding - 1))
+        : vimStatusText;
+    if (vimStatusLabel->text() != statusText) {
+        vimStatusLabel->setText(statusText);
+    }
+    const QSize statusSize = vimLabelSize(vimStatusLabel);
+    const int statusWidth = qMin(statusSize.width(), availableWidth);
     vimStatusLabel->setGeometry(statusLeft, visibleRect.bottom() + 1 - statusSize.height() - margin,
                                 statusWidth, statusSize.height());
 }
@@ -279,8 +302,17 @@ void ScriptTextEdit::Implementation::updateVimBlockCursor()
     //
     // Курсор-блок подсвечивает символ под курсором, а в конце строки он рисуется поверх текста
     //
+    //
+    // ... в режиме вставки курсор-блока нет, и перерисовывать редактор на каждое нажатие незачем
+    //
+    const bool isVisible = isVimBlockCursorVisible();
+    if (!isVisible && !isVimBlockCursorPainted) {
+        return;
+    }
+    isVimBlockCursorPainted = isVisible;
+
     QList<PageTextEdit::ExtraSelection> selections;
-    if (isVimBlockCursorVisible()) {
+    if (isVisible) {
         QTextCursor cursor(q->document());
         cursor.setPosition(vimMode.blockCursorPosition());
         if (!cursor.atBlockEnd()) {
@@ -387,11 +419,6 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     //
     setVerticalScroll(verticalScrollValue);
     setHorizontalScroll(horizontalScrollValue);
-}
-
-void ScriptTextEdit::insertMimeData(const QMimeData* _source)
-{
-    insertFromMimeData(_source);
 }
 
 bool ScriptTextEdit::isTrackChangesEnabled() const
