@@ -67,9 +67,10 @@ const int kMaxPastedTextLength = 1000000;
 
 /**
  * @brief Максимальное количество строк, вставляемых одной командой с количеством
- * @note Каждая строка - это абзац документа, создание которого заметно дороже вставки текста
+ * @note Каждая строка - это абзац документа, создание которого заметно дороже вставки текста, а
+ *       без количества вставляется то, что и так было в документе
  */
-const int kMaxPastedLines = 1000;
+const int kMaxPastedLines = 300;
 
 /**
  * @brief Выравнивание курсора при прокрутке командами z
@@ -593,13 +594,12 @@ bool VimTextEditController::handleShortcutOverride(QKeyEvent* _event) const
     }
 
     //
-    // ... а в визуальном режиме выделение - это обычное выделение редактора, поэтому сочетания
-    //     форматирования и буфера обмена работают с ним как обычно, кроме прокрутки, ведь Ctrl+D
-    //     в редакторе ещё и превращает выделение в диалог в две колонки
+    // ... а в визуальном режиме выделение - это обычное выделение редактора, поэтому его
+    //     сочетания, например форматирования или диалога в две колонки, работают как обычно, кроме
+    //     тех, что удалили бы скрытый текст
     //
     if (isVisualMode()) {
-        return _event->key() == Qt::Key_D || _event->key() == Qt::Key_U
-            || isProtectedSelectionEdit(_event);
+        return isProtectedSelectionEdit(_event);
     }
 
     return _event->key() == Qt::Key_R || _event->key() == Qt::Key_D || _event->key() == Qt::Key_U
@@ -874,7 +874,18 @@ void VimTextEditController::leaveInsertMode()
             }
         } else {
             QScopedValueRollback<bool> replayRollback(m_replayingInsert, true);
+            QElapsedTimer timer;
+            timer.start();
             for (int index = 1; index < m_insertRepeat && !m_commandFailed; ++index) {
+                //
+                // ... каждый повтор, например новая строка для o, - это правка документа со всеми
+                //     его корректировками, поэтому, как и объединение строк, повтор ограничен
+                //     по времени
+                //
+                if (timer.elapsed() > kSearchTimeoutMs) {
+                    fail(QCoreApplication::translate("Ui::VimTextEditController", "Interrupted"));
+                    break;
+                }
                 if (m_insertCommand == 'o' || m_insertCommand == 'O') {
                     openLine(true);
                 }
@@ -1373,8 +1384,7 @@ bool VimTextEditController::handleKeyPressImpl(QKeyEvent* _event)
         return true;
     }
 
-    if (hasVimControl(_event)
-        && (!isVisualMode() || _event->key() == Qt::Key_D || _event->key() == Qt::Key_U)) {
+    if (hasVimControl(_event) && !isVisualMode()) {
         switch (_event->key()) {
         case Qt::Key_R: {
             redo(takeCount());
@@ -3455,9 +3465,15 @@ int VimTextEditController::deleteLines(const QVector<Vim::TextRange>& _runs, int
             return removeText(firstPosition, afterPosition) ? firstPosition : afterPosition;
         }
         if (canMergeWith(firstBlock, blockBefore)) {
-            const int cursorPosition = blockBefore.position();
+            //
+            // ... курсор, как и в vim, встаёт на следующую строку, если она есть, например в
+            //     таблице за удалёнными строками
+            //
+            const auto nextBlock = Vim::nextNavigableBlock(lastBlock);
+            QTextCursor next(document);
+            next.setPosition(nextBlock.isValid() ? nextBlock.position() : blockBefore.position());
             removeText(Vim::lineEndPosition(blockBefore), Vim::lineEndPosition(lastBlock));
-            return cursorPosition;
+            return next.position();
         }
         removeText(firstPosition, Vim::lineEndPosition(lastBlock));
         return firstPosition;
@@ -3619,7 +3635,7 @@ Vim::RegisterContent VimTextEditController::registerContent(const Vim::TextRange
         // ... вместе с текстом запоминаем и начертание, отличающееся от стиля абзаца, чтобы
         //     вставленный текст выглядел так же
         //
-        const int offset = content.text.size();
+        const int offset = static_cast<int>(content.text.size());
         const auto blockFormat = block.charFormat();
         for (auto iter = block.begin(); !iter.atEnd(); ++iter) {
             const auto fragment = iter.fragment();
@@ -3797,19 +3813,29 @@ void VimTextEditController::applyTextFormats(
     // очередной строки документа, при этом начертание применяем только там, где текст в документе
     // совпадает со вставленным, на случай, если редактор вставил его как-то иначе
     //
+    if (_formats.isEmpty()) {
+        return;
+    }
+
+    //
+    // ... всё начертание применяем одной правкой, чтобы модель и разметка страниц обновились
+    //     один раз
+    //
+    QTextCursor editCursor(document());
+    editCursor.beginEditBlock();
     auto block = document()->findBlock(_position);
     int lineStart = 0;
     int column = _position - block.position();
     for (const auto& format : _formats) {
-        for (int lineEnd = _text.indexOf('\n', lineStart);
+        for (int lineEnd = static_cast<int>(_text.indexOf('\n', lineStart));
              lineEnd >= 0 && lineEnd < format.from && block.isValid();
-             lineEnd = _text.indexOf('\n', lineStart)) {
+             lineEnd = static_cast<int>(_text.indexOf('\n', lineStart))) {
             lineStart = lineEnd + 1;
             block = Vim::nextNavigableBlock(block);
             column = 0;
         }
         if (!block.isValid()) {
-            return;
+            break;
         }
 
         const int from = column + format.from - lineStart;
@@ -3821,6 +3847,7 @@ void VimTextEditController::applyTextFormats(
         cursor.setPosition(block.position() + from + format.length, QTextCursor::KeepAnchor);
         cursor.mergeCharFormat(format.format);
     }
+    editCursor.endEditBlock();
 }
 
 QVector<Vim::TextRange> VimTextEditController::lineRanges(const Vim::TextRange& _range) const
@@ -4392,9 +4419,11 @@ void VimTextEditController::toggleCase(int _count)
     // ... в режиме отслеживания изменений заменённые символы остаются в тексте, и курсор встаёт
     //     за добавленными вместо них
     //
+    const bool isTrackChanges = m_editor->isTrackChangesEnabled();
     const int charactersCount = document()->characterCount();
     changeCaseRange({ position, end, false }, Operator::SwapCase);
-    setCursorPosition(characterPosition(end + document()->characterCount() - charactersCount));
+    const int inserted = isTrackChanges ? document()->characterCount() - charactersCount : 0;
+    setCursorPosition(characterPosition(end + inserted));
 }
 
 void VimTextEditController::joinLines(int _count, bool _withSpaces)
@@ -4514,6 +4543,27 @@ void VimTextEditController::paste(QChar _registerName, bool _before, int _count,
     pasteContent(content, _before, _count, _cursorAfter);
 }
 
+bool VimTextEditController::canPaste(const Vim::RegisterContent& _content, int _count)
+{
+    //
+    // Вставка с количеством ограничена и по длине текста, и по количеству строк, ведь каждая
+    // строка - это новый абзац документа
+    //
+    auto text = _content.text;
+    if (_content.linewise && text.endsWith('\n')) {
+        text.chop(1);
+    }
+    const int lineBreaks = static_cast<int>(text.count('\n')) + (_content.linewise ? 1 : 0);
+    const bool isTooLarge = static_cast<qint64>(text.size() + (_content.linewise ? 1 : 0)) * _count
+            > kMaxPastedTextLength
+        || (_count > 1 && static_cast<qint64>(lineBreaks) * _count > kMaxPastedLines);
+    if (isTooLarge) {
+        fail(QCoreApplication::translate("Ui::VimTextEditController",
+                                         "E1240: Resulting text too long"));
+    }
+    return !isTooLarge;
+}
+
 void VimTextEditController::pasteContent(const Vim::RegisterContent& _content, bool _before,
                                          int _count, bool _cursorAfter)
 {
@@ -4522,6 +4572,9 @@ void VimTextEditController::pasteContent(const Vim::RegisterContent& _content, b
     }
     if (_content.isEmpty()) {
         fail();
+        return;
+    }
+    if (!canPaste(_content, _count)) {
         return;
     }
 
@@ -4536,17 +4589,12 @@ void VimTextEditController::pasteContent(const Vim::RegisterContent& _content, b
         position = Vim::nextCharacterPosition(block, position);
     }
 
-    if (static_cast<qint64>(_content.text.size()) * _count > kMaxPastedTextLength) {
-        fail(QCoreApplication::translate("Ui::VimTextEditController",
-                                         "E1240: Resulting text too long"));
-        return;
-    }
-
     const auto text = _content.text.repeated(_count);
     if (!insertText(position, text)) {
         return;
     }
-    applyTextFormats(position, text, repeatedFormats(_content, _count, _content.text.size()));
+    applyTextFormats(position, text,
+                     repeatedFormats(_content, _count, static_cast<int>(_content.text.size())));
 
     //
     // ... курсор встаёт на последний вставленный символ, а при многострочной вставке - на первый
@@ -4566,12 +4614,6 @@ void VimTextEditController::pasteLines(const Vim::RegisterContent& _content, boo
     if (text.endsWith('\n')) {
         text.chop(1);
     }
-    if (static_cast<qint64>(text.size() + 1) * _count > kMaxPastedTextLength
-        || static_cast<qint64>(text.count('\n') + 1) * _count > kMaxPastedLines) {
-        fail(QCoreApplication::translate("Ui::VimTextEditController",
-                                         "E1240: Resulting text too long"));
-        return;
-    }
 
     QStringList lines;
     for (int index = 0; index < _count; ++index) {
@@ -4589,7 +4631,8 @@ void VimTextEditController::pasteLines(const Vim::RegisterContent& _content, boo
         return;
     }
     restoreParagraphTypes(position, _content, _count);
-    applyTextFormats(position, linesText, repeatedFormats(_content, _count, text.size() + 1));
+    applyTextFormats(position, linesText,
+                     repeatedFormats(_content, _count, static_cast<int>(text.size()) + 1));
 
     if (_cursorAfter) {
         //
@@ -4618,7 +4661,7 @@ void VimTextEditController::replaceVisualWithRegister(QChar _registerName, bool 
     const bool wasLinewise = m_mode == Mode::VisualLine;
     leaveVisualMode();
 
-    if (!range.isValid() || content.isEmpty() || !canEdit()) {
+    if (!range.isValid() || content.isEmpty() || !canEdit() || !canPaste(content, _count)) {
         return;
     }
 
@@ -4653,11 +4696,13 @@ void VimTextEditController::replaceVisualWithRegister(QChar _registerName, bool 
             lines.append(text);
         }
         const int splitPosition = position < range.start ? range.start : position;
-        if (!insertText(splitPosition,
-                        QStringLiteral("\n") + lines.join('\n') + QStringLiteral("\n"))) {
+        const auto linesText = lines.join('\n');
+        if (!insertText(splitPosition, QStringLiteral("\n") + linesText + QStringLiteral("\n"))) {
             return;
         }
         restoreParagraphTypes(splitPosition + 1, content, _count);
+        applyTextFormats(splitPosition + 1, linesText,
+                         repeatedFormats(content, _count, static_cast<int>(text.size()) + 1));
         setCursorPosition(Vim::firstNonBlankPosition(document->findBlock(splitPosition + 1)));
         return;
     }

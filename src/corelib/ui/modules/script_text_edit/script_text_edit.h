@@ -105,6 +105,11 @@ protected:
     bool event(QEvent* _event) override;
 
     /**
+     * @brief Не показываем подсказки вне режима вставки, когда активен Vim-режим
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+    /**
      * @brief Дополнительная функция для обработки нажатий самим редактором
      * @return Обработано ли событие
      * @note В наследниках необходимо вызывать вручную при необходимости

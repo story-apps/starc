@@ -198,7 +198,7 @@ RegisterContent Registers::setContent(QChar _name, const RegisterContent& _conte
             //
             content.formats = existingContent.formats;
             for (auto format : _content.formats) {
-                format.from += text.size();
+                format.from += static_cast<int>(text.size());
                 content.formats.append(format);
             }
 

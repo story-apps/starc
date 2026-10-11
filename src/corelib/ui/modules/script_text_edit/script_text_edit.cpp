@@ -9,11 +9,13 @@
 #include <ui/design_system/design_system.h>
 #include <ui/modules/script_text_edit/vim_text_edit_controller.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/page/page_text_edit_scroll_bar.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
 
+#include <QAbstractItemView>
 #include <QFocusEvent>
 #include <QFontMetricsF>
 #include <QGraphicsProxyWidget>
@@ -363,6 +365,7 @@ ScriptTextEdit::ScriptTextEdit(QWidget* _parent)
     : BaseTextEdit(_parent)
     , d(new Implementation(this))
 {
+    completer()->popup()->installEventFilter(this);
     setVimModeEnabled(settingsValue(DataStorageLayer::kApplicationUseVimModeKey).toBool());
 }
 
@@ -566,6 +569,21 @@ void ScriptTextEdit::paintOverText(QPainter* _painter)
         = qMax<qreal>(cursorR.height() / 2.0, QFontMetricsF(currentFont()).horizontalAdvance("M"));
     QRectF blockCursorRect(cursorR.topLeft(), QSizeF(cursorWidth, cursorR.height()));
     _painter->fillRect(blockCursorRect, d->vimModeColor());
+}
+
+bool ScriptTextEdit::eventFilter(QObject* _watched, QEvent* _event)
+{
+    //
+    // Подсказки нужны только при наборе текста, а редактор может открыть их и сам, например после
+    // смены типа пустого абзаца, поэтому в остальных режимах Vim сразу же их закрываем
+    //
+    if (_event->type() == QEvent::Show && _watched == completer()->popup() && d->vimMode.isEnabled()
+        && d->vimMode.mode() != VimTextEditController::Mode::Insert
+        && d->vimMode.mode() != VimTextEditController::Mode::Replace) {
+        QMetaObject::invokeMethod(this, [this] { closeCompleter(); }, Qt::QueuedConnection);
+    }
+
+    return BaseTextEdit::eventFilter(_watched, _event);
 }
 
 bool ScriptTextEdit::event(QEvent* _event)

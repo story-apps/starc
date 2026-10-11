@@ -307,6 +307,7 @@ private:
     void incrementNumber(int _delta);
     void joinLines(int _count, bool _withSpaces);
     void paste(QChar _registerName, bool _before, int _count, bool _cursorAfter = false);
+    bool canPaste(const Vim::RegisterContent& _content, int _count);
     void pasteContent(const Vim::RegisterContent& _content, bool _before, int _count,
                       bool _cursorAfter = false);
     void pasteLines(const Vim::RegisterContent& _content, bool _before, int _count,
