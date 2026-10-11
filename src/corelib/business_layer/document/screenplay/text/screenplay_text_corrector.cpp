@@ -19,6 +19,7 @@
 #include <QTextDocument>
 
 #include <cmath>
+#include <initializer_list>
 
 using BusinessLayer::ScreenplayCharacterParser;
 using BusinessLayer::TemplatesFacade;
@@ -33,6 +34,29 @@ namespace {
  * @brief Список символов пунктуации, разделяющие предложения
  */
 const QRegularExpression kPunctuationCharacter("([.]|[!]|[?]|[:]|[;]|[…])[^\"']");
+
+/**
+ * @brief Высота блока посередине страницы, вместе с отступами
+ */
+qreal middleBlockHeight(const QTextBlock& _block)
+{
+    const auto format = _block.blockFormat();
+    return format.lineHeight() * _block.layout()->lineCount() + format.topMargin()
+        + format.bottomMargin();
+}
+
+/**
+ * @brief Поместятся ли идущие подряд блоки на одной странице, если начать её с первого из них
+ * @note Первый блок на странице идёт без верхнего отступа
+ */
+bool fitsOnOnePage(std::initializer_list<QTextBlock> _blocks, qreal _pageHeight)
+{
+    qreal height = -_blocks.begin()->blockFormat().topMargin();
+    for (const auto& block : _blocks) {
+        height += middleBlockHeight(block);
+    }
+    return height <= _pageHeight;
+}
 
 /**
  * @brief Автоматически добавляемые продолжения в диалогах
@@ -279,6 +303,21 @@ public:
      * @brief Модель параметров блоков
      */
     QVector<BlockInfo> blockItems;
+
+    /**
+     * @brief Параметры блока с заданным номером
+     * @note Абзацы длиннее страницы при переносе добавляют блоки декораций, которых может
+     *       оказаться больше, чем предусмотрено в начале корректировки, поэтому при необходимости
+     *       модель расширяется
+     */
+    BlockInfo& blockItem(int _index)
+    {
+        Q_ASSERT(_index >= 0);
+        if (_index >= blockItems.size()) {
+            blockItems.resize(_index * 2 + 1);
+        }
+        return blockItems[_index];
+    }
 };
 
 ScreenplayTextCorrector::Implementation::Implementation(ScreenplayTextCorrector* _q)
@@ -706,21 +745,21 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
     //
     if (clearNextBlocksInfo > 0) {
         for (int delta = 0; delta < clearNextBlocksInfo; ++delta) {
-            blockItems[currentBlockInfo.number + delta] = {};
+            blockItem(currentBlockInfo.number + delta) = {};
         }
     }
     //
     // ... ищем блок, для которого уже есть предрасчитанные в прошлом проходе параметры
     //
-    while (block.position() > 0 && !blockItems[currentBlockInfo.number].isValid()) {
+    while (block.position() > 0 && !blockItem(currentBlockInfo.number).isValid()) {
         --currentBlockInfo.number;
         block = block.previous();
     }
     //
     // ... значение нижней позиции последнего блока относительно начала страницы
     //
-    qreal lastBlockHeight = blockItems[currentBlockInfo.number].isValid()
-        ? blockItems[currentBlockInfo.number].top
+    qreal lastBlockHeight = blockItem(currentBlockInfo.number).isValid()
+        ? blockItem(currentBlockInfo.number).top
         : 0.0;
     qreal beforeLastBlockHeight = lastBlockHeight;
     auto setLastBlockHeight = [&lastBlockHeight, &beforeLastBlockHeight](qreal _height) {
@@ -730,9 +769,11 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
     bool isFirstChangedBlock = true;
     int consecutiveFineBlocksCount = 0;
     //
-    // ... погнали делать корректировки
+    // ... погнали делать корректировки, ограничивая количество обрабатываемых блоков на случай,
+    //     если корректировки зациклятся, ведь каждый проход может добавлять блоки декораций
     //
-    while (block.isValid()) {
+    const int maxBlockNumber = currentBlockInfo.number + document()->blockCount() * 4 + 1000;
+    while (block.isValid() && currentBlockInfo.number <= maxBlockNumber) {
         //
         // Если при проверке части документа, у нас подряд идут maxConsecutiveBlocks блоков
         // на правильном месте, то прерываем корректировки (при проверке документа целиком -
@@ -755,7 +796,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         if (!block.isVisible()) {
             isFirstChangedBlock = false;
 
-            blockItems[currentBlockInfo.number] = {};
+            blockItem(currentBlockInfo.number) = {};
 
             block = block.next();
             ++currentBlockInfo.number;
@@ -792,7 +833,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                 currentBlockInfo.tableBottom = std::numeric_limits<qreal>::min();
             }
 
-            blockItems[currentBlockInfo.number] = {};
+            blockItem(currentBlockInfo.number) = {};
 
             block = block.next();
             ++currentBlockInfo.number;
@@ -898,12 +939,11 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         //
         const bool isBlockEmptyDecorationOnTopOfThePage
             = blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)
-            && block.text().isEmpty()
-            && qFuzzyCompare(blockItems[currentBlockInfo.number].top, 0.0);
-        if (blockItems[currentBlockInfo.number].isValid() && !isBlockEmptyDecorationOnTopOfThePage
-            && qFuzzyCompare(blockItems[currentBlockInfo.number].height, blockHeight)
-            && qFuzzyCompare(blockItems[currentBlockInfo.number].top, lastBlockHeight)
-            && blockItems[currentBlockInfo.number].type == blockType) {
+            && block.text().isEmpty() && qFuzzyCompare(blockItem(currentBlockInfo.number).top, 0.0);
+        if (blockItem(currentBlockInfo.number).isValid() && !isBlockEmptyDecorationOnTopOfThePage
+            && qFuzzyCompare(blockItem(currentBlockInfo.number).height, blockHeight)
+            && qFuzzyCompare(blockItem(currentBlockInfo.number).top, lastBlockHeight)
+            && blockItem(currentBlockInfo.number).type == blockType) {
             //
             // Если не изменилась
             //
@@ -942,7 +982,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         // ближайшие блоки, чтобы корректно обработать ситуацию, когда в блоке удалили текст
         // и теперь он может быть помещён на предыдущей странице
         //
-        if (isFirstChangedBlock && blockItems[currentBlockInfo.number].isValid()) {
+        if (isFirstChangedBlock && blockItem(currentBlockInfo.number).isValid()) {
             isFirstChangedBlock = false;
             int topIndex = currentBlockInfo.number;
             const auto maxDecorationBlocks = 3;
@@ -968,7 +1008,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
 
                 block = previousBlock;
                 topIndex -= previousBlockCount;
-                setLastBlockHeight(blockItems[topIndex].top);
+                setLastBlockHeight(blockItem(topIndex).top);
             }
             currentBlockInfo.number = topIndex;
 
@@ -978,7 +1018,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     break;
                 }
 
-                blockItems[index] = {};
+                blockItem(index) = {};
             }
 
             continue;
@@ -991,7 +1031,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         // ... если блок декорация, то удаляем его
         //
         if (blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)) {
-            blockItems[currentBlockInfo.number] = {};
+            blockItem(currentBlockInfo.number) = {};
             cursor.setPosition(block.position());
             QTextBlockFormat targetBlockFormat;
             auto targetBlockType = blockType;
@@ -1044,12 +1084,12 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                 block = block.previous();
                 --currentBlockInfo.number;
             }
-            lastBlockHeight = blockItems[currentBlockInfo.number].top;
+            lastBlockHeight = blockItem(currentBlockInfo.number).top;
             //
             // ... а также сбрасываем закешированную информацию о предыдущем блоке, чтобы он
             //     пересчитывался со следующими за ним блоками
             //
-            blockItems[currentBlockInfo.number] = {};
+            blockItem(currentBlockInfo.number) = {};
             continue;
         }
         //
@@ -1070,13 +1110,13 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                 // предыдущим
                 //
                 do {
-                    blockItems[currentBlockInfo.number] = {};
+                    blockItem(currentBlockInfo.number) = {};
                     cursor.movePosition(TextCursor::PreviousBlock);
                     --currentBlockInfo.number;
                     //
                     // ... восстанавливаем последнюю высоту от предыдущего элемента
                     //
-                    setLastBlockHeight(blockItems[currentBlockInfo.number].top);
+                    setLastBlockHeight(blockItem(currentBlockInfo.number).top);
                 } while (!cursor.atStart()
                          && cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                          && !cursor.blockFormat().boolProperty(
@@ -1181,7 +1221,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     //
                     // Запоминаем параметры текущего блока
                     //
-                    blockItems[currentBlockInfo.number++]
+                    blockItem(currentBlockInfo.number++)
                         = BlockInfo{ blockHeight, lastBlockHeight, blockType };
                     //
                     // и идём дальше
@@ -1238,7 +1278,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     //
                     // Запоминаем параметры текущего блока
                     //
-                    blockItems[currentBlockInfo.number++]
+                    blockItem(currentBlockInfo.number++)
                         = BlockInfo{ blockHeight, lastBlockHeight, blockType };
                     //
                     // и идём дальше
@@ -1450,7 +1490,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     //
                     // Запоминаем параметры текущего блока
                     //
-                    blockItems[currentBlockInfo.number++]
+                    blockItem(currentBlockInfo.number++)
                         = BlockInfo{ blockHeight, lastBlockHeight, blockType };
                     //
                     // и идём дальше
@@ -1496,7 +1536,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                             //
                             const qreal breakStartBlockHeight = lineToBreak * blockLineHeight
                                 + blockFormat.topMargin() + blockFormat.bottomMargin();
-                            blockItems[currentBlockInfo.number++]
+                            blockItem(currentBlockInfo.number++)
                                 = BlockInfo{ breakStartBlockHeight, lastBlockHeight, blockType };
                             setLastBlockHeight(lastBlockHeight + breakStartBlockHeight);
                             //
@@ -1536,7 +1576,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                             // ... сохраняем оторванный конец блока и корректируем последнюю высоту
                             //
                             block = block.next();
-                            blockItems[currentBlockInfo.number++]
+                            blockItem(currentBlockInfo.number++)
                                 = BlockInfo{ breakEndBlockHeight, lastBlockHeight, blockType };
                             setLastBlockHeight(lastBlockHeight + breakEndBlockHeight);
                             //
@@ -1684,7 +1724,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     //
                     // Запоминаем параметры текущего блока
                     //
-                    blockItems[currentBlockInfo.number++]
+                    blockItem(currentBlockInfo.number++)
                         = BlockInfo{ blockHeight, lastBlockHeight, blockType };
                     //
                     // и идём дальше
@@ -1729,7 +1769,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                             //
                             const qreal breakStartBlockHeight = lineToBreak * blockLineHeight
                                 + blockFormat.topMargin() + blockFormat.bottomMargin();
-                            blockItems[currentBlockInfo.number++]
+                            blockItem(currentBlockInfo.number++)
                                 = BlockInfo{ breakStartBlockHeight, lastBlockHeight, blockType };
                             //
                             // ... если после разрыва остался пробел, уберём его
@@ -1770,7 +1810,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                             //
                             // ... запоминаем параметры блока перенесённого на следующую страницу
                             //
-                            blockItems[currentBlockInfo.number++]
+                            blockItem(currentBlockInfo.number++)
                                 = BlockInfo{ breakEndBlockHeight, 0, blockType };
                             //
                             // ... обозначаем последнюю высоту
@@ -1858,7 +1898,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
             //
             // Запоминаем параметры текущего блока
             //
-            blockItems[currentBlockInfo.number++]
+            blockItem(currentBlockInfo.number++)
                 = BlockInfo{ blockHeight, lastBlockHeight, blockType };
             //
             // и идём дальше
@@ -1940,6 +1980,18 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithThreePreviousT
     const QTextBlock& _previousBlock, qreal _pageHeight, qreal _pageWidth, TextCursor& _cursor,
     QTextBlock& _block, qreal& _lastBlockHeight)
 {
+    //
+    // Если текущий блок вместе с предыдущими не поместится и на следующей странице, то переносить
+    // их вместе бессмысленно, ведь на следующем проходе всё повторится, поэтому переносим меньше
+    // блоков
+    //
+    if (!fitsOnOnePage({ _prePrePreviousBlock, _prePreviousBlock, _previousBlock, _block },
+                       _pageHeight)) {
+        moveCurrentBlockWithTwoPreviousToNextPage(_prePreviousBlock, _previousBlock, _pageHeight,
+                                                  _pageWidth, _cursor, _block, _lastBlockHeight);
+        return;
+    }
+
     moveCurrentBlockNumberTo(_prePrePreviousBlock, _block);
 
     const QTextBlockFormat previousBlockFormat = _previousBlock.blockFormat();
@@ -1961,7 +2013,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithThreePreviousT
     //
     // Запоминаем параметры блока время и места
     //
-    blockItems[currentBlockInfo.number++]
+    blockItem(currentBlockInfo.number++)
         = BlockInfo{ prePreviousBlockHeight - prePreviousBlockFormat.topMargin(), 0,
                      TextBlockStyle::forBlock(_block) };
     //
@@ -1977,6 +2029,17 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithTwoPreviousToN
     const QTextBlock& _prePreviousBlock, const QTextBlock& _previousBlock, qreal _pageHeight,
     qreal _pageWidth, TextCursor& _cursor, QTextBlock& _block, qreal& _lastBlockHeight)
 {
+    //
+    // Если текущий блок вместе с предыдущими не поместится и на следующей странице, то переносить
+    // их вместе бессмысленно, ведь на следующем проходе всё повторится, поэтому переносим меньше
+    // блоков
+    //
+    if (!fitsOnOnePage({ _prePreviousBlock, _previousBlock, _block }, _pageHeight)) {
+        moveCurrentBlockWithPreviousToNextPage(_previousBlock, _pageHeight, _pageWidth, _cursor,
+                                               _block, _lastBlockHeight);
+        return;
+    }
+
     moveCurrentBlockNumberTo(_prePreviousBlock, _block);
 
     const QTextBlockFormat previousBlockFormat = _previousBlock.blockFormat();
@@ -1994,7 +2057,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithTwoPreviousToN
     //
     // Запоминаем параметры блока время и места
     //
-    blockItems[currentBlockInfo.number++]
+    blockItem(currentBlockInfo.number++)
         = BlockInfo{ prePreviousBlockHeight - prePreviousBlockFormat.topMargin(), 0,
                      TextBlockStyle::forBlock(_block) };
     //
@@ -2010,6 +2073,17 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithPreviousToNext
     const QTextBlock& _previousBlock, qreal _pageHeight, qreal _pageWidth, TextCursor& _cursor,
     QTextBlock& _block, qreal& _lastBlockHeight)
 {
+    //
+    // Если текущий блок вместе с предыдущим не поместится и на следующей странице, то переносить их
+    // вместе бессмысленно, ведь на следующем проходе всё повторится, поэтому переносим только сам
+    // блок
+    //
+    if (!fitsOnOnePage({ _previousBlock, _block }, _pageHeight)) {
+        moveCurrentBlockToNextPage(_block.blockFormat(), middleBlockHeight(_block), _pageHeight,
+                                   _pageWidth, _cursor, _block, _lastBlockHeight);
+        return;
+    }
+
     moveCurrentBlockNumberTo(_previousBlock, _block);
 
     const QTextBlockFormat previousBlockFormat = _previousBlock.blockFormat();
@@ -2022,7 +2096,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithPreviousToNext
     //
     // Запоминаем параметры предыдущего блока
     //
-    blockItems[currentBlockInfo.number++]
+    blockItem(currentBlockInfo.number++)
         = BlockInfo{ previousBlockHeight - previousBlockFormat.topMargin(), 0,
                      TextBlockStyle::forBlock(_block) };
     //
@@ -2047,7 +2121,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockToNextPage(
     //
     // Запоминаем параметры текущего блока
     //
-    blockItems[currentBlockInfo.number++]
+    blockItem(currentBlockInfo.number++)
         = BlockInfo{ _blockHeight - _blockFormat.topMargin(), 0, TextBlockStyle::forBlock(_block) };
 
     if (_blockHeight < _pageHeight) {
@@ -2096,7 +2170,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
     updateBlockLayout(_pageWidth, _block);
     const qreal moreBlockHeight = _block.layout()->lineCount() * moreKeywordFormat.lineHeight()
         + moreKeywordFormat.topMargin() + moreKeywordFormat.bottomMargin();
-    blockItems[currentBlockInfo.number++]
+    blockItem(currentBlockInfo.number++)
         = BlockInfo{ moreBlockHeight, _lastBlockHeight, TextBlockStyle::forBlock(_block) };
     //
     // Перенести текущий блок на следующую страницу, если на текущей влезает
@@ -2149,7 +2223,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
         const qreal continuedBlockHeight
             = _block.layout()->lineCount() * characterBlockFormat.lineHeight()
             + characterBlockFormat.bottomMargin();
-        blockItems[currentBlockInfo.number++]
+        blockItem(currentBlockInfo.number++)
             = BlockInfo{ continuedBlockHeight, 0, TextBlockStyle::forBlock(_block) };
         //
         // Обозначаем последнюю высоту, как высоту предыдущего блока
@@ -2164,8 +2238,8 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
     // А если не нашли то оставляем блок прямо сверху страницы
     //
     else {
-        blockItems[currentBlockInfo.number++] = BlockInfo{ _blockHeight - _blockFormat.topMargin(),
-                                                           0, TextBlockStyle::forBlock(_block) };
+        blockItem(currentBlockInfo.number++) = BlockInfo{ _blockHeight - _blockFormat.topMargin(),
+                                                          0, TextBlockStyle::forBlock(_block) };
         _lastBlockHeight = _blockHeight - _blockFormat.topMargin();
     }
 }
@@ -2279,7 +2353,7 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
         //
         // Запоминаем параметры текущего блока
         //
-        blockItems[currentBlockInfo.number++]
+        blockItem(currentBlockInfo.number++)
             = BlockInfo{ blockHeight, _pageHeight - _spaceToPageEnd + blockIndex * blockHeight,
                          TextBlockStyle::forBlock(block) };
         //
