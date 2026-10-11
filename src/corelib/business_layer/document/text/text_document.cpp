@@ -51,6 +51,7 @@ void deleteBlock(TextCursor& _cursor, BlockDeleteDirection _direction)
         blockData = new TextBlockData(static_cast<TextBlockData*>(blockToKeep.userData()));
     }
     const auto blockFormat = blockToKeep.blockFormat();
+    const auto blockCharFormat = blockToKeep.charFormat();
 
     if (_direction == BlockDeleteDirection::Forward) {
         _cursor.deleteChar();
@@ -60,6 +61,7 @@ void deleteBlock(TextCursor& _cursor, BlockDeleteDirection _direction)
 
     _cursor.block().setUserData(blockData);
     _cursor.setBlockFormat(blockFormat);
+    _cursor.setBlockCharFormat(blockCharFormat);
 }
 
 
@@ -350,6 +352,27 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
         const auto textItem = static_cast<TextModelTextItem*>(item);
 
         //
+        // Пустой блок ячейки занимаем новым элементом, а если в ячейке уже есть абзацы (например,
+        // при отмене удаления первого абзаца колонки), то новый вставляем перед ними, а данные
+        // первого абзаца ячейки переносим вместе с его текстом в следующий блок
+        //
+        auto freeCellBlock = [this, &_cursor] {
+            auto block = _cursor.block();
+            const auto cellBlockData = static_cast<TextBlockData*>(block.userData());
+            if (cellBlockData == nullptr || cellBlockData->item() == nullptr
+                || cellBlockData->item()->type() != TextModelItemType::Text) {
+                return;
+            }
+
+            auto blockData = new TextBlockData(cellBlockData);
+            block.setUserData(nullptr);
+            correctPositionsToItems(_cursor.position(), 1);
+            _cursor.insertBlock();
+            _cursor.block().setUserData(blockData);
+            _cursor.movePosition(QTextCursor::PreviousBlock);
+        };
+
+        //
         // Если новый блок должен быть в другой колонке
         //
         if (_cursor.inTable() && _cursor.inFirstColumn()) {
@@ -362,6 +385,7 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
                 // Переходим к следующей колонке
                 //
                 _cursor.movePosition(QTextCursor::NextBlock);
+                freeCellBlock();
                 //
                 // ... и помечаем, что вставлять новый блок нет необходимости
                 //
@@ -381,6 +405,7 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
                 // Зайдём внутрь таблицы
                 //
                 _cursor.movePosition(TextCursor::NextBlock);
+                freeCellBlock();
                 //
                 // ... и пометим, что вставлять новый блок нет нужны
                 //
