@@ -8,7 +8,7 @@
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/script_text_edit/vim_text_edit_controller.h>
-#include <ui/widgets/text_edit/page/qt6/page_text_edit_scroll_bar.h>
+#include <ui/widgets/text_edit/page/page_text_edit_scroll_bar.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
@@ -38,8 +38,9 @@ public:
     bool updateVimModeLabel();
     bool updateVimStatusLabel();
     void updateVimModeLabelGeometry();
+    bool isVimBlockCursorVisible() const;
     void updateVimBlockCursor();
-    void configureVimLabel(QLabel* _label, const QColor& _backgroundColor,
+    void configureVimLabel(QLabel* _label, const QFont& _font, const QColor& _backgroundColor,
                            const QColor& _textColor);
     QColor vimModeColor() const;
     QColor vimModeTextColor() const;
@@ -97,7 +98,10 @@ ScriptTextEdit::Implementation::Implementation(ScriptTextEdit* _q)
     vimStatusLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
 
     QObject::connect(q, &PageTextEdit::cursorPositionChanged, q, [this] { refreshVimModeUi(); });
-    QObject::connect(q, &PageTextEdit::selectionChanged, q, [this] { refreshVimModeUi(); });
+    QObject::connect(q, &PageTextEdit::selectionChanged, q, [this] {
+        vimMode.handleSelectionChange();
+        refreshVimModeUi();
+    });
 
     connect(&collaboratorCursorInfoUpdateDebouncer, &Debouncer::gotWork, q, [this] {
         std::swap(collaboratorsCursorInfo, pendingCollaboratorsCursorInfo);
@@ -147,7 +151,8 @@ bool ScriptTextEdit::Implementation::updateVimModeLabel()
     const bool needReconfigure = vimModeLabelNeedUpdate || vimModeLabel->text() != modeName;
     if (needReconfigure) {
         vimModeLabel->setText(modeName);
-        configureVimLabel(vimModeLabel, vimModeColor(), vimModeTextColor());
+        configureVimLabel(vimModeLabel, DesignSystem::font().overline(), vimModeColor(),
+                          vimModeTextColor());
     }
 
     vimModeLabel->show();
@@ -168,8 +173,11 @@ bool ScriptTextEdit::Implementation::updateVimStatusLabel()
     const bool needReconfigure = vimModeLabelNeedUpdate || vimStatusLabel->text() != statusText;
     if (needReconfigure) {
         vimStatusLabel->setText(statusText);
-        configureVimLabel(vimStatusLabel, DesignSystem::color().background(),
-                          DesignSystem::color().onBackground());
+        //
+        // ... набираемая команда показывается как есть, без перевода в верхний регистр
+        //
+        configureVimLabel(vimStatusLabel, DesignSystem::font().caption(),
+                          DesignSystem::color().background(), DesignSystem::color().onBackground());
     }
 
     vimStatusLabel->show();
@@ -178,7 +186,7 @@ bool ScriptTextEdit::Implementation::updateVimStatusLabel()
     return needReconfigure;
 }
 
-void ScriptTextEdit::Implementation::configureVimLabel(QLabel* _label,
+void ScriptTextEdit::Implementation::configureVimLabel(QLabel* _label, const QFont& _font,
                                                        const QColor& _backgroundColor,
                                                        const QColor& _textColor)
 {
@@ -186,7 +194,7 @@ void ScriptTextEdit::Implementation::configureVimLabel(QLabel* _label,
     const int verticalPadding = static_cast<int>(DesignSystem::layout().px4());
     const int horizontalPadding = static_cast<int>(DesignSystem::layout().px8());
 
-    _label->setFont(DesignSystem::font().overline());
+    _label->setFont(_font);
     _label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; border-radius: %3px; "
                                   "padding: %4px %5px; }")
                               .arg(_backgroundColor.name(), _textColor.name())
@@ -219,29 +227,28 @@ void ScriptTextEdit::Implementation::updateVimModeLabelGeometry()
                                 statusWidth, statusSize.height());
 }
 
+bool ScriptTextEdit::Implementation::isVimBlockCursorVisible() const
+{
+    return vimMode.usesBlockCursor() && q->hasFocus();
+}
+
 void ScriptTextEdit::Implementation::updateVimBlockCursor()
 {
+    //
+    // Курсор-блок подсвечивает символ под курсором, а в конце строки он рисуется поверх текста
+    //
     QList<PageTextEdit::ExtraSelection> selections;
-    if (!vimMode.usesBlockCursor()) {
-        q->setExtraSelections(selections);
-        q->viewport()->update();
-        return;
-    }
-
-    QTextCursor cursor(q->document());
-    cursor.setPosition(vimMode.blockCursorPosition());
-    cursor.clearSelection();
-    if (cursor.block().length() > 1) {
-        if (cursor.atBlockEnd()) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-        } else {
+    if (isVimBlockCursorVisible()) {
+        QTextCursor cursor(q->document());
+        cursor.setPosition(vimMode.blockCursorPosition());
+        if (!cursor.atBlockEnd()) {
             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-        }
 
-        QTextCharFormat format;
-        format.setBackground(vimModeColor());
-        format.setForeground(vimModeTextColor());
-        selections.append({ cursor, format });
+            QTextCharFormat format;
+            format.setBackground(vimModeColor());
+            format.setForeground(vimModeTextColor());
+            selections.append({ cursor, format });
+        }
     }
 
     q->setExtraSelections(selections);
@@ -436,10 +443,11 @@ void ScriptTextEdit::resizeEvent(QResizeEvent* _event)
 void ScriptTextEdit::inputMethodEvent(QInputMethodEvent* _event)
 {
     //
-    // В командных режимах Vim'а ввод текста запрещён, в том числе и через методы ввода
+    // В командных режимах Vim'а текст из методов ввода не вставляется, а обрабатывается как
+    // команды, например символы, набранные с мёртвыми клавишами
     //
-    if (d->vimMode.usesBlockCursor()) {
-        _event->accept();
+    if (d->vimMode.handleInputMethodEvent(_event)) {
+        d->refreshVimModeUi();
         return;
     }
 
@@ -450,13 +458,13 @@ void ScriptTextEdit::paintOverText(QPainter* _painter)
 {
     BaseTextEdit::paintOverText(_painter);
 
-    if (!d->vimMode.usesBlockCursor()) {
+    if (!d->isVimBlockCursorVisible()) {
         return;
     }
 
     QTextCursor cursor(document());
     cursor.setPosition(d->vimMode.blockCursorPosition());
-    if (cursor.block().length() > 1) {
+    if (!cursor.atBlockEnd()) {
         return;
     }
 
@@ -494,6 +502,8 @@ bool ScriptTextEdit::event(QEvent* _event)
     const bool result = BaseTextEdit::event(_event);
     if (static_cast<int>(_event->type()) == static_cast<int>(EventType::DesignSystemChangeEvent)) {
         d->vimModeLabelNeedUpdate = true;
+        d->refreshVimModeUi();
+    } else if (_event->type() == QEvent::FocusIn || _event->type() == QEvent::FocusOut) {
         d->refreshVimModeUi();
     }
     return result;

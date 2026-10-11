@@ -10,6 +10,7 @@
 #include <QTextCursor>
 #include <QVector>
 
+class QInputMethodEvent;
 class QKeyEvent;
 
 namespace Ui {
@@ -76,6 +77,17 @@ public:
      */
     bool handleKeyPress(QKeyEvent* _event);
 
+    /**
+     * @brief Обработать ввод через метод ввода, например символов с мёртвыми клавишами
+     * @return Обработано ли событие
+     */
+    bool handleInputMethodEvent(QInputMethodEvent* _event);
+
+    /**
+     * @brief Синхронизировать режим с выделением, сделанным не через Vim-команды, например мышью
+     */
+    void handleSelectionChange();
+
 private:
     /**
      * @brief Оператор, ожидающий цели, над которой нужно выполнить действие
@@ -95,7 +107,6 @@ private:
      */
     enum class Awaiting {
         None,
-        Motion,
         TextObject,
         FindCharacter,
         ReplaceCharacter,
@@ -109,35 +120,48 @@ private:
     };
 
     /**
-     * @brief Перемещения курсора
+     * @brief Результат вычисления перемещения курсора
      */
-    enum class Motion {
-        None,
-        Left,
-        Down,
-        Up,
-        Right,
-        StartOfLine,
-        FirstNonBlank,
-        EndOfLine,
-        NextWord,
-        NextBigWord,
-        PreviousWord,
-        PreviousBigWord,
-        EndOfWord,
-        EndOfBigWord,
-        NextParagraph,
-        PreviousParagraph,
-        MatchingBracket,
-    };
+    struct Motion {
+        /**
+         * @brief Позиция, в которую нужно переместить курсор, -1 если перемещение невозможно
+         */
+        int position = -1;
 
-    /**
-     * @brief Положение курсора в области просмотра после прокрутки
-     */
-    enum class ScrollAlignment {
-        Center,
-        Top,
-        Bottom,
+        /**
+         * @brief Входит ли символ в позиции назначения в диапазон оператора
+         */
+        bool inclusive = false;
+
+        /**
+         * @brief Работает ли оператор с перемещением построчно
+         */
+        bool linewise = false;
+
+        /**
+         * @brief Является ли перемещение прыжком, после которого можно вернуться назад
+         */
+        bool jump = false;
+
+        /**
+         * @brief Сохранить ли горизонтальное положение курсора для перемещений вверх и вниз
+         */
+        bool keepPreferredX = false;
+
+        /**
+         * @brief Не переносить конец диапазона оператора с начала строки на конец предыдущей
+         */
+        bool keepOperatorEnd = false;
+
+        /**
+         * @brief Перемещение в конец строки, которое сохраняется при перемещениях вверх и вниз
+         */
+        bool toLineEnd = false;
+
+        /**
+         * @brief Попадает ли текст в нумерованный регистр при удалении
+         */
+        bool toNumberedRegister = false;
     };
 
     /**
@@ -150,171 +174,153 @@ private:
     };
 
     /**
-     * @brief Находимся ли в одном из режимов выделения
+     * @brief Состояние, общее для всех редакторов: регистры, макросы и последний поиск
      */
+    struct SharedState;
+    static SharedState& shared();
+
+    //
+    // Режимы
+    //
+
     bool isVisualMode() const;
-
-    /**
-     * @brief Ожидает ли контроллер продолжения набираемой команды
-     */
     bool hasPendingInput() const;
-
-    /**
-     * @brief Переключение между режимами работы
-     */
     void resetPendingCommand();
-    void enterInsertMode();
-    void enterNormalMode(bool _fromInsert = false);
-    void enterVisualMode(Mode _mode);
+    void enterInsertMode(int _repeat, QChar _command);
+    void leaveInsertMode();
+    void enterNormalMode();
+    void enterVisualMode(Mode _mode, int _anchor, int _cursor);
     void leaveVisualMode();
     void restoreLastVisualSelection();
-
-    /**
-     * @brief Работа с выделением режимов VISUAL
-     */
-    void resetVisualSelection();
     void updateVisualSelection();
     Vim::TextRange visualRange() const;
+    int visualLinesCount() const;
 
-    /**
-     * @brief Работа с количеством повторений команды
-     */
-    void appendCount(const QString& _digit);
-    int takeCount(int _default = 1);
+    //
+    // Количество повторений
+    //
+
+    void appendCount(QChar _digit);
+    bool hasCount() const;
+    int takeCount();
     int takeOptionalCount();
-    int combinedOperatorCount();
 
-    /**
-     * @brief Обработка нажатий клавиш
-     */
+    //
+    // Обработка нажатий
+    //
+
     bool handleKeyPressImpl(QKeyEvent* _event);
-    bool handleNormalMode(QKeyEvent* _event);
-    bool handleVisualMode(QKeyEvent* _event);
-    bool handleCommonMotion(QKeyEvent* _event);
-    bool handleCommonCommand(QKeyEvent* _event);
+    bool handleCommand(QKeyEvent* _event);
     bool handleAwaitingInput(QKeyEvent* _event);
-    bool handleMotionTarget(QKeyEvent* _event);
-    bool handleTextObject(QKeyEvent* _event);
-    bool handleFindCharacter(QKeyEvent* _event);
-    bool handleReplaceCharacter(QKeyEvent* _event);
+    bool handleNormalCommand(QKeyEvent* _event);
+    bool handleVisualCommand(QKeyEvent* _event);
+    bool handleOperatorTarget(QKeyEvent* _event);
     bool handleGoCommand(QKeyEvent* _event);
     bool handleScrollCommand(QKeyEvent* _event);
+    bool handleTextObject(QKeyEvent* _event);
+    bool handleCommonCommand(QKeyEvent* _event);
 
-    /**
-     * @brief Перемещение курсора
-     */
-    Motion motionFromKey(QKeyEvent* _event) const;
-    bool isInclusiveMotion(Motion _motion) const;
-    bool isLinewiseMotion(Motion _motion) const;
-    int motionTargetPosition(Motion _motion, int _fromPosition, int _count,
-                             bool _forOperator) const;
-    void applyMotion(int _targetPosition, bool _inclusive, bool _linewise);
-    void goToPosition(int _position);
-    void setCursorPosition(int _position);
+    //
+    // Перемещения
+    //
 
-    /**
-     * @brief Вычисление позиций и диапазонов в документе
-     */
+    bool isMotionKey(QKeyEvent* _event) const;
+    Motion motionForKey(QKeyEvent* _event, int _count, bool _hasCount);
+    Motion verticalMotion(int _count, bool _down, bool _visualLines);
+    Motion lineMotion(int _lineNumber, bool _firstNonBlank) const;
+    Motion findCharacterMotion(QChar _character, bool _forward, bool _till, int _count,
+                               bool _repeat) const;
+    Motion markMotion(QChar _name, bool _exact) const;
+    Motion searchMotion(const QString& _pattern, bool _forward, int _count, int _fromPosition);
+    void applyMotion(const Motion& _motion);
+    void applyOperatorToMotion(const Motion& _motion);
+    void applyOperatorToObject(const Vim::ObjectRange& _object);
+
+    //
+    // Позиции в документе
+    //
+
+    QTextDocument* document() const;
     int currentPosition() const;
-    int lastLinePosition(int _fromPosition, int _count) const;
-    int boundedPosition(int _position) const;
-    int visualCursorPosition(int _position) const;
-    int visualSelectionEndPosition(int _position) const;
+    QTextBlock currentBlock() const;
+    int characterPosition(int _position) const;
+    void setCursorPosition(int _position);
     Vim::TextRange linesRange(int _fromPosition, int _toPosition) const;
-    QTextCursor rangeCursor(const Vim::TextRange& _range, bool _includeSeparator) const;
 
-    /**
-     * @brief Выполнение операторов над диапазоном текста
-     */
-    void applyOperator(Operator _operator, const Vim::TextRange& _range);
-    void yankRange(const Vim::TextRange& _range, QChar _registerName);
-    void deleteRange(const Vim::TextRange& _range, QChar _registerName);
-    void changeRange(const Vim::TextRange& _range, QChar _registerName);
+    //
+    // Операторы
+    //
+
+    void applyOperator(Operator _operator, const Vim::TextRange& _range, int _cursorPosition,
+                       bool _toNumberedRegister);
+    void yankRange(const Vim::TextRange& _range, QChar _registerName, int _cursorPosition);
+    void deleteRange(const Vim::TextRange& _range, QChar _registerName, bool _toNumberedRegister);
+    void changeRange(const Vim::TextRange& _range, QChar _registerName, bool _toNumberedRegister);
     void changeCaseRange(const Vim::TextRange& _range, Operator _operator);
+    QString rangeText(const Vim::TextRange& _range) const;
+    Vim::RegisterContent registerContent(const Vim::TextRange& _range) const;
+    QVector<Vim::TextRange> lineRanges(const Vim::TextRange& _range) const;
 
-    /**
-     * @brief Отмена и повтор последнего действия силами самого редактора
-     */
-    void undo();
-    void redo();
+    //
+    // Редактирование
+    //
+
+    bool canEdit() const;
+    void removeText(int _from, int _to);
+    void insertText(int _position, const QString& _text);
+    void replaceText(int _from, int _to, const QString& _text);
+    bool openLine(bool _below);
+    void deleteCharacters(int _count, bool _previous);
+    void replaceCharacters(QChar _character, int _count);
+    void toggleCase(int _count);
+    void joinLines(int _count, bool _withSpaces);
+    void paste(QChar _registerName, bool _before, int _count, bool _cursorAfter = false);
+    void pasteContent(const Vim::RegisterContent& _content, bool _before, int _count,
+                      bool _cursorAfter = false);
+    void pasteLines(const QString& _text, bool _before, int _count, bool _cursorAfter = false);
+    void replaceVisualWithRegister(QChar _registerName, bool _keepRegisters, int _count);
+    void undo(int _count);
+    void redo(int _count);
     void triggerEditorShortcut(QKeySequence::StandardKey _key);
+    void sendKeyPressToEditor(int _key, const QString& _text);
+    void commitUndoStep();
 
-    /**
-     * @brief Редактирование текста
-     */
-    void deleteCharacters(int _count, bool _previous, QChar _registerName);
-    void deleteToEndOfLine(bool _change, QChar _registerName);
-    void replaceCharacters(const QString& _text, int _count);
-    void replaceRangeCharacters(const Vim::TextRange& _range, const QString& _text);
-    void toggleCaseUnderCursor(int _count);
-    void joinLines(int _count, bool _withSpace);
-    void openLineBelow();
-    void openLineAbove();
+    //
+    // Метки и поиск
+    //
 
-    /**
-     * @brief Вставка из регистра
-     */
-    void paste(bool _before, int _count, QChar _registerName);
-    void pasteContent(const Vim::RegisterContent& _content, bool _before, int _count);
-    void replaceSelectionWithRegister(QChar _registerName);
-
-    /**
-     * @brief Метки
-     */
-    void setMark(QChar _name);
-    void jumpToMark(QChar _name, bool _exact);
+    void setMark(QChar _name, int _position);
     void rememberJumpPosition();
-
-    /**
-     * @brief Поиск по документу
-     */
-    void search(const QString& _pattern, bool _forward);
-    void searchNext(bool _reverse, int _count);
-    void searchWordUnderCursor(bool _forward);
     int searchPosition(const QString& _pattern, int _fromPosition, bool _forward) const;
+    void searchWordUnderCursor(bool _forward, bool _wholeWord, int _count);
 
-    /**
-     * @brief Прокрутка документа
-     */
-    void scrollPages(qreal _pages);
-    void scrollCursorTo(ScrollAlignment _alignment);
+    //
+    // Прокрутка
+    //
 
-    /**
-     * @brief Строка ввода команд
-     */
+    void scrollHalfPage(bool _down, int _count);
+    void scrollCursorTo(int _alignment);
+
+    //
+    // Строка ввода команд
+    //
+
     void openCommandLine(const QString& _prefix);
     void closeCommandLine();
-    bool handleCommandLine(QKeyEvent* _event);
+    void handleCommandLine(QKeyEvent* _event);
     void executeCommandLine(const QString& _command);
     void executeExCommand(const QString& _command);
-    void substitute(const QString& _arguments, bool _wholeDocument);
+    void substitute(QTextBlock _firstLine, QTextBlock _lastLine, const QString& _arguments);
 
-    /**
-     * @brief Макросы и повтор последнего изменения
-     */
-    void trackKeyPress(const RecordedKey& _key, bool _wasInsertMode, int _revisionBefore,
-                       bool _trackChange);
-    void skipChangeTracking();
+    //
+    // Макросы и повтор последнего изменения
+    //
+
+    void trackKeyPress(const RecordedKey& _key);
     void toggleMacroRecording(QChar _name);
     void playMacro(QChar _name, int _count);
     void repeatLastChange(int _count);
-    void replayKeys(QVector<RecordedKey> _keys);
-
-    /**
-     * @brief Доступно ли редактирование текста
-     */
-    bool canEdit() const;
-
-    /**
-     * @brief Отправить нажатие клавиши редактору, чтобы он обработал его сам
-     */
-    void sendDeleteKeyPressToEditor();
-    void sendReturnKeyPressToEditor();
-
-    /**
-     * @brief Текст выделения в том виде, в котором он попадает в регистр
-     */
-    QString selectedTextForClipboard(const QTextCursor& _cursor) const;
+    void replayKeys(const QVector<RecordedKey>& _keys);
 
     /**
      * @brief Завершить обработку нажатия клавиши
@@ -330,63 +336,83 @@ private:
      */
     Awaiting m_awaiting = Awaiting::None;
     Operator m_pendingOperator = Operator::None;
-    int m_operatorCount = 0;
     QString m_count;
+    int m_operatorCount = 0;
     QChar m_pendingRegister;
+    QChar m_findCommand;
     bool m_textObjectAround = false;
     bool m_jumpToMarkExact = true;
 
     /**
-     * @brief Последний поиск символа в строке - для повтора по клавишам ; и ,
+     * @brief Предпочтительное положение курсора при перемещениях вверх и вниз
      */
-    QChar m_findCharacter;
-    bool m_findForward = true;
-    bool m_findTill = false;
+    int m_preferredX = -1;
+    bool m_preferLineEnd = false;
 
     /**
      * @brief Выделение режимов VISUAL, в том числе и последнее, для команды gv
      */
-    int m_visualAnchorPosition = -1;
-    int m_visualCursorPosition = -1;
-    int m_lastVisualAnchorPosition = -1;
-    int m_lastVisualCursorPosition = -1;
+    int m_visualAnchor = -1;
+    int m_visualCursor = -1;
+    QTextCursor m_lastVisualAnchor;
+    QTextCursor m_lastVisualCursor;
     Mode m_lastVisualMode = Mode::Visual;
 
     /**
-     * @brief Регистры и метки
+     * @brief Метки
      */
-    Vim::Registers m_registers;
     QHash<QChar, QTextCursor> m_marks;
-
-    /**
-     * @brief Последний поиск по документу
-     */
-    QString m_searchPattern;
-    bool m_searchForward = true;
 
     /**
      * @brief Набираемая пользователем команда
      */
     bool m_commandLineActive = false;
     QString m_commandLine;
+    Operator m_commandLineOperator = Operator::None;
+    int m_commandLineOperatorCount = 0;
+    QChar m_commandLineRegister;
 
     /**
-     * @brief Макросы и повтор последнего изменения
+     * @brief Повтор вставленного текста для команд с количеством, например 3ia<Esc>
      */
-    QHash<QChar, QVector<RecordedKey>> m_macros;
-    QChar m_recordingRegister;
-    QChar m_lastPlayedRegister;
-    QVector<RecordedKey> m_recordedKeys;
-    QVector<RecordedKey> m_changeKeys;
+    int m_insertRepeat = 1;
+    QChar m_insertCommand;
+    QVector<RecordedKey> m_insertKeys;
+    QTextCursor m_lastInsertPosition;
+
+    /**
+     * @brief Строка, в которой после изменения остался только отступ
+     */
+    QTextCursor m_autoIndentLine;
+    int m_autoIndentRevision = -1;
+
+    /**
+     * @brief Повтор последнего изменения
+     */
+    QVector<RecordedKey> m_commandKeys;
     QVector<RecordedKey> m_lastChangeKeys;
-    bool m_collectingChange = false;
+    int m_commandRevision = -1;
+    bool m_commandIsChange = true;
+
+    /**
+     * @brief Макросы
+     */
+    QChar m_recordingRegister;
+    QVector<RecordedKey> m_recordedKeys;
     bool m_skipMacroRecordKey = false;
     int m_replayDepth = 0;
+    int m_replayedKeys = 0;
+    bool m_replayingInsert = false;
 
     /**
-     * @brief Флаг текущего нажатия, отвечающий за то, запоминать ли команду для повтора
+     * @brief Идёт ли обработка нажатия, во время которой редактор меняется самим контроллером
      */
-    bool* m_trackChangeTarget = nullptr;
+    int m_editingDepth = 0;
+
+    /**
+     * @brief Отправляет ли контроллер нажатие клавиши самому редактору
+     */
+    int m_passThroughDepth = 0;
 };
 
 } // namespace Ui

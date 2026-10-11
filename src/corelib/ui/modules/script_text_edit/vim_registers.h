@@ -10,6 +10,7 @@ namespace Vim {
 
 /**
  * @brief Содержимое регистра
+ * @note Построчный фрагмент всегда заканчивается переводом строки
  */
 struct RegisterContent {
     QString text;
@@ -25,21 +26,19 @@ class Registers
 {
 public:
     /**
-     * @brief Регистр по умолчанию
-     */
-    static QChar unnamedRegister();
-
-    /**
      * @brief Может ли символ быть именем регистра
      */
     static bool isValidName(QChar _name);
 
     /**
      * @brief Сохранить текст в регистр
+     * @param _name - имя регистра, пустой символ означает регистр по умолчанию
+     * @param _toNumbered - сохранить ли удалённый текст в нумерованный регистр, даже если это
+     *        удаление в пределах одной строки
      * @note Заглавная буква в имени означает, что текст нужно дописать к уже имеющемуся
      */
     void setYankedContent(QChar _name, const RegisterContent& _content);
-    void setDeletedContent(QChar _name, const RegisterContent& _content);
+    void setDeletedContent(QChar _name, const RegisterContent& _content, bool _toNumbered);
 
     /**
      * @brief Получить содержимое регистра
@@ -49,22 +48,23 @@ public:
 private:
     /**
      * @brief Сохранить содержимое в конкретный регистр
+     * @return Итоговое содержимое регистра
      */
-    void setContent(QChar _name, const RegisterContent& _content);
+    RegisterContent setContent(QChar _name, const RegisterContent& _content);
 
     /**
      * @brief Синхронизация регистра по умолчанию с системным буфером обмена
      */
     void syncToClipboard(const RegisterContent& _content);
-    RegisterContent unnamedContent() const;
+    RegisterContent clipboardContent() const;
 
     QHash<QChar, RegisterContent> m_registers;
 
     /**
-     * @brief Текст, который мы последним положили в системный буфер обмена
-     * @note Нужен, чтобы понять, что буфер обмена сменился в другом приложении
+     * @brief Содержимое, которое мы последним положили в системный буфер обмена
+     * @note Нужно, чтобы понять, что буфер обмена сменился в другом приложении
      */
-    QString m_clipboardText;
+    RegisterContent m_clipboardContent;
 };
 
 } // namespace Vim
