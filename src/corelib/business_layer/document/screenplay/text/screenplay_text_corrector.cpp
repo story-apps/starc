@@ -1046,7 +1046,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     cursor.block().setUserData(nullptr);
                 }
             };
-            if (cursor.block() != cursor.document()->end()) {
+            if (cursor.block().next() != cursor.document()->end()) {
                 cursor.movePosition(TextCursor::NextBlock);
                 cursor.movePosition(TextCursor::StartOfBlock);
                 fillTargetBlockInfo();
