@@ -6,6 +6,7 @@
 #include <QChar>
 #include <QHash>
 #include <QKeySequence>
+#include <QPair>
 #include <QString>
 #include <QStringList>
 #include <QTextCursor>
@@ -297,7 +298,11 @@ private:
     bool canEdit() const;
     bool isEditableRange(int _from, int _to) const;
     bool isProtectedSelectionEdit(QKeyEvent* _event) const;
+    void beginEdit();
+    void endEdit();
+    void markInsertedText(int _from, int _to);
     bool removeText(int _from, int _to);
+    bool removeTextAcrossPageBreaks(int _from, int _to);
     bool insertText(int _position, const QString& _text);
     bool replaceText(int _from, int _to, const QString& _text, int* _textPosition = nullptr);
     bool openLine(bool _below);
@@ -312,7 +317,10 @@ private:
                       bool _cursorAfter = false);
     void pasteLines(const Vim::RegisterContent& _content, bool _before, int _count,
                     bool _cursorAfter = false);
-    void restoreParagraphTypes(int _position, const Vim::RegisterContent& _content, int _count);
+    QTextCursor insertRegisterText(int _position, const Vim::RegisterContent& _content, int _count);
+    QVector<QPair<QTextCursor, int>> restoreParagraphTypes(int _position,
+                                                           const Vim::RegisterContent& _content,
+                                                           int _count);
     void applyTextFormats(int _position, const QString& _text,
                           const QVector<Vim::RegisterContent::TextFormat>& _formats);
     void replaceVisualWithRegister(QChar _registerName, bool _keepRegisters, int _count);
@@ -473,6 +481,20 @@ private:
      */
     QTextCursor m_autoIndentLine;
     int m_autoIndentRevision = -1;
+
+    /**
+     * @brief Правка из нескольких шагов, которую модель и разметка страниц получают одним
+     *        изменением, и добавленный в ней текст, который помечается после её завершения
+     */
+    int m_editDepth = 0;
+    QTextCursor m_editCursor;
+    QVector<QTextCursor> m_insertedTextToMark;
+
+    /**
+     * @brief Вставленные строки, которым вернули тип абзаца, вместе с их прежним типом, - после
+     *        правки они проверяются на видимость
+     */
+    QVector<QPair<QTextCursor, int>> m_restoredLines;
 
     /**
      * @brief Повтор последнего изменения
