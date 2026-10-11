@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QByteArray>
 #include <QChar>
 #include <QHash>
 #include <QString>
@@ -26,6 +27,13 @@ struct RegisterContent {
      */
     QVector<int> paragraphTypes;
     QString documentKind;
+
+    /**
+     * @brief Фрагмент в формате, в котором его копирует сам редактор, - вместе с форматированием,
+     *        редакторскими заметками и структурой документа
+     */
+    QString richMimeType;
+    QByteArray richMimeData;
 
     bool isEmpty() const;
 };

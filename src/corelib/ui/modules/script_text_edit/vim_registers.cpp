@@ -2,6 +2,7 @@
 
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QMimeData>
 
 namespace Ui {
 namespace Vim {
@@ -204,6 +205,12 @@ RegisterContent Registers::setContent(QChar _name, const RegisterContent& _conte
                 content.paragraphTypes.clear();
                 content.documentKind.clear();
             }
+
+            //
+            // ... а форматированные фрагменты так не склеить
+            //
+            content.richMimeType.clear();
+            content.richMimeData.clear();
         }
     }
 
@@ -214,7 +221,17 @@ RegisterContent Registers::setContent(QChar _name, const RegisterContent& _conte
 void Registers::syncToClipboard(const RegisterContent& _content)
 {
     m_clipboardContent = _content;
-    QGuiApplication::clipboard()->setText(_content.text);
+
+    //
+    // ... вместе с текстом кладём и форматированный фрагмент, чтобы при вставке средствами
+    //     самого редактора он вставлялся так же, как и скопированный редактором
+    //
+    auto mimeData = new QMimeData;
+    mimeData->setText(_content.text);
+    if (!_content.richMimeType.isEmpty()) {
+        mimeData->setData(_content.richMimeType, _content.richMimeData);
+    }
+    QGuiApplication::clipboard()->setMimeData(mimeData);
 }
 
 RegisterContent Registers::clipboardContent() const
@@ -231,9 +248,20 @@ RegisterContent Registers::clipboardContent() const
     text.replace('\r', '\n');
 
     //
-    // ... текст, скопированный в другом приложении целыми строками, вставляем построчно
+    // ... текст, скопированный в другом приложении целыми строками, вставляем построчно, а
+    //     скопированный самим редактором - вместе с форматированием
     //
-    return { text, text.endsWith('\n') };
+    RegisterContent content(text, text.endsWith('\n'));
+    if (const auto mimeData = QGuiApplication::clipboard()->mimeData()) {
+        for (const auto& format : mimeData->formats()) {
+            if (format.startsWith(QStringLiteral("application/x-starc/"))) {
+                content.richMimeType = format;
+                content.richMimeData = mimeData->data(format);
+                break;
+            }
+        }
+    }
+    return content;
 }
 
 } // namespace Vim

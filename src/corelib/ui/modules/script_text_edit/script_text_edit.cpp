@@ -8,6 +8,7 @@
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/script_text_edit/vim_text_edit_controller.h>
+#include <ui/widgets/label/label.h>
 #include <ui/widgets/text_edit/page/page_text_edit_scroll_bar.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -19,7 +20,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QKeyEvent>
-#include <QLabel>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRegularExpression>
@@ -46,8 +46,9 @@ public:
     QRect visibleViewportRect() const;
     bool isVimBlockCursorVisible() const;
     void updateVimBlockCursor();
-    void configureVimLabel(QLabel* _label, const QFont& _font, const QColor& _backgroundColor,
+    void configureVimLabel(AbstractLabel* _label, const QColor& _backgroundColor,
                            const QColor& _textColor);
+    QSize vimLabelSize(AbstractLabel* _label) const;
     QColor vimModeColor() const;
     QColor vimModeTextColor() const;
 
@@ -63,8 +64,8 @@ public:
      * @brief Vim-режим редактирования текста
      */
     VimTextEditController vimMode;
-    QLabel* vimModeLabel = nullptr;
-    QLabel* vimStatusLabel = nullptr;
+    AbstractLabel* vimModeLabel = nullptr;
+    AbstractLabel* vimStatusLabel = nullptr;
 
     /**
      * @brief Применены ли к редактору настройки внешнего вида Vim-режима
@@ -95,16 +96,16 @@ ScriptTextEdit::Implementation::Implementation(ScriptTextEdit* _q)
     , vimMode(_q)
     , collaboratorCursorInfoUpdateDebouncer(500)
 {
-    vimModeLabel = new QLabel(q->viewport());
+    vimModeLabel = new OverlineLabel(q->viewport());
     vimModeLabel->hide();
     vimModeLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    vimStatusLabel = new QLabel(q->viewport());
+    vimStatusLabel = new CaptionLabel(q->viewport());
     vimStatusLabel->hide();
     vimStatusLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    QObject::connect(q, &PageTextEdit::cursorPositionChanged, q, [this] { refreshVimModeUi(); });
-    QObject::connect(q, &PageTextEdit::selectionChanged, q, [this] {
+    connect(q, &PageTextEdit::cursorPositionChanged, q, [this] { refreshVimModeUi(); });
+    connect(q, &PageTextEdit::selectionChanged, q, [this] {
         vimMode.handleSelectionChange();
         refreshVimModeUi();
     });
@@ -159,8 +160,7 @@ void ScriptTextEdit::Implementation::updateVimModeLabel()
     const bool needReconfigure = vimModeLabelNeedUpdate || vimModeLabel->text() != modeName;
     if (needReconfigure) {
         vimModeLabel->setText(modeName);
-        configureVimLabel(vimModeLabel, DesignSystem::font().overline(), vimModeColor(),
-                          vimModeTextColor());
+        configureVimLabel(vimModeLabel, vimModeColor(), vimModeTextColor());
     }
 
     vimModeLabel->show();
@@ -178,33 +178,34 @@ void ScriptTextEdit::Implementation::updateVimStatusLabel()
     const bool needReconfigure = vimModeLabelNeedUpdate || vimStatusLabel->text() != statusText;
     if (needReconfigure) {
         vimStatusLabel->setText(statusText);
-        //
-        // ... набираемая команда показывается как есть, без перевода в верхний регистр
-        //
-        configureVimLabel(vimStatusLabel, DesignSystem::font().caption(),
-                          DesignSystem::color().background(), DesignSystem::color().onBackground());
+        configureVimLabel(vimStatusLabel, DesignSystem::color().background(),
+                          DesignSystem::color().onBackground());
     }
 
     vimStatusLabel->show();
     vimStatusLabel->raise();
 }
 
-void ScriptTextEdit::Implementation::configureVimLabel(QLabel* _label, const QFont& _font,
+void ScriptTextEdit::Implementation::configureVimLabel(AbstractLabel* _label,
                                                        const QColor& _backgroundColor,
                                                        const QColor& _textColor)
 {
-    const int borderRadius = static_cast<int>(DesignSystem::layout().px4());
-    const int verticalPadding = static_cast<int>(DesignSystem::layout().px4());
-    const int horizontalPadding = static_cast<int>(DesignSystem::layout().px8());
+    //
+    // ... отступы вокруг текста задаём размером самого виджета, т.к. фон рисуется в области
+    //     содержимого
+    //
+    _label->setContentsMargins({});
+    _label->setAlignment(Qt::AlignCenter);
+    _label->setBorderRadius(DesignSystem::layout().px4());
+    _label->setBackgroundColor(_backgroundColor);
+    _label->setTextColor(_textColor);
+}
 
-    _label->setFont(_font);
-    _label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; border-radius: %3px; "
-                                  "padding: %4px %5px; }")
-                              .arg(_backgroundColor.name(), _textColor.name())
-                              .arg(borderRadius)
-                              .arg(verticalPadding)
-                              .arg(horizontalPadding));
-    _label->adjustSize();
+QSize ScriptTextEdit::Implementation::vimLabelSize(AbstractLabel* _label) const
+{
+    return _label->sizeHint()
+        + QSize(static_cast<int>(DesignSystem::layout().px16()),
+                static_cast<int>(DesignSystem::layout().px8()));
 }
 
 void ScriptTextEdit::Implementation::updateVimModeLabelGeometry()
@@ -215,7 +216,7 @@ void ScriptTextEdit::Implementation::updateVimModeLabelGeometry()
 
     const int margin = static_cast<int>(DesignSystem::layout().px8());
     const QRect visibleRect = visibleViewportRect();
-    const QSize labelSize = vimModeLabel->sizeHint();
+    const QSize labelSize = vimLabelSize(vimModeLabel);
     vimModeLabel->setGeometry(visibleRect.left() + margin,
                               visibleRect.bottom() + 1 - labelSize.height() - margin,
                               labelSize.width(), labelSize.height());
@@ -223,7 +224,7 @@ void ScriptTextEdit::Implementation::updateVimModeLabelGeometry()
     //
     // ... строка ввода команды располагается справа от индикатора режима
     //
-    const QSize statusSize = vimStatusLabel->sizeHint();
+    const QSize statusSize = vimLabelSize(vimStatusLabel);
     const int statusLeft = vimModeLabel->geometry().right() + 1 + margin;
     const int statusWidth
         = qMin(statusSize.width(), qMax(0, visibleRect.right() + 1 - statusLeft - margin));
@@ -386,6 +387,11 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     //
     setVerticalScroll(verticalScrollValue);
     setHorizontalScroll(horizontalScrollValue);
+}
+
+void ScriptTextEdit::insertMimeData(const QMimeData* _source)
+{
+    insertFromMimeData(_source);
 }
 
 bool ScriptTextEdit::isTrackChangesEnabled() const

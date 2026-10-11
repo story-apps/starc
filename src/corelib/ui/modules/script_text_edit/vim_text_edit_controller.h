@@ -310,6 +310,8 @@ private:
     void pasteLines(const Vim::RegisterContent& _content, bool _before, int _count,
                     bool _cursorAfter = false);
     void restoreParagraphTypes(int _position, const Vim::RegisterContent& _content, int _count);
+    bool canInsertRich(const Vim::RegisterContent& _content) const;
+    bool insertRich(int _position, const Vim::RegisterContent& _content);
     void replaceVisualWithRegister(QChar _registerName, bool _keepRegisters, int _count);
     void undo(int _count);
     void redo(int _count);
@@ -475,6 +477,14 @@ private:
     QVector<RecordedKey> m_lastChangeKeys;
     int m_commandRevision = -1;
     bool m_commandIsChange = true;
+    bool m_commandKeysOverflow = false;
+
+    /**
+     * @brief Изменения, сделанные зажатой клавишей, сохраняются одним шагом отмены, когда она
+     *        будет отпущена, иначе на каждое повторение приходилось бы сохранять весь документ
+     */
+    bool m_isAutoRepeat = false;
+    bool m_hasUncommittedChange = false;
 
     /**
      * @brief Макросы

@@ -2,6 +2,8 @@
 
 #include <ui/widgets/text_edit/base/base_text_edit.h>
 
+class QMimeData;
+
 namespace Domain {
 struct CursorInfo;
 }
@@ -46,6 +48,12 @@ public:
      * @brief Задать курсоры соавторов
      */
     void setCollaboratorsCursors(const QVector<Domain::CursorInfo>& _cursors);
+
+    /**
+     * @brief Вставить данные в позиции курсора так же, как из буфера обмена
+     * @note Нужно Vim-командам, чтобы вставлять текст вместе с форматированием и типами абзацев
+     */
+    void insertMimeData(const QMimeData* _source);
 
     /**
      * @brief Включён ли режим отслеживания изменений, в котором удалённый текст лишь помечается

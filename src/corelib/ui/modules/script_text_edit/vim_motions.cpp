@@ -1466,8 +1466,6 @@ bool findSentence(Cursor& _cursor, bool _forward, int _count)
 {
     const QString sentenceEnds = QStringLiteral(".!?");
     const QString closingCharacters = QStringLiteral(")]\"'");
-    auto isLastLine
-        = [](const QTextBlock& _block) { return !nextNavigableBlock(_block).isValid(); };
 
     Cursor position = _cursor;
     int count = _count;
@@ -1488,16 +1486,6 @@ bool findSentence(Cursor& _cursor, bool _forward, int _count)
             if (_forward) {
                 found = true;
             }
-        }
-        //
-        // ... из начала абзаца вперёд - к следующей строке
-        //
-        else if (_forward && position.column() == 0 && position.isLineEmpty()) {
-            if (isLastLine(position.block())) {
-                return false;
-            }
-            position.setPosition(nextNavigableBlock(position.block()).position());
-            found = true;
         } else if (!_forward) {
             position.decl();
         }
@@ -2198,8 +2186,14 @@ QRegularExpression regularExpression(const QString& _pattern)
         //
         if ((symbol == '<' || symbol == '>')
             && isSpecial(QStringLiteral("<>"), QString(), QString())) {
+            //
+            // ... слово в vim - это не только латиница, поэтому границы определяем по свойствам
+            //     символов юникода
+            //
             atomStart = result.size();
-            result += symbol == '<' ? QStringLiteral("\\b(?=\\w)") : QStringLiteral("\\b(?<=\\w)");
+            result += symbol == '<'
+                ? QStringLiteral("(?<![\\p{L}\\p{M}\\p{N}_])(?=[\\p{L}\\p{M}\\p{N}_])")
+                : QStringLiteral("(?<=[\\p{L}\\p{M}\\p{N}_])(?![\\p{L}\\p{M}\\p{N}_])");
             continue;
         }
 
@@ -2335,10 +2329,21 @@ QRegularExpression regularExpression(const QString& _pattern)
                 continue;
             }
             case 'k':
-            case 'i':
-            case 'f':
-            case 'p': {
+            case 'i': {
+                result += QStringLiteral("[\\p{L}\\p{M}\\p{N}_]");
+                continue;
+            }
+            case 'K':
+            case 'I': {
+                result += QStringLiteral("[\\p{L}\\p{M}_]");
+                continue;
+            }
+            case 'f': {
                 result += QStringLiteral("\\w");
+                continue;
+            }
+            case 'p': {
+                result += QStringLiteral("\\P{C}");
                 continue;
             }
             case 't': {
