@@ -29,6 +29,16 @@ const QChar kSmallDeleteRegisterName = '-';
 const QChar kBlackHoleRegisterName = '_';
 
 /**
+ * @brief Регистры, которые можно только читать: последний вставленный текст, последняя команда и
+ *        последний поиск
+ * @note Их содержимое хранит контроллер
+ */
+bool isReadOnlyRegister(QChar _name)
+{
+    return _name == '.' || _name == ':' || _name == '/';
+}
+
+/**
  * @brief Регистры системного буфера обмена
  */
 bool isClipboardRegister(QChar _name)
@@ -51,6 +61,12 @@ QString normalizedText(const QString& _text, bool _linewise)
 } // namespace
 
 
+RegisterContent::RegisterContent(const QString& _text, bool _linewise)
+    : text(_text)
+    , linewise(_linewise)
+{
+}
+
 bool RegisterContent::isEmpty() const
 {
     return text.isEmpty();
@@ -62,12 +78,12 @@ bool Registers::isValidName(QChar _name)
     return (code >= 'a' && code <= 'z') || (code >= 'A' && code <= 'Z')
         || (code >= '0' && code <= '9') || isClipboardRegister(_name)
         || _name == kUnnamedRegisterName || _name == kBlackHoleRegisterName
-        || _name == kSmallDeleteRegisterName;
+        || _name == kSmallDeleteRegisterName || isReadOnlyRegister(_name);
 }
 
 void Registers::setYankedContent(QChar _name, const RegisterContent& _content)
 {
-    if (_name == kBlackHoleRegisterName) {
+    if (_name == kBlackHoleRegisterName || isReadOnlyRegister(_name)) {
         return;
     }
 
@@ -84,7 +100,7 @@ void Registers::setYankedContent(QChar _name, const RegisterContent& _content)
 
 void Registers::setDeletedContent(QChar _name, const RegisterContent& _content, bool _toNumbered)
 {
-    if (_name == kBlackHoleRegisterName) {
+    if (_name == kBlackHoleRegisterName || isReadOnlyRegister(_name)) {
         return;
     }
 
@@ -115,6 +131,15 @@ void Registers::setDeletedContent(QChar _name, const RegisterContent& _content, 
     if (_name.isNull() || _name == kUnnamedRegisterName || isClipboardRegister(_name)) {
         syncToClipboard(content);
     }
+}
+
+void Registers::setRecordedContent(QChar _name, const QString& _text)
+{
+    if (_name == kBlackHoleRegisterName || _name.isNull() || isReadOnlyRegister(_name)) {
+        return;
+    }
+
+    setContent(_name, { _text, false });
 }
 
 RegisterContent Registers::content(QChar _name) const
@@ -167,6 +192,18 @@ RegisterContent Registers::setContent(QChar _name, const RegisterContent& _conte
             }
             content.text = normalizedText(text + content.text, linewise);
             content.linewise = linewise;
+
+            //
+            // ... типы абзацев сохраняются, только если оба фрагмента построчные и скопированы
+            //     из документов одного вида
+            //
+            if (existingContent.linewise && _content.linewise
+                && existingContent.documentKind == _content.documentKind) {
+                content.paragraphTypes = existingContent.paragraphTypes + _content.paragraphTypes;
+            } else {
+                content.paragraphTypes.clear();
+                content.documentKind.clear();
+            }
         }
     }
 

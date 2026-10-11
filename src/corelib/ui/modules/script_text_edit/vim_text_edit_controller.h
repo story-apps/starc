@@ -7,6 +7,7 @@
 #include <QHash>
 #include <QKeySequence>
 #include <QString>
+#include <QStringList>
 #include <QTextCursor>
 #include <QVector>
 
@@ -28,6 +29,7 @@ public:
      */
     enum class Mode {
         Insert,
+        Replace,
         Normal,
         Visual,
         VisualLine,
@@ -87,6 +89,11 @@ public:
      * @brief Синхронизировать режим с выделением, сделанным не через Vim-команды, например мышью
      */
     void handleSelectionChange();
+
+    /**
+     * @brief Отменить набираемую команду, например при щелчке мышью, или потере фокуса
+     */
+    void cancelPendingInput();
 
 private:
     /**
@@ -162,6 +169,12 @@ private:
          * @brief Попадает ли текст в нумерованный регистр при удалении
          */
         bool toNumberedRegister = false;
+
+        /**
+         * @brief Перемещение выполнено не полностью, например не хватило слов для количества
+         * @note Как и в vim, курсор всё равно перемещается, но воспроизведение макроса прерывается
+         */
+        bool failed = false;
     };
 
     /**
@@ -186,8 +199,17 @@ private:
     bool isVisualMode() const;
     bool hasPendingInput() const;
     void resetPendingCommand();
+    bool isInsertMode() const;
     void enterInsertMode(int _repeat, QChar _command);
     void leaveInsertMode();
+
+    /**
+     * @brief Команды режимов вставки и замены: Ctrl-W, Ctrl-U, Ctrl-H, Ctrl-R и Ctrl-O
+     * @return Обработано ли нажатие
+     */
+    bool handleInsertControl(QKeyEvent* _event);
+    bool handleReplaceKey(QKeyEvent* _event);
+    void deleteBeforeCursor(bool _word);
     void enterNormalMode();
     void enterVisualMode(Mode _mode, int _anchor, int _cursor);
     void leaveVisualMode();
@@ -228,10 +250,11 @@ private:
     Motion motionForKey(QKeyEvent* _event, int _count, bool _hasCount);
     Motion verticalMotion(int _count, bool _down, bool _visualLines);
     Motion lineMotion(int _lineNumber, bool _firstNonBlank) const;
-    Motion findCharacterMotion(QChar _character, bool _forward, bool _till, int _count,
+    Motion findCharacterMotion(const QString& _character, bool _forward, bool _till, int _count,
                                bool _repeat) const;
-    Motion markMotion(QChar _name, bool _exact) const;
-    Motion searchMotion(const QString& _pattern, bool _forward, int _count, int _fromPosition);
+    Motion markMotion(QChar _name, bool _exact);
+    Motion searchMotion(const QString& _pattern, bool _forward, int _count, int _fromPosition,
+                        const QString& _offset = {});
     void applyMotion(const Motion& _motion);
     void applyOperatorToMotion(const Motion& _motion);
     void applyOperatorToObject(const Vim::ObjectRange& _object);
@@ -256,9 +279,14 @@ private:
     void yankRange(const Vim::TextRange& _range, QChar _registerName, int _cursorPosition);
     void deleteRange(const Vim::TextRange& _range, QChar _registerName, bool _toNumberedRegister);
     void changeRange(const Vim::TextRange& _range, QChar _registerName, bool _toNumberedRegister);
-    void changeCaseRange(const Vim::TextRange& _range, Operator _operator);
+    QVector<Vim::TextRange> lineRuns(const Vim::TextRange& _range) const;
+    int deleteLines(const QVector<Vim::TextRange>& _runs, int _fromRun);
+    void changeCaseRange(const Vim::TextRange& _range, Operator _operator,
+                         int _cursorPosition = -1);
     QString rangeText(const Vim::TextRange& _range) const;
     Vim::RegisterContent registerContent(const Vim::TextRange& _range) const;
+    QString documentKind() const;
+    Vim::RegisterContent registerValue(QChar _name) const;
     QVector<Vim::TextRange> lineRanges(const Vim::TextRange& _range) const;
 
     //
@@ -266,18 +294,22 @@ private:
     //
 
     bool canEdit() const;
-    void removeText(int _from, int _to);
-    void insertText(int _position, const QString& _text);
-    void replaceText(int _from, int _to, const QString& _text);
+    bool isEditableRange(int _from, int _to) const;
+    bool removeText(int _from, int _to);
+    bool insertText(int _position, const QString& _text);
+    bool replaceText(int _from, int _to, const QString& _text);
     bool openLine(bool _below);
     void deleteCharacters(int _count, bool _previous);
-    void replaceCharacters(QChar _character, int _count);
+    void replaceCharacters(const QString& _character, int _count);
     void toggleCase(int _count);
+    void incrementNumber(int _delta);
     void joinLines(int _count, bool _withSpaces);
     void paste(QChar _registerName, bool _before, int _count, bool _cursorAfter = false);
     void pasteContent(const Vim::RegisterContent& _content, bool _before, int _count,
                       bool _cursorAfter = false);
-    void pasteLines(const QString& _text, bool _before, int _count, bool _cursorAfter = false);
+    void pasteLines(const Vim::RegisterContent& _content, bool _before, int _count,
+                    bool _cursorAfter = false);
+    void restoreParagraphTypes(int _position, const Vim::RegisterContent& _content, int _count);
     void replaceVisualWithRegister(QChar _registerName, bool _keepRegisters, int _count);
     void undo(int _count);
     void redo(int _count);
@@ -291,8 +323,10 @@ private:
 
     void setMark(QChar _name, int _position);
     void rememberJumpPosition();
-    int searchPosition(const QString& _pattern, int _fromPosition, bool _forward) const;
+    int searchPosition(const QString& _pattern, int _fromPosition, bool _forward,
+                       int* _matchEnd = nullptr);
     void searchWordUnderCursor(bool _forward, bool _wholeWord, int _count);
+    Vim::TextRange searchMatchRange(bool _forward);
 
     //
     // Прокрутка
@@ -309,7 +343,9 @@ private:
     void closeCommandLine();
     void handleCommandLine(QKeyEvent* _event);
     void executeCommandLine(const QString& _command);
+    void executeExCommands(const QString& _commands);
     void executeExCommand(const QString& _command);
+    void executeNormalCommand(int _firstLine, int _lastLine, const QString& _keys);
     void substitute(QTextBlock _firstLine, QTextBlock _lastLine, const QString& _arguments);
 
     //
@@ -319,6 +355,14 @@ private:
     void trackKeyPress(const RecordedKey& _key);
     void toggleMacroRecording(QChar _name);
     void playMacro(QChar _name, int _count);
+
+    /**
+     * @brief Макрос хранится в регистре в виде текста, как и в vim, поэтому его можно вставить,
+     *        поправить и скопировать обратно в регистр
+     */
+    static QString keysText(const QVector<RecordedKey>& _keys);
+    static QVector<RecordedKey> keysFromText(const QString& _text);
+    QVector<RecordedKey> macroKeys(QChar _name) const;
     void repeatLastChange(int _count);
     void replayKeys(const QVector<RecordedKey>& _keys);
 
@@ -326,6 +370,12 @@ private:
      * @brief Завершить обработку нажатия клавиши
      */
     void finishHandledEvent(QKeyEvent* _event);
+
+    /**
+     * @brief Команда не выполнена: как и в vim, это прерывает воспроизведение макроса и повтор
+     * @param _message - сообщение об ошибке для строки состояния
+     */
+    void fail(const QString& _message = {});
 
     ScriptTextEdit* m_editor = nullptr;
     bool m_enabled = false;
@@ -367,7 +417,13 @@ private:
      * @brief Набираемая пользователем команда
      */
     bool m_commandLineActive = false;
+    bool m_commandLineAwaitingRegister = false;
     QString m_commandLine;
+
+    /**
+     * @brief Нажатия незавершённой команды, которые показываются в строке состояния
+     */
+    QString m_pendingKeys;
     Operator m_commandLineOperator = Operator::None;
     int m_commandLineOperatorCount = 0;
     QChar m_commandLineRegister;
@@ -379,6 +435,32 @@ private:
     QChar m_insertCommand;
     QVector<RecordedKey> m_insertKeys;
     QTextCursor m_lastInsertPosition;
+
+    /**
+     * @brief Начало вставки - до него Ctrl-W и Ctrl-U останавливаются
+     */
+    QTextCursor m_insertStart;
+
+    /**
+     * @brief Текст, набранный в текущем режиме вставки, - для регистра .
+     */
+    QString m_insertedText;
+
+    /**
+     * @brief Ожидается имя регистра для вставки по Ctrl-R, и вставленный из него текст
+     */
+    bool m_awaitingInsertRegister = false;
+    QString m_insertedRegisterText;
+
+    /**
+     * @brief Выполняется одна команда по Ctrl-O, после которой нужно вернуться в режим вставки
+     */
+    bool m_insertOneCommand = false;
+
+    /**
+     * @brief Символы, заменённые в режиме замены, чтобы вернуть их по Backspace
+     */
+    QStringList m_replacedCharacters;
 
     /**
      * @brief Строка, в которой после изменения остался только отступ
@@ -403,6 +485,18 @@ private:
     int m_replayDepth = 0;
     int m_replayedKeys = 0;
     bool m_replayingInsert = false;
+
+    /**
+     * @brief Идёт ли повтор последнего изменения, который, в отличие от макроса, не прерывается
+     *        из-за невыполненного перемещения
+     */
+    bool m_repeatingChange = false;
+
+    /**
+     * @brief Не выполнилась ли последняя команда, и сообщение об ошибке для пользователя
+     */
+    bool m_commandFailed = false;
+    QString m_message;
 
     /**
      * @brief Идёт ли обработка нажатия, во время которой редактор меняется самим контроллером

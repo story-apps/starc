@@ -151,6 +151,12 @@ public:
     void setAutoReviewMode(const QColor& _textColor, const QColor& _backgroundColor,
                            bool _isRevision, bool _isTrackChanges);
 
+    /**
+     * @brief Режим отслеживания изменений и пометка вставленного текста для Vim-команд
+     */
+    bool isTrackChangesEnabled() const override;
+    void markInsertedText(int _from, int _to) override;
+
 signals:
     /**
      * @brief Изменён тип абзаца

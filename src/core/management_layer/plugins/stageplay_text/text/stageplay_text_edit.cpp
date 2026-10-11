@@ -659,6 +659,16 @@ void StageplayTextEdit::setAutoReviewMode(const QColor& _textColor, const QColor
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
+bool StageplayTextEdit::isTrackChangesEnabled() const
+{
+    return d->autoReviewMode.isEnabled && d->autoReviewMode.isTrackChanges;
+}
+
+void StageplayTextEdit::markInsertedText(int _from, int _to)
+{
+    d->updateReviewMark(nullptr, _from, _to);
+}
+
 void StageplayTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {

@@ -3,6 +3,7 @@
 #include <QChar>
 #include <QHash>
 #include <QString>
+#include <QVector>
 
 
 namespace Ui {
@@ -13,8 +14,18 @@ namespace Vim {
  * @note Построчный фрагмент всегда заканчивается переводом строки
  */
 struct RegisterContent {
+    RegisterContent() = default;
+    RegisterContent(const QString& _text, bool _linewise);
+
     QString text;
     bool linewise = false;
+
+    /**
+     * @brief Типы абзацев построчного фрагмента и вид документа, из которого он скопирован
+     * @note Нужны, чтобы при вставке в документ того же вида строки сохранили свои типы
+     */
+    QVector<int> paragraphTypes;
+    QString documentKind;
 
     bool isEmpty() const;
 };
@@ -39,6 +50,11 @@ public:
      */
     void setYankedContent(QChar _name, const RegisterContent& _content);
     void setDeletedContent(QChar _name, const RegisterContent& _content, bool _toNumbered);
+
+    /**
+     * @brief Сохранить записанный макрос, не трогая регистр по умолчанию
+     */
+    void setRecordedContent(QChar _name, const QString& _text);
 
     /**
      * @brief Получить содержимое регистра

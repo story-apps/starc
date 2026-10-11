@@ -664,6 +664,16 @@ void AudioplayTextEdit::setAutoReviewMode(const QColor& _textColor, const QColor
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
+bool AudioplayTextEdit::isTrackChangesEnabled() const
+{
+    return d->autoReviewMode.isEnabled && d->autoReviewMode.isTrackChanges;
+}
+
+void AudioplayTextEdit::markInsertedText(int _from, int _to)
+{
+    d->updateReviewMark(nullptr, _from, _to);
+}
+
 void AudioplayTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {

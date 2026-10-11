@@ -3,10 +3,12 @@
 #include "script_text_edit.h"
 
 #include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/text/text_document.h>
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/templates/text_template.h>
 
+#include <QElapsedTimer>
 #include <QGuiApplication>
 #include <QInputMethodEvent>
 #include <QKeyEvent>
@@ -14,6 +16,8 @@
 #include <QScrollBar>
 #include <QTextBlock>
 #include <QTextDocument>
+#include <QTextLayout>
+#include <QTextTable>
 
 namespace Ui {
 
@@ -45,6 +49,17 @@ const int kMaxReplayedKeys = 100000;
  * @brief Максимальная длина записываемого макроса и повторяемой команды
  */
 const int kMaxRecordedKeys = 10000;
+
+/**
+ * @brief Максимальное время поиска и замены
+ * @note Некоторые шаблоны выполняются очень долго, а интерфейс в это время не отвечает
+ */
+const int kSearchTimeoutMs = 2000;
+
+/**
+ * @brief Максимальная длина текста, вставляемого одной командой с количеством
+ */
+const int kMaxPastedTextLength = 1000000;
 
 /**
  * @brief Выравнивание курсора при прокрутке командами z
@@ -112,12 +127,26 @@ bool isModifierKey(int _key)
 }
 
 /**
+ * @brief Код первого символа текста с учётом суррогатных пар
+ */
+uint firstCodePoint(const QString& _text)
+{
+    if (_text.isEmpty()) {
+        return 0;
+    }
+    if (_text.size() > 1 && _text.at(0).isHighSurrogate() && _text.at(1).isLowSurrogate()) {
+        return QChar::surrogateToUcs4(_text.at(0), _text.at(1));
+    }
+    return _text.at(0).unicode();
+}
+
+/**
  * @brief Вводит ли нажатие символ, с учётом раскладок, в которых символы набираются с Alt
  */
 bool isCharacterInput(QKeyEvent* _event)
 {
     const auto text = _event->text();
-    if (text.isEmpty() || !text.at(0).isPrint()) {
+    if (text.isEmpty() || !QChar::isPrint(firstCodePoint(text))) {
         return false;
     }
 
@@ -141,6 +170,80 @@ bool isCharacterInput(QKeyEvent* _event)
 QChar commandCharacter(QKeyEvent* _event)
 {
     return isCharacterInput(_event) ? _event->text().at(0) : QChar();
+}
+
+/**
+ * @brief Текст символа, который вводит нажатие, - для команд, принимающих любой символ, включая
+ *        эмодзи, например f или r
+ */
+QString characterText(QKeyEvent* _event)
+{
+    return isCharacterInput(_event) ? _event->text() : QString();
+}
+
+/**
+ * @brief Параметры сопоставления шаблона со строкой
+ * @note Строку проверяем на корректность один раз, а не при каждом поиске в ней, иначе поиск
+ *       всех совпадений в длинном абзаце занимает квадратичное время
+ */
+QRegularExpression::MatchOptions matchOptions(const QString& _text)
+{
+    for (int index = 0; index < _text.size(); ++index) {
+        const auto character = _text.at(index);
+        if (character.isHighSurrogate()) {
+            if (index + 1 >= _text.size() || !_text.at(index + 1).isLowSurrogate()) {
+                return QRegularExpression::NoMatchOption;
+            }
+            ++index;
+        } else if (character.isLowSurrogate()) {
+            return QRegularExpression::NoMatchOption;
+        }
+    }
+    return QRegularExpression::DontCheckSubjectStringMatchOption;
+}
+
+/**
+ * @brief Позиция через заданное количество символов в пределах строки
+ * @param _count - положительное значение означает движение вперёд, отрицательное - назад
+ * @param _moved - на сколько символов удалось сдвинуться
+ */
+int movePositionByCharacters(const QTextBlock& _block, int _position, int _count,
+                             int* _moved = nullptr)
+{
+    const int lineStart = _block.position();
+    const int lineEnd = Vim::lineEndPosition(_block);
+    int position = _position;
+    int moved = 0;
+    for (; moved < qAbs(_count); ++moved) {
+        if (_count > 0) {
+            if (position >= lineEnd) {
+                break;
+            }
+            position = Vim::nextCharacterPosition(_block, position);
+        } else {
+            if (position <= lineStart) {
+                break;
+            }
+            position = Vim::previousCharacterPosition(_block, position);
+        }
+    }
+    if (_moved != nullptr) {
+        *_moved = moved;
+    }
+    return position;
+}
+
+/**
+ * @brief Количество символов в заданном диапазоне строки
+ */
+int charactersCount(const QTextBlock& _block, int _from, int _to)
+{
+    int count = 0;
+    for (int position = _from; position < _to;
+         position = Vim::nextCharacterPosition(_block, position)) {
+        ++count;
+    }
+    return count;
 }
 
 /**
@@ -168,6 +271,95 @@ QString escapedPattern(const QString& _text)
 }
 
 /**
+ * @brief Находятся ли блоки в одной ячейке таблицы, или оба вне таблиц
+ * @note Редактор считает выделение, выходящее за пределы ячейки, выделением всей таблицы
+ */
+bool isSameContainer(const QTextBlock& _lhs, const QTextBlock& _rhs)
+{
+    const QTextCursor lhsCursor(_lhs);
+    const QTextCursor rhsCursor(_rhs);
+    const auto lhsTable = lhsCursor.currentTable();
+    const auto rhsTable = rhsCursor.currentTable();
+    if (lhsTable != rhsTable) {
+        return false;
+    }
+    if (lhsTable == nullptr) {
+        return true;
+    }
+    return lhsTable->cellAt(lhsCursor) == rhsTable->cellAt(rhsCursor);
+}
+
+/**
+ * @brief Можно ли удалить разделитель абзацев между блоком и его соседом
+ */
+bool canMergeWith(const QTextBlock& _block, const QTextBlock& _neighbour)
+{
+    return _neighbour.isValid() && _neighbour.isVisible()
+        && BusinessLayer::TextBlockStyle::forBlock(_neighbour)
+        != BusinessLayer::TextParagraphType::PageSplitter
+        && isSameContainer(_block, _neighbour);
+}
+
+/**
+ * @brief Относятся ли блоки к одному абзацу, возможно, разорванному переносом на новую страницу
+ */
+bool isSameParagraph(const QTextBlock& _first, const QTextBlock& _second)
+{
+    if (_first == _second) {
+        return true;
+    }
+    using BusinessLayer::TextBlockStyle;
+    if (!_first.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)) {
+        return false;
+    }
+    for (auto block = _first.next(); block.isValid(); block = block.next()) {
+        if (block == _second) {
+            return block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd);
+        }
+        if (!block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
+            return false;
+        }
+    }
+    return false;
+}
+
+/**
+ * @brief Является ли блок заголовком, или окончанием папки
+ * @note Такой блок нельзя разделить, или скопировать переводом строки, т.к. у новой части не
+ *       будет пары, и структура документа сломается
+ */
+bool isFolderBoundary(const QTextBlock& _block)
+{
+    using BusinessLayer::TextParagraphType;
+    switch (BusinessLayer::TextBlockStyle::forBlock(_block)) {
+    case TextParagraphType::ActHeading:
+    case TextParagraphType::ActFooter:
+    case TextParagraphType::SequenceHeading:
+    case TextParagraphType::SequenceFooter:
+    case TextParagraphType::PartHeading:
+    case TextParagraphType::PartFooter:
+    case TextParagraphType::ChapterHeading:
+    case TextParagraphType::ChapterFooter: {
+        return true;
+    }
+    default: {
+        return false;
+    }
+    }
+}
+
+/**
+ * @brief Является ли блок окончанием папки
+ */
+bool isFolderFooter(const QTextBlock& _block)
+{
+    using BusinessLayer::TextParagraphType;
+    const auto type = BusinessLayer::TextBlockStyle::forBlock(_block);
+    return type == TextParagraphType::ActFooter || type == TextParagraphType::SequenceFooter
+        || type == TextParagraphType::PartFooter || type == TextParagraphType::ChapterFooter;
+}
+
+/**
  * @brief Количество пробельных символов в начале строки
  */
 int leadingWhiteCount(const QString& _text)
@@ -188,9 +380,13 @@ struct VimTextEditController::SharedState {
     QChar lastPlayedMacro;
 
     QString searchPattern;
+    QString searchOffset;
     bool searchForward = true;
 
-    QChar findCharacter;
+    QString lastExCommand;
+    QString lastInsertedText;
+
+    QString findCharacter;
     QChar findCommand;
 
     QString substitutePattern;
@@ -255,8 +451,10 @@ QString VimTextEditController::modeName() const
     switch (m_mode) {
     case Mode::Insert:
         return QStringLiteral("INSERT");
+    case Mode::Replace:
+        return QStringLiteral("REPLACE");
     case Mode::Normal:
-        return QStringLiteral("NORMAL");
+        return m_insertOneCommand ? QStringLiteral("(INSERT)") : QStringLiteral("NORMAL");
     case Mode::Visual:
         return QStringLiteral("VISUAL");
     case Mode::VisualLine:
@@ -272,16 +470,26 @@ QString VimTextEditController::statusText() const
         return m_commandLine;
     }
 
-    if (!m_recordingRegister.isNull()) {
-        return QStringLiteral("recording @%1").arg(m_recordingRegister.toLower());
+    if (!m_message.isEmpty()) {
+        return m_message;
     }
 
-    return {};
+    //
+    // ... набираемая команда показывается так же, как опцией showcmd в vim
+    //
+    const auto pendingKeys
+        = hasPendingInput() || m_awaitingInsertRegister ? m_pendingKeys : QString();
+    if (!m_recordingRegister.isNull()) {
+        const auto recording = QStringLiteral("recording @%1").arg(m_recordingRegister.toLower());
+        return pendingKeys.isEmpty() ? recording : recording + QStringLiteral("  ") + pendingKeys;
+    }
+
+    return pendingKeys;
 }
 
 bool VimTextEditController::usesBlockCursor() const
 {
-    return m_enabled && m_mode != Mode::Insert;
+    return m_enabled && !isInsertMode();
 }
 
 int VimTextEditController::blockCursorPosition() const
@@ -306,11 +514,22 @@ bool VimTextEditController::handleShortcutOverride(QKeyEvent* _event) const
         return true;
     }
 
-    if (m_mode == Mode::Insert || !hasVimControl(_event)) {
+    if (!hasVimControl(_event)) {
         return false;
     }
 
-    return _event->key() == Qt::Key_R || _event->key() == Qt::Key_D || _event->key() == Qt::Key_U;
+    //
+    // ... в режиме вставки перехватываем только команды vim, остальные сочетания, например
+    //     форматирования, остаются за редактором
+    //
+    if (isInsertMode()) {
+        return _event->key() == Qt::Key_W || _event->key() == Qt::Key_U
+            || _event->key() == Qt::Key_H || _event->key() == Qt::Key_R
+            || (_event->key() == Qt::Key_O && m_mode == Mode::Insert);
+    }
+
+    return _event->key() == Qt::Key_R || _event->key() == Qt::Key_D || _event->key() == Qt::Key_U
+        || _event->key() == Qt::Key_A || _event->key() == Qt::Key_X;
 }
 
 bool VimTextEditController::handleKeyPress(QKeyEvent* _event)
@@ -332,6 +551,8 @@ bool VimTextEditController::handleKeyPress(QKeyEvent* _event)
     const bool isTopLevel = m_replayDepth == 0;
     if (isTopLevel) {
         m_replayedKeys = 0;
+        m_commandFailed = false;
+        m_message.clear();
         if (m_mode == Mode::Normal && !hasPendingInput()) {
             m_commandKeys.clear();
             m_commandRevision = document()->revision();
@@ -344,9 +565,40 @@ bool VimTextEditController::handleKeyPress(QKeyEvent* _event)
         }
     }
 
+    const bool wasInsertOneCommand = m_insertOneCommand;
     const bool handled = handleKeyPressImpl(_event);
 
+    //
+    // ... после команды, выполненной по Ctrl-O, возвращаемся в режим вставки
+    //
+    if (m_insertOneCommand) {
+        if (m_mode != Mode::Normal) {
+            m_insertOneCommand = !isInsertMode();
+        } else if (wasInsertOneCommand && !hasPendingInput()) {
+            m_insertOneCommand = false;
+            int position = m_editor->textCursor().position();
+            if (m_preferLineEnd) {
+                position = Vim::lineEndPosition(currentBlock());
+            }
+            QTextCursor cursor(document());
+            cursor.setPosition(position);
+            m_editor->setTextCursor(cursor);
+            enterInsertMode(1, 'i');
+        }
+    }
+
     if (isTopLevel) {
+        if ((hasPendingInput() || m_awaitingInsertRegister) && !m_commandLineActive) {
+            const auto text = _event->text();
+            const auto code = text.isEmpty() ? 0 : text.at(0).unicode();
+            if (code > 0 && code < 0x20) {
+                m_pendingKeys += QStringLiteral("^") + QChar(code + 0x40);
+            } else {
+                m_pendingKeys += text;
+            }
+        } else {
+            m_pendingKeys.clear();
+        }
         trackKeyPress(recordedKey);
     }
     return handled;
@@ -363,18 +615,37 @@ bool VimTextEditController::handleInputMethodEvent(QInputMethodEvent* _event)
     // обрабатываем так же, как обычные нажатия
     //
     const auto commitString = _event->commitString();
-    for (const auto& character : commitString) {
-        QKeyEvent keyEvent(QEvent::KeyPress, keyForCharacter(character), Qt::NoModifier,
-                           QString(character));
+    for (int index = 0; index < commitString.size(); ++index) {
+        auto text = QString(commitString.at(index));
+        if (commitString.at(index).isHighSurrogate() && index + 1 < commitString.size()) {
+            text += commitString.at(++index);
+        }
+        QKeyEvent keyEvent(QEvent::KeyPress, keyForCharacter(text.at(0)), Qt::NoModifier, text);
         handleKeyPress(&keyEvent);
     }
     _event->accept();
     return true;
 }
 
+void VimTextEditController::cancelPendingInput()
+{
+    if (!m_enabled) {
+        return;
+    }
+
+    if (m_commandLineActive) {
+        closeCommandLine();
+    }
+    m_awaitingInsertRegister = false;
+    if (!isInsertMode()) {
+        resetPendingCommand();
+    }
+    m_pendingKeys.clear();
+}
+
 void VimTextEditController::handleSelectionChange()
 {
-    if (!m_enabled || m_editingDepth > 0 || m_passThroughDepth > 0 || m_mode == Mode::Insert) {
+    if (!m_enabled || m_editingDepth > 0 || m_passThroughDepth > 0 || isInsertMode()) {
         return;
     }
 
@@ -422,6 +693,11 @@ void VimTextEditController::resetPendingCommand()
     m_textObjectAround = false;
 }
 
+bool VimTextEditController::isInsertMode() const
+{
+    return m_mode == Mode::Insert || m_mode == Mode::Replace;
+}
+
 void VimTextEditController::enterInsertMode(int _repeat, QChar _command)
 {
     m_autoIndentLine = QTextCursor();
@@ -429,10 +705,15 @@ void VimTextEditController::enterInsertMode(int _repeat, QChar _command)
         leaveVisualMode();
     }
     resetPendingCommand();
-    m_mode = Mode::Insert;
+    m_mode = _command == 'R' ? Mode::Replace : Mode::Insert;
     m_insertRepeat = qBound(1, _repeat, kMaxCount);
     m_insertCommand = _command;
     m_insertKeys.clear();
+    m_replacedCharacters.clear();
+    m_insertedText.clear();
+    m_insertStart = QTextCursor(document());
+    m_insertStart.setPosition(m_editor->textCursor().position());
+    m_insertStart.setKeepPositionOnInsert(true);
     m_preferredX = -1;
 }
 
@@ -458,17 +739,53 @@ void VimTextEditController::leaveInsertMode()
     //
     if (m_insertRepeat > 1 && !m_insertKeys.isEmpty() && canEdit()) {
         const auto keys = m_insertKeys;
-        QScopedValueRollback<bool> replayRollback(m_replayingInsert, true);
-        for (int index = 1; index < m_insertRepeat; ++index) {
-            if (m_insertCommand == 'o' || m_insertCommand == 'O') {
-                openLine(true);
+
+        //
+        // ... обычный текст вставляем сразу целиком, т.к. повторять нажатия долго
+        //
+        QString text;
+        bool isPlainText
+            = m_mode == Mode::Insert && m_insertCommand != 'o' && m_insertCommand != 'O';
+        for (const auto& key : keys) {
+            const auto modifiers = key.modifiers
+                & ~(Qt::ShiftModifier | Qt::KeypadModifier | Qt::GroupSwitchModifier);
+            if (!isPlainText || key.text.isEmpty() || modifiers != Qt::NoModifier
+                || !QChar::isPrint(firstCodePoint(key.text))) {
+                isPlainText = false;
+                break;
             }
-            replayKeys(keys);
+            text += key.text;
+        }
+        if (isPlainText) {
+            const int count = m_insertRepeat - 1;
+            if (static_cast<qint64>(text.size()) * count > kMaxPastedTextLength) {
+                fail(QStringLiteral("E1240: Resulting text too long"));
+            } else {
+                auto cursor = m_editor->textCursor();
+                const int position = cursor.position();
+                cursor.insertText(text.repeated(count));
+                m_editor->setTextCursor(cursor);
+                m_editor->markInsertedText(position, cursor.position());
+            }
+        } else {
+            QScopedValueRollback<bool> replayRollback(m_replayingInsert, true);
+            for (int index = 1; index < m_insertRepeat && !m_commandFailed; ++index) {
+                if (m_insertCommand == 'o' || m_insertCommand == 'O') {
+                    openLine(true);
+                }
+                replayKeys(keys);
+            }
         }
     }
     m_insertRepeat = 1;
     m_insertCommand = QChar();
     m_insertKeys.clear();
+    m_replacedCharacters.clear();
+    m_awaitingInsertRegister = false;
+    m_insertOneCommand = false;
+    if (!m_insertedText.isEmpty()) {
+        shared().lastInsertedText = m_insertedText;
+    }
 
     m_mode = Mode::Normal;
     resetPendingCommand();
@@ -485,6 +802,165 @@ void VimTextEditController::leaveInsertMode()
     }
     m_editor->setTextCursor(cursor);
     m_preferredX = -1;
+}
+
+bool VimTextEditController::handleInsertControl(QKeyEvent* _event)
+{
+    switch (_event->key()) {
+    case Qt::Key_H: {
+        if (m_mode == Mode::Replace) {
+            QKeyEvent backspace(QEvent::KeyPress, Qt::Key_Backspace, Qt::NoModifier,
+                                QStringLiteral("\b"));
+            return handleReplaceKey(&backspace);
+        }
+        sendKeyPressToEditor(Qt::Key_Backspace, QStringLiteral("\b"));
+        return true;
+    }
+
+    case Qt::Key_W:
+    case Qt::Key_U: {
+        if (canEdit()) {
+            deleteBeforeCursor(_event->key() == Qt::Key_W);
+        }
+        return true;
+    }
+
+    case Qt::Key_R: {
+        m_awaitingInsertRegister = true;
+        return true;
+    }
+
+    case Qt::Key_O: {
+        if (m_mode != Mode::Insert) {
+            return false;
+        }
+
+        //
+        // ... выполняем одну команду обычного режима, оставляя курсор на месте, а затем
+        //     возвращаемся в режим вставки
+        //
+        if (m_editor->isCompleterVisible()) {
+            m_editor->closeCompleter();
+        }
+        m_autoIndentLine = QTextCursor();
+        m_insertRepeat = 1;
+        m_insertKeys.clear();
+        if (!m_insertedText.isEmpty()) {
+            shared().lastInsertedText = m_insertedText;
+        }
+        m_mode = Mode::Normal;
+        m_insertOneCommand = true;
+        resetPendingCommand();
+        return true;
+    }
+
+    default: {
+        return false;
+    }
+    }
+}
+
+bool VimTextEditController::handleReplaceKey(QKeyEvent* _event)
+{
+    auto cursor = m_editor->textCursor();
+    const int position = cursor.position();
+    const auto block = document()->findBlock(position);
+
+    //
+    // Backspace возвращает заменённый символ, а за началом замены просто сдвигает курсор
+    //
+    if (_event->key() == Qt::Key_Backspace) {
+        if (position > block.position()) {
+            const int previous = Vim::previousCharacterPosition(block, position);
+            if (!m_replacedCharacters.isEmpty() && canEdit()) {
+                replaceText(previous, position, m_replacedCharacters.takeLast());
+            }
+            cursor.setPosition(previous);
+            m_editor->setTextCursor(cursor);
+        }
+        return true;
+    }
+
+    //
+    // ... остальные служебные клавиши, например перенос строки, обрабатывает сам редактор
+    //
+    const auto text = characterText(_event);
+    if (text.isEmpty()) {
+        m_replacedCharacters.clear();
+        return false;
+    }
+    if (!canEdit()) {
+        return true;
+    }
+
+    const int lineEnd = Vim::lineEndPosition(block);
+    if (position < lineEnd) {
+        const int next = Vim::nextCharacterPosition(block, position);
+        m_replacedCharacters.append(block.text().mid(position - block.position(), next - position));
+        if (!replaceText(position, next, text)) {
+            return true;
+        }
+    } else {
+        m_replacedCharacters.append(QString());
+        if (!insertText(position, text)) {
+            return true;
+        }
+    }
+    cursor.setPosition(position + text.size());
+    m_editor->setTextCursor(cursor);
+    return true;
+}
+
+void VimTextEditController::deleteBeforeCursor(bool _word)
+{
+    const int position = m_editor->textCursor().position();
+    const auto block = document()->findBlock(position);
+
+    //
+    // ... в начале строки, как и в vim, она объединяется с предыдущей
+    //
+    if (position <= block.position()) {
+        sendKeyPressToEditor(Qt::Key_Backspace, QStringLiteral("\b"));
+        return;
+    }
+
+    int start = block.position();
+    if (_word) {
+        //
+        // ... слово перед курсором вместе с пробелами за ним
+        //
+        start = position;
+        auto previousClass = [&block, &start] {
+            const Vim::Cursor previous(block.document(),
+                                       Vim::previousCharacterPosition(block, start));
+            return previous.characterClass(false);
+        };
+        while (start > block.position() && previousClass() == 0) {
+            start = Vim::previousCharacterPosition(block, start);
+        }
+        if (start > block.position()) {
+            const int wordClass = previousClass();
+            while (start > block.position() && previousClass() == wordClass) {
+                start = Vim::previousCharacterPosition(block, start);
+            }
+        }
+    } else {
+        const int firstNonBlank = Vim::firstNonBlankPosition(block);
+        start = position > firstNonBlank ? firstNonBlank : block.position();
+    }
+
+    //
+    // ... и как в vim, удаление один раз останавливается в начале вставки
+    //
+    if (!m_insertStart.isNull() && m_insertStart.block() == block
+        && m_insertStart.position() < position && m_insertStart.position() > start) {
+        start = m_insertStart.position();
+    }
+
+    removeText(start, position);
+    QTextCursor cursor(document());
+    cursor.setPosition(start);
+    m_editor->setTextCursor(cursor);
 }
 
 void VimTextEditController::enterNormalMode()
@@ -518,8 +994,19 @@ void VimTextEditController::leaveVisualMode()
         m_lastVisualCursor = QTextCursor(document());
         m_lastVisualCursor.setPosition(m_visualCursor);
         m_lastVisualMode = isVisualMode() ? m_mode : m_lastVisualMode;
-        setMark('<', qMin(m_visualAnchor, m_visualCursor));
-        setMark('>', qMax(m_visualAnchor, m_visualCursor));
+        //
+        // ... при построчном выделении метки стоят в начале первой и в конце последней строки
+        //
+        const int start = qMin(m_visualAnchor, m_visualCursor);
+        const int end = qMax(m_visualAnchor, m_visualCursor);
+        if (m_mode == Mode::VisualLine) {
+            setMark('<', Vim::navigableBlock(document(), start).position());
+            setMark('>',
+                    characterPosition(Vim::lineEndPosition(Vim::navigableBlock(document(), end))));
+        } else {
+            setMark('<', start);
+            setMark('>', end);
+        }
     }
 
     m_visualAnchor = -1;
@@ -651,12 +1138,16 @@ bool VimTextEditController::handleKeyPressImpl(QKeyEvent* _event)
         if (m_commandLineActive) {
             closeCommandLine();
             m_commandIsChange = false;
+        } else if (m_awaitingInsertRegister) {
+            m_awaitingInsertRegister = false;
         } else if (m_mode == Mode::Insert) {
             if (m_editor->isCompleterVisible()) {
                 m_editor->closeCompleter();
             } else {
                 leaveInsertMode();
             }
+        } else if (m_mode == Mode::Replace) {
+            leaveInsertMode();
         } else if (isVisualMode()) {
             enterNormalMode();
         } else {
@@ -672,12 +1163,61 @@ bool VimTextEditController::handleKeyPressImpl(QKeyEvent* _event)
         return true;
     }
 
-    if (m_mode == Mode::Insert) {
+    if (isInsertMode()) {
         //
         // ... запоминаем набранное, чтобы повторить его для команд вставки с количеством
         //
         if (!m_replayingInsert && m_insertRepeat > 1 && m_insertKeys.size() < kMaxRecordedKeys) {
             m_insertKeys.append({ _event->key(), _event->modifiers(), _event->text() });
+        }
+
+        //
+        // ... имя регистра для вставки его содержимого
+        //
+        if (m_awaitingInsertRegister) {
+            m_awaitingInsertRegister = false;
+            const auto name = commandCharacter(_event);
+            const auto content
+                = Vim::Registers::isValidName(name) ? registerValue(name) : Vim::RegisterContent();
+            if (content.isEmpty()) {
+                fail();
+            } else if (canEdit()) {
+                const int position = m_editor->textCursor().position();
+                if (insertText(position, content.text)) {
+                    QTextCursor cursor(document());
+                    cursor.setPosition(position + content.text.size());
+                    m_editor->setTextCursor(cursor);
+                    m_insertedText += content.text;
+
+                    //
+                    // ... при повторе вставляется тот же текст, а не новое содержимое регистра
+                    //
+                    m_insertedRegisterText = content.text;
+                }
+            }
+            finishHandledEvent(_event);
+            return true;
+        }
+
+        if (hasVimControl(_event) && handleInsertControl(_event)) {
+            finishHandledEvent(_event);
+            return true;
+        }
+
+        //
+        // ... запоминаем набранный текст для регистра .
+        //
+        if (isEnter(_event)) {
+            m_insertedText += '\n';
+        } else if (_event->key() == Qt::Key_Backspace) {
+            m_insertedText.chop(1);
+        } else {
+            m_insertedText += characterText(_event);
+        }
+
+        if (m_mode == Mode::Replace && handleReplaceKey(_event)) {
+            finishHandledEvent(_event);
+            return true;
         }
         return false;
     }
@@ -694,6 +1234,19 @@ bool VimTextEditController::handleKeyPressImpl(QKeyEvent* _event)
         case Qt::Key_U: {
             scrollHalfPage(_event->key() == Qt::Key_D, takeOptionalCount());
             resetPendingCommand();
+            finishHandledEvent(_event);
+            return true;
+        }
+        case Qt::Key_A:
+        case Qt::Key_X: {
+            const int count = takeCount();
+            const bool canIncrement = !isVisualMode() && m_pendingOperator == Operator::None;
+            resetPendingCommand();
+            if (canIncrement) {
+                incrementNumber(_event->key() == Qt::Key_A ? count : -count);
+            } else {
+                fail();
+            }
             finishHandledEvent(_event);
             return true;
         }
@@ -865,7 +1418,8 @@ bool VimTextEditController::handleNormalCommand(QKeyEvent* _event)
     case 'i':
     case 'a':
     case 'I':
-    case 'A': {
+    case 'A':
+    case 'R': {
         const int count = takeCount();
         if (!canEdit()) {
             resetPendingCommand();
@@ -877,7 +1431,7 @@ bool VimTextEditController::handleNormalCommand(QKeyEvent* _event)
         } else if (character == 'A') {
             setCursorPosition(Vim::lineEndPosition(block));
         } else if (character == 'a' && block.length() > 1) {
-            setCursorPosition(qMin(currentPosition() + 1, Vim::lineEndPosition(block)));
+            setCursorPosition(Vim::nextCharacterPosition(block, currentPosition()));
         } else {
             setCursorPosition(currentPosition());
         }
@@ -892,7 +1446,11 @@ bool VimTextEditController::handleNormalCommand(QKeyEvent* _event)
             resetPendingCommand();
             return true;
         }
-        openLine(character == 'o');
+        if (!openLine(character == 'o')) {
+            resetPendingCommand();
+            fail();
+            return true;
+        }
         enterInsertMode(count, character);
         return true;
     }
@@ -929,7 +1487,7 @@ bool VimTextEditController::handleNormalCommand(QKeyEvent* _event)
             return true;
         }
         const int position = currentPosition();
-        const int end = qMin(Vim::lineEndPosition(currentBlock()), position + count);
+        const int end = movePositionByCharacters(currentBlock(), position, count);
         changeRange({ position, end, false }, m_pendingRegister, false);
         return true;
     }
@@ -1025,6 +1583,7 @@ bool VimTextEditController::handleNormalCommand(QKeyEvent* _event)
 
     default: {
         resetPendingCommand();
+        fail();
         return true;
     }
     }
@@ -1164,6 +1723,7 @@ bool VimTextEditController::handleVisualCommand(QKeyEvent* _event)
 
     default: {
         resetPendingCommand();
+        fail();
         return true;
     }
     }
@@ -1193,14 +1753,24 @@ bool VimTextEditController::handleOperatorTarget(QKeyEvent* _event)
                 //
                 if (index == 1) {
                     resetPendingCommand();
+                    fail();
                     return true;
                 }
                 break;
             }
             lastBlock = next;
         }
+        //
+        // ... как и в vim, курсор при этом встаёт на первый значимый символ последней строки,
+        //     кроме копирования, которое курсор не двигает
+        //
         Motion motion;
-        motion.position = lastBlock == currentBlock() ? currentPosition() : lastBlock.position();
+        if (m_pendingOperator == Operator::Yank) {
+            motion.position
+                = lastBlock == currentBlock() ? currentPosition() : lastBlock.position();
+        } else {
+            motion.position = Vim::firstNonBlankPosition(lastBlock);
+        }
         motion.linewise = true;
         applyOperatorToMotion(motion);
         return true;
@@ -1259,6 +1829,7 @@ bool VimTextEditController::handleOperatorTarget(QKeyEvent* _event)
     }
     default: {
         resetPendingCommand();
+        fail();
         return true;
     }
     }
@@ -1284,14 +1855,15 @@ bool VimTextEditController::handleAwaitingInput(QKeyEvent* _event)
     }
 
     case Awaiting::FindCharacter: {
-        if (character.isNull()) {
+        const auto text = characterText(_event);
+        if (text.isEmpty()) {
             resetPendingCommand();
             return true;
         }
-        shared().findCharacter = character;
+        shared().findCharacter = text;
         shared().findCommand = m_findCommand;
         const int count = takeCount();
-        applyMotion(findCharacterMotion(character, m_findCommand == 'f' || m_findCommand == 't',
+        applyMotion(findCharacterMotion(text, m_findCommand == 'f' || m_findCommand == 't',
                                         m_findCommand == 't' || m_findCommand == 'T', count,
                                         false));
         return true;
@@ -1299,7 +1871,8 @@ bool VimTextEditController::handleAwaitingInput(QKeyEvent* _event)
 
     case Awaiting::ReplaceCharacter: {
         const bool isLineBreak = isEnter(_event);
-        if (character.isNull() && !isLineBreak) {
+        const auto text = characterText(_event);
+        if (text.isEmpty() && !isLineBreak) {
             if (isVisualMode()) {
                 enterNormalMode();
             } else {
@@ -1317,8 +1890,10 @@ bool VimTextEditController::handleAwaitingInput(QKeyEvent* _event)
                 // ... заменяем символы, не трогая переводы строк
                 //
                 for (const auto& lineRange : lineRanges(range)) {
-                    replaceText(lineRange.start, lineRange.end,
-                                QString(lineRange.end - lineRange.start, character));
+                    const auto block = document()->findBlock(lineRange.start);
+                    replaceText(
+                        lineRange.start, lineRange.end,
+                        text.repeated(charactersCount(block, lineRange.start, lineRange.end)));
                 }
             }
             setCursorPosition(characterPosition(range.start));
@@ -1331,11 +1906,13 @@ bool VimTextEditController::handleAwaitingInput(QKeyEvent* _event)
             // ... r<Enter> заменяет символы одним переводом строки
             //
             const int position = currentPosition();
-            const int lineEnd = Vim::lineEndPosition(currentBlock());
-            if (!canEdit() || position + count > lineEnd) {
+            int moved = 0;
+            const int end = movePositionByCharacters(currentBlock(), position, count, &moved);
+            if (!canEdit() || moved < count) {
+                fail();
                 return true;
             }
-            removeText(position, position + count);
+            removeText(position, end);
             QTextCursor cursor(document());
             cursor.setPosition(position);
             m_editor->setTextCursor(cursor);
@@ -1343,7 +1920,7 @@ bool VimTextEditController::handleAwaitingInput(QKeyEvent* _event)
             setCursorPosition(characterPosition(m_editor->textCursor().position()));
             return true;
         }
-        replaceCharacters(character, count);
+        replaceCharacters(text, count);
         return true;
     }
 
@@ -1389,10 +1966,27 @@ bool VimTextEditController::handleAwaitingInput(QKeyEvent* _event)
         const int count = takeCount();
         resetPendingCommand();
         m_commandIsChange = false;
+        //
+        // ... @: повторяет последнюю команду строки ввода
+        //
         const auto name = character == '@' ? shared().lastPlayedMacro : character;
-        if (!name.isNull()) {
-            playMacro(name, count);
+        if (name == ':') {
+            if (shared().lastExCommand.isEmpty()) {
+                fail(QStringLiteral("E30: No previous command line"));
+                return true;
+            }
+            shared().lastPlayedMacro = name;
+            for (int step = 0; step < count && !m_commandFailed; ++step) {
+                executeExCommands(shared().lastExCommand);
+            }
+            return true;
         }
+        if (name.isNull()) {
+            fail(character == '@' ? QStringLiteral("E748: No previously used register")
+                                  : QString());
+            return true;
+        }
+        playMacro(name, count);
         return true;
     }
 
@@ -1419,10 +2013,77 @@ bool VimTextEditController::handleGoCommand(QKeyEvent* _event)
             motion = lineMotion(withCount ? count : 1, true);
             motion.jump = true;
         } else {
-            Vim::Cursor cursor(document(), currentPosition());
-            if (Vim::backwardEndOfWord(cursor, count, character == 'E', false)) {
+            const int position = currentPosition();
+            Vim::Cursor cursor(document(), position);
+            const bool success = Vim::backwardEndOfWord(cursor, count, character == 'E', false);
+            if (success || cursor.position() != position) {
                 motion.position = cursor.position();
+                motion.failed = !success;
             }
+            motion.inclusive = true;
+        }
+        applyMotion(motion);
+        return true;
+    }
+
+    //
+    // ... к последнему значимому символу строки
+    //
+    if (character == '_') {
+        const int count = takeCount();
+        Motion motion;
+        motion.inclusive = true;
+        auto block = currentBlock();
+        for (int index = 1; index < count && block.isValid(); ++index) {
+            block = Vim::nextNavigableBlock(block);
+        }
+        if (block.isValid()) {
+            int end = Vim::lineEndPosition(block);
+            while (end > block.position()
+                   && QStringLiteral(" \t").contains(document()->characterAt(end - 1))) {
+                end = Vim::previousCharacterPosition(block, end);
+            }
+            motion.position
+                = end > block.position() ? Vim::previousCharacterPosition(block, end) : end;
+        }
+        applyMotion(motion);
+        return true;
+    }
+
+    //
+    // ... по строкам на экране, на которые разбит абзац
+    //
+    if (character == 'j' || character == 'k') {
+        const int count = takeCount();
+        auto motion = verticalMotion(count, character == 'j', true);
+        motion.linewise = false;
+        applyMotion(motion);
+        return true;
+    }
+    if (character == '0' || character == '^' || character == '$') {
+        takeCount();
+        const int position = currentPosition();
+        const auto block = Vim::navigableBlock(document(), position);
+        const auto layout = block.layout();
+        const auto line = layout != nullptr
+            ? layout->lineForTextPosition(position - block.position())
+            : QTextLine();
+        const int lineStart = block.position() + (line.isValid() ? line.textStart() : 0);
+        const int lineEnd = line.isValid()
+            ? qMin(Vim::lineEndPosition(block), lineStart + line.textLength())
+            : Vim::lineEndPosition(block);
+        Motion motion;
+        if (character == '0') {
+            motion.position = lineStart;
+        } else if (character == '^') {
+            motion.position = lineStart;
+            while (motion.position < lineEnd
+                   && QStringLiteral(" \t").contains(document()->characterAt(motion.position))) {
+                motion.position = Vim::nextCharacterPosition(block, motion.position);
+            }
+        } else {
+            motion.position
+                = lineEnd > lineStart ? Vim::previousCharacterPosition(block, lineEnd) : lineStart;
             motion.inclusive = true;
         }
         applyMotion(motion);
@@ -1432,6 +2093,35 @@ bool VimTextEditController::handleGoCommand(QKeyEvent* _event)
     if (character == '*' || character == '#') {
         const int count = takeCount();
         searchWordUnderCursor(character == '*', false, count);
+        return true;
+    }
+
+    //
+    // ... gn и gN выделяют ближайшее совпадение с последним поиском, или применяют к нему оператор
+    //
+    if (character == 'n' || character == 'N') {
+        takeCount();
+        const auto match = searchMatchRange(character == 'n');
+        if (!match.isValid()) {
+            resetPendingCommand();
+            return true;
+        }
+        const auto block = document()->findBlock(match.start);
+        const int last = match.end > match.start ? Vim::previousCharacterPosition(block, match.end)
+                                                 : match.start;
+        if (m_pendingOperator != Operator::None) {
+            setCursorPosition(match.start);
+            Motion motion;
+            motion.position = last;
+            motion.inclusive = match.end > match.start;
+            applyOperatorToMotion(motion);
+            return true;
+        }
+        if (character == 'n') {
+            enterVisualMode(Mode::Visual, match.start, last);
+        } else {
+            enterVisualMode(Mode::Visual, last, match.start);
+        }
         return true;
     }
 
@@ -1542,6 +2232,7 @@ bool VimTextEditController::handleGoCommand(QKeyEvent* _event)
 
     default: {
         resetPendingCommand();
+        fail();
         return true;
     }
     }
@@ -1640,6 +2331,7 @@ bool VimTextEditController::handleTextObject(QKeyEvent* _event)
         if (!visual) {
             resetPendingCommand();
         }
+        fail();
         return true;
     }
 
@@ -1703,7 +2395,8 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
     if (character == 'h' || key == Qt::Key_Left || key == Qt::Key_Backspace) {
         const bool wrap = key == Qt::Key_Backspace;
         Vim::Cursor cursor(document, position);
-        for (int count = _count; count > 0; --count) {
+        int moved = 0;
+        for (int count = _count; count > 0; --count, ++moved) {
             if (cursor.column() > 0) {
                 cursor.setColumn(cursor.column() - 1);
                 continue;
@@ -1726,6 +2419,12 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
             }
             break;
         }
+        //
+        // ... как и в vim, если сдвинуться не удалось вовсе, то это ошибка
+        //
+        if (moved == 0) {
+            return motion;
+        }
         motion.position = cursor.position();
         return motion;
     }
@@ -1737,11 +2436,13 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
         const bool wrap = character == ' ';
         const bool pastLine = isVisualMode();
         Vim::Cursor cursor(document, position);
-        for (int count = _count; count > 0; --count) {
-            const bool canMove
-                = pastLine ? !cursor.atLineEnd() : cursor.column() + 1 < cursor.lineLength();
+        int moved = 0;
+        for (int count = _count; count > 0; --count, ++moved) {
+            const int nextColumn = Vim::nextCharacterPosition(cursor.block(), cursor.position())
+                - cursor.block().position();
+            const bool canMove = pastLine ? !cursor.atLineEnd() : nextColumn < cursor.lineLength();
             if (canMove) {
-                cursor.setColumn(cursor.column() + 1);
+                cursor.setColumn(nextColumn);
                 continue;
             }
             const auto next = Vim::nextNavigableBlock(cursor.block());
@@ -1758,6 +2459,9 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
                 motion.inclusive = true;
             }
             break;
+        }
+        if (moved == 0 && !forOperator) {
+            return motion;
         }
         motion.position = cursor.position();
         return motion;
@@ -1812,7 +2516,9 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
             block = next;
         }
         const int lineEnd = Vim::lineEndPosition(block);
-        motion.position = isVisualMode() || lineEnd == block.position() ? lineEnd : lineEnd - 1;
+        motion.position = isVisualMode() || lineEnd == block.position()
+            ? lineEnd
+            : Vim::previousCharacterPosition(block, lineEnd);
         motion.inclusive = true;
         motion.toLineEnd = true;
         motion.keepPreferredX = true;
@@ -1820,7 +2526,8 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
     }
     if (character == '|') {
         const auto block = Vim::navigableBlock(document, position);
-        motion.position = block.position() + qMin(_count - 1, qMax(0, block.length() - 2));
+        motion.position = Vim::characterStartPosition(
+            block, block.position() + qMin(_count - 1, qMax(0, block.length() - 2)));
         return motion;
     }
 
@@ -1856,16 +2563,23 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
             motion.inclusive = true;
         }
 
-        if (!success && !forOperator) {
+        //
+        // ... как и в vim, если слов не хватило, курсор всё равно перемещается, но если он так и
+        //     не сдвинулся, то перемещение невозможно
+        //
+        if (!success && !forOperator && cursor.position() == position) {
             return motion;
         }
         motion.position = cursor.position();
+        motion.failed = !success;
         return motion;
     }
     if (character == 'b' || character == 'B') {
         Vim::Cursor cursor(document, position);
-        if (Vim::backwardWord(cursor, _count, character == 'B', false)) {
+        const bool success = Vim::backwardWord(cursor, _count, character == 'B', false);
+        if (success || cursor.position() != position) {
             motion.position = cursor.position();
+            motion.failed = !success;
         }
         return motion;
     }
@@ -1874,7 +2588,8 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
     // Предложения
     //
     if (character == '(' || character == ')') {
-        Vim::Cursor cursor(document, position);
+        const bool paragraphBreaks = true;
+        Vim::Cursor cursor(document, position, paragraphBreaks);
         if (!Vim::findSentence(cursor, character == ')', _count)) {
             return motion;
         }
@@ -1960,7 +2675,8 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
     //
     if (character == 'n' || character == 'N') {
         const bool forward = character == 'n' ? shared().searchForward : !shared().searchForward;
-        return searchMotion(shared().searchPattern, forward, _count, position);
+        return searchMotion(shared().searchPattern, forward, _count, position,
+                            shared().searchOffset);
     }
     if (character == '*' || character == '#') {
         searchWordUnderCursor(character == '*', true, _count);
@@ -1972,7 +2688,7 @@ VimTextEditController::Motion VimTextEditController::motionForKey(QKeyEvent* _ev
     // Повтор поиска символа в строке
     //
     if (character == ';' || character == ',') {
-        if (shared().findCharacter.isNull()) {
+        if (shared().findCharacter.isEmpty()) {
             return motion;
         }
         const auto command = shared().findCommand;
@@ -2057,7 +2773,7 @@ VimTextEditController::Motion VimTextEditController::lineMotion(int _lineNumber,
     return motion;
 }
 
-VimTextEditController::Motion VimTextEditController::findCharacterMotion(QChar _character,
+VimTextEditController::Motion VimTextEditController::findCharacterMotion(const QString& _character,
                                                                          bool _forward, bool _till,
                                                                          int _count,
                                                                          bool _repeat) const
@@ -2066,8 +2782,11 @@ VimTextEditController::Motion VimTextEditController::findCharacterMotion(QChar _
     motion.inclusive = _forward;
 
     const Vim::Cursor cursor(document(), currentPosition());
-    const auto text = cursor.block().text();
-    int column = cursor.column();
+    const auto block = cursor.block();
+    const auto text = Vim::displayedText(block);
+    const int lineStart = block.position();
+    const int lineEnd = Vim::lineEndPosition(block);
+    int position = cursor.position();
     //
     // ... при повторе поиска до символа стоящий рядом искомый символ пропускается
     //
@@ -2076,17 +2795,18 @@ VimTextEditController::Motion VimTextEditController::findCharacterMotion(QChar _
         forever
         {
             if (_forward) {
-                ++column;
-                if (column >= text.size()) {
+                position = Vim::nextCharacterPosition(block, position);
+                if (position >= lineEnd) {
                     return motion;
                 }
             } else {
-                if (column == 0) {
+                if (position <= lineStart) {
                     return motion;
                 }
-                --column;
+                position = Vim::previousCharacterPosition(block, position);
             }
-            if (text.at(column) == _character && stop) {
+            const int characterEnd = Vim::nextCharacterPosition(block, position);
+            if (stop && text.mid(position - lineStart, characterEnd - position) == _character) {
                 break;
             }
             stop = true;
@@ -2094,17 +2814,20 @@ VimTextEditController::Motion VimTextEditController::findCharacterMotion(QChar _
     }
 
     if (_till) {
-        column += _forward ? -1 : 1;
+        position = _forward ? Vim::previousCharacterPosition(block, position)
+                            : Vim::nextCharacterPosition(block, position);
     }
-    motion.position = cursor.block().position() + column;
+    motion.position = position;
     return motion;
 }
 
-VimTextEditController::Motion VimTextEditController::markMotion(QChar _name, bool _exact) const
+VimTextEditController::Motion VimTextEditController::markMotion(QChar _name, bool _exact)
 {
     Motion motion;
     const auto name = _name == '\'' ? QChar('`') : _name;
-    if (!m_marks.contains(name) || m_marks.value(name).isNull()) {
+    if (!m_marks.contains(name) || m_marks.value(name).isNull()
+        || m_marks.value(name).document() != document()) {
+        fail(QStringLiteral("E20: Mark not set"));
         return motion;
     }
 
@@ -2122,23 +2845,101 @@ VimTextEditController::Motion VimTextEditController::markMotion(QChar _name, boo
 
 VimTextEditController::Motion VimTextEditController::searchMotion(const QString& _pattern,
                                                                   bool _forward, int _count,
-                                                                  int _fromPosition)
+                                                                  int _fromPosition,
+                                                                  const QString& _offset)
 {
     Motion motion;
     motion.jump = true;
     motion.toNumberedRegister = true;
     if (_pattern.isEmpty()) {
+        fail(QStringLiteral("E35: No previous regular expression"));
         return motion;
     }
 
+    //
+    // Разбираем смещение: число строк, или сдвиг от конца (e), или от начала (s, b) совпадения
+    //
+    QChar offsetType;
+    int offset = 0;
+    {
+        auto offsetText = _offset.trimmed();
+        if (!offsetText.isEmpty() && QStringLiteral("esb").contains(offsetText.at(0))) {
+            offsetType = offsetText.at(0);
+            offsetText = offsetText.mid(1);
+        }
+        if (offsetText == '+' || offsetText == '-') {
+            offset = offsetText == '+' ? 1 : -1;
+        } else if (!offsetText.isEmpty()) {
+            bool ok = false;
+            offset = offsetText.toInt(&ok);
+            if (!ok) {
+                offset = 0;
+            }
+        }
+        if (offsetType.isNull() && !_offset.trimmed().isEmpty()) {
+            offsetType = 'l';
+        }
+    }
+
+    //
+    // ... как и vim, перед поиском отменяем сдвиг в символах, чтобы повторный поиск не находил
+    //     то же самое совпадение
+    //
     int position = _fromPosition;
+    if (offsetType != 'l' && offset != 0) {
+        Vim::Cursor start(document(), position);
+        for (int step = 0; step < qAbs(offset); ++step) {
+            if ((offset > 0 ? start.decl() : start.incl()) == -1) {
+                break;
+            }
+        }
+        position = start.position();
+    }
+    int matchEnd = -1;
     for (int count = 0; count < _count; ++count) {
-        position = searchPosition(_pattern, position, _forward);
+        position = searchPosition(_pattern, position, _forward, &matchEnd);
         if (position < 0) {
+            if (m_message.isEmpty()) {
+                fail(QStringLiteral("E486: Pattern not found: %1").arg(_pattern));
+            } else {
+                fail();
+            }
             return motion;
         }
     }
-    motion.position = position;
+
+    if (offsetType == 'l') {
+        auto block = Vim::navigableBlock(document(), position);
+        for (int step = 0; step < qAbs(offset); ++step) {
+            const auto next
+                = offset > 0 ? Vim::nextNavigableBlock(block) : Vim::previousNavigableBlock(block);
+            if (!next.isValid()) {
+                break;
+            }
+            block = next;
+        }
+        motion.position = block.position();
+        motion.linewise = true;
+        return motion;
+    }
+
+    Vim::Cursor cursor(document(), position);
+    if (offsetType == 'e') {
+        //
+        // ... конец совпадения - последний его символ, и он входит в диапазон оператора
+        //
+        cursor.setPosition(qMax(position, matchEnd));
+        if (matchEnd > position) {
+            cursor.decl();
+        }
+        motion.inclusive = true;
+    }
+    for (int step = 0; step < qAbs(offset); ++step) {
+        if ((offset > 0 ? cursor.incl() : cursor.decl()) == -1) {
+            break;
+        }
+    }
+    motion.position = cursor.position();
     return motion;
 }
 
@@ -2153,7 +2954,15 @@ void VimTextEditController::applyMotion(const Motion& _motion)
 
     if (_motion.position < 0) {
         resetPendingCommand();
+        fail();
         return;
+    }
+
+    //
+    // ... не полностью выполненное перемещение без оператора всё же сдвигает курсор
+    //
+    if (_motion.failed && m_pendingOperator == Operator::None) {
+        fail();
     }
 
     if (_motion.jump) {
@@ -2340,7 +3149,7 @@ void VimTextEditController::applyOperator(Operator _operator, const Vim::TextRan
     case Operator::SwapCase:
     case Operator::Lowercase:
     case Operator::Uppercase: {
-        changeCaseRange(_range, _operator);
+        changeCaseRange(_range, _operator, _cursorPosition);
         break;
     }
     default: {
@@ -2371,40 +3180,109 @@ void VimTextEditController::deleteRange(const Vim::TextRange& _range, QChar _reg
         return;
     }
 
-    shared().registers.setDeletedContent(_registerName, registerContent(_range),
-                                         _toNumberedRegister);
-
     if (!_range.linewise) {
-        removeText(_range.start, _range.end);
-        setCursorPosition(characterPosition(_range.start));
+        if (!isEditableRange(_range.start, _range.end)) {
+            fail();
+            return;
+        }
+        shared().registers.setDeletedContent(_registerName, registerContent(_range),
+                                             _toNumberedRegister);
+        const bool removed = removeText(_range.start, _range.end);
+        setCursorPosition(characterPosition(removed ? _range.start : _range.end));
         return;
     }
 
+    shared().registers.setDeletedContent(_registerName, registerContent(_range),
+                                         _toNumberedRegister);
+    const int cursorPosition = deleteLines(lineRuns(_range), 0);
+    setCursorPosition(Vim::firstNonBlankPosition(Vim::navigableBlock(document(), cursorPosition)));
+}
+
+QVector<Vim::TextRange> VimTextEditController::lineRuns(const Vim::TextRange& _range) const
+{
+    //
+    // Строки диапазона делим на части, между которыми есть скрытый текст, или граница ячейки
+    // таблицы, ведь удалять их нужно по отдельности, чтобы не задеть то, что между ними
+    //
+    QVector<Vim::TextRange> runs;
+    QTextBlock runStart;
+    QTextBlock runEnd;
+    auto finishRun = [&] {
+        if (runStart.isValid()) {
+            runs.append({ runStart.position(), Vim::lineEndPosition(runEnd), true });
+        }
+    };
+    for (auto block = Vim::navigableBlock(document(), _range.start);
+         block.isValid() && block.position() <= _range.end;
+         block = Vim::nextNavigableBlock(block)) {
+        bool isConnected = runEnd.isValid() && isSameContainer(runEnd, block);
+        for (auto between = runEnd.next(); isConnected && between.isValid() && between != block;
+             between = between.next()) {
+            isConnected = between.isVisible();
+        }
+        if (!isConnected) {
+            finishRun();
+            runStart = block;
+        }
+        runEnd = block;
+    }
+    finishRun();
+    return runs;
+}
+
+int VimTextEditController::deleteLines(const QVector<Vim::TextRange>& _runs, int _fromRun)
+{
     //
     // Чтобы строки действительно исчезли, а не превратились в пустые, захватываем ещё и
-    // разделитель абзацев - следующий, а если за строками идёт скрытый текст, то предыдущий,
-    // если же скрыт текст с обеих сторон, то очищаем строки, не трогая соседние абзацы
-    // @note Позиции вычисляем заранее, т.к. после правки документа блоки становятся невалидными
+    // разделитель абзацев - следующий, а если за строками идёт скрытый текст, или они в конце
+    // ячейки таблицы, то предыдущий, если же ни тот, ни другой удалить нельзя, то очищаем строки,
+    // не трогая соседние абзацы
+    // @note Удаляем с конца, чтобы не сдвигать позиции ещё не обработанных частей, а блоки
+    //       получаем заново на каждом шаге, т.к. после правки документа они становятся невалидными
     //
     auto document = this->document();
-    const auto firstBlock = document->findBlock(_range.start);
-    const auto lastBlock = document->findBlock(_range.end);
-    const auto blockAfter = lastBlock.next();
-    const auto blockBefore = firstBlock.previous();
-    int cursorPosition = firstBlock.position();
-    if (blockAfter.isValid() && blockAfter.isVisible()) {
-        removeText(firstBlock.position(), blockAfter.position());
-    } else if (blockBefore.isValid() && blockBefore.isVisible()) {
-        cursorPosition = blockBefore.position();
-        removeText(Vim::lineEndPosition(blockBefore), Vim::lineEndPosition(lastBlock));
-    } else {
-        removeText(firstBlock.position(), Vim::lineEndPosition(lastBlock));
-    }
+    auto removeLines = [this, document](int _firstPosition, int _lastPosition) {
+        const auto firstBlock = document->findBlock(_firstPosition);
+        const auto lastBlock = document->findBlock(_lastPosition);
+        const auto blockAfter = lastBlock.next();
+        const auto blockBefore = firstBlock.previous();
+        const int firstPosition = firstBlock.position();
+        if (canMergeWith(lastBlock, blockAfter)) {
+            removeText(firstPosition, blockAfter.position());
+            return firstPosition;
+        }
+        if (canMergeWith(firstBlock, blockBefore)) {
+            const int cursorPosition = blockBefore.position();
+            removeText(Vim::lineEndPosition(blockBefore), Vim::lineEndPosition(lastBlock));
+            return cursorPosition;
+        }
+        removeText(firstPosition, Vim::lineEndPosition(lastBlock));
+        return firstPosition;
+    };
 
-    //
-    // ... курсор ставим на первый значимый символ строки, оказавшейся на месте удалённых
-    //
-    setCursorPosition(Vim::firstNonBlankPosition(Vim::navigableBlock(document, cursorPosition)));
+    int cursorPosition = currentPosition();
+    for (int index = _runs.size() - 1; index >= _fromRun; --index) {
+        const auto& run = _runs.at(index);
+
+        //
+        // ... в ячейке таблицы удаляем строки по одной, т.к. редактор плохо справляется с
+        //     выделением нескольких абзацев внутри ячейки
+        //
+        if (QTextCursor(document->findBlock(run.start)).currentTable() != nullptr) {
+            QVector<int> lines;
+            for (auto block = document->findBlock(run.start);
+                 block.isValid() && block.position() <= run.end; block = block.next()) {
+                lines.append(block.position());
+            }
+            for (int line = lines.size() - 1; line >= 0; --line) {
+                cursorPosition = removeLines(lines.at(line), lines.at(line));
+            }
+            continue;
+        }
+
+        cursorPosition = removeLines(run.start, run.end);
+    }
+    return cursorPosition;
 }
 
 void VimTextEditController::changeRange(const Vim::TextRange& _range, QChar _registerName,
@@ -2414,19 +3292,32 @@ void VimTextEditController::changeRange(const Vim::TextRange& _range, QChar _reg
         return;
     }
 
-    shared().registers.setDeletedContent(_registerName, registerContent(_range),
-                                         _toNumberedRegister);
-
     //
     // ... в отличие от удаления, при построчном изменении первая строка остаётся на месте вместе
-    //     с отступом, лишь очищается её содержимое
+    //     с отступом, лишь очищается её содержимое, а строки за скрытым текстом удаляются целиком
     //
     int start = _range.start;
+    int end = _range.end;
+    QVector<Vim::TextRange> runs;
     if (_range.linewise) {
-        start = Vim::firstNonBlankPosition(document()->findBlock(_range.start));
-        start = qMin(start, Vim::lineEndPosition(document()->findBlock(_range.start)));
+        runs = lineRuns(_range);
+        if (runs.isEmpty()) {
+            return;
+        }
+        const auto firstBlock = document()->findBlock(runs.constFirst().start);
+        start = qMin(Vim::firstNonBlankPosition(firstBlock), Vim::lineEndPosition(firstBlock));
+        end = runs.constFirst().end;
+    } else if (!isEditableRange(start, end)) {
+        fail();
+        return;
     }
-    removeText(start, _range.end);
+
+    shared().registers.setDeletedContent(_registerName, registerContent(_range),
+                                         _toNumberedRegister);
+    if (runs.size() > 1) {
+        deleteLines(runs, 1);
+    }
+    removeText(start, end);
     setCursorPosition(start);
     enterInsertMode(1, 'c');
 
@@ -2441,7 +3332,8 @@ void VimTextEditController::changeRange(const Vim::TextRange& _range, QChar _reg
     }
 }
 
-void VimTextEditController::changeCaseRange(const Vim::TextRange& _range, Operator _operator)
+void VimTextEditController::changeCaseRange(const Vim::TextRange& _range, Operator _operator,
+                                            int _cursorPosition)
 {
     if (!canEdit() || !_range.isValid()) {
         return;
@@ -2450,40 +3342,172 @@ void VimTextEditController::changeCaseRange(const Vim::TextRange& _range, Operat
     for (const auto& lineRange : lineRanges(_range)) {
         const int from = lineRange.start;
         const int to = lineRange.end;
-        auto text = rangeText({ from, to, false });
-        for (auto& character : text) {
+        const auto block = document()->findBlock(from);
+        const auto originalText = rangeText({ from, to, false });
+        auto text = originalText;
+        for (int index = 0; index < text.size(); ++index) {
+            //
+            // ... текст, который форматирование и так показывает в одном регистре, не трогаем,
+            //     ведь изменение не будет видно, и модель документа его не сохранит
+            //
+            if (Vim::hasForcedCase(block, from + index)) {
+                continue;
+            }
+            const auto character = text.at(index);
             switch (_operator) {
             case Operator::Lowercase: {
-                character = character.toLower();
+                text[index] = character.toLower();
                 break;
             }
             case Operator::Uppercase: {
-                character = character.toUpper();
+                text[index] = character.toUpper();
                 break;
             }
             default: {
-                character = character.isUpper() ? character.toLower() : character.toUpper();
+                text[index] = character.isUpper() ? character.toLower() : character.toUpper();
                 break;
             }
             }
         }
-        replaceText(from, to, text);
+        if (text != originalText) {
+            replaceText(from, to, text);
+        }
     }
 
-    setCursorPosition(characterPosition(_range.start));
+    //
+    // ... курсор встаёт в начало диапазона, а для построчного - туда, где начиналось
+    //     перемещение, сохраняя столбец, как это делает vim
+    //
+    setCursorPosition(characterPosition(_cursorPosition >= 0 ? _cursorPosition : _range.start));
 }
 
 Vim::RegisterContent VimTextEditController::registerContent(const Vim::TextRange& _range) const
 {
+    Vim::RegisterContent content{ rangeText(_range), _range.linewise };
+    if (!_range.linewise) {
+        return content;
+    }
+
     //
     // ... построчный фрагмент всегда заканчивается переводом строки, даже если последняя
     //     строка пуста
     //
-    auto text = rangeText(_range);
-    if (_range.linewise) {
-        text += '\n';
+    content.text += '\n';
+
+    //
+    // ... а чтобы при вставке строки сохранили свои типы, запоминаем и их
+    //
+    content.documentKind = documentKind();
+    if (!content.documentKind.isEmpty()) {
+        for (auto block = document()->findBlock(_range.start);
+             block.isValid() && block.position() <= _range.end; block = block.next()) {
+            if (Vim::isNavigableBlock(block)) {
+                content.paragraphTypes.append(
+                    static_cast<int>(BusinessLayer::TextBlockStyle::forBlock(block)));
+            }
+        }
     }
-    return { text, _range.linewise };
+    return content;
+}
+
+Vim::RegisterContent VimTextEditController::registerValue(QChar _name) const
+{
+    //
+    // ... регистры только для чтения хранят то, что знает только контроллер
+    //
+    if (_name == '.') {
+        return { shared().lastInsertedText, false };
+    }
+    if (_name == ':') {
+        return { shared().lastExCommand, false };
+    }
+    if (_name == '/') {
+        return { shared().searchPattern, false };
+    }
+    return shared().registers.content(_name);
+}
+
+QString VimTextEditController::documentKind() const
+{
+    const auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document());
+    if (textDocument == nullptr || textDocument->model() == nullptr) {
+        return {};
+    }
+
+    return QString::fromLatin1(textDocument->model()->metaObject()->className());
+}
+
+void VimTextEditController::restoreParagraphTypes(int _position,
+                                                  const Vim::RegisterContent& _content, int _count)
+{
+    const auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document());
+    if (textDocument == nullptr || _content.paragraphTypes.isEmpty()
+        || _content.documentKind != documentKind()
+        || _content.paragraphTypes.size() != _content.text.count('\n')) {
+        return;
+    }
+
+    //
+    // Восстанавливаем только типы обычных абзацев: заголовки и окончания папок, а так же
+    // служебные блоки так не создать, не сломав структуру документа
+    //
+    using BusinessLayer::TextParagraphType;
+    auto canRestore = [](TextParagraphType _type) {
+        switch (_type) {
+        case TextParagraphType::UnformattedText:
+        case TextParagraphType::InlineNote:
+        case TextParagraphType::SceneHeading:
+        case TextParagraphType::Character:
+        case TextParagraphType::Dialogue:
+        case TextParagraphType::SceneCharacters:
+        case TextParagraphType::BeatHeading:
+        case TextParagraphType::Action:
+        case TextParagraphType::Parenthetical:
+        case TextParagraphType::Lyrics:
+        case TextParagraphType::Transition:
+        case TextParagraphType::Shot:
+        case TextParagraphType::Sound:
+        case TextParagraphType::Music:
+        case TextParagraphType::Cue:
+        case TextParagraphType::PageHeading:
+        case TextParagraphType::PanelHeading:
+        case TextParagraphType::Description:
+        case TextParagraphType::ChapterHeading1:
+        case TextParagraphType::ChapterHeading2:
+        case TextParagraphType::ChapterHeading3:
+        case TextParagraphType::ChapterHeading4:
+        case TextParagraphType::ChapterHeading5:
+        case TextParagraphType::ChapterHeading6:
+        case TextParagraphType::Text: {
+            return true;
+        }
+        default: {
+            return false;
+        }
+        }
+    };
+
+    //
+    // ... позиции вставленных строк отслеживаем курсорами, т.к. смена типа меняет документ
+    //
+    QVector<QTextCursor> lines;
+    const int linesCount = _content.paragraphTypes.size() * _count;
+    for (auto block = document()->findBlock(_position);
+         block.isValid() && lines.size() < linesCount; block = Vim::nextNavigableBlock(block)) {
+        QTextCursor cursor(document());
+        cursor.setPosition(block.position());
+        lines.append(cursor);
+    }
+
+    for (int index = 0; index < lines.size(); ++index) {
+        const auto type = static_cast<TextParagraphType>(
+            _content.paragraphTypes.at(index % _content.paragraphTypes.size()));
+        BusinessLayer::TextCursor cursor(lines.at(index));
+        if (!canRestore(type) || BusinessLayer::TextBlockStyle::forBlock(cursor.block()) == type) {
+            continue;
+        }
+        textDocument->setParagraphType(type, cursor);
+    }
 }
 
 QVector<Vim::TextRange> VimTextEditController::lineRanges(const Vim::TextRange& _range) const
@@ -2539,34 +3563,68 @@ QString VimTextEditController::rangeText(const Vim::TextRange& _range) const
 
 bool VimTextEditController::canEdit() const
 {
-    return !m_editor->isReadOnly();
+    //
+    // ... если в документе нет ни одной строки, по которой может перемещаться курсор, то любое
+    //     изменение затронет скрытый, или служебный текст
+    //
+    return !m_editor->isReadOnly() && Vim::firstNavigableBlock(document()).isValid();
 }
 
-void VimTextEditController::removeText(int _from, int _to)
+bool VimTextEditController::isEditableRange(int _from, int _to) const
+{
+    //
+    // Изменение не должно затрагивать скрытый текст и выходить за пределы ячейки таблицы
+    //
+    const auto firstBlock = document()->findBlock(_from);
+    const auto lastBlock = document()->findBlock(_to);
+    for (auto block = firstBlock; block.isValid(); block = block.next()) {
+        if (!block.isVisible() || !isSameContainer(firstBlock, block)) {
+            return false;
+        }
+        if (block == lastBlock) {
+            break;
+        }
+    }
+    return true;
+}
+
+bool VimTextEditController::removeText(int _from, int _to)
 {
     if (_from >= _to) {
-        return;
+        return true;
     }
 
     //
     // Удаление отдаём самому редактору, чтобы он корректно обработал границы абзацев, таблиц
     // и режим отслеживания изменений
+    // @note Выделяем от конца к началу, т.к. в режиме отслеживания изменений редактор проверяет,
+    //       не добавленный ли это текст, начиная с блока, в котором находится курсор
     //
+    const int charactersCount = document()->characterCount();
     QTextCursor cursor(document());
-    cursor.setPosition(_from);
-    cursor.setPosition(_to, QTextCursor::KeepAnchor);
+    cursor.setPosition(_to);
+    cursor.setPosition(_from, QTextCursor::KeepAnchor);
     m_editor->setTextCursor(cursor);
     sendKeyPressToEditor(Qt::Key_Delete, {});
+
+    //
+    // ... в режиме отслеживания изменений текст лишь помечается удалённым
+    //
+    return !m_editor->isTrackChangesEnabled() || document()->characterCount() < charactersCount;
 }
 
-void VimTextEditController::insertText(int _position, const QString& _text)
+bool VimTextEditController::insertText(int _position, const QString& _text)
 {
     if (_text.isEmpty()) {
-        return;
+        return true;
     }
 
     QTextCursor cursor(document());
     cursor.setPosition(_position);
+    if (_text.contains('\n') && isFolderBoundary(cursor.block())) {
+        fail();
+        return false;
+    }
     cursor.beginEditBlock();
 
     //
@@ -2587,11 +3645,35 @@ void VimTextEditController::insertText(int _position, const QString& _text)
         cursor.block().setUserData(movedData);
     }
     cursor.endEditBlock();
+    m_editor->markInsertedText(_position, _position + _text.size());
+    return true;
 }
 
-void VimTextEditController::replaceText(int _from, int _to, const QString& _text)
+bool VimTextEditController::replaceText(int _from, int _to, const QString& _text)
 {
     QTextCursor cursor(document());
+    if (_text.contains('\n') && isFolderBoundary(document()->findBlock(_from))) {
+        fail();
+        return false;
+    }
+
+    //
+    // В режиме отслеживания изменений заменяемый текст помечается удалённым, а новый
+    // вставляется за ним и помечается добавленным, с форматированием первого заменяемого символа
+    //
+    if (m_editor->isTrackChangesEnabled() && _to > _from) {
+        cursor.setPosition(_from + 1);
+        const auto format = cursor.charFormat();
+        const int position = removeText(_from, _to) ? _from : _to;
+        if (_text.contains('\n')) {
+            return insertText(position, _text);
+        }
+        cursor.setPosition(position);
+        cursor.insertText(_text, format);
+        m_editor->markInsertedText(position, position + _text.size());
+        return true;
+    }
+
     cursor.beginEditBlock();
 
     //
@@ -2604,14 +3686,20 @@ void VimTextEditController::replaceText(int _from, int _to, const QString& _text
             int to = 0;
             QTextCharFormat format;
         };
+        //
+        // ... формат каждого символа узнаём курсором, а не перебором фрагментов блока, которых в
+        //     длинном абзаце после множества правок может быть очень много
+        //
         QVector<Part> parts;
-        const auto block = document()->findBlock(_from);
-        for (auto iter = block.begin(); !iter.atEnd(); ++iter) {
-            const auto fragment = iter.fragment();
-            const int from = qMax(_from, fragment.position());
-            const int to = qMin(_to, fragment.position() + fragment.length());
-            if (to > from) {
-                parts.append({ from, to, fragment.charFormat() });
+        QTextCursor probe(document());
+        for (int position = _from; position < _to; ++position) {
+            probe.setPosition(position + 1);
+            const auto format = probe.charFormat();
+            if (!parts.isEmpty() && parts.constLast().to == position
+                && parts.constLast().format == format) {
+                parts.last().to = position + 1;
+            } else {
+                parts.append({ position, position + 1, format });
             }
         }
         for (const auto& part : parts) {
@@ -2620,7 +3708,8 @@ void VimTextEditController::replaceText(int _from, int _to, const QString& _text
             cursor.insertText(_text.mid(part.from - _from, part.to - part.from), part.format);
         }
         cursor.endEditBlock();
-        return;
+        m_editor->markInsertedText(_from, _to);
+        return true;
     }
 
     //
@@ -2636,11 +3725,12 @@ void VimTextEditController::replaceText(int _from, int _to, const QString& _text
     if (_text.contains('\n')) {
         cursor.removeSelectedText();
         cursor.endEditBlock();
-        insertText(_from, _text);
-        return;
+        return insertText(_from, _text);
     }
     cursor.insertText(_text, format);
     cursor.endEditBlock();
+    m_editor->markInsertedText(_from, _from + _text.size());
+    return true;
 }
 
 bool VimTextEditController::openLine(bool _below)
@@ -2651,14 +3741,32 @@ bool VimTextEditController::openLine(bool _below)
 
     //
     // Строка выше открывается как строка под предыдущей, чтобы тип нового абзаца выбрал
-    // редактор, как при нажатии Enter в конце строки
+    // редактор, как при нажатии Enter в конце строки, а абзац, разорванный переносом на другую
+    // страницу, обрабатываем целиком
     //
+    using BusinessLayer::TextBlockStyle;
     auto document = this->document();
     auto block = currentBlock();
     bool below = _below;
-    if (!below) {
+    if (below) {
+        while (block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)) {
+            const auto next = Vim::nextNavigableBlock(block);
+            if (!next.isValid()) {
+                break;
+            }
+            block = next;
+        }
+    } else {
+        while (block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            const auto previous = Vim::previousNavigableBlock(block);
+            if (!previous.isValid()) {
+                break;
+            }
+            block = previous;
+        }
         const auto previous = block.previous();
-        if (previous.isValid() && Vim::isNavigableBlock(previous)) {
+        if (previous.isValid() && Vim::isNavigableBlock(previous)
+            && isSameContainer(previous, block)) {
             block = previous;
             below = true;
         }
@@ -2669,31 +3777,61 @@ bool VimTextEditController::openLine(bool _below)
     const int blockEnd = Vim::lineEndPosition(block);
 
     //
+    // Под окончанием папки строка открывается за самой папкой, перед следующим абзацем, ведь
+    // редактор по Enter в окончании папки создаёт новую папку
+    //
+    if (below && isFolderFooter(block)) {
+        const auto next = block.next();
+        if (!next.isValid() || !next.isVisible() || isFolderBoundary(next)
+            || !isSameContainer(block, next)) {
+            return false;
+        }
+        const int nextPosition = next.position();
+        if (!insertText(nextPosition, QStringLiteral("\n"))) {
+            return false;
+        }
+        QTextCursor cursor(document);
+        cursor.setPosition(nextPosition);
+        m_editor->setTextCursor(cursor);
+        return true;
+    }
+
+    //
     // Новый абзац создаёт сам редактор, но в пустом абзаце нажатие Enter меняет его тип,
     // поэтому там вставляем абзац сами
     //
     if (block.length() > 1) {
+        const int revision = document->revision();
+        QTextCursor original(document);
+        original.setPosition(blockStart);
         QTextCursor cursor(document);
         cursor.setPosition(below ? blockEnd : blockStart);
         m_editor->setTextCursor(cursor);
         sendKeyPressToEditor(Qt::Key_Return, QStringLiteral("\r"));
 
-        if (document->blockCount() > blocksCount) {
-            auto newBlock = m_editor->textCursor().block();
-            if (!below && newBlock.length() > 1) {
-                newBlock = newBlock.previous();
-            }
-            if (newBlock.isValid() && newBlock.length() == 1) {
-                QTextCursor newCursor(document);
-                newCursor.setPosition(newBlock.position());
-                m_editor->setTextCursor(newCursor);
-                return true;
-            }
+        auto newBlock = m_editor->textCursor().block();
+        if (!below && newBlock.length() > 1) {
+            newBlock = newBlock.previous();
+        }
+        if (newBlock.isValid() && newBlock.length() == 1 && newBlock != original.block()) {
+            QTextCursor newCursor(document);
+            newCursor.setPosition(newBlock.position());
+            m_editor->setTextCursor(newCursor);
+            return true;
+        }
+
+        //
+        // ... если редактор изменил документ как-то иначе, то сами ничего не добавляем
+        //
+        if (document->revision() != revision) {
+            return false;
         }
     }
 
     const int position = below ? blockEnd : blockStart;
-    insertText(position, QStringLiteral("\n"));
+    if (!insertText(position, QStringLiteral("\n"))) {
+        return false;
+    }
     QTextCursor cursor(document);
     cursor.setPosition(below ? position + 1 : blockStart);
     m_editor->setTextCursor(cursor);
@@ -2714,37 +3852,171 @@ void VimTextEditController::deleteCharacters(int _count, bool _previous)
         return;
     }
 
-    const int start = _previous ? qMax(lineStart, position - _count) : position;
-    const int end = _previous ? position : qMin(lineEnd, position + _count);
+    const int start = _previous ? movePositionByCharacters(block, position, -_count) : position;
+    const int end = _previous ? position : movePositionByCharacters(block, position, _count);
     if (end <= start) {
+        //
+        // ... X в начале строки ничего не удаляет, о чём и сообщаем, а x в пустой строке - нет
+        //
+        if (_previous) {
+            fail();
+        }
         return;
     }
 
     deleteRange({ start, end, false }, m_pendingRegister, false);
 }
 
-void VimTextEditController::replaceCharacters(QChar _character, int _count)
+void VimTextEditController::replaceCharacters(const QString& _character, int _count)
 {
     if (!canEdit()) {
         return;
     }
 
-    const int position = currentPosition();
-    const int lineEnd = Vim::lineEndPosition(currentBlock());
-
     //
     // ... если в строке не хватает символов, то замена не выполняется вовсе
     //
-    if (position + _count > lineEnd) {
+    const int position = currentPosition();
+    int moved = 0;
+    const int end = movePositionByCharacters(currentBlock(), position, _count, &moved);
+    if (moved < _count) {
+        fail();
         return;
     }
 
-    replaceText(position, position + _count, QString(_count, _character));
+    replaceText(position, end, _character.repeated(_count));
 
     //
     // ... курсор остаётся на последнем заменённом символе
     //
-    setCursorPosition(position + _count - 1);
+    setCursorPosition(position + (_count - 1) * _character.size());
+}
+
+void VimTextEditController::incrementNumber(int _delta)
+{
+    if (!canEdit()) {
+        return;
+    }
+
+    //
+    // Ищем число под курсором, или первое число правее него, как это делает vim: десятичное,
+    // шестнадцатеричное с префиксом 0x, или двоичное с префиксом 0b
+    //
+    const auto block = currentBlock();
+    const auto text = block.text();
+    const int column = currentPosition() - block.position();
+    auto isDigit = [](QChar _character, int _base) {
+        const auto code = _character.unicode();
+        if (_base == 16) {
+            return (code >= '0' && code <= '9') || (code >= 'a' && code <= 'f')
+                || (code >= 'A' && code <= 'F');
+        }
+        return code >= '0' && code < '0' + qMin(_base, 10);
+    };
+    auto prefixedNumberAt = [&text, &isDigit](int _index, int* _base) {
+        if (_index + 2 < text.size() && text.at(_index) == '0') {
+            const auto prefix = text.at(_index + 1).toLower();
+            const int base = prefix == 'x' ? 16 : (prefix == 'b' ? 2 : 0);
+            if (base > 0 && isDigit(text.at(_index + 2), base)) {
+                *_base = base;
+                return true;
+            }
+        }
+        return false;
+    };
+
+    int start = -1;
+    int base = 10;
+    //
+    // ... курсор может стоять внутри числа с префиксом, поэтому ищем префикс от начала слова
+    //
+    int wordStart = qMin(column, static_cast<int>(text.size()));
+    while (wordStart > 0 && text.at(wordStart - 1).unicode() < 0x80
+           && text.at(wordStart - 1).isLetterOrNumber()) {
+        --wordStart;
+    }
+    for (int index = wordStart; index <= column && start < 0; ++index) {
+        int prefixBase = 0;
+        if (prefixedNumberAt(index, &prefixBase)) {
+            int numberEnd = index + 2;
+            while (numberEnd < text.size() && isDigit(text.at(numberEnd), prefixBase)) {
+                ++numberEnd;
+            }
+            if (column < numberEnd) {
+                start = index;
+                base = prefixBase;
+            }
+        }
+    }
+    if (start < 0 && column < text.size() && isDigit(text.at(column), 10)) {
+        start = column;
+        while (start > 0 && isDigit(text.at(start - 1), 10)) {
+            --start;
+        }
+    }
+    if (start < 0) {
+        for (int index = column; index < text.size(); ++index) {
+            int prefixBase = 0;
+            if (prefixedNumberAt(index, &prefixBase)) {
+                start = index;
+                base = prefixBase;
+                break;
+            }
+            if (isDigit(text.at(index), 10)) {
+                start = index;
+                break;
+            }
+        }
+    }
+    if (start < 0) {
+        fail();
+        return;
+    }
+
+    const int digitsStart = base == 10 ? start : start + 2;
+    int end = digitsStart;
+    while (end < text.size() && isDigit(text.at(end), base)) {
+        ++end;
+    }
+    const auto digits = text.mid(digitsStart, end - digitsStart);
+
+    QString result;
+    int replaceStart = start;
+    if (base == 10) {
+        //
+        // ... десятичное число может быть отрицательным, а ведущие нули сохраняются
+        //
+        const bool negative = start > 0 && text.at(start - 1) == '-';
+        if (negative) {
+            replaceStart = start - 1;
+        }
+        const qint64 value = (negative ? -1 : 1) * digits.toLongLong() + _delta;
+        result = QString::number(qAbs(value));
+        if (digits.size() > 1 && digits.startsWith('0') && result.size() < digits.size()) {
+            result = result.rightJustified(digits.size(), '0');
+        }
+        if (value < 0) {
+            result.prepend('-');
+        }
+    } else {
+        //
+        // ... а шестнадцатеричное и двоичное - беззнаковые, сохраняют ширину и регистр букв
+        //
+        const quint64 value = digits.toULongLong(nullptr, base) + static_cast<quint64>(_delta);
+        result = QString::number(value, base);
+        if (result.size() < digits.size()) {
+            result = result.rightJustified(digits.size(), '0');
+        }
+        if (digits != digits.toLower()) {
+            result = result.toUpper();
+        }
+        result.prepend(text.mid(start, 2));
+    }
+
+    const int position = block.position() + replaceStart;
+    if (replaceText(position, block.position() + end, result)) {
+        setCursorPosition(position + result.size() - 1);
+    }
 }
 
 void VimTextEditController::toggleCase(int _count)
@@ -2754,8 +4026,7 @@ void VimTextEditController::toggleCase(int _count)
     }
 
     const int position = currentPosition();
-    const int lineEnd = Vim::lineEndPosition(currentBlock());
-    const int end = qMin(lineEnd, position + _count);
+    const int end = movePositionByCharacters(currentBlock(), position, _count);
     if (end <= position) {
         return;
     }
@@ -2776,39 +4047,58 @@ void VimTextEditController::joinLines(int _count, bool _withSpaces)
     for (int step = 0; step < qMax(1, _count - 1); ++step) {
         const auto next = Vim::nextNavigableBlock(block);
         if (!next.isValid()) {
+            if (step == 0) {
+                fail();
+            }
             break;
         }
 
         //
-        // ... не объединяем со скрытым текстом и с продолжением абзаца на следующей странице
+        // ... не объединяем со скрытым текстом, с продолжением абзаца на следующей странице, с
+        //     другой ячейкой таблицы и с заголовками и окончаниями папок, ведь редактор при этом
+        //     удалит саму папку
         //
-        bool canJoin = !block.blockFormat().boolProperty(
-            BusinessLayer::TextBlockStyle::PropertyIsBreakCorrectionStart);
+        using BusinessLayer::TextBlockStyle;
+        bool canJoin
+            = !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)
+            && isSameContainer(block, next) && !isFolderBoundary(block) && !isFolderBoundary(next);
         for (auto between = block.next(); canJoin && between.isValid() && between != next;
              between = between.next()) {
             canJoin = between.isVisible();
         }
         if (!canJoin) {
+            if (step == 0) {
+                fail();
+            }
             break;
         }
 
         const auto currentText = block.text();
         const auto nextText = next.text();
-        const int blocksCount = document->blockCount();
         const int lineEnd = Vim::lineEndPosition(block);
 
         //
-        // ... само объединение делает редактор, чтобы корректно обработать декорации
+        // ... само объединение делает редактор, чтобы корректно обработать декорации, а получилось
+        //     ли оно, определяем по тому, оказался ли текст следующей строки в том же абзаце
         //
+        QTextCursor currentEnd(document);
+        currentEnd.setPosition(lineEnd);
+        QTextCursor nextStart(document);
+        nextStart.setPosition(next.position());
+        QTextCursor nextEnd(document);
+        nextEnd.setPosition(Vim::lineEndPosition(next));
         QTextCursor cursor(document);
         cursor.setPosition(lineEnd);
         m_editor->setTextCursor(cursor);
         sendKeyPressToEditor(Qt::Key_Delete, {});
-        if (document->blockCount() >= blocksCount) {
+        if (!isSameParagraph(currentEnd.block(), nextStart.block())) {
+            if (step == 0) {
+                fail();
+            }
             break;
         }
-        block = document->findBlock(lineEnd);
-        joinPosition = lineEnd;
+        joinPosition = nextStart.position();
+        block = nextEnd.block();
 
         if (!_withSpaces) {
             continue;
@@ -2822,19 +4112,21 @@ void VimTextEditController::joinLines(int _count, bool _withSpaces)
         const int leadingWhite = leadingWhiteCount(nextText);
         if (leadingWhite > 0) {
             QTextCursor whiteCursor(document);
-            whiteCursor.setPosition(lineEnd);
-            whiteCursor.setPosition(lineEnd + leadingWhite, QTextCursor::KeepAnchor);
+            whiteCursor.setPosition(nextStart.position());
+            whiteCursor.setPosition(nextStart.position() + leadingWhite, QTextCursor::KeepAnchor);
             whiteCursor.removeSelectedText();
         }
         const auto rest = nextText.mid(leadingWhite);
         const bool insertSpace = !rest.isEmpty() && !rest.startsWith(')') && !currentText.isEmpty()
             && !currentText.endsWith(' ') && !currentText.endsWith('\t');
         if (insertSpace) {
+            joinPosition = nextStart.position();
             QTextCursor spaceCursor(document);
-            spaceCursor.setPosition(lineEnd);
+            spaceCursor.setPosition(joinPosition);
             spaceCursor.insertText(QStringLiteral(" "));
+            m_editor->markInsertedText(joinPosition, joinPosition + 1);
         }
-        block = document->findBlock(lineEnd);
+        block = nextEnd.block();
     }
 
     if (joinPosition >= 0) {
@@ -2846,36 +4138,45 @@ void VimTextEditController::joinLines(int _count, bool _withSpaces)
 
 void VimTextEditController::paste(QChar _registerName, bool _before, int _count, bool _cursorAfter)
 {
-    pasteContent(shared().registers.content(_registerName), _before, _count, _cursorAfter);
+    const auto content = registerValue(_registerName);
+    if (content.isEmpty()) {
+        fail(QStringLiteral("E353: Nothing in register %1")
+                 .arg(_registerName.isNull() ? QChar('"') : _registerName));
+        return;
+    }
+    pasteContent(content, _before, _count, _cursorAfter);
 }
 
 void VimTextEditController::pasteContent(const Vim::RegisterContent& _content, bool _before,
                                          int _count, bool _cursorAfter)
 {
-    if (!canEdit() || _content.isEmpty()) {
+    if (!canEdit()) {
+        return;
+    }
+    if (_content.isEmpty()) {
+        fail();
         return;
     }
 
     if (_content.linewise) {
-        auto text = _content.text;
-        if (text.endsWith('\n')) {
-            text.chop(1);
-        }
-        pasteLines(text, _before, _count, _cursorAfter);
+        pasteLines(_content, _before, _count, _cursorAfter);
         return;
     }
 
     const auto block = currentBlock();
     int position = currentPosition();
     if (!_before && block.length() > 1) {
-        position = qMin(position + 1, Vim::lineEndPosition(block));
+        position = Vim::nextCharacterPosition(block, position);
     }
 
-    QString text;
-    for (int index = 0; index < _count; ++index) {
-        text += _content.text;
+    if (static_cast<qint64>(_content.text.size()) * _count > kMaxPastedTextLength) {
+        fail(QStringLiteral("E1240: Resulting text too long"));
+        return;
     }
-    insertText(position, text);
+    const auto text = _content.text.repeated(_count);
+    if (!insertText(position, text)) {
+        return;
+    }
 
     //
     // ... курсор встаёт на последний вставленный символ, а при многострочной вставке - на первый
@@ -2888,26 +4189,47 @@ void VimTextEditController::pasteContent(const Vim::RegisterContent& _content, b
                                           : characterPosition(position + text.size() - 1));
 }
 
-void VimTextEditController::pasteLines(const QString& _text, bool _before, int _count,
-                                       bool _cursorAfter)
+void VimTextEditController::pasteLines(const Vim::RegisterContent& _content, bool _before,
+                                       int _count, bool _cursorAfter)
 {
+    auto text = _content.text;
+    if (text.endsWith('\n')) {
+        text.chop(1);
+    }
+    if (static_cast<qint64>(text.size() + 1) * _count > kMaxPastedTextLength) {
+        fail(QStringLiteral("E1240: Resulting text too long"));
+        return;
+    }
+
     QStringList lines;
     for (int index = 0; index < _count; ++index) {
-        lines.append(_text);
+        lines.append(text);
     }
 
     if (!openLine(!_before)) {
+        fail();
         return;
     }
 
     const int position = m_editor->textCursor().position();
-    const auto text = lines.join('\n');
-    insertText(position, text);
+    const auto linesText = lines.join('\n');
+    if (!insertText(position, linesText)) {
+        return;
+    }
+    restoreParagraphTypes(position, _content, _count);
+
     if (_cursorAfter) {
         //
         // ... курсор встаёт в начало строки, следующей за вставленными
         //
-        const auto lastBlock = document()->findBlock(position + text.size());
+        auto lastBlock = Vim::navigableBlock(document(), position);
+        for (int index = 1; index < lines.size() * (text.count('\n') + 1); ++index) {
+            const auto next = Vim::nextNavigableBlock(lastBlock);
+            if (!next.isValid()) {
+                break;
+            }
+            lastBlock = next;
+        }
         const auto next = Vim::nextNavigableBlock(lastBlock);
         setCursorPosition(next.isValid() ? next.position() : lastBlock.position());
         return;
@@ -2918,7 +4240,7 @@ void VimTextEditController::pasteLines(const QString& _text, bool _before, int _
 void VimTextEditController::replaceVisualWithRegister(QChar _registerName, bool _keepRegisters,
                                                       int _count)
 {
-    const auto content = shared().registers.content(_registerName);
+    const auto content = registerValue(_registerName);
     const auto range = visualRange();
     const bool wasLinewise = m_mode == Mode::VisualLine;
     leaveVisualMode();
@@ -2940,11 +4262,7 @@ void VimTextEditController::replaceVisualWithRegister(QChar _registerName, bool 
         //     строки были удалены в конце документа, то курсор встал выше, и вставлять нужно под
         //     ним
         //
-        auto text = content.text;
-        if (text.endsWith('\n')) {
-            text.chop(1);
-        }
-        pasteLines(text, currentBlock().position() >= range.start, _count);
+        pasteLines(content, currentBlock().position() >= range.start, _count);
         return;
     }
 
@@ -2962,7 +4280,11 @@ void VimTextEditController::replaceVisualWithRegister(QChar _registerName, bool 
             lines.append(text);
         }
         const int splitPosition = position < range.start ? range.start : position;
-        insertText(splitPosition, QStringLiteral("\n") + lines.join('\n') + QStringLiteral("\n"));
+        if (!insertText(splitPosition,
+                        QStringLiteral("\n") + lines.join('\n') + QStringLiteral("\n"))) {
+            return;
+        }
+        restoreParagraphTypes(splitPosition + 1, content, _count);
         setCursorPosition(Vim::firstNonBlankPosition(document->findBlock(splitPosition + 1)));
         return;
     }
@@ -3062,8 +4384,8 @@ void VimTextEditController::rememberJumpPosition()
     setMark('`', currentPosition());
 }
 
-int VimTextEditController::searchPosition(const QString& _pattern, int _fromPosition,
-                                          bool _forward) const
+int VimTextEditController::searchPosition(const QString& _pattern, int _fromPosition, bool _forward,
+                                          int* _matchEnd)
 {
     if (_pattern.isEmpty()) {
         return -1;
@@ -3073,21 +4395,33 @@ int VimTextEditController::searchPosition(const QString& _pattern, int _fromPosi
     auto document = this->document();
     const Vim::Cursor start(document, _fromPosition);
     const auto startBlock = start.block();
+    QElapsedTimer timer;
+    timer.start();
+    bool interrupted = false;
 
     //
     // Ищем в строках, по которым может перемещаться курсор, продолжая с другого конца документа
     //
+    int foundEnd = -1;
     auto findInBlock
-        = [&expression](const QTextBlock& _block, int _fromColumn, int _toColumn, bool _forward) {
+        = [&expression, &timer, &interrupted, &foundEnd](const QTextBlock& _block, int _fromColumn,
+                                                         int _toColumn, bool _forward) {
+              if (interrupted || timer.elapsed() > kSearchTimeoutMs) {
+                  interrupted = true;
+                  return -1;
+              }
+
               //
               // ... совпадения ищем с начала строки, т.к. с \zs начало совпадения может оказаться
               //     дальше того места, откуда шаблон начинает сопоставляться
               //
-              const auto text = _block.text();
+              const auto text = Vim::displayedText(_block);
+              const auto options = matchOptions(text);
               int found = -1;
               int column = 0;
               while (column <= text.size()) {
-                  const auto match = expression.match(text, column);
+                  const auto match
+                      = expression.match(text, column, QRegularExpression::NormalMatch, options);
                   if (!match.hasMatch()) {
                       break;
                   }
@@ -3097,59 +4431,122 @@ int VimTextEditController::searchPosition(const QString& _pattern, int _fromPosi
                   }
                   if (matchStart >= _fromColumn) {
                       found = matchStart;
+                      foundEnd = _block.position() + static_cast<int>(match.capturedEnd());
                       if (_forward) {
                           break;
                       }
                   }
+                  //
+                  // ... следующую попытку начинаем со следующего символа, не разрывая суррогатную
+                  // пару
+                  //
                   column = qMax(column + 1, matchStart + 1);
+                  if (column < text.size() && text.at(column).isLowSurrogate()
+                      && text.at(column - 1).isHighSurrogate()) {
+                      ++column;
+                  }
               }
               return found >= 0 ? _block.position() + found : -1;
           };
+    auto result = [&interrupted, &foundEnd, _matchEnd, this](int _found) {
+        if (interrupted) {
+            fail(QStringLiteral("Interrupted"));
+            return -1;
+        }
+        if (_matchEnd != nullptr) {
+            *_matchEnd = foundEnd;
+        }
+        return _found;
+    };
 
     if (_forward) {
         int found = findInBlock(startBlock, start.column() + 1, startBlock.length(), true);
         if (found >= 0) {
-            return found;
+            return result(found);
         }
-        for (auto block = Vim::nextNavigableBlock(startBlock); block.isValid();
+        for (auto block = Vim::nextNavigableBlock(startBlock); block.isValid() && !interrupted;
              block = Vim::nextNavigableBlock(block)) {
             found = findInBlock(block, 0, block.length(), true);
             if (found >= 0) {
-                return found;
+                return result(found);
             }
         }
         for (auto block = Vim::firstNavigableBlock(document);
-             block.isValid() && block.blockNumber() <= startBlock.blockNumber();
+             block.isValid() && !interrupted && block.blockNumber() <= startBlock.blockNumber();
              block = Vim::nextNavigableBlock(block)) {
             found = findInBlock(block, 0, block == startBlock ? start.column() : block.length(),
                                 true);
             if (found >= 0) {
-                return found;
+                return result(found);
             }
         }
-        return -1;
+        return result(-1);
     }
 
     int found = findInBlock(startBlock, 0, start.column() - 1, false);
     if (found >= 0) {
-        return found;
+        return result(found);
     }
-    for (auto block = Vim::previousNavigableBlock(startBlock); block.isValid();
+    for (auto block = Vim::previousNavigableBlock(startBlock); block.isValid() && !interrupted;
          block = Vim::previousNavigableBlock(block)) {
         found = findInBlock(block, 0, block.length(), false);
         if (found >= 0) {
-            return found;
+            return result(found);
         }
     }
     for (auto block = Vim::lastNavigableBlock(document);
-         block.isValid() && block.blockNumber() >= startBlock.blockNumber();
+         block.isValid() && !interrupted && block.blockNumber() >= startBlock.blockNumber();
          block = Vim::previousNavigableBlock(block)) {
         found = findInBlock(block, block == startBlock ? start.column() : 0, block.length(), false);
         if (found >= 0) {
-            return found;
+            return result(found);
         }
     }
-    return -1;
+    return result(-1);
+}
+
+Vim::TextRange VimTextEditController::searchMatchRange(bool _forward)
+{
+    const auto pattern = shared().searchPattern;
+    if (pattern.isEmpty()) {
+        fail(QStringLiteral("E35: No previous regular expression"));
+        return {};
+    }
+
+    //
+    // Сперва проверяем, не стоит ли курсор на совпадении, а затем ищем ближайшее
+    //
+    const int position = currentPosition();
+    const auto block = currentBlock();
+    const auto text = Vim::displayedText(block);
+    const auto expression = Vim::regularExpression(pattern);
+    const auto options = matchOptions(text);
+    int column = 0;
+    while (column <= text.size()) {
+        const auto match = expression.match(text, column, QRegularExpression::NormalMatch, options);
+        if (!match.hasMatch()) {
+            break;
+        }
+        const int start = block.position() + static_cast<int>(match.capturedStart());
+        const int end = block.position() + static_cast<int>(match.capturedEnd());
+        if (start > position) {
+            break;
+        }
+        if (position < qMax(end, start + 1)) {
+            return { start, end, false };
+        }
+        column = qMax(column + 1, static_cast<int>(match.capturedEnd()));
+    }
+
+    int end = -1;
+    const int start = searchPosition(pattern, position, _forward, &end);
+    if (start < 0) {
+        if (m_message.isEmpty()) {
+            fail(QStringLiteral("E486: Pattern not found: %1").arg(pattern));
+        }
+        return {};
+    }
+    return { start, qMax(start, end), false };
 }
 
 void VimTextEditController::searchWordUnderCursor(bool _forward, bool _wholeWord, int _count)
@@ -3167,6 +4564,7 @@ void VimTextEditController::searchWordUnderCursor(bool _forward, bool _wholeWord
         pattern = QStringLiteral("\\<%1\\>").arg(pattern);
     }
     shared().searchPattern = pattern;
+    shared().searchOffset.clear();
     shared().searchForward = _forward;
 
     const auto motion = searchMotion(pattern, _forward, _count, wordStart);
@@ -3252,6 +4650,7 @@ void VimTextEditController::openCommandLine(const QString& _prefix)
 void VimTextEditController::closeCommandLine()
 {
     m_commandLineActive = false;
+    m_commandLineAwaitingRegister = false;
     m_commandLine.clear();
     m_commandLineOperator = Operator::None;
     m_commandLineOperatorCount = 0;
@@ -3273,8 +4672,33 @@ void VimTextEditController::handleCommandLine(QKeyEvent* _event)
         return;
     }
 
+    //
+    // ... Ctrl-R вставляет содержимое регистра, а Ctrl-R Ctrl-W - слово под курсором
+    //
+    if (m_commandLineAwaitingRegister) {
+        m_commandLineAwaitingRegister = false;
+        QString text;
+        if (hasVimControl(_event) && _event->key() == Qt::Key_W) {
+            text = Vim::wordUnderCursor(document(), currentPosition(), nullptr, nullptr);
+        } else if (Vim::Registers::isValidName(commandCharacter(_event))) {
+            text = registerValue(commandCharacter(_event)).text;
+            while (text.endsWith('\n')) {
+                text.chop(1);
+            }
+        }
+        m_commandLine.append(text);
+        return;
+    }
+    if (hasVimControl(_event) && _event->key() == Qt::Key_R) {
+        m_commandLineAwaitingRegister = true;
+        return;
+    }
+
     if (_event->key() == Qt::Key_Backspace) {
-        m_commandLine.chop(1);
+        const int size = m_commandLine.size();
+        const bool isSurrogatePair = size > 2 && m_commandLine.at(size - 1).isLowSurrogate()
+            && m_commandLine.at(size - 2).isHighSurrogate();
+        m_commandLine.chop(isSurrogatePair ? 2 : 1);
         if (m_commandLine.isEmpty()) {
             closeCommandLine();
         }
@@ -3286,8 +4710,29 @@ void VimTextEditController::handleCommandLine(QKeyEvent* _event)
         return;
     }
 
+    //
+    // ... Ctrl-W удаляет слово, или знаки препинания перед курсором вместе с пробелами за ними
+    //
+    if (hasVimControl(_event) && _event->key() == Qt::Key_W) {
+        auto isWordCharacter
+            = [](QChar _character) { return _character.isLetterOrNumber() || _character == '_'; };
+        int end = m_commandLine.size();
+        while (end > 1 && m_commandLine.at(end - 1).isSpace()) {
+            --end;
+        }
+        if (end > 1) {
+            const bool isWord = isWordCharacter(m_commandLine.at(end - 1));
+            while (end > 1 && !m_commandLine.at(end - 1).isSpace()
+                   && isWordCharacter(m_commandLine.at(end - 1)) == isWord) {
+                --end;
+            }
+        }
+        m_commandLine.truncate(end);
+        return;
+    }
+
     const auto text = _event->text();
-    if (!text.isEmpty() && text.at(0).isPrint()) {
+    if (!text.isEmpty() && QChar::isPrint(firstCodePoint(text))) {
         m_commandLine.append(text);
     }
 }
@@ -3300,25 +4745,86 @@ void VimTextEditController::executeCommandLine(const QString& _command)
     }
 
     const auto prefix = _command.at(0);
-    auto body = _command.mid(1);
+    const auto body = _command.mid(1);
     if (prefix == '/' || prefix == '?') {
         //
-        // ... пустой шаблон означает повтор последнего поиска
+        // ... после шаблона через разделитель может идти смещение: /шаблон/e+1
         //
-        if (body.isEmpty()) {
-            body = shared().searchPattern;
+        QString pattern;
+        QString offset;
+        bool hasOffset = false;
+        for (int index = 0; index < body.size(); ++index) {
+            const auto character = body.at(index);
+            if (character == '\\' && index + 1 < body.size()) {
+                pattern += character;
+                pattern += body.at(++index);
+                continue;
+            }
+            if (character == prefix) {
+                offset = body.mid(index + 1);
+                hasOffset = true;
+                break;
+            }
+            pattern += character;
         }
-        shared().searchPattern = body;
+
+        //
+        // ... пустой шаблон означает повтор последнего поиска, а если не задано и смещение,
+        //     то и с последним смещением
+        //
+        if (pattern.isEmpty()) {
+            pattern = shared().searchPattern;
+            if (!hasOffset) {
+                offset = shared().searchOffset;
+            }
+        }
+        shared().searchPattern = pattern;
+        shared().searchOffset = offset;
         shared().searchForward = prefix == '/';
         const int count = takeCount();
-        auto motion = searchMotion(body, prefix == '/', count, currentPosition());
+        auto motion = searchMotion(pattern, prefix == '/', count, currentPosition(), offset);
         applyMotion(motion);
         return;
     }
 
     resetPendingCommand();
     if (prefix == ':') {
-        executeExCommand(body);
+        shared().lastExCommand = body;
+        executeExCommands(body);
+    }
+}
+
+void VimTextEditController::executeExCommands(const QString& _commands)
+{
+    //
+    // Команды разделяются чертой, если она не экранирована, но у :normal черта - часть аргумента,
+    // а у замены она может быть в шаблоне, поэтому замена отделяет следующую команду сама
+    //
+    static const QRegularExpression wholeArgumentCommand(
+        QStringLiteral("^[^A-Za-z&]*(norm|&|s(u(b(s(t(i(t(u(te?)?)?)?)?)?)?)?)?(?![A-Za-z]))"));
+    QStringList commands;
+    QString command;
+    for (int index = 0; index < _commands.size(); ++index) {
+        const auto character = _commands.at(index);
+        if (character == '\\' && index + 1 < _commands.size()) {
+            command += character;
+            command += _commands.at(++index);
+            continue;
+        }
+        if (character == '|' && !wholeArgumentCommand.match(command).hasMatch()) {
+            commands.append(command);
+            command.clear();
+            continue;
+        }
+        command += character;
+    }
+    commands.append(command);
+
+    for (const auto& item : commands) {
+        executeExCommand(item);
+        if (m_commandFailed) {
+            break;
+        }
     }
 }
 
@@ -3329,10 +4835,11 @@ void VimTextEditController::executeExCommand(const QString& _command)
     int index = 0;
 
     //
-    // Разбираем диапазон строк: %, номера, ., $, метки и смещения
+    // Разбираем диапазон строк: %, номера, ., $, метки, шаблоны и смещения
     //
     auto currentLine = Vim::navigableBlockNumber(currentBlock());
     const int lineCount = Vim::navigableBlocksCount(document);
+    bool addressFailed = false;
     auto parseAddress = [&](int* _line) {
         bool found = false;
         int line = currentLine;
@@ -3356,12 +4863,47 @@ void VimTextEditController::executeExCommand(const QString& _command)
             } else if (character == '\'' && index + 1 < command.size()) {
                 const auto mark = command.at(index + 1);
                 const auto name = mark == '\'' ? QChar('`') : mark;
-                if (!m_marks.contains(name)) {
+                index += 2;
+                if (!m_marks.contains(name) || m_marks.value(name).document() != document) {
+                    fail(QStringLiteral("E20: Mark not set"));
+                    addressFailed = true;
                     return false;
                 }
                 line = Vim::navigableBlockNumber(
                     Vim::navigableBlock(document, m_marks.value(name).position()));
-                index += 2;
+                found = true;
+            } else if (character == '/' || character == '?') {
+                //
+                // ... строка, в которой найден шаблон, ищем со следующей строки, или с предыдущей
+                //
+                QString pattern;
+                int end = index + 1;
+                while (end < command.size() && command.at(end) != character) {
+                    if (command.at(end) == '\\' && end + 1 < command.size()) {
+                        pattern += command.at(end);
+                        ++end;
+                    }
+                    pattern += command.at(end);
+                    ++end;
+                }
+                index = end < command.size() ? end + 1 : end;
+                if (pattern.isEmpty()) {
+                    pattern = shared().searchPattern;
+                } else {
+                    shared().searchPattern = pattern;
+                }
+                const bool forward = character == '/';
+                const auto block = Vim::navigableBlockByNumber(document, line);
+                const int position = searchPosition(
+                    pattern, forward ? Vim::lineEndPosition(block) : block.position(), forward);
+                if (position < 0) {
+                    if (m_message.isEmpty()) {
+                        fail(QStringLiteral("E486: Pattern not found: %1").arg(pattern));
+                    }
+                    addressFailed = true;
+                    return false;
+                }
+                line = Vim::navigableBlockNumber(Vim::navigableBlock(document, position));
                 found = true;
             }
         }
@@ -3384,19 +4926,20 @@ void VimTextEditController::executeExCommand(const QString& _command)
 
     int firstLine = currentLine;
     int lastLine = currentLine;
-    bool hasRange = false;
+    int addressCount = 0;
     if (command.startsWith('%')) {
         firstLine = 1;
         lastLine = lineCount;
         index = 1;
-        hasRange = true;
+        addressCount = 2;
     } else {
         int line = currentLine;
         if (parseAddress(&line)) {
             firstLine = lastLine = line;
-            hasRange = true;
+            addressCount = 1;
         }
-        if (index < command.size() && (command.at(index) == ',' || command.at(index) == ';')) {
+        if (!addressFailed && index < command.size()
+            && (command.at(index) == ',' || command.at(index) == ';')) {
             if (command.at(index) == ';') {
                 currentLine = firstLine;
             }
@@ -3404,70 +4947,198 @@ void VimTextEditController::executeExCommand(const QString& _command)
             if (parseAddress(&line)) {
                 lastLine = line;
             }
-            hasRange = true;
+            addressCount = 2;
         }
     }
-    firstLine = qBound(1, firstLine, lineCount);
-    lastLine = qBound(1, lastLine, lineCount);
+    const bool hasRange = addressCount > 0;
+    if (addressFailed) {
+        return;
+    }
     if (firstLine > lastLine) {
         std::swap(firstLine, lastLine);
     }
 
-    const auto name = command.mid(index).trimmed();
-    const auto firstBlock = Vim::navigableBlockByNumber(document, firstLine);
-    const auto lastBlock = Vim::navigableBlockByNumber(document, lastLine);
+    const auto rest = command.mid(index).trimmed();
 
     //
-    // ... переход к строке по её номеру
+    // ... переход к строке по её номеру, номера за пределами документа ограничиваются им
     //
-    if (name.isEmpty()) {
+    if (rest.isEmpty()) {
         if (hasRange) {
             rememberJumpPosition();
-            setCursorPosition(Vim::firstNonBlankPosition(lastBlock));
+            setCursorPosition(Vim::firstNonBlankPosition(
+                Vim::navigableBlockByNumber(document, qBound(1, lastLine, lineCount))));
         }
         return;
     }
 
     //
-    // ... замена текста
+    // ... а для команд диапазон должен быть внутри документа, нулевая строка означает первую
     //
-    if (name.startsWith('&')) {
-        substitute(firstBlock, lastBlock, name);
+    if (firstLine < 0 || lastLine > lineCount) {
+        fail(QStringLiteral("E16: Invalid range"));
         return;
     }
-    if (name.startsWith('s')) {
+    firstLine = qMax(1, firstLine);
+    lastLine = qMax(1, lastLine);
+    auto firstBlock = Vim::navigableBlockByNumber(document, firstLine);
+    auto lastBlock = Vim::navigableBlockByNumber(document, lastLine);
+
+    //
+    // ... замена текста
+    //
+    if (rest.startsWith('&')) {
+        substitute(firstBlock, lastBlock, rest);
+        return;
+    }
+    if (rest.startsWith('s')) {
         //
         // ... команда может быть сокращена до любого начала слова substitute
         //
         const QString substituteCommand = QStringLiteral("substitute");
         int length = 1;
-        while (length < name.size() && length < substituteCommand.size()
-               && name.at(length) == substituteCommand.at(length)) {
+        while (length < rest.size() && length < substituteCommand.size()
+               && rest.at(length) == substituteCommand.at(length)) {
             ++length;
         }
-        const auto arguments = name.mid(length);
-        if (!arguments.isEmpty() && arguments.at(0).isLetterOrNumber()) {
+        const auto arguments = rest.mid(length);
+        if (arguments.isEmpty() || !arguments.at(0).isLetter()) {
+            substitute(firstBlock, lastBlock, arguments);
             return;
         }
-        substitute(firstBlock, lastBlock, arguments);
+    }
+
+    //
+    // ... остальные команды: имя, восклицательный знак и аргументы
+    //
+    int nameEnd = 0;
+    while (nameEnd < rest.size() && rest.at(nameEnd).isLetter()) {
+        ++nameEnd;
+    }
+    const auto name = rest.left(nameEnd);
+    const bool bang = nameEnd < rest.size() && rest.at(nameEnd) == '!';
+    auto arguments = rest.mid(nameEnd + (bang ? 1 : 0)).trimmed();
+    auto isCommand = [&name](const QString& _fullName, int _minLength) {
+        return name.size() >= _minLength && _fullName.startsWith(name);
+    };
+
+    //
+    // ... регистр и количество строк, которое отсчитывается от конца диапазона
+    //
+    auto takeRegisterAndCount = [&](bool _withRegister, QChar* _register) {
+        if (_withRegister && !arguments.isEmpty() && !arguments.at(0).isDigit()) {
+            *_register = arguments.at(0);
+            arguments = arguments.mid(1).trimmed();
+        }
+        if (!arguments.isEmpty() && arguments.at(0).isDigit()) {
+            int end = 0;
+            while (end < arguments.size() && arguments.at(end).isDigit()) {
+                ++end;
+            }
+            const int count = arguments.left(end).toInt();
+            arguments = arguments.mid(end).trimmed();
+            if (count <= 0) {
+                fail(QStringLiteral("E939: Positive count required"));
+                return false;
+            }
+            firstLine = lastLine;
+            lastLine = qMin(lineCount, lastLine + count - 1);
+            firstBlock = Vim::navigableBlockByNumber(document, firstLine);
+            lastBlock = Vim::navigableBlockByNumber(document, lastLine);
+        }
+        if (!arguments.isEmpty()) {
+            fail(QStringLiteral("E488: Trailing characters: %1").arg(arguments));
+            return false;
+        }
+        return true;
+    };
+
+    if (isCommand(QStringLiteral("delete"), 1)) {
+        QChar registerName;
+        if (takeRegisterAndCount(true, &registerName)) {
+            deleteRange(linesRange(firstBlock.position(), lastBlock.position()), registerName,
+                        true);
+        }
+    } else if (isCommand(QStringLiteral("yank"), 1)) {
+        QChar registerName;
+        if (takeRegisterAndCount(true, &registerName)) {
+            yankRange(linesRange(firstBlock.position(), lastBlock.position()), registerName,
+                      currentPosition());
+        }
+    } else if (isCommand(QStringLiteral("join"), 1)) {
+        QChar registerName;
+        if (!arguments.isEmpty() && arguments.at(0).isDigit()) {
+            ++addressCount;
+        }
+        if (!takeRegisterAndCount(false, &registerName)) {
+            return;
+        }
+        //
+        // ... как и в vim, без диапазона объединяются текущая и следующая строки, а диапазон
+        //     из одной строки ничего не объединяет
+        //
+        if (firstLine == lastLine) {
+            if (addressCount >= 2) {
+                return;
+            }
+            if (lastLine == lineCount) {
+                fail();
+                return;
+            }
+            ++lastLine;
+        }
+        setCursorPosition(firstBlock.position());
+        joinLines(lastLine - firstLine + 1, !bang);
+        setCursorPosition(Vim::firstNonBlankPosition(currentBlock()));
+    } else if (isCommand(QStringLiteral("normal"), 4)) {
+        executeNormalCommand(firstLine, hasRange ? lastLine : firstLine, arguments);
+    } else if (isCommand(QStringLiteral("nohlsearch"), 3)) {
+        //
+        // ... найденный текст не подсвечивается, так что и убирать нечего
+        //
+    } else {
+        fail(QStringLiteral("E492: Not an editor command: %1").arg(_command.trimmed()));
+    }
+}
+
+void VimTextEditController::executeNormalCommand(int _firstLine, int _lastLine,
+                                                 const QString& _keys)
+{
+    if (_keys.isEmpty() || m_replayDepth >= kMaxReplayDepth) {
         return;
     }
 
     //
-    // ... удаление, копирование и объединение строк
+    // Набираем команду, как будто её ввели с клавиатуры, отдельно для каждой строки диапазона
     //
-    const auto words = name.split(' ', Qt::SkipEmptyParts);
-    const auto commandName = words.value(0);
-    const auto registerName = words.value(1).isEmpty() ? QChar() : words.value(1).at(0);
-    if (QStringLiteral("delete").startsWith(commandName)) {
-        deleteRange(linesRange(firstBlock.position(), lastBlock.position()), registerName, true);
-    } else if (QStringLiteral("yank").startsWith(commandName)) {
-        yankRange(linesRange(firstBlock.position(), lastBlock.position()), registerName,
-                  currentPosition());
-    } else if (QStringLiteral("join").startsWith(commandName)) {
-        setCursorPosition(firstBlock.position());
-        joinLines(qMax(2, lastLine - firstLine + 1), true);
-        setCursorPosition(Vim::firstNonBlankPosition(currentBlock()));
+    QVector<RecordedKey> keys;
+    for (int index = 0; index < _keys.size(); ++index) {
+        auto text = QString(_keys.at(index));
+        if (_keys.at(index).isHighSurrogate() && index + 1 < _keys.size()) {
+            text += _keys.at(++index);
+        }
+        const auto modifiers = text.at(0).isUpper() ? Qt::ShiftModifier : Qt::NoModifier;
+        keys.append({ keyForCharacter(text.at(0)), modifiers, text });
+    }
+
+    for (int line = _firstLine; line <= _lastLine; ++line) {
+        if (line > Vim::navigableBlocksCount(document())) {
+            break;
+        }
+        m_commandFailed = false;
+        setCursorPosition(Vim::navigableBlockByNumber(document(), line).position());
+        replayKeys(keys);
+
+        //
+        // ... незавершённая команда отменяется, как будто нажали Esc
+        //
+        if (m_mode == Mode::Insert) {
+            leaveInsertMode();
+        } else if (isVisualMode()) {
+            enterNormalMode();
+        }
+        closeCommandLine();
+        resetPendingCommand();
     }
 }
 
@@ -3482,6 +5153,7 @@ void VimTextEditController::substitute(QTextBlock _firstLine, QTextBlock _lastLi
     QString pattern;
     QString replacement;
     QString flags;
+    QString nextCommand;
 
     //
     // Без аргументов повторяем последнюю замену, а с & - ещё и с прежними флагами
@@ -3530,8 +5202,58 @@ void VimTextEditController::substitute(QTextBlock _firstLine, QTextBlock _lastLi
         pattern = parts.value(0);
         replacement = parts.value(1);
         flags = parts.value(2).trimmed();
+
+        //
+        // ... ~ в замене означает предыдущую замену
+        //
+        QString expandedReplacement;
+        for (int index = 0; index < replacement.size(); ++index) {
+            const auto character = replacement.at(index);
+            if (character == '\\' && index + 1 < replacement.size()) {
+                expandedReplacement += character;
+                expandedReplacement += replacement.at(++index);
+            } else if (character == '~') {
+                expandedReplacement += state.substituteReplacement;
+            } else {
+                expandedReplacement += character;
+            }
+        }
+        replacement = expandedReplacement;
+
+        //
+        // ... за флагами через черту может идти следующая команда
+        //
+        const int nextCommandStart = flags.indexOf('|');
+        if (nextCommandStart >= 0) {
+            nextCommand = flags.mid(nextCommandStart + 1);
+            flags = flags.left(nextCommandStart).trimmed();
+        }
         if (flags.startsWith('&')) {
             flags = state.substituteFlags + flags.mid(1);
+        }
+
+        //
+        // ... за флагами может идти количество строк, отсчитываемое от конца диапазона
+        //
+        int flagsEnd = 0;
+        while (flagsEnd < flags.size() && !flags.at(flagsEnd).isDigit()) {
+            ++flagsEnd;
+        }
+        if (flagsEnd < flags.size()) {
+            const int count = flags.mid(flagsEnd).trimmed().toInt();
+            flags = flags.left(flagsEnd).trimmed();
+            if (count <= 0) {
+                fail(QStringLiteral("E939: Positive count required"));
+                return;
+            }
+            _firstLine = _lastLine;
+            for (int line = 1; line < count; ++line) {
+                const auto next = Vim::nextNavigableBlock(_lastLine);
+                if (!next.isValid()) {
+                    break;
+                }
+                _lastLine = next;
+            }
         }
 
         //
@@ -3560,37 +5282,37 @@ void VimTextEditController::substitute(QTextBlock _firstLine, QTextBlock _lastLi
     const bool replaceAll = flags.contains('g');
 
     //
-    // ... с флагом n совпадения только подсчитываются, поэтому текст не трогаем
+    // Сперва находим все совпадения, а затем заменяем их с конца. Обычно все замены делаются
+    // одним изменением документа, во время которого он не перестраивается, и позиции ещё не
+    // заменённых совпадений не сдвигаются, но в режиме отслеживания изменений удалением
+    // занимается сам редактор, который может перестроить разрывы страниц, поэтому тогда
+    // отслеживаем позиции курсорами
+    // @note Курсоры используем только тогда, т.к. каждый из них обновляется при любой правке
+    //       документа, а совпадений могут быть тысячи
     //
-    if (flags.contains('n')) {
-        return;
-    }
-
-    //
-    // Идём по строкам снизу вверх, чтобы замены с переводами строк не сбивали позиции
-    //
-    QVector<int> lines;
+    const bool isTrackChanges = m_editor->isTrackChangesEnabled();
+    struct Replacement {
+        int from = 0;
+        int to = 0;
+        QTextCursor range;
+        QString text;
+    };
+    QVector<Replacement> replacements;
+    int changedLines = 0;
+    QElapsedTimer timer;
+    timer.start();
     for (auto block = _firstLine; block.isValid(); block = Vim::nextNavigableBlock(block)) {
-        lines.append(block.position());
-        if (block == _lastLine) {
-            break;
+        if (timer.elapsed() > kSearchTimeoutMs) {
+            fail(QStringLiteral("Interrupted"));
+            return;
         }
-    }
 
-    QTextCursor lastChangedLine;
-    for (int lineIndex = lines.size() - 1; lineIndex >= 0; --lineIndex) {
-        const auto block = document()->findBlock(lines.at(lineIndex));
-        const int blockPosition = block.position();
-        const auto text = block.text();
-
-        struct Replacement {
-            int from = 0;
-            int to = 0;
-            QString text;
-        };
-        QVector<Replacement> replacements;
+        const auto text = Vim::displayedText(block);
+        const auto options = matchOptions(text);
         int column = 0;
+        int previousMatchEnd = -1;
         bool isFirst = true;
+        bool isChanged = false;
         forever
         {
             //
@@ -3599,44 +5321,120 @@ void VimTextEditController::substitute(QTextBlock _firstLine, QTextBlock _lastLi
             if (!isFirst && column >= text.size()) {
                 break;
             }
-            const auto match = expression.match(text, column);
+            const auto match
+                = expression.match(text, column, QRegularExpression::NormalMatch, options);
             if (!match.hasMatch()) {
                 break;
             }
-            replacements.append({ static_cast<int>(match.capturedStart()),
-                                  static_cast<int>(match.capturedEnd()),
-                                  Vim::substitution(match, replacement) });
+            const int matchStart = static_cast<int>(match.capturedStart());
+            const int matchEnd = static_cast<int>(match.capturedEnd());
+
+            //
+            // ... пустое совпадение сразу за предыдущим не считается
+            //
+            if (matchStart == matchEnd && matchStart == previousMatchEnd) {
+                if (matchStart >= text.size()) {
+                    break;
+                }
+                column = Vim::nextCharacterPosition(block, block.position() + matchStart)
+                    - block.position();
+                continue;
+            }
+
+            Replacement item;
+            item.from = block.position() + matchStart;
+            item.to = block.position() + matchEnd;
+            item.text = Vim::substitution(match, replacement);
+            if (isTrackChanges) {
+                //
+                // ... конец совпадения не должен сдвигаться заменой следующего совпадения,
+                //     которая начинается сразу за ним
+                //
+                item.range = QTextCursor(document());
+                item.range.setPosition(item.from);
+                item.range.setPosition(item.to, QTextCursor::KeepAnchor);
+                item.range.setKeepPositionOnInsert(true);
+            }
+            replacements.append(item);
+            isChanged = true;
             isFirst = false;
+            previousMatchEnd = matchEnd;
             if (!replaceAll) {
                 break;
             }
-            column = match.capturedLength() == 0 ? match.capturedEnd() + 1 : match.capturedEnd();
+            column = matchStart == matchEnd
+                ? Vim::nextCharacterPosition(block, block.position() + matchEnd) - block.position()
+                : matchEnd;
+        }
+        if (isChanged) {
+            ++changedLines;
         }
 
-        if (replacements.isEmpty()) {
-            continue;
+        if (block == _lastLine) {
+            break;
         }
+    }
 
-        for (int index = replacements.size() - 1; index >= 0; --index) {
-            const auto& item = replacements.at(index);
-            replaceText(blockPosition + item.from, blockPosition + item.to, item.text);
+    if (replacements.isEmpty()) {
+        fail(QStringLiteral("E486: Pattern not found: %1").arg(pattern));
+        return;
+    }
 
-            //
-            // ... запоминаем конец последней замены, ведь замена с переводами строк делит строку
-            //
-            if (lastChangedLine.isNull()) {
-                lastChangedLine = QTextCursor(document());
-                lastChangedLine.setPosition(blockPosition + item.from + item.text.size());
-            }
+    //
+    // ... с флагом n совпадения только подсчитываются, поэтому текст не трогаем
+    //
+    if (flags.contains('n')) {
+        m_message = QStringLiteral("%1 match%2 on %3 line%4")
+                        .arg(replacements.size())
+                        .arg(replacements.size() == 1 ? QString() : QStringLiteral("es"))
+                        .arg(changedLines)
+                        .arg(changedLines == 1 ? QString() : QStringLiteral("s"));
+        if (!nextCommand.isEmpty()) {
+            executeExCommands(nextCommand);
         }
+        return;
+    }
+
+    //
+    // ... все замены делаем одним изменением документа, чтобы модель обновилась один раз
+    //
+    QTextCursor editCursor(document());
+    if (!isTrackChanges) {
+        editCursor.beginEditBlock();
+    }
+    QTextCursor lastChangedLine;
+    for (int index = replacements.size() - 1; index >= 0; --index) {
+        const auto& item = replacements.at(index);
+        const int from = isTrackChanges ? item.range.selectionStart() : item.from;
+        const int to = isTrackChanges ? item.range.selectionEnd() : item.to;
+        replaceText(from, to, item.text);
+
+        //
+        // ... запоминаем конец последней замены, ведь замена с переводами строк делит строку
+        //
+        if (lastChangedLine.isNull()) {
+            lastChangedLine = QTextCursor(document());
+            lastChangedLine.setPosition(
+                qMin(from + static_cast<int>(item.text.size()), document()->characterCount() - 1));
+        }
+    }
+    if (!isTrackChanges) {
+        editCursor.endEditBlock();
     }
 
     //
     // ... курсор встаёт в начало последней изменённой строки
     //
-    if (!lastChangedLine.isNull()) {
-        setCursorPosition(Vim::firstNonBlankPosition(
-            Vim::navigableBlock(document(), lastChangedLine.position())));
+    setCursorPosition(
+        Vim::firstNonBlankPosition(Vim::navigableBlock(document(), lastChangedLine.position())));
+    if (changedLines > 2) {
+        m_message = QStringLiteral("%1 substitution%2 on %3 lines")
+                        .arg(replacements.size())
+                        .arg(replacements.size() == 1 ? QString() : QStringLiteral("s"))
+                        .arg(changedLines);
+    }
+    if (!nextCommand.isEmpty() && !m_commandFailed) {
+        executeExCommands(nextCommand);
     }
 }
 
@@ -3658,9 +5456,23 @@ void VimTextEditController::trackKeyPress(const RecordedKey& _key)
     }
 
     //
-    // ... и собираем команду, которую можно будет повторить
+    // ... и собираем команду, которую можно будет повторить, причём текст, вставленный из
+    //     регистра по Ctrl-R, запоминается как набранный
     //
-    if (m_commandKeys.size() < kMaxRecordedKeys) {
+    if (!m_insertedRegisterText.isEmpty()) {
+        if (!m_commandKeys.isEmpty()) {
+            m_commandKeys.removeLast();
+        }
+        if (!m_insertKeys.isEmpty()) {
+            m_insertKeys.removeLast();
+            if (!m_insertKeys.isEmpty()) {
+                m_insertKeys.removeLast();
+            }
+            m_insertKeys += keysFromText(m_insertedRegisterText);
+        }
+        m_commandKeys += keysFromText(m_insertedRegisterText);
+        m_insertedRegisterText.clear();
+    } else if (m_commandKeys.size() < kMaxRecordedKeys) {
         m_commandKeys.append(_key);
     }
 
@@ -3673,6 +5485,14 @@ void VimTextEditController::trackKeyPress(const RecordedKey& _key)
     if (isChanged) {
         if (m_commandIsChange) {
             m_lastChangeKeys = m_commandKeys;
+
+            //
+            // ... вставка, прерванная по Ctrl-O, повторяется так, будто её завершили по Esc
+            //
+            if (m_insertOneCommand && !m_lastChangeKeys.isEmpty()) {
+                m_lastChangeKeys.last()
+                    = { Qt::Key_Escape, Qt::NoModifier, QStringLiteral("\x1b") };
+            }
         }
         setMark('.', currentPosition());
         commitUndoStep();
@@ -3687,7 +5507,9 @@ void VimTextEditController::toggleMacroRecording(QChar _name)
     m_commandIsChange = false;
 
     if (!m_recordingRegister.isNull()) {
-        shared().macros[m_recordingRegister.toLower()] = m_recordedKeys;
+        const auto name = m_recordingRegister.toLower();
+        shared().macros[name] = m_recordedKeys;
+        shared().registers.setRecordedContent(name, keysText(m_recordedKeys));
         m_recordedKeys.clear();
         m_recordingRegister = QChar();
         return;
@@ -3697,21 +5519,153 @@ void VimTextEditController::toggleMacroRecording(QChar _name)
     // ... заглавная буква дописывает нажатия к уже записанному макросу
     //
     m_recordingRegister = _name;
-    m_recordedKeys
-        = _name.isUpper() ? shared().macros.value(_name.toLower()) : QVector<RecordedKey>();
+    m_recordedKeys = _name.isUpper() ? macroKeys(_name.toLower()) : QVector<RecordedKey>();
     m_skipMacroRecordKey = true;
+}
+
+QString VimTextEditController::keysText(const QVector<RecordedKey>& _keys)
+{
+    QString text;
+    for (const auto& key : _keys) {
+        if (!key.text.isEmpty()) {
+            text += key.text;
+            continue;
+        }
+
+        //
+        // ... клавиши, которые не вводят текст, записываем символами из области для личного
+        //     использования, как это делает macOS
+        //
+        switch (key.key) {
+        case Qt::Key_Up: {
+            text += QChar(0xF700);
+            break;
+        }
+        case Qt::Key_Down: {
+            text += QChar(0xF701);
+            break;
+        }
+        case Qt::Key_Left: {
+            text += QChar(0xF702);
+            break;
+        }
+        case Qt::Key_Right: {
+            text += QChar(0xF703);
+            break;
+        }
+        case Qt::Key_Home: {
+            text += QChar(0xF729);
+            break;
+        }
+        case Qt::Key_End: {
+            text += QChar(0xF72B);
+            break;
+        }
+        case Qt::Key_PageUp: {
+            text += QChar(0xF72C);
+            break;
+        }
+        case Qt::Key_PageDown: {
+            text += QChar(0xF72D);
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+    }
+    return text;
+}
+
+QVector<VimTextEditController::RecordedKey> VimTextEditController::keysFromText(
+    const QString& _text)
+{
+    QVector<RecordedKey> keys;
+    for (int index = 0; index < _text.size(); ++index) {
+        const auto character = _text.at(index);
+        const auto code = character.unicode();
+        switch (code) {
+        case 0x1b: {
+            keys.append({ Qt::Key_Escape, Qt::NoModifier, QString(character) });
+            break;
+        }
+        case '\r':
+        case '\n': {
+            keys.append({ Qt::Key_Return, Qt::NoModifier, QStringLiteral("\r") });
+            break;
+        }
+        case '\t': {
+            keys.append({ Qt::Key_Tab, Qt::NoModifier, QString(character) });
+            break;
+        }
+        case '\b': {
+            keys.append({ Qt::Key_Backspace, Qt::NoModifier, QString(character) });
+            break;
+        }
+        case 0x7f: {
+            keys.append({ Qt::Key_Delete, Qt::NoModifier, QString(character) });
+            break;
+        }
+        case 0xF700:
+        case 0xF701:
+        case 0xF702:
+        case 0xF703:
+        case 0xF729:
+        case 0xF72B:
+        case 0xF72C:
+        case 0xF72D: {
+            const QHash<ushort, int> functionKeys = {
+                { 0xF700, Qt::Key_Up },     { 0xF701, Qt::Key_Down },     { 0xF702, Qt::Key_Left },
+                { 0xF703, Qt::Key_Right },  { 0xF729, Qt::Key_Home },     { 0xF72B, Qt::Key_End },
+                { 0xF72C, Qt::Key_PageUp }, { 0xF72D, Qt::Key_PageDown },
+            };
+            keys.append({ functionKeys.value(code), Qt::NoModifier, {} });
+            break;
+        }
+        default: {
+            //
+            // ... управляющие символы - это сочетания с Ctrl
+            //
+            if (code >= 0x01 && code <= 0x1a) {
+                keys.append({ Qt::Key_A + code - 1, vimControlModifier(), QString(character) });
+                break;
+            }
+            auto text = QString(character);
+            if (character.isHighSurrogate() && index + 1 < _text.size()) {
+                text += _text.at(++index);
+            }
+            keys.append({ keyForCharacter(character),
+                          character.isUpper() ? Qt::ShiftModifier : Qt::NoModifier, text });
+            break;
+        }
+        }
+    }
+    return keys;
+}
+
+QVector<VimTextEditController::RecordedKey> VimTextEditController::macroKeys(QChar _name) const
+{
+    //
+    // ... если текст в регистре не менялся, то воспроизводим записанные нажатия как есть
+    //
+    const auto content = registerValue(_name);
+    const auto recordedKeys = shared().macros.value(_name.toLower());
+    if (!recordedKeys.isEmpty() && keysText(recordedKeys) == content.text) {
+        return recordedKeys;
+    }
+    return keysFromText(content.text);
 }
 
 void VimTextEditController::playMacro(QChar _name, int _count)
 {
     const auto name = _name.toLower();
-    const auto keys = shared().macros.value(name);
+    const auto keys = macroKeys(name);
     if (keys.isEmpty()) {
         return;
     }
 
     shared().lastPlayedMacro = name;
-    for (int step = 0; step < _count; ++step) {
+    for (int step = 0; step < _count && !m_commandFailed; ++step) {
         replayKeys(keys);
     }
 }
@@ -3721,6 +5675,27 @@ void VimTextEditController::repeatLastChange(int _count)
     m_commandIsChange = false;
     if (m_lastChangeKeys.isEmpty()) {
         return;
+    }
+
+    //
+    // Повтор вставки из нумерованного регистра берёт следующий регистр, как в vim: "1p...
+    //
+    for (int index = 0; index + 2 < m_lastChangeKeys.size(); ++index) {
+        const auto& key = m_lastChangeKeys.at(index);
+        if (key.text.size() == 1 && key.text.at(0).isDigit()) {
+            continue;
+        }
+        if (key.text == '"') {
+            auto& registerKey = m_lastChangeKeys[index + 1];
+            const auto command = m_lastChangeKeys.at(index + 2).text;
+            const auto name = registerKey.text.size() == 1 ? registerKey.text.at(0) : QChar();
+            if (name >= '1' && name <= '8'
+                && (command == 'p' || command == 'P' || command == 'g')) {
+                const QChar nextName(name.unicode() + 1);
+                registerKey = { keyForCharacter(nextName), Qt::NoModifier, QString(nextName) };
+            }
+        }
+        break;
     }
 
     //
@@ -3789,6 +5764,7 @@ void VimTextEditController::repeatLastChange(int _count)
         }
     }
 
+    QScopedValueRollback<bool> repeatRollback(m_repeatingChange, true);
     replayKeys(keys);
 }
 
@@ -3800,7 +5776,17 @@ void VimTextEditController::replayKeys(const QVector<RecordedKey>& _keys)
 
     ++m_replayDepth;
     for (const auto& key : _keys) {
-        if (m_replayedKeys >= kMaxReplayedKeys) {
+        //
+        // ... как и в vim, ошибка в команде прерывает воспроизведение
+        //
+        //
+        // ... но при повторе изменения невыполненное перемещение, которым строилось выделение,
+        //     не страшно, ведь vim повторяет сам оператор над тем же объёмом текста
+        //
+        if (m_commandFailed && m_repeatingChange && isVisualMode()) {
+            m_commandFailed = false;
+        }
+        if (m_replayedKeys >= kMaxReplayedKeys || m_commandFailed) {
             break;
         }
         ++m_replayedKeys;
@@ -3812,8 +5798,22 @@ void VimTextEditController::replayKeys(const QVector<RecordedKey>& _keys)
 
 void VimTextEditController::finishHandledEvent(QKeyEvent* _event)
 {
+    //
+    // ... подсказки редактора нужны только при наборе текста
+    //
+    if (!isInsertMode() && m_editor->isCompleterVisible()) {
+        m_editor->closeCompleter();
+    }
     m_editor->ensureCursorVisible();
     _event->accept();
+}
+
+void VimTextEditController::fail(const QString& _message)
+{
+    m_commandFailed = true;
+    if (!_message.isEmpty()) {
+        m_message = _message;
+    }
 }
 
 } // namespace Ui

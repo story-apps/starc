@@ -47,6 +47,18 @@ public:
      */
     void setCollaboratorsCursors(const QVector<Domain::CursorInfo>& _cursors);
 
+    /**
+     * @brief Включён ли режим отслеживания изменений, в котором удалённый текст лишь помечается
+     * @note Нужно Vim-командам, которые не набирают текст, а заменяют его
+     */
+    virtual bool isTrackChangesEnabled() const;
+
+    /**
+     * @brief Пометить текст, вставленный не с клавиатуры, если включено автоматическое добавление
+     *        редакторских заметок
+     */
+    virtual void markInsertedText(int _from, int _to);
+
 protected:
     /**
      * @brief Обновить положение курсоров соавторов
@@ -66,6 +78,11 @@ protected:
      *       ScalableWrapper и координаты мыши могут несколько искажаться
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Щелчок мышью отменяет набираемую Vim-команду
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
 
     /**
      * @brief Обновить положение элементов Vim-режима

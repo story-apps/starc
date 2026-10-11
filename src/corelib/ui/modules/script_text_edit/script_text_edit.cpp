@@ -13,9 +13,14 @@
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
 
+#include <QFocusEvent>
 #include <QFontMetricsF>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QRegularExpression>
 #include <QResizeEvent>
@@ -35,9 +40,10 @@ public:
      * @brief Обновить внешний вид редактора в соответствии с состоянием Vim-режима
      */
     void refreshVimModeUi();
-    bool updateVimModeLabel();
-    bool updateVimStatusLabel();
+    void updateVimModeLabel();
+    void updateVimStatusLabel();
     void updateVimModeLabelGeometry();
+    QRect visibleViewportRect() const;
     bool isVimBlockCursorVisible() const;
     void updateVimBlockCursor();
     void configureVimLabel(QLabel* _label, const QFont& _font, const QColor& _backgroundColor,
@@ -131,17 +137,19 @@ void ScriptTextEdit::Implementation::refreshVimModeUi()
     vimModeUiApplied = true;
     q->setCursorWidth(vimMode.usesBlockCursor() ? 0 : DesignSystem::layout().px2());
 
-    bool needUpdateGeometry = updateVimModeLabel();
-    needUpdateGeometry = updateVimStatusLabel() || needUpdateGeometry;
+    //
+    // ... положение обновляем каждый раз, ведь видимая часть редактора может измениться и без
+    //     изменения его размера, например когда появляется шкала хронометража
+    //
+    updateVimModeLabel();
+    updateVimStatusLabel();
     vimModeLabelNeedUpdate = false;
-    if (needUpdateGeometry) {
-        updateVimModeLabelGeometry();
-    }
+    updateVimModeLabelGeometry();
 
     updateVimBlockCursor();
 }
 
-bool ScriptTextEdit::Implementation::updateVimModeLabel()
+void ScriptTextEdit::Implementation::updateVimModeLabel()
 {
     //
     // Перенастраиваем виджет только когда действительно поменялся режим работы, или дизайн-система,
@@ -157,17 +165,14 @@ bool ScriptTextEdit::Implementation::updateVimModeLabel()
 
     vimModeLabel->show();
     vimModeLabel->raise();
-
-    return needReconfigure;
 }
 
-bool ScriptTextEdit::Implementation::updateVimStatusLabel()
+void ScriptTextEdit::Implementation::updateVimStatusLabel()
 {
     const auto statusText = vimMode.statusText();
     if (statusText.isEmpty()) {
-        const bool wasVisible = !vimStatusLabel->isHidden();
         vimStatusLabel->hide();
-        return wasVisible;
+        return;
     }
 
     const bool needReconfigure = vimModeLabelNeedUpdate || vimStatusLabel->text() != statusText;
@@ -182,8 +187,6 @@ bool ScriptTextEdit::Implementation::updateVimStatusLabel()
 
     vimStatusLabel->show();
     vimStatusLabel->raise();
-
-    return needReconfigure;
 }
 
 void ScriptTextEdit::Implementation::configureVimLabel(QLabel* _label, const QFont& _font,
@@ -211,20 +214,58 @@ void ScriptTextEdit::Implementation::updateVimModeLabelGeometry()
     }
 
     const int margin = static_cast<int>(DesignSystem::layout().px8());
-    const int viewportHeight = q->viewport()->height();
+    const QRect visibleRect = visibleViewportRect();
     const QSize labelSize = vimModeLabel->sizeHint();
-    vimModeLabel->setGeometry(margin, viewportHeight - labelSize.height() - margin,
+    vimModeLabel->setGeometry(visibleRect.left() + margin,
+                              visibleRect.bottom() + 1 - labelSize.height() - margin,
                               labelSize.width(), labelSize.height());
 
     //
     // ... строка ввода команды располагается справа от индикатора режима
     //
     const QSize statusSize = vimStatusLabel->sizeHint();
-    const int statusLeft = margin + labelSize.width() + margin;
+    const int statusLeft = vimModeLabel->geometry().right() + 1 + margin;
     const int statusWidth
-        = qMin(statusSize.width(), qMax(0, q->viewport()->width() - statusLeft - margin));
-    vimStatusLabel->setGeometry(statusLeft, viewportHeight - statusSize.height() - margin,
+        = qMin(statusSize.width(), qMax(0, visibleRect.right() + 1 - statusLeft - margin));
+    vimStatusLabel->setGeometry(statusLeft, visibleRect.bottom() + 1 - statusSize.height() - margin,
                                 statusWidth, statusSize.height());
+}
+
+QRect ScriptTextEdit::Implementation::visibleViewportRect() const
+{
+    //
+    // Редактор может быть встроен в ScalableWrapper, который показывает его не целиком: часть
+    // вьюпорта закрывают полосы прокрутки обёртки, поэтому берём только видимую в ней область
+    //
+    QRect visibleRect = q->viewport()->rect();
+    const auto proxy = q->graphicsProxyWidget();
+    if (proxy == nullptr || proxy->scene() == nullptr || proxy->scene()->views().isEmpty()) {
+        return visibleRect;
+    }
+
+    //
+    // ... а поверх нижнего края вьюпорта обёртки бывают и другие виджеты, например шкала
+    //     хронометража сценария, их тоже исключаем
+    //
+    const auto view = proxy->scene()->views().constFirst();
+    auto viewRect = view->viewport()->rect();
+    const auto viewportPosition = view->viewport()->pos();
+    for (const auto child : view->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly)) {
+        if (child == view->viewport() || !child->isVisible()) {
+            continue;
+        }
+        const auto childRect = child->geometry().translated(-viewportPosition);
+        if (childRect.top() > viewRect.top() && childRect.top() <= viewRect.bottom()
+            && childRect.bottom() >= viewRect.bottom()
+            && childRect.width() > viewRect.width() / 2) {
+            viewRect.setBottom(childRect.top() - 1);
+        }
+    }
+    const auto visibleInScene = view->mapToScene(viewRect).boundingRect();
+    const auto visibleInEditor = proxy->mapFromScene(visibleInScene).boundingRect().toRect();
+    const auto visibleInViewport = visibleInEditor.translated(-q->viewport()->pos());
+    const auto intersection = visibleRect.intersected(visibleInViewport);
+    return intersection.isEmpty() ? visibleRect : intersection;
 }
 
 bool ScriptTextEdit::Implementation::isVimBlockCursorVisible() const
@@ -347,6 +388,17 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     setHorizontalScroll(horizontalScrollValue);
 }
 
+bool ScriptTextEdit::isTrackChangesEnabled() const
+{
+    return false;
+}
+
+void ScriptTextEdit::markInsertedText(int _from, int _to)
+{
+    Q_UNUSED(_from)
+    Q_UNUSED(_to)
+}
+
 void ScriptTextEdit::setCollaboratorsCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
     d->pendingCollaboratorsCursorInfo = _cursors;
@@ -434,6 +486,14 @@ void ScriptTextEdit::mouseMoveEvent(QMouseEvent* _event)
     BaseTextEdit::mouseMoveEvent(_event);
 }
 
+void ScriptTextEdit::mousePressEvent(QMouseEvent* _event)
+{
+    d->vimMode.cancelPendingInput();
+
+    BaseTextEdit::mousePressEvent(_event);
+    d->refreshVimModeUi();
+}
+
 void ScriptTextEdit::resizeEvent(QResizeEvent* _event)
 {
     BaseTextEdit::resizeEvent(_event);
@@ -504,6 +564,17 @@ bool ScriptTextEdit::event(QEvent* _event)
         d->vimModeLabelNeedUpdate = true;
         d->refreshVimModeUi();
     } else if (_event->type() == QEvent::FocusIn || _event->type() == QEvent::FocusOut) {
+        //
+        // ... при переходе в другой виджет набираемая команда отменяется, но не при открытии
+        //     всплывающих окон и переключении на другое приложение
+        //
+        if (_event->type() == QEvent::FocusOut) {
+            const auto reason = static_cast<QFocusEvent*>(_event)->reason();
+            if (reason != Qt::PopupFocusReason && reason != Qt::ActiveWindowFocusReason
+                && reason != Qt::MenuBarFocusReason) {
+                d->vimMode.cancelPendingInput();
+            }
+        }
         d->refreshVimModeUi();
     }
     return result;

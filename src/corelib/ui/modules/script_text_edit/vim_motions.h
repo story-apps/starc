@@ -84,6 +84,40 @@ int lineEndPosition(const QTextBlock& _block);
 int firstNonBlankPosition(const QTextBlock& _block);
 
 /**
+ * @brief Позиции соседних символов строки
+ * @note Символом считается то, что пользователь видит как один знак: суррогатная пара (например
+ *       эмодзи) или буква вместе с комбинируемыми знаками
+ */
+int nextCharacterPosition(const QTextBlock& _block, int _position);
+int previousCharacterPosition(const QTextBlock& _block, int _position);
+
+/**
+ * @brief Позиция начала символа, в который попадает заданная позиция
+ */
+int characterStartPosition(const QTextBlock& _block, int _position);
+
+/**
+ * @brief Текст строки в том виде, в котором его видит пользователь
+ * @note Например, заголовки сцен хранятся в том регистре, в котором их набрали, а показываются
+ *       прописными буквами, поэтому и искать в них нужно то, что видно
+ */
+QString displayedText(const QTextBlock& _block);
+
+/**
+ * @brief Показывается ли символ в заданной позиции в регистре, заданном форматированием, а не
+ *        в том, в котором он хранится
+ */
+bool hasForcedCase(const QTextBlock& _block, int _position);
+
+/**
+ * @brief Есть ли граница абзацев перед заданной строкой
+ * @note В vim абзацы разделяются пустыми строками, а в наших документах каждый блок - отдельный
+ *       абзац, поэтому между двумя непустыми блоками считаем, что есть пустая строка. Исключение -
+ *       абзац, разорванный переносом на следующую страницу
+ */
+bool hasParagraphBreakBefore(const QTextBlock& _block);
+
+/**
  * @brief Курсор, перемещающийся по документу так, как это делает vim
  * @note Позиция в конце строки соответствует символу перевода строки, из конца строки курсор
  *       переходит в начало следующей строки, в которой он может находиться
@@ -91,7 +125,11 @@ int firstNonBlankPosition(const QTextBlock& _block);
 class Cursor
 {
 public:
-    Cursor(const QTextDocument* _document, int _position);
+    /**
+     * @param _paragraphBreaks - останавливаться ли на пустых строках, которые разделяют абзацы,
+     *        см. hasParagraphBreakBefore, такая строка занимает позицию начала следующего абзаца
+     */
+    Cursor(const QTextDocument* _document, int _position, bool _paragraphBreaks = false);
 
     /**
      * @brief Позиция в документе
@@ -111,11 +149,13 @@ public:
 
     /**
      * @brief Символ под курсором, в конце строки - пустой символ
+     * @note Для суррогатной пары возвращается её первая половина
      */
     QChar character() const;
 
     /**
-     * @brief Класс символа под курсором: 0 - пробел, 1 - знак препинания, 2 - символ слова
+     * @brief Класс символа под курсором: 0 - пробел, 1 - знак препинания, 2 - символ слова,
+     *        3 - эмодзи
      */
     int characterClass(bool _bigWord) const;
 
@@ -144,6 +184,11 @@ public:
      */
     bool inIndent(int _extra) const;
 
+    /**
+     * @brief Находится ли курсор на пустой строке между абзацами, см. hasParagraphBreakBefore
+     */
+    bool isOnParagraphBreak() const;
+
 private:
     void setBlock(const QTextBlock& _block);
 
@@ -151,6 +196,16 @@ private:
     QTextBlock m_block;
     QString m_text;
     int m_column = 0;
+
+    /**
+     * @brief Останавливаться ли на границах абзацев, как на пустых строках
+     */
+    bool m_paragraphBreaks = false;
+
+    /**
+     * @brief Находится ли курсор на пустой строке перед абзацем m_block
+     */
+    bool m_onParagraphBreak = false;
 };
 
 /**
@@ -169,7 +224,7 @@ bool backwardEndOfWord(Cursor& _cursor, int _count, bool _bigWord, bool _stopAtL
 int matchingBracketPosition(const QTextDocument* _document, int _position);
 
 /**
- * @brief Перемещение по абзацам, разделённым пустыми строками
+ * @brief Перемещение по абзацам, разделённым пустыми строками, см. hasParagraphBreakBefore
  * @return -1, если перемещение невозможно
  */
 int paragraphPosition(const QTextDocument* _document, int _position, bool _forward, int _count,

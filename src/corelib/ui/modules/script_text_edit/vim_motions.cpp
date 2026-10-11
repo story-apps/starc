@@ -3,7 +3,9 @@
 #include <business_layer/templates/text_template.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 
+#include <QTextCursor>
 #include <QTextDocument>
+#include <QTextLayout>
 #include <QVector>
 
 #include <algorithm>
@@ -14,23 +16,186 @@ namespace Vim {
 namespace {
 
 /**
- * @brief Класс символа, по которому определяются границы слов
+ * @brief Класс символа, по которому определяются границы слов, как в utf_class из vim
+ * @note Разные письменности образуют разные классы, поэтому, например, слова из иероглифов и
+ *       каны разделяются
  */
-int characterClass(QChar _character, bool _bigWord)
+int characterClass(uint _character, bool _bigWord)
 {
-    if (_character.isNull() || _character.isSpace()) {
+    struct Interval {
+        uint first;
+        uint last;
+        int characterClass;
+    };
+    static const Interval kClasses[] = {
+        { 0x037e, 0x037e, 1 },        { 0x0387, 0x0387, 1 },        { 0x055a, 0x055f, 1 },
+        { 0x0589, 0x0589, 1 },        { 0x05be, 0x05be, 1 },        { 0x05c0, 0x05c0, 1 },
+        { 0x05c3, 0x05c3, 1 },        { 0x05f3, 0x05f4, 1 },        { 0x060c, 0x060c, 1 },
+        { 0x061b, 0x061b, 1 },        { 0x061f, 0x061f, 1 },        { 0x066a, 0x066d, 1 },
+        { 0x06d4, 0x06d4, 1 },        { 0x0700, 0x070d, 1 },        { 0x0964, 0x0965, 1 },
+        { 0x0970, 0x0970, 1 },        { 0x0df4, 0x0df4, 1 },        { 0x0e4f, 0x0e4f, 1 },
+        { 0x0e5a, 0x0e5b, 1 },        { 0x0f04, 0x0f12, 1 },        { 0x0f3a, 0x0f3d, 1 },
+        { 0x0f85, 0x0f85, 1 },        { 0x104a, 0x104f, 1 },        { 0x10fb, 0x10fb, 1 },
+        { 0x1361, 0x1368, 1 },        { 0x166d, 0x166e, 1 },        { 0x1680, 0x1680, 0 },
+        { 0x169b, 0x169c, 1 },        { 0x16eb, 0x16ed, 1 },        { 0x1735, 0x1736, 1 },
+        { 0x17d4, 0x17dc, 1 },        { 0x1800, 0x180a, 1 },        { 0x2000, 0x200b, 0 },
+        { 0x200c, 0x2027, 1 },        { 0x2028, 0x2029, 0 },        { 0x202a, 0x202e, 1 },
+        { 0x202f, 0x202f, 0 },        { 0x2030, 0x205e, 1 },        { 0x205f, 0x205f, 0 },
+        { 0x2060, 0x206f, 1 },        { 0x2070, 0x207f, 0x2070 },   { 0x2080, 0x2094, 0x2080 },
+        { 0x20a0, 0x27ff, 1 },        { 0x2800, 0x28ff, 0x2800 },   { 0x2900, 0x2998, 1 },
+        { 0x29d8, 0x29db, 1 },        { 0x29fc, 0x29fd, 1 },        { 0x2e00, 0x2e7f, 1 },
+        { 0x3000, 0x3000, 0 },        { 0x3001, 0x3020, 1 },        { 0x3030, 0x3030, 1 },
+        { 0x303d, 0x303d, 1 },        { 0x3040, 0x309f, 0x3040 },   { 0x30a0, 0x30ff, 0x30a0 },
+        { 0x3300, 0x9fff, 0x4e00 },   { 0xac00, 0xd7a3, 0xac00 },   { 0xf900, 0xfaff, 0x4e00 },
+        { 0xfd3e, 0xfd3f, 1 },        { 0xfe30, 0xfe6b, 1 },        { 0xff00, 0xff0f, 1 },
+        { 0xff1a, 0xff20, 1 },        { 0xff3b, 0xff40, 1 },        { 0xff5b, 0xff65, 1 },
+        { 0x1d000, 0x1d24f, 1 },      { 0x1d400, 0x1d7ff, 1 },      { 0x1f000, 0x1f2ff, 1 },
+        { 0x1f300, 0x1f9ff, 1 },      { 0x20000, 0x2a6df, 0x4e00 }, { 0x2a700, 0x2b73f, 0x4e00 },
+        { 0x2b740, 0x2b81f, 0x4e00 }, { 0x2f800, 0x2fa1f, 0x4e00 },
+    };
+
+    const int result = [&_character] {
+        if (_character == 0 || _character == ' ' || _character == '\t' || _character == 0xa0) {
+            return 0;
+        }
+
+        //
+        // ... символы слова латиницы определяются так же, как опцией iskeyword по умолчанию
+        //
+        if (_character < 0x100) {
+            if ((_character >= 'a' && _character <= 'z') || (_character >= 'A' && _character <= 'Z')
+                || (_character >= '0' && _character <= '9') || _character == '_'
+                || _character >= 192) {
+                return 2;
+            }
+            return 1;
+        }
+
+        //
+        // ... эмодзи
+        //
+        if (QChar::category(_character) == QChar::Symbol_Other
+            && (_character >= 0x1f000 || (_character >= 0x2190 && _character <= 0x2bff))) {
+            return 3;
+        }
+
+        const auto end = std::end(kClasses);
+        const auto interval = std::lower_bound(
+            std::begin(kClasses), end, _character,
+            [](const Interval& _interval, uint _value) { return _interval.last < _value; });
+        if (interval != end && interval->first <= _character) {
+            return interval->characterClass;
+        }
+        return 2;
+    }();
+
+    //
+    // ... для больших слов важно лишь, пробел это или нет
+    //
+    return _bigWord && result != 0 ? 1 : result;
+}
+
+/**
+ * @brief Код символа в заданной позиции строки с учётом суррогатных пар
+ */
+uint codePointAt(const QString& _text, int _column)
+{
+    if (_column < 0 || _column >= _text.size()) {
         return 0;
     }
 
-    if (_bigWord) {
-        return 1;
+    const auto character = _text.at(_column);
+    if (character.isHighSurrogate() && _column + 1 < _text.size()
+        && _text.at(_column + 1).isLowSurrogate()) {
+        return QChar::surrogateToUcs4(character, _text.at(_column + 1));
+    }
+    return character.unicode();
+}
+
+/**
+ * @brief Раскладка строки, по которой определяются границы символов
+ * @note Во время ввода через метод ввода в раскладке есть ещё и вводимый текст, тогда её не
+ *       используем
+ */
+const QTextLayout* characterLayout(const QTextBlock& _block)
+{
+    const auto layout = _block.layout();
+    if (layout == nullptr || !layout->preeditAreaText().isEmpty()) {
+        return nullptr;
+    }
+    return layout;
+}
+
+/**
+ * @brief Позиция следующего символа в строке
+ */
+int nextColumn(const QTextBlock& _block, const QString& _text, int _column)
+{
+    if (_column >= _text.size()) {
+        return _text.size();
     }
 
-    if (_character.isLetterOrNumber() || _character.isMark() || _character == '_') {
-        return 2;
+    if (const auto layout = characterLayout(_block)) {
+        const int next = layout->nextCursorPosition(_column, QTextLayout::SkipCharacters);
+        if (next > _column) {
+            return qMin(next, static_cast<int>(_text.size()));
+        }
     }
 
-    return 1;
+    int next = _column + 1;
+    if (next < _text.size() && _text.at(next).isLowSurrogate()
+        && _text.at(_column).isHighSurrogate()) {
+        ++next;
+    }
+    return next;
+}
+
+/**
+ * @brief Позиция предыдущего символа в строке
+ */
+int previousColumn(const QTextBlock& _block, const QString& _text, int _column)
+{
+    if (_column <= 0) {
+        return 0;
+    }
+
+    const int column = qMin(_column, static_cast<int>(_text.size()));
+    if (const auto layout = characterLayout(_block)) {
+        const int previous = layout->previousCursorPosition(column, QTextLayout::SkipCharacters);
+        if (previous < column) {
+            return qMax(0, previous);
+        }
+    }
+
+    int previous = column - 1;
+    if (previous > 0 && _text.at(previous).isLowSurrogate()
+        && _text.at(previous - 1).isHighSurrogate()) {
+        --previous;
+    }
+    return previous;
+}
+
+/**
+ * @brief Начало символа, в который попадает позиция
+ */
+int characterStartColumn(const QTextBlock& _block, const QString& _text, int _column)
+{
+    int column = qBound(0, _column, static_cast<int>(_text.size()));
+    if (column == 0 || column == _text.size()) {
+        return column;
+    }
+
+    if (const auto layout = characterLayout(_block)) {
+        while (column > 0 && !layout->isValidCursorPosition(column)) {
+            --column;
+        }
+        return column;
+    }
+
+    if (_text.at(column).isLowSurrogate() && _text.at(column - 1).isHighSurrogate()) {
+        --column;
+    }
+    return column;
 }
 
 /**
@@ -350,25 +515,130 @@ int firstNonBlankPosition(const QTextBlock& _block)
     return _block.position() + column;
 }
 
+//
+// ... текст блока получаем, только если без него не обойтись, т.к. его копирование в длинном
+//     абзаце занимает заметное время
+//
+
+int nextCharacterPosition(const QTextBlock& _block, int _position)
+{
+    const int column = _position - _block.position();
+    const int length = lineLength(_block);
+    if (column >= length) {
+        return _block.position() + length;
+    }
+    if (const auto layout = characterLayout(_block)) {
+        const int next = layout->nextCursorPosition(column, QTextLayout::SkipCharacters);
+        if (next > column) {
+            return _block.position() + qMin(next, length);
+        }
+    }
+    return _block.position() + nextColumn(_block, _block.text(), column);
+}
+
+int previousCharacterPosition(const QTextBlock& _block, int _position)
+{
+    const int column = qMin(_position - _block.position(), lineLength(_block));
+    if (column <= 0) {
+        return _block.position();
+    }
+    if (const auto layout = characterLayout(_block)) {
+        const int previous = layout->previousCursorPosition(column, QTextLayout::SkipCharacters);
+        if (previous < column) {
+            return _block.position() + qMax(0, previous);
+        }
+    }
+    return _block.position() + previousColumn(_block, _block.text(), column);
+}
+
+int characterStartPosition(const QTextBlock& _block, int _position)
+{
+    const int column = qBound(0, _position - _block.position(), lineLength(_block));
+    if (column == 0 || column == lineLength(_block)) {
+        return _block.position() + column;
+    }
+    if (const auto layout = characterLayout(_block)) {
+        int start = column;
+        while (start > 0 && !layout->isValidCursorPosition(start)) {
+            --start;
+        }
+        return _block.position() + start;
+    }
+    return _block.position() + characterStartColumn(_block, _block.text(), column);
+}
+
+QString displayedText(const QTextBlock& _block)
+{
+    //
+    // ... регистр может быть задан как для всего абзаца, так и для отдельных фрагментов, при
+    //     этом меняем его посимвольно, чтобы позиции в тексте не сдвигались
+    //
+    auto text = _block.text();
+    auto applyCapitalization = [&text](QFont::Capitalization _capitalization, int _from, int _to) {
+        if (_capitalization != QFont::AllUppercase && _capitalization != QFont::AllLowercase) {
+            return;
+        }
+        for (int index = qMax(0, _from); index < qMin(static_cast<int>(text.size()), _to);
+             ++index) {
+            text[index] = _capitalization == QFont::AllUppercase ? text.at(index).toUpper()
+                                                                 : text.at(index).toLower();
+        }
+    };
+    applyCapitalization(_block.charFormat().fontCapitalization(), 0, text.size());
+    for (auto iter = _block.begin(); !iter.atEnd(); ++iter) {
+        const auto fragment = iter.fragment();
+        const int from = fragment.position() - _block.position();
+        applyCapitalization(fragment.charFormat().fontCapitalization(), from,
+                            from + fragment.length());
+    }
+    return text;
+}
+
+bool hasForcedCase(const QTextBlock& _block, int _position)
+{
+    auto isForced = [](QFont::Capitalization _capitalization) {
+        return _capitalization == QFont::AllUppercase || _capitalization == QFont::AllLowercase;
+    };
+    if (isForced(_block.charFormat().fontCapitalization())) {
+        return true;
+    }
+    QTextCursor cursor(_block);
+    cursor.setPosition(_position + 1);
+    return isForced(cursor.charFormat().fontCapitalization());
+}
+
+bool hasParagraphBreakBefore(const QTextBlock& _block)
+{
+    if (lineLength(_block) == 0) {
+        return false;
+    }
+
+    const auto previous = previousNavigableBlock(_block);
+    return previous.isValid() && lineLength(previous) > 0
+        && !previous.blockFormat().boolProperty(
+            BusinessLayer::TextBlockStyle::PropertyIsBreakCorrectionStart);
+}
+
 
 // ****
 
 
-Cursor::Cursor(const QTextDocument* _document, int _position)
+Cursor::Cursor(const QTextDocument* _document, int _position, bool _paragraphBreaks)
     : m_document(_document)
+    , m_paragraphBreaks(_paragraphBreaks)
 {
     setPosition(_position);
 }
 
 int Cursor::position() const
 {
-    return m_block.position() + m_column;
+    return m_block.position() + (m_onParagraphBreak ? 0 : m_column);
 }
 
 void Cursor::setPosition(int _position)
 {
     setBlock(navigableBlock(m_document, _position));
-    m_column = qBound(0, _position - m_block.position(), m_text.size());
+    m_column = characterStartColumn(m_block, m_text, _position - m_block.position());
 }
 
 QTextBlock Cursor::block() const
@@ -378,34 +648,28 @@ QTextBlock Cursor::block() const
 
 int Cursor::column() const
 {
-    return m_column;
+    return m_onParagraphBreak ? 0 : m_column;
 }
 
 void Cursor::setColumn(int _column)
 {
-    m_column = qBound(0, _column, m_text.size());
-    //
-    // ... не встаём посреди суррогатной пары
-    //
-    if (m_column > 0 && m_column < m_text.size() && m_text.at(m_column).isLowSurrogate()
-        && m_text.at(m_column - 1).isHighSurrogate()) {
-        --m_column;
-    }
+    m_onParagraphBreak = false;
+    m_column = characterStartColumn(m_block, m_text, _column);
 }
 
 int Cursor::lineLength() const
 {
-    return m_text.size();
+    return m_onParagraphBreak ? 0 : m_text.size();
 }
 
 bool Cursor::isLineEmpty() const
 {
-    return m_text.isEmpty();
+    return m_onParagraphBreak || m_text.isEmpty();
 }
 
 bool Cursor::atLineEnd() const
 {
-    return m_column >= m_text.size();
+    return m_onParagraphBreak || m_column >= m_text.size();
 }
 
 QChar Cursor::character() const
@@ -415,17 +679,22 @@ QChar Cursor::character() const
 
 int Cursor::characterClass(bool _bigWord) const
 {
-    return Vim::characterClass(character(), _bigWord);
+    return Vim::characterClass(atLineEnd() ? 0 : codePointAt(m_text, m_column), _bigWord);
 }
 
 int Cursor::inc()
 {
+    //
+    // ... с пустой строки между абзацами переходим в начало абзаца
+    //
+    if (m_onParagraphBreak) {
+        m_onParagraphBreak = false;
+        m_column = 0;
+        return 1;
+    }
+
     if (m_column < m_text.size()) {
-        ++m_column;
-        if (m_column < m_text.size() && m_text.at(m_column).isLowSurrogate()
-            && m_text.at(m_column - 1).isHighSurrogate()) {
-            ++m_column;
-        }
+        m_column = nextColumn(m_block, m_text, m_column);
         return m_column < m_text.size() ? 0 : 2;
     }
 
@@ -436,14 +705,26 @@ int Cursor::inc()
 
     setBlock(next);
     m_column = 0;
+    m_onParagraphBreak = m_paragraphBreaks && hasParagraphBreakBefore(next);
     return 1;
 }
 
 int Cursor::dec()
 {
+    if (m_onParagraphBreak) {
+        setBlock(previousNavigableBlock(m_block));
+        m_column = m_text.size();
+        return 1;
+    }
+
     if (m_column > 0) {
-        setColumn(m_column - 1);
+        m_column = previousColumn(m_block, m_text, m_column);
         return 0;
+    }
+
+    if (m_paragraphBreaks && hasParagraphBreakBefore(m_block)) {
+        m_onParagraphBreak = true;
+        return 1;
     }
 
     const auto previous = previousNavigableBlock(m_block);
@@ -459,7 +740,7 @@ int Cursor::dec()
 int Cursor::incl()
 {
     int result = inc();
-    if (result >= 1 && m_column > 0) {
+    if (result >= 1 && column() > 0) {
         result = inc();
     }
     return result;
@@ -468,7 +749,7 @@ int Cursor::incl()
 int Cursor::decl()
 {
     int result = dec();
-    if (result == 1 && m_column > 0) {
+    if (result == 1 && column() > 0) {
         result = dec();
     }
     return result;
@@ -480,13 +761,19 @@ bool Cursor::inIndent(int _extra) const
     while (indent < m_text.size() && isWhite(m_text.at(indent))) {
         ++indent;
     }
-    return indent >= m_column + _extra;
+    return indent >= column() + _extra;
+}
+
+bool Cursor::isOnParagraphBreak() const
+{
+    return m_onParagraphBreak;
 }
 
 void Cursor::setBlock(const QTextBlock& _block)
 {
     m_block = _block;
     m_text = _block.text();
+    m_onParagraphBreak = false;
 }
 
 
@@ -702,19 +989,51 @@ int paragraphPosition(const QTextDocument* _document, int _position, bool _forwa
         *_inclusive = false;
     }
 
-    auto line = navigableBlock(_document, _position);
+    //
+    // Идём по строкам, как findpar в vim, учитывая и пустые строки между абзацами, которых нет
+    // в документе. Такая строка стоит перед абзацем и занимает позицию его начала, поэтому, идя
+    // назад из начала абзаца, считаем, что курсор уже на ней
+    //
+    struct Line {
+        QTextBlock block;
+        bool isParagraphBreak = false;
+
+        bool isEmpty() const
+        {
+            return isParagraphBreak || lineLength(block) == 0;
+        }
+    };
+    const auto startBlock = navigableBlock(_document, _position);
+    Line line{ startBlock,
+               !_forward && _position <= startBlock.position()
+                   && hasParagraphBreakBefore(startBlock) };
+    auto nextLine = [_forward](const Line& _line) -> Line {
+        if (_forward) {
+            if (_line.isParagraphBreak) {
+                return { _line.block, false };
+            }
+            const auto next = nextNavigableBlock(_line.block);
+            return { next, next.isValid() && hasParagraphBreakBefore(next) };
+        }
+
+        if (!_line.isParagraphBreak && hasParagraphBreakBefore(_line.block)) {
+            return { _line.block, true };
+        }
+        return { previousNavigableBlock(_line.block), false };
+    };
+
     for (int count = _count - 1; count >= 0; --count) {
         bool didSkip = false;
         for (bool first = true;; first = false) {
-            if (lineLength(line) > 0) {
+            if (!line.isEmpty()) {
                 didSkip = true;
             }
-            if (!first && didSkip && lineLength(line) == 0) {
+            if (!first && didSkip && line.isEmpty()) {
                 break;
             }
 
-            const auto next = _forward ? nextNavigableBlock(line) : previousNavigableBlock(line);
-            if (!next.isValid()) {
+            const auto next = nextLine(line);
+            if (!next.block.isValid()) {
                 if (count > 0) {
                     return -1;
                 }
@@ -727,14 +1046,15 @@ int paragraphPosition(const QTextDocument* _document, int _position, bool _forwa
     //
     // ... в конце документа курсор встаёт на последний символ, который попадает в диапазон
     //
-    if (_forward && !nextNavigableBlock(line).isValid() && lineLength(line) > 0) {
+    if (_forward && !line.isParagraphBreak && !nextNavigableBlock(line.block).isValid()
+        && lineLength(line.block) > 0) {
         if (_inclusive != nullptr) {
             *_inclusive = true;
         }
-        return lineEndPosition(line) - 1;
+        return previousCharacterPosition(line.block, lineEndPosition(line.block));
     }
 
-    return line.position();
+    return line.block.position();
 }
 
 ObjectRange wordObject(const QTextDocument* _document, int _start, int _cursor, bool _visual,
@@ -1221,8 +1541,12 @@ bool findSentence(Cursor& _cursor, bool _forward, int _count)
             {
                 const auto character = position.character();
                 if (character.isNull() || (position.column() == 0 && position.isLineEmpty())) {
-                    if (!_forward && position.block() != startLine) {
-                        position.setPosition(nextNavigableBlock(position.block()).position());
+                    //
+                    // ... идя назад, встаём на строку, следующую за пустой
+                    //
+                    if (!_forward
+                        && (position.block() != startLine || position.isOnParagraphBreak())) {
+                        position.inc();
                     }
                     break;
                 }
@@ -1283,7 +1607,8 @@ bool findSentence(Cursor& _cursor, bool _forward, int _count)
 ObjectRange sentenceObject(const QTextDocument* _document, int _start, int _cursor, bool _visual,
                            int _count, bool _around)
 {
-    Cursor startPosition(_document, _cursor);
+    const bool paragraphBreaks = true;
+    Cursor startPosition(_document, _cursor, paragraphBreaks);
     Cursor position = startPosition;
     Cursor cursor = startPosition;
     const int count = qMax(1, _count);
@@ -1420,26 +1745,49 @@ ObjectRange paragraphObject(const QTextDocument* _document, int _start, int _cur
 {
     //
     // Работаем с номерами строк, как это делает vim, учитывая только строки, по которым может
-    // перемещаться курсор
+    // перемещаться курсор, а так же пустые строки между абзацами, которых нет в документе
     //
-    QVector<QTextBlock> lines;
+    struct Line {
+        QTextBlock block;
+        bool isParagraphBreak = false;
+    };
+    QVector<Line> lines;
     for (auto block = firstNavigableBlock(_document); block.isValid();
          block = nextNavigableBlock(block)) {
-        lines.append(block);
+        if (hasParagraphBreakBefore(block)) {
+            lines.append({ block, true });
+        }
+        lines.append({ block, false });
     }
     if (lines.isEmpty()) {
         return {};
     }
     const int lineCount = lines.size();
     auto lineNumber = [&lines](const QTextBlock& _block) {
-        const auto iter = std::lower_bound(lines.cbegin(), lines.cend(), _block,
-                                           [](const QTextBlock& _lhs, const QTextBlock& _rhs) {
-                                               return _lhs.blockNumber() < _rhs.blockNumber();
-                                           });
+        const auto iter = std::lower_bound(
+            lines.cbegin(), lines.cend(), _block, [](const Line& _line, const QTextBlock& _value) {
+                return _line.block.blockNumber() < _value.blockNumber()
+                    || (_line.block == _value && _line.isParagraphBreak);
+            });
         return static_cast<int>(std::distance(lines.cbegin(), iter)) + 1;
     };
-    auto isWhiteLine = [&lines](int _line) { return isLineWhite(lines.at(_line - 1)); };
-    auto isParagraphStart = [&lines](int _line) { return lineLength(lines.at(_line - 1)) == 0; };
+    auto isWhiteLine = [&lines](int _line) {
+        const auto& line = lines.at(_line - 1);
+        return line.isParagraphBreak || isLineWhite(line.block);
+    };
+    auto isParagraphStart = [&lines](int _line) {
+        const auto& line = lines.at(_line - 1);
+        return line.isParagraphBreak || lineLength(line.block) == 0;
+    };
+    //
+    // ... пустая строка между абзацами не занимает места, поэтому в начале диапазона она
+    //     соответствует следующей строке, а в конце - предыдущей
+    //
+    auto startPosition = [&lines](int _line) { return lines.at(_line - 1).block.position(); };
+    auto endPosition = [&lines](int _line) {
+        const int index = lines.at(_line - 1).isParagraphBreak ? _line - 2 : _line - 1;
+        return lines.at(index).block.position();
+    };
 
     const int count = qMax(1, _count);
     const int cursorLine = lineNumber(navigableBlock(_document, _cursor));
@@ -1488,7 +1836,8 @@ ObjectRange paragraphObject(const QTextDocument* _document, int _start, int _cur
         if (!success && startLine == cursorLine) {
             return {};
         }
-        return { _start, lines.at(startLine - 1).position(), true, true };
+        return { _start, direction > 0 ? endPosition(startLine) : startPosition(startLine), true,
+                 true };
     };
 
     if (_visual && startLine != visualLine) {
@@ -1572,67 +1921,87 @@ ObjectRange paragraphObject(const QTextDocument* _document, int _start, int _cur
         if (_visualLine && startLine == cursorLine) {
             return extend();
         }
-        const int start = visualLine != startLine ? lines.at(startLine - 1).position() : _start;
-        return { start, lines.at(endLine - 1).position(), true, true };
+        const int start = visualLine != startLine ? startPosition(startLine) : _start;
+        return { start, endPosition(endLine), true, true };
     }
 
-    return { lines.at(startLine - 1).position(), lines.at(endLine - 1).position(), true, true };
+    return { startPosition(startLine), endPosition(endLine), true, true };
 }
 
 QString wordUnderCursor(const QTextDocument* _document, int _position, bool* _isKeyword,
                         int* _start)
 {
     const Cursor cursor(_document, _position);
-    const auto line = cursor.block().text();
+    const auto block = cursor.block();
+    const auto line = displayedText(block);
+
+    //
+    // Разбиваем строку на символы, чтобы не разрывать суррогатные пары и составные символы
+    //
+    struct Character {
+        int column = 0;
+        int characterClass = 0;
+    };
+    QVector<Character> characters;
+    for (int column = 0; column < line.size(); column = nextColumn(block, line, column)) {
+        characters.append({ column, characterClass(codePointAt(line, column), false) });
+    }
+    auto classAt = [&characters](int _index) {
+        return _index < characters.size() ? characters.at(_index).characterClass : 0;
+    };
+    int cursorIndex = 0;
+    while (cursorIndex < characters.size() && characters.at(cursorIndex).column < cursor.column()) {
+        ++cursorIndex;
+    }
 
     //
     // Сперва ищем слово, а если его нет, то любую последовательность непробельных символов
     //
-    int column = 0;
+    int index = 0;
     int pass = 0;
     int currentClass = 0;
     for (; pass < 2; ++pass) {
-        column = cursor.column();
-        while (column < line.size()) {
-            currentClass = characterClass(line.at(column), false);
+        index = cursorIndex;
+        while (index < characters.size()) {
+            currentClass = classAt(index);
             if (currentClass != 0 && (pass == 1 || currentClass != 1)) {
                 break;
             }
-            ++column;
+            ++index;
         }
 
-        currentClass = characterClass(characterAt(line, column), false);
-        while (column > 0 && currentClass != 0) {
-            const int previousClass = characterClass(line.at(column - 1), false);
-            if (currentClass != previousClass) {
+        currentClass = classAt(index);
+        while (index > 0 && currentClass != 0) {
+            if (currentClass != classAt(index - 1)) {
                 break;
             }
-            --column;
+            --index;
         }
 
-        if (currentClass == 2) {
+        if (currentClass >= 2) {
             break;
         }
     }
 
-    if (column >= line.size() || currentClass == 0) {
+    if (index >= characters.size() || currentClass == 0) {
         return {};
     }
 
-    int end = column;
-    while (end < line.size()
-           && (pass == 0 ? characterClass(line.at(end), false) == currentClass
-                         : characterClass(line.at(end), false) != 0)) {
+    int end = index;
+    while (end < characters.size()
+           && (pass == 0 ? classAt(end) == currentClass : classAt(end) != 0)) {
         ++end;
     }
 
+    const int startColumn = characters.at(index).column;
+    const int endColumn = end < characters.size() ? characters.at(end).column : line.size();
     if (_isKeyword != nullptr) {
-        *_isKeyword = currentClass == 2;
+        *_isKeyword = currentClass >= 2;
     }
     if (_start != nullptr) {
-        *_start = cursor.block().position() + column;
+        *_start = block.position() + startColumn;
     }
-    return line.mid(column, end - column);
+    return line.mid(startColumn, endColumn - startColumn);
 }
 
 QRegularExpression regularExpression(const QString& _pattern)
@@ -1652,6 +2021,13 @@ QRegularExpression regularExpression(const QString& _pattern)
     QString result;
     QString lookaheadSuffix;
     bool atBranchStart = true;
+
+    //
+    // ... начало последнего атома в результате и начала открытых групп - к атому применяются
+    //     утверждения \@=, \@! и подобные
+    //
+    int atomStart = -1;
+    QVector<int> groupStarts;
     for (int index = 0; index < _pattern.size(); ++index) {
         const auto character = _pattern.at(index);
         const bool escaped = character == '\\' && index + 1 < _pattern.size();
@@ -1715,26 +2091,64 @@ QRegularExpression regularExpression(const QString& _pattern)
         //
         if ((symbol == '(' || symbol == ')' || symbol == '|')
             && isSpecial(QStringLiteral("()|"), QString(), QString())) {
-            if (symbol == '(' && index + 0 < _pattern.size()) {
-                result += '(';
+            if (symbol == '(') {
+                groupStarts.append(result.size());
+                atomStart = -1;
+            } else if (symbol == ')') {
+                atomStart = groupStarts.isEmpty() ? -1 : groupStarts.takeLast();
             } else {
-                result += symbol;
+                atomStart = -1;
             }
+            result += symbol;
             atBranchStart = symbol != ')';
             continue;
         }
         if (symbol == '%' && isSpecial(QStringLiteral("%"), QString(), QString())
-            && index + 1 < _pattern.size()) {
+            && index + 1 < _pattern.size() && _pattern.at(index + 1) == '(') {
             //
             // ... \%( - группа без запоминания
             //
-            const bool veryMagicGroup = magic == Magic::VeryMagic && _pattern.at(index + 1) == '(';
-            const bool magicGroup = magic != Magic::VeryMagic && index + 2 < _pattern.size()
-                && _pattern.at(index + 1) == '\\' && _pattern.at(index + 2) == '(';
-            if (veryMagicGroup || magicGroup) {
-                index += veryMagicGroup ? 1 : 2;
-                result += QStringLiteral("(?:");
-                atBranchStart = true;
+            ++index;
+            groupStarts.append(result.size());
+            atomStart = -1;
+            result += QStringLiteral("(?:");
+            atBranchStart = true;
+            continue;
+        }
+
+        //
+        // ... утверждения о предыдущем атоме: \@= \@! \@<= \@<! и \@>
+        //
+        if (symbol == '@' && isSpecial(QStringLiteral("@"), QString(), QString())
+            && atomStart >= 0) {
+            int assertionEnd = index + 1;
+            while (assertionEnd < _pattern.size() && _pattern.at(assertionEnd).isDigit()) {
+                ++assertionEnd;
+            }
+            const auto assertion = _pattern.mid(assertionEnd, 2);
+            QString prefix;
+            int length = 0;
+            if (assertion.startsWith('=')) {
+                prefix = QStringLiteral("(?=");
+                length = 1;
+            } else if (assertion.startsWith('!')) {
+                prefix = QStringLiteral("(?!");
+                length = 1;
+            } else if (assertion.startsWith('>')) {
+                prefix = QStringLiteral("(?>");
+                length = 1;
+            } else if (assertion == QStringLiteral("<=")) {
+                prefix = QStringLiteral("(?<=");
+                length = 2;
+            } else if (assertion == QStringLiteral("<!")) {
+                prefix = QStringLiteral("(?<!");
+                length = 2;
+            }
+            if (length > 0) {
+                const auto atom = result.mid(atomStart);
+                result.truncate(atomStart);
+                result += prefix + atom + ')';
+                index = assertionEnd + length - 1;
                 continue;
             }
         }
@@ -1784,6 +2198,7 @@ QRegularExpression regularExpression(const QString& _pattern)
         //
         if ((symbol == '<' || symbol == '>')
             && isSpecial(QStringLiteral("<>"), QString(), QString())) {
+            atomStart = result.size();
             result += symbol == '<' ? QStringLiteral("\\b(?=\\w)") : QStringLiteral("\\b(?<=\\w)");
             continue;
         }
@@ -1792,6 +2207,7 @@ QRegularExpression regularExpression(const QString& _pattern)
         // ... любой символ и наборы символов
         //
         if (symbol == '.' && isSpecial(QStringLiteral("."), QStringLiteral("."), QString())) {
+            atomStart = result.size();
             result += '.';
             continue;
         }
@@ -1821,6 +2237,7 @@ QRegularExpression regularExpression(const QString& _pattern)
             }
             auto set = _pattern.mid(index + 1, close - index - 1);
             index = close;
+            atomStart = result.size();
             result += '[';
             for (int setIndex = 0; setIndex < set.size(); ++setIndex) {
                 if (set.at(setIndex) == '['
@@ -1856,6 +2273,7 @@ QRegularExpression regularExpression(const QString& _pattern)
         //
         // ... экранированные классы символов и обратные ссылки
         //
+        atomStart = result.size();
         if (escaped) {
             switch (next.unicode()) {
             case 's':

@@ -598,6 +598,16 @@ void ScreenplayTreatmentEdit::setAutoReviewMode(const QColor& _textColor,
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
+bool ScreenplayTreatmentEdit::isTrackChangesEnabled() const
+{
+    return d->autoReviewMode.isEnabled && d->autoReviewMode.isTrackChanges;
+}
+
+void ScreenplayTreatmentEdit::markInsertedText(int _from, int _to)
+{
+    d->updateReviewMark(nullptr, _from, _to);
+}
+
 void ScreenplayTreatmentEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
