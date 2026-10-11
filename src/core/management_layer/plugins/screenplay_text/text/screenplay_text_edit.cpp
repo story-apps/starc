@@ -1911,7 +1911,7 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
                             .arg(toString(_cursor.blockFormat().alignment()),
                                  QString::number(_cursor.blockFormat().leftMargin(), 'f', 2),
                                  QString::number(_cursor.blockFormat().rightMargin(), 'f', 2),
-                                 _cursor.blockCharFormat().fontFamily(),
+                                 _cursor.blockCharFormat().font().family(),
                                  QString::number(_cursor.blockCharFormat().font().pixelSize()),
                                  _text.trimmed())
                             .toUtf8());
