@@ -1936,7 +1936,7 @@ int TextDocument::mergeParagraph(const TextCursor& _cursor)
     //
     cursor.movePosition(QTextCursor::NextBlock);
     QTextTable* table = cursor.currentTable();
-    while (table->cellAt(cursor).column() == 0) {
+    while (table != nullptr && table->cellAt(cursor).column() == 0) {
         cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
     }
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
