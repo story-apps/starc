@@ -269,15 +269,15 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
             pasteAction->setText(tr("Paste theme HASH"));
             connect(pasteAction, &QAction::triggered, this, [this] {
                 const auto hash = QGuiApplication::clipboard()->text();
-                if (hash.length() != 84) {
+                if (hash.length() != 84 && hash.length() != 108) {
                     UiHelper::showToolTip(tr("Pasted HASH has incorrect length"));
                     return;
                 }
 
                 QVector<QColor> colors;
                 int startIndex = 0;
-                for (int colorIndex = 0; colorIndex < 14; ++colorIndex) {
-                    const int length = 6;
+                const int length = 6;
+                for (int colorIndex = 0; colorIndex < hash.length() / length; ++colorIndex) {
                     const QColor color = "#" + hash.mid(startIndex, length);
                     if (!color.isValid()) {
                         UiHelper::showToolTip(tr("Pasted HASH has invalid colors"));
@@ -288,7 +288,7 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
                     colors.append(color);
                 }
                 for (const auto& color : std::as_const(colors)) {
-                    if (colors.count(color) > 6) {
+                    if (colors.count(color) > 8) {
                         UiHelper::showToolTip(tr("Pasted HASH has too many equal colors"));
                         return;
                     }
