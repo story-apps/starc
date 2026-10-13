@@ -846,6 +846,14 @@ void ScreenplayTextModel::updateNumbering()
 
 void ScreenplayTextModel::setScenesNumbersLocked(bool _locked)
 {
+    //
+    // Если мы тут во время сигнала об изменении модели информации, то игнорируем применение
+    // параметра, т.к. следом прилетит изменение для самого документа, которое и будет применено
+    //
+    if (d->informationModel->isChangesApplyingInProcess()) {
+        return;
+    }
+
     std::function<void(const TextModelItem*)> setSceneNumbersLockedImpl;
     setSceneNumbersLockedImpl
         = [this, _locked, &setSceneNumbersLockedImpl](const TextModelItem* _item) {
