@@ -846,8 +846,10 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 loader->addRequestAttribute("version", appVersion);
                 loader->addRequestAttribute("arch", QSysInfo::currentCpuArchitecture());
                 loader->addRequestAttribute(
-                    "user", DataStorageLayer::StorageFacade::settingsStorage()->accountName());
-                loader->addRequestAttribute("email", dialog->contactEmail());
+                    "user",
+                    QString("%1 <%2>").arg(
+                        DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
+                        dialog->contactEmail()));
                 loader->addRequestAttribute("list_annotations", annotationsText);
                 loader->addRequestAttributeFile("upload_file_minidump", dmpPath);
 

@@ -206,9 +206,6 @@ else
 
         # 2. ЖЕСТКО заставляем GN выставить Deployment Target = MAC_MIN_VERSION
         echo "mac_deployment_target=\"$MAC_MIN_VERSION\"" >> "$OUT_DIR/args.gn"
-
-        # 3. Передаем макросы контроля экспорта ABI libc++
-#        echo 'extra_cflags="-fvisibility=hidden -fvisibility-inlines-hidden -D_LIBCPP_DISABLE_AVAILABILITY -D_LIBCPP_BUILDING_LIBRARY -D_LIBCPP_SHARED_TEMPLATE_INLINE_VISIBILITY=hidden -Wno-error=deprecated-declarations"' >> "$OUT_DIR/args.gn"
         echo "extra_cflags=\"-mmacosx-version-min=$MAC_MIN_VERSION -Wno-error=deprecated-declarations\"" >> "$OUT_DIR/args.gn"
         echo "extra_ldflags=\"-mmacosx-version-min=$MAC_MIN_VERSION\"" >> "$OUT_DIR/args.gn"
     fi

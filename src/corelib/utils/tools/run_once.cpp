@@ -1,37 +1,54 @@
 #include "run_once.h"
 
-RunOnceLock::RunOnceLock()
+
+namespace {
+
+/**
+ * @brief Ключи заблокированных замков — свои для каждого потока
+ */
+QSet<QString>& lockedKeys()
 {
+    thread_local QSet<QString> keys;
+    return keys;
 }
+
+} // namespace
 
 RunOnceLock::RunOnceLock(const QString& _key)
     : m_key(_key)
 {
 }
 
+RunOnceLock::RunOnceLock(RunOnceLock&& _other) noexcept
+    : m_key(std::move(_other.m_key))
+{
+    _other.m_key = QString(); // чтобы деструктор источника не снял блокировку
+}
+
 RunOnceLock::~RunOnceLock()
 {
-    RunOnce::s_lockedKeys.remove(m_key);
+    if (!m_key.isNull()) {
+        lockedKeys().remove(m_key);
+    }
 }
 
 
 const RunOnceLock RunOnce::tryRun(const QString& _key)
 {
-    if (isRunned(_key))
-        return RunOnceLock();
+    if (isRunned(_key)) {
+        return {};
+    }
 
-    s_lockedKeys.insert(_key);
+    lockedKeys().insert(_key);
     return RunOnceLock(_key);
 }
 
 bool RunOnce::isRunned(const QString& _key)
 {
-    return s_lockedKeys.contains(_key);
+    return lockedKeys().contains(_key);
 }
 
 bool RunOnce::canRun(const QString& _key)
 {
     return !isRunned(_key);
 }
-
-QSet<QString> RunOnce::s_lockedKeys;

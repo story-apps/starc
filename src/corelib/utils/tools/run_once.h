@@ -13,6 +13,11 @@ class CORE_LIBRARY_EXPORT RunOnceLock
 public:
     ~RunOnceLock();
 
+    RunOnceLock(const RunOnceLock&) = delete;
+    RunOnceLock& operator=(const RunOnceLock&) = delete;
+    RunOnceLock(RunOnceLock&& _other) noexcept;
+    RunOnceLock& operator=(RunOnceLock&&) = delete;
+
     inline operator bool() const
     {
         return !m_key.isNull();
@@ -24,7 +29,7 @@ private:
      */
     QString m_key;
 
-    RunOnceLock();
+    RunOnceLock() = default;
     explicit RunOnceLock(const QString& _key);
 
     /**
@@ -55,15 +60,4 @@ public:
      * @brief Можно ли захватить запуск для заданного ключа
      */
     static bool canRun(const QString& _key);
-
-private:
-    /**
-     * @brief Ключи от заблокированных замков
-     */
-    static QSet<QString> s_lockedKeys;
-
-    /**
-     * Дружим с классом RunOnceLock для доступа к списку ключей
-     */
-    friend class RunOnceLock;
 };
