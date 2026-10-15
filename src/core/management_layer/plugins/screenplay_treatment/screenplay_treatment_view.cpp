@@ -1628,6 +1628,11 @@ void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKey
         d->textEdit->setAvoidMultipleSpaces(
             settingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseVimModeKey)) {
+        d->textEdit->setVimModeEnabled(
+            settingsValue(DataStorageLayer::kApplicationUseVimModeKey).toBool());
+    }
 }
 
 void ScreenplayTreatmentView::loadViewSettings()

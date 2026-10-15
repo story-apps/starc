@@ -1852,6 +1852,10 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
                                                                        : ScrollBarType::Timeline);
         d->complianceCheckResultView->setUseEighths(useEighths);
     }
+
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationUseVimModeKey)) {
+        d->textEdit->setVimModeEnabled(toBool(kApplicationUseVimModeKey));
+    }
 }
 
 void ScreenplayTextView::loadViewSettings()

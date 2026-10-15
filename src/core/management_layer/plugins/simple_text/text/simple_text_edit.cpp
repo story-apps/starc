@@ -555,6 +555,16 @@ void SimpleTextEdit::setAutoReviewMode(const QColor& _textColor, const QColor& _
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
+bool SimpleTextEdit::isTrackChangesEnabled() const
+{
+    return d->autoReviewMode.isEnabled && d->autoReviewMode.isTrackChanges;
+}
+
+void SimpleTextEdit::markInsertedText(int _from, int _to)
+{
+    d->updateReviewMark(nullptr, _from, _to);
+}
+
 void SimpleTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {

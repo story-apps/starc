@@ -1216,6 +1216,11 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->setAvoidMultipleSpaces(
             settingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseVimModeKey)) {
+        d->textEdit->setVimModeEnabled(
+            settingsValue(DataStorageLayer::kApplicationUseVimModeKey).toBool());
+    }
 }
 
 void SimpleTextView::loadViewSettings()

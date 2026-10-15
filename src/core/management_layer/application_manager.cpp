@@ -3462,6 +3462,9 @@ void ApplicationManager::initConnections()
                     event->avoidMultipleSpaces
                         = settingsValue(kApplicationAvoidMultipleSpacesKey).toBool();
                 }
+                if (_changedSettingsKeys.contains(kApplicationUseVimModeKey)) {
+                    event->useVimMode = settingsValue(kApplicationUseVimModeKey).toBool();
+                }
                 QApplication::postEvent(this, event);
 
                 //
