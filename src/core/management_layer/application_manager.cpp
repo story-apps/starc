@@ -1599,12 +1599,16 @@ void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
 
 void ApplicationManager::Implementation::updateWindowTitle(const QString& _projectName)
 {
-    if (projectsManager->currentProject() == nullptr) {
+    const auto currentProject = projectsManager->currentProject();
+    if (currentProject == nullptr) {
         applicationView->setWindowTitle("Story Architect");
         return;
     }
 
-    const auto currentProject = projectsManager->currentProject();
+    QString currentProjectName = _projectName;
+    if (currentProjectName.isEmpty()) {
+        projectsManager->currentProjectName();
+    }
     applicationView->setWindowTitle(
         QString("%1%2 (%3) - Story Architect%4")
             .arg(
@@ -1614,7 +1618,7 @@ void ApplicationManager::Implementation::updateWindowTitle(const QString& _proje
                 ""
 #endif
                 ,
-                _projectName.isEmpty() ? currentProject->name() : _projectName,
+                currentProjectName,
                 (currentProject->isLocal() ? currentProject->path() : tr("in cloud")),
                 (currentProject->isReadOnly() ? QString(" - %1").arg(tr("Read only")) : "")));
 
@@ -3338,8 +3342,9 @@ void ApplicationManager::initConnections()
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectUuid);
     connect(d->projectManager.data(), &ProjectManager::projectNameChanged, this,
             [this](const QString& _name) {
-                d->menuView->setProjectTitle(_name);
-                d->updateWindowTitle(_name);
+                const auto projectName = d->projectsManager->currentProjectName(_name);
+                d->menuView->setProjectTitle(projectName);
+                d->updateWindowTitle(projectName);
             });
     connect(d->projectManager.data(), &ProjectManager::projectLoglineChanged,
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectLogline);

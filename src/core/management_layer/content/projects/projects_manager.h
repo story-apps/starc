@@ -176,6 +176,11 @@ public:
      */
     void updateCurrentProject(const QString& _name, const QString& _logline, const QPixmap& _cover);
 
+    /**
+     * @brief Получить полное название текущего проекта (вместе с командой)
+     */
+    QString currentProjectName(const QString _name = {}) const;
+
 signals:
     /**
      * @brief Запрос на отображение меню

@@ -1516,4 +1516,20 @@ void ProjectsManager::updateCurrentProject(const QString& _name, const QString& 
     setCurrentProjectCover(_cover);
 }
 
+QString ProjectsManager::currentProjectName(const QString _name) const
+{
+    QString currentProjectName = _name.isEmpty() ? d->currentProject->name() : _name;
+    const auto parentItem = d->currentProject->parent();
+    if (parentItem == nullptr || parentItem->type() != BusinessLayer::ProjectsModelItemType::Team) {
+        return currentProjectName;
+    }
+
+    const auto currentProjectTeam = static_cast<BusinessLayer::ProjectsModelTeamItem*>(parentItem);
+    if (currentProjectTeam != nullptr) {
+        currentProjectName.prepend(currentProjectTeam->name() + ": ");
+    }
+
+    return currentProjectName;
+}
+
 } // namespace ManagementLayer
