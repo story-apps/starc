@@ -1012,7 +1012,10 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
 
     createDocumentDialog = new Ui::CreateDocumentDialog(topLevelWidget);
     createDocumentDialog->setBlockedDocumentTypes(blockedDocumentTypes);
-    if (currentItem->type() == Domain::DocumentObjectType::Folder) {
+    if (currentItem->type() == Domain::DocumentObjectType::Folder
+        || currentItem->type() == Domain::DocumentObjectType::Character
+        || currentItem->type() == Domain::DocumentObjectType::Location
+        || currentItem->type() == Domain::DocumentObjectType::World) {
         createDocumentDialog->setInsertionParent(currentItem->name());
     }
     if (_type != Domain::DocumentObjectType::Undefined) {
@@ -1076,7 +1079,10 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                     : currentItemIndex.parent();
                 auto parentItem = projectStructureModel->itemForIndex(parentIndex);
                 while (parentIndex.isValid() && parentItem != nullptr
-                       && parentItem->type() != Domain::DocumentObjectType::Folder) {
+                       && parentItem->type() != Domain::DocumentObjectType::Folder
+                       && parentItem->type() != Domain::DocumentObjectType::Character
+                       && parentItem->type() != Domain::DocumentObjectType::Location
+                       && parentItem->type() != Domain::DocumentObjectType::World) {
                     parentIndex = parentIndex.parent();
                     parentItem = projectStructureModel->itemForIndex(parentIndex);
                 }
@@ -1089,8 +1095,7 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 QModelIndex itemForSelectIndex = addedItemIndex;
                 //
                 // ... в зависимости от типа, выбираем потенциально желаемый к редактированию
-                // документ
-                //     сейчас это просто выбор сценария для всех видов бандлов
+                //     документ сейчас это просто выбор сценария для всех видов бандлов
                 //
                 constexpr int invalidIndex = -1;
                 int childIndex = invalidIndex;
