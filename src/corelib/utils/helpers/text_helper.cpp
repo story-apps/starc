@@ -526,6 +526,48 @@ int TextHelper::wordsCount(const QString& _text)
     return _text.split(wordCountExpression, Qt::SkipEmptyParts).count();
 }
 
+void TextHelper::clearSelectionFormatting(QTextCursor& _cursor)
+{
+    if (!_cursor.hasSelection()) {
+        return;
+    }
+
+    _cursor.beginEditBlock();
+
+    int position = std::min(_cursor.selectionStart(), _cursor.selectionEnd());
+    const int lastPosition = std::max(_cursor.selectionStart(), _cursor.selectionEnd());
+    while (position < lastPosition) {
+        const auto block = _cursor.document()->findBlock(position);
+        const auto textFormats = block.textFormats();
+        if (!textFormats.isEmpty()) {
+            for (const auto& format : textFormats) {
+                const auto formatStart = block.position() + format.start;
+                const auto formatEnd = formatStart + format.length;
+                if (position >= formatEnd) {
+                    continue;
+                } else if (formatStart >= lastPosition) {
+                    break;
+                }
+
+                _cursor.setPosition(std::max(formatStart, position));
+                _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
+                _cursor.setCharFormat(_cursor.block().charFormat());
+
+                _cursor.clearSelection();
+                position = _cursor.position();
+            }
+        }
+
+        if (!block.next().isValid()) {
+            break;
+        }
+
+        position = block.next().position();
+    }
+
+    _cursor.endEditBlock();
+}
+
 void TextHelper::updateSelectionFormatting(
     QTextCursor& _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat)
 {
@@ -560,10 +602,14 @@ void TextHelper::updateSelectionFormatting(
                 position = _cursor.position();
             }
         } else {
-            _cursor.setPosition(block.position());
+            _cursor.setPosition(position);
+            const auto endPosition = std::min(position + _cursor.block().length(), lastPosition);
+            _cursor.setPosition(endPosition);
 
             const auto newFormat = _updateFormat(block.charFormat());
-            _cursor.mergeBlockCharFormat(newFormat);
+            _cursor.mergeCharFormat(newFormat);
+
+            _cursor.clearSelection();
         }
 
         if (!block.next().isValid()) {

@@ -69,6 +69,8 @@ public:
     void invertTextItalic();
     void invertTextUnderline();
     void invertTextStrikethrough();
+    //
+    void clearTextFormatting();
     /** @} */
 
     /**

@@ -142,6 +142,11 @@ public:
     static int wordsCount(const QString& _text);
 
     /**
+     * @brief Очистить форматирования для выделенного текста в курсоре
+     */
+    static void clearSelectionFormatting(QTextCursor& _cursor);
+
+    /**
      * @brief Применить заданный функтор форматирования для выделенного текста в курсоре
      */
     static void updateSelectionFormatting(

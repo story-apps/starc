@@ -379,6 +379,16 @@ void BaseTextEdit::invertTextStrikethrough()
     setTextStrikethrough(!cursorForFormatInversion(textCursor()).charFormat().font().strikeOut());
 }
 
+void BaseTextEdit::clearTextFormatting()
+{
+    auto cursor = textCursor();
+    if (!cursor.hasSelection()) {
+        return;
+    }
+
+    TextHelper::clearSelectionFormatting(cursor);
+}
+
 void BaseTextEdit::setTextFont(const QFont& _font)
 {
     auto buildFormat = [_font](const QTextCharFormat& _format) {
@@ -550,6 +560,14 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
             lowercaseAction->setWhatsThis(
                 QKeySequence("Ctrl+Shift+Down").toString(QKeySequence::NativeText));
             connect(lowercaseAction, &QAction::triggered, this, [this] { changeTextCase(false); });
+
+            auto clearFormattingAction = new QAction(formattingAction);
+            clearFormattingAction->setSeparator(true);
+            clearFormattingAction->setText(tr("Clear formatting"));
+            clearFormattingAction->setWhatsThis(
+                QKeySequence("Ctrl+\\").toString(QKeySequence::NativeText));
+            connect(clearFormattingAction, &QAction::triggered, this,
+                    &BaseTextEdit::clearTextFormatting);
         }
 
         //
@@ -707,6 +725,13 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
              && _event->modifiers().testFlag(Qt::ShiftModifier)
              && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)) {
         changeTextCase(_event->key() == Qt::Key_Up);
+    }
+    //
+    // Сброс формата
+    //
+    else if (_event->modifiers().testFlag(Qt::ControlModifier)
+             && _event->key() == Qt::Key_Backslash) {
+        clearTextFormatting();
     }
     //
     // Сдвигаем на одну строку
