@@ -4180,6 +4180,12 @@ void ApplicationManager::initConnections()
 
                 d->cloudServiceManager->sendDocumentToReview(currentProject->id(), _documentUuid,
                                                              _draftName, _comment);
+
+                const auto taskId = "project-sent-for-review";
+                TaskBar::addTask(taskId);
+                TaskBar::setTaskTitle(taskId, tr("Screenplay sent for reveiw"));
+                TaskBar::setTaskHasProgress(taskId, false);
+                QTimer::singleShot(2400, this, [taskId] { TaskBar::finishTask(taskId); });
             });
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased,
