@@ -261,7 +261,7 @@ struct TeamInfo {
     QString description;
     QByteArray avatar;
     bool isReviewEnabled = false;
-    QString reviewNotiifcationsTelegramChatId;
+    QString reviewNotiifcationsInfo;
 
     //
     // тут вложена инфо о текущем пользователе

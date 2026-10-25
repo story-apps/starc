@@ -58,8 +58,8 @@ public:
     /**
      * @brief Айди чата телеграма для отправки уведомлений
      */
-    QString reviewNotificationTelegramChatId() const;
-    void setReviewNotificationTelegramChatId(const QString& _chatId);
+    QString reviewNotificationInfo() const;
+    void setReviewNotificationInfo(const QString& _chatId);
 
 signals:
     /**

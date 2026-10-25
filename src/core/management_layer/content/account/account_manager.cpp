@@ -169,7 +169,7 @@ void AccountManager::Implementation::initNavigatorConnections()
             //
             emit q->createTeamRequested(dialog->teamName(), dialog->teamDescription(),
                                         avatarData(dialog->teamAvatar()), dialog->isReviewEnabled(),
-                                        dialog->reviewNotificationTelegramChatId());
+                                        dialog->reviewNotificationInfo());
 
             dialog->hideDialog();
         });
@@ -198,7 +198,7 @@ void AccountManager::Implementation::initNavigatorConnections()
         dialog->setteamDescription(team.description);
         dialog->setTeamAvatar(ImageHelper::imageFromBytes(team.avatar));
         dialog->setReviewEnabled(team.isReviewEnabled);
-        dialog->setReviewNotificationTelegramChatId(team.reviewNotiifcationsTelegramChatId);
+        dialog->setReviewNotificationInfo(team.reviewNotiifcationsInfo);
         connect(dialog, &Ui::TeamDialog::savePressed, view, [this, team, dialog] {
             if (dialog->teamName().isEmpty()) {
                 dialog->setTeamNameError(tr("The team should have a name"));
@@ -210,7 +210,7 @@ void AccountManager::Implementation::initNavigatorConnections()
             //
             emit q->updateTeamRequested(team.id, dialog->teamName(), dialog->teamDescription(),
                                         avatarData(dialog->teamAvatar()), dialog->isReviewEnabled(),
-                                        dialog->reviewNotificationTelegramChatId());
+                                        dialog->reviewNotificationInfo());
 
             dialog->hideDialog();
         });

@@ -30,7 +30,7 @@ public:
     TextField* teamName = nullptr;
     TextField* teamDescription = nullptr;
     CheckBox* isReviewEnabled = nullptr;
-    TextField* reviewNotificationsTelegramChatId = nullptr;
+    TextField* reviewNotificationsInfo = nullptr;
     ImageCard* teamAvatar = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -42,15 +42,15 @@ TeamDialog::Implementation::Implementation(QWidget* _parent)
     : teamName(new TextField(_parent))
     , teamDescription(new TextField(_parent))
     , isReviewEnabled(new CheckBox(_parent))
-    , reviewNotificationsTelegramChatId(new TextField(_parent))
+    , reviewNotificationsInfo(new TextField(_parent))
     , teamAvatar(new ImageCard(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , saveButton(new Button(_parent))
 {
     teamName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    reviewNotificationsTelegramChatId->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    reviewNotificationsTelegramChatId->hide();
+    reviewNotificationsInfo->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    reviewNotificationsInfo->hide();
     teamAvatar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     teamAvatar->setDecorationIcon(u8"\U000F0381");
     UiHelper::initSpellingFor(teamDescription);
@@ -87,7 +87,7 @@ TeamDialog::TeamDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->teamName, row++, 0, 1, 2);
     contentsLayout()->addWidget(d->teamDescription, row++, 0, 1, 2);
     contentsLayout()->addWidget(d->isReviewEnabled, row++, 0, 1, 2);
-    contentsLayout()->addWidget(d->reviewNotificationsTelegramChatId, row++, 0, 1, 2);
+    contentsLayout()->addWidget(d->reviewNotificationsInfo, row++, 0, 1, 2);
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->addWidget(d->teamAvatar, 0, 2, row++, 1, Qt::AlignTop);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 3);
@@ -97,7 +97,7 @@ TeamDialog::TeamDialog(QWidget* _parent)
 
 
     connect(d->teamName, &TextField::textChanged, d->teamName, &TextField::clearError);
-    connect(d->isReviewEnabled, &CheckBox::checkedChanged, d->reviewNotificationsTelegramChatId,
+    connect(d->isReviewEnabled, &CheckBox::checkedChanged, d->reviewNotificationsInfo,
             &TextField::setVisible);
     connect(d->cancelButton, &Button::clicked, this, &TeamDialog::hideDialog);
     connect(d->saveButton, &Button::clicked, this, &TeamDialog::savePressed);
@@ -160,14 +160,14 @@ void TeamDialog::setReviewEnabled(bool _enabled)
     d->isReviewEnabled->setChecked(_enabled);
 }
 
-QString TeamDialog::reviewNotificationTelegramChatId() const
+QString TeamDialog::reviewNotificationInfo() const
 {
-    return d->reviewNotificationsTelegramChatId->text();
+    return d->reviewNotificationsInfo->text();
 }
 
-void TeamDialog::setReviewNotificationTelegramChatId(const QString& _chatId)
+void TeamDialog::setReviewNotificationInfo(const QString& _chatId)
 {
-    d->reviewNotificationsTelegramChatId->setText(_chatId);
+    d->reviewNotificationsInfo->setText(_chatId);
 }
 
 bool TeamDialog::eventFilter(QObject* _watched, QEvent* _event)
@@ -195,7 +195,7 @@ void TeamDialog::updateTranslations()
     d->teamName->setLabel(tr("Name"));
     d->teamDescription->setLabel(tr("Description"));
     d->isReviewEnabled->setText(tr("Enable review for documents"));
-    d->reviewNotificationsTelegramChatId->setLabel(tr("Telegram chat ID for review notifications"));
+    d->reviewNotificationsInfo->setLabel(tr("Config for review notifications"));
     d->teamAvatar->setSupportingText(tr("Add avatar +"), tr("Change avatar..."),
                                      tr("Do you want to delete the team's avatar?"));
     d->teamAvatar->setImageCroppingText(tr("Select an area for the team avatar"));
@@ -212,7 +212,7 @@ void TeamDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto textField : std::vector<TextField*>{
              d->teamName,
              d->teamDescription,
-             d->reviewNotificationsTelegramChatId,
+             d->reviewNotificationsInfo,
          }) {
         textField->setTextColor(DesignSystem::color().onBackground());
         textField->setBackgroundColor(DesignSystem::color().onBackground());
