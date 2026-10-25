@@ -32,6 +32,7 @@
 #include <ui/modules/search_toolbar/search_manager.h>
 #include <ui/modules/text_scrollbar_manager/screenplay_text_scrollbar_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
@@ -2137,6 +2138,15 @@ void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->textEdit->viewport()->setPalette(palette);
     d->textEdit->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
     d->textEdit->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    if (const auto textEditScrollBars = d->scalableWrapper->findChildren<ScrollBar*>();
+        !textEditScrollBars.isEmpty()) {
+        for (auto scrollBar : textEditScrollBars) {
+            if (scrollBar->orientation() == Qt::Horizontal) {
+                scrollBar->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().surface()));
+                break;
+            }
+        }
+    }
 
     d->splitter->setBackgroundColor(Ui::DesignSystem::color().surface());
 

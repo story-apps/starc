@@ -3,6 +3,7 @@
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/eighths_helper.h>
 #include <utils/helpers/time_helper.h>
@@ -45,7 +46,8 @@ public:
 
     QPointer<BusinessLayer::ScreenplayTextModel> model;
 
-    QScrollBar* scrollbar = nullptr;
+    QScrollBar* verticalScrollBar = nullptr;
+    QScrollBar* horizontalScrollBar = nullptr;
 
     ScrollBarType type = ScrollBarType::Pageline;
     QPointer<ScreenplayTextTimeline> timeline;
@@ -60,7 +62,8 @@ public:
 ScreenplayTextScrollBarManager::Implementation::Implementation(ScreenplayTextScrollBarManager* _q,
                                                                QAbstractScrollArea* _parent)
     : q(_q)
-    , scrollbar(_parent->verticalScrollBar())
+    , verticalScrollBar(_parent->verticalScrollBar())
+    , horizontalScrollBar(_parent->horizontalScrollBar())
     , lineUpdateDebouncer(180)
 {
     lineHideTimer.setSingleShot(true);
@@ -76,7 +79,8 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineGeometry()
     Widget* line = nullptr;
     if (type == ScrollBarType::Timeline) {
         if (timeline.isNull()) {
-            timeline = new ScreenplayTextTimeline(scrollbar->parentWidget()->parentWidget());
+            timeline
+                = new ScreenplayTextTimeline(verticalScrollBar->parentWidget()->parentWidget());
             timeline->installEventFilter(q);
         }
         line = timeline;
@@ -86,7 +90,8 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineGeometry()
         }
     } else {
         if (pageline.isNull()) {
-            pageline = new ScreenplayTextPageline(scrollbar->parentWidget()->parentWidget());
+            pageline
+                = new ScreenplayTextPageline(verticalScrollBar->parentWidget()->parentWidget());
             pageline->installEventFilter(q);
         }
         line = pageline;
@@ -96,18 +101,20 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineGeometry()
         }
     }
 
-    const auto parent = qobject_cast<QAbstractScrollArea*>(line->parentWidget());
     const auto bottomScrollBarDelta
-        = parent->horizontalScrollBar()->isVisible() ? parent->horizontalScrollBar()->height() : 0;
+        = horizontalScrollBar->maximum() > horizontalScrollBar->minimum()
+        ? DesignSystem::scrollBar().minimumSize()
+        : 0;
     line->move(0, line->parentWidget()->size().height() - line->height() - bottomScrollBarDelta);
-    line->resize(line->parentWidget()->size().width(), line->sizeHint().height());
+    line->resize(line->parentWidget()->size().width(),
+                 line->sizeHint().height() + bottomScrollBarDelta);
 
     updateLineDisplayRange();
 }
 
 void ScreenplayTextScrollBarManager::Implementation::updateLineDisplayRange()
 {
-    if (model.isNull() || scrollbar->maximum() == 0) {
+    if (model.isNull() || verticalScrollBar->maximum() == 0) {
         return;
     }
 
@@ -117,12 +124,12 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineDisplayRange()
     // поэтому тут рассчёт идёт исходя из этого знания
     //
     if (!timeline.isNull()) {
-        timeline->setDisplayRange(model->duration() * scrollbar->pageStep()
-                                  / (scrollbar->maximum() + scrollbar->pageStep()));
+        timeline->setDisplayRange(model->duration() * verticalScrollBar->pageStep()
+                                  / (verticalScrollBar->maximum() + verticalScrollBar->pageStep()));
     }
     if (!pageline.isNull()) {
-        pageline->setDisplayRange(model->eighths() * scrollbar->pageStep()
-                                  / (scrollbar->maximum() + scrollbar->pageStep()));
+        pageline->setDisplayRange(model->eighths() * verticalScrollBar->pageStep()
+                                  / (verticalScrollBar->maximum() + verticalScrollBar->pageStep()));
     }
 }
 
@@ -193,15 +200,16 @@ ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
 
 void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
 {
-    connect(d->scrollbar, &QScrollBar::rangeChanged, this, [this](int _minimum, int _maximum) {
-        if (!d->timeline.isNull()) {
-            d->timeline->setScrollable(_minimum < _maximum);
-        }
-        if (!d->pageline.isNull()) {
-            d->pageline->setScrollable(_minimum < _maximum);
-        }
-        d->updateLineDisplayRange();
-    });
+    connect(d->verticalScrollBar, &QScrollBar::rangeChanged, this,
+            [this](int _minimum, int _maximum) {
+                if (!d->timeline.isNull()) {
+                    d->timeline->setScrollable(_minimum < _maximum);
+                }
+                if (!d->pageline.isNull()) {
+                    d->pageline->setScrollable(_minimum < _maximum);
+                }
+                d->updateLineDisplayRange();
+            });
     auto updateLineValue = [this] {
         if (d->model == nullptr) {
             return;
@@ -209,7 +217,7 @@ void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
 
         QSignalBlocker timelineSignalBlocker(d->timeline);
         QSignalBlocker pagelineSignalBlocker(d->pageline);
-        if (d->scrollbar->maximum() == 0) {
+        if (d->verticalScrollBar->maximum() == 0) {
             if (!d->timeline.isNull()) {
                 d->timeline->setValue({});
             }
@@ -217,8 +225,8 @@ void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
                 d->pageline->setValue({});
             }
         } else {
-            const qreal scrollBarValue = d->scrollbar->value();
-            const qreal scrollBarMaximum = d->scrollbar->maximum();
+            const qreal scrollBarValue = d->verticalScrollBar->value();
+            const qreal scrollBarMaximum = d->verticalScrollBar->maximum();
             if (!d->timeline.isNull()) {
                 const auto durationValue = d->model->duration() * scrollBarValue / scrollBarMaximum;
                 d->timeline->setValue(
@@ -230,23 +238,31 @@ void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
             }
         }
     };
-    connect(d->scrollbar, &QScrollBar::valueChanged, this, updateLineValue);
+    connect(d->verticalScrollBar, &QScrollBar::valueChanged, this, updateLineValue);
     if (!d->timeline.isNull()) {
-        connect(d->timeline, &ScreenplayTextTimeline::valueChanged, this,
-                [this](std::chrono::milliseconds _value) {
-                    d->scrollbar->setValue(d->scrollbar->maximum() * _value
-                                           / std::chrono::duration_cast<std::chrono::milliseconds>(
-                                               d->model->duration()));
-                });
+        connect(
+            d->timeline, &ScreenplayTextTimeline::valueChanged, this,
+            [this](std::chrono::milliseconds _value) {
+                d->verticalScrollBar->setValue(
+                    d->verticalScrollBar->maximum() * _value
+                    / std::chrono::duration_cast<std::chrono::milliseconds>(d->model->duration()));
+            });
         connect(d->timeline, &ScreenplayTextTimeline::updateValueRequested, this, updateLineValue);
     }
     if (!d->pageline.isNull()) {
         connect(d->pageline, &ScreenplayTextPageline::valueChanged, this, [this](qreal _value) {
-            d->scrollbar->setValue(
-                static_cast<int>(d->scrollbar->maximum() * _value / d->model->eighths()));
+            d->verticalScrollBar->setValue(
+                static_cast<int>(d->verticalScrollBar->maximum() * _value / d->model->eighths()));
         });
         connect(d->pageline, &ScreenplayTextPageline::updateValueRequested, this, updateLineValue);
     }
+
+    //
+    // Тут мы закладываемся на знание о том, что полоса горизонтальной прокрутки будет видна, если у
+    // неё валидный интервал значений, поэтому обновляем геометрию в момент изменения интревала
+    //
+    connect(d->horizontalScrollBar, &QScrollBar::rangeChanged, this,
+            [this] { d->updateLineGeometry(); });
 }
 
 void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel* _model)

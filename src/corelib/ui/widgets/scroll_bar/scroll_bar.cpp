@@ -203,18 +203,16 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
+    //
+    // Заливаем фон виджета заданным цветом, если он задан, либо прозрачным, для кейса, когда нужно
+    // видеть, что под скролбаром (поведение по-умолчанию)
+    //
     QPainter painter(this);
-    painter.fillRect(rect(), Qt::transparent);
+    painter.fillRect(rect(), d->backgroundColor.isValid() ? d->backgroundColor : Qt::transparent);
 
     if (maximum() <= minimum()) {
         return;
     }
-
-    //
-    // Настраиваем видимость полосы прокрутки
-    //
-    const qreal opacity = d->widthAnimation.currentValue().toReal();
-    painter.setOpacity(opacity);
 
     //
     // Рисуем фон скролбара
