@@ -600,9 +600,193 @@ std::chrono::milliseconds ScreenplayTextModel::duration() const
     return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->duration();
 }
 
+std::chrono::milliseconds ScreenplayTextModel::itemStartsDuration(TextModelItem* _item) const
+{
+    if (_item == nullptr) {
+        return {};
+    }
+
+    std::chrono::milliseconds lastItemDuration{ 0 };
+    std::function<bool(const TextModelItem*)> findItem;
+    findItem = [&findItem, &lastItemDuration, searchItem = _item](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            if (childItem == searchItem) {
+                return true;
+            }
+
+            switch (childItem->type()) {
+            case TextModelItemType::Folder: {
+                const auto isItemFound = findItem(childItem);
+                if (isItemFound) {
+                    return true;
+                }
+                break;
+            }
+
+            case TextModelItemType::Group: {
+                if (static_cast<TextGroupType>(childItem->subtype()) != TextGroupType::Scene) {
+                    break;
+                }
+
+                const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(childItem);
+                lastItemDuration += sceneItem->duration();
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(childItem);
+                lastItemDuration += textItem->duration();
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+        return false;
+    };
+    findItem(d->rootItem());
+    return lastItemDuration;
+}
+
+QModelIndex ScreenplayTextModel::indexForDuration(std::chrono::milliseconds _duration) const
+{
+    if (_duration < std::chrono::milliseconds{ 0 }) {
+        return {};
+    }
+
+    QModelIndex index;
+    std::chrono::milliseconds lastItemDuration{ 0 };
+    std::function<bool(const TextModelItem*)> findItem;
+    findItem = [this, &findItem, &lastItemDuration, _duration, &index](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
+                const auto isItemFound = findItem(childItem);
+                if (isItemFound) {
+                    return true;
+                }
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(childItem);
+                if (lastItemDuration <= _duration
+                    && _duration <= lastItemDuration + textItem->duration()) {
+                    index = indexForItem(textItem->parent());
+                    return true;
+                }
+
+                lastItemDuration += textItem->duration();
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+        return false;
+    };
+    findItem(d->rootItem());
+    return index;
+}
+
 qreal ScreenplayTextModel::eighths() const
 {
     return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->eighths();
+}
+
+qreal ScreenplayTextModel::itemStartsEighths(TextModelItem* _item) const
+{
+    qreal lastItemDuration = 0.0;
+    std::function<bool(const TextModelItem*)> findItem;
+    findItem = [&findItem, &lastItemDuration, searchItem = _item](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            if (childItem == searchItem) {
+                return true;
+            }
+
+            switch (childItem->type()) {
+            case TextModelItemType::Folder: {
+                const auto isItemFound = findItem(childItem);
+                if (isItemFound) {
+                    return true;
+                }
+                break;
+            }
+
+            case TextModelItemType::Group: {
+                if (static_cast<TextGroupType>(childItem->subtype()) != TextGroupType::Scene) {
+                    break;
+                }
+
+                const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(childItem);
+                lastItemDuration += sceneItem->eighths();
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(childItem);
+                lastItemDuration += textItem->eighths();
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+        return false;
+    };
+    findItem(d->rootItem());
+    return lastItemDuration;
+}
+
+QModelIndex ScreenplayTextModel::indexForEighths(qreal _eighths) const
+{
+    if (_eighths < 0) {
+        return {};
+    }
+
+    QModelIndex index;
+    qreal lastItemDuration{ 0 };
+    std::function<bool(const TextModelItem*)> findItem;
+    findItem = [this, &findItem, &lastItemDuration, _eighths, &index](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
+                const auto isItemFound = findItem(childItem);
+                if (isItemFound) {
+                    return true;
+                }
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(childItem);
+                if (lastItemDuration <= _eighths
+                    && _eighths <= lastItemDuration + textItem->eighths()) {
+                    index = indexForItem(textItem->parent());
+                    return true;
+                }
+
+                lastItemDuration += textItem->eighths();
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+        return false;
+    };
+    findItem(d->rootItem());
+    return index;
 }
 
 std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsColors() const
@@ -628,6 +812,12 @@ std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsColors() c
                 const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(childItem);
                 colors.emplace(lastItemDuration, sceneItem->color());
                 lastItemDuration += sceneItem->duration();
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(childItem);
+                lastItemDuration += textItem->duration();
                 break;
             }
 
@@ -663,6 +853,12 @@ std::map<qreal, QColor> ScreenplayTextModel::itemsColorsForEighths() const
                 const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(childItem);
                 colors.emplace(lastItemDuration, sceneItem->color());
                 lastItemDuration += sceneItem->eighths();
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(childItem);
+                lastItemDuration += textItem->eighths();
                 break;
             }
 

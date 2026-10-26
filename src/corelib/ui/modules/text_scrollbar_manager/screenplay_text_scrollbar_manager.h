@@ -10,7 +10,8 @@
 
 namespace BusinessLayer {
 class ScreenplayTextModel;
-}
+class TextModelItem;
+} // namespace BusinessLayer
 
 namespace Ui {
 
@@ -20,6 +21,14 @@ namespace Ui {
 enum class CORE_LIBRARY_EXPORT ScrollBarType {
     Timeline,
     Pageline,
+};
+
+/**
+ * @brief Тип выделения области на полосе прокрутки
+ */
+enum class CORE_LIBRARY_EXPORT ScrollBarMode {
+    Scroll, //!< Основан на прокрутке оригинального документа и его отображаемой области
+    Range, //!< Пользовательское выделение
 };
 
 /**
@@ -59,6 +68,16 @@ public:
     void setScrollBarVisible(bool _visible, bool _animate = true);
 
     /**
+     * @brief Задать режим работы полосы прокрутки
+     */
+    void setScrollBarMode(ScrollBarMode _mode);
+
+    /**
+     * @brief Задать выделенный элемент
+     */
+    void selectItem(BusinessLayer::TextModelItem* _item);
+
+    /**
      * @brief Высота скролбара
      */
     int scrollBarHeight() const;
@@ -68,6 +87,12 @@ public:
      *        для коррктировки положения и размера таймлайна
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+signals:
+    /**
+     * @brief Пользователь нажал на заданную сцену
+     */
+    void itemClicked(const QModelIndex& _index);
 
 private:
     class Implementation;
@@ -96,7 +121,7 @@ public:
     void setMaximum(std::chrono::milliseconds _maximum);
 
     /**
-     * @brief Задать текущее значение слайдера
+     * @brief Задать позицию прокрутки от 0 до maximum (не начало отрезка)
      */
     void setValue(std::chrono::milliseconds _value);
 
@@ -104,6 +129,14 @@ public:
      * @brief Задать размер отображаемой области
      */
     void setDisplayRange(std::chrono::milliseconds _value);
+
+    /**
+     * @brief Показать абсолютный отрезок без преобразования позиции прокрутки.
+     *        Длина ограничивается [0, maximum], начало — [0, maximum - длина].
+     *        Не изменяет возможность взаимодействия и не испускает valueChanged().
+     *        setValue() возвращает режим позиции прокрутки.
+     */
+    void setRange(std::chrono::milliseconds _start, std::chrono::milliseconds _length);
 
     /**
      * @brief Задать цвета слайдера
@@ -122,7 +155,15 @@ public:
 
 signals:
     /**
-     * @brief Значение слайдера изменилось
+     * @brief Абсолютная позиция нажатия левой кнопки мыши в миллисекундах.
+     *        Работает и при setScrollable(false), не зависит от выделенного отрезка.
+     *        Не испускается при перетаскивании, программных изменениях и вне шкалы.
+     */
+    void positionClicked(std::chrono::milliseconds _position);
+
+    /**
+     * @brief Значение слайдера изменилось при взаимодействии с пользователем или setValue().
+     *        В режиме setRange() передаётся абсолютное начало отрезка.
      */
     void valueChanged(std::chrono::milliseconds _value);
 
@@ -196,7 +237,7 @@ public:
     void setMaximum(qreal _maximum);
 
     /**
-     * @brief Задать текущее значение слайдера
+     * @brief Задать позицию прокрутки от 0 до maximum (не начало отрезка)
      */
     void setValue(qreal _value);
 
@@ -204,6 +245,15 @@ public:
      * @brief Задать размер отображаемой области
      */
     void setDisplayRange(qreal _value);
+
+    /**
+     * @brief Показать абсолютный отрезок без преобразования позиции прокрутки.
+     *        Длина ограничивается [0, maximum], начало — [0, maximum - длина].
+     *        Не изменяет возможность взаимодействия и не испускает valueChanged().
+     *        setValue() возвращает режим позиции прокрутки.
+     *        Начало, длина и maximum задаются в восьмых долях страницы.
+     */
+    void setRange(qreal _start, qreal _length);
 
     /**
      * @brief Задать цвета слайдера
@@ -222,7 +272,15 @@ public:
 
 signals:
     /**
-     * @brief Значение слайдера изменилось
+     * @brief Абсолютная позиция нажатия левой кнопки мыши в восьмых долях страницы.
+     * Работает и при setScrollable(false), не зависит от выделенного отрезка.
+     * Не испускается при перетаскивании, программных изменениях и вне шкалы.
+     */
+    void positionClicked(qreal _position);
+
+    /**
+     * @brief Значение слайдера изменилось при взаимодействии с пользователем или setValue().
+     * В режиме setRange() передаётся абсолютное начало отрезка.
      */
     void valueChanged(qreal _value);
 

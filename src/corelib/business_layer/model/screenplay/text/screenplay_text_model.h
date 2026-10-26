@@ -106,9 +106,29 @@ public:
     std::chrono::milliseconds duration() const;
 
     /**
+     * @brief Длительность, на которой начинается заданный элемент
+     */
+    std::chrono::milliseconds itemStartsDuration(TextModelItem* _item) const;
+
+    /**
+     * @brief Получить индекс элемента в заданной позиции
+     */
+    QModelIndex indexForDuration(std::chrono::milliseconds _duration) const;
+
+    /**
      * @brief Восьмушность сценария
      */
     qreal eighths() const;
+
+    /**
+     * @brief Восьмушность, на которой начинается заданный элемент
+     */
+    qreal itemStartsEighths(TextModelItem* _item) const;
+
+    /**
+     * @brief Получить индекс элемента в заданной позиции
+     */
+    QModelIndex indexForEighths(qreal _eighths) const;
 
     /**
      * @brief Получить цвета элементов сценария

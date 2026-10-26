@@ -2,6 +2,8 @@
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <utils/helpers/color_helper.h>
@@ -25,6 +27,27 @@ class ScreenplayTextScrollBarManager::Implementation
 {
 public:
     explicit Implementation(ScreenplayTextScrollBarManager* _q, QAbstractScrollArea* _parent);
+
+    /**
+     * @brief Настроить соединения таймлайна
+     */
+    void connectLine(ScreenplayTextTimeline* _line);
+    void connectLine(ScreenplayTextPageline* _line);
+
+    /**
+     * @brief Синхронизировать таймлайн с параметрами модели
+     */
+    void updateLineModel();
+
+    /**
+     * @brief Обновить значение на таймлайне если он находится в режиме скрола
+     */
+    void updateLineValue();
+
+    /**
+     * @brief Обновить состояние таймлайна
+     */
+    void updateLineState();
 
     /**
      * @brief Скорректировать положение таймлайна в зависимости от родительского виджета
@@ -55,8 +78,14 @@ public:
     bool needAnimateLineOpacity = false;
     QTimer lineHideTimer;
     QVariantAnimation lineOpacityAnimation;
-
     Debouncer lineUpdateDebouncer;
+
+    ScrollBarMode mode = ScrollBarMode::Scroll;
+    bool syncingInitialized = false;
+    std::chrono::milliseconds rangeStart{ 0 };
+    std::chrono::milliseconds rangeLength{ 0 };
+    qreal pageRangeStart = 0;
+    qreal pageRangeLength = 0;
 };
 
 ScreenplayTextScrollBarManager::Implementation::Implementation(ScreenplayTextScrollBarManager* _q,
@@ -74,6 +103,110 @@ ScreenplayTextScrollBarManager::Implementation::Implementation(ScreenplayTextScr
     lineOpacityAnimation.setEndValue(0.0);
 }
 
+void ScreenplayTextScrollBarManager::Implementation::connectLine(ScreenplayTextTimeline* _line)
+{
+    connect(
+        _line, &ScreenplayTextTimeline::valueChanged, q, [this](std::chrono::milliseconds _value) {
+            if (!syncingInitialized || mode != ScrollBarMode::Scroll || !model
+                || model->duration().count() <= 0) {
+                return;
+            }
+            verticalScrollBar->setValue(verticalScrollBar->maximum() * _value / model->duration());
+        });
+    connect(_line, &ScreenplayTextTimeline::updateValueRequested, q, [this] { updateLineState(); });
+
+    connect(timeline, &ScreenplayTextTimeline::positionClicked, q,
+            [this](std::chrono::milliseconds _position) {
+                const auto index = model->indexForDuration(_position);
+                if (index.isValid()) {
+                    emit q->itemClicked(index);
+                }
+            });
+}
+
+void ScreenplayTextScrollBarManager::Implementation::connectLine(ScreenplayTextPageline* _line)
+{
+    connect(_line, &ScreenplayTextPageline::valueChanged, q, [this](qreal _value) {
+        if (!syncingInitialized || mode != ScrollBarMode::Scroll || !model
+            || model->eighths() <= 0) {
+            return;
+        }
+        verticalScrollBar->setValue(
+            static_cast<int>(verticalScrollBar->maximum() * _value / model->eighths()));
+    });
+    connect(_line, &ScreenplayTextPageline::updateValueRequested, q, [this] { updateLineState(); });
+
+    connect(pageline, &ScreenplayTextPageline::positionClicked, q, [this](qreal _position) {
+        const auto index = model->indexForEighths(_position);
+        if (index.isValid()) {
+            emit q->itemClicked(index);
+        }
+    });
+}
+
+void ScreenplayTextScrollBarManager::Implementation::updateLineModel()
+{
+    if (!timeline.isNull()) {
+        timeline->setMaximum(model ? model->duration() : std::chrono::milliseconds{ 0 });
+        timeline->setColors(model ? model->itemsColors()
+                                  : std::map<std::chrono::milliseconds, QColor>{});
+        timeline->setBookmarks(model ? model->itemsBookmarks()
+                                     : std::map<std::chrono::milliseconds, QColor>{});
+    }
+    if (!pageline.isNull()) {
+        pageline->setMaximum(model ? model->eighths() : 0);
+        pageline->setColors(model ? model->itemsColorsForEighths() : std::map<qreal, QColor>{});
+        pageline->setBookmarks(model ? model->itemsBookmarksForEighths()
+                                     : std::map<qreal, QColor>{});
+    }
+
+    updateLineState();
+}
+
+void ScreenplayTextScrollBarManager::Implementation::updateLineValue()
+{
+    if (mode != ScrollBarMode::Scroll) {
+        return;
+    }
+
+    QSignalBlocker timelineBlocker(timeline);
+    QSignalBlocker pagelineBlocker(pageline);
+    const qreal fraction = verticalScrollBar->maximum() > 0
+        ? qreal(verticalScrollBar->value()) / verticalScrollBar->maximum()
+        : 0;
+    if (!timeline.isNull()) {
+        timeline->setValue(model ? std::chrono::duration_cast<std::chrono::milliseconds>(
+                                       model->duration() * fraction)
+                                 : std::chrono::milliseconds{ 0 });
+    }
+    if (!pageline.isNull()) {
+        pageline->setValue(model ? model->eighths() * fraction : 0);
+    }
+}
+
+void ScreenplayTextScrollBarManager::Implementation::updateLineState()
+{
+    const bool scrollable = mode == ScrollBarMode::Scroll
+        && verticalScrollBar->minimum() < verticalScrollBar->maximum();
+    if (!timeline.isNull()) {
+        timeline->setScrollable(scrollable);
+    }
+    if (!pageline.isNull()) {
+        pageline->setScrollable(scrollable);
+    }
+    if (mode == ScrollBarMode::Range) {
+        if (!timeline.isNull()) {
+            timeline->setRange(rangeStart, rangeLength);
+        }
+        if (!pageline.isNull()) {
+            pageline->setRange(pageRangeStart, pageRangeLength);
+        }
+    } else {
+        updateLineDisplayRange();
+        updateLineValue();
+    }
+}
+
 void ScreenplayTextScrollBarManager::Implementation::updateLineGeometry()
 {
     Widget* line = nullptr;
@@ -82,6 +215,7 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineGeometry()
             timeline
                 = new ScreenplayTextTimeline(verticalScrollBar->parentWidget()->parentWidget());
             timeline->installEventFilter(q);
+            connectLine(timeline);
         }
         line = timeline;
         if (!pageline.isNull()) {
@@ -93,6 +227,7 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineGeometry()
             pageline
                 = new ScreenplayTextPageline(verticalScrollBar->parentWidget()->parentWidget());
             pageline->installEventFilter(q);
+            connectLine(pageline);
         }
         line = pageline;
         if (!timeline.isNull()) {
@@ -109,12 +244,12 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineGeometry()
     line->resize(line->parentWidget()->size().width(),
                  line->sizeHint().height() + bottomScrollBarDelta);
 
-    updateLineDisplayRange();
+    updateLineModel();
 }
 
 void ScreenplayTextScrollBarManager::Implementation::updateLineDisplayRange()
 {
-    if (model.isNull() || verticalScrollBar->maximum() == 0) {
+    if (mode != ScrollBarMode::Scroll || model.isNull()) {
         return;
     }
 
@@ -123,13 +258,14 @@ void ScreenplayTextScrollBarManager::Implementation::updateLineDisplayRange()
     // а в maximum всю высоту документа за вычетом одной страницы,
     // поэтому тут рассчёт идёт исходя из этого знания
     //
+    const qreal total = verticalScrollBar->maximum() + qreal(verticalScrollBar->pageStep());
+    const qreal fraction = total > 0 ? verticalScrollBar->pageStep() / total : 1;
     if (!timeline.isNull()) {
-        timeline->setDisplayRange(model->duration() * verticalScrollBar->pageStep()
-                                  / (verticalScrollBar->maximum() + verticalScrollBar->pageStep()));
+        timeline->setDisplayRange(
+            std::chrono::duration_cast<std::chrono::milliseconds>(model->duration() * fraction));
     }
     if (!pageline.isNull()) {
-        pageline->setDisplayRange(model->eighths() * verticalScrollBar->pageStep()
-                                  / (verticalScrollBar->maximum() + verticalScrollBar->pageStep()));
+        pageline->setDisplayRange(model->eighths() * fraction);
     }
 }
 
@@ -164,6 +300,8 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
 
     d->updateLineGeometry();
 
+    initScrollBarsSyncing();
+
     connect(&d->lineHideTimer, &QTimer::timeout, this, [this] {
         d->lineOpacityAnimation.setDirection(QVariantAnimation::Forward);
         d->lineOpacityAnimation.start();
@@ -177,92 +315,30 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
                     d->pageline->setOpacity(_value.toReal());
                 }
             });
-    connect(&d->lineUpdateDebouncer, &Debouncer::gotWork, this, [this] {
-        if (d->model == nullptr) {
-            return;
-        }
-
-        if (!d->timeline.isNull()) {
-            d->timeline->setMaximum(d->model->duration());
-            d->timeline->setColors(d->model->itemsColors());
-            d->timeline->setBookmarks(d->model->itemsBookmarks());
-        }
-        if (!d->pageline.isNull()) {
-            d->pageline->setMaximum(d->model->eighths());
-            d->pageline->setColors(d->model->itemsColorsForEighths());
-            d->pageline->setBookmarks(d->model->itemsBookmarksForEighths());
-        }
-        d->updateLineDisplayRange();
-    });
+    connect(&d->lineUpdateDebouncer, &Debouncer::gotWork, this, [this] { d->updateLineModel(); });
 }
 
 ScreenplayTextScrollBarManager::~ScreenplayTextScrollBarManager() = default;
 
 void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
 {
-    connect(d->verticalScrollBar, &QScrollBar::rangeChanged, this,
-            [this](int _minimum, int _maximum) {
-                if (!d->timeline.isNull()) {
-                    d->timeline->setScrollable(_minimum < _maximum);
-                }
-                if (!d->pageline.isNull()) {
-                    d->pageline->setScrollable(_minimum < _maximum);
-                }
-                d->updateLineDisplayRange();
-            });
-    auto updateLineValue = [this] {
-        if (d->model == nullptr) {
-            return;
-        }
+    if (!d->syncingInitialized) {
+        d->syncingInitialized = true;
+        connect(d->verticalScrollBar, &QScrollBar::rangeChanged, this,
+                [this] { d->updateLineState(); });
+        connect(d->verticalScrollBar, &QScrollBar::valueChanged, this,
+                [this] { d->updateLineValue(); });
 
-        QSignalBlocker timelineSignalBlocker(d->timeline);
-        QSignalBlocker pagelineSignalBlocker(d->pageline);
-        if (d->verticalScrollBar->maximum() == 0) {
-            if (!d->timeline.isNull()) {
-                d->timeline->setValue({});
-            }
-            if (!d->pageline.isNull()) {
-                d->pageline->setValue({});
-            }
-        } else {
-            const qreal scrollBarValue = d->verticalScrollBar->value();
-            const qreal scrollBarMaximum = d->verticalScrollBar->maximum();
-            if (!d->timeline.isNull()) {
-                const auto durationValue = d->model->duration() * scrollBarValue / scrollBarMaximum;
-                d->timeline->setValue(
-                    std::chrono::duration_cast<std::chrono::milliseconds>(durationValue));
-            }
-            if (!d->pageline.isNull()) {
-                const auto eightsValue = d->model->eighths() * scrollBarValue / scrollBarMaximum;
-                d->pageline->setValue(eightsValue);
-            }
-        }
-    };
-    connect(d->verticalScrollBar, &QScrollBar::valueChanged, this, updateLineValue);
-    if (!d->timeline.isNull()) {
-        connect(
-            d->timeline, &ScreenplayTextTimeline::valueChanged, this,
-            [this](std::chrono::milliseconds _value) {
-                d->verticalScrollBar->setValue(
-                    d->verticalScrollBar->maximum() * _value
-                    / std::chrono::duration_cast<std::chrono::milliseconds>(d->model->duration()));
-            });
-        connect(d->timeline, &ScreenplayTextTimeline::updateValueRequested, this, updateLineValue);
-    }
-    if (!d->pageline.isNull()) {
-        connect(d->pageline, &ScreenplayTextPageline::valueChanged, this, [this](qreal _value) {
-            d->verticalScrollBar->setValue(
-                static_cast<int>(d->verticalScrollBar->maximum() * _value / d->model->eighths()));
-        });
-        connect(d->pageline, &ScreenplayTextPageline::updateValueRequested, this, updateLineValue);
+        //
+        // Тут мы закладываемся на знание о том, что полоса горизонтальной прокрутки будет видна,
+        // если у неё валидный интервал значений, поэтому обновляем геометрию в момент изменения
+        // интревала
+        //
+        connect(d->horizontalScrollBar, &QScrollBar::rangeChanged, this,
+                [this] { d->updateLineGeometry(); });
     }
 
-    //
-    // Тут мы закладываемся на знание о том, что полоса горизонтальной прокрутки будет видна, если у
-    // неё валидный интервал значений, поэтому обновляем геометрию в момент изменения интревала
-    //
-    connect(d->horizontalScrollBar, &QScrollBar::rangeChanged, this,
-            [this] { d->updateLineGeometry(); });
+    d->updateLineState();
 }
 
 void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel* _model)
@@ -288,14 +364,9 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
         connect(d->model, &QAbstractItemModel::dataChanged, &d->lineUpdateDebouncer,
                 &Debouncer::orderWork);
         d->lineUpdateDebouncer.orderWork();
-    } else {
-        if (!d->timeline.isNull()) {
-            d->timeline->update();
-        }
-        if (!d->pageline.isNull()) {
-            d->pageline->update();
-        }
     }
+
+    d->updateLineModel();
 }
 
 void ScreenplayTextScrollBarManager::setScrollBarType(ScrollBarType _type)
@@ -329,6 +400,46 @@ void ScreenplayTextScrollBarManager::setScrollBarVisible(bool _visible, bool _an
         d->needAnimateLineOpacity = true;
         d->lineHideTimer.start();
     }
+}
+
+void ScreenplayTextScrollBarManager::setScrollBarMode(ScrollBarMode _mode)
+{
+    if (d->mode == _mode) {
+        return;
+    }
+
+    d->mode = _mode;
+    d->updateLineState();
+}
+
+void ScreenplayTextScrollBarManager::selectItem(BusinessLayer::TextModelItem* _item)
+{
+    if (_item == nullptr) {
+        d->rangeStart = {};
+        d->rangeLength = {};
+        d->pageRangeStart = {};
+        d->pageRangeLength = {};
+    } else if (_item->type() == BusinessLayer::TextModelItemType::Folder) {
+        const auto folderItem = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(_item);
+        if (d->type == ScrollBarType::Timeline) {
+            d->rangeStart = d->model->itemStartsDuration(folderItem);
+            d->rangeLength = folderItem->duration();
+        } else {
+            d->pageRangeStart = d->model->itemStartsEighths(folderItem);
+            d->pageRangeLength = folderItem->eighths();
+        }
+    } else if (_item->type() == BusinessLayer::TextModelItemType::Group) {
+        const auto sceneItem = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(_item);
+        if (d->type == ScrollBarType::Timeline) {
+            d->rangeStart = d->model->itemStartsDuration(sceneItem);
+            d->rangeLength = sceneItem->duration();
+        } else {
+            d->pageRangeStart = d->model->itemStartsEighths(sceneItem);
+            d->pageRangeLength = sceneItem->eighths();
+        }
+    }
+
+    d->updateLineState();
 }
 
 int ScreenplayTextScrollBarManager::scrollBarHeight() const
@@ -372,10 +483,22 @@ bool ScreenplayTextScrollBarManager::eventFilter(QObject* _watched, QEvent* _eve
 // ****
 
 
+namespace {
+QRectF lineTrack(const QWidget* _widget)
+{
+    const qreal width
+        = qMax(qreal{ 0 }, _widget->width() - DesignSystem::scrollBar().minimumSize());
+    const qreal inset = qMin(width / 2, DesignSystem::layout().px(42) / 2);
+    return QRectF(inset, 0, qMax(qreal{ 0 }, width - 2 * inset), _widget->height());
+}
+} // namespace
+
+
 class ScreenplayTextTimeline::Implementation
 {
 public:
     bool scrollable = true;
+    bool explicitRange = false;
     const std::chrono::milliseconds minimum = std::chrono::seconds{ 0 };
     std::chrono::milliseconds maximum = std::chrono::seconds{ 10 };
     std::chrono::milliseconds current = std::chrono::seconds{ 0 };
@@ -418,12 +541,23 @@ void ScreenplayTextTimeline::setMaximum(std::chrono::milliseconds _maximum)
         d->current = d->maximum;
     }
 
+    d->displayRange = qMin(d->displayRange, d->maximum);
+    if (d->explicitRange) {
+        d->current = qMin(d->current, d->maximum - d->displayRange);
+    }
+
     update();
 }
 
 void ScreenplayTextTimeline::setValue(std::chrono::milliseconds _value)
 {
-    if (d->minimum > _value || _value > d->maximum || d->current == _value) {
+    if (d->minimum > _value || _value > d->maximum) {
+        return;
+    }
+
+    const bool wasInExplicitRange = d->explicitRange;
+    d->explicitRange = false;
+    if (d->current == _value && !wasInExplicitRange) {
         return;
     }
 
@@ -439,6 +573,18 @@ void ScreenplayTextTimeline::setDisplayRange(std::chrono::milliseconds _value)
     }
 
     d->displayRange = _value;
+    if (d->explicitRange) {
+        d->current = qMin(d->current, d->maximum - d->displayRange);
+    }
+    update();
+}
+
+void ScreenplayTextTimeline::setRange(std::chrono::milliseconds _start,
+                                      std::chrono::milliseconds _length)
+{
+    d->explicitRange = true;
+    d->displayRange = qBound(std::chrono::milliseconds{ 0 }, _length, d->maximum);
+    d->current = qBound(std::chrono::milliseconds{ 0 }, _start, d->maximum - d->displayRange);
     update();
 }
 
@@ -483,6 +629,15 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     painter.setFont(DesignSystem::font().caption());
 
     const QRectF contentRect = rect().adjusted(0, 0, -DesignSystem::scrollBar().minimumSize(), 0);
+    const auto track = lineTrack(this);
+    if (track.width() <= 0) {
+        return;
+    }
+    const auto valueToX = [this, track](auto _value) -> qreal {
+        return d->maximum > decltype(d->maximum){ 0 }
+            ? track.left() + track.width() * _value / d->maximum
+            : track.left();
+    };
 
     //
     // Рисуем фон скролбара
@@ -502,22 +657,16 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         auto startDuration = d->colors.begin()->first;
         auto endDuration = startDuration;
         QColor color = d->colors.begin()->second;
-        auto paintColor = [this, &painter, scrollbarRect, &startDuration, &endDuration, &color] {
-            if (!color.isValid() || d->maximum.count() == 0) {
-                return;
-            }
+        auto paintColor
+            = [this, &painter, scrollbarRect, &startDuration, &endDuration, &color, &valueToX] {
+                  if (!color.isValid() || d->maximum.count() == 0) {
+                      return;
+                  }
 
-            const QRectF colorRect(
-                QPointF((scrollbarRect.width() - painter.fontMetrics().lineSpacing())
-                                * startDuration / d->maximum
-                            + painter.fontMetrics().lineSpacing() / 2,
-                        scrollbarRect.top()),
-                QPointF((scrollbarRect.width() - painter.fontMetrics().lineSpacing()) * endDuration
-                                / d->maximum
-                            + painter.fontMetrics().lineSpacing() / 2,
-                        scrollbarRect.bottom()));
-            painter.fillRect(colorRect, color);
-        };
+                  const QRectF colorRect(QPointF(valueToX(startDuration), scrollbarRect.top()),
+                                         QPointF(valueToX(endDuration), scrollbarRect.bottom()));
+                  painter.fillRect(colorRect, color);
+              };
         for (auto iter = std::next(d->colors.begin()); iter != d->colors.end(); ++iter) {
             endDuration = iter->first;
             paintColor();
@@ -545,10 +694,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         // Рисуем линию
         //
         const auto duration = iter->first;
-        const QPointF top((contentRect.width() - painter.fontMetrics().lineSpacing()) * duration
-                                  / d->maximum
-                              + painter.fontMetrics().lineSpacing() / 2,
-                          0);
+        const QPointF top(valueToX(duration), 0);
         const QPointF bottom(top.x(), scrollbarRect.bottom());
         const QLineF colorRect(top, bottom);
         painter.drawLine(colorRect);
@@ -573,27 +719,26 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     // Рассчитываем хэндл
     //
-    const qreal handleX = d->maximum > std::chrono::milliseconds{ 0 }
-        ? ((contentRect.width() - painter.fontMetrics().lineSpacing()) * d->current / d->maximum
-           + painter.fontMetrics().lineSpacing() / 2)
-        : 0;
+    const qreal handleX = valueToX(d->current);
     const qreal handleY = scrollbarRect.center().y();
     const qreal handleSize = DesignSystem::layout().px12();
     QRectF handleRect(handleX - handleSize / 2, handleY - handleSize / 2, handleSize, handleSize);
     QRectF handleEllipseRect;
-    std::chrono::duration<float> handleLeftValue = std::chrono::milliseconds{ 0 };
-    if (d->scrollable && d->maximum > std::chrono::milliseconds{ 0 }) {
-        handleLeftValue
-            = d->current - d->current / std::chrono::duration<float>(d->maximum) * d->displayRange;
-        const qreal handleLeft = contentRect.width() * handleLeftValue / d->maximum;
-        const qreal handleRight
-            = contentRect.width() * (handleLeftValue + d->displayRange) / d->maximum;
+    std::chrono::duration<double> handleLeftValue = std::chrono::milliseconds{ 0 };
+    if (d->maximum > std::chrono::milliseconds{ 0 }) {
+        handleLeftValue = d->explicitRange
+            ? d->current
+            : d->current - d->current / std::chrono::duration<double>(d->maximum) * d->displayRange;
+        const qreal handleLeft = valueToX(handleLeftValue);
+        const qreal handleRight = valueToX(handleLeftValue + d->displayRange);
         const auto handleWidth = handleRight - handleLeft - DesignSystem::layout().px() * 2;
         const auto minimumWidth = painter.fontMetrics().lineSpacing() * 2.0;
-        if (handleWidth >= minimumWidth) {
-            handleRect = QRectF(handleLeft + DesignSystem::layout().px(),
-                                scrollbarRect.top() - DesignSystem::layout().px(), handleWidth,
-                                scrollbarRect.height() + DesignSystem::layout().px() * 2);
+        if (d->explicitRange || handleWidth >= minimumWidth) {
+            const auto inset = d->explicitRange ? qreal{ 0 } : DesignSystem::layout().px();
+            handleRect
+                = QRectF(handleLeft + inset, scrollbarRect.top() - DesignSystem::layout().px(),
+                         qMax(qreal{ 0 }, handleRight - handleLeft - 2 * inset),
+                         scrollbarRect.height() + DesignSystem::layout().px() * 2);
         } else {
             handleEllipseRect = handleRect;
 
@@ -645,15 +790,15 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     const auto markColor = ColorHelper::transparent(DesignSystem::color().onSurface(),
                                                     DesignSystem::disabledTextOpacity());
     const qreal marksSpacing = handleTextWidth * 1.4;
-    const int marksCount = (contentRect.width() - handleTextWidth) / marksSpacing;
-    const qreal marksSpacingCorrected
-        = static_cast<qreal>(contentRect.width() - handleTextWidth) / marksCount;
-    qreal left = 0.0;
+    const int marksCount = qMax(1, static_cast<int>(track.width() / marksSpacing));
+    const qreal marksSpacingCorrected = track.width() / marksCount;
+    qreal left = track.left() - handleTextWidth / 2;
     for (int markIndex = 0; markIndex <= marksCount; ++markIndex) {
         const QRectF markTextRect(left, handleTextTop, handleTextWidth,
                                   painter.fontMetrics().lineSpacing());
         const auto duartionAtMark = d->maximum * (static_cast<qreal>(markIndex) / marksCount);
-        if (d->scrollable
+        if ((d->scrollable
+             || (d->explicitRange && d->displayRange > std::chrono::milliseconds{ 0 }))
             && (markTextRect.intersects(handleLeftTextRect)
                 || markTextRect.intersects(handleRightTextRect))) {
             painter.setOpacity(opacity() * DesignSystem::focusBackgroundOpacity());
@@ -676,7 +821,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     // Рисуем хэндл
     //
-    if (d->scrollable) {
+    if (d->scrollable || (d->explicitRange && d->displayRange > std::chrono::milliseconds{ 0 })) {
         painter.setPen(Ui::DesignSystem::color().onSurface());
         //
         // ... область
@@ -701,15 +846,19 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
 
 void ScreenplayTextTimeline::mousePressEvent(QMouseEvent* _event)
 {
-    if (!d->scrollable) {
-        return;
-    }
+    const auto track = lineTrack(this);
+    const bool clicked = _event->button() == Qt::LeftButton && track.width() > 0
+        && _event->pos().x() >= track.left() && _event->pos().x() <= track.right()
+        && d->maximum.count() > 0;
+    const qreal position
+        = clicked ? d->maximum.count() * (_event->pos().x() - track.left()) / track.width() : 0;
 
-    if (_event->buttons().testFlag(Qt::NoButton)) {
-        return;
+    if (d->scrollable && _event->buttons() != Qt::NoButton) {
+        updateValue(_event->pos());
     }
-
-    updateValue(_event->pos());
+    if (clicked) {
+        emit positionClicked(std::chrono::milliseconds{ qRound64(position) });
+    }
 }
 
 void ScreenplayTextTimeline::mouseMoveEvent(QMouseEvent* _event)
@@ -759,11 +908,24 @@ void ScreenplayTextTimeline::designSystemChangeEvent(DesignSystemChangeEvent* _e
 
 void ScreenplayTextTimeline::updateValue(const QPoint& _mousePosition)
 {
-    const qreal trackWidth = contentsRect().width();
-    const qreal mousePosition = _mousePosition.x() - contentsMargins().left();
+    const auto track = lineTrack(this);
+    const qreal trackWidth = track.width();
+    if (trackWidth <= 0) {
+        return;
+    }
+    const qreal mousePosition = _mousePosition.x() - track.left();
     const auto value = d->maximum * mousePosition / trackWidth;
-    setValue(qBound(d->minimum, std::chrono::duration_cast<std::chrono::milliseconds>(value),
-                    d->maximum));
+    const auto boundedValue = qBound(
+        d->minimum, std::chrono::duration_cast<std::chrono::milliseconds>(value), d->maximum);
+    if (d->explicitRange) {
+        const auto previous = d->current;
+        setRange(boundedValue, d->displayRange);
+        if (d->current != previous) {
+            emit valueChanged(d->current);
+        }
+    } else {
+        setValue(boundedValue);
+    }
 }
 
 // ****
@@ -773,6 +935,7 @@ class ScreenplayTextPageline::Implementation
 {
 public:
     bool scrollable = true;
+    bool explicitRange = false;
     const qreal minimum = 0;
     qreal maximum = 10;
     qreal current = 0;
@@ -805,6 +968,10 @@ void ScreenplayTextPageline::setScrollable(bool _scrollable)
 
 void ScreenplayTextPageline::setMaximum(qreal _maximum)
 {
+    if (!qIsFinite(_maximum)) {
+        return;
+    }
+    _maximum = qMax(qreal{ 0 }, _maximum);
     if (qFuzzyCompare(d->maximum, _maximum)) {
         return;
     }
@@ -815,12 +982,23 @@ void ScreenplayTextPageline::setMaximum(qreal _maximum)
         d->current = d->maximum;
     }
 
+    d->displayRange = qMin(d->displayRange, d->maximum);
+    if (d->explicitRange) {
+        d->current = qMin(d->current, d->maximum - d->displayRange);
+    }
+
     update();
 }
 
 void ScreenplayTextPageline::setValue(qreal _value)
 {
-    if (d->minimum > _value || _value > d->maximum || qAbs(d->current - _value) < 0.1) {
+    if (!qIsFinite(_value) || d->minimum > _value || _value > d->maximum) {
+        return;
+    }
+
+    const bool wasInExplicitRange = d->explicitRange;
+    d->explicitRange = false;
+    if (qFuzzyCompare(d->current, _value) && !wasInExplicitRange) {
         return;
     }
 
@@ -831,11 +1009,26 @@ void ScreenplayTextPageline::setValue(qreal _value)
 
 void ScreenplayTextPageline::setDisplayRange(qreal _value)
 {
-    if (d->minimum > _value || _value > d->maximum || qFuzzyCompare(d->displayRange, _value)) {
+    if (!qIsFinite(_value) || d->minimum > _value || _value > d->maximum
+        || qFuzzyCompare(d->displayRange, _value)) {
         return;
     }
 
     d->displayRange = _value;
+    if (d->explicitRange) {
+        d->current = qMin(d->current, d->maximum - d->displayRange);
+    }
+    update();
+}
+
+void ScreenplayTextPageline::setRange(qreal _start, qreal _length)
+{
+    if (!qIsFinite(_start) || !qIsFinite(_length)) {
+        return;
+    }
+    d->explicitRange = true;
+    d->displayRange = qBound(qreal{ 0 }, _length, d->maximum);
+    d->current = qBound(qreal{ 0 }, _start, d->maximum - d->displayRange);
     update();
 }
 
@@ -879,6 +1072,15 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
     painter.setFont(DesignSystem::font().caption());
 
     const QRectF contentRect = rect().adjusted(0, 0, -DesignSystem::scrollBar().minimumSize(), 0);
+    const auto track = lineTrack(this);
+    if (track.width() <= 0) {
+        return;
+    }
+    const auto valueToX = [this, track](auto _value) -> qreal {
+        return d->maximum > decltype(d->maximum){ 0 }
+            ? track.left() + track.width() * _value / d->maximum
+            : track.left();
+    };
 
     //
     // Рисуем фон скролбара
@@ -898,22 +1100,16 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
         auto startDuration = d->colors.begin()->first;
         auto endDuration = startDuration;
         QColor color = d->colors.begin()->second;
-        auto paintColor = [this, &painter, scrollbarRect, &startDuration, &endDuration, &color] {
-            if (!color.isValid() || qFuzzyCompare(d->maximum, 0.0)) {
-                return;
-            }
+        auto paintColor
+            = [this, &painter, scrollbarRect, &startDuration, &endDuration, &color, &valueToX] {
+                  if (!color.isValid() || qFuzzyCompare(d->maximum, 0.0)) {
+                      return;
+                  }
 
-            const QRectF colorRect(
-                QPointF((scrollbarRect.width() - painter.fontMetrics().lineSpacing())
-                                * startDuration / d->maximum
-                            + painter.fontMetrics().lineSpacing() / 2,
-                        scrollbarRect.top()),
-                QPointF((scrollbarRect.width() - painter.fontMetrics().lineSpacing()) * endDuration
-                                / d->maximum
-                            + painter.fontMetrics().lineSpacing() / 2,
-                        scrollbarRect.bottom()));
-            painter.fillRect(colorRect, color);
-        };
+                  const QRectF colorRect(QPointF(valueToX(startDuration), scrollbarRect.top()),
+                                         QPointF(valueToX(endDuration), scrollbarRect.bottom()));
+                  painter.fillRect(colorRect, color);
+              };
         for (auto iter = std::next(d->colors.begin()); iter != d->colors.end(); ++iter) {
             endDuration = iter->first;
             paintColor();
@@ -941,10 +1137,7 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
         // Рисуем линию
         //
         const auto duration = iter->first;
-        const QPointF top((contentRect.width() - painter.fontMetrics().lineSpacing()) * duration
-                                  / d->maximum
-                              + painter.fontMetrics().lineSpacing() / 2,
-                          0);
+        const QPointF top(valueToX(duration), 0);
         const QPointF bottom(top.x(), scrollbarRect.bottom());
         const QLineF colorRect(top, bottom);
         painter.drawLine(colorRect);
@@ -969,26 +1162,25 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
     //
     // Рассчитываем хэндл
     //
-    const qreal handleX = d->maximum > qreal{ 0 }
-        ? ((contentRect.width() - painter.fontMetrics().lineSpacing()) * d->current / d->maximum
-           + painter.fontMetrics().lineSpacing() / 2)
-        : 0;
+    const qreal handleX = valueToX(d->current);
     const qreal handleY = scrollbarRect.center().y();
     const qreal handleSize = DesignSystem::layout().px12();
     QRectF handleRect(handleX - handleSize / 2, handleY - handleSize / 2, handleSize, handleSize);
     QRectF handleEllipseRect;
     qreal handleLeftValue = 0.0;
-    if (d->scrollable && d->maximum > qreal{ 0 }) {
-        handleLeftValue = d->current - d->current / d->maximum * d->displayRange;
-        const qreal handleLeft = contentRect.width() * handleLeftValue / d->maximum;
-        const qreal handleRight
-            = contentRect.width() * (handleLeftValue + d->displayRange) / d->maximum;
+    if (d->maximum > qreal{ 0 }) {
+        handleLeftValue = d->explicitRange ? d->current
+                                           : d->current - d->current / d->maximum * d->displayRange;
+        const qreal handleLeft = valueToX(handleLeftValue);
+        const qreal handleRight = valueToX(handleLeftValue + d->displayRange);
         const auto handleWidth = handleRight - handleLeft - DesignSystem::layout().px() * 2;
         const auto minimumWidth = painter.fontMetrics().lineSpacing() * 2.0;
-        if (handleWidth >= minimumWidth) {
-            handleRect = QRectF(handleLeft + DesignSystem::layout().px(),
-                                scrollbarRect.top() - DesignSystem::layout().px(), handleWidth,
-                                scrollbarRect.height() + DesignSystem::layout().px() * 2);
+        if (d->explicitRange || handleWidth >= minimumWidth) {
+            const auto inset = d->explicitRange ? qreal{ 0 } : DesignSystem::layout().px();
+            handleRect
+                = QRectF(handleLeft + inset, scrollbarRect.top() - DesignSystem::layout().px(),
+                         qMax(qreal{ 0 }, handleRight - handleLeft - 2 * inset),
+                         scrollbarRect.height() + DesignSystem::layout().px() * 2);
         } else {
             handleEllipseRect = handleRect;
 
@@ -1040,26 +1232,16 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
     const auto markColor = ColorHelper::transparent(DesignSystem::color().onSurface(),
                                                     DesignSystem::disabledTextOpacity());
 
-    int marksCount = qCeil(d->maximum / 8.0);
-    const int fullMaximum = marksCount * 8.0;
-    const qreal marksDefaultSpacing
-        = static_cast<qreal>(contentRect.width() - handleTextWidth) / marksCount;
-    qreal marksSpacing = marksDefaultSpacing;
-    const qreal marksMinimumSpacing = handleTextWidth;
-    int paintOnIndex = 1;
-    while (marksSpacing < marksMinimumSpacing) {
-        marksSpacing += marksDefaultSpacing;
-        ++paintOnIndex;
-    }
-    qreal left = 0.0;
+    const int marksCount = qMax(1, qCeil(d->maximum / 8.0));
+    const qreal marksDefaultSpacing = track.width() / marksCount;
+    const int paintOnIndex = qMax(1, qCeil(handleTextWidth / marksDefaultSpacing));
+    qreal left = track.left() - handleTextWidth / 2;
     for (int markIndex = 0; markIndex <= marksCount; ++markIndex) {
+        const auto durationAtMark = qMin(d->maximum, markIndex * 8.0);
+        left = valueToX(durationAtMark) - handleTextWidth / 2;
         const QRectF markTextRect(left, handleTextTop, handleTextWidth,
                                   painter.fontMetrics().lineSpacing());
-        auto durationAtMark = fullMaximum * (static_cast<qreal>(markIndex) / marksCount);
-        if (durationAtMark > d->maximum) {
-            durationAtMark = d->maximum;
-        }
-        if (d->scrollable
+        if ((d->scrollable || (d->explicitRange && d->displayRange > 0.0))
             && (markTextRect.intersects(handleLeftTextRect)
                 || markTextRect.intersects(handleRightTextRect))) {
             painter.setOpacity(opacity() * DesignSystem::focusBackgroundOpacity());
@@ -1076,14 +1258,12 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
                 || markTextRect.intersects(handleRightTextRect)) { }
         }
         painter.setOpacity(opacity());
-
-        left += marksDefaultSpacing;
     }
 
     //
     // Рисуем хэндл
     //
-    if (d->scrollable) {
+    if (d->scrollable || (d->explicitRange && d->displayRange > 0.0)) {
         painter.setPen(Ui::DesignSystem::color().onSurface());
         //
         // ... область
@@ -1106,15 +1286,19 @@ void ScreenplayTextPageline::paintEvent(QPaintEvent* _event)
 
 void ScreenplayTextPageline::mousePressEvent(QMouseEvent* _event)
 {
-    if (!d->scrollable) {
-        return;
-    }
+    const auto track = lineTrack(this);
+    const bool clicked = _event->button() == Qt::LeftButton && track.width() > 0
+        && _event->pos().x() >= track.left() && _event->pos().x() <= track.right()
+        && d->maximum > 0;
+    const qreal position
+        = clicked ? d->maximum * (_event->pos().x() - track.left()) / track.width() : 0;
 
-    if (_event->buttons().testFlag(Qt::NoButton)) {
-        return;
+    if (d->scrollable && _event->buttons() != Qt::NoButton) {
+        updateValue(_event->pos());
     }
-
-    updateValue(_event->pos());
+    if (clicked) {
+        emit positionClicked(position);
+    }
 }
 
 void ScreenplayTextPageline::mouseMoveEvent(QMouseEvent* _event)
@@ -1164,10 +1348,23 @@ void ScreenplayTextPageline::designSystemChangeEvent(DesignSystemChangeEvent* _e
 
 void ScreenplayTextPageline::updateValue(const QPoint& _mousePosition)
 {
-    const qreal trackWidth = contentsRect().width();
-    const qreal mousePosition = _mousePosition.x() - contentsMargins().left();
+    const auto track = lineTrack(this);
+    const qreal trackWidth = track.width();
+    if (trackWidth <= 0) {
+        return;
+    }
+    const qreal mousePosition = _mousePosition.x() - track.left();
     const qreal value = d->maximum * mousePosition / trackWidth;
-    setValue(qBound(d->minimum, value, d->maximum));
+    const auto boundedValue = qBound(d->minimum, value, d->maximum);
+    if (d->explicitRange) {
+        const auto previous = d->current;
+        setRange(boundedValue, d->displayRange);
+        if (!qFuzzyCompare(d->current, previous)) {
+            emit valueChanged(d->current);
+        }
+    } else {
+        setValue(boundedValue);
+    }
 }
 
 } // namespace Ui
