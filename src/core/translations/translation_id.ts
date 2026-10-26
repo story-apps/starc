@@ -12,62 +12,67 @@
 <context>
     <name>BaseTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="484"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="494"/>
         <source>Formatting</source>
         <translation>Pengaturan format</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="488"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="498"/>
         <source>Bold</source>
         <translation>Ditebalkan</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="494"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="504"/>
         <source>Italic</source>
         <translation>Dimiringkan</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="500"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="510"/>
         <source>Underline</source>
         <translation>Digarisbawahi</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="506"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="516"/>
         <source>Strikethrough</source>
         <translation>Dicoret</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="514"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="524"/>
         <source>Align left</source>
         <translation>Rata kiri</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="521"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="531"/>
         <source>Align center</source>
         <translation>Rata tengah</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="528"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="538"/>
         <source>Align right</source>
         <translation>Rata kanan</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="535"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="545"/>
         <source>Align justify</source>
         <translation>Rata keduanya</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="543"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="553"/>
         <source>Make uppercase</source>
         <translation>Buat semuanya huruf besar</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="549"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="559"/>
         <source>Make lowercase</source>
         <translation>Buat semuanya huruf kecil</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="567"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="566"/>
+        <source>Clear formatting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="585"/>
         <source>Paste without formatting</source>
         <translation>Tempel tanpa format</translation>
     </message>
@@ -3140,7 +3145,7 @@
 <context>
     <name>DatabaseLayer::Database</name>
     <message>
-        <location filename="../../corelib/data_layer/database.cpp" line="73"/>
+        <location filename="../../corelib/data_layer/database.cpp" line="74"/>
         <source>Project was modified in a newer version. Update to the latest version to open it.</source>
         <translation>Proyek ini sudah diubah ke versi terbaru. Harap update ke versi terbaru untuk membukannya.</translation>
     </message>
@@ -3592,27 +3597,27 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1089"/>
+        <location filename="../management_layer/application_manager.cpp" line="1107"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>Tolong perbarui ke versi terbaru apabila kamu ingin pakai penyimpanan CLOUD.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1090"/>
+        <location filename="../management_layer/application_manager.cpp" line="1108"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>Tidak, saya baik-baik saja tanpa penyimpanan Cloud</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1091"/>
+        <location filename="../management_layer/application_manager.cpp" line="1109"/>
         <source>Update</source>
         <translation>Perbarui</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1120"/>
+        <location filename="../management_layer/application_manager.cpp" line="1138"/>
         <source>The last version is downloading</source>
         <translation>Versi terbaru sedang diunduh</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1177"/>
+        <location filename="../management_layer/application_manager.cpp" line="1195"/>
         <source>Can&apos;t load url for the last version update.
 
 Please visit our official website &quot;starc.app&quot; and download the last version manually.</source>
@@ -3621,157 +3626,162 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
 Silakan kunjungi situs web resmi kami &quot;starc.app&quot; dan unduh versi terbaru secara manual.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1600"/>
+        <location filename="../management_layer/application_manager.cpp" line="1622"/>
         <source>in cloud</source>
         <translation>dalam penyimpanan cloud</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1601"/>
+        <location filename="../management_layer/application_manager.cpp" line="1623"/>
         <source>Read only</source>
         <translation>Baca saja</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1611"/>
+        <location filename="../management_layer/application_manager.cpp" line="1633"/>
         <source> - changed</source>
         <translation>- diubah</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1705"/>
-        <location filename="../management_layer/application_manager.cpp" line="1738"/>
-        <location filename="../management_layer/application_manager.cpp" line="1965"/>
+        <location filename="../management_layer/application_manager.cpp" line="1727"/>
+        <location filename="../management_layer/application_manager.cpp" line="1760"/>
+        <location filename="../management_layer/application_manager.cpp" line="1987"/>
         <source>Saving error</source>
         <translation>Menyimpan error</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1706"/>
+        <location filename="../management_layer/application_manager.cpp" line="1728"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Perubahan tidak dapat ditulis. Ada kesalahan basis data internal: &quot;%1&quot; Silakan periksa, apakah file-mu ada dan apakah kamu memiliki izin untuk menulis.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1710"/>
+        <location filename="../management_layer/application_manager.cpp" line="1732"/>
         <source>Retry</source>
         <translation>Coba lagi</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1739"/>
+        <location filename="../management_layer/application_manager.cpp" line="1761"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Perubahan tidak dapat ditulis karena lokasi cerita pada &quot;%1&quot; tidak ada. Silakan pindahkan kembali file tersebut dan coba simpan kembali.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1841"/>
+        <location filename="../management_layer/application_manager.cpp" line="1863"/>
         <source>Project was modified. Save changes?</source>
         <translation>Proyek ini telah diubah. Simpan perubahan?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1842"/>
+        <location filename="../management_layer/application_manager.cpp" line="1864"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1843"/>
+        <location filename="../management_layer/application_manager.cpp" line="1865"/>
         <source>Don&apos;t save</source>
         <translation>Jangan simpan</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1844"/>
+        <location filename="../management_layer/application_manager.cpp" line="1866"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1925"/>
+        <location filename="../management_layer/application_manager.cpp" line="1947"/>
         <source>Choose file to save story</source>
         <translation>Pilih file untuk menyimpan cerita</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1966"/>
+        <location filename="../management_layer/application_manager.cpp" line="1988"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Tidak dapat menyimpan cerita pada file %1. Silakan periksa izin dan coba lagi.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2016"/>
+        <location filename="../management_layer/application_manager.cpp" line="2038"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Kamu sedang mencoba buat suatu proyek pada folder %1 yang tidak pernah ada. Silakan pilih lokasi lain untuk proyek baru.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2021"/>
+        <location filename="../management_layer/application_manager.cpp" line="2043"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>File ini tidak bisa ditulis. Sepertinya file ini sudah dibuka dengan aplikasi lain.
 Harap tutup dan coba kembali membuat proyek baru.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2025"/>
+        <location filename="../management_layer/application_manager.cpp" line="2047"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>File ini tidak bisa ditulis. Silakan cek dan berikan izin pada aplikasi untuk menulis pada folder yang dipilih, atau pilih folder lain untuk menyimpan proyek baru.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2029"/>
+        <location filename="../management_layer/application_manager.cpp" line="2051"/>
         <source>Create project error</source>
         <translation>Membuat error proyek</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2220"/>
-        <location filename="../management_layer/application_manager.cpp" line="2243"/>
+        <location filename="../management_layer/application_manager.cpp" line="2242"/>
+        <location filename="../management_layer/application_manager.cpp" line="2265"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>File ini tidak bisa dibuka saat ini, karena sudah terbuka di salinan aplikasi yang lain.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2246"/>
+        <location filename="../management_layer/application_manager.cpp" line="2268"/>
         <source>Ignore and open</source>
         <translation>Abaikan dan buka</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2342"/>
+        <location filename="../management_layer/application_manager.cpp" line="2364"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>File yang kamu coba buka tidak memiliki izin tulis. Periksa properti file dan izinkan untuk diedit. Karena tidak dapat diedit, maka file tersebut hanya bisa dibuka dalam mode baca saja.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2359"/>
+        <location filename="../management_layer/application_manager.cpp" line="2381"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>Apakah kamu ingin terus pakai format file .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2360"/>
+        <location filename="../management_layer/application_manager.cpp" line="2382"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>Beberapa data proyek tidak dapat disimpan dalam format .%1. Kami menyarankanmu untuk pakai format .%2 Story Architect agar semua data proyek dapat tersimpan dengan baik.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2363"/>
+        <location filename="../management_layer/application_manager.cpp" line="2385"/>
         <source>Never ask again</source>
         <translation>Jangan tanya lagi</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2364"/>
+        <location filename="../management_layer/application_manager.cpp" line="2386"/>
         <source>Keep .%1</source>
         <translation>Tetap .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2365"/>
+        <location filename="../management_layer/application_manager.cpp" line="2387"/>
         <source>Switch to .STARC</source>
         <translation>Beralih ke .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2564"/>
+        <location filename="../management_layer/application_manager.cpp" line="2586"/>
         <source>Prepare document for exporting</source>
         <translation>Siapkan dokumen untuk diekspor</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3902"/>
+        <location filename="../management_layer/application_manager.cpp" line="3925"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>Langganan layanan penyimpanan Cloud dari pemilik proyek telah berakhir. Kamu bisa melanjutkan bekerja pada proyek segera setelah mereka memperbarui langganan.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="4182"/>
+        <location filename="../management_layer/application_manager.cpp" line="4186"/>
+        <source>Screenplay sent for reveiw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="4211"/>
         <source>Novel</source>
         <translation>Novel</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="4195"/>
+        <location filename="../management_layer/application_manager.cpp" line="4224"/>
         <source>Screenplay</source>
         <translation>Skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3883"/>
-        <location filename="../management_layer/application_manager.cpp" line="3904"/>
+        <location filename="../management_layer/application_manager.cpp" line="3906"/>
+        <location filename="../management_layer/application_manager.cpp" line="3927"/>
         <source>Continue offline</source>
         <translation>Lanjutkan offline</translation>
     </message>
@@ -3782,17 +3792,17 @@ Harap tutup dan coba kembali membuat proyek baru.</translation>
         <translation>Buka jendela baru</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1029"/>
+        <location filename="../management_layer/application_manager.cpp" line="1047"/>
         <source>Loading missed fonts</source>
         <translation>Memuat jenis huruf yang hilang</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3881"/>
+        <location filename="../management_layer/application_manager.cpp" line="3904"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Layanan langganan penyimpanan cloud-mu telah berakhir. Aktivasi langganan untuk melanjutkan pekerjaan pada proyek ini.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3884"/>
+        <location filename="../management_layer/application_manager.cpp" line="3907"/>
         <source>Renew subscription</source>
         <translation>Perbarui langganan</translation>
     </message>
@@ -4148,7 +4158,7 @@ File-file berikut ini tidak akan diimpor:
 </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="496"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="544"/>
         <source>Choose files to import</source>
         <translation>Pilih file-file untuk diimpor</translation>
     </message>
@@ -4449,19 +4459,19 @@ File-file berikut ini tidak akan diimpor:
         <translation>Buka dalam jendela baru</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1044"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1047"/>
         <source>Character with this name already exists</source>
         <translation>Tokoh ini memiliki nama yang sudah ada</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1055"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1058"/>
         <source>Location with this name already exists</source>
         <translation>Lokasi ini memiliki nama yang sudah ada</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1378"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1552"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2149"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1383"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1557"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2154"/>
         <source>No</source>
         <translation>Tidak</translation>
     </message>
@@ -4497,7 +4507,7 @@ File-file berikut ini tidak akan diimpor:
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="777"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2861"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2866"/>
         <source>Create draft</source>
         <translation>Membuat draf</translation>
     </message>
@@ -4527,222 +4537,222 @@ File-file berikut ini tidak akan diimpor:
         <translation>Persempit semua</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1066"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1069"/>
         <source>World with this name already exists</source>
         <translation>Dunia ini memiliki nama yang sudah ada</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1372"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1377"/>
         <source>Do you really want to close comparison &quot;%1&quot;?</source>
         <translation>Apakah kamu benar-benar ingin menutup perbandingan &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1373"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1378"/>
         <source>Do you really want to remove document draft &quot;%1&quot;?</source>
         <translation>Apakah kamu benar-benar ingin menghapus draf dokumen &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1374"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1553"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2150"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1379"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1558"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2155"/>
         <source>Yes, remove</source>
         <translation>Ya, hapus</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1374"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1379"/>
         <source>Yes, close</source>
         <translation>Ya, tutup</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1542"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1547"/>
         <source>Do you really want to permanently remove document: &quot;%1&quot;?</source>
         <translation>Apakah kamu benar-benar ingin menghapus dokumen: &quot;%1&quot; secara pemanen?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1779"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1784"/>
         <source>Characters from the text</source>
         <translation>Tokoh berdasarkan teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1789"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1794"/>
         <source>Characters that are not found in the text</source>
         <translation>Tokoh tersebut tidak ditemukan pada teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1802"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1807"/>
         <source>Save only characters from the text</source>
         <translation>Simpan berdasarkan hanya tokoh dari teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1803"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1808"/>
         <source>Save all characters</source>
         <translation>Simpan semua tokoh</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1804"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1934"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1809"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1939"/>
         <source>Change nothing</source>
         <translation>Tidak mengubah apa-apa</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1909"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1914"/>
         <source>Locations from the text</source>
         <translation>Lokasi berdasarkan teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1919"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1924"/>
         <source>Locations that are not found in the text</source>
         <translation>Lokasi tersebut tidak ditemukan pada teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1932"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1937"/>
         <source>Save only locations from the text</source>
         <translation>Simpan berdasarkan hanya lokasi dari teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1933"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1938"/>
         <source>Save all locations</source>
         <translation>Simpan semua lokasi</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2115"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2120"/>
         <source>%1 vs %2</source>
         <translation>%1 vs %2</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2148"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2153"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Apakah kamu benar-benar ingin menghapus semua dokumen dari tempat sampah?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2877"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2882"/>
         <source>Compare drafts</source>
         <translation>Bandingkan draf</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2892"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2897"/>
         <source>Edit</source>
         <translation>Ubah</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2902"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2907"/>
         <source>Remove</source>
         <translation>Hapus</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2917"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2922"/>
         <source>Close</source>
         <translation>Tutup</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3070"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3091"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3112"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3133"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3242"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3075"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3096"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3117"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3138"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3247"/>
         <source>draft</source>
         <translation>draf</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3089"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3110"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3131"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3094"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3115"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3136"/>
         <source>Script</source>
         <translation>Skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3916"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3977"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4016"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4066"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4114"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4171"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4228"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4272"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3921"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3982"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4021"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4071"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4119"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4176"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4233"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4277"/>
         <source>First draft</source>
         <translation>Draf pertama</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3933"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3938"/>
         <source>Mind map</source>
         <translation>Peta pikiran</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3939"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3944"/>
         <source>Images gallery</source>
         <translation>Galeri gambar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4025"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4075"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4123"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4180"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4237"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4030"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4080"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4128"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4185"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4242"/>
         <source>Title page</source>
         <translation>Judul halaman</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4028"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4078"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4124"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4182"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4240"/>
-        <source>Synopsis</source>
-        <translation>Sinopsis</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4030"/>
-        <source>Audioplay</source>
-        <translation>Pemutaran audio</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4080"/>
-        <source>Comic book</source>
-        <translation>Buku komik</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4194"/>
-        <source>Treatment</source>
-        <translation>Ringkasan naskah</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4126"/>
-        <source>Novel</source>
-        <translation>Novel</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1540"/>
-        <source>Do you really want to permanently remove following documents?</source>
-        <translation>Apakah kamu benar-benar ingin menghapus dokumen berikut secara permanen?</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4135"/>
-        <source>Outline</source>
-        <translation>Kerangka tulisan</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4242"/>
-        <source>Stageplay</source>
-        <translation>Skenario panggung</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4652"/>
-        <source>Conflicted version</source>
-        <translation>Versi yang konflik</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3068"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3240"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4185"/>
-        <source>Screenplay</source>
-        <translation>Skenario</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="4033"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="4083"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="4129"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="4188"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4187"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="4245"/>
+        <source>Synopsis</source>
+        <translation>Sinopsis</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4035"/>
+        <source>Audioplay</source>
+        <translation>Pemutaran audio</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4085"/>
+        <source>Comic book</source>
+        <translation>Buku komik</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4199"/>
+        <source>Treatment</source>
+        <translation>Ringkasan naskah</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4131"/>
+        <source>Novel</source>
+        <translation>Novel</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1545"/>
+        <source>Do you really want to permanently remove following documents?</source>
+        <translation>Apakah kamu benar-benar ingin menghapus dokumen berikut secara permanen?</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4140"/>
+        <source>Outline</source>
+        <translation>Kerangka tulisan</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4247"/>
+        <source>Stageplay</source>
+        <translation>Skenario panggung</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4658"/>
+        <source>Conflicted version</source>
+        <translation>Versi yang konflik</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3073"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3245"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4190"/>
+        <source>Screenplay</source>
+        <translation>Skenario</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4038"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4088"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4134"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4193"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="4250"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
     </message>
@@ -5719,252 +5729,252 @@ Tombol &quot;Reset semua pengaturan&quot; akan mengembalikan semua pengaturan ya
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="549"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
         <source>Information about project</source>
         <translation>Informasi tentang proyek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="551"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="552"/>
         <source>Project parameters</source>
         <translation>Parameter proyek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="554"/>
         <source>Project collaborators</source>
         <translation>Kolaborator proyek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="557"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
         <source>Information about screenplay</source>
         <translation>Informasi tentang skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="560"/>
         <source>Screenplay parameters</source>
         <translation>Parameter skenario film</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="562"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="596"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="627"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="647"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="667"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="687"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="563"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="628"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="648"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="668"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="688"/>
         <source>Title page text</source>
         <translation>Teks judul halaman</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="565"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="599"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="630"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="650"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="670"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="690"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="566"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="631"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="651"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="671"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="691"/>
         <source>Synopsis text</source>
         <translation>Teks sinopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="604"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="695"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="571"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="605"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="696"/>
         <source>Beats</source>
         <translation>Beats</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="579"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="613"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="704"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="580"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="614"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="705"/>
         <source>Timeline</source>
         <translation>Garis waktu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="581"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="615"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="582"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="616"/>
         <source>Breakdown</source>
         <translation>Perincian</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="588"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="589"/>
         <source>Information about series</source>
         <translation>Informasi tentang serial</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="590"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="591"/>
         <source>Series parameters</source>
         <translation>Parameter serial</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="594"/>
         <source>Episodes plan</source>
         <translation>Rencana episode</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="622"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="623"/>
         <source>Information about comic book</source>
         <translation>Informasi tentang buku komik</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="624"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="625"/>
         <source>Comic book parameters</source>
         <translation>Parameter buku komik</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="633"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="634"/>
         <source>Comic book text</source>
         <translation>Teks buku komik</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="642"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="643"/>
         <source>Information about audioplay</source>
         <translation>Informasi tentang audioplay</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="644"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="645"/>
         <source>Audioplay parameters</source>
         <translation>Parameter audioplay</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="653"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="654"/>
         <source>Audioplay text</source>
         <translation>Teks audioplay</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="662"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="663"/>
         <source>Information about stageplay</source>
         <translation>Informasi tentang skenario panggung</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="664"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="665"/>
         <source>Stageplay parameters</source>
         <translation>Parameter skenario panggung</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="673"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="674"/>
         <source>Stageplay text</source>
         <translation>Teks skenario panggung</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="682"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="683"/>
         <source>Information about novel</source>
         <translation>Informasi tentang novel</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="684"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="685"/>
         <source>Novel parameters</source>
         <translation>Parameter novel</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="693"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="694"/>
         <source>Outline text</source>
         <translation>Kerangka teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="700"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="701"/>
         <source>Novel text</source>
         <translation>Teks novel</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="711"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="712"/>
         <source>Characters relations</source>
         <translation>Relasi tokoh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="714"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="715"/>
         <source>Character information</source>
         <translation>Informasi tokoh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="716"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="717"/>
         <source>Character dialogues</source>
         <translation>Dialog tokoh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="720"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="721"/>
         <source>Locations map</source>
         <translation>Peta lokasi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="723"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="724"/>
         <source>Location information</source>
         <translation>Informasi lokasi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="725"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="726"/>
         <source>Location scenes</source>
         <translation>Lokasi adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="729"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="730"/>
         <source>Worlds map</source>
         <translation>Peta dunia</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="732"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="733"/>
         <source>World information</source>
         <translation>Informasi dunia</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="736"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="737"/>
         <source>Folder text</source>
         <translation>Teks folder</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="739"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="740"/>
         <source>Document text</source>
         <translation>Teks dokumen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="743"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="744"/>
         <source>Recycle bin summary info</source>
         <translation>Info rangkuman tempat sampah</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="746"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="747"/>
         <source>Mind map</source>
         <translation>Peta pikiran</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="749"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="750"/>
         <source>Images gallery</source>
         <translation>Galeri gambar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="752"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="753"/>
         <source>Presentation</source>
         <translation>Presentasi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="602"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="569"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="603"/>
         <source>Treatment text</source>
         <translation>Teks ringkasan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="575"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="576"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="610"/>
         <source>Screenplay text</source>
         <translation>Teks skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="572"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="577"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="611"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="655"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="675"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="697"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="702"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="578"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="607"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="612"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="636"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="656"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="676"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="698"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="703"/>
         <source>Cards</source>
         <translation>Kartu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="584"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="638"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="658"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="678"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="707"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="585"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="619"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="639"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="659"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="679"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="708"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
     </message>
@@ -14714,27 +14724,27 @@ Tombol &quot;Reset semua pengaturan&quot; akan mengembalikan semua pengaturan ya
 <context>
     <name>Ui::NovelCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="287"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="290"/>
         <source>Choose the file to save image</source>
         <translation>Pilih file untuk menyimpan gambar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="953"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="956"/>
         <source>You&apos;re in the read only mode</source>
         <translation>Kamu sedang berada dalam mode baca saja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="955"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="958"/>
         <source>Activate PRO version to unlock full access to the novel cards module</source>
         <translation>Aktifkan versi PRO untuk mengakses modul kartu novel secara penuh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="956"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="959"/>
         <source>Go back to text</source>
         <translation>Kembali ke teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="957"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="960"/>
         <source>Unlock cards</source>
         <translation>Membuka kartu</translation>
     </message>
@@ -17079,127 +17089,127 @@ Masa berlaku kode promo adalah 1 tahun.</translation>
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="406"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="407"/>
         <source>Hide scene parameters</source>
         <translation>Sembunyikan parameter adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="408"/>
         <source>Show scene parameters</source>
         <translation>Tampilkan parameter adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="408"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="409"/>
         <source>Hide bookmarks list</source>
         <translation>Sembunyikan list penanda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="409"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="410"/>
         <source>Show bookmarks list</source>
         <translation>Tampilkan list penanda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="411"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="412"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Menyembunyikan kamus skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="412"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="413"/>
         <source>Show screenplay dictionaries</source>
         <translation>Menampilkan kamus skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1296"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1297"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>Apakah kamu benar-benar ingin menghapus elemen &quot;%1&quot; dari pemandangan saat ini?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2134"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2135"/>
         <source>You&apos;re in the read only mode</source>
         <translation>Kamu sedang berada dalam mode baca saja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2137"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2138"/>
         <source>Go back to text</source>
         <translation>Kembali ke teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2138"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2139"/>
         <source>Unlock breakdown</source>
         <translation>Membuka analisis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2140"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2141"/>
         <source>Elements</source>
         <translation>Elemen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2161"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2162"/>
         <source>In the whole text</source>
         <translation>Di seluruh teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2162"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2163"/>
         <source>In scene heading</source>
         <translation>Di heading adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2163"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2164"/>
         <source>In cast list</source>
         <translation>Dalam daftar pemeran</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2164"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2165"/>
         <source>In action</source>
         <translation>Di action</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2165"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2166"/>
         <source>In character</source>
         <translation>Di tokoh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2166"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2167"/>
         <source>In dialogue</source>
         <translation>Di dialog</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1298"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1299"/>
         <source>No</source>
         <translation>Tidak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1299"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1300"/>
         <source>Yes, remove</source>
         <translation>Ya, hapus</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2136"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2137"/>
         <source>Activate CREATOR version to unlock full access to the screenplay breakdown module</source>
         <translation>Aktifkan versi KREATOR untuk mengakses modul analisis naskah film secara penuh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2141"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2142"/>
         <source>Formatting</source>
         <translation>Pengaturan format</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2142"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2143"/>
         <source>Scene parameters</source>
         <translation>Parameter adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2143"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2144"/>
         <source>Comments</source>
         <translation>Komentar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2144"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2145"/>
         <source>Bookmarks</source>
         <translation>Penanda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2145"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2146"/>
         <source>Dictionaries</source>
         <translation>Kamus</translation>
     </message>
@@ -17411,27 +17421,27 @@ Masa berlaku kode promo adalah 1 tahun.</translation>
 <context>
     <name>Ui::ScreenplayCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="302"/>
         <source>Choose the file to save image</source>
         <translation>Pilih file untuk menyimpan gambar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="975"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="999"/>
         <source>You&apos;re in the read only mode</source>
         <translation>Kamu sedang berada dalam mode baca saja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="977"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="1001"/>
         <source>Activate PRO version to unlock full access to the screenplay cards module</source>
         <translation>Aktifkan versi PRO untuk mengakses modul kartu naskah secara penuh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="978"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="1002"/>
         <source>Go back to text</source>
         <translation>Kembali ke teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="979"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="1003"/>
         <source>Unlock cards</source>
         <translation>Membuka kartu</translation>
     </message>
@@ -18975,138 +18985,138 @@ Masa berlaku kode promo adalah 1 tahun.</translation>
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="400"/>
         <source>Hide scene parameters</source>
         <translation>Sembunyikan parameter adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="400"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="401"/>
         <source>Show scene parameters</source>
         <translation>Tampilkan parameter adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="401"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="402"/>
         <source>Hide bookmarks list</source>
         <translation>Sembunyikan list penanda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="404"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="405"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Menyembunyikan kamus skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="405"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="406"/>
         <source>Show screenplay dictionaries</source>
         <translation>Menampilkan kamus skenario</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="408"/>
         <source>Hide compliance check results</source>
         <translation>Sembunyikan hasil pemeriksaan kepatuhan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="408"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="409"/>
         <source>Show compliance check results</source>
         <translation>Tampilkan hasil pemeriksaan kepatuhan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1639"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1640"/>
         <source>Writing text</source>
         <translation>Menulis teks</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1955"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1956"/>
         <source>Document translation will take %n word(s)</source>
         <translation>
             <numerusform>Terjemahan dokumen akan mengambil %n kata(s)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1957"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1958"/>
         <source>Synopsis generation will take %n word(s)</source>
         <translation>
             <numerusform>Pembuatan sinopsis akan mengambil %n kata(s)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1959"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1960"/>
         <source>Novel generation will take %n word(s)</source>
         <translation>
             <numerusform>Pembuatan novel akan mengambil %n kata(s)</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2085"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2086"/>
         <source>Formatting</source>
         <translation>Pengaturan format</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2086"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2087"/>
         <source>Scene parameters</source>
         <translation>Parameter adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2087"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2088"/>
         <source>Comments</source>
         <translation>Komentar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2088"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2089"/>
         <source>AI assistant</source>
         <translation>Asisten AI</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2089"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2090"/>
         <source>Bookmarks</source>
         <translation>Penanda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2090"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2091"/>
         <source>Dictionaries</source>
         <translation>Kamus</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2091"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2092"/>
         <source>Checklist</source>
         <translation>Daftar periksa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2094"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2095"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
         <translation>Mulailah dengan pertanyaan seperti &quot;Tulislah skenario tentang...&quot;, atau &quot;Tulislah skenario film pendek tentang...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2111"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2112"/>
         <source>In the whole text</source>
         <translation>Di seluruh teks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2112"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2113"/>
         <source>In scene heading</source>
         <translation>Di heading adegan</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2113"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2114"/>
         <source>In cast list</source>
         <translation>Dalam daftar pemeran</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2114"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2115"/>
         <source>In action</source>
         <translation>Di action</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2115"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2116"/>
         <source>In character</source>
         <translation>Di tokoh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2116"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2117"/>
         <source>In dialogue</source>
         <translation>Di dialog</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="402"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="403"/>
         <source>Show bookmarks list</source>
         <translation>Tampilkan list penanda</translation>
     </message>
@@ -21891,9 +21901,13 @@ Jika kamu bekerja tanpa jeda, aplikasi akan menyimpan proyek setiap 3 menit.</tr
         <translation>Aktifkan fitur tinjauan untuk dokumen</translation>
     </message>
     <message>
-        <location filename="../ui/account/team_dialog.cpp" line="198"/>
         <source>Telegram chat ID for review notifications</source>
-        <translation>ID obrolan Telegram untuk pemberitahuan ulasan</translation>
+        <translation type="vanished">ID obrolan Telegram untuk pemberitahuan ulasan</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/team_dialog.cpp" line="198"/>
+        <source>Config for review notifications</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/account/team_dialog.cpp" line="199"/>
