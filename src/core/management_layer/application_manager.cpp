@@ -1807,6 +1807,13 @@ void ApplicationManager::Implementation::saveChanges()
             [this, backupWatcher] {
                 const auto result = backupWatcher->result();
                 backupWatcher->deleteLater();
+                for (const auto& diagnostic : result.diagnostics) {
+                    if (result.success) {
+                        Log::info(diagnostic);
+                    } else {
+                        Log::warning(diagnostic);
+                    }
+                }
                 if (result.success) {
                     Log::info(QStringLiteral("[ApplicationManager] Backup creation succeded: %1")
                                   .arg(result.status));

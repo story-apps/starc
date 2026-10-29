@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 
 #include <corelib_global.h>
 
@@ -16,6 +17,7 @@ namespace BackupBuilder {
 struct CORE_LIBRARY_EXPORT BackupResult {
     bool success = false;
     QString status;
+    QStringList diagnostics;
 };
 
 

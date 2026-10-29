@@ -7,6 +7,13 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QString>
+#include <QSysInfo>
+
+#ifdef Q_OS_UNIX
+#include <cerrno>
+#include <cstring>
+#include <dirent.h>
+#endif
 
 
 BackupBuilder::BackupResult BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
@@ -105,7 +112,7 @@ BackupBuilder::BackupResult BackupBuilder::save(const QString& _filePath, const 
     // в конце
     //
     const QRegularExpression backupNamePattern(
-        QStringLiteral("^(|[.])%1_(.*)%2(|.icloud)$")
+        QStringLiteral("\\A\\.?%1_[0-9]{4}(?:_[0-9]{2}){5}\\.%2(?:\\.icloud)?\\z")
             .arg(normalizedAndEscaped(backupBaseName),
                  normalizedAndEscaped(fileInfo.completeSuffix())));
     QVector<QString> backups;
@@ -118,6 +125,114 @@ BackupBuilder::BackupResult BackupBuilder::save(const QString& _filePath, const 
         }
     }
     const auto foundBackupsAmount = backups.size();
+    //
+    // TODO: временная диагностика
+    //
+    {
+        const QFileInfo directoryInfo(_backupDir);
+        backupResult.diagnostics.append(
+            QStringLiteral("[BackupBuilder] directory=\"%1\", canonical=\"%2\", exists=%3, "
+                           "isDir=%4, readable=%5, writable=%6, executable=%7, permissions=0x%8, "
+                           "ownerId=%9, groupId=%10, Qt=%11, OS=\"%12\"")
+                .arg(directoryInfo.absoluteFilePath(), directoryInfo.canonicalFilePath())
+                .arg(directoryInfo.exists())
+                .arg(directoryInfo.isDir())
+                .arg(directoryInfo.isReadable())
+                .arg(directoryInfo.isWritable())
+                .arg(directoryInfo.isExecutable())
+                .arg(static_cast<uint>(directoryInfo.permissions()), 0, 16)
+                .arg(directoryInfo.ownerId())
+                .arg(directoryInfo.groupId())
+                .arg(QString::fromLatin1(qVersion()), QSysInfo::prettyProductName()));
+        backupResult.diagnostics.append(
+            QStringLiteral("[BackupBuilder] created=\"%1\", existsByPath=%2, Qt entries=%3, "
+                           "matching=%4, limit=%5, pattern=\"%6\", valid=%7, patternError=\"%8\", "
+                           "createdNameMatches=%9, baseNameUtf8Hex=%10, suffixUtf8Hex=%11")
+                .arg(backupFileName)
+                .arg(QFileInfo::exists(backupFileName))
+                .arg(files.size())
+                .arg(foundBackupsAmount)
+                .arg(_maximumBackups)
+                .arg(backupNamePattern.pattern())
+                .arg(backupNamePattern.isValid())
+                .arg(backupNamePattern.errorString())
+                .arg(backupNamePattern.match(normalized(QFileInfo(backupFileName).fileName()))
+                         .hasMatch())
+                .arg(QString::fromLatin1(backupBaseName.toUtf8().toHex()),
+                     QString::fromLatin1(fileInfo.completeSuffix().toUtf8().toHex())));
+        const auto normalizedBackupPath = normalized(QFileInfo(backupFileName).absoluteFilePath());
+        if (std::none_of(backups.cbegin(), backups.cend(), [&](const QString& _path) {
+                return normalized(_path) == normalizedBackupPath;
+            })) {
+            // QFileInfo access flags do not prove that directory enumeration is allowed.
+            // Qt does not expose the enumeration error, so also query the native API on Unix/macOS.
+            const int sampleLimit = 20;
+            for (int index = 0; index < qMin(sampleLimit, int(files.size())); ++index) {
+                const auto& file = files.at(index);
+                backupResult.diagnostics.append(
+                    QStringLiteral(
+                        "[BackupBuilder] Qt entry=\"%1\", utf8Hex=%2, normalizedUtf8Hex=%3, "
+                        "isFile=%4, isSymLink=%5, matches=%6")
+                        .arg(file.fileName(), QString::fromLatin1(file.fileName().toUtf8().toHex()),
+                             QString::fromLatin1(normalized(file.fileName()).toUtf8().toHex()))
+                        .arg(file.isFile())
+                        .arg(file.isSymLink())
+                        .arg(backupNamePattern.match(normalized(file.fileName())).hasMatch()));
+            }
+#ifdef Q_OS_UNIX
+            const auto directoryPath = QFile::encodeName(QDir(_backupDir).absolutePath());
+            DIR* directory = ::opendir(directoryPath.constData());
+            const int openError = directory ? 0 : errno;
+            backupResult.diagnostics.append(
+                QStringLiteral("[BackupBuilder] native opendir: success=%1, errno=%2, error=\"%3\"")
+                    .arg(directory != nullptr)
+                    .arg(openError)
+                    .arg(QString::fromLocal8Bit(std::strerror(openError))));
+            if (directory) {
+                int entries = 0;
+                int readError = 0;
+                for (;;) {
+                    errno = 0;
+                    const auto entry = ::readdir(directory);
+                    if (!entry) {
+                        readError = errno;
+                        break;
+                    }
+                    if (std::strcmp(entry->d_name, ".") == 0
+                        || std::strcmp(entry->d_name, "..") == 0) {
+                        continue;
+                    }
+                    if (entries++ < sampleLimit) {
+                        backupResult.diagnostics.append(
+                            QStringLiteral("[BackupBuilder] native entry=\"%1\", rawNameHex=%2")
+                                .arg(QFile::decodeName(entry->d_name),
+                                     QString::fromLatin1(QByteArray(entry->d_name).toHex())));
+                    }
+                }
+                ::closedir(directory);
+                backupResult.diagnostics.append(
+                    QStringLiteral(
+                        "[BackupBuilder] native readdir: entries=%1, errno=%2, error=\"%3\"; "
+                        "Qt/native name samples limited to %4 each")
+                        .arg(entries)
+                        .arg(readError)
+                        .arg(QString::fromLocal8Bit(std::strerror(readError)))
+                        .arg(sampleLimit));
+            }
+#endif
+            backupResult.success = false;
+            backupResult.status
+                = QStringLiteral(
+                      "Backup created at \"%1\", but not found during cleanup: "
+                      "directory=\"%2\", entries=%3, matching backups=%4, pattern=\"%5\", "
+                      "pattern error=\"%6\"")
+                      .arg(backupFileName, _backupDir)
+                      .arg(files.size())
+                      .arg(foundBackupsAmount)
+                      .arg(backupNamePattern.pattern(), backupNamePattern.errorString());
+            return backupResult;
+        }
+    }
     //
     // ... помещаем сверху актуальные, а внизу старые
     //
