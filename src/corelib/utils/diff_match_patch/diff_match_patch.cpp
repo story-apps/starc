@@ -1780,18 +1780,54 @@ QPair<QString, QVector<bool>> diff_match_patch::patch_apply(QList<Patch>& patche
 
     QString nullPadding = patch_addPadding(patchesCopy);
     text = nullPadding + text + nullPadding;
-    patch_splitMax(patchesCopy);
 
-    int x = 0;
     // delta keeps track of the offset between the expected and actual location
     // of the previous patch.  If there are patches expected at positions 10 and
     // 20, but the first patch was found at 12, delta is 2 and the second patch
     // has an effective expected position of 22.
     int delta = 0;
-    QVector<bool> results(patchesCopy.size());
-    foreach (Patch aPatch, patchesCopy) {
+    QVector<bool> results;
+    for (int patchIndex = 0; patchIndex < patchesCopy.size(); ++patchIndex) {
+        const auto aPatch = patchesCopy.at(patchIndex);
         int expected_loc = aPatch.start2 + delta;
         QString text1 = diff_text1(aPatch.diffs);
+
+        if (text1.length() > Match_MaxBits) {
+            // Keep the full context when it matches exactly. Splitting first can
+            // discard the distinguishing part of an XML attribute and let a short
+            // fuzzy match apply the edit to a neighbouring, similar attribute.
+            const auto searchPosition = qBound(0, expected_loc, static_cast<int>(text.length()));
+            auto exact_loc = text.indexOf(text1, searchPosition);
+            const auto lastStartPosition
+                = std::max(0, static_cast<int>(text.length() - text1.length()));
+            const auto preceding_loc
+                = text.lastIndexOf(text1, std::min(searchPosition, lastStartPosition));
+            if (preceding_loc != -1
+                && (exact_loc == -1
+                    || qAbs(preceding_loc - expected_loc) < qAbs(exact_loc - expected_loc))) {
+                exact_loc = preceding_loc;
+            }
+            if (exact_loc != -1) {
+                text.replace(exact_loc, text1.length(), diff_text2(aPatch.diffs));
+                delta = exact_loc - expected_loc;
+                results.append(true);
+                continue;
+            }
+
+            // Only fall back to Bitap-sized fragments when the full context no
+            // longer matches. A monster deletion may remain a single large patch.
+            QList<Patch> fragments{ aPatch };
+            patch_splitMax(fragments);
+            if (fragments.size() != 1 || fragments.constFirst().diffs != aPatch.diffs) {
+                patchesCopy.removeAt(patchIndex);
+                for (int index = fragments.size() - 1; index >= 0; --index) {
+                    patchesCopy.insert(patchIndex, fragments.at(index));
+                }
+                --patchIndex;
+                continue;
+            }
+        }
+
         int start_loc;
         int end_loc = -1;
         if (text1.length() > Match_MaxBits) {
@@ -1811,12 +1847,12 @@ QPair<QString, QVector<bool>> diff_match_patch::patch_apply(QList<Patch>& patche
         }
         if (start_loc == -1) {
             // No match found.  :(
-            results[x] = false;
+            results.append(false);
             // Subtract the delta for this failed patch from subsequent patches.
             delta -= aPatch.length2 - aPatch.length1;
         } else {
             // Found a match.  :)
-            results[x] = true;
+            results.append(true);
             delta = start_loc - expected_loc;
             QString text2;
             if (end_loc == -1) {
@@ -1836,7 +1872,7 @@ QPair<QString, QVector<bool>> diff_match_patch::patch_apply(QList<Patch>& patche
                     && diff_levenshtein(diffs) / static_cast<float>(text1.length())
                         > Patch_DeleteThreshold) {
                     // The end points match, but the content is unacceptably bad.
-                    results[x] = false;
+                    results.last() = false;
                 } else {
                     diff_cleanupSemanticLossless(diffs);
                     int index1 = 0;
@@ -1863,7 +1899,6 @@ QPair<QString, QVector<bool>> diff_match_patch::patch_apply(QList<Patch>& patche
                 }
             }
         }
-        x++;
     }
     // Strip the padding off.
     text = safeMid(text, nullPadding.length(), text.length() - 2 * nullPadding.length());
