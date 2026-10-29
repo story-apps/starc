@@ -26,6 +26,7 @@
 #include <QDateTime>
 #include <QDomDocument>
 #include <QMimeData>
+#include <QPersistentModelIndex>
 #include <QRegularExpression>
 #include <QStringListModel>
 #include <QXmlStreamReader>
@@ -2874,6 +2875,12 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
     qDeleteAll(oldItems);
     qDeleteAll(newItems);
 
+    //
+    // Обработчики rowsChanged могут скорректировать документ и удалить изменённый элемент, поэтому
+    // сохраняем индекс до сигнала, чтобы извлечь корректный элемент после завершения всех операций
+    //
+    const QPersistentModelIndex lastChangedItemIndex = indexForItem(lastChangedItem);
+
     endChangeRows();
 
 #ifdef XML_CHECKS
@@ -2887,7 +2894,13 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
     Q_ASSERT(newContent == toXml());
 #endif
 
-    return { lastChangedItem, lastChangedItemPosition };
+    //
+    // Контролируем, не был ли удалён последний изменяемый элемент
+    //
+    if (!lastChangedItemIndex.isValid()) {
+        return {};
+    }
+    return { itemForIndex(lastChangedItemIndex), lastChangedItemPosition };
 }
 
 QByteArray TextModel::prepareToComparison(const QByteArray& _xml) const
