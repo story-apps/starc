@@ -558,8 +558,11 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             //
             style = m_styles.value(value.toString());
         } else if (m_xml.qualifiedName() == QLatin1String("w:rPr")) {
-            readRunProperties(style);
-            continue;
+            //
+            // В оригинальном коде тут считывается стиль прогона, который добавляется к стилю
+            // параграфа - по факту же, это стиль знаков абзаца (Paragraph Mark Run Properties), для
+            // нас они не нужны, поэтому просто игнорируем их
+            //
         }
 
         m_xml.skipCurrentElement();
