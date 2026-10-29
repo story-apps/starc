@@ -11,7 +11,8 @@ bool EmailValidator::isValid(const QString& _email)
     //
     QString toCheck = _email;
     int pos = 0;
-    QRegularExpressionValidator validator(QRegularExpression("[^\\s]+@[^\\s]{2,}\\.[^\\s]{2,}"));
+    QRegularExpressionValidator validator(
+        QRegularExpression("[^\\s]+@[^\\s]{2,}\\.[^\\s]*[^\\s\\p{P}\\p{S}]"));
     if (validator.validate(toCheck, pos) != QValidator::Acceptable) {
         return false;
     } else {
