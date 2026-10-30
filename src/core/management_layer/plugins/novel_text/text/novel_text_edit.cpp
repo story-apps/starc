@@ -97,7 +97,6 @@ public:
         bool isRevision = false;
         bool isTrackChanges = false;
     } autoReviewMode;
-
 };
 
 NovelTextEdit::Implementation::Implementation(NovelTextEdit* _q)

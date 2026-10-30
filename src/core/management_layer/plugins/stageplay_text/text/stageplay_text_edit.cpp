@@ -81,7 +81,6 @@ public:
         bool isRevision = false;
         bool isTrackChanges = false;
     } autoReviewMode;
-
 };
 
 StageplayTextEdit::Implementation::Implementation(StageplayTextEdit* _q)

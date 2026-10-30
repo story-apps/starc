@@ -92,7 +92,6 @@ public:
         bool isRevision = false;
         bool isTrackChanges = false;
     } autoReviewMode;
-
 };
 
 ScreenplayTreatmentEdit::Implementation::Implementation(ScreenplayTreatmentEdit* _q)

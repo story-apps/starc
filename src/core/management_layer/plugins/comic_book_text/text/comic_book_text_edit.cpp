@@ -82,7 +82,6 @@ public:
         bool isRevision = false;
         bool isTrackChanges = false;
     } autoReviewMode;
-
 };
 
 ComicBookTextEdit::Implementation::Implementation(ComicBookTextEdit* _q)

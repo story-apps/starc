@@ -81,7 +81,6 @@ public:
         bool isRevision = false;
         bool isTrackChanges = false;
     } autoReviewMode;
-
 };
 
 AudioplayTextEdit::Implementation::Implementation(AudioplayTextEdit* _q)

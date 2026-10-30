@@ -82,7 +82,6 @@ public:
         bool isRevision = false;
         bool isTrackChanges = false;
     } autoReviewMode;
-
 };
 
 SimpleTextEdit::Implementation::Implementation(SimpleTextEdit* _q)
