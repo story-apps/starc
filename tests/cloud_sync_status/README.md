@@ -3,7 +3,8 @@
 These QtTest cases exercise the actual icon and details popup using the built corelib.
 No cloud account is required. They cover independent uploads/downloads, concurrent
 edits during an upload, reconnecting without losing pending changes, late confirmations
-after closing a project, server rejection and recovery, confirmation timeouts,
+after closing a project, repeated bundle subscriptions with silent server replies,
+subscription reset on reconnect/close, server rejection and recovery, confirmation timeouts,
 Material Design glyphs, keyboard access, and popup layout after a connection change.
 
 ```sh
