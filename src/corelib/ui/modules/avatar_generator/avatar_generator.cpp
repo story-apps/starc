@@ -76,7 +76,7 @@ QPixmap AvatarGenerator::avatar(const QString& _name, const QString& _email)
     }
 
     //
-    // Если имейл есть, то пробууем получить из кэша
+    // Если имейл есть, то пробуем получить из кэша
     //
     avatar = loadAvatarFromCache(_email);
     if (!avatar.isNull()) {
@@ -84,7 +84,17 @@ QPixmap AvatarGenerator::avatar(const QString& _name, const QString& _email)
     }
 
     //
-    // Если в кэше нет, то пробуем загрузить из сохранённого файла
+    // Если в кэше нет, то
+    //
+    // ... положим в очередь событий запрос аватара у внешнего сервиса
+    //
+    if (!_email.isEmpty()) {
+        QMetaObject::invokeMethod(
+            instance(), [_email] { emit instance() -> avatarRequested(_email); },
+            Qt::QueuedConnection);
+    }
+    //
+    // ... и попробуем загрузить временный аватар из сохранённого файла
     //
     const auto path = avatarPath(_email);
     if (QFile::exists(path)) {
@@ -97,19 +107,8 @@ QPixmap AvatarGenerator::avatar(const QString& _name, const QString& _email)
         storeAvatarInCache(_email, avatar);
         return avatar;
     }
-
     //
-    // Если нет подготовленного аватара, то
-    //
-    // ... положим в очередь событий запрос аватара у внешнего сервиса
-    //
-    if (!_email.isEmpty()) {
-        QMetaObject::invokeMethod(
-            instance(), [_email] { emit instance() -> avatarRequested(_email); },
-            Qt::QueuedConnection);
-    }
-    //
-    // ... и временно сгенерируем аватар на основании текста
+    // ... а если нет и в файле, то временно сгенерируем аватар на основании текста
     //
     avatar = ImageHelper::makeAvatar(
         !_name.isEmpty() ? _name : _email, Ui::DesignSystem::font().body1(),
