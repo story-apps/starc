@@ -208,6 +208,11 @@ public:
     void clearCursors();
 
     /**
+     * @brief Перейти к документу и позиции активного соавтора
+     */
+    void followCollaborator(const QString& _cursorId);
+
+    /**
      * @brief Задать список заблокированных для добавления типов документов
      */
     void setBlockedDocumentTypes(const QVector<Domain::DocumentObjectType>& _types);
@@ -239,6 +244,11 @@ public:
     QPixmap projectCover() const;
 
 signals:
+    /**
+     * @brief Обновлён список активных соавторов после фильтрации устаревших курсоров
+     */
+    void collaboratorsChanged(const QVector<Domain::CursorInfo>& _collaborators);
+
     /**
      * @brief Запрос на отображение меню
      */

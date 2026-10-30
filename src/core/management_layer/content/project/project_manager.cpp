@@ -43,7 +43,6 @@
 #include <management_layer/content/projects/projects_model_team_item.h>
 #include <management_layer/plugins_builder.h>
 #include <ui/abstract_navigator.h>
-#include <ui/account/collaborators_tool_bar.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/compare_draft_dialog.h>
 #include <ui/project/create_document_dialog.h>
@@ -402,11 +401,6 @@ public:
     } view;
 
     /**
-     * @brief Панель со список соавторов
-     */
-    Ui::CollaboratorsToolBar* collaboratorsToolBar = nullptr;
-
-    /**
      * @brief Действие разделения экрана напополам
      */
     QAction* splitScreenAction = nullptr;
@@ -547,7 +541,6 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
           new Ui::ProjectView(_parent),
           new Ui::ProjectView(_parent),
       })
-    , collaboratorsToolBar(new Ui::CollaboratorsToolBar(_parent))
     , splitScreenAction(new QAction(_parent))
     , splitScreenShortcut(new QShortcut(_parent))
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
@@ -3460,28 +3453,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Соединения со список соавторов
     //
-    connect(d->collaboratorsToolBar, &Ui::CollaboratorsToolBar::collaboratorClicked, this,
-            [this](const QString& _cursorId) {
-                if (!d->collaboratorsCursors.contains(_cursorId)) {
-                    return;
-                }
-
-                //
-                // Покажем нужный документ
-                //
-                const auto collaboratorCursor = d->collaboratorsCursors.value(_cursorId);
-                activateLink(QUuid(collaboratorCursor.documentUuid), {}, {});
-                //
-                // и сместим курсор к положению соавтора
-                //
-                if (d->view.active == d->view.left) {
-                    d->pluginsBuilder.setViewCurrentCursor(collaboratorCursor,
-                                                           d->view.activeViewMimeType);
-                } else {
-                    d->pluginsBuilder.setSecondaryViewCurrentCursor(collaboratorCursor,
-                                                                    d->view.activeViewMimeType);
-                }
-            });
     connect(&d->collaboratorsUpdateDebouncer, &Debouncer::gotWork, this, [this] {
         setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     });
@@ -3837,7 +3808,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Сбрасываем список соавторов
     //
     d->collaboratorsCursors.clear();
-    d->collaboratorsToolBar->setCollaborators({});
+    emit collaboratorsChanged({});
 }
 
 void ProjectManager::clearChangesHistory()
@@ -5191,7 +5162,7 @@ void ProjectManager::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     //
     const QVector<Domain::CursorInfo> activeCursors(d->collaboratorsCursors.begin(),
                                                     d->collaboratorsCursors.end());
-    d->collaboratorsToolBar->setCollaborators(activeCursors);
+    emit collaboratorsChanged(activeCursors);
 
     //
     // Устновим курсоры в открытые редакторы
@@ -5212,9 +5183,31 @@ void ProjectManager::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     }
 }
 
+void ProjectManager::followCollaborator(const QString& _cursorId)
+{
+    if (!d->collaboratorsCursors.contains(_cursorId)) {
+        return;
+    }
+
+    //
+    // Покажем нужный документ
+    //
+    const auto collaboratorCursor = d->collaboratorsCursors.value(_cursorId);
+    activateLink(QUuid(collaboratorCursor.documentUuid), {}, {});
+    //
+    // и сместим курсор к положению соавтора
+    //
+    if (d->view.active == d->view.left) {
+        d->pluginsBuilder.setViewCurrentCursor(collaboratorCursor, d->view.activeViewMimeType);
+    } else {
+        d->pluginsBuilder.setSecondaryViewCurrentCursor(collaboratorCursor,
+                                                       d->view.activeViewMimeType);
+    }
+}
+
 void ProjectManager::clearCursors()
 {
-    d->collaboratorsToolBar->setCollaborators({});
+    emit collaboratorsChanged({});
     d->collaboratorsCursors.clear();
 }
 

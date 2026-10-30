@@ -1,3 +1,4 @@
+#include <domain/starcloud_api.h>
 #include <ui/account/connection_status_tool_bar.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -6,7 +7,10 @@
 
 #include <QAction>
 #include <QFontDatabase>
+#include <QLabel>
+#include <QPushButton>
 #include <QRawFont>
+#include <QScrollArea>
 #include <QSignalSpy>
 #include <QtTest>
 
@@ -245,7 +249,12 @@ private slots:
         QCoreApplication::processEvents();
         for (auto label : popup->findChildren<AbstractLabel*>()) {
             if (label->isVisible()) {
-                QVERIFY(label->height() >= label->heightForWidth(label->width()));
+                QVERIFY2(label->height() >= label->heightForWidth(label->width()),
+                         qPrintable(QString("%1: %2x%3, needs %4")
+                                        .arg(label->text())
+                                        .arg(label->width())
+                                        .arg(label->height())
+                                        .arg(label->heightForWidth(label->width()))));
             }
         }
         button->click();
@@ -275,6 +284,160 @@ private slots:
         status.setUploadFinished(second, false);
         QVERIFY(!status.accessibleDescription().contains("Not enough cloud storage"));
         QVERIFY(status.accessibleDescription().contains("saved to the cloud at"));
+    }
+
+    void collaboratorsExpandAndCollapseWithoutMovingTheIcon()
+    {
+        QWidget window;
+        window.resize(900, 700);
+        window.show();
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setConnectionAvailable(true);
+        status.setCloudProjectOpen(true);
+        QVector<Domain::CursorInfo> collaborators;
+        for (int i = 0; i < 8; ++i) {
+            Domain::CursorInfo cursor;
+            cursor.cursorId = QString::number(i);
+            cursor.name = QString("Writer %1").arg(i);
+            collaborators.append(cursor);
+        }
+        status.setCollaborators(collaborators);
+        const int collapsed = status.height();
+        const auto bottomRight = status.geometry().bottomRight();
+        QEvent enter(QEvent::Enter);
+        QApplication::sendEvent(&status, &enter);
+        QTest::qWait(220);
+        QVERIFY(status.height() > collapsed);
+        QCOMPARE(status.geometry().bottomRight(), bottomRight);
+        const int expanded = status.height();
+        QEvent leave(QEvent::Leave);
+        QApplication::sendEvent(&status, &leave);
+        QTest::qWait(350);
+        QCOMPARE(status.height(), expanded);
+        QApplication::sendEvent(&status, &enter); // Returning cancels the delayed collapse.
+        QTest::qWait(500);
+        QCOMPARE(status.height(), expanded);
+        QApplication::sendEvent(&status, &leave);
+        QTest::qWait(950);
+        QCOMPARE(status.height(), collapsed);
+        QCOMPARE(status.geometry().bottomRight(), bottomRight);
+    }
+
+    void combinedPopupPreservesOrderAndNavigation()
+    {
+        QWidget window;
+        window.resize(900, 700);
+        window.show();
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setConnectionAvailable(true);
+        status.setCloudProjectOpen(true);
+        Domain::CursorInfo first, second;
+        first.cursorId = "first";
+        first.name = "First author";
+        second.cursorId = "second";
+        second.name = "Second author";
+        status.setCollaborators({ first, second });
+        QTest::mouseClick(&status, Qt::RightButton, Qt::NoModifier, status.rect().center());
+        auto popup = status.findChild<CardPopup*>();
+        QVERIFY(!popup->isVisible());
+        QTest::mouseClick(&status, Qt::LeftButton, Qt::NoModifier, status.rect().center());
+        QVERIFY(popup->isVisible());
+        auto rows = popup->findChildren<QPushButton*>();
+        QCOMPARE(rows.size(), 2);
+        QCOMPARE(rows[0]->property("cursorId").toString(), first.cursorId);
+        rows[0]->setFocus();
+        status.setCollaborators({ second, first });
+        QCOMPARE(popup->findChildren<QPushButton*>()[0], rows[0]);
+        QCOMPARE(rows[0]->property("cursorId").toString(), first.cursorId);
+        QSignalSpy follow(&status, &Ui::ConnectionStatusToolBar::collaboratorClicked);
+        rows[1]->click();
+        QCOMPARE(follow.count(), 1);
+        QCOMPARE(follow.takeFirst().first().toString(), second.cursorId);
+        QVERIFY(!popup->isVisible());
+        status.setCloudProjectOpen(false);
+        status.setCloudProjectOpen(true);
+        status.actions().constFirst()->trigger();
+        QCOMPARE(popup->findChildren<QPushButton*>().size(), 0);
+    }
+
+    void largeCollaboratorListScrollsAndAdaptsToSmallWindows()
+    {
+        QWidget window;
+        window.resize(600, 700);
+        window.show();
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setConnectionAvailable(true);
+        status.setCloudProjectOpen(true);
+        QVector<Domain::CursorInfo> collaborators;
+        for (int i = 0; i < 30; ++i) {
+            Domain::CursorInfo cursor;
+            cursor.cursorId = QString::number(i);
+            cursor.name = QString("Writer %1").arg(i);
+            collaborators.append(cursor);
+        }
+        status.setCollaborators(collaborators);
+        status.actions().constFirst()->trigger();
+        QTest::qWait(220);
+        auto scroll = status.findChild<QScrollArea*>();
+        QVERIFY(scroll->isVisible());
+        QCOMPARE(scroll->findChildren<QPushButton*>().size(), 30);
+        QVERIFY(scroll->widget()->height() > scroll->height());
+        status.setSyncError(
+            "Synchronization is temporarily unavailable. Please check your "
+            "subscription and reconnect to continue collaborating on this project.");
+        status.setConnectionAvailable(false);
+        QTest::qWait(50);
+        auto popup = status.findChild<CardPopup*>();
+        for (auto label : popup->findChildren<AbstractLabel*>()) {
+            if (label->isVisible()) {
+                QVERIFY(label->height() >= label->heightForWidth(label->width()));
+                QVERIFY(popup->rect().contains(label->geometry()));
+            }
+        }
+        auto reconnect = popup->findChild<Button*>();
+        QVERIFY(reconnect->isVisible());
+        QVERIFY(popup->rect().contains(reconnect->geometry()));
+        window.resize(600, 160);
+        QCoreApplication::processEvents();
+        QVERIFY(status.y() >= 0);
+        QVERIFY(status.geometry().bottom() < window.height());
+        window.setLayoutDirection(Qt::RightToLeft);
+        QCoreApplication::processEvents();
+        QVERIFY(status.x() < window.width() / 2);
+    }
+
+    void iconPulsesAndProblemNotificationDoesNotRepeat()
+    {
+        QWidget window;
+        window.resize(900, 700);
+        window.show();
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setConnectionAvailable(true);
+        status.setCloudProjectOpen(true);
+        status.clearFocus();
+        QTest::qWait(50); // Apply the queued design-system event before comparing frames.
+        const auto idle = status.grab().toImage();
+        QTest::qWait(400);
+        QCOMPARE(status.grab().toImage(), idle);
+        status.setConnectionAvailable(false);
+        auto notification = status.findChild<QLabel*>("syncNotification");
+        QVERIFY(notification->isVisible());
+        QVERIFY(notification->text().contains("saved locally"));
+        const auto neutral = status.grab().toImage();
+        QTest::qWait(800);
+        QVERIFY(status.grab().toImage() != neutral);
+        notification->hide();
+        status.setConnectionAvailable(false);
+        QVERIFY(!notification->isVisible());
+        status.setConnectionAvailable(true);
+        QTest::qWait(50);
+        QCOMPARE(status.grab().toImage(), idle);
+        status.setUploadStarted(QUuid::createUuid());
+        status.setUploadError("Rejected");
+        QVERIFY(notification->isVisible());
+        QVERIFY(notification->text().contains("Rejected"));
+        status.setCloudProjectOpen(false);
+        QVERIFY(!notification->isVisible());
     }
 
     void unconfirmedOperationsStayVisible()

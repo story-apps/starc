@@ -1,9 +1,13 @@
 #include "connection_status_tool_bar.h"
 
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/avatar_generator/avatar_generator.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card_popup.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/logging.h>
 
 #include <QAction>
@@ -12,13 +16,20 @@
 #include <QElapsedTimer>
 #include <QHash>
 #include <QKeyEvent>
+#include <QLabel>
 #include <QLocale>
+#include <QMouseEvent>
 #include <QPainter>
+#include <QPushButton>
 #include <QScreen>
+#include <QScrollArea>
 #include <QSet>
 #include <QTimer>
+#include <QToolTip>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
+
+#include <algorithm>
 
 namespace Ui {
 
@@ -33,7 +44,15 @@ public:
     void refresh();
     void correctPosition();
     void showDetails();
-    void positionDetails();
+    void positionDetails(bool _invalidate = true);
+    void updateCollaborators();
+    void expand(bool _expanded);
+    void updateGeometry();
+    void showHint(bool _problem = false);
+    int slotCount() const;
+    QRect statusRect() const;
+    QRect avatarRect(int _index) const;
+    int hitTest(const QPoint& _position) const;
     bool isOverdue(const QHash<QString, qint64>& _operations) const;
     void begin(QHash<QString, qint64>& _operations, const QString& _key);
 
@@ -47,6 +66,22 @@ public:
     Body2Label* error = nullptr;
     Button* reconnect = nullptr;
     QVBoxLayout* layout = nullptr;
+    H6Label* collaboratorsTitle = nullptr;
+    QScrollArea* collaboratorsScroll = nullptr;
+    QWidget* collaboratorsContent = nullptr;
+    QVBoxLayout* collaboratorsLayout = nullptr;
+    QVector<Domain::CursorInfo> collaborators;
+    QLabel* notification = nullptr;
+    QTimer notificationTimer;
+    QTimer collapseTimer;
+    QTimer hintTimer;
+    QVariantAnimation expansion;
+    qreal expansionProgress = 0;
+    QColor stateColor;
+    QString summary;
+    QString problem;
+    int pressedSlot = -2;
+    int hoveredSlot = -2;
 
     bool connectionKnown = false;
     bool connected = false;
@@ -76,9 +111,26 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
     , error(new Body2Label(details))
     , reconnect(new Button(details))
     , layout(new QVBoxLayout)
+    , collaboratorsTitle(new H6Label(details))
+    , collaboratorsScroll(new QScrollArea(details))
+    , collaboratorsContent(new QWidget)
+    , collaboratorsLayout(new QVBoxLayout(collaboratorsContent))
+    , notification(
+          new QLabel(q, Qt::ToolTip | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint))
 {
     clock.start();
     layout->setContentsMargins({ });
+    collaboratorsTitle->setObjectName("collaboratorsTitle");
+    collaboratorsScroll->setObjectName("collaboratorsList");
+    collaboratorsScroll->setWidgetResizable(true);
+    collaboratorsScroll->setFrameShape(QFrame::NoFrame);
+    collaboratorsScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    collaboratorsScroll->setVerticalScrollBar(new ScrollBar);
+    collaboratorsScroll->setWidget(collaboratorsContent);
+    collaboratorsLayout->setContentsMargins({ });
+    collaboratorsLayout->setSpacing(0);
+    layout->addWidget(collaboratorsTitle);
+    layout->addWidget(collaboratorsScroll);
     for (auto label : QVector<AbstractLabel*>{ title, connection, outgoing, incoming, error }) {
         layout->addWidget(label);
     }
@@ -94,12 +146,51 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
     receivedTimer.setSingleShot(true);
     receivedTimer.setInterval(2000);
     QObject::connect(&receivedTimer, &QTimer::timeout, q, [this] { refresh(); });
-    activity.setStartValue(0);
-    activity.setEndValue(360);
+    activity.setObjectName("syncColorPulse");
+    activity.setStartValue(0.0);
+    activity.setKeyValueAt(0.5, 1.0);
+    activity.setEndValue(0.0);
+    activity.setEasingCurve(QEasingCurve::InOutSine);
     activity.setDuration(1600);
     activity.setLoopCount(-1);
     QObject::connect(&activity, &QVariantAnimation::valueChanged, q,
                      qOverload<>(&ConnectionStatusToolBar::update));
+    expansion.setDuration(180);
+    expansion.setEasingCurve(QEasingCurve::OutCubic);
+    QObject::connect(&expansion, &QVariantAnimation::valueChanged, q,
+                     [this](const QVariant& value) {
+                         expansionProgress = value.toReal();
+                         updateGeometry();
+                     });
+    collapseTimer.setSingleShot(true);
+    collapseTimer.setInterval(700);
+    QObject::connect(&collapseTimer, &QTimer::timeout, q, [this] {
+        if (!details->isVisible()) {
+            expand(false);
+        }
+    });
+    hintTimer.setSingleShot(true);
+    hintTimer.setInterval(350);
+    QObject::connect(&hintTimer, &QTimer::timeout, q, [this] { showHint(); });
+    notification->setObjectName("syncNotification");
+    notification->setAttribute(Qt::WA_ShowWithoutActivating);
+    notification->setAttribute(Qt::WA_TransparentForMouseEvents);
+    notification->setTextFormat(Qt::PlainText);
+    notification->setWordWrap(true);
+    notification->hide();
+    notificationTimer.setSingleShot(true);
+    notificationTimer.setInterval(5000);
+    QObject::connect(&notificationTimer, &QTimer::timeout, notification, &QWidget::hide);
+    QObject::connect(AvatarGenerator::instance(), &AvatarGenerator::avatarUpdated, q,
+                     [this](const QString& email) {
+                         for (const auto& collaborator : std::as_const(collaborators)) {
+                             if (collaborator.email == email) {
+                                 updateCollaborators();
+                                 q->update();
+                                 break;
+                             }
+                         }
+                     });
 }
 
 void ConnectionStatusToolBar::Implementation::begin(QHash<QString, qint64>& _operations,
@@ -132,7 +223,8 @@ void ConnectionStatusToolBar::Implementation::refresh()
     const bool receivingDelayed = isOverdue(downloading);
     const bool hasError
         = !syncError.isEmpty() || !uploadError.isEmpty() || sendingDelayed || receivingDelayed;
-    const bool busy = connected && !hasError && (!pending.isEmpty() || !downloading.isEmpty());
+    const bool busy = connected && !hasError
+        && (!pending.isEmpty() || !downloading.isEmpty() || receivedTimer.isActive());
 
     // Material Design Icons: cloud-check / cloud-off-outline / cloud-alert /
     // cloud-upload / cloud-download / cloud-sync.
@@ -205,11 +297,22 @@ void ConnectionStatusToolBar::Implementation::refresh()
                                        ? "\n" + uploadText + "\n" + downloadText + "\n" + syncError
                                        : QString()));
 
-    q->setTextColor(hasError ? DesignSystem::color().error() : DesignSystem::color().onPrimary());
-    q->setBackgroundColor(DesignSystem::color().primary());
-    if (busy && activity.state() != QAbstractAnimation::Running) {
+    summary = !connected ? ConnectionStatusToolBar::tr("No connection")
+        : hasError       ? ConnectionStatusToolBar::tr("Synchronization needs attention")
+        : busy           ? ConnectionStatusToolBar::tr("Synchronizing…")
+                         : ConnectionStatusToolBar::tr("Synchronized");
+    stateColor = !connected ? DesignSystem::color().warning()
+        : hasError          ? DesignSystem::color().error()
+                            : QColor("#2196f3");
+    auto neutral = DesignSystem::color().onSurface();
+    neutral.setAlphaF(0.65);
+    q->setTextColor(neutral);
+    q->setBackgroundColor(DesignSystem::color().surface());
+    const bool visible = cloudProjectOpen || (connectionKnown && !connected);
+    const bool pulse = visible && (busy || hasError || !connected);
+    if (pulse && activity.state() != QAbstractAnimation::Running) {
         activity.start();
-    } else if (!busy) {
+    } else if (!pulse) {
         activity.stop();
     }
     if (cloudProjectOpen && (!pending.isEmpty() || !downloading.isEmpty())) {
@@ -219,14 +322,196 @@ void ConnectionStatusToolBar::Implementation::refresh()
     } else {
         refreshTimer.stop();
     }
-    q->setVisible(cloudProjectOpen || (connectionKnown && !connected));
+    q->setVisible(visible);
     if (q->isHidden()) {
         details->hide();
     }
     if (details->isVisible()) {
         positionDetails();
     }
+    const QString nextProblem = !connected && connectionKnown ? QStringLiteral("offline")
+        : connected && hasError ? syncError + uploadError + QString::number(sendingDelayed)
+            + QString::number(receivingDelayed)
+                                : QString();
+    if (problem != nextProblem) {
+        problem = nextProblem;
+        notification->hide();
+        if (!problem.isEmpty() && visible && q->isVisible() && !details->isVisible()) {
+            showHint(true);
+        }
+    }
     q->update();
+}
+
+int ConnectionStatusToolBar::Implementation::slotCount() const
+{
+    const int available = qMax(0,
+                               (q->parentWidget()->height() - int(DesignSystem::layout().px(92)))
+                                   / int(DesignSystem::layout().px(36)));
+    return qMin(available, qMin(int(collaborators.size()), 4));
+}
+
+QRect ConnectionStatusToolBar::Implementation::statusRect() const
+{
+    const int size = DesignSystem::layout().px(44);
+    return QRect(0, q->height() - size, q->width(), size);
+}
+
+QRect ConnectionStatusToolBar::Implementation::avatarRect(int _index) const
+{
+    const int step = DesignSystem::layout().px(36);
+    const int size = DesignSystem::layout().px(28);
+    return QRect((q->width() - size) / 2,
+                 statusRect().top() - slotCount() * step + _index * step + (step - size) / 2, size,
+                 size);
+}
+
+int ConnectionStatusToolBar::Implementation::hitTest(const QPoint& _position) const
+{
+    if (!q->rect().contains(_position)) {
+        return -2;
+    }
+    if (statusRect().contains(_position)) {
+        return -1;
+    }
+    for (int i = 0; i < slotCount(); ++i) {
+        if (avatarRect(i).adjusted(-4, -4, 4, 4).contains(_position)) {
+            return i;
+        }
+    }
+    return -2;
+}
+
+void ConnectionStatusToolBar::Implementation::updateGeometry()
+{
+    q->setFixedSize(q->sizeHint());
+    correctPosition();
+    q->update();
+}
+
+void ConnectionStatusToolBar::Implementation::expand(bool _expanded)
+{
+    collapseTimer.stop();
+    const qreal target = _expanded && !collaborators.isEmpty() ? 1.0 : 0.0;
+    if (expansion.endValue().toReal() == target
+        && expansion.state() == QAbstractAnimation::Running) {
+        return;
+    }
+    expansion.stop();
+    expansion.setStartValue(expansionProgress);
+    expansion.setEndValue(target);
+    expansion.start();
+}
+
+void ConnectionStatusToolBar::Implementation::updateCollaborators()
+{
+    // Update existing rows in place: cursor broadcasts must not steal keyboard focus.
+    while (collaboratorsLayout->count() > collaborators.size()) {
+        auto item = collaboratorsLayout->takeAt(collaboratorsLayout->count() - 1);
+        delete item->widget();
+        delete item;
+    }
+    for (int i = 0; i < collaborators.size(); ++i) {
+        QPushButton* row = nullptr;
+        if (i < collaboratorsLayout->count()) {
+            row = qobject_cast<QPushButton*>(collaboratorsLayout->itemAt(i)->widget());
+        } else {
+            row = new QPushButton(collaboratorsContent);
+            row->setFlat(true);
+            row->setCursor(Qt::PointingHandCursor);
+            collaboratorsLayout->addWidget(row);
+            QObject::connect(row, &QPushButton::clicked, q, [this, row] {
+                const auto id = row->property("cursorId").toString();
+                details->hide();
+                emit q->collaboratorClicked(id);
+            });
+        }
+        const auto& collaborator = collaborators[i];
+        row->setProperty("cursorId", collaborator.cursorId);
+        auto name = collaborator.name;
+        name.replace('&', "&&"); // Names are literal text, not button mnemonics.
+        row->setText(name + "\n" + ConnectionStatusToolBar::tr("Active in this project"));
+        row->setToolTip(ConnectionStatusToolBar::tr("Go to collaborator’s position"));
+        row->setIcon(QIcon(AvatarGenerator::avatar(collaborator.name, collaborator.email)));
+        row->setIconSize(QSize(DesignSystem::layout().px(28), DesignSystem::layout().px(28)));
+        row->setMinimumHeight(DesignSystem::layout().px(56));
+        row->setFont(DesignSystem::font().body2());
+    }
+    collaboratorsTitle->setText(
+        ConnectionStatusToolBar::tr("Collaborators (%1)").arg(collaborators.size()));
+    collaboratorsTitle->setVisible(!collaborators.isEmpty());
+    collaboratorsScroll->setVisible(!collaborators.isEmpty());
+    collaboratorsScroll->setFixedHeight(qMin(int(collaborators.size()), 4)
+                                        * int(DesignSystem::layout().px(56)));
+    collaboratorsScroll->setStyleSheet(
+        QString("QScrollArea, QWidget { background: %1; color: %2; } "
+                "QPushButton { text-align: left; border: none; padding: 4px; border-radius: 4px; } "
+                "QPushButton:hover, QPushButton:focus { background: %3; }")
+            .arg(DesignSystem::color().background().name(),
+                 DesignSystem::color().onBackground().name(),
+                 DesignSystem::color().surface().name()));
+    if (details->isVisible()) {
+        positionDetails();
+    }
+}
+
+void ConnectionStatusToolBar::Implementation::showHint(bool _problem)
+{
+    if (!q->isVisible() || details->isVisible()) {
+        return;
+    }
+    if (!_problem && hoveredSlot >= 0 && hoveredSlot < collaborators.size()) {
+        const bool overflow = hoveredSlot == slotCount() - 1
+            && (collaborators.size() > 3 || collaborators.size() > slotCount());
+        QToolTip::showText(q->mapToGlobal(avatarRect(hoveredSlot).topLeft()),
+                           overflow ? ConnectionStatusToolBar::tr("Show all collaborators")
+                                    : collaborators[hoveredSlot].name + "\n"
+                                   + ConnectionStatusToolBar::tr("Active in this project"),
+                           q);
+        return;
+    }
+    QString text = summary;
+    if (_problem) {
+        text += "\n"
+            + (!connected                 ? ConnectionStatusToolBar::tr("Changes are saved locally")
+                   : !syncError.isEmpty() ? syncError
+                   : !uploadError.isEmpty()
+                   ? uploadError
+                   : ConnectionStatusToolBar::tr("Waiting for the server to confirm changes"));
+    } else {
+        if (hoveredSlot != -1) {
+            return;
+        }
+        const auto latest = qMax(lastUpload, lastDownload);
+        if (latest.isValid()) {
+            text += "\n"
+                + ConnectionStatusToolBar::tr("Last synchronization: %1")
+                      .arg(QLocale().toString(latest.toLocalTime().time(), QLocale::ShortFormat));
+        }
+        QToolTip::showText(q->mapToGlobal(statusRect().topLeft()), text, q, statusRect());
+        return;
+    }
+    notification->setFont(DesignSystem::font().body2());
+    notification->setStyleSheet(QString("QLabel { background: %1; color: %2; border: 1px solid %3; "
+                                        "border-radius: 6px; padding: 10px; }")
+                                    .arg(DesignSystem::color().background().name(),
+                                         DesignSystem::color().onBackground().name(),
+                                         stateColor.name()));
+    notification->setText(text);
+    const auto anchor = q->mapToGlobal(QPoint(0, 0));
+    const auto anchorScreen = QApplication::screenAt(anchor);
+    const auto screen = anchorScreen != nullptr ? anchorScreen : q->screen();
+    if (!screen) {
+        return;
+    }
+    const auto available = screen->availableGeometry();
+    notification->setFixedWidth(qMin(int(DesignSystem::layout().px(300)), available.width()));
+    notification->adjustSize();
+    notification->move(qBound(available.left(), anchor.x() + q->width() - notification->width(),
+                              available.right() - notification->width() + 1),
+                       qMax(available.top(), anchor.y() - notification->height() - 8));
+    notification->show();
+    notificationTimer.start();
 }
 
 void ConnectionStatusToolBar::Implementation::correctPosition()
@@ -243,16 +528,22 @@ void ConnectionStatusToolBar::Implementation::showDetails()
         details->hide();
         return;
     }
+    hintTimer.stop();
+    QToolTip::hideText();
+    notification->hide();
+    expand(true);
     refresh();
     positionDetails();
     details->show();
+    positionDetails();
     details->setFocus(Qt::PopupFocusReason);
 }
 
-void ConnectionStatusToolBar::Implementation::positionDetails()
+void ConnectionStatusToolBar::Implementation::positionDetails(bool _invalidate)
 {
-    const auto anchor = q->mapToGlobal(q->rect().topLeft());
-    const auto screen = QApplication::screenAt(anchor);
+    const auto anchor = q->mapToGlobal(statusRect().topLeft());
+    const auto anchorScreen = QApplication::screenAt(anchor);
+    const auto screen = anchorScreen != nullptr ? anchorScreen : q->screen();
     if (screen == nullptr) {
         return;
     }
@@ -260,24 +551,50 @@ void ConnectionStatusToolBar::Implementation::positionDetails()
     const int width = qMin(static_cast<int>(DesignSystem::layout().px(360)), available.width());
     // Initialize the card's shadow margins before measuring its wrapped content.
     details->resize(width, details->height());
-    details->layout()->invalidate();
-    const int height = qMin(available.height(),
-                            qMax(details->layout()->totalHeightForWidth(width),
-                                 details->layout()->minimumSize().height()));
+    if (_invalidate) {
+        layout->invalidate();
+        details->layout()->invalidate();
+    }
+    auto contentHeight = [&] {
+        return qMax(details->layout()->totalHeightForWidth(width),
+                    details->layout()->minimumSize().height());
+    };
+    if (_invalidate && !collaborators.isEmpty()) {
+        // Reserve space for the status text; long errors and larger fonts must
+        // not push the reconnect action out of the screen.
+        const int preferred
+            = qMin(int(collaborators.size()), 4) * int(DesignSystem::layout().px(56));
+        collaboratorsScroll->setFixedHeight(preferred);
+        layout->invalidate();
+        details->layout()->invalidate();
+        const int overflow = qMax(0, contentHeight() - available.height());
+        if (overflow > 0) {
+            collaboratorsScroll->setFixedHeight(
+                qMax(int(DesignSystem::layout().px(28)), preferred - overflow));
+            layout->invalidate();
+            details->layout()->invalidate();
+        }
+    }
+    const int height = qMin(available.height(), contentHeight());
     const int x = qBound(available.left(),
-                         q->isLeftToRight() ? anchor.x() + q->width() - width : anchor.x(),
+                         q->isLeftToRight() ? anchor.x() - width : anchor.x() + q->width(),
                          available.right() - width + 1);
-    const int y = qBound(available.top(), anchor.y() - height, available.bottom() - height + 1);
+    const int y = qBound(available.top(), anchor.y() + statusRect().height() - height,
+                         available.bottom() - height + 1);
     details->setGeometry(x, y, width, height);
 }
 
 ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
-    : FloatingToolBar(_parent)
+    : Widget(_parent)
     , d(new Implementation(this))
 {
     Q_ASSERT(_parent);
     _parent->installEventFilter(this);
     setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
+    setCursor(Qt::PointingHandCursor);
+    d->updateCollaborators();
+    d->updateGeometry();
     addAction(d->statusAction);
     connect(d->statusAction, &QAction::triggered, this, [this] { d->showDetails(); });
     hide();
@@ -310,6 +627,15 @@ void ConnectionStatusToolBar::setConnectionAvailable(bool _available)
 void ConnectionStatusToolBar::setCloudProjectOpen(bool _open)
 {
     d->details->hide();
+    d->notification->hide();
+    d->hintTimer.stop();
+    d->collapseTimer.stop();
+    d->expansion.stop();
+    d->expansionProgress = 0;
+    d->collaborators.clear();
+    d->updateCollaborators();
+    d->updateGeometry();
+    d->problem.clear();
     d->cloudProjectOpen = _open;
     d->pending.clear();
     d->uploading.clear();
@@ -428,18 +754,24 @@ bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == parentWidget()) {
         if (_event->type() == QEvent::Resize || _event->type() == QEvent::LayoutDirectionChange) {
-            d->correctPosition();
+            d->updateGeometry();
             d->details->hide();
+            d->notification->hide();
         } else if (_event->type() == QEvent::ChildAdded) {
             raise();
         }
+    } else if (_watched == d->details && _event->type() == QEvent::LayoutRequest
+               && d->details->isVisible()) {
+        d->positionDetails(false);
+    } else if (_watched == d->details && _event->type() == QEvent::Hide) {
+        d->collapseTimer.start();
     } else if (_watched == d->details && _event->type() == QEvent::KeyPress
                && static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape) {
         d->details->hide();
         setFocus(Qt::PopupFocusReason);
         return true;
     }
-    return FloatingToolBar::eventFilter(_watched, _event);
+    return Widget::eventFilter(_watched, _event);
 }
 
 void ConnectionStatusToolBar::keyPressEvent(QKeyEvent* _event)
@@ -450,46 +782,179 @@ void ConnectionStatusToolBar::keyPressEvent(QKeyEvent* _event)
         _event->accept();
         return;
     }
-    FloatingToolBar::keyPressEvent(_event);
+    Widget::keyPressEvent(_event);
 }
 
-void ConnectionStatusToolBar::paintEventPostprocess(QPainter& _painter)
+bool ConnectionStatusToolBar::event(QEvent* _event)
 {
-    if (hasFocus()) {
-        QPen focusPen(DesignSystem::color().onPrimary());
-        focusPen.setStyle(Qt::DotLine);
-        _painter.setPen(focusPen);
-        _painter.setBrush(Qt::NoBrush);
-        _painter.drawRoundedRect(
-            QRectF(rect()).marginsRemoved(DesignSystem::floatingToolBar().shadowMargins()), 6, 6);
+    switch (_event->type()) {
+    case QEvent::Enter:
+        d->expand(true);
+        d->hoveredSlot = d->hitTest(mapFromGlobal(QCursor::pos()));
+        d->hintTimer.start();
+        break;
+    case QEvent::Leave:
+        d->hintTimer.stop();
+        QToolTip::hideText();
+        d->hoveredSlot = -2;
+        d->collapseTimer.start();
+        break;
+    case QEvent::Show:
+        QTimer::singleShot(0, this, [this] { d->refresh(); });
+        break;
+    case QEvent::Hide:
+        d->activity.stop();
+        d->hintTimer.stop();
+        d->notification->hide();
+        d->details->hide();
+        break;
+    case QEvent::ToolTip:
+        return true; // The explicit 350 ms timer controls hover hints.
+    default:
+        break;
     }
-    if (d->activity.state() != QAbstractAnimation::Running) {
+    return Widget::event(_event);
+}
+
+void ConnectionStatusToolBar::mouseMoveEvent(QMouseEvent* _event)
+{
+    const auto slot = d->hitTest(_event->pos());
+    if (slot != d->hoveredSlot) {
+        d->hoveredSlot = slot;
+        QToolTip::hideText();
+        d->hintTimer.start();
+    }
+    Widget::mouseMoveEvent(_event);
+}
+
+void ConnectionStatusToolBar::mousePressEvent(QMouseEvent* _event)
+{
+    if (_event->button() == Qt::LeftButton) {
+        d->pressedSlot = d->hitTest(_event->pos());
+        _event->accept();
+    }
+}
+
+void ConnectionStatusToolBar::mouseReleaseEvent(QMouseEvent* _event)
+{
+    const int slot = d->hitTest(_event->pos());
+    if (_event->button() == Qt::LeftButton && slot != -2 && slot == d->pressedSlot) {
+        d->showDetails();
+    }
+    d->pressedSlot = -2;
+}
+
+void ConnectionStatusToolBar::paintEvent(QPaintEvent*)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(backgroundColor());
+    painter.drawRoundedRect(rect(), DesignSystem::layout().px8(), DesignSystem::layout().px8());
+
+    painter.save();
+    painter.setClipRect(QRect(0, 0, width(), d->statusRect().top()));
+    painter.setOpacity(d->expansionProgress);
+    for (int i = 0; i < d->slotCount(); ++i) {
+        const auto avatarRect = d->avatarRect(i);
+        if (i == d->slotCount() - 1
+            && (d->collaborators.size() > 3 || d->collaborators.size() > d->slotCount())) {
+            painter.setBrush(DesignSystem::color().background());
+            painter.setPen(Qt::NoPen);
+            painter.drawEllipse(avatarRect);
+            painter.setFont(DesignSystem::font().caption());
+            painter.setPen(DesignSystem::color().onSurface());
+            painter.drawText(avatarRect, Qt::AlignCenter,
+                             QString("+%1").arg(d->collaborators.size() - i));
+        } else {
+            const auto& collaborator = d->collaborators[i];
+            painter.setPen(
+                QPen(ColorHelper::forText(collaborator.name), DesignSystem::layout().px2()));
+            painter.setBrush(Qt::NoBrush);
+            painter.drawEllipse(avatarRect);
+            const auto avatar = AvatarGenerator::avatar(collaborator.name, collaborator.email);
+            painter.drawPixmap(avatarRect, avatar);
+        }
+    }
+    painter.restore();
+    auto color = textColor();
+    if (d->activity.state() == QAbstractAnimation::Running) {
+        const auto progress = d->activity.currentValue().toReal();
+        color = QColor::fromRgbF(color.redF() + (d->stateColor.redF() - color.redF()) * progress,
+                                 color.greenF()
+                                     + (d->stateColor.greenF() - color.greenF()) * progress,
+                                 color.blueF() + (d->stateColor.blueF() - color.blueF()) * progress,
+                                 color.alphaF() + (1.0 - color.alphaF()) * progress);
+    }
+    painter.setPen(color);
+    painter.setFont(DesignSystem::font().iconsMid());
+    painter.drawText(d->statusRect(), Qt::AlignCenter, d->statusAction->iconText());
+    if (hasFocus()) {
+        QPen focusPen(DesignSystem::color().onSurface());
+        focusPen.setStyle(Qt::DotLine);
+        painter.setPen(focusPen);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawRoundedRect(d->statusRect().adjusted(2, 2, -2, -2), 6, 6);
+    }
+}
+
+QSize ConnectionStatusToolBar::sizeHint() const
+{
+    const int size = DesignSystem::layout().px(44);
+    return QSize(
+        size, size + qRound(d->slotCount() * DesignSystem::layout().px(36) * d->expansionProgress));
+}
+
+void ConnectionStatusToolBar::setCollaborators(const QVector<Domain::CursorInfo>& _collaborators)
+{
+    if (!d->cloudProjectOpen) {
         return;
     }
-    QPen pen(DesignSystem::color().onPrimary());
-    pen.setWidthF(DesignSystem::layout().px2());
-    pen.setCapStyle(Qt::RoundCap);
-    _painter.setPen(pen);
-    const auto circle
-        = QRectF(rect()).marginsRemoved(DesignSystem::floatingToolBar().shadowMargins()
-                                        + DesignSystem::floatingToolBar().margins());
-    _painter.drawArc(circle, d->activity.currentValue().toInt() * 16, 90 * 16);
+    // Preserve the visual order even when the cursor map arrives in a different order.
+    for (int i = d->collaborators.size() - 1; i >= 0; --i) {
+        const auto found = std::find_if(_collaborators.begin(), _collaborators.end(),
+                                        [this, i](const Domain::CursorInfo& cursor) {
+                                            return cursor.cursorId == d->collaborators[i].cursorId;
+                                        });
+        if (found == _collaborators.end()) {
+            d->collaborators.removeAt(i);
+        } else {
+            d->collaborators[i] = *found;
+        }
+    }
+    for (const auto& cursor : _collaborators) {
+        const bool exists = std::any_of(d->collaborators.begin(), d->collaborators.end(),
+                                        [&cursor](const Domain::CursorInfo& existing) {
+                                            return existing.cursorId == cursor.cursorId;
+                                        });
+        if (!exists) {
+            d->collaborators.append(cursor);
+        }
+    }
+    d->updateCollaborators();
+    if (d->collaborators.isEmpty()) {
+        d->expand(false);
+    } else if (underMouse() || d->details->isVisible()) {
+        d->expand(true);
+    }
+    d->updateGeometry();
 }
 
 void ConnectionStatusToolBar::updateTranslations()
 {
+    d->updateCollaborators();
     d->refresh();
 }
 
 void ConnectionStatusToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    FloatingToolBar::designSystemChangeEvent(_event);
+    Widget::designSystemChangeEvent(_event);
     d->details->setBackgroundColor(DesignSystem::color().background());
     d->layout->setSpacing(DesignSystem::layout().px12());
     const int padding = DesignSystem::layout().px16();
     d->layout->setContentsMargins(padding, padding, padding, padding);
-    for (auto label :
-         QVector<AbstractLabel*>{ d->title, d->connection, d->outgoing, d->incoming }) {
+    for (auto label : QVector<AbstractLabel*>{ d->title, d->connection, d->outgoing, d->incoming,
+                                               d->collaboratorsTitle }) {
         label->setBackgroundColor(Qt::transparent);
         label->setTextColor(DesignSystem::color().onBackground());
     }
@@ -497,8 +962,8 @@ void ConnectionStatusToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _
     d->error->setBackgroundColor(Qt::transparent);
     d->reconnect->setBackgroundColor(DesignSystem::color().background());
     d->reconnect->setTextColor(DesignSystem::color().accent());
-    resize(sizeHint());
-    d->correctPosition();
+    d->updateCollaborators();
+    d->updateGeometry();
     d->refresh();
     raise();
 }

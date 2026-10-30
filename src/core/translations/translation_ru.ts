@@ -11840,6 +11840,50 @@ This action can&apos;t be canceled.</source>
         <source>Reconnect</source>
         <translation>Переподключиться</translation>
     </message>
+    <message>
+        <source>No connection</source>
+        <translation>Нет соединения</translation>
+    </message>
+    <message>
+        <source>Synchronization needs attention</source>
+        <translation>Проблема синхронизации</translation>
+    </message>
+    <message>
+        <source>Synchronizing…</source>
+        <translation>Синхронизация…</translation>
+    </message>
+    <message>
+        <source>Synchronized</source>
+        <translation>Синхронизировано</translation>
+    </message>
+    <message>
+        <source>Active in this project</source>
+        <translation>Сейчас в проекте</translation>
+    </message>
+    <message>
+        <source>Go to collaborator’s position</source>
+        <translation>Перейти к позиции соавтора</translation>
+    </message>
+    <message>
+        <source>Collaborators (%1)</source>
+        <translation>Соавторы (%1)</translation>
+    </message>
+    <message>
+        <source>Show all collaborators</source>
+        <translation>Показать всех соавторов</translation>
+    </message>
+    <message>
+        <source>Changes are saved locally</source>
+        <translation>Изменения сохраняются локально</translation>
+    </message>
+    <message>
+        <source>Waiting for the server to confirm changes</source>
+        <translation>Ожидаем подтверждения изменений от сервера</translation>
+    </message>
+    <message>
+        <source>Last synchronization: %1</source>
+        <translation>Последняя синхронизация: %1</translation>
+    </message>
 </context>
 <context>
     <name>Ui::CountersInfoWidget</name>
