@@ -7,11 +7,13 @@
 
 #include <QAction>
 #include <QFontDatabase>
+#include <QHelpEvent>
 #include <QLabel>
 #include <QPushButton>
 #include <QRawFont>
 #include <QScrollArea>
 #include <QSignalSpy>
+#include <QToolTip>
 #include <QtTest>
 
 class CloudSyncStatusTest : public QObject
@@ -240,8 +242,7 @@ private slots:
         QVERIFY(popup != nullptr);
         QVERIFY(popup->isVisible());
         QCOMPARE(reconnect.count(), 0); // Clicking the icon only opens details.
-        QCOMPARE(status.actions().constFirst()->toolTip(),
-                 status.actions().constFirst()->iconText());
+        QCOMPARE(status.actions().constFirst()->toolTip(), QString("Synchronized"));
         status.setConnectionAvailable(false);
         auto button = popup->findChild<Button*>();
         QVERIFY(button != nullptr);
@@ -438,6 +439,45 @@ private slots:
         QVERIFY(notification->text().contains("Rejected"));
         status.setCloudProjectOpen(false);
         QVERIFY(!notification->isVisible());
+    }
+
+    void standardTooltipsStayVisibleAtTheCenterAndLowerEdge()
+    {
+        QWidget window;
+        window.resize(700, 550);
+        window.show();
+        Ui::ConnectionStatusToolBar status(&window);
+        QVERIFY(qobject_cast<FloatingToolBar*>(&status) != nullptr);
+        status.setConnectionAvailable(true);
+        status.setCloudProjectOpen(true);
+        Domain::CursorInfo author;
+        author.cursorId = "author";
+        author.name = "Writer";
+        status.setCollaborators({ author });
+        QEvent enter(QEvent::Enter);
+        QApplication::sendEvent(&status, &enter);
+        QTest::qWait(220);
+        const auto& style = Ui::DesignSystem::floatingToolBar();
+        const int bottom = status.height() - style.shadowMargins().bottom();
+        const int center = bottom - style.height() / 2;
+        for (int y : { center, center + 6, bottom - 2 }) {
+            const QPoint point(status.width() / 2, y);
+            QTest::mouseMove(&status, point);
+            QHelpEvent help(QEvent::ToolTip, point, status.mapToGlobal(point));
+            QApplication::sendEvent(&status, &help);
+            QCOMPARE(QToolTip::text(), QString("Synchronized"));
+            QTest::qWait(800); // Longer than both the old hint and collapse timers.
+            QVERIFY(QToolTip::isVisible());
+            QCOMPARE(QToolTip::text(), QString("Synchronized"));
+        }
+        const QPoint avatar(status.width() / 2, bottom - style.height() - 18);
+        QTest::mouseMove(&status, avatar);
+        QHelpEvent help(QEvent::ToolTip, avatar, status.mapToGlobal(avatar));
+        QApplication::sendEvent(&status, &help);
+        QCOMPARE(QToolTip::text(), QString("Writer\nActive in this project"));
+        QTest::qWait(800);
+        QVERIFY(QToolTip::isVisible());
+        QToolTip::hideText();
     }
 
     void unconfirmedOperationsStayVisible()

@@ -51,6 +51,11 @@ public:
 
 protected:
     /**
+     * @brief Смещение действий для панели с дополнительным содержимым
+     */
+    void setActionsOffset(const QPointF& _offset);
+
+    /**
      * @brief Получить цвет заданного действия
      */
     QColor actionColor(QAction* _action) const;
