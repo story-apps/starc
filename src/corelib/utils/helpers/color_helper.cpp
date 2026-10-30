@@ -2,6 +2,8 @@
 
 #include <QColor>
 
+#include <cmath>
+
 
 namespace {
 const QVector<QColor> kRevisionColors = {
@@ -55,11 +57,51 @@ QColor ColorHelper::colorBetween(const QColor& _lhs, const QColor& _rhs)
 
 bool ColorHelper::isColorLight(const QColor& _color)
 {
-    if ((_color.hue() < 20 || _color.hue() > 220) && _color.saturationF() > 0.7) {
-        return false;
-    } else {
-        return _color.valueF() > 0.55;
-    }
+    //
+    // Яркость экрана по APCA (упрощённая гамма 2.4 + мягкое ограничение около чёрного)
+    //
+    auto apcaY = [](const QColor& _color) {
+        const QColor c = _color.toRgb();
+        double y = 0.2126729 * std::pow(c.redF(), 2.4) + 0.7151522 * std::pow(c.greenF(), 2.4)
+            + 0.0721750 * std::pow(c.blueF(), 2.4);
+
+        const double blackThreshold = 0.022;
+        if (y < blackThreshold) {
+            y += std::pow(blackThreshold - y, 1.414);
+        }
+
+        return y;
+    };
+
+    //
+    // Контраст Lc по APCA (по модулю), примерно 0..106
+    //
+    auto apcaContrast = [&apcaY](const QColor& _text, const QColor& _background) {
+        const double yTxt = apcaY(_text);
+        const double yBg = apcaY(_background);
+
+        //
+        // Тёмный текст на светлом фоне
+        //
+        double s = 0.0;
+        if (yBg > yTxt) {
+            s = (std::pow(yBg, 0.56) - std::pow(yTxt, 0.57)) * 1.14;
+        }
+        //
+        // Светлый текст на тёмном фоне
+        //
+        else {
+            s = (std::pow(yBg, 0.65) - std::pow(yTxt, 0.62)) * 1.14;
+        }
+
+        if (std::abs(s) < 0.1) {
+            return 0.0;
+        }
+
+        return (std::abs(s) - 0.027) * 100.0;
+    };
+
+    return apcaContrast(Qt::black, _color) > apcaContrast(Qt::white, _color);
 }
 
 QColor ColorHelper::contrasted(const QColor& _color)
