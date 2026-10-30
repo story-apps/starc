@@ -21,6 +21,17 @@ public:
     ~ScriptTextEdit() override;
 
     /**
+     * @brief Использовать Vim-режим редактирования
+     */
+    bool isVimModeEnabled() const;
+    void setVimModeEnabled(bool _enabled);
+
+    /**
+     * @brief Прокрутить редактор по вертикали на заданное количество пикселей
+     */
+    void scrollVerticallyBy(int _delta);
+
+    /**
      * @brief Показывать ли автодополнения в пустых блоках
      */
     bool showSuggestionsInEmptyBlocks() const;
@@ -35,6 +46,18 @@ public:
      * @brief Задать курсоры соавторов
      */
     void setCollaboratorsCursors(const QVector<Domain::CursorInfo>& _cursors);
+
+    /**
+     * @brief Включён ли режим отслеживания изменений, в котором удалённый текст лишь помечается
+     * @note Нужно Vim-командам, которые не набирают текст, а заменяют его
+     */
+    virtual bool isTrackChangesEnabled() const;
+
+    /**
+     * @brief Пометить текст, вставленный не с клавиатуры, если включено автоматическое добавление
+     *        редакторских заметок
+     */
+    virtual void markInsertedText(int _from, int _to);
 
 protected:
     /**
@@ -55,6 +78,36 @@ protected:
      *       ScalableWrapper и координаты мыши могут несколько искажаться
      */
     void mouseMoveEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Щелчок мышью отменяет набираемую Vim-команду
+     */
+    void mousePressEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Обновить положение элементов Vim-режима
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
+    /**
+     * @brief Не даём вводить текст через методы ввода, когда активен Vim-режим
+     */
+    void inputMethodEvent(QInputMethodEvent* _event) override;
+
+    /**
+     * @brief Нарисовать дополнительные элементы поверх текста
+     */
+    void paintOverText(QPainter* _painter) override;
+
+    /**
+     * @brief Обрабатываем смену параметров текстового редактора и Vim-команды
+     */
+    bool event(QEvent* _event) override;
+
+    /**
+     * @brief Не показываем подсказки вне режима вставки, когда активен Vim-режим
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
 
     /**
      * @brief Дополнительная функция для обработки нажатий самим редактором

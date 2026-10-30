@@ -711,6 +711,16 @@ void NovelTextEdit::setAutoReviewMode(const QColor& _textColor, const QColor& _b
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
+bool NovelTextEdit::isTrackChangesEnabled() const
+{
+    return d->autoReviewMode.isEnabled && d->autoReviewMode.isTrackChanges;
+}
+
+void NovelTextEdit::markInsertedText(int _from, int _to)
+{
+    d->updateReviewMark(nullptr, _from, _to);
+}
+
 void NovelTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {

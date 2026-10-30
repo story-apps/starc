@@ -762,6 +762,16 @@ void ScreenplayTextEdit::setAutoReviewMode(const QColor& _textColor, const QColo
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
+bool ScreenplayTextEdit::isTrackChangesEnabled() const
+{
+    return d->autoReviewMode.isEnabled && d->autoReviewMode.isTrackChanges;
+}
+
+void ScreenplayTextEdit::markInsertedText(int _from, int _to)
+{
+    d->updateReviewMark(nullptr, _from, _to);
+}
+
 void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
@@ -1901,7 +1911,7 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
                             .arg(toString(_cursor.blockFormat().alignment()),
                                  QString::number(_cursor.blockFormat().leftMargin(), 'f', 2),
                                  QString::number(_cursor.blockFormat().rightMargin(), 'f', 2),
-                                 _cursor.blockCharFormat().fontFamily(),
+                                 _cursor.blockCharFormat().font().family(),
                                  QString::number(_cursor.blockCharFormat().font().pixelSize()),
                                  _text.trimmed())
                             .toUtf8());

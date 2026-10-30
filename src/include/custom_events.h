@@ -121,4 +121,9 @@ public:
      * @brief Запретить вводить несколько пробелов подряд
      */
     std::optional<bool> avoidMultipleSpaces;
+
+    /**
+     * @brief Использовать Vim-режим для текстовых редакторов
+     */
+    std::optional<bool> useVimMode;
 };

@@ -680,6 +680,16 @@ void ComicBookTextEdit::setAutoReviewMode(const QColor& _textColor, const QColor
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
+bool ComicBookTextEdit::isTrackChangesEnabled() const
+{
+    return d->autoReviewMode.isEnabled && d->autoReviewMode.isTrackChanges;
+}
+
+void ComicBookTextEdit::markInsertedText(int _from, int _to)
+{
+    d->updateReviewMark(nullptr, _from, _to);
+}
+
 void ComicBookTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {

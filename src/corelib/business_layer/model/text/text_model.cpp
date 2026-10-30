@@ -2699,9 +2699,14 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
                 auto nextItem = findNextItemWithChildren(textItem, false);
                 while (nextItem != nullptr && nextItem->type() == TextModelItemType::Text) {
                     auto nextTextItem = static_cast<TextModelTextItem*>(nextItem);
+                    //
+                    // ... удаляемые элементы могут быть в списке на перемещение, поэтому убираем
+                    //     их и оттуда
+                    //
                     if (nextTextItem->isCorrection()) {
                         auto itemToRemove = nextItem;
                         nextItem = findNextItemWithChildren(nextItem, false);
+                        movedSiblingItems.removeAll(itemToRemove);
                         removeItem(itemToRemove);
                         continue;
                     }
@@ -2710,6 +2715,7 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
                     textItem->mergeWith(nextTextItem);
                     textItem->setBreakCorrectionStart(false);
                     updateItem(textItem);
+                    movedSiblingItems.removeAll(nextItem);
                     removeItem(nextItem);
                     break;
                 }
