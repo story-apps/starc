@@ -2,11 +2,13 @@
 
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
+#include <QUuid>
+
 
 namespace Ui {
 
 /**
- * @brief Панель с информацией о соединении с сервером
+ * @brief Единый индикатор подключения и синхронизации текущего облачного проекта
  */
 class ConnectionStatusToolBar : public FloatingToolBar
 {
@@ -16,36 +18,38 @@ public:
     explicit ConnectionStatusToolBar(QWidget* _parent = nullptr);
     ~ConnectionStatusToolBar() override;
 
-    /**
-     * @brief Визуализировать состояние подключения
-     */
     void setConnectionAvailable(bool _available);
 
-signals:
     /**
-     * @brief Пользователь хочет проверить соединение прямо сейчас
+     * @brief Сбросить состояние при открытии/закрытии проекта
      */
+    void setCloudProjectOpen(bool _open);
+    void setSyncError(const QString& _error);
+    void setUploadError(const QString& _error);
+
+    /**
+     * @brief Правки остаются ожидающими до подтверждения сервера
+     */
+    void setDocumentPending(const QUuid& _uuid);
+    void setUploadStarted(const QUuid& _uuid);
+    void setUploadFinished(const QUuid& _uuid, bool _hasPendingChanges);
+    void removeDocument(const QUuid& _uuid);
+
+    /**
+     * @brief Загрузка документа или служебного документа, UUID которого ещё неизвестен
+     */
+    void setDownloadStarted(const QUuid& _uuid);
+    void setDownloadStarted(int _documentType);
+    void setDownloadFinished(const QUuid& _uuid, int _documentType, bool _receivedChanges = true);
+
+signals:
     void checkConnectionPressed();
 
 protected:
-    /**
-     * @brief Переопределяем для корректировки позиции и положения при изменениях родителя
-     */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
-
-    /**
-     * @brief Рисуем крутящийся лоадер
-     */
+    void keyPressEvent(QKeyEvent* _event) override;
     void paintEventPostprocess(QPainter& _painter) override;
-
-    /**
-     * @brief Обновить переводы
-     */
     void updateTranslations() override;
-
-    /**
-     * @brief Обновляем UI при изменении дизайн системы
-     */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:

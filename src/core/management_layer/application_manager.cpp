@@ -38,6 +38,7 @@
 #include <client/crashpad_client.h>
 #include <client/settings.h>
 #include <data_layer/database.h>
+#include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_change_object.h>
@@ -2331,6 +2332,9 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Загрузим данные текущего проекта
     //
+#ifdef CLOUD_SERVICE_MANAGER
+    connectionStatus->setCloudProjectOpen(currentProject->isRemote());
+#endif
     projectManager->loadCurrentProject(currentProject);
     menuView->setImportAvailable(currentProject->editingMode() == DocumentEditingMode::Edit);
 
@@ -2455,6 +2459,12 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
         projectsManager->setCurrentProjectCanBeSynced(true);
         const auto unsyncedDocuments = projectManager->unsyncedDocuments();
         for (const auto document : unsyncedDocuments) {
+            connectionStatus->setDownloadStarted(document->uuid());
+            if (!DataStorageLayer::StorageFacade::documentChangeStorage()
+                     ->unsyncedDocumentChanges(document->uuid())
+                     .isEmpty()) {
+                connectionStatus->setDocumentPending(document->uuid());
+            }
             cloudServiceManager->openDocument(projectsManager->currentProject()->id(), document,
                                               projectManager->draftSource(document->uuid()));
         }
@@ -2544,6 +2554,7 @@ void ApplicationManager::Implementation::closeCurrentProject()
         cloudServiceManager->closeProject(projectsManager->currentProject()->id());
     }
 #endif
+    connectionStatus->setCloudProjectOpen(false);
     projectManager->closeCurrentProject(projectsManager->currentProject()->path());
     projectsManager->closeCurrentProject();
 
@@ -3660,6 +3671,11 @@ void ApplicationManager::initConnections()
                     //
                     const auto unsyncedDocuments = d->projectManager->unsyncedDocuments();
                     for (const auto document : unsyncedDocuments) {
+                        if (!DataStorageLayer::StorageFacade::documentChangeStorage()
+                                 ->unsyncedDocumentChanges(document->uuid())
+                                 .isEmpty()) {
+                            d->connectionStatus->setDocumentPending(document->uuid());
+                        }
                         d->projectManager->notifyDownloadDocumentRequested(document->uuid());
                     }
                     //
@@ -3672,8 +3688,14 @@ void ApplicationManager::initConnections()
                     //
                     // ... а также структуру, данные проекта и словари
                     //
+                    d->connectionStatus->setDownloadStarted(
+                        static_cast<int>(Domain::DocumentObjectType::Structure));
                     d->cloudServiceManager->openStructure(currentProjectId);
+                    d->connectionStatus->setDownloadStarted(
+                        static_cast<int>(Domain::DocumentObjectType::Project));
                     d->cloudServiceManager->openProjectInfo(currentProjectId);
+                    d->connectionStatus->setDownloadStarted(
+                        static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries));
                     d->cloudServiceManager->openScreenplayDictionaries(currentProjectId);
                 }
             });
@@ -3836,8 +3858,14 @@ void ApplicationManager::initConnections()
                         return;
                     }
 
+                    d->connectionStatus->setDownloadStarted(
+                        static_cast<int>(Domain::DocumentObjectType::Structure));
                     d->cloudServiceManager->openStructure(_id);
+                    d->connectionStatus->setDownloadStarted(
+                        static_cast<int>(Domain::DocumentObjectType::Project));
                     d->cloudServiceManager->openProjectInfo(_id);
+                    d->connectionStatus->setDownloadStarted(
+                        static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries));
                     d->cloudServiceManager->openScreenplayDictionaries(_id);
                 };
                 d->saveIfNeeded(callback);
@@ -3901,6 +3929,8 @@ void ApplicationManager::initConnections()
         }
 
         d->projectsManager->setCurrentProjectCanBeSynced(false);
+        d->connectionStatus->setSyncError(tr(
+            "Synchronization is unavailable: the project owner's cloud subscription has expired."));
 
         if (currentProject->isOwner()) {
             auto dialog = new Dialog(d->applicationView);
@@ -3948,6 +3978,8 @@ void ApplicationManager::initConnections()
                     return;
                 }
 
+                d->connectionStatus->setDownloadStarted(
+                    static_cast<int>(_model->document()->type()));
                 d->cloudServiceManager->openDocument(currentProject->id(), _model->document());
             });
     connect(d->projectManager.data(), &ProjectManager::downloadDocumentRequested, this,
@@ -3990,6 +4022,9 @@ void ApplicationManager::initConnections()
                         documentsToUpdate.append(document);
                     }
                 }
+                for (const auto document : std::as_const(documentsToUpdate)) {
+                    d->connectionStatus->setDownloadStarted(document->uuid());
+                }
                 d->cloudServiceManager->openDocuments(currentProject->id(), documentsToUpdate);
                 //
                 // ... очищаем все временные объекты
@@ -4010,14 +4045,46 @@ void ApplicationManager::initConnections()
                 }
 
                 d->projectManager->mergeDocumentInfo(_documentInfo);
+                d->connectionStatus->setDownloadFinished(_documentInfo.uuid, _documentInfo.type);
             });
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChanged,
-            d->projectManager.data(), &ProjectManager::applyDocumentChanges);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentOpened, this,
+            [this](const QUuid& _documentUuid) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (currentProject == nullptr || currentProject->isLocal()) {
+                    return;
+                }
+                const auto document = d->projectManager->documentToSync(_documentUuid);
+                if (document == nullptr) {
+                    return;
+                }
+                d->connectionStatus->setDownloadFinished(_documentUuid,
+                                                         static_cast<int>(document->type()), false);
+                const bool hasPendingChanges
+                    = !DataStorageLayer::StorageFacade::documentChangeStorage()
+                           ->unsyncedDocumentChanges(_documentUuid)
+                           .isEmpty();
+                d->connectionStatus->setUploadFinished(_documentUuid, hasPendingChanges);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChanged, this,
+            [this](const Domain::DocumentInfo& _documentInfo) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (currentProject == nullptr || currentProject->isLocal()
+                    || !currentProject->canBeSynced()
+                    || d->projectManager->documentToSync(_documentInfo.uuid) == nullptr) {
+                    return;
+                }
+                d->connectionStatus->setDownloadStarted(_documentInfo.uuid);
+                d->projectManager->applyDocumentChanges(_documentInfo);
+                d->connectionStatus->setDownloadFinished(_documentInfo.uuid, _documentInfo.type);
+            });
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 const auto currentProject = d->projectsManager->currentProject();
-                if (currentProject == nullptr || currentProject->isLocal()
-                    || !currentProject->canBeSynced()) {
+                if (currentProject == nullptr || currentProject->isLocal()) {
+                    return;
+                }
+                d->connectionStatus->setDocumentPending(_model->document()->uuid());
+                if (!currentProject->canBeSynced()) {
                     return;
                 }
 
@@ -4044,6 +4111,8 @@ void ApplicationManager::initConnections()
                 // Если был создан новый документ, то кидаем его в облако и подписываемся
                 //
                 if (_isNewDocument) {
+                    d->connectionStatus->setUploadStarted(_documentUuid);
+                    d->connectionStatus->setDownloadStarted(_documentUuid);
                     d->cloudServiceManager->openDocument(
                         currentProject->id(), d->projectManager->documentToSync(_documentUuid),
                         d->projectManager->draftSource(_documentUuid));
@@ -4052,6 +4121,7 @@ void ApplicationManager::initConnections()
                 // В противном случае, запросим отправку изменений
                 //
                 else {
+                    d->connectionStatus->setDocumentPending(_documentUuid);
                     d->cloudServiceManager->startDocumentChange(currentProject->id(),
                                                                 _documentUuid);
                 }
@@ -4069,6 +4139,7 @@ void ApplicationManager::initConnections()
                 //
                 const auto changes = d->projectManager->unsyncedChanges(_documentUuid);
                 if (!changes.isEmpty()) {
+                    d->connectionStatus->setUploadStarted(_documentUuid);
                     d->cloudServiceManager->pushDocumentChange(currentProject->id(), _documentUuid,
                                                                changes);
                 }
@@ -4077,12 +4148,28 @@ void ApplicationManager::initConnections()
                 //
                 else if (auto document = d->projectManager->documentToSync(_documentUuid);
                          document != nullptr) {
+                    d->connectionStatus->setUploadStarted(_documentUuid);
                     d->cloudServiceManager->pushDocumentChange(currentProject->id(), _documentUuid,
                                                                document->content());
                 }
             });
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangesPushed,
-            d->projectManager.data(), &ProjectManager::markChangesSynced);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentUploadFailed,
+            d->connectionStatus, &Ui::ConnectionStatusToolBar::setUploadError);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangesPushed, this,
+            [this](const QUuid& _documentUuid) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (currentProject == nullptr || currentProject->isLocal()
+                    || d->projectManager->documentToSync(_documentUuid) == nullptr) {
+                    return;
+                }
+                d->projectManager->markChangesSynced(_documentUuid);
+                // Read storage directly: unsyncedChanges() also replaces the in-flight batch.
+                const bool hasPendingChanges
+                    = !DataStorageLayer::StorageFacade::documentChangeStorage()
+                           ->unsyncedDocumentChanges(_documentUuid)
+                           .isEmpty();
+                d->connectionStatus->setUploadFinished(_documentUuid, hasPendingChanges);
+            });
     connect(d->projectManager.data(), &ProjectManager::closeDocumentRequested, this,
             [this](const QUuid& _documentUuid) {
                 const auto currentProject = d->projectsManager->currentProject();
@@ -4101,6 +4188,7 @@ void ApplicationManager::initConnections()
                     return;
                 }
 
+                d->connectionStatus->removeDocument(_documentUuid);
                 d->cloudServiceManager->removeDocument(currentProject->id(), _documentUuid);
             });
 

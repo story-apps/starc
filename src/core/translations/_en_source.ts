@@ -3811,6 +3811,11 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
         <source>Renew subscription</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="3933"/>
+        <source>Synchronization is unavailable: the project owner's cloud subscription has expired.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ManagementLayer::AudioplayStatisticsManager</name>
@@ -4067,6 +4072,16 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="2307"/>
         <source>Generating image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="974"/>
+        <source>Not enough cloud storage to save changes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="979"/>
+        <source>The server rejected the changes. They have not been saved to the cloud.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -11825,8 +11840,83 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>Ui::ConnectionStatusToolBar</name>
     <message>
-        <location filename="../ui/account/connection_status_tool_bar.cpp" line="283"/>
-        <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="151"/>
+        <source>Cloud synchronization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="154"/>
+        <source>Connection: connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="156"/>
+        <source>Connection: disconnected. Automatic reconnection enabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="161"/>
+        <source>Your changes: waiting for connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="163"/>
+        <source>Your changes: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="166"/>
+        <source>Your changes: server confirmation has not arrived yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="168"/>
+        <source>Your changes: saving to the cloud…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="170"/>
+        <source>Your changes: waiting to be sent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="174"/>
+        <source>Your changes: saved to the cloud at %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="176"/>
+        <source>Your changes: no pending changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="181"/>
+        <source>Incoming changes: waiting for connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="184"/>
+        <source>Incoming changes: the server has not responded yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="186"/>
+        <source>Incoming changes: receiving…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="189"/>
+        <source>Incoming changes: received at %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="191"/>
+        <source>Incoming changes: none received in this session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="198"/>
+        <source>Reconnect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
