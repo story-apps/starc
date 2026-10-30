@@ -83,11 +83,6 @@ public:
         bool isTrackChanges = false;
     } autoReviewMode;
 
-    struct {
-        int inBlock = 0;
-        int inDocument = 0;
-        int blockLength = 0;
-    } lastPosition;
 };
 
 SimpleTextEdit::Implementation::Implementation(SimpleTextEdit* _q)
@@ -355,36 +350,10 @@ void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
         //
         // Корректируем позицию курсора при совместной работе
         //
-        connect(d->model, &BusinessLayer::SimpleTextModel::changesAboutToBeApplied, this, [this] {
-            d->lastPosition.inBlock = textCursor().positionInBlock();
-            d->lastPosition.inDocument = textCursor().position();
-            d->lastPosition.blockLength = textCursor().block().length();
-        });
+        connect(d->model, &BusinessLayer::SimpleTextModel::changesAboutToBeApplied, this,
+                &SimpleTextEdit::saveEditingState);
         connect(d->model, &BusinessLayer::SimpleTextModel::changesApplied, this,
-                [this](const BusinessLayer::ChangeCursor& _changeCursor) {
-                    //
-                    // Если курсор сместился в конец блока, значит изменение затрагивало данный блок
-                    //
-                    auto cursor = textCursor();
-                    if (d->lastPosition.inBlock != cursor.positionInBlock()
-                        && cursor.positionInBlock() == cursor.block().length() - 1) {
-                        //
-                        // ... если изменение было за курсором, то восстановим предыдущую позицию
-                        //
-                        if (_changeCursor.position > d->lastPosition.inBlock) {
-                            cursor.setPosition(d->lastPosition.inDocument);
-                        }
-                        //
-                        // ... если изменение было перед, то корректируем позицию с учётом изменения
-                        //     количества символов в текущем абзаце
-                        //
-                        else {
-                            cursor.setPosition(d->lastPosition.inDocument + cursor.block().length()
-                                               - d->lastPosition.blockLength);
-                        }
-                        setTextCursorAndKeepScrollBars(cursor);
-                    }
-                });
+                &SimpleTextEdit::restoreEditingState);
     }
 
     emit cursorPositionChanged();

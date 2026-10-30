@@ -14,6 +14,7 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/diff_match_patch/diff_match_patch.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
@@ -629,6 +630,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         // - а потом переустанавливаем модель по сигналу завершения сброса
         //
 
+        emit documentAboutToBeRebuilt();
         auto model = d->model;
         setModel(nullptr);
 
@@ -725,12 +727,26 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     d->correctPositionsToItems(position + 1, distanse);
 
                     //
-                    // TODO: Сделать более умный алгоритм, который заменяет только изменённые части
-                    // текста
+                    // Меняем только отличающиеся фрагменты, чтобы QTextCursor сохранил
+                    // позицию и оба конца выделения в неизменённом тексте.
                     //
-                    cursor.movePosition(QTextCursor::StartOfBlock);
-                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    cursor.insertText(textItem->text());
+                    const auto diffs
+                        = diff_match_patch().diff_main(cursor.block().text(), textItem->text());
+                    for (const auto& diff : diffs) {
+                        switch (diff.operation) {
+                        case EQUAL:
+                            cursor.setPosition(cursor.position() + diff.text.length());
+                            break;
+                        case DELETE:
+                            cursor.setPosition(cursor.position() + diff.text.length(),
+                                               QTextCursor::KeepAnchor);
+                            cursor.removeSelectedText();
+                            break;
+                        case INSERT:
+                            cursor.insertText(diff.text);
+                            break;
+                        }
+                    }
                 }
                 //
                 // ... редакторские заметки и форматирование
@@ -1275,6 +1291,11 @@ void TextDocument::setCorrectionOptions(const QStringList& _options)
     }
 
     d->corrector->setCorrectionOptions(_options);
+}
+
+void TextDocument::finishDelayedCorrections()
+{
+    d->modelChangeCorrectionDebouncer.forceWork();
 }
 
 QModelIndex TextDocument::visibleTopLeveLItem() const

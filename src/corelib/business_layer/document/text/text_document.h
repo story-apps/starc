@@ -46,6 +46,11 @@ public:
     void setCorrectionOptions(const QStringList& _options);
 
     /**
+     * @brief Завершить отложенные корректировки перед восстановлением положения редактора
+     */
+    void finishDelayedCorrections();
+
+    /**
      * @brief Видимый верхнеуровневый элемент
      */
     QModelIndex visibleTopLeveLItem() const;
@@ -138,6 +143,12 @@ public:
      * @brief Получить закладку блока
      */
     TextModelTextItem::Bookmark bookmark(const QTextBlock& _forBlock) const;
+
+signals:
+    /**
+     * @brief Документ будет полностью перестроен из модели
+     */
+    void documentAboutToBeRebuilt();
 
 protected:
     /**

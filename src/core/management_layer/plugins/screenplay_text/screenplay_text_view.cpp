@@ -1974,6 +1974,16 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
         // Перед началом сброса документа запоминаем текущую позицию курсора
         //
         connect(d->model, &BusinessLayer::ScreenplayTextModel::modelAboutToBeReset, this, [this] {
+            //
+            // Если в данный момент выполняется применение патча, то значит дальше курсор и
+            // прокрутка будут восстановлены в самом ScriptTextEdit, так что отложенный обработчик
+            // modelReset не должен возвращать старую абсолютную позицию
+            //
+            if (d->model->isChangesApplyingInProcess()) {
+                d->pendingCursorPosition.reset();
+                return;
+            }
+
             if (!d->pendingCursorPosition.has_value()) {
                 d->pendingCursorPosition = cursorPosition();
             }

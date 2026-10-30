@@ -38,6 +38,12 @@ public:
 
 protected:
     /**
+     * @brief Сохранить и восстановить состояние редактора
+     */
+    void saveEditingState();
+    void restoreEditingState();
+
+    /**
      * @brief Обновить положение курсоров соавторов
      */
     void updateCollaboratorsCursors(int _position, int _charsRemoved, int _charsAdded);

@@ -1,13 +1,16 @@
 #include "script_text_edit.h"
 
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/document/text/text_document.h>
 #include <business_layer/templates/text_template.h>
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
+#include <utils/diff_match_patch/diff_match_patch.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
 
+#include <QAbstractTextDocumentLayout>
 #include <QPainter>
 #include <QRegularExpression>
 #include <QTextTable>
@@ -34,6 +37,22 @@ public:
      * @brief Последнее положение мыши
      */
     QPoint lastMousePos;
+
+    /**
+     * @brief Состояние редактора
+     */
+    struct {
+        QTextCursor cursor;
+        QTextCursor viewportAnchor;
+        int viewportAnchorTop = 0;
+        int horizontalScroll = 0;
+        QMetaObject::Connection modelRebuildConnection;
+        bool modelWasRebuilt = false;
+        QString text;
+        int position = 0;
+        int selectionAnchor = 0;
+        int viewportAnchorPosition = 0;
+    } editingState;
 
     /**
      * @brief Курсоры соавторов
@@ -101,6 +120,79 @@ void ScriptTextEdit::setCollaboratorsCursors(const QVector<Domain::CursorInfo>& 
 {
     d->pendingCollaboratorsCursorInfo = _cursors;
     d->collaboratorCursorInfoUpdateDebouncer.orderWork();
+}
+
+void ScriptTextEdit::saveEditingState()
+{
+    //
+    // Живые курсоры отслеживают все изменения пакета, включая сдвиги в предыдущих абзацах
+    //
+    d->editingState.cursor = textCursor();
+    d->editingState.viewportAnchor = textCursor();
+    d->editingState.viewportAnchor.clearSelection();
+    if (!viewport()->rect().intersects(cursorRect(d->editingState.viewportAnchor))) {
+        //
+        // ... пользователь мог прокрутить документ, оставив курсор за пределами экрана
+        //
+        d->editingState.viewportAnchor = cursorForPosition(QPoint(0, 0));
+    }
+    d->editingState.viewportAnchorTop = cursorRect(d->editingState.viewportAnchor).top();
+    d->editingState.horizontalScroll = horizontalScroll();
+
+    d->editingState.modelWasRebuilt = false;
+    disconnect(d->editingState.modelRebuildConnection);
+    if (auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document())) {
+        d->editingState.modelRebuildConnection = connect(
+            textDocument, &BusinessLayer::TextDocument::documentAboutToBeRebuilt, this, [this] {
+                if (d->editingState.modelWasRebuilt) {
+                    return;
+                }
+
+                //
+                // Большие патчи сбрасывают модель целиком, поэтому в этом случае на нужен снимок
+                // документа, иначе живые курсоры не переживут очистку QTextDocument
+                //
+                d->editingState.modelWasRebuilt = true;
+                d->editingState.text = document()->toRawText();
+                d->editingState.position = d->editingState.cursor.position();
+                d->editingState.selectionAnchor = d->editingState.cursor.anchor();
+                d->editingState.viewportAnchorPosition = d->editingState.viewportAnchor.position();
+            });
+    }
+}
+
+void ScriptTextEdit::restoreEditingState()
+{
+    if (d->editingState.cursor.isNull() || d->editingState.cursor.document() != document()) {
+        return;
+    }
+
+    if (auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document())) {
+        textDocument->finishDelayedCorrections();
+    }
+    disconnect(d->editingState.modelRebuildConnection);
+    if (d->editingState.modelWasRebuilt) {
+        diff_match_patch dmp;
+        const auto diffs = dmp.diff_main(d->editingState.text, document()->toRawText());
+        d->editingState.cursor.setPosition(dmp.diff_xIndex(diffs, d->editingState.selectionAnchor));
+        d->editingState.cursor.setPosition(dmp.diff_xIndex(diffs, d->editingState.position),
+                                           QTextCursor::KeepAnchor);
+        d->editingState.viewportAnchor.setPosition(
+            dmp.diff_xIndex(diffs, d->editingState.viewportAnchorPosition));
+        d->editingState.text.clear();
+    }
+    setTextCursor(d->editingState.cursor);
+
+    //
+    // Завершаем ленивую раскладку перед вычислением смещения и границ прокрутки
+    //
+    document()->documentLayout()->documentSize();
+    const auto offset
+        = cursorRect(d->editingState.viewportAnchor).top() - d->editingState.viewportAnchorTop;
+    setVerticalScroll(verticalScroll() + offset);
+    setHorizontalScroll(d->editingState.horizontalScroll);
+
+    d->editingState = {};
 }
 
 void ScriptTextEdit::updateCollaboratorsCursors(int _position, int _charsRemoved, int _charsAdded)

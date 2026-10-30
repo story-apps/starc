@@ -33,11 +33,10 @@ void Debouncer::orderWork()
 
 void Debouncer::forceWork()
 {
-    if (!hasPendingWork()) {
-        return;
+    if (hasPendingWork()) {
+        m_timer.stop();
     }
 
-    m_timer.stop();
     emit gotWork();
 }
 
