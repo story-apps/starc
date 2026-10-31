@@ -4027,7 +4027,11 @@ void ApplicationManager::initConnections()
                     }
                 }
                 for (const auto document : std::as_const(documentsToUpdate)) {
-                    d->connectionStatus->setDownloadStarted(document->uuid());
+                    // The bundle includes background locations/characters and other
+                    // auxiliary documents. The server may skip them without a reply,
+                    // so only the explicitly requested document has a reply deadline.
+                    d->connectionStatus->setDownloadStarted(document->uuid(),
+                                                             document->uuid() == _documentUuid);
                 }
                 d->cloudServiceManager->openDocuments(currentProject->id(), documentsToUpdate);
                 //
