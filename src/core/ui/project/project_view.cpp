@@ -255,6 +255,8 @@ void ProjectView::setDocumentDrafts(const BusinessLayer::StructureModelItem* _it
 
     d->documentDraftsHeightAnimation.setStartValue(0);
     d->documentDraftsHeightAnimation.setEndValue(d->documentDrafts->sizeHint().height());
+
+    setDraftsVisible(d->documentDrafts->count() > 1);
 }
 
 void ProjectView::setDraftsVisible(bool _visible)
