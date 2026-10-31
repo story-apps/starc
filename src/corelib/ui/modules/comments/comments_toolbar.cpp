@@ -463,6 +463,11 @@ void CommentsToolbar::showToolbar()
 
 void CommentsToolbar::hideToolbar()
 {
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
     if (!isVisible()) {
         return;
     }
