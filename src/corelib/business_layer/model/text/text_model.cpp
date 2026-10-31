@@ -1275,6 +1275,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
 
         insertItems(itemsToInsert, insertAfterItem);
         lastItem = itemsToInsert.constLast();
+        insertAfterItem = lastItem;
         itemsToInsert.clear();
     };
     QXmlStreamReader contentReader(correctedMimeData);
