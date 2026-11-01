@@ -307,7 +307,7 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from, 
     bool isFirstVisibleBlock = cursor.block() == document()->begin();
     bool isFirstBlockAfterInvisible = true;
     auto block = cursor.block();
-    while (block.isValid() && block.position() < endPosition) {
+    while (block.isValid() && block.position() <= endPosition) {
         const auto blockType = TextBlockStyle::forBlock(block);
 
         //

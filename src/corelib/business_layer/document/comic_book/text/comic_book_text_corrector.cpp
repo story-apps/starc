@@ -303,7 +303,7 @@ void ComicBookTextCorrector::Implementation::updateBlocksVisibility(int _from, i
     bool isFirstVisibleBlock = cursor.block() == document()->begin();
     bool isFirstBlockAfterInvisible = true;
     auto block = cursor.block();
-    while (block.isValid() && block.position() < endPosition) {
+    while (block.isValid() && block.position() <= endPosition) {
         const auto blockType = TextBlockStyle::forBlock(block);
 
         //
