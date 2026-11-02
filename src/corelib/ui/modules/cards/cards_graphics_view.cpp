@@ -2526,13 +2526,28 @@ void CardsGraphicsView::selectCardItemIndex(const QModelIndex& _index)
         item->setSelected(false);
     }
 
+    //
+    // Карточка может быть удалена со сцены, пока таймер анимации находится в процессе выполнения
+    // (например при закрытии проекта), поэтому выносим определение карточки в момент вызова, чтобы
+    // не нарваться на разрушенный объект
+    //
+    const auto ensureVisible = [this, index = QPersistentModelIndex(_index)] {
+        if (!index.isValid() || index.model() != d->model) {
+            return;
+        }
+
+        auto card = d->modelItemsToCards.value(index.internalPointer());
+        if (card != nullptr) {
+            animateEnsureVisible(card);
+        }
+    };
+
     const auto animationIter = d->cardsAnimations.find(card);
     if (animationIter != d->cardsAnimations.end() && !animationIter.value().isNull()) {
         Once::connect(animationIter.value().data(), &QVariantAnimation::finished, this,
-                      [this, card] { animateEnsureVisible(card); });
+                      ensureVisible);
     } else if (d->reorderCardsDebounceTimer.isActive()) {
-        Once::connect(&d->reorderCardsDebounceTimer, &QTimer::timeout, this,
-                      [this, card] { animateEnsureVisible(card); });
+        Once::connect(&d->reorderCardsDebounceTimer, &QTimer::timeout, this, ensureVisible);
     } else {
         animateEnsureVisible(card);
     }
