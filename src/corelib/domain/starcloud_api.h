@@ -28,7 +28,9 @@ enum class NotificationType {
     UpdateStableQt6Windows = 103,
     //
     ProSubscriptionEnds = 9,
-    TeamSubscriptionEnds = 10,
+    CreatorSubscriptionEnds = 10,
+    StudioSubscriptionEnds = 1001,
+    CampusSubscriptionEnds = 1002,
     //
     CreditsAdded = 11,
 };

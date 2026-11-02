@@ -478,12 +478,17 @@ void MenuView::setNotifications(const QVector<Domain::Notification>& _notificati
         }
 
         case Domain::NotificationType::ProSubscriptionEnds:
-        case Domain::NotificationType::TeamSubscriptionEnds: {
+        case Domain::NotificationType::CreatorSubscriptionEnds: {
             auto view = new SubscriptionView(this, notification);
             connect(view, &SubscriptionView::renewProPressed, this, &MenuView::renewProPressed);
             connect(view, &SubscriptionView::renewCreatorPressed, this,
                     &MenuView::renewCreatorPressed);
             notificationView = view;
+            break;
+        }
+        case Domain::NotificationType::StudioSubscriptionEnds:
+        case Domain::NotificationType::CampusSubscriptionEnds: {
+            notificationView = new SubscriptionView(this, notification);
             break;
         }
 

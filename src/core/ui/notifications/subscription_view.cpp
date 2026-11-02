@@ -48,9 +48,24 @@ SubscriptionView::Implementation::Implementation(SubscriptionView* _q,
     , renewButton(new Button(_q))
     , buttonsLayout(new QHBoxLayout)
 {
-    avatarLabel->setIcon(notification.type == Domain::NotificationType::ProSubscriptionEnds
-                             ? u8"\U000F18BD"
-                             : u8"\U000F0163");
+    const auto icon = [type = notification.type] {
+        switch (type) {
+        case Domain::NotificationType::ProSubscriptionEnds:
+        default: {
+            return u8"\U000F18BD";
+        }
+        case Domain::NotificationType::CreatorSubscriptionEnds: {
+            return u8"\U000F0163";
+        }
+        case Domain::NotificationType::StudioSubscriptionEnds: {
+            return u8"\U000F0FCF";
+        }
+        case Domain::NotificationType::CampusSubscriptionEnds: {
+            return u8"\U000F1180";
+        }
+        }
+    }();
+    avatarLabel->setIcon(icon);
     avatarLabel->setDecorationVisible(true);
 
     buttonsLayout->setContentsMargins({});
@@ -70,10 +85,32 @@ void SubscriptionView::Implementation::setupView()
                                             : Ui::DesignSystem::color().accent());
     QString title;
     QString body;
-    bool isButtonVisible = true;
+    //
+    // По дефолту кнопка видня только для PRO & CREATOR подписок
+    //
+    bool isButtonVisible = notification.type != Domain::NotificationType::StudioSubscriptionEnds
+        && notification.type != Domain::NotificationType::CampusSubscriptionEnds;
+
+    const auto subscriptionName = [type = notification.type] {
+        switch (type) {
+        case Domain::NotificationType::ProSubscriptionEnds:
+        default: {
+            return "PRO";
+        }
+        case Domain::NotificationType::CreatorSubscriptionEnds: {
+            return "CREATOR";
+        }
+        case Domain::NotificationType::StudioSubscriptionEnds: {
+            return "STUDIO";
+        }
+        case Domain::NotificationType::CampusSubscriptionEnds: {
+            return "CAMPUS";
+        }
+        }
+    }();
 
     //
-    // Удаление проектов
+    // Удаление проектов [;-1)
     //
     if (daysLeft < -1) {
         title = tr("Cloud projects removal");
@@ -81,55 +118,62 @@ void SubscriptionView::Implementation::setupView()
                   "renew CREATOR subscription.");
     }
     //
-    // Подписка закончилась
+    // Подписка закончилась [-1]
     //
     else if (daysLeft == -1) {
         title = tr("Subscription ended");
-        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
-            ? tr("Your PRO version subscription is expired. Account is switched to the FREE "
-                 "version.")
-            : tr("Your CREATOR version subscription is expired. Your cloud projects will be stored "
-                 "for 30 days and then removed if you don't reactivate CREATOR subscription.");
+        switch (notification.type) {
+        default:
+        case Domain::NotificationType::ProSubscriptionEnds: {
+            body = tr("Your PRO version subscription is expired. Account is switched to the FREE "
+                      "version.");
+            break;
+        }
+        case Domain::NotificationType::CreatorSubscriptionEnds: {
+            body = tr(
+                "Your CREATOR version subscription is expired. Your cloud projects will be stored "
+                "for 30 days and then removed if you don't reactivate CREATOR subscription.");
+            break;
+        }
+        case Domain::NotificationType::StudioSubscriptionEnds:
+        case Domain::NotificationType::CampusSubscriptionEnds: {
+            body = tr("Your %1 version subscription is expired. All your organization's accounts "
+                      "switched to the FREE version and access to the workspaces limited.")
+                       .arg(subscriptionName);
+            break;
+        }
+        }
     }
     //
-    // Последний день подписки
+    // Последний день подписки [0]
     //
     else if (daysLeft == 0) {
         title = tr("Subscription ends");
-        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
-            ? tr("Your PRO version subscription expires today.")
-            : tr("Your CREATOR version subscription expires today.");
+        body = tr("Your %1 version subscription expires today.").arg(subscriptionName);
     }
     //
-    // Подписка скоро закончится
+    // Подписка скоро закончится [1:28)
     //
-    else if (daysLeft < 10) {
+    else if (daysLeft < 28) {
         title = tr("Subscription ends");
-        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
-            ? tr("Your PRO version subscription expires in %n day(s).", "", std::max(1, daysLeft))
-            : tr("Your CREATOR version subscription expires in %n day(s).", "",
-                 std::max(1, daysLeft));
+        body = tr("Your %1 version subscription expires in %n day(s).", "", std::max(1, daysLeft))
+                   .arg(subscriptionName);
     }
     //
-    // Подписка продлена на период
+    // Подписка продлена на период [28:1000)
     //
     else if (daysLeft < 1000) {
         title = tr("Subscription renewed");
-        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
-            ? tr("Your PRO version subscription active until %1.")
-                  .arg(endDateTime.toString("dd.MM.yyyy"))
-            : tr("Your CREATOR version subscription active until %1.")
-                  .arg(endDateTime.toString("dd.MM.yyyy"));
+        body = tr("Your %1 version subscription active until %2.")
+                   .arg(subscriptionName, endDateTime.toString("dd.MM.yyyy"));
         isButtonVisible = false;
     }
     //
-    // Подписка продлена навсегда
+    // Подписка продлена навсегда [1000;]
     //
     else {
         title = tr("Subscription renewed");
-        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
-            ? tr("Your PRO version lifetime subscription activated.")
-            : tr("Your CREATOR version lifetime subscription activated.");
+        body = tr("Your %1 version lifetime subscription activated.").arg(subscriptionName);
         isButtonVisible = false;
     }
 
@@ -170,7 +214,7 @@ SubscriptionView::SubscriptionView(QWidget* _parent, const Domain::Notification&
             break;
         }
 
-        case Domain::NotificationType::TeamSubscriptionEnds: {
+        case Domain::NotificationType::CreatorSubscriptionEnds: {
             emit renewCreatorPressed();
             break;
         }
