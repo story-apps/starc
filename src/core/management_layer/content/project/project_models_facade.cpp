@@ -127,12 +127,29 @@ void ProjectModelsFacade::clear()
 
 BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(const QUuid& _uuid)
 {
-    return modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(_uuid));
+    Log::trace("[ProjectModelsFacade] Resolving document: document=%1", _uuid.toString());
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(_uuid);
+    if (document == nullptr) {
+        Log::debug("[ProjectModelsFacade] Document is not available locally: document=%1",
+                   _uuid.toString());
+        return nullptr;
+    }
+
+    return modelFor(document);
 }
 
 BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObjectType _type)
 {
-    return modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(_type));
+    Log::trace("[ProjectModelsFacade] Resolving document: document_type=%1",
+               QString::number(static_cast<int>(_type)));
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(_type);
+    if (document == nullptr) {
+        Log::debug("[ProjectModelsFacade] Document is not available locally: document_type=%1",
+                   QString::number(static_cast<int>(_type)));
+        return nullptr;
+    }
+
+    return modelFor(document);
 }
 
 BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObject* _document)
@@ -151,6 +168,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         bool isDocumentAlias = false;
 
         if (!d->documentsToModels.contains(documentToLoad)) {
+            Log::debug("[ProjectModelsFacade] Creating model: document=%1, document_type=%2",
+                       documentToLoad->uuid().toString(),
+                       QString::number(static_cast<int>(documentToLoad->type())));
+
             BusinessLayer::AbstractModel* model = nullptr;
             switch (documentToLoad->type()) {
             case Domain::DocumentObjectType::Project: {
@@ -1677,6 +1698,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             default: {
+                Log::critical("[ProjectModelsFacade] Unsupported document type: document=%1, "
+                              "document_type=%2",
+                              documentToLoad->uuid().toString(),
+                              QString::number(static_cast<int>(documentToLoad->type())));
                 Q_ASSERT(false);
                 return nullptr;
             }
@@ -1711,6 +1736,11 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             d->documentsToModels.insert(documentToLoad, model);
+
+            Log::debug("[ProjectModelsFacade] Model cached: document=%1, model=%2, alias=%3",
+                       documentToLoad->uuid().toString(),
+                       QString::fromLatin1(model->metaObject()->className()),
+                       QString::number(isDocumentAlias));
         }
     }
 

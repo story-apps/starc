@@ -120,10 +120,18 @@ void AbstractModel::setDocument(Domain::DocumentObject* _document)
 
     d->document = _document;
 
+    const auto modelType = QString::fromLatin1(metaObject()->className());
     if (d->document) {
+        const auto documentId = d->document->uuid().toString();
+        Log::debug("[AbstractModel] Initializing document: model=%1, document=%2", modelType,
+                   documentId);
         initDocument();
+        Log::trace("[AbstractModel] Document initialized: model=%1, document=%2", modelType,
+                   documentId);
     } else {
+        Log::debug("[AbstractModel] Clearing document: model=%1", modelType);
         clearDocument();
+        Log::trace("[AbstractModel] Document cleared: model=%1", modelType);
     }
 }
 

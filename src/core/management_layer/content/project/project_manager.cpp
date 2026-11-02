@@ -5519,6 +5519,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         && versionIndex < aliasedItem->drafts().size()) {
         itemForShow = aliasedItem->drafts().at(versionIndex);
     }
+    Log::debug("[ProjectManager] Requesting document for editor: document=%1",
+               itemForShow->uuid().toString());
     emit downloadDocumentRequested(itemForShow->uuid());
 
     //
@@ -5544,6 +5546,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), viewMimeType);
     if (d->view.activeModel == nullptr) {
+        Log::debug("[ProjectManager] Waiting for document model: document=%1, mime=%2",
+                   itemForShow->uuid().toString(), viewMimeType);
         d->view.active->showDocumentLoadingPage();
         d->view.active->setDraftsVisible(false);
         return;
@@ -5561,6 +5565,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         view = d->pluginsBuilder.activateSecondView(viewMimeType, d->view.activeModel);
     }
     if (view == nullptr) {
+        Log::warning("[ProjectManager] Editor activation failed: document=%1, mime=%2",
+                     itemForShow->uuid().toString(), viewMimeType);
         d->view.active->showNotImplementedPage();
         d->view.active->setDraftsVisible(false);
         return;
@@ -5766,7 +5772,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         }
     });
 
-    Log::info("Plugin activated");
+    Log::info("[ProjectManager] Editor shown: document=%1, mime=%2", itemForShow->uuid().toString(),
+              viewMimeType);
 }
 
 void ProjectManager::showViewForDraft(BusinessLayer::StructureModelItem* _item)

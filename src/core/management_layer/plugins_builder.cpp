@@ -1,7 +1,10 @@
 #include "plugins_builder.h"
 
+#include <business_layer/model/abstract_model.h>
+#include <domain/document_object.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
+#include <utils/logging.h>
 
 #include <QApplication>
 #include <QDebug>
@@ -378,6 +381,7 @@ public:
 bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
 {
     if (plugins.contains(_mimeType)) {
+        Log::trace("[PluginsBuilder] Using cached plugin: mime=%1", _mimeType);
         return true;
     }
 
@@ -405,6 +409,7 @@ bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
     // Если папки с плагинами нет, идём лесом
     //
     if (!pluginsDir.cd(pluginsDirName)) {
+        Log::critical("[PluginsBuilder] Plugin directory is missing: mime=%1", _mimeType);
         return false;
     }
 
@@ -424,23 +429,32 @@ bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
     const QStringList libCorePluginEntries
         = pluginsDir.entryList({ kMimeToPlugin.value(_mimeType) + extensionFilter }, QDir::Files);
     if (libCorePluginEntries.isEmpty()) {
-        qCritical() << "Plugin isn't found for mime-type:" << _mimeType;
+        Log::critical("[PluginsBuilder] Plugin library not found: mime=%1", _mimeType);
         return false;
     }
     if (libCorePluginEntries.size() > 1) {
-        qCritical() << "Found more than 1 plugins for mime-type:" << _mimeType;
+        Log::critical("[PluginsBuilder] Multiple plugin libraries found: mime=%1", _mimeType);
         return false;
     }
 
     const auto pluginPath = libCorePluginEntries.first();
     QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(pluginPath));
+    Log::debug("[PluginsBuilder] Instantiating plugin: mime=%1, library=%2", _mimeType, pluginPath);
     QObject* pluginObject = pluginLoader.instance();
     if (pluginObject == nullptr) {
-        qCritical() << pluginLoader.errorString();
+        Log::critical("[PluginsBuilder] Loading failed: mime=%1, library=%2, error=%3", _mimeType,
+                      pluginPath, pluginLoader.errorString());
         return false;
     }
 
     auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
+    if (plugin == nullptr) {
+        Log::critical(
+            "[PluginsBuilder] Library does not implement IDocumentManager: mime=%1, library=%2",
+            _mimeType, pluginPath);
+        return false;
+    }
+
     plugin->setAvailableCredits(availableCredits);
     plugins.insert(_mimeType, plugin);
 
@@ -450,11 +464,18 @@ bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
 Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     const QString& _mimeType, BusinessLayer::AbstractModel* _model, ViewType _type)
 {
+    const auto documentId = _model && _model->document() ? _model->document()->uuid().toString()
+                                                         : QStringLiteral("none");
+    Log::debug("[PluginsBuilder] Activating view: mime=%1, document=%2, view_type=%3", _mimeType,
+               documentId, QString::number(static_cast<int>(_type)));
+
     //
     // Инициилизируем плагин
     //
     const auto isPluginInitialized = initPlugin(_mimeType);
     if (!isPluginInitialized) {
+        Log::critical("[PluginsBuilder] Activation failed during plugin initialization: mime=%1",
+                      _mimeType);
         return nullptr;
     }
 
@@ -463,6 +484,7 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     //
     auto plugin = plugins.value(_mimeType);
     if (plugin == nullptr) {
+        Log::critical("[PluginsBuilder] Initialized plugin is unavailable: mime=%1", _mimeType);
         return nullptr;
     }
 
@@ -487,6 +509,13 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     }
     }
 
+    if (view == nullptr) {
+        Log::critical("[PluginsBuilder] Plugin returned no view: mime=%1, document=%2", _mimeType,
+                      documentId);
+        return nullptr;
+    }
+    Log::debug("[PluginsBuilder] View obtained: mime=%1, document=%2", _mimeType, documentId);
+
     //
     // Настроим доступность для редактирования в плагине
     //
@@ -496,6 +525,8 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     // ... а также доступные кредиты для работы с ИИ
     //
     view->setAvailableCredits(availableCredits);
+
+    Log::debug("[PluginsBuilder] View activated: mime=%1, document=%2", _mimeType, documentId);
 
     return view;
 }
