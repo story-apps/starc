@@ -124,6 +124,11 @@ QScrollBar* Tree::verticalScrollBar() const
     return d->tree->verticalScrollBar();
 }
 
+void Tree::setBottomScrollMargin(int _margin)
+{
+    d->tree->setBottomScrollMargin(_margin);
+}
+
 void Tree::setHeaderVisible(bool _visible)
 {
     d->tree->setHeaderHidden(!_visible);

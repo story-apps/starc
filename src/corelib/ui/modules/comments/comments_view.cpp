@@ -468,7 +468,12 @@ void CommentsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     StackWidget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().primary());
+    setBackgroundColor(DesignSystem::color().primary());
+    d->commentsView->setBottomScrollMargin(
+        DesignSystem::floatingToolBar().height()
+        + DesignSystem::floatingToolBar().shadowMargins().top()
+        + DesignSystem::floatingToolBar().shadowMargins().bottom() + DesignSystem::layout().px24()
+        + DesignSystem::layout().px8());
     d->commentsView->setBackgroundColor(DesignSystem::color().primary());
     d->commentsView->setTextColor(DesignSystem::color().onPrimary());
     d->contextMenu->setBackgroundColor(DesignSystem::color().background());

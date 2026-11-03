@@ -49,6 +49,11 @@ public:
     QScrollBar* verticalScrollBar() const;
 
     /**
+     * @brief Дополнительное прокручиваемое пространство под последним элементом
+     */
+    void setBottomScrollMargin(int _margin);
+
+    /**
      * @brief Установить видимость заголовков
      */
     void setHeaderVisible(bool _visible);

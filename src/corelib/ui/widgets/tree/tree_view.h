@@ -22,6 +22,11 @@ public:
     void setAutoAdjustSize(bool _auto);
 
     /**
+     * @brief Дополнительное прокручиваемое пространство под последним элементом
+     */
+    void setBottomScrollMargin(int _margin);
+
+    /**
      * @brief Переопределяем метод, чтобы дать доступ к нему наружу
      */
     QSize viewportSizeHint() const override;
@@ -48,6 +53,11 @@ signals:
     void hoverIndexChanged(const QModelIndex& _index);
 
 protected:
+    /**
+     * @brief Учитываем кастомный отступ для списка снизу
+     */
+    void updateGeometries() override;
+
     /**
      * @brief Фильтруем события клика вьюпорта, чтобы анимировать их
      */

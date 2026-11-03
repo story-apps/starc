@@ -1,8 +1,11 @@
 #include "tree_view.h"
 
+#include <utils/tools/run_once.h>
+
 #include <QDomDocument>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QScrollBar>
 #include <QVariantAnimation>
 
 
@@ -21,6 +24,7 @@ public:
      * @brief Нужно ли пересчитывать размер отрисовываемых элементов при изменении размера
      */
     bool adjustSizeAutomatically = false;
+    int bottomScrollMargin = 0;
 
     /**
      * @brief Индекс элемента на который наведена мышь
@@ -79,6 +83,17 @@ TreeView::TreeView(QWidget* _parent)
 void TreeView::setAutoAdjustSize(bool _auto)
 {
     d->adjustSizeAutomatically = _auto;
+}
+
+void TreeView::setBottomScrollMargin(int _margin)
+{
+    _margin = std::max(0, _margin);
+    if (d->bottomScrollMargin == _margin) {
+        return;
+    }
+
+    d->bottomScrollMargin = _margin;
+    updateGeometries();
 }
 
 QSize TreeView::viewportSizeHint() const
@@ -149,6 +164,31 @@ int TreeView::sizeHintForColumn(int _column) const
 }
 
 TreeView::~TreeView() = default;
+
+void TreeView::updateGeometries()
+{
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
+    const auto scrollPosition = verticalScrollBar()->value();
+
+    QTreeView::updateGeometries();
+
+    if (d->bottomScrollMargin == 0 || verticalScrollMode() != ScrollPerPixel) {
+        return;
+    }
+
+    const auto maximum = verticalScrollBar()->maximum();
+    const auto contentHeight
+        = maximum > 0 ? viewport()->height() + maximum : viewportSizeHint().height();
+    if (contentHeight > 0) {
+        verticalScrollBar()->setMaximum(
+            std::max(0, contentHeight + d->bottomScrollMargin - viewport()->height()));
+        verticalScrollBar()->setValue(scrollPosition);
+    }
+}
 
 bool TreeView::eventFilter(QObject* _watched, QEvent* _event)
 {
