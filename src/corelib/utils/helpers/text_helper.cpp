@@ -505,8 +505,28 @@ int TextHelper::wordsCount(const QString& _text)
     //        - слова разделённые знаками препинания без пробелов
     //        - не учитывать знаки препинания окружённые пробелами, типа " - "
     //
-    static QRegularExpression wordCountExpression("[\\s.,!():;]+");
-    return _text.split(wordCountExpression, Qt::SkipEmptyParts).count();
+    int count = 0;
+    bool inWord = false;
+    for (const auto character : _text) {
+        const auto value = character.unicode();
+        if (QChar::isSurrogate(value)) {
+            // Preserve the regular expression's handling of supplementary characters
+            // and malformed UTF-16 (which can occur while editing).
+            static const QRegularExpression wordCountExpression("[\\s.,!():;]+");
+            return _text.split(wordCountExpression, Qt::SkipEmptyParts).count();
+        }
+
+        // Match [\s.,!():;]+ without UseUnicodePropertiesOption: Unicode spaces
+        // outside the ASCII range must keep the same semantics as before.
+        const bool separator = (value >= '\t' && value <= '\r') || value == ' '
+            || value == '.' || value == ',' || value == '!' || value == '(' || value == ')'
+            || value == ':' || value == ';';
+        if (!separator && !inWord) {
+            ++count;
+        }
+        inWord = !separator;
+    }
+    return count;
 }
 
 void TextHelper::clearSelectionFormatting(QTextCursor& _cursor)

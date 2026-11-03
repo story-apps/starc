@@ -533,6 +533,7 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
     currentTag = readCustomContent(_contentReader);
 
     if (currentTag == xml::kContentTag) {
+        QVector<AbstractModelItem*> children;
         xml::readNextElement(_contentReader); // next item
         do {
             currentTag = _contentReader.name();
@@ -557,15 +558,19 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
             //
             else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined) {
                 auto item = model()->createGroupItem(_contentReader);
-                appendItem(item);
+                children.append(item);
             } else if (currentTag == xml::kSplitterTag) {
                 auto item = model()->createSplitterItem(_contentReader);
-                appendItem(item);
+                children.append(item);
             } else {
                 auto item = model()->createTextItem(_contentReader);
-                appendItem(item);
+                children.append(item);
             }
         } while (!_contentReader.atEnd());
+        if (!children.isEmpty()) {
+            // Recalculate aggregate text and counters once after loading all children.
+            appendItems(children);
+        }
     }
 
     //

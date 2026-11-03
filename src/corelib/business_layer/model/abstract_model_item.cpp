@@ -12,7 +12,10 @@ class AbstractModelItem::Implementation
 public:
     ~Implementation();
 
+    void updateChildRows(int _from);
+
     AbstractModelItem* parent = nullptr;
+    int rowInParent = -1;
     QVector<AbstractModelItem*> children;
     bool changed = false;
 };
@@ -20,6 +23,16 @@ public:
 AbstractModelItem::Implementation::~Implementation()
 {
     qDeleteAll(children);
+}
+
+void AbstractModelItem::Implementation::updateChildRows(int _from)
+{
+    for (int row = _from; row < children.size(); ++row) {
+        // An item can already belong to a new tree while the old tree is being patched.
+        if (children[row]->d->parent && children[row]->d->parent->d.data() == this) {
+            children[row]->d->rowInParent = row;
+        }
+    }
 }
 
 
@@ -44,16 +57,7 @@ void AbstractModelItem::prependItem(AbstractModelItem* _item)
 
 void AbstractModelItem::prependItems(const QVector<AbstractModelItem*>& _items)
 {
-    for (auto item : reversed(_items)) {
-        if (item->parent() == this) {
-            continue;
-        }
-
-        item->d->parent = this;
-        d->children.prepend(item);
-    }
-
-    setChanged(true);
+    insertItems(0, _items);
 }
 
 void AbstractModelItem::appendItem(AbstractModelItem* _item)
@@ -69,6 +73,7 @@ void AbstractModelItem::appendItems(const QVector<AbstractModelItem*>& _items)
         }
 
         item->d->parent = this;
+        item->d->rowInParent = d->children.size();
         d->children.append(item);
     }
 
@@ -82,13 +87,23 @@ void AbstractModelItem::insertItem(int _index, AbstractModelItem* _item)
 
 void AbstractModelItem::insertItems(int _index, const QVector<AbstractModelItem*>& _items)
 {
+    QVector<AbstractModelItem*> inserted;
+    inserted.reserve(_items.size());
     for (auto item : reversed(_items)) {
         if (item->parent() == this) {
             continue;
         }
 
         item->d->parent = this;
-        d->children.insert(_index, item);
+        inserted.append(item);
+    }
+    if (!inserted.isEmpty()) {
+        // Shift the suffix once for the entire batch, rather than once per item.
+        d->children.insert(_index, inserted.size(), nullptr);
+        for (auto item : reversed(inserted)) {
+            d->children[_index++] = item;
+        }
+        d->updateChildRows(_index - inserted.size());
     }
 
     setChanged(true);
@@ -114,6 +129,7 @@ void AbstractModelItem::removeItems(int _fromIndex, int _toIndex)
         item = nullptr;
     }
 
+    d->updateChildRows(_fromIndex);
     setChanged(true);
 }
 
@@ -134,6 +150,7 @@ void AbstractModelItem::takeItems(int _fromIndex, int _toIndex)
         d->children.removeAt(index);
     }
 
+    d->updateChildRows(_fromIndex);
     setChanged(true);
 }
 
@@ -150,6 +167,7 @@ AbstractModelItem* AbstractModelItem::parent() const
 void AbstractModelItem::setParent(AbstractModelItem* _parent)
 {
     d->parent = _parent;
+    d->rowInParent = -1;
 }
 
 bool AbstractModelItem::isChildOf(AbstractModelItem* _parent) const
@@ -200,13 +218,29 @@ bool AbstractModelItem::hasChild(AbstractModelItem* _child, bool _recursively) c
 
 int AbstractModelItem::rowOfChild(AbstractModelItem* _child) const
 {
-    return d->children.indexOf(_child);
+    if (_child == nullptr) {
+        return -1;
+    }
+
+    const auto row = _child->d->rowInParent;
+    if (row >= 0 && row < d->children.size() && d->children.at(row) == _child) {
+        return row;
+    }
+
+    // setParent() also supports drafts and temporary reparenting without changing the
+    // child list. Preserve membership-based lookup in these cases.
+    const auto actualRow = d->children.indexOf(_child);
+    if (_child->d->parent == this) {
+        _child->d->rowInParent = actualRow;
+    }
+    return actualRow;
 }
 
 void AbstractModelItem::sortChildren(
     const std::function<bool(AbstractModelItem*, AbstractModelItem*)>& _sorter)
 {
     std::sort(d->children.begin(), d->children.end(), _sorter);
+    d->updateChildRows(0);
 }
 
 AbstractModelItem* AbstractModelItem::childAt(int _index) const

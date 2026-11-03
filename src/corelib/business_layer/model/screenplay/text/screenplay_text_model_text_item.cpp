@@ -85,12 +85,11 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     //
     const auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(model());
     Q_ASSERT(screenplayModel);
-    const auto duration = ScreenplayChronometer::duration(
+    const auto counters = ScreenplayChronometer::counters(
         paragraphType(), text(), screenplayModel->informationModel()->templateId(),
         screenplayModel->informationModel()->chronometerOptions());
-    const auto eighths = ScreenplayChronometer::eighths(
-        paragraphType(), text(), screenplayModel->informationModel()->templateId(),
-        screenplayModel->informationModel()->chronometerOptions());
+    const auto duration = counters.duration;
+    const auto eighths = counters.eighths;
 
     //
     // Если не было изменений, то и ладно, выходим тогда
