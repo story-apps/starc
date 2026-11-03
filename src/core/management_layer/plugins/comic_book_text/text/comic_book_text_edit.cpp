@@ -162,8 +162,11 @@ void ComicBookTextEdit::Implementation::updateReviewMark(QKeyEvent* _event, int 
         cursor.setPosition(_from);
         cursor.setPosition(_to, QTextCursor::KeepAnchor);
         q->setTextCursor(cursor);
-        q->addReviewMark(autoReviewMode.textColor, autoReviewMode.backgroundColor, {},
-                         autoReviewMode.isRevision, autoReviewMode.isTrackChanges, false);
+        constexpr bool isRemoval = false;
+        constexpr bool isContinuation = true;
+        document.addReviewMark(autoReviewMode.textColor, autoReviewMode.backgroundColor, {},
+                               autoReviewMode.isRevision, autoReviewMode.isTrackChanges, isRemoval,
+                               cursor, isContinuation);
         q->setTextCursor(lastCursor);
     }
 }

@@ -16,6 +16,18 @@
 
 namespace BusinessLayer {
 
+namespace {
+bool isSameDiscussion(const TextModelTextItem::ReviewMark& _left,
+                      const TextModelTextItem::ReviewMark& _right)
+{
+    //
+    // После частичного перекрытия у разных обсуждений может остаться один автор
+    // первого комментария и одинаковый цвет
+    //
+    return _left.isPartiallyEqual(_right) && _left.comments == _right.comments;
+}
+} // namespace
+
 class CommentsModel::Implementation
 {
 public:
@@ -148,7 +160,7 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
             // ... присовокупляем, если она имеет аналогичное форматирование и заканчивается в конце
             // абзаца
             //
-            if (previousTextItemLastReviewMarkWrapper.reviewMark.isPartiallyEqual(_reviewMark)
+            if (isSameDiscussion(previousTextItemLastReviewMarkWrapper.reviewMark, _reviewMark)
                 && previousTextItemLastReviewMarkWrapper.toInLastItem
                     == previousTextItem->text().length()) {
                 auto& reviewMarkWrapper
@@ -191,7 +203,7 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
                 // ... присовокупляем, если она имеет аналогичное форматирование и заканчивается в
                 // конце абзаца
                 //
-                if (textItemReviewMarkWrapper.reviewMark.isPartiallyEqual(_reviewMark)) {
+                if (isSameDiscussion(textItemReviewMarkWrapper.reviewMark, _reviewMark)) {
                     auto& reviewMarkWrapper
                         = reviewMarks[reviewMarks.indexOf(textItemReviewMarkWrapper)];
                     //
@@ -599,7 +611,12 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
                 //
                 // Обновим заметку, если она осталась на месте
                 //
-                if (newReviewMark.isPartiallyEqual(oldReviewMarkWrapper.reviewMark)) {
+                if (newReviewMark.isPartiallyEqual(oldReviewMarkWrapper.reviewMark)
+                    && (newReviewMark.comments == oldReviewMarkWrapper.reviewMark.comments
+                        || ((textItem != oldReviewMarkWrapper.items.constFirst()
+                             || newReviewMark.from == oldReviewMarkWrapper.fromInFirstItem)
+                            && (textItem != oldReviewMarkWrapper.items.constLast()
+                                || newReviewMark.end() == oldReviewMarkWrapper.toInLastItem)))) {
                     auto newReviewMarkWrapper = oldReviewMarkWrapper;
                     newReviewMarkWrapper.reviewMark = newReviewMark;
                     if (newReviewMarkWrapper.items.size() == 1) {
@@ -789,7 +806,8 @@ void CommentsModel::setTextModel(TextModel* _model)
                                 //
                                 if (lastReviewMarkWrapper.items.last()
                                         == d->modelTextItems.at(d->modelTextItems.size() - 2)
-                                    && lastReviewMarkWrapper.reviewMark.isPartiallyEqual(reviewMark)
+                                    && isSameDiscussion(lastReviewMarkWrapper.reviewMark,
+                                                        reviewMark)
                                     && lastReviewMarkWrapper.toInLastItem
                                         == lastReviewMarkWrapper.items.constLast()
                                                ->text()
@@ -812,7 +830,8 @@ void CommentsModel::setTextModel(TextModel* _model)
                                 // заканчивается она в конце абзаца
                                 //
                                 if (lastReviewMarkWrapper.items.last() == textItem
-                                    && lastReviewMarkWrapper.reviewMark.isPartiallyEqual(reviewMark)
+                                    && isSameDiscussion(lastReviewMarkWrapper.reviewMark,
+                                                        reviewMark)
                                     && lastReviewMarkWrapper.toInLastItem == reviewMark.from) {
                                     if (!lastReviewMarkWrapper.items.contains(textItem)) {
                                         lastReviewMarkWrapper.items.append(textItem);
@@ -908,7 +927,7 @@ QModelIndex CommentsModel::mapFromModel(const QModelIndex& _index, int _position
         }
 
         for (const auto& reviewMark : textItem->reviewMarks()) {
-            if (!reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+            if (!isSameDiscussion(reviewMark, reviewMarkWrapper.reviewMark)) {
                 continue;
             }
 
@@ -937,7 +956,7 @@ void CommentsModel::setComment(const QModelIndex& _index, const QString& _commen
     for (auto textItem : std::as_const(reviewMarkWrapper.items)) {
         auto updatedReviewMarks = textItem->reviewMarks();
         for (auto& reviewMark : updatedReviewMarks) {
-            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+            if (isSameDiscussion(reviewMark, reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.first().text = _comment;
                 reviewMark.comments.first().isEdited = true;
             }
@@ -954,7 +973,7 @@ void CommentsModel::markAsDone(const QModelIndexList& _indexes)
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
             for (auto& reviewMark : updatedReviewMarks) {
-                if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+                if (isSameDiscussion(reviewMark, reviewMarkWrapper.reviewMark)) {
                     reviewMark.isDone = true;
                 }
             }
@@ -971,7 +990,7 @@ void CommentsModel::markAsUndone(const QModelIndexList& _indexes)
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
             for (auto& reviewMark : updatedReviewMarks) {
-                if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+                if (isSameDiscussion(reviewMark, reviewMarkWrapper.reviewMark)) {
                     reviewMark.isDone = false;
                 }
             }
@@ -1130,7 +1149,7 @@ void CommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
     for (auto textItem : reviewMarkWrapper.items) {
         auto updatedReviewMarks = textItem->reviewMarks();
         for (auto& reviewMark : updatedReviewMarks) {
-            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+            if (isSameDiscussion(reviewMark, reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.append(
                     { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
                       DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
@@ -1149,7 +1168,7 @@ void CommentsModel::editReply(const QModelIndex& _index, int _replyIndex, const 
     for (auto textItem : reviewMarkWrapper.items) {
         auto updatedReviewMarks = textItem->reviewMarks();
         for (auto& reviewMark : updatedReviewMarks) {
-            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+            if (isSameDiscussion(reviewMark, reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments[_replyIndex].text = _comment;
                 reviewMark.comments[_replyIndex].date = replyDateTime;
             }
@@ -1165,7 +1184,7 @@ void CommentsModel::removeReply(const QModelIndex& _index, int _replyIndex)
     for (auto textItem : reviewMarkWrapper.items) {
         auto updatedReviewMarks = textItem->reviewMarks();
         for (auto& reviewMark : updatedReviewMarks) {
-            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+            if (isSameDiscussion(reviewMark, reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.removeAt(_replyIndex);
             }
         }
@@ -1180,13 +1199,13 @@ void CommentsModel::remove(const QModelIndexList& _indexes)
         const auto reviewMarkWrapper = d->reviewMarks.value(index.row());
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
-            updatedReviewMarks.erase(std::remove_if(updatedReviewMarks.begin(),
-                                                    updatedReviewMarks.end(),
-                                                    [reviewMarkWrapper](const auto& _reviewMark) {
-                                                        return _reviewMark.isPartiallyEqual(
-                                                            reviewMarkWrapper.reviewMark);
-                                                    }),
-                                     updatedReviewMarks.end());
+            updatedReviewMarks.erase(
+                std::remove_if(updatedReviewMarks.begin(), updatedReviewMarks.end(),
+                               [reviewMarkWrapper](const auto& _reviewMark) {
+                                   return isSameDiscussion(_reviewMark,
+                                                           reviewMarkWrapper.reviewMark);
+                               }),
+                updatedReviewMarks.end());
             textItem->setReviewMarks(updatedReviewMarks);
             d->model->updateItem(textItem);
         }
@@ -1270,6 +1289,20 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
             return {};
         }
         return QVariant::fromValue(reviewMarkWrapper.reviewMark.comments);
+    }
+
+    case ReviewMarkRepliesWithTextRole: {
+        auto commentsWithText = reviewMarkWrapper.reviewMark.comments;
+        commentsWithText.erase(
+            std::remove_if(commentsWithText.begin(), commentsWithText.end(),
+                           [](const BusinessLayer::TextModelTextItem::ReviewComment& _comment) {
+                               return _comment.text.isEmpty();
+                           }),
+            commentsWithText.end());
+        if (commentsWithText.isEmpty()) {
+            return {};
+        }
+        return QVariant::fromValue(commentsWithText);
     }
 
     default: {

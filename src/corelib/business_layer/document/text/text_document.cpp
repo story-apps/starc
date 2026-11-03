@@ -25,6 +25,8 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
+#include <algorithm>
+
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
@@ -2027,8 +2029,12 @@ int TextDocument::mergeParagraph(const TextCursor& _cursor)
 
 void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                                  const QString& _comment, bool _isRevision, bool _isAddition,
-                                 bool _isRemoval, const TextCursor& _cursor)
+                                 bool _isRemoval, const TextCursor& _cursor, bool _isContinuation)
 {
+    if (!_cursor.hasSelection()) {
+        return;
+    }
+
     TextModelTextItem::ReviewMark newReviewMark;
     if (_textColor.isValid()) {
         newReviewMark.textColor = _textColor;
@@ -2041,9 +2047,58 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     }
 
     //
-    // Пробуем сшить редакторские заметки
+    // Собираем обсуждения до замены формата из всего выделенного текста (границы выделения
+    // полуоткрытые: соседняя заметка не входит в обсуждение)
+    //
+    const auto selection = _cursor.selectionInterval();
+    for (auto block = findBlock(selection.from); block.isValid() && block.position() < selection.to;
+         block = block.next()) {
+        const auto iter = d->positionsToItems.find(block.position());
+        if (iter == d->positionsToItems.end() || iter->second->type() != TextModelItemType::Text) {
+            continue;
+        }
+
+        const auto textItem = static_cast<const TextModelTextItem*>(iter->second);
+        for (const auto& mark : textItem->reviewMarks()) {
+            if (block.position() + mark.from >= selection.to
+                || block.position() + mark.end() <= selection.from) {
+                continue;
+            }
+
+            //
+            // Один комментарий может храниться в нескольких фрагментах заметки.
+            // Сохраняем также намеренные повторы внутри самого обсуждения.
+            //
+            for (int index = 0; index < mark.comments.size(); ++index) {
+                const auto& comment = mark.comments.at(index);
+                const auto occurrences = std::count(mark.comments.cbegin(),
+                                                    mark.comments.cbegin() + index + 1, comment);
+                if (std::count(newReviewMark.comments.cbegin(), newReviewMark.comments.cend(),
+                               comment)
+                    < occurrences) {
+                    newReviewMark.comments.append(comment);
+                }
+            }
+        }
+    }
+    std::stable_sort(newReviewMark.comments.begin(), newReviewMark.comments.end(),
+                     [](const auto& left, const auto& right) {
+                         const auto leftDate = QDateTime::fromString(left.date, Qt::ISODate);
+                         const auto rightDate = QDateTime::fromString(right.date, Qt::ISODate);
+                         if (leftDate.isValid() != rightDate.isValid()) {
+                             return !leftDate.isValid();
+                         }
+                         return leftDate < rightDate;
+                     });
+
+    //
+    // Пробуем сшить пустую заметку при автоматическом рецензировании, если в выделении
+    // нет других обсуждений. Ручное выделение всегда добавляет запись в историю.
     //
     do {
+        if (!_isContinuation || !_comment.isEmpty()) {
+            break;
+        }
         //
         // ... если добавляемая заметка касается только одного блока
         //
@@ -2075,25 +2130,28 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
                 continue;
             }
 
+            const auto& lastComment = mark.comments.constLast();
+            const bool isSystemComment = lastComment.text.isEmpty();
+            const bool hasCompatibleDiscussion
+                = newReviewMark.comments.isEmpty() || newReviewMark.comments == mark.comments;
+            const bool hasSameColors = mark.textColor == newReviewMark.textColor
+                && mark.backgroundColor == newReviewMark.backgroundColor;
+            const bool hasSameChangeType = lastComment.isRevision == _isRevision
+                && lastComment.isAddition == _isAddition && lastComment.isRemoval == _isRemoval;
+            const auto settings = DataStorageLayer::StorageFacade::settingsStorage();
+            const bool isCurrentUser = lastComment.author == settings->accountName()
+                && lastComment.authorEmail == settings->accountEmail();
+
             //
             // Если нашли редакторскую заметку с которой пересекается добавляемая
             //
-            if (mark.textColor == newReviewMark.textColor
-                && mark.backgroundColor == newReviewMark.backgroundColor
-                && mark.comments.constFirst().isRevision == _isRevision
-                && mark.comments.constFirst().isAddition == _isAddition
-                && mark.comments.constFirst().isRemoval == _isRemoval
-                && mark.comments.constFirst().author
-                    == DataStorageLayer::StorageFacade::settingsStorage()->accountName()
-                && mark.comments.constFirst().authorEmail
-                    == DataStorageLayer::StorageFacade::settingsStorage()->accountEmail()) {
+            if (isSystemComment && hasCompatibleDiscussion && hasSameColors && hasSameChangeType
+                && isCurrentUser) {
                 //
                 // ... и они равны по формату, то объединим их
                 //
                 mark.from = std::min(mark.from, selectionInterval.from);
                 mark.length = std::max(markEnd, selectionInterval.to) - mark.from;
-                mark.comments.first().date = QDateTime::currentDateTime().toString(Qt::ISODate);
-                mark.comments.first().isEdited = true;
                 textItem->setReviewMarks(reviewMarks);
                 d->model->updateItem(textItem);
                 return;
@@ -2109,7 +2167,7 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     newReviewMark.comments.append(
         { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
           DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
-          QDateTime::currentDateTime().toString(Qt::ISODate), _comment, isEdited, _isRevision,
+          QDateTime::currentDateTime().toString(Qt::ISODateWithMs), _comment, isEdited, _isRevision,
           _isAddition, _isRemoval });
     auto cursor = _cursor;
     cursor.mergeCharFormat(newReviewMark.charFormat());

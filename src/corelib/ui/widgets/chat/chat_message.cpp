@@ -3,10 +3,12 @@
 
 ChatMessage::ChatMessage() = default;
 
-ChatMessage::ChatMessage(const QDateTime& _dateTime, const QString& _text, const User& _author)
+ChatMessage::ChatMessage(const QDateTime& _dateTime, const QString& _text, const User& _author,
+                         bool _isSystemMessage)
     : m_dateTime(_dateTime)
     , m_text(_text)
     , m_author(_author)
+    , m_isSistemMessage(_isSystemMessage)
 {
 }
 
@@ -25,10 +27,15 @@ User ChatMessage::author() const
     return m_author;
 }
 
+bool ChatMessage::isSistemMessage() const
+{
+    return m_isSistemMessage;
+}
+
 bool operator==(const ChatMessage& _lhs, const ChatMessage& _rhs)
 {
     return _lhs.dateTime() == _rhs.dateTime() && _lhs.text() == _rhs.text()
-        && _lhs.author() == _rhs.author();
+        && _lhs.author() == _rhs.author() && _lhs.isSistemMessage() == _rhs.isSistemMessage();
 }
 
 bool operator!=(const ChatMessage& _lhs, const ChatMessage& _rhs)

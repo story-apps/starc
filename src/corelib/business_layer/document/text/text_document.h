@@ -132,7 +132,7 @@ public:
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                        const QString& _comment, bool _isRevision, bool _isAddition, bool _isRemoval,
-                       const TextCursor& _cursor);
+                       const TextCursor& _cursor, bool _isContinuation = false);
 
     /**
      * @brief Добавить ресурсную заметку в текущее выделение

@@ -91,19 +91,33 @@ CommentRepliesView::Implementation::Implementation(QWidget* _parent)
 
 void CommentRepliesView::Implementation::fillComments()
 {
+    auto reviewCommentText = [](const BusinessLayer::TextModelTextItem::ReviewComment& _comment) {
+        if (!_comment.text.isEmpty()) {
+            return _comment.text;
+        }
+        if (_comment.isAddition) {
+            return tr("Added text");
+        }
+        if (_comment.isRemoval) {
+            return tr("Removed text");
+        }
+        if (_comment.isRevision) {
+            return tr("Revised text");
+        }
+        return tr("Highlighted text");
+    };
+
     //
     // Собираем ответы на комментарий и помещаем их во вьюху
     //
     const auto comments = commentIndex.data(CommentsModel::ReviewMarkRepliesRole)
                               .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
     QVector<ChatMessage> replies;
-    for (const auto& comment : comments) {
-        if (comment == comments.first()) {
-            continue;
-        }
-
-        replies.append({ QDateTime::fromString(comment.date, Qt::ISODate), comment.text,
-                         User(comment.author, comment.authorEmail) });
+    for (int index = 1; index < comments.size(); ++index) {
+        const auto& comment = comments.at(index);
+        replies.append({ QDateTime::fromString(comment.date, Qt::ISODate),
+                         reviewCommentText(comment), User(comment.author, comment.authorEmail),
+                         comment.text.isEmpty() });
     }
     repliesView->setMessages(replies);
 }

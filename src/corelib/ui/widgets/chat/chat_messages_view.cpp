@@ -158,6 +158,7 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.setFont(Ui::DesignSystem::font().body2());
 
     //
@@ -274,11 +275,15 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
             Ui::DesignSystem::layout().px12(),
             Ui::DesignSystem::layout().px12() + messageHeightDelta,
             -Ui::DesignSystem::layout().px12(), -Ui::DesignSystem::layout().px12());
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(isCurrentAuthor ? currentAuthorBaloonColor : defaultBaloonColor);
-        painter.drawRoundedRect(messageRect, Ui::DesignSystem::card().borderRadius(),
-                                Ui::DesignSystem::card().borderRadius());
-        painter.setPen(textColor());
+        //
+        // ... фон рисуем только для сообщений пользователей
+        //
+        if (!message.isSistemMessage()) {
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(isCurrentAuthor ? currentAuthorBaloonColor : defaultBaloonColor);
+            painter.drawRoundedRect(messageRect, Ui::DesignSystem::card().borderRadius(),
+                                    Ui::DesignSystem::card().borderRadius());
+        }
         //
         QTextOption textOption;
         textOption.setAlignment(isLeftToRight() ? Qt::AlignLeft : Qt::AlignRight);
@@ -289,11 +294,13 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
                                             messageRect.top() + Ui::DesignSystem::layout().px8()),
                                     QSizeF(messageTextRect.width(), titleFontLineSpacing)),
                              message.author().name(), textOption);
-            painter.setFont(Ui::DesignSystem::font().body2());
-            painter.setPen(textColor());
         }
         //
         textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        auto messageFont = Ui::DesignSystem::font().body2();
+        messageFont.setItalic(message.isSistemMessage());
+        painter.setFont(messageFont);
+        painter.setPen(textColor());
         painter.drawText(messageTextRect, message.text(), textOption);
 
         lastY = messageRect.bottom();
