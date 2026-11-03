@@ -5,6 +5,7 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPixmapCache>
 #include <QVariantAnimation>
 
 
@@ -55,6 +56,11 @@ public:
      */
     int currentImageIndex = kInvalidImageIndex;
     QPixmap currentImage;
+    QPixmapCache::Key scaledImageKey;
+    qint64 scaledSourceKey = 0;
+    QSize scaledImageSize;
+    Qt::TransformationMode scaledImageMode = Qt::FastTransformation;
+    CursorAction paintedCursorAction = CursorAction::Close;
     QVariantAnimation opacityAnimation;
     QVariantAnimation geometryAnimation;
 };
@@ -260,6 +266,7 @@ void ImagesListPreview::paintEvent(QPaintEvent* _event)
     painter.setPen(Ui::DesignSystem::color().onShadow());
     painter.setFont(Ui::DesignSystem::font().iconsBig());
     const auto cursorAction = d->cursorAction();
+    d->paintedCursorAction = cursorAction;
     if (d->currentImageIndex > 0 && d->images.size() > 1) {
         const QRectF goToPrevRect(0, margin(), margin(), height() - margin() * 2);
         if (cursorAction == CursorAction::ToPrevious) {
@@ -280,9 +287,18 @@ void ImagesListPreview::paintEvent(QPaintEvent* _event)
         ? Qt::FastTransformation
         : Qt::SmoothTransformation;
     const auto imageRect = d->geometryAnimation.currentValue().toRectF();
-    painter.drawPixmap(
-        imageRect.topLeft(),
-        d->currentImage.scaled(imageRect.size().toSize(), Qt::KeepAspectRatio, mode));
+    const auto imageSize = imageRect.size().toSize();
+    QPixmap scaledImage;
+    if (d->scaledSourceKey != d->currentImage.cacheKey() || d->scaledImageSize != imageSize
+        || d->scaledImageMode != mode || !QPixmapCache::find(d->scaledImageKey, &scaledImage)) {
+        scaledImage = d->currentImage.scaled(imageSize, Qt::KeepAspectRatio, mode);
+        QPixmapCache::remove(d->scaledImageKey);
+        d->scaledImageKey = QPixmapCache::insert(scaledImage);
+        d->scaledSourceKey = d->currentImage.cacheKey();
+        d->scaledImageSize = imageSize;
+        d->scaledImageMode = mode;
+    }
+    painter.drawPixmap(imageRect.topLeft(), scaledImage);
 }
 
 void ImagesListPreview::keyPressEvent(QKeyEvent* _event)
@@ -320,7 +336,12 @@ void ImagesListPreview::mouseMoveEvent(QMouseEvent* _event)
 {
     Widget::mouseMoveEvent(_event);
 
-    update();
+    if (d->paintedCursorAction != d->cursorAction()) {
+        // Only the navigation highlights change when the pointer moves.
+        update(QRectF(0, margin(), margin(), height() - margin() * 2).toAlignedRect());
+        update(QRectF(width() - margin(), margin(), margin(), height() - margin() * 2)
+                   .toAlignedRect());
+    }
 }
 
 void ImagesListPreview::mouseReleaseEvent(QMouseEvent* _event)

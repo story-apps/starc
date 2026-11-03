@@ -58,6 +58,8 @@ protected:
      */
     void paintEvent(QPaintEvent* _event) override;
 
+    void scrollContentsBy(int _dx, int _dy) override;
+
     /**
      * @brief Переопределяем, чтобы при необходимости пересчитывать размер элементов
      */

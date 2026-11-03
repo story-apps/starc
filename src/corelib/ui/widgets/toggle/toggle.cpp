@@ -182,26 +182,14 @@ void Toggle::paintEvent(QPaintEvent* _event)
     const QRectF toggleRect = d->tumblerAnimation.currentValue().toRectF();
     const qreal borderRadius = toggleRect.height() / 2.0;
     //
-    // ... подготовим тень
-    //
-    static QPixmap backgroundImage;
-    if (backgroundImage.size() != toggleRect.size().toSize()) {
-        backgroundImage = QPixmap(toggleRect.size().toSize());
-        backgroundImage.fill(Qt::transparent);
-        QPainter backgroundImagePainter(&backgroundImage);
-        backgroundImagePainter.setPen(Qt::NoPen);
-        backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
-        backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
-                                               borderRadius, borderRadius);
-    }
-    //
     // ... рисуем тень
     //
     const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
-    const bool useCache = true;
     const QPixmap shadow
-        = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
-                                  shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
+        = ImageHelper::roundedRectShadow(
+            toggleRect.size().toSize(), Ui::DesignSystem::color().textEditor(), borderRadius,
+            Ui::DesignSystem::card().shadowMargins(), shadowHeight,
+            Ui::DesignSystem::color().shadow());
     painter.drawPixmap(toggleRect.topLeft()
                            - QPointF{ Ui::DesignSystem::card().shadowMargins().left(),
                                       Ui::DesignSystem::card().shadowMargins().top() },

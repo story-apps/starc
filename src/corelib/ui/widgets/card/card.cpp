@@ -127,23 +127,16 @@ void Card::paintEvent(QPaintEvent* _event)
     //
     // Заливаем фон
     //
-    QPixmap backgroundImage(backgroundRect.size().toSize());
-    backgroundImage.fill(Qt::transparent);
-    QPainter backgroundImagePainter(&backgroundImage);
-    backgroundImagePainter.setPen(Qt::NoPen);
-    backgroundImagePainter.setBrush(backgroundColor());
     const auto borderRadius = Ui::DesignSystem::card().borderRadius();
-    backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()), borderRadius,
-                                           borderRadius);
     //
     // ... рисуем тень
     //
     QPainter painter(this);
-    auto dropShadow = [&painter, backgroundRect, backgroundImage](qreal _radius) {
-        const auto cacheShadow = true;
+    auto dropShadow = [this, &painter, backgroundRect, borderRadius](qreal _radius) {
         const auto shadow
-            = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
-                                      _radius, Ui::DesignSystem::color().shadow(), cacheShadow);
+            = ImageHelper::roundedRectShadow(backgroundRect.size().toSize(), backgroundColor(),
+                                             borderRadius, Ui::DesignSystem::card().shadowMargins(),
+                                             _radius, Ui::DesignSystem::color().shadow());
         painter.drawPixmap(
             backgroundRect.marginsAdded(Ui::DesignSystem::card().shadowMargins().toMargins())
                 .topLeft(),
@@ -151,10 +144,14 @@ void Card::paintEvent(QPaintEvent* _event)
     };
     if (d->shadowOpacityAnimation.currentValue().isValid()) {
         const auto shadowOpacity = d->shadowOpacityAnimation.currentValue().toReal();
-        painter.setOpacity(1.0 - shadowOpacity);
-        dropShadow(Ui::DesignSystem::card().minimumShadowBlurRadius());
-        painter.setOpacity(shadowOpacity);
-        dropShadow(Ui::DesignSystem::card().maximumShadowBlurRadius());
+        if (shadowOpacity < 1.0) {
+            painter.setOpacity(1.0 - shadowOpacity);
+            dropShadow(Ui::DesignSystem::card().minimumShadowBlurRadius());
+        }
+        if (shadowOpacity > 0.0) {
+            painter.setOpacity(shadowOpacity);
+            dropShadow(Ui::DesignSystem::card().maximumShadowBlurRadius());
+        }
         painter.setOpacity(1.0);
     } else {
         dropShadow(Ui::DesignSystem::card().minimumShadowBlurRadius());
@@ -162,7 +159,9 @@ void Card::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем сам фон
     //
-    painter.drawPixmap(backgroundRect, backgroundImage, backgroundImage.rect());
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(backgroundColor());
+    painter.drawRoundedRect(backgroundRect, borderRadius, borderRadius);
 }
 
 #if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))

@@ -1814,26 +1814,14 @@ void PageTextEditPrivate::paintPagesView(QPainter* _painter)
         const qreal borderRadius = Ui::DesignSystem::card().borderRadius();
 
         //
-        // Заливаем фон
-        //
-        static QPixmap backgroundImage;
-        if (backgroundImage.size() != backgroundRect.size().toSize()) {
-            backgroundImage = QPixmap(backgroundRect.size().toSize());
-            backgroundImage.fill(Qt::transparent);
-            QPainter backgroundImagePainter(&backgroundImage);
-            backgroundImagePainter.setPen(Qt::NoPen);
-            backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
-            backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
-                                                   borderRadius, borderRadius);
-        }
-        //
-        // ... рисуем тень
+        // Рисуем тень
         //
         const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
-        const bool useCache = true;
         const QPixmap shadow
-            = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
-                                      shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
+            = ImageHelper::roundedRectShadow(
+                backgroundRect.size().toSize(), Ui::DesignSystem::color().textEditor(), borderRadius,
+                Ui::DesignSystem::card().shadowMargins(), shadowHeight,
+                Ui::DesignSystem::color().shadow());
         _painter->drawPixmap(pageRect.topLeft(), shadow);
         //
         // ... рисуем сам фон

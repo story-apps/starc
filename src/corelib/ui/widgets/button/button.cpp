@@ -230,20 +230,12 @@ void Button::paintEvent(QPaintEvent* _event)
         // Тень рисуем только в случае, если кнопка имеет установленный фон
         //
         if (d->isContained) {
-            QPixmap backgroundImage(backgroundRect.size());
-            backgroundImage.fill(Qt::transparent);
-            QPainter backgroundImagePainter(&backgroundImage);
-            backgroundImagePainter.setPen(Qt::NoPen);
-            backgroundImagePainter.setBrush(backgroundColor);
-            backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
-                                                   Ui::DesignSystem::button().borderRadius(),
-                                                   Ui::DesignSystem::button().borderRadius());
-
             const qreal shadowBlurRadius
                 = std::max(Ui::DesignSystem::button().minimumShadowBlurRadius(),
                            d->shadowBlurRadiusAnimation.currentValue().toReal());
-            const QPixmap shadow = ImageHelper::dropShadow(
-                backgroundImage, Ui::DesignSystem::button().shadowMargins(), shadowBlurRadius,
+            const QPixmap shadow = ImageHelper::roundedRectShadow(
+                backgroundRect.size(), backgroundColor, Ui::DesignSystem::button().borderRadius(),
+                Ui::DesignSystem::button().shadowMargins(), shadowBlurRadius,
                 Ui::DesignSystem::color().shadow());
             painter.drawPixmap(contentsRect().topLeft(), shadow);
         }

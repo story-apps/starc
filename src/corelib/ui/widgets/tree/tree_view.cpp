@@ -66,14 +66,15 @@ TreeView::TreeView(QWidget* _parent)
     setVerticalScrollMode(TreeView::ScrollPerPixel);
     viewport()->installEventFilter(this);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] {
-        update();
-        viewport()->update();
-    });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] {
-        update();
-        viewport()->update();
-    });
+    const auto updateDecoration = [this] {
+        viewport()->update(d->decorationRect.toAlignedRect());
+    };
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            updateDecoration);
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            updateDecoration);
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::finished, this,
+            updateDecoration);
 }
 
 void TreeView::setAutoAdjustSize(bool _auto)
@@ -154,6 +155,8 @@ bool TreeView::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == viewport() && _event->type() == QEvent::MouseButtonPress) {
         auto event = static_cast<QMouseEvent*>(_event);
+        // Erase the previous ripple if another row is clicked before it finishes.
+        viewport()->update(d->decorationRect.toAlignedRect());
         d->decorationCenterPosition = event->pos();
         d->decorationRect = visualRect(indexAt(event->pos()));
         d->decorationRect.setLeft(0.0);
@@ -185,6 +188,15 @@ void TreeView::paintEvent(QPaintEvent* _event)
                             d->decorationRadiusAnimation.currentValue().toReal());
         painter.setOpacity(1.0);
         painter.setClipRect(QRect(), Qt::NoClip);
+    }
+}
+
+void TreeView::scrollContentsBy(int _dx, int _dy)
+{
+    QTreeView::scrollContentsBy(_dx, _dy);
+    if (d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+        // Scrolling also moves already painted ripple pixels. Erase those before the next frame.
+        viewport()->update();
     }
 }
 
