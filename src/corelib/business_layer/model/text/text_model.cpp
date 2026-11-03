@@ -107,6 +107,7 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _document)
         return;
     }
 
+    QVector<AbstractModelItem*> children;
     QXmlStreamReader contentReader(_document->content());
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
@@ -117,14 +118,17 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _document)
         }
 
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-            rootItem->appendItem(q->createFolderItem(contentReader));
+            children.append(q->createFolderItem(contentReader));
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-            rootItem->appendItem(q->createGroupItem(contentReader));
+            children.append(q->createGroupItem(contentReader));
         } else if (currentTag == xml::kSplitterTag) {
-            rootItem->appendItem(q->createSplitterItem(contentReader));
+            children.append(q->createSplitterItem(contentReader));
         } else {
-            rootItem->appendItem(q->createTextItem(contentReader));
+            children.append(q->createTextItem(contentReader));
         }
+    }
+    if (!children.isEmpty()) {
+        rootItem->appendItems(children);
     }
 }
 
@@ -2136,8 +2140,8 @@ void TextModel::clearDocument()
     }
 
     beginResetModelTransaction();
-    while (d->rootItem->hasChildren()) {
-        d->rootItem->removeItem(d->rootItem->childAt(0));
+    if (d->rootItem->hasChildren()) {
+        d->rootItem->removeItems(0, d->rootItem->childCount() - 1);
     }
     endResetModelTransaction();
 
@@ -2146,8 +2150,8 @@ void TextModel::clearDocument()
     // документа, т.к. в текстовом документе всегда имеется один абзац, поэтому тут повторно удаляем
     // всех детей, чтобы при последующей инициилизации у нас в модели не торчали лишние данные
     //
-    while (d->rootItem->hasChildren()) {
-        d->rootItem->removeItem(d->rootItem->childAt(0));
+    if (d->rootItem->hasChildren()) {
+        d->rootItem->removeItems(0, d->rootItem->childCount() - 1);
     }
 }
 

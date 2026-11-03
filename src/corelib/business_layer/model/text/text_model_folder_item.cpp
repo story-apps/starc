@@ -200,6 +200,7 @@ void TextModelFolderItem::readContent(QXmlStreamReader& _contentReader)
     }
 
     if (currentTag == xml::kContentTag) {
+        QVector<AbstractModelItem*> children;
         xml::readNextElement(_contentReader); // next item
         do {
             currentTag = _contentReader.name();
@@ -223,15 +224,19 @@ void TextModelFolderItem::readContent(QXmlStreamReader& _contentReader)
             // Считываем вложенный контент
             //
             else if (textFolderTypeFromString(currentTag.toString()) != TextFolderType::Undefined) {
-                appendItem(model()->createFolderItem(_contentReader));
+                children.append(model()->createFolderItem(_contentReader));
             } else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined) {
-                appendItem(model()->createGroupItem(_contentReader));
+                children.append(model()->createGroupItem(_contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(model()->createSplitterItem(_contentReader));
+                children.append(model()->createSplitterItem(_contentReader));
             } else {
-                appendItem(model()->createTextItem(_contentReader));
+                children.append(model()->createTextItem(_contentReader));
             }
         } while (!_contentReader.atEnd());
+        if (!children.isEmpty()) {
+            // Recalculate aggregate text and counters once after loading all children.
+            appendItems(children);
+        }
     }
 
     //

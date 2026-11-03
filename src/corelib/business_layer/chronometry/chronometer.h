@@ -96,6 +96,17 @@ inline bool operator==(const ChronometerOptions& _lhs, const ChronometerOptions&
 class CORE_LIBRARY_EXPORT ScreenplayChronometer
 {
 public:
+    struct Counters {
+        std::chrono::milliseconds duration;
+        qreal eighths;
+    };
+
+    /**
+     * @brief Вычислить оба счётчика без повторной раскладки текста
+     */
+    static Counters counters(TextParagraphType _type, const QString& _text,
+                             const QString& _templateId, const ChronometerOptions& _options);
+
     /**
      * @brief Определить длительность заданного блока
      */

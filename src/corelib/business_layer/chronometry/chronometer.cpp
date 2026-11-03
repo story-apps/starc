@@ -3,8 +3,6 @@
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <data_layer/storage/settings_storage.h>
-#include <data_layer/storage/storage_facade.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -36,72 +34,74 @@ protected:
 };
 
 /**
- * @brief Расчёт хронометража по количеству страниц
+ * @brief Размер абзаца для расчёта длительности и восьмушек за одну раскладку текста
  */
-class PageChronometer : public AbstractChronometer
-{
-public:
-    explicit PageChronometer(const ChronometerOptions& _options)
-        : AbstractChronometer(_options)
+struct PageMetrics {
+    qreal textHeight;
+    qreal pageHeight;
+
+    std::chrono::milliseconds duration(const ChronometerOptions& _options) const
     {
-    }
-    std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
-                                       const TextTemplate& _textTemplate) const override
-    {
-        const auto milliseconds = m_options.page.seconds * 1000;
-
-        const auto mmPageSize
-            = QPageSize(_textTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
-        const bool x = true, y = false;
-        const auto pxPageSize = QSizeF(MeasurementHelper::mmToPx(mmPageSize.width(), x),
-                                       MeasurementHelper::mmToPx(mmPageSize.height(), y));
-        const auto mmPageMargins = _textTemplate.pageMargins();
-        const auto pxPageMargins = QMarginsF(MeasurementHelper::mmToPx(mmPageMargins.left(), x),
-                                             MeasurementHelper::mmToPx(mmPageMargins.top(), y),
-                                             MeasurementHelper::mmToPx(mmPageMargins.right(), x),
-                                             MeasurementHelper::mmToPx(mmPageMargins.bottom(), y));
-        const auto pageHeight = pxPageSize.height() - pxPageMargins.top() - pxPageMargins.bottom();
-
-        const auto& blockStyle = _textTemplate.paragraphStyle(_type);
-        const auto mmBlockMargins = blockStyle.margins();
-        const auto pxBlockMargins
-            = QMarginsF(MeasurementHelper::mmToPx(mmBlockMargins.left(), x),
-                        MeasurementHelper::mmToPx(mmBlockMargins.top(), y),
-                        MeasurementHelper::mmToPx(mmBlockMargins.right(), x),
-                        MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
-        const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
-            - pxBlockMargins.left() - pxBlockMargins.right();
-        auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
-        switch (blockStyle.lineSpacingType()) {
-        case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
-            textLineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());
-            break;
-        }
-        case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
-            textLineHeight *= 2.0;
-            break;
-        }
-        case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
-            textLineHeight *= 1.5;
-            break;
-        }
-        case TextBlockStyle::LineSpacingType::SingleLineSpacing:
-        default: {
-            break;
-        }
-        }
-        const auto textHeight
-            = TextHelper::layoutHeightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
-            + pxBlockMargins.top() + pxBlockMargins.bottom()
-            + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
-
-        //
-        // Добавляем небольшую дельту, т.к. из-за приблизительности рассчётов не удаётся попадать
-        // точно в минуты
-        //
+        const auto milliseconds = _options.page.seconds * 1000;
         return std::chrono::milliseconds{ qCeil(textHeight / pageHeight * milliseconds * 1.01) };
     }
+
+    qreal eighths() const
+    {
+        return textHeight / (pageHeight / 8.0) * 1.01;
+    }
 };
+
+PageMetrics pageMetrics(TextParagraphType _type, const QString& _text,
+                        const TextTemplate& _textTemplate)
+{
+    const auto mmPageSize
+        = QPageSize(_textTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
+    const bool x = true, y = false;
+    const auto pxPageSize = QSizeF(MeasurementHelper::mmToPx(mmPageSize.width(), x),
+                                   MeasurementHelper::mmToPx(mmPageSize.height(), y));
+    const auto mmPageMargins = _textTemplate.pageMargins();
+    const auto pxPageMargins = QMarginsF(MeasurementHelper::mmToPx(mmPageMargins.left(), x),
+                                         MeasurementHelper::mmToPx(mmPageMargins.top(), y),
+                                         MeasurementHelper::mmToPx(mmPageMargins.right(), x),
+                                         MeasurementHelper::mmToPx(mmPageMargins.bottom(), y));
+    const auto pageHeight = pxPageSize.height() - pxPageMargins.top() - pxPageMargins.bottom();
+
+    const auto& blockStyle = _textTemplate.paragraphStyle(_type);
+    const auto mmBlockMargins = blockStyle.margins();
+    const auto pxBlockMargins
+        = QMarginsF(MeasurementHelper::mmToPx(mmBlockMargins.left(), x),
+                    MeasurementHelper::mmToPx(mmBlockMargins.top(), y),
+                    MeasurementHelper::mmToPx(mmBlockMargins.right(), x),
+                    MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
+    const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
+        - pxBlockMargins.left() - pxBlockMargins.right();
+    auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
+    switch (blockStyle.lineSpacingType()) {
+    case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
+        textLineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());
+        break;
+    }
+    case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
+        textLineHeight *= 2.0;
+        break;
+    }
+    case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
+        textLineHeight *= 1.5;
+        break;
+    }
+    case TextBlockStyle::LineSpacingType::SingleLineSpacing:
+    default: {
+        break;
+    }
+    }
+    const auto textHeight
+        = TextHelper::layoutHeightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
+        + pxBlockMargins.top() + pxBlockMargins.bottom()
+        + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
+
+    return { textHeight, pageHeight };
+}
 
 /**
  * @brief Расчёт хронометража по количеству символов
@@ -202,70 +202,6 @@ public:
     }
 };
 
-/**
- * @brief Расчёт хронометража по количеству страниц
- */
-class PageEightCalculator
-{
-public:
-    PageEightCalculator() = default;
-
-    qreal eighths(TextParagraphType _type, const QString& _text,
-                  const TextTemplate& _textTemplate) const
-    {
-        const auto mmPageSize
-            = QPageSize(_textTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
-        const bool x = true, y = false;
-        const auto pxPageSize = QSizeF(MeasurementHelper::mmToPx(mmPageSize.width(), x),
-                                       MeasurementHelper::mmToPx(mmPageSize.height(), y));
-        const auto mmPageMargins = _textTemplate.pageMargins();
-        const auto pxPageMargins = QMarginsF(MeasurementHelper::mmToPx(mmPageMargins.left(), x),
-                                             MeasurementHelper::mmToPx(mmPageMargins.top(), y),
-                                             MeasurementHelper::mmToPx(mmPageMargins.right(), x),
-                                             MeasurementHelper::mmToPx(mmPageMargins.bottom(), y));
-        const auto pageHeight = pxPageSize.height() - pxPageMargins.top() - pxPageMargins.bottom();
-
-        const auto& blockStyle = _textTemplate.paragraphStyle(_type);
-        const auto mmBlockMargins = blockStyle.margins();
-        const auto pxBlockMargins
-            = QMarginsF(MeasurementHelper::mmToPx(mmBlockMargins.left(), x),
-                        MeasurementHelper::mmToPx(mmBlockMargins.top(), y),
-                        MeasurementHelper::mmToPx(mmBlockMargins.right(), x),
-                        MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
-        const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
-            - pxBlockMargins.left() - pxBlockMargins.right();
-        auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
-        switch (blockStyle.lineSpacingType()) {
-        case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
-            textLineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());
-            break;
-        }
-        case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
-            textLineHeight *= 2.0;
-            break;
-        }
-        case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
-            textLineHeight *= 1.5;
-            break;
-        }
-        case TextBlockStyle::LineSpacingType::SingleLineSpacing:
-        default: {
-            break;
-        }
-        }
-        const auto textHeight
-            = TextHelper::layoutHeightForWidth(_text, blockStyle.font(), textWidth, textLineHeight)
-            + pxBlockMargins.top() + pxBlockMargins.bottom()
-            + blockStyle.linesBefore() * textLineHeight + blockStyle.linesAfter() * textLineHeight;
-
-        //
-        // Добавляем небольшую дельту, т.к. из-за приблизительности рассчётов не удаётся попадать
-        // точно в страницы
-        //
-        return textHeight / (pageHeight / 8.0) * 1.01;
-    }
-};
-
 } // namespace
 
 
@@ -278,7 +214,7 @@ std::chrono::milliseconds ScreenplayChronometer::duration(TextParagraphType _typ
 
     switch (_options.type) {
     case ChronometerType::Page: {
-        return PageChronometer(_options).duration(_type, _text, screenplayTemplate);
+        return pageMetrics(_type, _text, screenplayTemplate).duration(_options);
     }
 
     case ChronometerType::Characters: {
@@ -299,8 +235,21 @@ std::chrono::milliseconds ScreenplayChronometer::duration(TextParagraphType _typ
 qreal ScreenplayChronometer::eighths(TextParagraphType _type, const QString& _text,
                                      const QString& _templateId, const ChronometerOptions& _options)
 {
+    Q_UNUSED(_options)
     const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(_templateId);
-    return PageEightCalculator().eighths(_type, _text, screenplayTemplate);
+    return pageMetrics(_type, _text, screenplayTemplate).eighths();
+}
+
+ScreenplayChronometer::Counters ScreenplayChronometer::counters(
+    TextParagraphType _type, const QString& _text, const QString& _templateId,
+    const ChronometerOptions& _options)
+{
+    const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(_templateId);
+    const auto metrics = pageMetrics(_type, _text, screenplayTemplate);
+    return { _options.type == ChronometerType::Page
+                 ? metrics.duration(_options)
+                 : duration(_type, _text, _templateId, _options),
+             metrics.eighths() };
 }
 
 std::chrono::milliseconds AudioplayChronometer::duration(TextParagraphType _type,
