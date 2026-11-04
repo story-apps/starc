@@ -35,6 +35,11 @@ public:
     void setTabName(int _tabIndex, const QString& _tabName);
 
     /**
+     * @brief Задать иконку и подсказку опции справа от названия вкладки
+     */
+    void setTabOption(int _tabIndex, const QString& _icon);
+
+    /**
      * @brief Задать видимость вкладки
      */
     void setTabVisible(int _tabIndex, bool _visible);
@@ -77,6 +82,11 @@ signals:
      * @brief Изменилась текущая вкладка
      */
     void currentIndexChanged(int _currentIndex, int _previousIndex);
+
+    /**
+     * @brief Нажата кнопка активной вкладки
+     */
+    void tabOptionClicked(int _tabIndex);
 
 protected:
     /**
