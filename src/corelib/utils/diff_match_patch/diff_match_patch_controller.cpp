@@ -4,6 +4,10 @@
 
 #include <utils/shugar.h>
 
+#include <QDomDocument>
+
+#include <algorithm>
+
 
 namespace {
 
@@ -160,6 +164,116 @@ QByteArray DiffMatchPatchController::applyPatch(const QByteArray& _content,
                                                 const QByteArray& _patch) const
 {
     return d->applyPatchXml(_content, _patch).toUtf8();
+}
+
+bool DiffMatchPatchController::applyPatchExact(const QByteArray& _content,
+                                               const QByteArray& _patch,
+                                               QByteArray& _result) const
+{
+    diff_match_patch dmp;
+    auto content = d->xmlToPlain(QString::fromUtf8(_content));
+    try {
+        const auto patches = dmp.patch_fromText(d->xmlToPlain(QString::fromUtf8(_patch)));
+        for (const auto& patch : patches) {
+            const auto before = dmp.diff_text1(patch.diffs);
+            const auto after = dmp.diff_text2(patch.diffs);
+            // Patch coordinates refer to the evolving text, not the original input.
+            if (patch.start2 < 0 || patch.start2 > content.size()
+                || patch.length1 != before.size() || patch.length2 != after.size()
+                || content.mid(patch.start2, before.size()) != before) {
+                return false;
+            }
+            content.replace(patch.start2, before.size(), after);
+        }
+    } catch (const QString&) {
+        return false;
+    }
+    _result = d->plainToXml(content).toUtf8();
+    return true;
+}
+
+bool DiffMatchPatchController::mergeXml(const QByteArray& _base, const QByteArray& _local,
+                                        const QByteArray& _remote, QByteArray& _result) const
+{
+    QDomDocument baseDocument;
+    QDomDocument localDocument;
+    QDomDocument remoteDocument;
+    if (!baseDocument.setContent(_base) || !localDocument.setContent(_local)
+        || !remoteDocument.setContent(_remote)
+        || baseDocument.documentElement().tagName() != localDocument.documentElement().tagName()
+        || baseDocument.documentElement().tagName() != remoteDocument.documentElement().tagName()) {
+        return false;
+    }
+
+    struct Edit {
+        int start = 0;
+        int length = 0;
+        QString replacement;
+    };
+    const auto base = QString::fromUtf8(_base);
+    auto editsFor = [&base](const QByteArray& _content) {
+        diff_match_patch dmp;
+        auto diffs = dmp.diff_main(base, QString::fromUtf8(_content));
+        dmp.diff_cleanupSemantic(diffs);
+        QVector<Edit> edits;
+        int position = 0;
+        bool inEdit = false;
+        for (const auto& diff : diffs) {
+            if (diff.operation == EQUAL) {
+                position += diff.text.size();
+                inEdit = false;
+                continue;
+            }
+            if (!inEdit) {
+                edits.append({ position, 0, {} });
+                inEdit = true;
+            }
+            if (diff.operation == DELETE) {
+                edits.last().length += diff.text.size();
+                position += diff.text.size();
+            } else {
+                edits.last().replacement += diff.text;
+            }
+        }
+        return edits;
+    };
+
+    const auto localEdits = editsFor(_local);
+    auto edits = editsFor(_remote);
+    for (const auto& local : localEdits) {
+        bool duplicate = false;
+        for (const auto& remote : std::as_const(edits)) {
+            if (local.start == remote.start && local.length == remote.length
+                && local.replacement == remote.replacement) {
+                duplicate = true;
+                break;
+            }
+            // Insertions at the same point or at a replacement boundary are ambiguous.
+            const bool overlaps = local.length == 0 || remote.length == 0
+                ? local.start <= remote.start + remote.length
+                    && remote.start <= local.start + local.length
+                : local.start < remote.start + remote.length
+                    && remote.start < local.start + local.length;
+            if (overlaps) {
+                return false;
+            }
+        }
+        if (!duplicate) {
+            edits.append(local);
+        }
+    }
+    std::sort(edits.begin(), edits.end(),
+              [](const Edit& _lhs, const Edit& _rhs) { return _lhs.start > _rhs.start; });
+    auto merged = base;
+    for (const auto& edit : edits) {
+        merged.replace(edit.start, edit.length, edit.replacement);
+    }
+    QDomDocument mergedDocument;
+    if (!mergedDocument.setContent(merged)) {
+        return false;
+    }
+    _result = merged.toUtf8();
+    return true;
 }
 
 QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMatchPatchController::

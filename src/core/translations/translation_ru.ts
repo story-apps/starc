@@ -4725,6 +4725,56 @@ The following files will not be imported:
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
+    <message>
+        <source>Open offline version</source>
+        <translation>Открыть офлайн-версию</translation>
+    </message>
+    <message>
+        <source>Compare versions</source>
+        <translation>Сравнить версии</translation>
+    </message>
+    <message>
+        <source>Open recovery folder</source>
+        <translation>Открыть папку восстановления</translation>
+    </message>
+    <message>
+        <source>Synchronization needs attention</source>
+        <translation>Не удалось завершить синхронизацию</translation>
+    </message>
+    <message>
+        <source>The online version could not be loaded. Your local document and pending changes have been kept. Please try synchronizing again.</source>
+        <translation>Не удалось загрузить онлайн-версию. Локальный документ и неотправленные изменения сохранены. Попробуйте выполнить синхронизацию ещё раз.</translation>
+    </message>
+    <message>
+        <source>Changes merged automatically</source>
+        <translation>Изменения объединены автоматически</translation>
+    </message>
+    <message>
+        <source>"%1" was changed both offline and online. The independent changes have been combined. You can continue editing.</source>
+        <translation>Документ «%1» был изменён и офлайн, и онлайн. Независимые правки объединены. Можно продолжать редактирование.</translation>
+    </message>
+    <message>
+        <source>The versions of "%1" conflict, but a recovery copy could not be saved. Your local document and pending changes have been kept. Check free space and folder permissions, then try synchronizing again.</source>
+        <translation>Версии документа «%1» конфликтуют, но сохранить резервную копию не удалось. Локальный документ и неотправленные изменения сохранены. Проверьте свободное место и права доступа к папке, затем повторите синхронизацию.</translation>
+    </message>
+    <message>
+        <source>Offline version — %1</source>
+        <translation>Офлайн-версия — %1</translation>
+    </message>
+    <message>
+        <source>Online and offline changes conflict</source>
+        <translation>Конфликт онлайн- и офлайн-правок</translation>
+    </message>
+    <message>
+        <source>"%1" was changed both offline and online. These changes could not be combined safely. The online version is now displayed. Both original versions are saved in:
+%2</source>
+        <translation>Документ «%1» был изменён и офлайн, и онлайн. Автоматически объединить правки без риска потери данных не удалось. Сейчас отображается онлайн-версия. Обе исходные версии сохранены в папке:
+%2</translation>
+    </message>
+    <message>
+        <source>"%1" was changed both offline and online. These changes could not be combined safely. The online version is now displayed; your offline edits are saved in a separate draft. Compare the versions and copy the changes you want to keep into the current draft. You can also do this later from the document's drafts.</source>
+        <translation>Документ «%1» был изменён и офлайн, и онлайн. Автоматически объединить правки без риска потери данных не удалось. Сейчас отображается онлайн-версия, а офлайн-правки сохранены в отдельном драфте. Сравните версии и перенесите нужные изменения в текущий драфт. Это можно сделать и позже, открыв список драфтов документа.</translation>
+    </message>
 </context>
 <context>
     <name>ManagementLayer::ProjectsManager</name>

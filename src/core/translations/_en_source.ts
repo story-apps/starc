@@ -4758,6 +4758,56 @@ The following files will not be imported:
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Open offline version</source>
+        <translation>Open offline version</translation>
+    </message>
+    <message>
+        <source>Compare versions</source>
+        <translation>Compare versions</translation>
+    </message>
+    <message>
+        <source>Open recovery folder</source>
+        <translation>Open recovery folder</translation>
+    </message>
+    <message>
+        <source>Synchronization needs attention</source>
+        <translation>Synchronization needs attention</translation>
+    </message>
+    <message>
+        <source>The online version could not be loaded. Your local document and pending changes have been kept. Please try synchronizing again.</source>
+        <translation>The online version could not be loaded. Your local document and pending changes have been kept. Please try synchronizing again.</translation>
+    </message>
+    <message>
+        <source>Changes merged automatically</source>
+        <translation>Changes merged automatically</translation>
+    </message>
+    <message>
+        <source>"%1" was changed both offline and online. The independent changes have been combined. You can continue editing.</source>
+        <translation>"%1" was changed both offline and online. The independent changes have been combined. You can continue editing.</translation>
+    </message>
+    <message>
+        <source>The versions of "%1" conflict, but a recovery copy could not be saved. Your local document and pending changes have been kept. Check free space and folder permissions, then try synchronizing again.</source>
+        <translation>The versions of "%1" conflict, but a recovery copy could not be saved. Your local document and pending changes have been kept. Check free space and folder permissions, then try synchronizing again.</translation>
+    </message>
+    <message>
+        <source>Offline version — %1</source>
+        <translation>Offline version — %1</translation>
+    </message>
+    <message>
+        <source>Online and offline changes conflict</source>
+        <translation>Online and offline changes conflict</translation>
+    </message>
+    <message>
+        <source>"%1" was changed both offline and online. These changes could not be combined safely. The online version is now displayed. Both original versions are saved in:
+%2</source>
+        <translation>"%1" was changed both offline and online. These changes could not be combined safely. The online version is now displayed. Both original versions are saved in:
+%2</translation>
+    </message>
+    <message>
+        <source>"%1" was changed both offline and online. These changes could not be combined safely. The online version is now displayed; your offline edits are saved in a separate draft. Compare the versions and copy the changes you want to keep into the current draft. You can also do this later from the document's drafts.</source>
+        <translation>"%1" was changed both offline and online. These changes could not be combined safely. The online version is now displayed; your offline edits are saved in a separate draft. Compare the versions and copy the changes you want to keep into the current draft. You can also do this later from the document's drafts.</translation>
+    </message>
 </context>
 <context>
     <name>ManagementLayer::ProjectsManager</name>

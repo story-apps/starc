@@ -29,6 +29,20 @@ public:
     QByteArray applyPatch(const QByteArray& _content, const QByteArray& _patch) const;
 
     /**
+     * @brief Apply every patch hunk at its exact location, without fuzzy matching.
+     * On failure, leave _result unchanged.
+     */
+    bool applyPatchExact(const QByteArray& _content, const QByteArray& _patch,
+                         QByteArray& _result) const;
+
+    /**
+     * @brief Three-way merge of independent XML edits. Overlapping edits require review.
+     * On failure, leave _result unchanged.
+     */
+    bool mergeXml(const QByteArray& _base, const QByteArray& _local,
+                  const QByteArray& _remote, QByteArray& _result) const;
+
+    /**
      * @brief Определить куски xml из документов, которые затрагивает данное изменение
      * @return Пара: 1) текст, который был изменён; 2) текст замены
      */

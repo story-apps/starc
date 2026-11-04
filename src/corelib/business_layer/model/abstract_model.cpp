@@ -307,66 +307,52 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
 
     auto newContent = _content.isEmpty() ? toXml() : _content;
     for (const auto& patch : _patches) {
-        auto patchedContent = d->dmpController.applyPatch(newContent, patch);
-
-        //
-        // Если патч не принёс успеха, значит ошибка в наложении изменений
-        //
-        if (patchedContent.size() == newContent.size() && patchedContent == newContent) {
-            //
-            // ... логгируем и пропускаем патч, чтобы собрать какой-никакой результат
-            //
-            Log::warning("Can't apply patch for document: Patch is\n\n%1\n",
-                         qUtf8Printable(QByteArray::fromPercentEncoding(patch)));
-            continue;
+        QByteArray patchedContent;
+        if (!d->dmpController.applyPatchExact(newContent, patch, patchedContent)) {
+            Log::warning("Can't apply all patches for document %1", document()->uuid().toString());
+            return false;
         }
-
         newContent.swap(patchedContent);
     }
 
-    //
-    // Если все эти изменения уже есть у нас локально, не нужно их заново применять
-    // TODO: оптимизировать это место, сравнивать огромные строки думаю, что довольно ресурсоёмко
-    //
-    if (!_content.isEmpty() && toXml() == newContent) {
+    QDomDocument xml;
+    if (!xml.setContent(newContent)) {
+        Log::warning("Invalid XML while merging document %1", document()->uuid().toString());
+        return false;
+    }
+    if (toXml() == newContent) {
         return true;
     }
 
-    //
-    // Если применение патча, привело к поломке xml, то нахуй такой патч
-    //
-    {
-        QDomDocument document;
-        QString error;
-        int line = 0;
-        int column = 0;
-        const auto isXmlFine = document.setContent(newContent, &error, &line, &column);
-        if (!isXmlFine) {
-            qWarning("***********");
-            qWarning("Problem with patch applying happened");
-            qWarning("Current document xml is (toXml()):");
-            qWarning(qUtf8Printable(toXml()));
-            qWarning("\n\n\n\n");
-            qWarning("Input content is (_content):");
-            qWarning(qUtf8Printable(_content));
-            qWarning("\n\n\n\n");
-            for (int i = 0; i < _patches.size(); ++i) {
-                qWarning(QString("Input patch number %1 is (_patches[%1]):").arg(i).toUtf8());
-                qWarning(qUtf8Printable(QByteArray::fromPercentEncoding(_patches[i])));
-                qWarning("\n\n\n\n");
-            }
-            qWarning("New content is (newContent):");
-            qWarning(qUtf8Printable(newContent));
-            return false;
-        }
-    }
-
+    QScopedValueRollback applyingChanges(d->isChangesApplyingInProgress, true);
+    d->undoedChanges.clear();
+    d->undoStep = 0;
+    d->undoRedoPosition = {};
     beginResetModelTransaction();
     clearDocument();
     document()->setContent(newContent);
     initDocument();
     endResetModelTransaction();
     return true;
+}
+
+bool AbstractModel::mergeOfflineChanges(const QByteArray& _localContent,
+                                         const QVector<QByteArray>& _undoPatches)
+{
+    auto base = _localContent;
+    // Local undo patches are stored oldest first. Rewind the complete offline history.
+    for (auto it = _undoPatches.crbegin(); it != _undoPatches.crend(); ++it) {
+        QByteArray previous;
+        if (!d->dmpController.applyPatchExact(base, *it, previous)) {
+            return false;
+        }
+        base.swap(previous);
+    }
+    QByteArray merged;
+    if (!d->dmpController.mergeXml(base, _localContent, document()->content(), merged)) {
+        return false;
+    }
+    return mergeDocumentChanges(merged, {});
 }
 
 void AbstractModel::applyDocumentChanges(const QVector<QByteArray>& _patches)

@@ -62,9 +62,15 @@
 #include <QAction>
 #include <QApplication>
 #include <QDateTime>
+#include <QDesktopServices>
+#include <QDir>
+#include <QFileInfo>
+#include <QSaveFile>
+#include <QUrl>
 #include <QHBoxLayout>
 #include <QSet>
 #include <QShortcut>
+#include <QSignalBlocker>
 #include <QTimer>
 #include <QUuid>
 #include <QVariantAnimation>
@@ -104,6 +110,22 @@ bool isTextItem(BusinessLayer::StructureModelItem* _item)
         Domain::DocumentObjectType::SimpleText,
     };
     return textItems.contains(_item->type());
+}
+
+// Drafts are siblings of their document in memory, but are not navigator rows.
+BusinessLayer::StructureModelItem* draftHostItem(BusinessLayer::StructureModel* _structure,
+                                                BusinessLayer::StructureModelItem* _item)
+{
+    if (_structure->indexForItem(_item).isValid() || !_item->parent()) {
+        return _item;
+    }
+    for (int i = 0; i < _item->parent()->childCount(); ++i) {
+        auto sibling = _item->parent()->childAt(i);
+        if (sibling->drafts().contains(_item)) {
+            return sibling;
+        }
+    }
+    return _item;
 }
 
 /**
@@ -210,6 +232,18 @@ class ProjectManager::Implementation
 public:
     explicit Implementation(ProjectManager* _q, QWidget* _parent,
                             const PluginsBuilder& _pluginsBuilder);
+
+    struct SyncNotice {
+        QString title;
+        QString text;
+        QUuid documentUuid;
+        QUuid draftUuid;
+        QString recoveryPath;
+    };
+    QVector<SyncNotice> syncNotices;
+    QPointer<Dialog> syncNoticeDialog;
+    void queueSyncNotice(const SyncNotice& _notice);
+    void showNextSyncNotice();
 
     /**
      * @brief Получить модель по заданному юиду, если модель нулевая, то запросить его из облака
@@ -910,6 +944,68 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     menuActions.append(collapseAll);
 
     navigator->setContextMenuActions(menuActions);
+}
+
+void ProjectManager::Implementation::queueSyncNotice(const SyncNotice& _notice)
+{
+    syncNotices.append(_notice);
+    QTimer::singleShot(0, q, [this] { showNextSyncNotice(); });
+}
+
+void ProjectManager::Implementation::showNextSyncNotice()
+{
+    if (syncNoticeDialog || syncNotices.isEmpty()) {
+        return;
+    }
+    const auto notice = syncNotices.takeFirst();
+    auto dialog = new Dialog(topLevelWidget);
+    syncNoticeDialog = dialog;
+    QVector<Dialog::ButtonInfo> buttons = { { 0, tr("Close"), Dialog::RejectButton } };
+    if (!notice.draftUuid.isNull()) {
+        buttons.append({ 1, tr("Open offline version"), Dialog::NormalButton });
+        buttons.append({ 2, tr("Compare versions"), Dialog::AcceptButton });
+    } else if (!notice.recoveryPath.isEmpty()) {
+        buttons.append({ 3, tr("Open recovery folder"), Dialog::NormalButton });
+    }
+    const auto path = projectPath;
+    connect(dialog, &Dialog::finished, q,
+            [this, dialog, notice, path](const Dialog::ButtonInfo& _button) {
+                dialog->hideDialog();
+                if (path != projectPath) {
+                    return;
+                }
+                if (_button.id == 3) {
+                    QDesktopServices::openUrl(QUrl::fromLocalFile(notice.recoveryPath));
+                    return;
+                }
+                if (_button.id != 1 && _button.id != 2) {
+                    return;
+                }
+                // Resolve IDs at click time: synchronization may have rebuilt the tree.
+                auto item = projectStructureModel->itemForUuid(notice.documentUuid);
+                auto draft = projectStructureModel->itemForUuid(notice.draftUuid);
+                if (!item || !draft) {
+                    return;
+                }
+                auto host = draftHostItem(projectStructureModel, item);
+                setCurrentItem(host);
+                q->showView(projectStructureProxyModel->mapFromSource(
+                    projectStructureModel->indexForItem(host)));
+                view.active->setDocumentDrafts(host);
+                if (_button.id == 2) {
+                    compareTextDocumentsItems(item, draft);
+                } else {
+                    view.active->setCurrentDraft(host->drafts().indexOf(draft) + 1);
+                }
+            });
+    connect(dialog, &Dialog::disappeared, q, [this, dialog] {
+        if (syncNoticeDialog == dialog) {
+            syncNoticeDialog = nullptr;
+        }
+        dialog->deleteLater();
+        QTimer::singleShot(0, q, [this] { showNextSyncNotice(); });
+    });
+    dialog->showDialog(notice.title, notice.text, buttons, false);
 }
 
 void ProjectManager::Implementation::setCurrentIndex(const QModelIndex& _sourceModelIndex)
@@ -2101,18 +2197,11 @@ void ProjectManager::Implementation::compareTextDocumentsItems(
     // ... определим элемент внутрь которого будем помещать драфт со сравнением
     //     по умолчанию это будет второй из выбранных элементов
     //
-    auto comparisonDraftHostItem = _rhsItem;
-    for (int index = 0; index < _rhsItem->parent()->childCount(); ++index) {
-        if (auto childItem = _rhsItem->parent()->childAt(index);
-            childItem->type() == _rhsItem->type()) {
-            comparisonDraftHostItem = childItem;
-            break;
-        }
-    }
+    auto comparisonDraftHostItem = draftHostItem(projectStructureModel, _rhsItem);
     //
     // ... если же сравнение происходит для драфтов одного документа, то скорректируем названия
     //
-    if (_lhsItem->parent() == _rhsItem->parent()) {
+    if (draftHostItem(projectStructureModel, _lhsItem) == comparisonDraftHostItem) {
         lhsName = _lhsItem == comparisonDraftHostItem ? _lhsItem->draftName() : _lhsItem->name();
         rhsName = _rhsItem == comparisonDraftHostItem ? _rhsItem->draftName() : _rhsItem->name();
     }
@@ -2808,7 +2897,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             }
         });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::draftAdded, this,
-            [this] { d->view.active->setDraftsVisible(true); });
+            [this](const QUuid& _uuid) {
+                if (d->view.activeModel && d->view.activeModel->document()->uuid() == _uuid) {
+                    d->view.active->setDraftsVisible(true);
+                }
+            });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::draftRemoved, this,
             [this](const QUuid& _uuid) {
                 const auto draftsCount
@@ -3763,6 +3856,10 @@ void ProjectManager::restoreCurrentProjectState(const QString& _path)
 
 void ProjectManager::closeCurrentProject(const QString& _path)
 {
+    d->syncNotices.clear();
+    if (d->syncNoticeDialog) {
+        d->syncNoticeDialog->hideDialog();
+    }
     //
     // Сохранить состояние дерева
     //
@@ -4547,6 +4644,12 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         return;
     }
 
+    // Flush the editor's debounce before taking the offline history snapshot.
+    {
+        const QSignalBlocker deferUpload(this);
+        documentModel->saveChanges();
+    }
+
     //
     // Загрузим несинхронизированные изменения
     //
@@ -4581,97 +4684,108 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         }
     }
 
-    //
-    // Сохраним изменения документа, которые накопились до момента синхронизации
-    //
-    documentModel->saveChanges();
-
-    //
-    // Если есть локальные несинхронизированные изменения данного документа, сохраним копию контента
-    //
-    QByteArray lastDocumentVersion;
-    if (!unsyncedChanges.isEmpty()) {
-        lastDocumentVersion = document->content();
-    }
-
-    //
-    // Загружаем в документ полученный контент и изменения
-    //
+    const auto localContent = document->content();
     QVector<QByteArray> changes;
     for (const auto& change : _documentInfo.changes) {
         changes.append(change.redoPatch);
     }
-    documentModel->mergeDocumentChanges(_documentInfo.content, changes);
+    if ((!_documentInfo.content.isEmpty() || !changes.isEmpty())
+        && !documentModel->mergeDocumentChanges(_documentInfo.content, changes)) {
+        d->queueSyncNotice({ tr("Synchronization needs attention"),
+                             tr("The online version could not be loaded. Your local document and "
+                                "pending changes have been kept. Please try synchronizing again."),
+                             {}, {}, {} });
+        return;
+    }
 
-    //
-    // Пробуем накатить несинхронизированные изменения
-    // NOTE: content всегда присутствует в сообщении от сервера, поэтому несинхронизированные
-    //       изменения будут пробоваться примениться именно к акутальной версии документа в облачном
-    //       сервисе
-    //
     if (!unsyncedChanges.isEmpty()) {
-        changes.clear();
-        for (const auto& change : unsyncedChanges) {
-            changes.append(change->redoPatch());
+        const auto onlineContent = document->content();
+        QVector<QByteArray> undoPatches;
+        for (const auto change : unsyncedChanges) {
+            undoPatches.append(change->undoPatch());
         }
-        const auto oldContent = documentModel->document()->content();
-        const auto isChangesMerged = documentModel->mergeDocumentChanges({}, changes);
-        //
-        // ... если успех - пушим несинхронизированные изменения
-        //
-        if (isChangesMerged) {
-            //
-            // Если есть локальные несинхронизированные изменения, то нужно получить патч между
-            // текущей версией документа в облаке и версией с применёнными несинхронизированными
-            // изменениями, чтобы отправить в облако новый патч в корректном состоянии, а не в том,
-            // которое было до момента получения изменений соавтора
-            //
-            const auto adoptedChange = documentModel->adoptDocumentChanges(oldContent);
-            handleModelChange(documentModel, adoptedChange.first, adoptedChange.second);
-            //
-            // ... а старые несинхроинизированные патчи удаляем
-            //
-            for (auto change : unsyncedChanges) {
-                DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(
-                    change);
+        const auto merged = documentModel->mergeOfflineChanges(localContent, undoPatches);
+        auto item = d->projectStructureModel->itemForUuid(document->uuid());
+        const auto name = item ? itemConcreteName(item) : document->uuid().toString();
+        if (merged) {
+            const auto adoptedChange = documentModel->adoptDocumentChanges(onlineContent);
+            // Register the replacement before removing the original offline history.
+            if (!adoptedChange.second.isEmpty()) {
+                DataStorageLayer::StorageFacade::documentChangeStorage()->appendDocumentChange(
+                    document->uuid(), QUuid::createUuid(), adoptedChange.first,
+                    adoptedChange.second,
+                    DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
+                    DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
+            }
+            if (localContent != onlineContent && document->content() != localContent) {
+                d->queueSyncNotice({ tr("Changes merged automatically"),
+                                     tr("\"%1\" was changed both offline and online. The independent "
+                                        "changes have been combined. You can continue editing.")
+                                         .arg(name),
+                                     {}, {}, {} });
+            }
+        } else {
+            // A durable recovery copy is required even for a single offline edit, metadata,
+            // or a document that no longer has an item in the project tree.
+            const auto recoveryPath = QFileInfo(d->projectPath).absolutePath()
+                + QLatin1String("/conflicts/")
+                + document->uuid().toString(QUuid::WithoutBraces) + QLatin1Char('-')
+                + QUuid::createUuid().toString(QUuid::WithoutBraces);
+            auto saveCopy = [&recoveryPath](const QString& _fileName, const QByteArray& _content) {
+                QSaveFile file(recoveryPath + QLatin1Char('/') + _fileName);
+                return file.open(QIODevice::WriteOnly) && file.write(_content) == _content.size()
+                    && file.commit();
+            };
+            if (!QDir().mkpath(recoveryPath)
+                || !saveCopy(QStringLiteral("offline.xml"), localContent)
+                || !saveCopy(QStringLiteral("online.xml"), onlineContent)) {
+                documentModel->mergeDocumentChanges(localContent, {});
+                d->queueSyncNotice({ tr("Synchronization needs attention"),
+                                     tr("The versions of \"%1\" conflict, but a recovery copy could "
+                                        "not be saved. Your local document and pending changes "
+                                        "have been kept. Check free space and folder permissions, "
+                                        "then try synchronizing again.")
+                                         .arg(name),
+                                     {}, {}, {} });
+                return;
             }
 
-            //
-            // Симулируем изменение модели, чтобы приложение запушило несинхронизированные изменения
-            //
+            QUuid draftUuid;
+            if (item && isTextItem(item)) {
+                const auto versionName = tr("Offline version — %1")
+                                             .arg(QDateTime::currentDateTime().toString(Qt::ISODate));
+                auto hostItem = draftHostItem(d->projectStructureModel, item);
+                d->projectStructureModel->addItemDraft(hostItem, versionName, Qt::red, false,
+                                                       localContent, false);
+                draftUuid = hostItem->drafts().constFirst()->uuid();
+                if (d->view.activeModel == documentModel) {
+                    d->view.active->setDocumentDrafts(hostItem);
+                    d->view.active->setDraftsVisible(true);
+                }
+            }
+            d->queueSyncNotice({ tr("Online and offline changes conflict"),
+                                 draftUuid.isNull()
+                                     ? tr("\"%1\" was changed both offline and online. These changes "
+                                          "could not be combined safely. The online version is now "
+                                          "displayed. Both original versions are saved in:\n%2")
+                                           .arg(name, QDir::toNativeSeparators(recoveryPath))
+                                     : tr("\"%1\" was changed both offline and online. These changes "
+                                          "could not be combined safely. The online version is now "
+                                          "displayed; your offline edits are saved in a separate "
+                                          "draft. Compare the versions and copy the changes you "
+                                          "want to keep into the current draft. You can also do "
+                                          "this later from the document's drafts.")
+                                           .arg(name),
+                                 document->uuid(), draftUuid, recoveryPath });
+            // Persist the recovery draft and its entry before dropping obsolete patches.
+            d->projectStructureModel->saveChanges();
+            saveChanges();
+        }
+        for (auto change : unsyncedChanges) {
+            DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(change);
+        }
+        if (merged) {
             emit contentsChanged(documentModel);
-        }
-        //
-        // ... в противном случае - создаём отдельную версию с документом содержащим конфликт и
-        //     дропаем офлайновые правки из базы
-        //
-        else {
-            //
-            // Если было много изменений, то создаём версию документа с конфликтом
-            //
-            if (documentType != Domain::DocumentObjectType::Structure
-                && unsyncedChanges.size() > 4) {
-                const auto item = d->projectStructureModel->itemForIndex(
-                    d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
-                Q_ASSERT(item);
-                const auto versionName = QString("%1 [%2]").arg(
-                    tr("Conflicted version"),
-                    QDateTime::currentDateTime().toString(Qt::ISODateWithMs));
-                const auto color = Qt::red;
-                const auto readOnly = false;
-                const auto comparison = false;
-                d->projectStructureModel->addItemDraft(item, versionName, color, readOnly,
-                                                       lastDocumentVersion, comparison);
-                d->view.active->setDocumentDrafts(item);
-            }
-
-            //
-            // Удаляем локальные изменения, которые привели к конфликту
-            //
-            for (auto change : unsyncedChanges) {
-                DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(
-                    change);
-            }
         }
     }
 

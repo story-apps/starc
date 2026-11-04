@@ -126,6 +126,14 @@ public:
     bool mergeDocumentChanges(const QByteArray _content, const QVector<QByteArray>& _patches);
 
     /**
+     * @brief Merge offline edits with the current online content using their common base.
+     * @param _undoPatches Local undo patches, ordered oldest first.
+     * On failure the current model remains unchanged.
+     */
+    bool mergeOfflineChanges(const QByteArray& _localContent,
+                             const QVector<QByteArray>& _undoPatches);
+
+    /**
      * @brief Наложить заданные изменения на документ
      */
     void applyDocumentChanges(const QVector<QByteArray>& _patches);
