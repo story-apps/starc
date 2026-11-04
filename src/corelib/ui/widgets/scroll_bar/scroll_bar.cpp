@@ -156,8 +156,9 @@ bool ScrollBar::eventFilter(QObject* _watched, QEvent* _event)
         }
 
         //
-        // Обновим положение и размер при изменении размера родителя
+        // Обновим положение и размер при отображении родителя, а также при изменении его размера
         //
+        case QEvent::Show:
         case QEvent::Resize: {
             d->correctScrollbarGeomerty();
             if (auto scrollView = qobject_cast<QAbstractScrollArea*>(parentWidget())) {
