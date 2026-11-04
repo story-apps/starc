@@ -94,6 +94,17 @@ void TreeView::setBottomScrollMargin(int _margin)
 
     d->bottomScrollMargin = _margin;
     updateGeometries();
+
+    //
+    // QTreeView::scrollTo обновляет диапазон напрямую, минуя updateGeometries, поэтому придётся
+    // следить за ним вручную и обновлять при необходимости
+    //
+    if (d->bottomScrollMargin > 0) {
+        connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TreeView::updateGeometries);
+    } else {
+        disconnect(verticalScrollBar(), &QScrollBar::rangeChanged, this,
+                   &TreeView::updateGeometries);
+    }
 }
 
 QSize TreeView::viewportSizeHint() const
@@ -181,8 +192,8 @@ void TreeView::updateGeometries()
     }
 
     const auto maximum = verticalScrollBar()->maximum();
-    const auto contentHeight
-        = maximum > 0 ? viewport()->height() + maximum : viewportSizeHint().height();
+    const auto contentHeight = maximum > 0 ? viewport()->height() + maximum
+                                           : viewportSizeHint().height() + verticalOffset();
     if (contentHeight > 0) {
         verticalScrollBar()->setMaximum(
             std::max(0, contentHeight + d->bottomScrollMargin - viewport()->height()));
