@@ -86,9 +86,11 @@ QPixmap AvatarGenerator::avatar(const QString& _name, const QString& _email)
     //
     // Если в кэше нет, то
     //
+    const QFileInfo avatarFile(avatarPath(_email));
+    //
     // ... положим в очередь событий запрос аватара у внешнего сервиса
     //
-    if (!_email.isEmpty()) {
+    if (!_email.isEmpty() && !avatarFile.exists()) {
         QMetaObject::invokeMethod(
             instance(), [_email] { emit instance() -> avatarRequested(_email); },
             Qt::QueuedConnection);
@@ -96,9 +98,8 @@ QPixmap AvatarGenerator::avatar(const QString& _name, const QString& _email)
     //
     // ... и попробуем загрузить временный аватар из сохранённого файла
     //
-    const auto path = avatarPath(_email);
-    if (QFile::exists(path)) {
-        avatar.load(path);
+    if (avatarFile.exists()) {
+        avatar.load(avatarFile.absoluteFilePath());
         //
         // ... но использовать будем масштабированную версию
         //

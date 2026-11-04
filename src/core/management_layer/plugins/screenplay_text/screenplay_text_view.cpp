@@ -295,6 +295,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     itemParametersView->setStampVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
+    commentsView->attachToTabBar(sidebarTabs, kCommentsTabIndex);
     commentsView->hide();
     aiAssistantView->hide();
     aiAssistantView->setSynopsisGenerationAvaiable(true);

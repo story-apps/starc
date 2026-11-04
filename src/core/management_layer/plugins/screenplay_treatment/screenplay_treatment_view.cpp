@@ -266,6 +266,7 @@ ScreenplayTreatmentView::Implementation::Implementation(ScreenplayTreatmentView*
     itemParametersView->setStampVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
+    commentsView->attachToTabBar(sidebarTabs, kCommentsTabIndex);
     commentsView->hide();
     aiAssistantView->hide();
     bookmarksView->setModel(bookmarksModel);

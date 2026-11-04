@@ -5,6 +5,8 @@
 #include <QModelIndex>
 #include <QtContainerFwd>
 
+class TabBar;
+
 
 namespace Ui {
 
@@ -29,6 +31,11 @@ public:
      * @brief Установить модель комментариев
      */
     void setModel(QAbstractItemModel* _model);
+
+    /**
+     * @brief Добавить меню фильтрации на вкладку комментариев
+     */
+    void attachToTabBar(TabBar* _tabBar, int _tabIndex);
 
     /**
      * @brief Установить текущим элемент для заданного индекса модели сценария и позиции в блоке
@@ -105,6 +112,11 @@ signals:
     void removeRequested(const QModelIndexList& _indexes);
 
 protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
     /**
      * @brief Обновляем виджет при изменении дизайн системы
      */

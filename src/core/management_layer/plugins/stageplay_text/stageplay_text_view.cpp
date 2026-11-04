@@ -241,6 +241,7 @@ StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
+    commentsView->attachToTabBar(sidebarTabs, kCommentsTabIndex);
     commentsView->hide();
     aiAssistantView->hide();
     bookmarksView->setModel(bookmarksModel);

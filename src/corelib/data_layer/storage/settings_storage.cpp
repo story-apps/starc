@@ -98,6 +98,7 @@ SettingsStorage::Implementation::Implementation()
     // Для приложения
     //
     defaultSettings.insert(kApplicationConfiguredKey, false);
+    defaultSettings.insert(kApplicationShowResolvedCommentsKey, false);
     defaultSettings.insert(kApplicationLanguagedKey, QLocale::AnyLanguage);
     defaultSettings.insert(kApplicationThemeKey, static_cast<int>(Ui::ApplicationTheme::Light));
     defaultSettings.insert(

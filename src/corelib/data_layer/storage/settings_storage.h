@@ -64,6 +64,9 @@ const QString kApplicationBackupsFolderKey = kApplicationGroupKey + "/backups-fo
 const QString kApplicationBackupsQtyKey = kApplicationGroupKey + "/backups-qty";
 // показывать ли страницы текстовых документов
 const QString kApplicationShowDocumentsPagesKey = kApplicationGroupKey + "/show-documents-pages";
+// показывать ли решённые комментарии во всех модулях
+const QString kApplicationShowResolvedCommentsKey
+    = kApplicationGroupKey + "/show-resolved-comments";
 // включены ли звуки печатной машинки при наборе текста
 const QString kApplicationUseTypewriterSoundKey = kApplicationGroupKey + "/typewriter-sound";
 // включена ли проверка орфографии

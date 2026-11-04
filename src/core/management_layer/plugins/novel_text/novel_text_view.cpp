@@ -267,6 +267,7 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     itemParametersView->setStampVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
+    commentsView->attachToTabBar(sidebarTabs, kCommentsTabIndex);
     commentsView->hide();
     aiAssistantView->hide();
     aiAssistantView->setScriptGenerationAvaiable(true);
