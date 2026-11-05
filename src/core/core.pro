@@ -231,6 +231,7 @@ SOURCES += \
     ui/writing_session/writing_sprint_panel.cpp
 
 HEADERS += \
+    ../include/deep_link.h \
     core_global.h \
     management_layer/application_manager.h \
     management_layer/content/account/account_manager.h \

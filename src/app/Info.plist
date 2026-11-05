@@ -21,6 +21,17 @@
 			<true/>
 		</dict>
 	</array>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>app.starc.open</string>
+            <key>CFBundleURLSchemes</key>
+            <array><string>starc</string></array>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+        </dict>
+    </array>
 	<key>CFBundleExecutable</key>
     <string>starcapp</string>
     <key>CFBundleIconFile</key>

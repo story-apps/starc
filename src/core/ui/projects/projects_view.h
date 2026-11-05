@@ -35,6 +35,7 @@ public:
      * @brief Показать страницу со списком проектов
      */
     void showProjectsPage();
+    void selectTeam(const QModelIndex& _index);
 
 signals:
     /**

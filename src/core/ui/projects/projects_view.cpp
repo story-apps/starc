@@ -170,6 +170,12 @@ void ProjectsView::setProjects(BusinessLayer::ProjectsModel* _projects)
     d->projectsPage->setModel(_projects);
 }
 
+void ProjectsView::selectTeam(const QModelIndex& _index)
+{
+    showProjectsPage();
+    d->projectsPage->selectCardItemIndex(_index);
+}
+
 void ProjectsView::showEmptyPage()
 {
     setCurrentWidget(d->emptyPage);

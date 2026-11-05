@@ -142,6 +142,9 @@ public:
      */
     Domain::DocumentObject* currentDocument() const;
 
+    /** Open an external document link using the same permission filter as the navigator. */
+    bool openLinkedDocument(const QUuid& _uuid);
+
     /**
      * @brief Установить возможность экспортирования текущего документа
      */
@@ -426,7 +429,7 @@ private:
     /**
      * @brief Пользователь хочет активировать ссылку на за документ с заданным индексом элемента
      */
-    Q_SLOT void activateLink(const QUuid& _documentUuid, const QModelIndex& _index,
+    Q_SLOT bool activateLink(const QUuid& _documentUuid, const QModelIndex& _index,
                              const QString& _viewMimeType);
 
     /**

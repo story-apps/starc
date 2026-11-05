@@ -86,6 +86,9 @@ public:
      */
     void openProject();
 
+    /** Expand and select a team in the projects list. */
+    bool openTeam(int _id);
+
     /**
      * @brief Задать список облачных проектов
      */

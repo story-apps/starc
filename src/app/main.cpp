@@ -108,6 +108,9 @@ int main(int argc, char* argv[])
     // Инициилизируем приложение
     //
     Application application(argc, argv);
+    if (application.forwardDeepLink()) {
+        return 0;
+    }
 
     //
     // Загружаем менеджера приложения

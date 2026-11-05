@@ -790,6 +790,25 @@ void ProjectsManager::addOrUpdateTeam(const Domain::TeamInfo& _teamInfo)
     }
 }
 
+bool ProjectsManager::openTeam(int _id)
+{
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto index = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(index);
+        if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
+            continue;
+        }
+        auto team = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+        if (team->id() == _id) {
+            team->setOpened(true);
+            d->projects->updateItem(team);
+            d->view->selectTeam(index);
+            return true;
+        }
+    }
+    return false;
+}
+
 void ProjectsManager::hideTeam(int _id)
 {
     for (int row = 0; row < d->projects->rowCount(); ++row) {

@@ -5984,12 +5984,17 @@ void ProjectManager::notifyCursorChanged(const QByteArray& _cursorData)
     emit cursorChanged(d->view.activeModel->document()->uuid(), _cursorData);
 }
 
-void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex& _index,
+bool ProjectManager::openLinkedDocument(const QUuid& _uuid)
+{
+    return activateLink(_uuid, {}, {});
+}
+
+bool ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex& _index,
                                   const QString& _viewMimeType)
 {
     const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
     if (item == nullptr) {
-        return;
+        return false;
     }
 
     auto sourceIndex = d->projectStructureModel->indexForItem(item);
@@ -6007,13 +6012,27 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
         }
 
         if (!sourceIndex.isValid() || versionIndex == invalidVersionIndex) {
-            return;
+            return false;
         }
     }
 
-    const auto itemIndex = d->projectStructureProxyModel->mapFromSource(sourceIndex);
+    // Validate permissions independently of the user's collapsed navigator settings.
+    BusinessLayer::StructureProxyModel permissionFilter(d->projectStructureModel);
+    permissionFilter.setItemsFilter(d->editingPermissions.keys());
+    if (!permissionFilter.mapFromSource(sourceIndex).isValid()) {
+        return false;
+    }
+    auto itemIndex = d->projectStructureProxyModel->mapFromSource(sourceIndex);
     if (!itemIndex.isValid()) {
-        return;
+        itemIndex = d->projectStructureProxyModel->mapFromSource(sourceIndex.parent());
+    }
+    if (!itemIndex.isValid()) {
+        return false;
+    }
+    const auto documentMimeType = Domain::mimeTypeFor(item->type());
+    const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
+    if (views.isEmpty()) {
+        return false;
     }
 
     //
@@ -6036,8 +6055,6 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
     // ... определим майм-тип редактора, который нужно открыть
     //
     QString viewMimeType;
-    const auto documentMimeType = Domain::mimeTypeFor(item->type());
-    const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
     if (!_viewMimeType.isEmpty()) {
         for (const auto& view : views) {
             if (view.mimeType == _viewMimeType) {
@@ -6081,6 +6098,7 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
     if (d->view.right->isVisible()) {
         d->switchViews(withActivation);
     }
+    return true;
 }
 
 void ProjectManager::createDocument(Domain::DocumentObjectType _type)

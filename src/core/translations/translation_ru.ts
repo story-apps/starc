@@ -3573,6 +3573,22 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
+        <source>This Story Architect link is invalid.</source>
+        <translation>Некорректная ссылка Story Architect.</translation>
+    </message>
+    <message>
+        <source>This build does not support cloud links. Please install the cloud-enabled version of Story Architect.</source>
+        <translation>Эта сборка не поддерживает ссылки на облачные проекты. Установите версию Story Architect с поддержкой облака.</translation>
+    </message>
+    <message>
+        <source>You do not have access to this team, project or document, or it no longer exists.</source>
+        <translation>У вас нет доступа к этой команде, проекту или документу, либо они больше не существуют.</translation>
+    </message>
+    <message>
+        <source>Could not open the link. Check your connection and try again.</source>
+        <translation>Не удалось открыть ссылку. Проверьте подключение к интернету и попробуйте снова.</translation>
+    </message>
+    <message>
         <location filename="../management_layer/application_manager.cpp" line="1107"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>Пожалуйста, обновите приложение до последней версии, чтобы иметь возможность работать с облаком.</translation>

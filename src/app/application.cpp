@@ -3,7 +3,18 @@
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_application_manager.h>
 
+#include <include/deep_link.h>
+
+#include <QCryptographicHash>
+#include <QDir>
 #include <QFileOpenEvent>
+#include <QLocalServer>
+#include <QLocalSocket>
+#include <QLockFile>
+#include <QStandardPaths>
+#include <QSaveFile>
+#include <QFileInfo>
+#include <QProcess>
 #include <QIcon>
 #include <QTimer>
 
@@ -28,6 +39,43 @@ static QString normalizePath(const QString& _path)
 #endif
 }
 
+#ifdef Q_OS_LINUX
+// An AppImage has no installer. Register its persistent outer path on first launch,
+// never the temporary mount containing the running executable.
+void registerAppImageLinks()
+{
+    auto appImage = qEnvironmentVariable("APPIMAGE");
+    if (!QFileInfo(appImage).isAbsolute() || !QFileInfo(appImage).isExecutable()
+        || appImage.contains(QLatin1Char('\n')) || appImage.contains(QLatin1Char('\r'))) {
+        return;
+    }
+    appImage.replace("\\", "\\\\").replace("\"", "\\\"").replace("`", "\\`").replace("$", "\\$");
+    appImage.replace("\\", "\\\\");
+    appImage.replace("%", "%%");
+    const auto entry = QStringLiteral(
+        "[Desktop Entry]\nType=Application\nName=Story Architect\n"
+        "Exec=\"%1\" %u\nIcon=starc\nTerminal=false\n"
+        "Categories=Office;\nMimeType=application/x-starc;x-scheme-handler/starc;\n").arg(appImage).toUtf8();
+    const auto directory = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+        + QStringLiteral("/applications");
+    if (!QDir().mkpath(directory)) {
+        return;
+    }
+    const auto path = directory + QStringLiteral("/app.starc.desktop");
+    QFile existing(path);
+    if (existing.open(QIODevice::ReadOnly) && existing.readAll() == entry) {
+        return;
+    }
+    QSaveFile file(path);
+    if (!file.open(QIODevice::WriteOnly) || file.write(entry) != entry.size() || !file.commit()) {
+        return;
+    }
+    QProcess::startDetached(QStringLiteral("xdg-mime"),
+                           { QStringLiteral("default"), QStringLiteral("app.starc.desktop"),
+                             QStringLiteral("x-scheme-handler/starc") });
+}
+#endif
+
 } // namespace
 
 class Application::Implementation
@@ -36,6 +84,9 @@ public:
     QObject* applicationManager = nullptr;
 
     QString fileToOpen;
+    bool started = false;
+    QScopedPointer<QLockFile> linkServerLock;
+    QLocalServer linkServer;
 
     /**
      * @brief Таймер кратковременного простоя приложения (3 секунды)
@@ -131,6 +182,85 @@ void Application::startUp()
 
     qInfo() << "Starting application";
     manager->exec(d->fileToOpen);
+    d->started = true;
+}
+
+bool Application::forwardDeepLink()
+{
+#ifdef Q_OS_LINUX
+    registerAppImageLinks();
+#endif
+    const auto args = arguments();
+    const QString link = args.size() == 2 && DeepLink::isLink(args.at(1)) ? args.at(1) : QString();
+    const auto dataPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    QDir().mkpath(dataPath);
+    const auto serverName = QStringLiteral("starc-links-")
+        + QString::fromLatin1(QCryptographicHash::hash(dataPath.toUtf8(), QCryptographicHash::Sha256)
+                                 .toHex().left(24));
+    auto forward = [&] {
+        if (link.isEmpty() || link.size() > 4096 || link.contains(QLatin1Char('\n'))) {
+            return false;
+        }
+        QLocalSocket socket;
+        socket.connectToServer(serverName);
+        if (!socket.waitForConnected(1000)) {
+            return false;
+        }
+        socket.write(link.toUtf8() + '\n');
+        if (!socket.waitForBytesWritten(1000)) {
+            return false;
+        }
+        const bool ready = socket.bytesAvailable() || socket.waitForReadyRead(3000);
+        const auto reply = socket.readAll();
+        return ready && reply == QByteArray("ok");
+    };
+    if (forward()) {
+        return true;
+    }
+    d->linkServerLock.reset(new QLockFile(dataPath + QStringLiteral("/deep-links.lock")));
+    d->linkServerLock->setStaleLockTime(0);
+    if (!d->linkServerLock->tryLock(1500)) {
+        // Another instance may have been starting when the first connection was attempted.
+        return forward();
+    }
+    QLocalServer::removeServer(serverName);
+    d->linkServer.setSocketOptions(QLocalServer::UserAccessOption);
+    if (!d->linkServer.listen(serverName)) {
+        d->linkServerLock.reset();
+        return false;
+    }
+    connect(&d->linkServer, &QLocalServer::newConnection, this, [this] {
+        while (auto socket = d->linkServer.nextPendingConnection()) {
+            socket->setReadBufferSize(16385);
+            connect(socket, &QLocalSocket::disconnected, socket, &QObject::deleteLater);
+            QTimer::singleShot(5000, socket, [socket] { socket->disconnectFromServer(); });
+            auto receive = [this, socket] {
+                if (socket->bytesAvailable() > 16384) {
+                    socket->disconnectFromServer();
+                    return;
+                }
+                if (!socket->canReadLine()) {
+                    return;
+                }
+                const auto value = QString::fromUtf8(socket->readLine()).trimmed();
+                if (!DeepLink::isLink(value) || value.size() > 4096) {
+                    socket->disconnectFromServer();
+                    return;
+                }
+                if (d->started) {
+                    auto manager = qobject_cast<ManagementLayer::IApplicationManager*>(d->applicationManager);
+                    manager->openProject(value);
+                } else {
+                    d->fileToOpen = value;
+                }
+                socket->write("ok");
+                socket->disconnectFromServer();
+            };
+            connect(socket, &QLocalSocket::readyRead, this, receive);
+            receive();
+        }
+    });
+    return false;
 }
 
 bool Application::notify(QObject* _object, QEvent* _event)
@@ -204,11 +334,14 @@ bool Application::event(QEvent* _event)
 {
     if (_event->type() == QEvent::FileOpen) {
         QFileOpenEvent* fileOpenEvent = static_cast<QFileOpenEvent*>(_event);
-        if (auto manager
-            = qobject_cast<ManagementLayer::IApplicationManager*>(d->applicationManager)) {
-            manager->openProject(normalizePath(fileOpenEvent->file()));
+        const auto value = fileOpenEvent->url().isLocalFile()
+            ? normalizePath(fileOpenEvent->url().toLocalFile())
+            : fileOpenEvent->url().toString(QUrl::FullyEncoded);
+        if (d->started) {
+            auto manager = qobject_cast<ManagementLayer::IApplicationManager*>(d->applicationManager);
+            manager->openProject(value);
         } else {
-            d->fileToOpen = normalizePath(fileOpenEvent->file());
+            d->fileToOpen = value;
         }
 
         return true;

@@ -66,6 +66,7 @@
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
+#include <include/deep_link.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/once.h>
 #include <utils/tools/run_once.h>
@@ -162,6 +163,10 @@ class ApplicationManager::Implementation
 {
 public:
     explicit Implementation(ApplicationManager* _q);
+
+    std::optional<DeepLink> pendingDeepLink;
+    quint64 deepLinkGeneration = 0;
+    QTimer deepLinkTimer;
     ~Implementation();
 
     /**
@@ -324,6 +329,12 @@ public:
      */
     void openProject();
     bool openProject(const QString& _path);
+    void openDeepLink(const QString& _url);
+    void resolveDeepLink();
+    void finishDeepLink(const QString& _error = {});
+#ifdef CLOUD_SERVICE_MANAGER
+    void navigateDeepLink();
+#endif
 
     /**
      * @brief Попробовать захватить владение файлом, заблокировав его изменение другими копиями
@@ -427,6 +438,13 @@ public:
     QScopedPointer<NotificationsManager> notificationsManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
+    bool linkAuthenticated = false;
+    bool linkTeamsReady = false;
+    bool linkProjectsReady = false;
+    bool linkWaitingForLists = false;
+    bool linkWaitingForStructure = false;
+    QSet<int> linkTeams;
+    QHash<int, int> linkProjects;
 #endif
 
     /**
@@ -2239,6 +2257,137 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
     return true;
 }
 
+void ApplicationManager::Implementation::finishDeepLink(const QString& _error)
+{
+    pendingDeepLink.reset();
+    deepLinkTimer.stop();
+#ifdef CLOUD_SERVICE_MANAGER
+    linkWaitingForLists = false;
+    linkWaitingForStructure = false;
+#endif
+    if (!_error.isEmpty()) {
+        StandardDialog::information(applicationView, {}, _error);
+    }
+}
+
+void ApplicationManager::Implementation::openDeepLink(const QString& _url)
+{
+    ++deepLinkGeneration;
+    finishDeepLink();
+    pendingDeepLink = DeepLink::parse(_url);
+    if (applicationView->isMinimized()) {
+        applicationView->showNormal();
+    }
+    applicationView->raise();
+    applicationView->activateWindow();
+    if (!pendingDeepLink) {
+        finishDeepLink(tr("This Story Architect link is invalid."));
+        return;
+    }
+    if (state != ApplicationState::Initializing) {
+        resolveDeepLink();
+    }
+}
+
+void ApplicationManager::Implementation::resolveDeepLink()
+{
+    if (!pendingDeepLink) {
+        return;
+    }
+    if (pendingDeepLink->teamId == -1 && pendingDeepLink->projectId == -1) {
+        showProjects();
+        finishDeepLink();
+        return;
+    }
+#ifdef CLOUD_SERVICE_MANAGER
+    if (!linkAuthenticated) {
+        showAccount();
+        return; // Keep the destination until loginCompleted, including cold startup.
+    }
+    linkTeamsReady = false;
+    linkProjectsReady = false;
+    linkWaitingForLists = true;
+    linkWaitingForStructure = false;
+    deepLinkTimer.start(30000);
+    cloudServiceManager->askTeams();
+    cloudServiceManager->askProjects();
+#else
+    finishDeepLink(tr("This build does not support cloud links. Please install the cloud-enabled "
+                      "version of Story Architect."));
+#endif
+}
+
+#ifdef CLOUD_SERVICE_MANAGER
+void ApplicationManager::Implementation::navigateDeepLink()
+{
+    if (!pendingDeepLink || !linkWaitingForLists || !linkTeamsReady || !linkProjectsReady) {
+        return;
+    }
+    const auto link = *pendingDeepLink;
+    const auto denied = tr("You do not have access to this team, project or document, "
+                           "or it no longer exists.");
+    if ((link.teamId != -1 && !linkTeams.contains(link.teamId))
+        || (link.projectId != -1 && !linkProjects.contains(link.projectId))
+        || (link.teamId != -1 && link.projectId != -1
+            && linkProjects.value(link.projectId) != link.teamId)) {
+        finishDeepLink(denied);
+        return;
+    }
+    if (link.projectId == -1) {
+        showProjects();
+        const bool opened = projectsManager->openTeam(link.teamId);
+        finishDeepLink(opened ? QString() : denied);
+        return;
+    }
+    const auto project = projectsManager->project(link.projectId);
+    if (project == nullptr || !project->isRemote()) {
+        finishDeepLink(denied);
+        return;
+    }
+    const auto generation = deepLinkGeneration;
+    if (!saveChangesDialog.isNull()) {
+        linkWaitingForLists = false;
+        deepLinkTimer.stop();
+        Once::connect(saveChangesDialog.data(), &Dialog::disappeared, q, [this, generation] {
+            if (pendingDeepLink && generation == deepLinkGeneration) {
+                resolveDeepLink();
+            }
+        });
+        return;
+    }
+    finishDeepLink();
+    saveIfNeeded([this, link, generation, denied] {
+        if (generation != deepLinkGeneration || !linkAuthenticated) {
+            return;
+        }
+        // Re-resolve after the save dialog: a project may have been removed in the meantime.
+        const auto target = projectsManager->project(link.projectId);
+        if (target == nullptr || !target->isRemote()
+            || !linkProjects.contains(link.projectId)
+            || (link.teamId != -1 && (!linkTeams.contains(link.teamId)
+                                     || target->teamId() != link.teamId))) {
+            finishDeepLink(denied);
+            return;
+        }
+        const auto current = projectsManager->currentProject();
+        if (current == nullptr || !current->isRemote() || current->id() != link.projectId) {
+            if (!openProject(target->path())) {
+                return;
+            }
+        }
+        showProject();
+        if (!link.documentGuid.isNull()) {
+            pendingDeepLink = link;
+            linkWaitingForStructure = true;
+            deepLinkTimer.start(30000);
+        }
+        cloudServiceManager->openStructure(link.projectId);
+        cloudServiceManager->openProjectInfo(link.projectId);
+        cloudServiceManager->openScreenplayDictionaries(link.projectId);
+    });
+}
+#endif
+
 bool ApplicationManager::Implementation::tryLockProject(const QString& _path)
 {
     const QFileInfo projectFileInfo(_path);
@@ -3035,13 +3184,23 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
             // Переводим состояние приложение в рабочий режим
             //
             d->state = ApplicationState::Working;
+            d->resolveDeepLink();
         },
         Qt::QueuedConnection);
 }
 
 bool ApplicationManager::openProject(const QString& _path)
 {
-    return d->openProject(_path);
+    if (DeepLink::isLink(_path)) {
+        d->openDeepLink(_path);
+        return true;
+    }
+    if (!_path.isEmpty()) {
+        ++d->deepLinkGeneration;
+        d->finishDeepLink();
+    }
+    const QUrl url(_path);
+    return d->openProject(url.isLocalFile() ? url.toLocalFile() : _path);
 }
 
 bool ApplicationManager::event(QEvent* _event)
@@ -3154,6 +3313,10 @@ bool ApplicationManager::event(QEvent* _event)
 
 void ApplicationManager::initConnections()
 {
+    d->deepLinkTimer.setSingleShot(true);
+    connect(&d->deepLinkTimer, &QTimer::timeout, this, [this] {
+        d->finishDeepLink(tr("Could not open the link. Check your connection and try again."));
+    });
     //
     // Горячие клавиши
     //
@@ -3591,6 +3754,11 @@ void ApplicationManager::initConnections()
         // Синхронизация офлайн правок будет сделана, после проверки ключа сессии на сервере
         //
     };
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected, this, [this] {
+        d->linkAuthenticated = false;
+        d->linkWaitingForLists = false;
+        d->linkWaitingForStructure = false;
+    });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::connected, d->connectionStatus,
             [configureConnectionStatus] { configureConnectionStatus(true); });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected, d->connectionStatus,
@@ -3637,6 +3805,8 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::checkConfirmationCode);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
             d->accountManager.data(), [this](bool _isNewAccount) {
+                d->linkAuthenticated = true;
+                d->resolveDeepLink();
                 d->cloudServiceManager->askAccountInfo();
                 d->onboardingManager->completeSignIn();
                 d->accountManager->completeSignIn(_isNewAccount);
@@ -3734,6 +3904,11 @@ void ApplicationManager::initConnections()
             d->showLastContent();
         }
 
+        ++d->deepLinkGeneration;
+        d->finishDeepLink();
+        d->linkAuthenticated = false;
+        d->linkTeams.clear();
+        d->linkProjects.clear();
         d->cloudServiceManager->logout();
         d->accountManager->clearAccountInfo();
         d->menuView->setSignInVisible(true);
@@ -3757,6 +3932,12 @@ void ApplicationManager::initConnections()
             [this](const QVector<Domain::TeamInfo>& _teams) {
                 d->accountManager->setAccountTeams(_teams);
                 d->projectsManager->setTeams(_teams);
+                d->linkTeams.clear();
+                for (const auto& team : _teams) {
+                    d->linkTeams.insert(team.id);
+                }
+                d->linkTeamsReady = true;
+                d->navigateDeepLink();
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::teamCreated, this,
             [this](const Domain::TeamInfo& _team) {
@@ -3770,6 +3951,7 @@ void ApplicationManager::initConnections()
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::teamRemoved, this,
             [this](int _id) {
+                d->linkTeams.remove(_id);
                 d->accountManager->removeAccountTeam(_id);
                 d->projectsManager->hideTeam(_id);
             });
@@ -3794,15 +3976,22 @@ void ApplicationManager::initConnections()
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectsReceived,
             d->projectsManager.data(), [this](const QVector<Domain::ProjectInfo>& _projects) {
                 d->projectsManager->setCloudProjects(_projects);
+                d->linkProjects.clear();
+                for (const auto& project : _projects) {
+                    d->linkProjects.insert(project.id, project.teamId);
+                }
+                d->linkProjectsReady = true;
 
                 const auto currentProject = d->projectsManager->currentProject();
                 if (currentProject != nullptr && currentProject->isRemote()) {
                     d->projectManager->updateCurrentProject(currentProject);
                 }
+                d->navigateDeepLink();
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectUpdated, this,
             [this](const Domain::ProjectInfo& _projectInfo) {
                 d->projectsManager->addOrUpdateCloudProject(_projectInfo);
+                d->linkProjects.insert(_projectInfo.id, _projectInfo.teamId);
 
                 const auto currentProject = d->projectsManager->currentProject();
                 if (currentProject != nullptr && _projectInfo.id == currentProject->id()) {
@@ -3811,6 +4000,7 @@ void ApplicationManager::initConnections()
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectRemoved,
             d->projectsManager.data(), [this](int _projectId) {
+                d->linkProjects.remove(_projectId);
                 const auto currentProject = d->projectsManager->currentProject();
                 if (currentProject != nullptr && currentProject->id() == _projectId) {
                     d->closeCurrentProject();
@@ -4010,6 +4200,15 @@ void ApplicationManager::initConnections()
                 }
 
                 d->projectManager->mergeDocumentInfo(_documentInfo);
+                if (d->pendingDeepLink && d->linkWaitingForStructure
+                    && d->pendingDeepLink->projectId == currentProject->id()
+                    && _documentInfo.type == static_cast<int>(Domain::DocumentObjectType::Structure)) {
+                    const auto guid = d->pendingDeepLink->documentGuid;
+                    const bool opened = d->projectManager->openLinkedDocument(guid);
+                    d->finishDeepLink(opened ? QString()
+                        : tr("You do not have access to this team, project or document, "
+                             "or it no longer exists."));
+                }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChanged,
             d->projectManager.data(), &ProjectManager::applyDocumentChanges);

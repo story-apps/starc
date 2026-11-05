@@ -95,6 +95,13 @@ Section "App files section" SecFiles
   
   ; Регистрируем ассоциации 
   ${registerExtension} "$INSTDIR\starcapp.exe" ".starc" "Story Architect project"
+
+  ; Browser deep links. Quote both executable and URL (URLs may contain spaces and &).
+  WriteRegStr HKCR "starc" "" "URL:Story Architect Protocol"
+  WriteRegStr HKCR "starc" "URL Protocol" ""
+  WriteRegStr HKCR "starc\DefaultIcon" "" '"$INSTDIR\starcapp.exe",0'
+  WriteRegStr HKCR "starc\shell\open\command" "" '"$INSTDIR\starcapp.exe" "%1"'
+
   
   ; Обновляем эксплорер
   System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
@@ -105,6 +112,12 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
+
+  ; Do not remove a handler registered by another installation.
+  ReadRegStr $0 HKCR "starc\shell\open\command" ""
+  StrCmp $0 '"$INSTDIR\starcapp.exe" "%1"' 0 +2
+  DeleteRegKey HKCR "starc"
+
 
   ; Удалим программу из списка установленных
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc"

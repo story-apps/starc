@@ -24,6 +24,9 @@ public:
      */
     void startUp();
 
+    /** Forward URL launches to the running instance; keep ordinary file launches independent. */
+    bool forwardDeepLink();
+
     /**
      * @brief Переопределяется для определения события простоя приложения (idle)
      */
