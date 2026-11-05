@@ -44,8 +44,10 @@ public:
     /**
      * @brief Подписка на документ или загрузка служебного документа с ещё неизвестным UUID
      * @note Сервер не отвечает на повторную подписку в рамках одного соединения.
+     * Фоновые документы из комплекта могут быть пропущены сервером (например, удалённые).
+     * Для них _replyRequired = false: получение учитывается, но ответ не обязателен.
      */
-    void setDownloadStarted(const QUuid& _uuid);
+    void setDownloadStarted(const QUuid& _uuid, bool _replyRequired = true);
     void setDownloadStarted(int _documentType);
     void setDownloadFinished(const QUuid& _uuid, int _documentType, bool _receivedChanges = true);
 

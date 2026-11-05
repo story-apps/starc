@@ -6,6 +6,9 @@ edits during an upload, reconnecting without losing pending changes, late confir
 after closing a project, repeated bundle subscriptions with silent server replies,
 subscription reset on reconnect/close, server rejection and recovery, confirmation timeouts,
 Material Design glyphs, keyboard access, and popup layout after a connection change.
+Auxiliary bundle subscriptions may receive no reply under the server protocol; tests
+cover 32 silent background subscriptions alongside a confirmed screenplay download,
+and ensure a directly requested document still times out when its reply is missing.
 The combined panel cases also check hover expansion and delayed collapse, stable
 collaborator ordering and navigation, scrolling, small windows, color pulsation,
 and one-time problem notifications.

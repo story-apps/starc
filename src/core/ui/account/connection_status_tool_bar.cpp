@@ -707,8 +707,13 @@ void ConnectionStatusToolBar::setDocumentClosed(const QUuid& _uuid)
     d->refresh();
 }
 
-void ConnectionStatusToolBar::setDownloadStarted(const QUuid& _uuid)
+void ConnectionStatusToolBar::setDownloadStarted(const QUuid& _uuid, bool _replyRequired)
 {
+    if (!_replyRequired) {
+        // OpenDocuments may silently skip auxiliary subscriptions. A missing reply
+        // is not a failed download, and must not cancel a direct request either.
+        return;
+    }
     if (d->subscribedDocuments.contains(_uuid)) {
         // OpenDocuments can include an already opened bundle. The server deliberately
         // sends no reply for its existing subscriptions, so there is nothing to await.

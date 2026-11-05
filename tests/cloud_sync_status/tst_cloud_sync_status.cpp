@@ -480,6 +480,41 @@ private slots:
         QToolTip::hideText();
     }
 
+    void auxiliaryBundleRepliesAreOptionalButDirectDownloadsAreNot()
+    {
+        QWidget window;
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setCloudProjectOpen(true);
+        status.setConnectionAvailable(true);
+        const auto screenplay = QUuid::createUuid();
+        const auto location = QUuid::createUuid();
+        status.setDownloadStarted(screenplay);
+        status.setDownloadStarted(location, false);
+        for (int i = 0; i < 31; ++i) {
+            status.setDownloadStarted(QUuid::createUuid(), false);
+        }
+        // As in the log, the requested document arrives while 32 auxiliary
+        // subscriptions receive no reply. They must not leave a pending download.
+        status.setDownloadFinished(screenplay, 10104);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+
+        // Opening one of those locations explicitly still requires its own reply.
+        status.setDownloadStarted(location);
+        status.setDownloadStarted(location, false); // Another bundle must not cancel it.
+        status.setDownloadFinished(screenplay, 10104); // Unrelated collaboration traffic.
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: receiving"));
+        status.setDownloadFinished(location, 1);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+
+        // A background reply also establishes a subscription, so directly opening
+        // that already received document does not await another (silent) reply.
+        const auto prefetched = QUuid::createUuid();
+        status.setDownloadStarted(prefetched, false);
+        status.setDownloadFinished(prefetched, 1);
+        status.setDownloadStarted(prefetched);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+    }
+
     void unconfirmedOperationsStayVisible()
     {
         QWidget window;
@@ -491,7 +526,26 @@ private slots:
         status.setUploadStarted(first);
         status.setUploadStarted(second);
         status.setDownloadStarted(1);
+        Ui::ConnectionStatusToolBar background(&window);
+        background.setCloudProjectOpen(true);
+        background.setConnectionAvailable(true);
+        const auto screenplay = QUuid::createUuid();
+        background.setDownloadStarted(screenplay);
+        for (int i = 0; i < 32; ++i) {
+            background.setDownloadStarted(QUuid::createUuid(), false);
+        }
+        background.setDownloadFinished(screenplay, 10104);
+
+        Ui::ConnectionStatusToolBar direct(&window);
+        direct.setCloudProjectOpen(true);
+        direct.setConnectionAvailable(true);
+        const auto missing = QUuid::createUuid();
+        direct.setDownloadStarted(missing);
+        direct.setDownloadStarted(missing, false);
         QTest::qWait(31000);
+        QVERIFY(background.accessibleDescription().contains("Incoming changes: received at"));
+        QVERIFY(!background.accessibleDescription().contains("has not responded"));
+        QVERIFY(direct.accessibleDescription().contains("has not responded"));
         QVERIFY(status.accessibleDescription().contains("confirmation has not arrived"));
         QVERIFY(status.accessibleDescription().contains("has not responded"));
         status.setUploadFinished(first, false);
