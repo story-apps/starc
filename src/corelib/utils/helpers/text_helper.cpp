@@ -2,6 +2,7 @@
 
 #include "measurement_helper.h"
 
+#include <business_layer/templates/text_template.h>
 #include <utils/diff_match_patch/diff_match_patch.h>
 
 #include <QApplication>
@@ -533,6 +534,18 @@ void TextHelper::clearSelectionFormatting(QTextCursor& _cursor)
                     continue;
                 } else if (formatStart >= lastPosition) {
                     break;
+                }
+
+                //
+                // Пропускаем выделения с комментариями, т.к. пользователи считывают их не как
+                // формат текста, а как отдельные сущности и поэтому для них неожиданно, когда
+                // комментарии удаляются при очистке формата текста
+                //
+                if (const auto comments
+                    = format.format.property(BusinessLayer::TextBlockStyle::PropertyComments)
+                          .toStringList();
+                    !comments.isEmpty() && !comments.constFirst().isEmpty()) {
+                    continue;
                 }
 
                 _cursor.setPosition(std::max(formatStart, position));
