@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
 #include <QUuid>
 
@@ -13,7 +13,7 @@ namespace Ui {
 /**
  * @brief Единый индикатор подключения и синхронизации текущего облачного проекта
  */
-class ConnectionStatusToolBar : public Widget
+class ConnectionStatusToolBar : public FloatingToolBar
 {
     Q_OBJECT
 
@@ -57,10 +57,9 @@ protected:
     bool event(QEvent* _event) override;
     bool eventFilter(QObject* _watched, QEvent* _event) override;
     void keyPressEvent(QKeyEvent* _event) override;
-    void mouseMoveEvent(QMouseEvent* _event) override;
     void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
-    void paintEvent(QPaintEvent* _event) override;
+    void paintEventPostprocess(QPainter& _painter) override;
     void updateTranslations() override;
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 

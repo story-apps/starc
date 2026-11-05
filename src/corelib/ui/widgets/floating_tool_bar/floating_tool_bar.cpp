@@ -68,6 +68,7 @@ public:
      * @brief Отображать ли панель в плоском виде
      */
     bool isFlat = false;
+    QPointF actionsOffset;
 
     /**
      * @brief Иконка на которой кликнули последней
@@ -135,6 +136,7 @@ void FloatingToolBar::Implementation::animateHoverOut()
 
 QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate) const
 {
+    const auto coordinate = _coordinate - actionsOffset;
     qreal actionLeft = q->isLeftToRight() || orientation == Qt::Vertical
         ? Ui::DesignSystem::floatingToolBar().shadowMargins().left()
             + Ui::DesignSystem::floatingToolBar().margins().left()
@@ -169,11 +171,11 @@ QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate) co
             = actionLeft + actionWidth(action) + Ui::DesignSystem::floatingToolBar().spacing();
 
         if (orientation == Qt::Horizontal) {
-            if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
+            if (actionLeft < coordinate.x() && coordinate.x() < actionRight) {
                 return action;
             }
         } else {
-            if (actionLeft < _coordinate.y() && _coordinate.y() < actionRight) {
+            if (actionLeft < coordinate.y() && coordinate.y() < actionRight) {
                 return action;
             }
         }
@@ -325,6 +327,15 @@ QColor FloatingToolBar::actionColor(QAction* _action) const
     }
 
     return _action->property(kActionColorKey).value<QColor>();
+}
+
+void FloatingToolBar::setActionsOffset(const QPointF& _offset)
+{
+    if (d->actionsOffset == _offset) {
+        return;
+    }
+    d->actionsOffset = _offset;
+    update();
 }
 
 void FloatingToolBar::setActionColor(QAction* _action, const QColor& _color)
@@ -509,8 +520,10 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         : width() - d->actionWidth(actions().constFirst())
             - Ui::DesignSystem::floatingToolBar().margins().right()
             - Ui::DesignSystem::floatingToolBar().shadowMargins().right();
+    actionIconX += d->orientation == Qt::Horizontal ? d->actionsOffset.x() : d->actionsOffset.y();
     const qreal actionIconY = Ui::DesignSystem::floatingToolBar().shadowMargins().top()
-        + Ui::DesignSystem::floatingToolBar().margins().top();
+        + Ui::DesignSystem::floatingToolBar().margins().top()
+        + (d->orientation == Qt::Horizontal ? d->actionsOffset.y() : d->actionsOffset.x());
     const QSizeF actionIconSize = Ui::DesignSystem::floatingToolBar().iconSize();
     for (const QAction* action : actions()) {
         if (!action->isVisible()) {
