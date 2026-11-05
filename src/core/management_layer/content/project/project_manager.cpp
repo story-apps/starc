@@ -290,6 +290,11 @@ public:
     void removeDraft(const QModelIndex& _itemIndex, int _draftIndex);
 
     /**
+     * @brief Обновить список соавторов и названия открытых ими документов
+     */
+    void notifyCollaboratorsChanged();
+
+    /**
      * @brief Удалить документы
      */
     void removeDocuments(const QList<QModelIndex>& _itemsIndexes);
@@ -506,6 +511,7 @@ public:
      * @brief Дебаунсер для проверки активных соавторов
      */
     Debouncer collaboratorsUpdateDebouncer;
+    QTimer collaboratorNamesUpdateTimer;
 
     /**
      * @brief Количество последовательно обновлённых документов
@@ -3456,6 +3462,21 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(&d->collaboratorsUpdateDebouncer, &Debouncer::gotWork, this, [this] {
         setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     });
+    // Refresh names after structure updates settle, without changing cursor activity times.
+    d->collaboratorNamesUpdateTimer.setSingleShot(true);
+    connect(&d->collaboratorNamesUpdateTimer, &QTimer::timeout, this,
+            [this] { d->notifyCollaboratorsChanged(); });
+    const auto refreshCollaboratorNames = [this] { d->collaboratorNamesUpdateTimer.start(0); };
+    connect(d->projectStructureModel, &QAbstractItemModel::dataChanged, this,
+            refreshCollaboratorNames);
+    connect(d->projectStructureModel, &QAbstractItemModel::modelReset, this,
+            refreshCollaboratorNames);
+    connect(d->projectStructureModel, &QAbstractItemModel::rowsInserted, this,
+            refreshCollaboratorNames);
+    connect(d->projectStructureModel, &QAbstractItemModel::rowsRemoved, this,
+            refreshCollaboratorNames);
+    connect(d->projectStructureModel, &QAbstractItemModel::rowsMoved, this,
+            refreshCollaboratorNames);
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -3808,7 +3829,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Сбрасываем список соавторов
     //
     d->collaboratorsCursors.clear();
-    emit collaboratorsChanged({});
+    emit collaboratorsChanged({ }, { });
 }
 
 void ProjectManager::clearChangesHistory()
@@ -5128,6 +5149,33 @@ void ProjectManager::notifyDownloadDocumentRequested(const QUuid& _documentUuid)
     emit downloadDocumentRequested(_documentUuid);
 }
 
+void ProjectManager::Implementation::notifyCollaboratorsChanged()
+{
+    collaboratorNamesUpdateTimer.stop();
+    const QVector<Domain::CursorInfo> activeCursors(collaboratorsCursors.begin(),
+                                                    collaboratorsCursors.end());
+    QHash<QUuid, QString> documentNames;
+    for (const auto& cursor : activeCursors) {
+        if (documentNames.contains(cursor.documentUuid)) {
+            continue;
+        }
+        auto item = projectStructureModel->itemForUuid(cursor.documentUuid);
+        if (item == nullptr) {
+            continue; // The structure may not have arrived yet, or the document was removed.
+        }
+        QStringList path;
+        // Include the containing screenplay/episode/folder to distinguish e.g. two "Text" sections.
+        for (auto ancestor = item; ancestor != nullptr && ancestor->hasParent();
+             ancestor = ancestor->parent()) {
+            if (!ancestor->name().isEmpty()) {
+                path.prepend(ancestor->name());
+            }
+        }
+        documentNames.insert(cursor.documentUuid, path.join(" / "));
+    }
+    emit q->collaboratorsChanged(activeCursors, documentNames);
+}
+
 void ProjectManager::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
     //
@@ -5162,7 +5210,7 @@ void ProjectManager::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     //
     const QVector<Domain::CursorInfo> activeCursors(d->collaboratorsCursors.begin(),
                                                     d->collaboratorsCursors.end());
-    emit collaboratorsChanged(activeCursors);
+    d->notifyCollaboratorsChanged();
 
     //
     // Устновим курсоры в открытые редакторы
@@ -5207,7 +5255,7 @@ void ProjectManager::followCollaborator(const QString& _cursorId)
 
 void ProjectManager::clearCursors()
 {
-    emit collaboratorsChanged({});
+    emit collaboratorsChanged({ }, { });
     d->collaboratorsCursors.clear();
 }
 

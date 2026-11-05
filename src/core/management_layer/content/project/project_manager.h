@@ -247,7 +247,8 @@ signals:
     /**
      * @brief Обновлён список активных соавторов после фильтрации устаревших курсоров
      */
-    void collaboratorsChanged(const QVector<Domain::CursorInfo>& _collaborators);
+    void collaboratorsChanged(const QVector<Domain::CursorInfo>& _collaborators,
+                              const QHash<QUuid, QString>& _documentNames);
 
     /**
      * @brief Запрос на отображение меню

@@ -2,6 +2,7 @@
 
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
+#include <QHash>
 #include <QUuid>
 
 namespace Domain {
@@ -22,7 +23,8 @@ public:
     ~ConnectionStatusToolBar() override;
 
     void setConnectionAvailable(bool _available);
-    void setCollaborators(const QVector<Domain::CursorInfo>& _collaborators);
+    void setCollaborators(const QVector<Domain::CursorInfo>& _collaborators,
+                          const QHash<QUuid, QString>& _documentNames = { });
     QSize sizeHint() const override;
 
     /**

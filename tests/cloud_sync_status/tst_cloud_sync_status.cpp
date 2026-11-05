@@ -13,6 +13,7 @@
 #include <QRawFont>
 #include <QScrollArea>
 #include <QSignalSpy>
+#include <QTextDocument>
 #include <QToolTip>
 #include <QtTest>
 
@@ -453,7 +454,8 @@ private slots:
         Domain::CursorInfo author;
         author.cursorId = "author";
         author.name = "Writer";
-        status.setCollaborators({ author });
+        author.documentUuid = QUuid::createUuid();
+        status.setCollaborators({ author }, { { author.documentUuid, "Episode 1 / Text" } });
         QEvent enter(QEvent::Enter);
         QApplication::sendEvent(&status, &enter);
         QTest::qWait(220);
@@ -474,10 +476,63 @@ private slots:
         QTest::mouseMove(&status, avatar);
         QHelpEvent help(QEvent::ToolTip, avatar, status.mapToGlobal(avatar));
         QApplication::sendEvent(&status, &help);
-        QCOMPARE(QToolTip::text(), QString("Writer\nActive in this project"));
+        QCOMPARE(QToolTip::text(), Qt::convertFromPlainText("Writer\nEpisode 1 / Text"));
         QTest::qWait(800);
         QVERIFY(QToolTip::isVisible());
         QToolTip::hideText();
+    }
+
+    void collaboratorDocumentNamesUpdateWithoutReplacingRows()
+    {
+        QWidget window;
+        window.resize(700, 550);
+        window.show();
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setConnectionAvailable(true);
+        status.setCloudProjectOpen(true);
+        Domain::CursorInfo author;
+        author.cursorId = "writer";
+        author.name = "Writer";
+        author.documentUuid = QUuid::createUuid();
+        const auto otherDocument = QUuid::createUuid();
+        QHash<QUuid, QString> names{
+            { author.documentUuid, "Episode 1 / Text & <draft>" },
+            { otherDocument, "Episode 2 / Synopsis" },
+        };
+        status.setCollaborators({ author }, names);
+        status.actions().constFirst()->trigger();
+        auto popup = status.findChild<CardPopup*>();
+        auto row = popup->findChild<QPushButton*>();
+        QVERIFY(row != nullptr);
+        QCOMPARE(row->text(), QString("Writer\nEpisode 1 / Text && <draft>"));
+        QCOMPARE(row->accessibleDescription(), names[author.documentUuid]);
+        QTextDocument tooltip;
+        tooltip.setHtml(row->toolTip());
+        QVERIFY(tooltip.toPlainText().contains("Text & <draft>"));
+
+        // A rename updates the visible popup without waiting for a new cursor position.
+        names[author.documentUuid] = "Renamed episode / Text";
+        status.setCollaborators({ author }, names);
+        QCOMPARE(popup->findChild<QPushButton*>(), row);
+        QCOMPARE(row->text(), QString("Writer\nRenamed episode / Text"));
+
+        author.documentUuid = otherDocument;
+        status.setCollaborators({ author }, names);
+        QCOMPARE(row->text(), QString("Writer\nEpisode 2 / Synopsis"));
+        QSignalSpy follow(&status, &Ui::ConnectionStatusToolBar::collaboratorClicked);
+        row->click();
+        QCOMPARE(follow.takeFirst().first().toString(), author.cursorId);
+
+        // A missing/removed document must not leave an unrelated old title in the row.
+        status.setCollaborators({ author }, { });
+        QCOMPARE(row->text(), author.name);
+        QVERIFY(row->accessibleDescription().isEmpty());
+        status.setCloudProjectOpen(false);
+        status.setCloudProjectOpen(true);
+        status.setCollaborators({ author });
+        status.actions().constFirst()->trigger();
+        row = popup->findChild<QPushButton*>();
+        QCOMPARE(row->text(), author.name);
     }
 
     void auxiliaryBundleRepliesAreOptionalButDirectDownloadsAreNot()

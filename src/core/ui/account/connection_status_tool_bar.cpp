@@ -25,6 +25,7 @@
 #include <QScreen>
 #include <QScrollArea>
 #include <QSet>
+#include <QTextDocument>
 #include <QTimer>
 #include <QToolTip>
 #include <QVBoxLayout>
@@ -73,6 +74,7 @@ public:
     QWidget* collaboratorsContent = nullptr;
     QVBoxLayout* collaboratorsLayout = nullptr;
     QVector<Domain::CursorInfo> collaborators;
+    QHash<QUuid, QString> collaboratorDocumentNames;
     QLabel* notification = nullptr;
     QTimer notificationTimer;
     QTimer collapseTimer;
@@ -444,8 +446,15 @@ void ConnectionStatusToolBar::Implementation::updateCollaborators()
         row->setProperty("cursorId", collaborator.cursorId);
         auto name = collaborator.name;
         name.replace('&', "&&"); // Names are literal text, not button mnemonics.
-        row->setText(name + "\n" + ConnectionStatusToolBar::tr("Active in this project"));
-        row->setToolTip(ConnectionStatusToolBar::tr("Go to collaborator’s position"));
+        const auto documentName = collaboratorDocumentNames.value(collaborator.documentUuid);
+        auto buttonDocumentName = documentName;
+        buttonDocumentName.replace('&', "&&");
+        row->setText(name + (documentName.isEmpty() ? QString() : "\n" + buttonDocumentName));
+        row->setToolTip(Qt::convertFromPlainText(
+            (documentName.isEmpty() ? QString() : documentName + "\n")
+            + ConnectionStatusToolBar::tr("Go to collaborator’s position")));
+        row->setAccessibleName(collaborator.name);
+        row->setAccessibleDescription(documentName);
         row->setIcon(QIcon(AvatarGenerator::avatar(collaborator.name, collaborator.email)));
         row->setIconSize(QSize(DesignSystem::layout().px(28), DesignSystem::layout().px(28)));
         row->setMinimumHeight(DesignSystem::layout().px(56));
@@ -623,6 +632,7 @@ void ConnectionStatusToolBar::setCloudProjectOpen(bool _open)
     d->expansion.stop();
     d->expansionProgress = 0;
     d->collaborators.clear();
+    d->collaboratorDocumentNames.clear();
     d->updateCollaborators();
     d->updateGeometry();
     d->problem.clear();
@@ -806,12 +816,14 @@ bool ConnectionStatusToolBar::event(QEvent* _event)
         if (slot >= 0 && !d->details->isVisible()) {
             const bool overflow = slot == d->slotCount() - 1
                 && (d->collaborators.size() > 3 || d->collaborators.size() > d->slotCount());
+            const auto& collaborator = d->collaborators[slot];
+            const auto documentName = d->collaboratorDocumentNames.value(collaborator.documentUuid);
             const auto text = overflow
                 ? tr("Show all collaborators")
-                : d->collaborators[slot].name + "\n" + tr("Active in this project");
+                : collaborator.name + (documentName.isEmpty() ? QString() : "\n" + documentName);
             // Use Qt's hover event and cursor position, as FloatingToolBar does.
             // Anchoring to the avatar's top-left can put the tooltip under the cursor.
-            QToolTip::showText(help->globalPos(), text, this);
+            QToolTip::showText(help->globalPos(), Qt::convertFromPlainText(text), this);
         } else {
             QToolTip::hideText();
         }
@@ -905,11 +917,13 @@ QSize ConnectionStatusToolBar::sizeHint() const
             + qRound(d->slotCount() * DesignSystem::layout().px(36) * d->expansionProgress));
 }
 
-void ConnectionStatusToolBar::setCollaborators(const QVector<Domain::CursorInfo>& _collaborators)
+void ConnectionStatusToolBar::setCollaborators(const QVector<Domain::CursorInfo>& _collaborators,
+                                               const QHash<QUuid, QString>& _documentNames)
 {
     if (!d->cloudProjectOpen) {
         return;
     }
+    d->collaboratorDocumentNames = _documentNames;
     // Preserve the visual order even when the cursor map arrives in a different order.
     for (int i = d->collaborators.size() - 1; i >= 0; --i) {
         const auto found = std::find_if(_collaborators.begin(), _collaborators.end(),
