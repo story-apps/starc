@@ -7,6 +7,8 @@ with writing statistics in `sessions.db`.
 
 `ai_chat_view.pro` links against a built corelib and tests keyboard submission,
 multiline input, safe rendering, explicit insertion, read-only documents and chat management.
+The assistant uses the existing `ChatMessagesView`, `ChatMessage` and `User` widgets
+and types. The tests also check scrolling long replies and system context messages.
 
 Build each target in its own directory with `qmake /path/to/ai_chat.pro` (or
 `ai_chat_view.pro`), followed by `make` and the resulting test executable.

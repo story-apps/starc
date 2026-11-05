@@ -14,7 +14,10 @@
 #include <QSignalSpy>
 #include <QSqlDatabase>
 #include <QTemporaryDir>
-#include <QTextBrowser>
+#include <ui/widgets/chat/chat_message.h>
+#include <ui/widgets/chat/chat_messages_view.h>
+#include <QScrollArea>
+#include <QScrollBar>
 #include <QtTest>
 #include <memory>
 
@@ -43,7 +46,7 @@ private slots:
         QTest::qWait(30);
         auto input = view.findChild<TextField*>("aiChatInput");
         auto send = view.findChild<Button*>("aiChatSend");
-        auto history = view.findChild<QTextBrowser*>("aiChatHistory");
+        auto history = view.findChild<ChatMessagesView*>("aiChatHistory");
         QVERIFY(input && send && history);
         QVERIFY(input->isVisible());
         QSignalSpy requests(session, &Ui::AiChatSession::replyRequested);
@@ -61,8 +64,11 @@ private slots:
         QVERIFY(input->text().isEmpty());
         QVERIFY(!send->isEnabled());
         session->finishReply("<b>Literal text</b>\nSecond paragraph");
-        QVERIFY(history->toPlainText().contains("<b>Literal text</b>"));
-        QVERIFY(history->toPlainText().contains("Second paragraph"));
+        QCOMPARE(history->messages().last().text(), QString("<b>Literal text</b>\nSecond paragraph"));
+        QVERIFY(!history->messages().last().isSistemMessage());
+        QVERIFY(history->messages().first().isSistemMessage());
+        QVERIFY(history->messages().last().dateTime().isValid());
+        QVERIFY(history->messages().at(1).author() != history->messages().last().author());
         auto insert = view.findChild<Button*>("aiChatInsert");
         QVERIFY(insert->isVisible());
         QSignalSpy insertions(&view, &Ui::AiAssistantView::insertTextRequested);
@@ -80,6 +86,33 @@ private slots:
         if (!screenshot.isEmpty()) {
             QVERIFY(view.grab().save(screenshot));
         }
+    }
+
+    void sharedHistoryScrollsLongReplies()
+    {
+        auto session = Ui::AiChatSession::instance();
+        session->setProject(QUuid::createUuid(), {});
+        session->setDocument(QUuid::createUuid(), "Draft", [] { return "Document"; });
+        session->setBackendAvailable(true);
+        Ui::AiAssistantView view;
+        view.setAvailableWords(100);
+        view.resize(360, 650);
+        view.show();
+        QVERIFY(session->send("Explain the document"));
+        session->finishReply(QString("A long response that wraps across several lines.\n").repeated(120));
+        auto container = view.findChild<QScrollArea*>("aiChatHistoryContainer");
+        auto history = view.findChild<ChatMessagesView*>("aiChatHistory");
+        QVERIFY(container && history);
+        auto scroll = container->verticalScrollBar();
+        QTRY_VERIFY(scroll->maximum() > 0);
+        QTRY_COMPARE(scroll->value(), scroll->maximum());
+        QCOMPARE(history->messages().size(), 3);
+        scroll->setValue(0);
+        session->setDocument(QUuid::createUuid(), "Another draft", [] { return "New document"; });
+        QTest::qWait(30);
+        QCOMPARE(scroll->value(), 0);
+        QVERIFY(history->messages().last().isSistemMessage());
+        QVERIFY(history->messages().last().text().contains("Another draft"));
     }
 
     void createsAndDeletesChatsFromTheView()

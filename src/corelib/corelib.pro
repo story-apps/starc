@@ -421,7 +421,6 @@ SOURCES += \
     ui/modules/ai_assistant/ai_assistant_toolbar.cpp \
     ui/modules/ai_assistant/ai_assistant_view.cpp \
     ui/modules/ai_assistant/ai_chat_session.cpp \
-    ui/modules/ai_assistant/ai_chat_view.cpp \
     ui/modules/avatar_generator/avatar_generator.cpp \
     ui/modules/bookmarks/add_bookmark_view.cpp \
     ui/modules/bookmarks/bookmark_delegate.cpp \
@@ -816,7 +815,6 @@ HEADERS += \
     ui/modules/ai_assistant/ai_assistant_toolbar.h \
     ui/modules/ai_assistant/ai_assistant_view.h \
     ui/modules/ai_assistant/ai_chat_session.h \
-    ui/modules/ai_assistant/ai_chat_view.h \
     ui/modules/avatar_generator/avatar_generator.h \
     ui/modules/bookmarks/add_bookmark_view.h \
     ui/modules/bookmarks/bookmark_delegate.h \

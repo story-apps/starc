@@ -28,6 +28,11 @@ public:
     void setMessages(const QVector<ChatMessage>& _messages);
 
     /**
+     * @brief Получить текущие сообщения, например, для действий контекстного меню
+     */
+    QVector<ChatMessage> messages() const;
+
+    /**
      * @brief Получить необходимую высоту в зависимости от ширины
      */
     int heightForWidth(int _width) const override;

@@ -104,6 +104,11 @@ void ChatMessagesView::setMessages(const QVector<ChatMessage>& _messages)
     update();
 }
 
+QVector<ChatMessage> ChatMessagesView::messages() const
+{
+    return d->messages;
+}
+
 int ChatMessagesView::heightForWidth(int _width) const
 {
     //

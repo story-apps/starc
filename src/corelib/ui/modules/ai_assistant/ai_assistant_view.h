@@ -196,6 +196,7 @@ signals:
     void buyCreditsPressed();
 
 protected:
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
     /**
      * @brief Обновить переводы
      */
@@ -207,6 +208,11 @@ protected:
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
+    void initChat();
+    void refreshChat();
+    void updateChatTranslations();
+    void updateChatDesign();
+
     class Implementation;
     QScopedPointer<Implementation> d;
 };

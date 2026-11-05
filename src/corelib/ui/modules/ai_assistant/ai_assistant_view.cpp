@@ -1,10 +1,13 @@
 #include "ai_assistant_view.h"
 
-#include "ai_chat_view.h"
+#include "ai_chat_session.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/chat/chat_message.h>
+#include <ui/widgets/chat/chat_messages_view.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/icon_button/icon_button.h>
@@ -20,7 +23,13 @@
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 
+#include <QAction>
+#include <QApplication>
 #include <QBoxLayout>
+#include <QClipboard>
+#include <QJsonObject>
+#include <QKeyEvent>
+#include <QSignalBlocker>
 #include <QScrollArea>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -89,7 +98,26 @@ public:
     int availableWords = 0;
 
     StackWidget* pages = nullptr;
-    AiChatView* chat = nullptr;
+    struct Chat {
+        ComboBox* chats = nullptr;
+        QStandardItemModel* model = nullptr;
+        IconButton* newChat = nullptr;
+        IconButton* deleteChat = nullptr;
+        Body2Label* context = nullptr;
+        Widget* widget = nullptr;
+        ChatMessagesView* history = nullptr;
+        QScrollArea* historyContainer = nullptr;
+        Body2Label* emptyHint = nullptr;
+        ComboBox* commands = nullptr;
+        TextField* input = nullptr;
+        Button* send = nullptr;
+        Button* insert = nullptr;
+        Button* tools = nullptr;
+        Body2Label* status = nullptr;
+        QString lastReply;
+        QString displayedChat;
+        QHash<QString, QString> drafts;
+    } chat;
     Button* backToChat = nullptr;
 
     Widget* buttonsPage = nullptr;
@@ -691,15 +719,13 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     layout->addWidget(d->pages, 1);
     layout->addLayout(d->buttonsLayout);
 
-    d->chat = new AiChatView(d->pages);
-    d->pages->addWidget(d->chat);
-    d->pages->setCurrentWidget(d->chat);
+    initChat();
+    d->pages->addWidget(d->chat.widget);
+    d->pages->setCurrentWidget(d->chat.widget);
     d->backToChat = new Button(d->buttonsPage);
     qobject_cast<QVBoxLayout*>(d->buttonsPage->layout())->insertWidget(0, d->backToChat);
-    connect(d->backToChat, &Button::clicked, this, [this] { d->pages->setCurrentWidget(d->chat); });
-    connect(d->chat, &AiChatView::toolsRequested, this,
-            [this] { d->pages->setCurrentWidget(d->buttonsPage); });
-    connect(d->chat, &AiChatView::insertRequested, this, &AiAssistantView::insertTextRequested);
+    connect(d->backToChat, &Button::clicked, this,
+            [this] { d->pages->setCurrentWidget(d->chat.widget); });
 
     connect(d->openRephraseButton, &Button::clicked, this, [this] {
         d->rephraseSourceText->clear();
@@ -1007,7 +1033,7 @@ void AiAssistantView::setReadOnly(bool _readOnly)
     }
 
     d->isReadOnly = _readOnly;
-    d->chat->setInsertionAvailable(d->insertionAvailable && !_readOnly);
+    refreshChat();
     for (auto button : std::vector<QWidget*>{
              d->buttonsPage,
              d->rephrasePage,
@@ -1048,7 +1074,7 @@ void AiAssistantView::setReadOnly(bool _readOnly)
 void AiAssistantView::setInsertionAvailable(bool _available)
 {
     d->insertionAvailable = _available;
-    d->chat->setInsertionAvailable(_available && !d->isReadOnly);
+    refreshChat();
     for (auto button : {
              d->rephraseInsertButton,
              d->expandInsertButton,
@@ -1210,8 +1236,8 @@ void AiAssistantView::setGenerateSynopsisResult(const QString& _text)
 
 void AiAssistantView::setAvailableWords(int _availableWords)
 {
-    d->chat->setAvailableWords(_availableWords);
     d->availableWords = _availableWords;
+    refreshChat();
     d->availableWordsLabel->setText(d->availableWords > 0
                                         ? tr("%n word(s) available", nullptr, d->availableWords)
                                         : tr("No words available"));
@@ -1237,6 +1263,7 @@ void AiAssistantView::setAvailableWords(int _availableWords)
 
 void AiAssistantView::updateTranslations()
 {
+    updateChatTranslations();
     d->backToChat->setText(tr("Back to chat"));
     d->openRephraseButton->setText(tr("Rephrase"));
     d->openExpandButton->setText(tr("Expand"));
@@ -1492,6 +1519,7 @@ void AiAssistantView::updateTranslations()
 void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
+    updateChatDesign();
 
     setBackgroundColor(DesignSystem::color().primary());
     d->backToChat->setBackgroundColor(DesignSystem::color().primary());
@@ -1665,6 +1693,264 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->buyCreditsLabel->setContentsMargins(
         DesignSystem::layout().px4(), DesignSystem::compactLayout().px16(),
         DesignSystem::layout().px24(), DesignSystem::layout().px24());
+}
+
+void AiAssistantView::initChat()
+{
+    d->chat.widget = new Widget(d->pages);
+    d->chat.chats = new ComboBox(d->chat.widget);
+    d->chat.chats->setObjectName("aiChatSelector");
+    d->chat.model = new QStandardItemModel(d->chat.widget);
+    d->chat.chats->setModel(d->chat.model);
+    d->chat.newChat = new IconButton(d->chat.widget);
+    d->chat.newChat->setObjectName("aiNewChat");
+    d->chat.newChat->setIcon(u8"\U000F0415");
+    d->chat.deleteChat = new IconButton(d->chat.widget);
+    d->chat.deleteChat->setObjectName("aiDeleteChat");
+    d->chat.deleteChat->setIcon(u8"\U000F01B4");
+    d->chat.context = new Body2Label(d->chat.widget);
+    d->chat.history = new ChatMessagesView;
+    d->chat.historyContainer = new QScrollArea(d->chat.widget);
+    d->chat.historyContainer->setObjectName("aiChatHistoryContainer");
+    d->chat.historyContainer->setFrameShape(QFrame::NoFrame);
+    d->chat.historyContainer->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->chat.historyContainer->setVerticalScrollBar(new ScrollBar);
+    d->chat.historyContainer->setWidget(d->chat.history);
+    d->chat.historyContainer->setWidgetResizable(true);
+    d->chat.emptyHint = new Body2Label(d->chat.widget);
+    d->chat.history->setObjectName("aiChatHistory");
+    d->chat.commands = new ComboBox(d->chat.widget);
+    const QStringList commands{ "/rephrase", "/expand", "/shorten", "/insert", "/summarize",
+                                "/translate", "/synopsis", "/novel", "/script", "/generate",
+                                "/character", "/mindmap", "/help" };
+    auto commandsModel = new QStandardItemModel(d->chat.widget);
+    for (const auto& command : commands) {
+        commandsModel->appendRow(new QStandardItem(command));
+    }
+    d->chat.commands->setModel(commandsModel);
+    d->chat.commands->setCurrentIndex({});
+    d->chat.input = new TextField(d->chat.widget);
+    d->chat.input->setObjectName("aiChatInput");
+    d->chat.input->setEnterMakesNewLine(true);
+    d->chat.input->installEventFilter(this);
+    d->chat.input->setMinimumHeight(80);
+    d->chat.input->setMaximumHeight(160);
+    d->chat.send = new Button(d->chat.widget);
+    d->chat.send->setObjectName("aiChatSend");
+    d->chat.insert = new Button(d->chat.widget);
+    d->chat.insert->setObjectName("aiChatInsert");
+    d->chat.tools = new Button(d->chat.widget);
+    d->chat.tools->setObjectName("aiChatTools");
+    d->chat.status = new Body2Label(d->chat.widget);
+
+    auto layout = new QVBoxLayout(d->chat.widget);
+    layout->setContentsMargins(12, 12, 12, 12);
+    layout->setSpacing(8);
+    auto header = new QHBoxLayout;
+    header->addWidget(d->chat.chats, 1);
+    header->addWidget(d->chat.newChat);
+    header->addWidget(d->chat.deleteChat);
+    layout->addLayout(header);
+    layout->addWidget(d->chat.context);
+    layout->addWidget(d->chat.emptyHint);
+    layout->addWidget(d->chat.historyContainer, 1);
+    layout->addWidget(d->chat.status);
+    layout->addWidget(d->chat.commands);
+    layout->addWidget(d->chat.input);
+    auto actions = new QHBoxLayout;
+    actions->addWidget(d->chat.tools);
+    actions->addStretch();
+    actions->addWidget(d->chat.send);
+    layout->addLayout(actions);
+    layout->addWidget(d->chat.insert);
+
+    auto session = AiChatSession::instance();
+    connect(session, &AiChatSession::changed, this, &AiAssistantView::refreshChat);
+    connect(session, &AiChatSession::errorOccurred, this,
+            [this](const QString& _error) { d->chat.input->setError(_error); });
+    connect(d->chat.newChat, &IconButton::clicked, session, [session] { session->createChat(); });
+    connect(d->chat.deleteChat, &IconButton::clicked, session, [session] { session->deleteChat(); });
+    connect(d->chat.chats, &ComboBox::currentIndexChanged, this, [this, session](const QModelIndex& _index) {
+        if (_index.isValid()) {
+            session->selectChat(_index.data(Qt::UserRole).toString());
+        }
+    });
+    connect(d->chat.commands, &ComboBox::currentIndexChanged, this, [this](const QModelIndex& _index) {
+        if (!_index.isValid()) {
+            return;
+        }
+        const auto command = _index.data().toString();
+        d->chat.input->setText(command + " ");
+        d->chat.input->setFocus();
+        const QSignalBlocker blocker(d->chat.commands);
+        d->chat.commands->setCurrentIndex({});
+    });
+    auto send = [this, session] {
+        if (d->chat.input->text().trimmed() == "/help") {
+            d->chat.input->setHelper(tr("Use /rephrase, /expand, /shorten, /insert, /summarize, /translate, "
+                                  "/synopsis, /novel, /script, /generate, /character or /mindmap. "
+                                  "Add instructions or text after the command. Without text, the current document is used."));
+            return;
+        }
+        if (d->availableWords > 0 && session->send(d->chat.input->text())) {
+            d->chat.input->clear();
+            d->chat.drafts.remove(session->currentChat());
+            d->chat.input->clearError();
+        }
+    };
+    connect(d->chat.send, &Button::clicked, this, send);
+    connect(d->chat.input, &TextField::enterPressed, this, send);
+    connect(d->chat.input, &TextField::textChanged, this, [this, session] {
+        d->chat.send->setEnabled(d->availableWords > 0 && session->canSend() && !d->chat.input->text().trimmed().isEmpty());
+    });
+    connect(d->chat.tools, &Button::clicked, this,
+            [this] { d->pages->setCurrentWidget(d->buttonsPage); });
+    connect(d->chat.insert, &Button::clicked, this, [this] { emit insertTextRequested(d->chat.lastReply); });
+    updateChatTranslations();
+    refreshChat();
+    connect(d->chat.history, &ChatMessagesView::messageContextMenuRequested, this,
+            [this](int _index) {
+                const auto messages = d->chat.history->messages();
+                if (_index < 0 || _index >= messages.size()) {
+                    return;
+                }
+                auto menu = new ContextMenu(this);
+                auto copy = new QAction(tr("Copy"), menu);
+                const auto text = messages.at(_index).text();
+                connect(copy, &QAction::triggered, this,
+                        [text] { QApplication::clipboard()->setText(text); });
+                menu->setActions({ copy });
+                menu->setBackgroundColor(DesignSystem::color().background());
+                menu->setTextColor(DesignSystem::color().onBackground());
+                connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+                menu->showContextMenu(QCursor::pos());
+            });
+
+}
+
+bool AiAssistantView::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == d->chat.input && _event->type() == QEvent::KeyPress) {
+        const auto key = static_cast<QKeyEvent*>(_event);
+        if ((key->key() == Qt::Key_Return || key->key() == Qt::Key_Enter)
+            && !(key->modifiers() & Qt::ShiftModifier)) {
+            if (d->chat.send->isEnabled()) {
+                d->chat.send->click();
+            }
+            return true;
+        }
+    }
+    return Widget::eventFilter(_watched, _event);
+}
+
+void AiAssistantView::refreshChat()
+{
+    auto session = AiChatSession::instance();
+    if (d->chat.displayedChat != session->currentChat()) {
+        // Keep unsent drafts scoped to the conversation when switching between chats.
+        if (!d->chat.displayedChat.isEmpty()) {
+            d->chat.drafts.insert(d->chat.displayedChat, d->chat.input->text());
+        }
+        d->chat.displayedChat = session->currentChat();
+        d->chat.input->setText(d->chat.drafts.value(d->chat.displayedChat));
+    }
+    const QSignalBlocker blocker(d->chat.chats);
+    d->chat.model->clear();
+    for (const auto& value : session->chats()) {
+        const auto chat = value.toObject();
+        auto item = new QStandardItem(chat.value("title").toString());
+        item->setData(chat.value("id").toString(), Qt::UserRole);
+        d->chat.model->appendRow(item);
+        if (chat.value("id").toString() == session->currentChat()) {
+            d->chat.chats->setCurrentIndex(item->index());
+        }
+    }
+    if (session->currentChat().isEmpty()) {
+        d->chat.chats->setCurrentIndex({});
+    }
+    d->chat.deleteChat->setEnabled(!session->currentChat().isEmpty());
+    d->chat.context->setText(session->documentName().isEmpty() ? tr("No document is open")
+                                                        : tr("Context: %1").arg(session->documentName()));
+    d->chat.context->setToolTip(d->chat.context->text());
+    QVector<ChatMessage> messages;
+    const User currentUser(tr("You"), QStringLiteral("ai-chat-user"));
+    const User assistant(tr("Assistant"), QStringLiteral("ai-chat-assistant"));
+    d->chat.lastReply.clear();
+    for (const auto& value : session->messages()) {
+        const auto message = value.toObject();
+        const auto role = message.value("role").toString();
+        const auto text = message.value("text").toString();
+        const auto author = role == "user" ? currentUser : role == "assistant" ? assistant
+            : User(role == "error" ? tr("Error") : tr("Context"), "ai-chat-" + role);
+        messages.append(ChatMessage(
+            QDateTime::fromString(message.value("created_at").toString(), Qt::ISODateWithMs)
+                .toLocalTime(),
+            text, author, role == "context" || role == "error"));
+        if (role == "assistant") {
+            d->chat.lastReply = text;
+        }
+    }
+    const auto scroll = d->chat.historyContainer->verticalScrollBar();
+    const auto oldScroll = scroll->value();
+    const auto atBottom = oldScroll >= scroll->maximum() - 4;
+    d->chat.history->setCurrentUser(currentUser);
+    d->chat.history->setMessages(messages);
+    d->chat.emptyHint->setVisible(messages.isEmpty());
+    // QScrollArea updates its range after the child has recalculated heightForWidth.
+    QTimer::singleShot(0, this, [this, oldScroll, atBottom] {
+        const auto scroll = d->chat.historyContainer->verticalScrollBar();
+        scroll->setValue(atBottom ? scroll->maximum() : oldScroll);
+    });
+    d->chat.send->setEnabled(d->availableWords > 0 && session->canSend() && !d->chat.input->text().trimmed().isEmpty());
+    d->chat.status->setText(session->hasPendingReply() ? tr("Waiting for the assistant…")
+                          : !session->canSend() ? tr("The assistant is unavailable. You can still read your chats.") : QString());
+    d->chat.insert->setVisible((d->insertionAvailable && !d->isReadOnly) && !d->chat.lastReply.isEmpty());
+}
+
+void AiAssistantView::updateChatTranslations()
+{
+    d->chat.emptyHint->setText(tr("Discuss the current document, ask a question, or choose a /command."));
+    d->chat.chats->setLabel(tr("Chat"));
+    d->chat.chats->setPlaceholderText(tr("New chat"));
+    d->chat.newChat->setToolTip(tr("New chat"));
+    d->chat.deleteChat->setToolTip(tr("Delete chat"));
+    d->chat.commands->setLabel(tr("Commands"));
+    d->chat.commands->setPlaceholderText(tr("Choose a /command"));
+    d->chat.input->setLabel(tr("Message"));
+    d->chat.input->setPlaceholderText(tr("Ask about this document or type /help"));
+    d->chat.input->setHelper(tr("Enter to send · Shift+Enter for a new line"));
+    d->chat.send->setText(tr("Send"));
+    d->chat.insert->setText(tr("Insert last reply into the current document"));
+    d->chat.tools->setText(tr("Writing tools"));
+}
+
+void AiAssistantView::updateChatDesign()
+{
+    const auto background = DesignSystem::color().primary();
+    const auto foreground = DesignSystem::color().onPrimary();
+    d->chat.widget->setBackgroundColor(background);
+    for (auto field : { static_cast<TextField*>(d->chat.chats), static_cast<TextField*>(d->chat.commands), d->chat.input }) {
+        field->setBackgroundColor(background);
+        field->setTextColor(foreground);
+    }
+    for (auto label : { d->chat.context, d->chat.status, d->chat.emptyHint }) {
+        label->setBackgroundColor(background);
+        label->setTextColor(foreground);
+    }
+    for (auto button : { d->chat.send, d->chat.insert, d->chat.tools }) {
+        button->setBackgroundColor(ColorHelper::nearby(background));
+        button->setTextColor(foreground);
+    }
+    for (auto button : { d->chat.newChat, d->chat.deleteChat }) {
+        button->setBackgroundColor(background);
+        button->setTextColor(foreground);
+    }
+    d->chat.history->setBackgroundColor(background);
+    d->chat.history->setTextColor(foreground);
+    auto palette = d->chat.historyContainer->palette();
+    palette.setColor(QPalette::Base, background);
+    palette.setColor(QPalette::Window, background);
+    d->chat.historyContainer->setPalette(palette);
 }
 
 } // namespace Ui

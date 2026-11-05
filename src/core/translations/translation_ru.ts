@@ -9171,6 +9171,94 @@ This action can&apos;t be canceled.</source>
         <source>Back to chat</source>
         <translation>Вернуться в чат</translation>
     </message>
+    <message>
+        <source>Use /rephrase, /expand, /shorten, /insert, /summarize, /translate, /synopsis, /novel, /script, /generate, /character or /mindmap. Add instructions or text after the command. Without text, the current document is used.</source>
+        <translation>Используйте /rephrase, /expand, /shorten, /insert, /summarize, /translate, /synopsis, /novel, /script, /generate, /character или /mindmap. После команды добавьте инструкции или текст. Если текст не указан, используется текущий документ.</translation>
+    </message>
+    <message>
+        <source>No document is open</source>
+        <translation>Документ не открыт</translation>
+    </message>
+    <message>
+        <source>Context: %1</source>
+        <translation>Контекст: %1</translation>
+    </message>
+    <message>
+        <source>You</source>
+        <translation>Вы</translation>
+    </message>
+    <message>
+        <source>Assistant</source>
+        <translation>Помощник</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>Context</source>
+        <translation>Контекст</translation>
+    </message>
+    <message>
+        <source>Discuss the current document, ask a question, or choose a /command.</source>
+        <translation>Обсудите текущий документ, задайте вопрос или выберите /команду.</translation>
+    </message>
+    <message>
+        <source>Waiting for the assistant…</source>
+        <translation>Помощник готовит ответ…</translation>
+    </message>
+    <message>
+        <source>The assistant is unavailable. You can still read your chats.</source>
+        <translation>Помощник недоступен. Вы можете просматривать историю чатов.</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Чат</translation>
+    </message>
+    <message>
+        <source>New chat</source>
+        <translation>Новый чат</translation>
+    </message>
+    <message>
+        <source>Delete chat</source>
+        <translation>Удалить чат</translation>
+    </message>
+    <message>
+        <source>Commands</source>
+        <translation>Команды</translation>
+    </message>
+    <message>
+        <source>Choose a /command</source>
+        <translation>Выберите /команду</translation>
+    </message>
+    <message>
+        <source>Message</source>
+        <translation>Сообщение</translation>
+    </message>
+    <message>
+        <source>Ask about this document or type /help</source>
+        <translation>Задайте вопрос о документе или введите /help</translation>
+    </message>
+    <message>
+        <source>Enter to send · Shift+Enter for a new line</source>
+        <translation>Enter — отправить · Shift+Enter — новая строка</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Отправить</translation>
+    </message>
+    <message>
+        <source>Insert last reply into the current document</source>
+        <translation>Вставить последний ответ в текущий документ</translation>
+    </message>
+    <message>
+        <source>Writing tools</source>
+        <translation>Инструменты</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
 </context>
 <context>
     <name>Ui::ApplicationView</name>
@@ -22721,91 +22809,5 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>Помощник не ответил вовремя. Восстановите соединение и попробуйте снова.</translation>
     </message>
 </context>
-<context>
-    <name>Ui::AiChatView</name>
-    <message>
-        <source>Use /rephrase, /expand, /shorten, /insert, /summarize, /translate, /synopsis, /novel, /script, /generate, /character or /mindmap. Add instructions or text after the command. Without text, the current document is used.</source>
-        <translation>Используйте /rephrase, /expand, /shorten, /insert, /summarize, /translate, /synopsis, /novel, /script, /generate, /character или /mindmap. После команды добавьте инструкции или текст. Если текст не указан, используется текущий документ.</translation>
-    </message>
-    <message>
-        <source>No document is open</source>
-        <translation>Документ не открыт</translation>
-    </message>
-    <message>
-        <source>Context: %1</source>
-        <translation>Контекст: %1</translation>
-    </message>
-    <message>
-        <source>You</source>
-        <translation>Вы</translation>
-    </message>
-    <message>
-        <source>Assistant</source>
-        <translation>Помощник</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Ошибка</translation>
-    </message>
-    <message>
-        <source>Context</source>
-        <translation>Контекст</translation>
-    </message>
-    <message>
-        <source>Discuss the current document, ask a question, or choose a /command.</source>
-        <translation>Обсудите текущий документ, задайте вопрос или выберите /команду.</translation>
-    </message>
-    <message>
-        <source>Waiting for the assistant…</source>
-        <translation>Помощник готовит ответ…</translation>
-    </message>
-    <message>
-        <source>The assistant is unavailable. You can still read your chats.</source>
-        <translation>Помощник недоступен. Вы можете просматривать историю чатов.</translation>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation>Чат</translation>
-    </message>
-    <message>
-        <source>New chat</source>
-        <translation>Новый чат</translation>
-    </message>
-    <message>
-        <source>Delete chat</source>
-        <translation>Удалить чат</translation>
-    </message>
-    <message>
-        <source>Commands</source>
-        <translation>Команды</translation>
-    </message>
-    <message>
-        <source>Choose a /command</source>
-        <translation>Выберите /команду</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Сообщение</translation>
-    </message>
-    <message>
-        <source>Ask about this document or type /help</source>
-        <translation>Задайте вопрос о документе или введите /help</translation>
-    </message>
-    <message>
-        <source>Enter to send · Shift+Enter for a new line</source>
-        <translation>Enter — отправить · Shift+Enter — новая строка</translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <translation>Отправить</translation>
-    </message>
-    <message>
-        <source>Insert last reply into the current document</source>
-        <translation>Вставить последний ответ в текущий документ</translation>
-    </message>
-    <message>
-        <source>Writing tools</source>
-        <translation>Инструменты</translation>
-    </message>
-</context>
+
 </TS>
