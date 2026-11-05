@@ -228,10 +228,19 @@ Tab TabBar::Implementation::tabAt(const QPointF& _position) const
         return {};
     }
 
+    qreal tabX
+        = q->isLeftToRight() ? 0.0 : std::max(static_cast<qreal>(q->width()), contentWidth());
+    tabX -= scrollState.current;
     for (const auto& tab : visibleTabs()) {
-        if (tabRect(tab).contains(_position)) {
+        const auto tabWidth = tabWidthHint(tab);
+        const QRectF tabBoundingRect
+            = QRectF(QPointF(q->isLeftToRight() ? tabX : tabX - tabWidth, 0.0),
+                     QSizeF(tabWidth, q->height()));
+        if (tabBoundingRect.left() < _position.x() && _position.x() < tabBoundingRect.right()) {
             return tab;
         }
+
+        tabX += (q->isLeftToRight() ? 1 : -1) * tabWidth;
     }
 
     return {};
