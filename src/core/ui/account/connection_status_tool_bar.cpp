@@ -14,6 +14,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QElapsedTimer>
+#include <QGraphicsOpacityEffect>
 #include <QHash>
 #include <QHelpEvent>
 #include <QKeyEvent>
@@ -37,6 +38,7 @@ namespace Ui {
 
 namespace {
 constexpr qint64 kConfirmationTimeout = 30000;
+constexpr qreal kIdleOpacity = 0.4;
 }
 
 class ConnectionStatusToolBar::Implementation
@@ -52,6 +54,7 @@ public:
     void updateGeometry();
     void showProblem();
     void updateActivityColor();
+    void updateOpacity();
     int slotCount() const;
     QRect statusRect() const;
     QRect avatarRect(int _index) const;
@@ -79,6 +82,9 @@ public:
     QTimer notificationTimer;
     QTimer collapseTimer;
     QVariantAnimation expansion;
+    QGraphicsOpacityEffect* opacityEffect = nullptr;
+    QVariantAnimation opacityAnimation;
+    bool hovered = false;
     qreal expansionProgress = 0;
     QColor stateColor;
     QString summary;
@@ -121,6 +127,12 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
           new QLabel(q, Qt::ToolTip | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint))
 {
     clock.start();
+    opacityEffect = new QGraphicsOpacityEffect(q);
+    opacityEffect->setOpacity(kIdleOpacity);
+    opacityAnimation.setDuration(180);
+    opacityAnimation.setEasingCurve(QEasingCurve::InOutCubic);
+    QObject::connect(&opacityAnimation, &QVariantAnimation::valueChanged, q,
+                     [this](const QVariant& value) { opacityEffect->setOpacity(value.toReal()); });
     layout->setContentsMargins({ });
     collaboratorsTitle->setObjectName("collaboratorsTitle");
     collaboratorsScroll->setObjectName("collaboratorsList");
@@ -419,6 +431,22 @@ void ConnectionStatusToolBar::Implementation::expand(bool _expanded)
     expansion.start();
 }
 
+void ConnectionStatusToolBar::Implementation::updateOpacity()
+{
+    const qreal target = hovered || details->isVisible() ? 1.0 : kIdleOpacity;
+    if (opacityAnimation.state() == QAbstractAnimation::Running
+        && opacityAnimation.endValue().toReal() == target) {
+        return;
+    }
+    opacityAnimation.stop();
+    if (qFuzzyCompare(opacityEffect->opacity(), target)) {
+        return;
+    }
+    opacityAnimation.setStartValue(opacityEffect->opacity());
+    opacityAnimation.setEndValue(target);
+    opacityAnimation.start();
+}
+
 void ConnectionStatusToolBar::Implementation::updateCollaborators()
 {
     // Update existing rows in place: cursor broadcasts must not steal keyboard focus.
@@ -591,6 +619,7 @@ ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
     Q_ASSERT(_parent);
     _parent->installEventFilter(this);
     setFlat(true);
+    setGraphicsEffect(d->opacityEffect);
     setFocusPolicy(Qt::StrongFocus);
     setCursor(Qt::PointingHandCursor);
     d->updateCollaborators();
@@ -768,8 +797,11 @@ bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
     } else if (_watched == d->details && _event->type() == QEvent::LayoutRequest
                && d->details->isVisible()) {
         d->positionDetails(false);
+    } else if (_watched == d->details && _event->type() == QEvent::Show) {
+        d->updateOpacity();
     } else if (_watched == d->details && _event->type() == QEvent::Hide) {
         d->collapseTimer.start();
+        d->updateOpacity();
     } else if (_watched == d->details && _event->type() == QEvent::KeyPress
                && static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape) {
         d->details->hide();
@@ -794,18 +826,27 @@ bool ConnectionStatusToolBar::event(QEvent* _event)
 {
     switch (_event->type()) {
     case QEvent::Enter:
+        d->hovered = true;
+        d->updateOpacity();
         d->expand(true);
         break;
     case QEvent::Leave:
+        d->hovered = false;
+        d->updateOpacity();
         d->collapseTimer.start();
         break;
     case QEvent::Show:
+        d->hovered = underMouse();
+        d->updateOpacity();
         QTimer::singleShot(0, this, [this] { d->refresh(); });
         break;
     case QEvent::Hide:
         d->activity.stop();
         d->notification->hide();
         d->details->hide();
+        d->hovered = false;
+        d->opacityAnimation.stop();
+        d->opacityEffect->setOpacity(kIdleOpacity);
         break;
     case QEvent::ToolTip: {
         const auto help = static_cast<QHelpEvent*>(_event);
