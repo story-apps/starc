@@ -1,3 +1,4 @@
+#include <domain/document_object.h>
 #include <domain/starcloud_api.h>
 #include <ui/account/connection_status_tool_bar.h>
 #include <ui/design_system/design_system.h>
@@ -570,6 +571,53 @@ private slots:
         QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
     }
 
+    void optionalDictionaryLookupDoesNotBlockProjectSynchronization()
+    {
+        QWidget window;
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setCloudProjectOpen(true);
+        status.setConnectionAvailable(true);
+        const auto dictionaries
+            = static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries);
+        const auto structure = static_cast<int>(Domain::DocumentObjectType::Structure);
+        const auto project = static_cast<int>(Domain::DocumentObjectType::Project);
+        const auto screenplay = QUuid::createUuid();
+
+        for (int session = 0; session < 3; ++session) {
+            if (session == 1) {
+                status.setConnectionAvailable(false);
+                status.setConnectionAvailable(true);
+            } else if (session == 2) {
+                status.setCloudProjectOpen(false);
+                status.setCloudProjectOpen(true);
+            }
+            status.setDownloadStarted(structure);
+            status.setDownloadStarted(project);
+            status.setDownloadStarted(dictionaries, false);
+            status.setDownloadStarted(screenplay);
+            status.setDownloadFinished(QUuid::createUuid(), structure);
+            status.setDownloadFinished(QUuid::createUuid(), project);
+            status.setDownloadFinished(
+                screenplay, static_cast<int>(Domain::DocumentObjectType::ScreenplayText));
+            QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+        }
+
+        // A late dictionary reply is still processed, including its subscription.
+        const auto dictionaryDocument = QUuid::createUuid();
+        status.setDownloadFinished(dictionaryDocument, dictionaries);
+        status.setDownloadStarted(dictionaryDocument);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+
+        // An optional lookup must not complete an outstanding required lookup.
+        status.setDownloadStarted(dictionaries);
+        status.setDownloadStarted(dictionaries, false);
+        status.setDownloadFinished(screenplay,
+                                   static_cast<int>(Domain::DocumentObjectType::ScreenplayText));
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: receiving"));
+        status.setDownloadFinished(dictionaryDocument, dictionaries);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+    }
+
     void unconfirmedOperationsStayVisible()
     {
         QWidget window;
@@ -590,6 +638,22 @@ private slots:
             background.setDownloadStarted(QUuid::createUuid(), false);
         }
         background.setDownloadFinished(screenplay, 10104);
+        const auto dictionaries
+            = static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries);
+        background.setDownloadStarted(dictionaries, false);
+
+        Ui::ConnectionStatusToolBar dictionaryDownload(&window);
+        dictionaryDownload.setCloudProjectOpen(true);
+        dictionaryDownload.setConnectionAvailable(true);
+        dictionaryDownload.setDownloadStarted(dictionaries);
+        dictionaryDownload.setDownloadStarted(dictionaries, false);
+
+        Ui::ConnectionStatusToolBar dictionaryUpload(&window);
+        dictionaryUpload.setCloudProjectOpen(true);
+        dictionaryUpload.setConnectionAvailable(true);
+        const auto editedDictionary = QUuid::createUuid();
+        dictionaryUpload.setUploadStarted(editedDictionary);
+        dictionaryUpload.setDownloadStarted(dictionaries, false);
 
         Ui::ConnectionStatusToolBar direct(&window);
         direct.setCloudProjectOpen(true);
@@ -600,6 +664,9 @@ private slots:
         QTest::qWait(31000);
         QVERIFY(background.accessibleDescription().contains("Incoming changes: received at"));
         QVERIFY(!background.accessibleDescription().contains("has not responded"));
+        QVERIFY(dictionaryDownload.accessibleDescription().contains("has not responded"));
+        QVERIFY(dictionaryUpload.accessibleDescription().contains("confirmation has not arrived"));
+        QVERIFY(!dictionaryUpload.accessibleDescription().contains("has not responded"));
         QVERIFY(direct.accessibleDescription().contains("has not responded"));
         QVERIFY(status.accessibleDescription().contains("confirmation has not arrived"));
         QVERIFY(status.accessibleDescription().contains("has not responded"));

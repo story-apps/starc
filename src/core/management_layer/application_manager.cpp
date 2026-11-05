@@ -3698,8 +3698,10 @@ void ApplicationManager::initConnections()
                     d->connectionStatus->setDownloadStarted(
                         static_cast<int>(Domain::DocumentObjectType::Project));
                     d->cloudServiceManager->openProjectInfo(currentProjectId);
+                    // Untouched default dictionaries may only exist locally;
+                    // the cloud lookup can legitimately return no document.
                     d->connectionStatus->setDownloadStarted(
-                        static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries));
+                        static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries), false);
                     d->cloudServiceManager->openScreenplayDictionaries(currentProjectId);
                 }
             });
@@ -3868,8 +3870,10 @@ void ApplicationManager::initConnections()
                     d->connectionStatus->setDownloadStarted(
                         static_cast<int>(Domain::DocumentObjectType::Project));
                     d->cloudServiceManager->openProjectInfo(_id);
+                    // Untouched default dictionaries may only exist locally;
+                    // the cloud lookup can legitimately return no document.
                     d->connectionStatus->setDownloadStarted(
-                        static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries));
+                        static_cast<int>(Domain::DocumentObjectType::ScreenplayDictionaries), false);
                     d->cloudServiceManager->openScreenplayDictionaries(_id);
                 };
                 d->saveIfNeeded(callback);

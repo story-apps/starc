@@ -50,7 +50,7 @@ public:
      * Для них _replyRequired = false: получение учитывается, но ответ не обязателен.
      */
     void setDownloadStarted(const QUuid& _uuid, bool _replyRequired = true);
-    void setDownloadStarted(int _documentType);
+    void setDownloadStarted(int _documentType, bool _replyRequired = true);
     void setDownloadFinished(const QUuid& _uuid, int _documentType, bool _receivedChanges = true);
 
 signals:

@@ -39,7 +39,7 @@ namespace Ui {
 namespace {
 constexpr qint64 kConfirmationTimeout = 30000;
 constexpr qreal kIdleOpacity = 0.4;
-}
+} // namespace
 
 class ConnectionStatusToolBar::Implementation
 {
@@ -761,8 +761,13 @@ void ConnectionStatusToolBar::setDownloadStarted(const QUuid& _uuid, bool _reply
     d->begin(d->downloading, _uuid.toString());
 }
 
-void ConnectionStatusToolBar::setDownloadStarted(int _documentType)
+void ConnectionStatusToolBar::setDownloadStarted(int _documentType, bool _replyRequired)
 {
+    if (!_replyRequired) {
+        // A lookup by type may find no cloud document (e.g. untouched default
+        // dictionaries). It must not create or cancel a required download.
+        return;
+    }
     d->begin(d->downloading, QString::number(_documentType));
 }
 
