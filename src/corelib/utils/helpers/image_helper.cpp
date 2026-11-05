@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPixmap>
+#include <QRegularExpression>
 #include <QtMath>
 
 namespace {
@@ -174,8 +175,9 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
     // Сформируем текст для отображения
     //
     QString textToDraw = _text.simplified().toUpper();
-    if (textToDraw.count(' ') > 0) {
-        const QStringList words = textToDraw.split(' ', Qt::SkipEmptyParts);
+    static QRegularExpression wordsDivider("( |[.]|[-])");
+    if (textToDraw.count(wordsDivider) > 0) {
+        const QStringList words = textToDraw.split(wordsDivider, Qt::SkipEmptyParts);
         textToDraw = QString("%1%2").arg(words[0][0]).arg(words[1][0]);
     } else {
         textToDraw = textToDraw.left(2);
