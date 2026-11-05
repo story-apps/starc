@@ -1297,7 +1297,12 @@ void TextDocument::setCorrectionOptions(const QStringList& _options)
 
 void TextDocument::finishDelayedCorrections()
 {
-    d->modelChangeCorrectionDebouncer.forceWork();
+    //
+    // Корректировка может быть запланирована и без активного таймера, например при сбросе модели,
+    // поэтому прерываем ожидание дебаунсера, если оно было и форсим вызов корректировки
+    //
+    d->modelChangeCorrectionDebouncer.abortWork();
+    d->tryToCorrectDocument();
 }
 
 QModelIndex TextDocument::visibleTopLeveLItem() const
@@ -2066,30 +2071,13 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
             }
 
             //
-            // Один комментарий может храниться в нескольких фрагментах заметки.
-            // Сохраняем также намеренные повторы внутри самого обсуждения.
+            // Сохраняем все записи каждого фрагмента, включая одинаковые комментарии.
             //
-            for (int index = 0; index < mark.comments.size(); ++index) {
-                const auto& comment = mark.comments.at(index);
-                const auto occurrences = std::count(mark.comments.cbegin(),
-                                                    mark.comments.cbegin() + index + 1, comment);
-                if (std::count(newReviewMark.comments.cbegin(), newReviewMark.comments.cend(),
-                               comment)
-                    < occurrences) {
-                    newReviewMark.comments.append(comment);
-                }
-            }
+            newReviewMark.comments.append(mark.comments);
         }
     }
     std::stable_sort(newReviewMark.comments.begin(), newReviewMark.comments.end(),
-                     [](const auto& left, const auto& right) {
-                         const auto leftDate = QDateTime::fromString(left.date, Qt::ISODate);
-                         const auto rightDate = QDateTime::fromString(right.date, Qt::ISODate);
-                         if (leftDate.isValid() != rightDate.isValid()) {
-                             return !leftDate.isValid();
-                         }
-                         return leftDate < rightDate;
-                     });
+                     [](const auto& _lhs, const auto& _rhs) { return _lhs.date < _rhs.date; });
 
     //
     // Пробуем сшить пустую заметку при автоматическом рецензировании, если в выделении
