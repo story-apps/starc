@@ -168,4 +168,10 @@ public:
      * @brief Находится ли текст в верхнем регистре
      */
     static bool isUppercase(const QString& _text);
+
+    /**
+     * @brief Перенести позиции курсоров в тексте после его глобального изменения
+     */
+    static QVector<int> mapTextPositions(const QString& _before, const QString& _after,
+                                         const QVector<int>& _positions);
 };

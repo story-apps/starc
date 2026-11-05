@@ -5,7 +5,6 @@
 #include <business_layer/templates/text_template.h>
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
-#include <utils/diff_match_patch/diff_match_patch.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
@@ -172,13 +171,16 @@ void ScriptTextEdit::restoreEditingState()
     }
     disconnect(d->editingState.modelRebuildConnection);
     if (d->editingState.modelWasRebuilt) {
-        diff_match_patch dmp;
-        const auto diffs = dmp.diff_main(d->editingState.text, document()->toRawText());
-        d->editingState.cursor.setPosition(dmp.diff_xIndex(diffs, d->editingState.selectionAnchor));
-        d->editingState.cursor.setPosition(dmp.diff_xIndex(diffs, d->editingState.position),
-                                           QTextCursor::KeepAnchor);
-        d->editingState.viewportAnchor.setPosition(
-            dmp.diff_xIndex(diffs, d->editingState.viewportAnchorPosition));
+        const auto positions
+            = TextHelper::mapTextPositions(d->editingState.text, document()->toRawText(),
+                                           {
+                                               d->editingState.selectionAnchor,
+                                               d->editingState.position,
+                                               d->editingState.viewportAnchorPosition,
+                                           });
+        d->editingState.cursor.setPosition(positions.at(0));
+        d->editingState.cursor.setPosition(positions.at(1), QTextCursor::KeepAnchor);
+        d->editingState.viewportAnchor.setPosition(positions.at(2));
         d->editingState.text.clear();
     }
     setTextCursor(d->editingState.cursor);

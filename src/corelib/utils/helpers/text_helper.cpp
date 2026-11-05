@@ -2,8 +2,11 @@
 
 #include "measurement_helper.h"
 
+#include <utils/diff_match_patch/diff_match_patch.h>
+
 #include <QApplication>
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QFontMetricsF>
 #include <QRegularExpression>
 #include <QScreen>
@@ -683,4 +686,139 @@ QTextCharFormat TextHelper::fineBlockCharFormat(const QTextBlock& _block)
 bool TextHelper::isUppercase(const QString& _text)
 {
     return _text == TextHelper::smartToUpper(_text);
+}
+
+namespace {
+
+//
+// Короткий уникальный контекст позволяет найти неизменившийся текст за линейное время.
+//
+constexpr int kContextLength = 64;
+constexpr int kDiffBudgetMs = 20;
+
+int findContext(const QString& _before, const QString& _after, int _start, int _length)
+{
+    if (_start < 0 || _length < kContextLength || _start + _length > _before.size()) {
+        return -1;
+    }
+
+    const auto context = _before.mid(_start, _length);
+    if (_before.indexOf(context) != _start || _before.indexOf(context, _start + 1) != -1) {
+        return -1;
+    }
+    const auto found = _after.indexOf(context);
+    return found >= 0 && _after.indexOf(context, found + 1) == -1 ? found : -1;
+}
+
+} // namespace
+
+QVector<int> TextHelper::mapTextPositions(const QString& _before, const QString& _after,
+                                          const QVector<int>& _positions)
+{
+    if (_positions.isEmpty()) {
+        return {};
+    }
+
+    const int beforeSize = _before.size();
+    const int afterSize = _after.size();
+    QElapsedTimer elapsed;
+    elapsed.start();
+    diff_match_patch dmp;
+    const auto diff = [&](const QString& _left, const QString& _right) {
+        // Общий бюджет для локальных сравнений и резервного сравнения. Нулевой timeout у DMP
+        // означает бесконечность, поэтому даже после исчерпания бюджета оставляем минимум.
+        dmp.Diff_Timeout = std::max(1, kDiffBudgetMs - int(elapsed.elapsed())) / 1000.0f;
+        return dmp.diff_main(_left.isNull() ? QStringLiteral("") : _left,
+                             _right.isNull() ? QStringLiteral("") : _right, false);
+    };
+
+    const int prefix = dmp.diff_commonPrefix(_before, _after);
+    const int suffix = std::min(
+        { dmp.diff_commonSuffix(_before, _after), beforeSize - prefix, afterSize - prefix });
+    std::map<int, int> mapped;
+    for (const int original : _positions) {
+        const int position = std::clamp(original, 0, beforeSize);
+        if (mapped.count(position) != 0) {
+            continue;
+        }
+        auto& result = mapped[position];
+        result = -1;
+        if (position == beforeSize) {
+            result = afterSize;
+        } else if (position < prefix) {
+            result = position;
+        } else if (suffix > 0 && position >= beforeSize - suffix) {
+            result = position + afterSize - beforeSize;
+        } else {
+            const int start = std::clamp(position - kContextLength / 2, 0,
+                                         std::max(0, beforeSize - kContextLength));
+            const int found = findContext(_before, _after, start, kContextLength);
+            if (found >= 0) {
+                result = found + position - start;
+                continue;
+            }
+
+            // Если менялся сам текст под курсором, ограничим diff ближайшими неизменными
+            // контекстами слева и справа. Начало/конец документа тоже служат границами.
+            int oldLeft = 0;
+            int newLeft = position < kContextLength ? 0 : -1;
+            int oldRight = beforeSize;
+            int newRight = beforeSize - position < kContextLength ? afterSize : -1;
+            for (const int distance : { 0, 64, 256, 1024 }) {
+                if (newLeft < 0) {
+                    const int left = position - distance - kContextLength;
+                    const int match = findContext(_before, _after, left, kContextLength);
+                    if (match >= 0) {
+                        oldLeft = left + kContextLength;
+                        newLeft = match + kContextLength;
+                    }
+                }
+                if (newRight < 0) {
+                    const int right = position + distance;
+                    const int match = findContext(_before, _after, right, kContextLength);
+                    if (match >= 0) {
+                        oldRight = right;
+                        newRight = match;
+                    }
+                }
+                if (newLeft >= 0 && newRight >= 0) {
+                    break;
+                }
+            }
+            if (newLeft >= 0 && newRight >= newLeft) {
+                const auto changes = diff(_before.mid(oldLeft, oldRight - oldLeft),
+                                          _after.mid(newLeft, newRight - newLeft));
+                result = newLeft + dmp.diff_xIndex(changes, position - oldLeft);
+            }
+        }
+    }
+
+    // Переставленные фрагменты могут дать несовместимые ориентиры. В этом случае переносим
+    // все позиции одним diff, чтобы не перевернуть направление выделения.
+    bool ordered = true;
+    int previous = -1;
+    bool needsFallback = false;
+    for (const auto& entry : mapped) {
+        if (entry.second < 0) {
+            needsFallback = true;
+            continue;
+        }
+        ordered = ordered && entry.second >= previous;
+        previous = entry.second;
+    }
+    if (needsFallback || !ordered) {
+        const auto changes = diff(_before, _after);
+        // Один способ отображения для всех позиций сохраняет порядок и согласованность
+        // курсора, выделения и привязки прокрутки даже при повторяющемся тексте.
+        for (auto& entry : mapped) {
+            entry.second = dmp.diff_xIndex(changes, entry.first);
+        }
+    }
+
+    QVector<int> result;
+    result.reserve(_positions.size());
+    for (const int position : _positions) {
+        result.append(std::clamp(mapped.at(std::clamp(position, 0, beforeSize)), 0, afterSize));
+    }
+    return result;
 }
