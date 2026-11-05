@@ -444,7 +444,9 @@ void CommentsModel::Implementation::processSourceModelRowsRemoved(const QModelIn
         if (item == nullptr) {
             continue;
         } else if (item->type() != TextModelItemType::Text && item->hasChildren()) {
-            processSourceModelRowsRemoved(itemIndex, 0, item->childCount() - 1);
+            if (item->hasChildren()) {
+                processSourceModelRowsRemoved(itemIndex, 0, item->childCount() - 1);
+            }
             continue;
         }
 
@@ -454,26 +456,14 @@ void CommentsModel::Implementation::processSourceModelRowsRemoved(const QModelIn
         auto textItem = static_cast<TextModelTextItem*>(item);
 
         //
-        // Пропускаем корректировочные блоки и блоки не проходящие фильтр
+        // Удаляем ссылки независимо от текущего типа и фильтра абзаца т.к. они могли измениться до
+        // уведомления об удалении
         //
-        if (textItem->isCorrection()
-            || (!typesFilter.isEmpty() && !typesFilter.contains(textItem->paragraphType()))) {
-            //
-            // Исключим его из списка
-            //
-            modelTextItems.removeAll(textItem);
-            continue;
-        }
 
         QVector<ReviewMarkWrapper> reviewMarkWrappersToDelete;
         for (const auto& reviewMarkWrapper : std::as_const(reviewMarks)) {
             if (reviewMarkWrapper.items.contains(textItem)) {
                 reviewMarkWrappersToDelete.append(reviewMarkWrapper);
-                continue;
-            }
-
-            if (!reviewMarkWrappersToDelete.isEmpty()) {
-                break;
             }
         }
 
@@ -488,7 +478,7 @@ void CommentsModel::Implementation::processSourceModelRowsRemoved(const QModelIn
             //
             if (reviewMarkWrapper.items.size() == 1) {
                 q->beginRemoveRows({}, reviewMarkWrapperIndex, reviewMarkWrapperIndex);
-                reviewMarks.removeAll(reviewMarkWrapper);
+                reviewMarks.removeAt(reviewMarkWrapperIndex);
                 q->endRemoveRows();
             }
             //
@@ -557,13 +547,7 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
     //
     if (textItem->isCorrection()
         || (!typesFilter.isEmpty() && !typesFilter.contains(textItem->paragraphType()))) {
-        //
-        // А если раньше блок был не корректировочным, исключим его из списка
-        //
-        modelTextItems.removeAll(textItem);
-        for (auto& reviewMark : reviewMarks) {
-            reviewMark.items.removeAll(textItem);
-        }
+        processSourceModelRowsRemoved(_index.parent(), _index.row(), _index.row());
         return;
     }
 
@@ -571,11 +555,6 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
     for (const auto& reviewMarkWrapper : std::as_const(reviewMarks)) {
         if (reviewMarkWrapper.items.contains(textItem)) {
             oldReviewMarkWrappers.append(reviewMarkWrapper);
-            continue;
-        }
-
-        if (!oldReviewMarkWrappers.isEmpty()) {
-            break;
         }
     }
 
@@ -892,11 +871,16 @@ void CommentsModel::setTextModel(TextModel* _model)
 
 CommentsModel::PositionHint CommentsModel::mapToModel(const QModelIndex& _index)
 {
-    if (!_index.isValid() || _index.row() >= d->reviewMarks.size()) {
+    if (d->model == nullptr || !_index.isValid() || _index.model() != this
+        || _index.row() >= d->reviewMarks.size()) {
         return {};
     }
 
     const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    if (reviewMarkWrapper.items.isEmpty()) {
+        return {};
+    }
+
     return { d->model->indexForItem(reviewMarkWrapper.items.constFirst()),
              reviewMarkWrapper.fromInFirstItem };
 }
