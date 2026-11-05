@@ -38,6 +38,9 @@ public:
      */
     Domain::DocumentObject* document() const;
 
+    /** Read the current in-memory contents without saving or changing the document. */
+    QByteArray contentSnapshot() const { return toXml(); }
+
     /**
      * @brief Задать документ со структурой
      */

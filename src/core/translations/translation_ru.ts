@@ -3781,6 +3781,10 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
         <source>Renew subscription</source>
         <translation>Продлите подписку</translation>
     </message>
+    <message>
+        <source>Connection lost. Please send your message again after reconnecting.</source>
+        <translation>Соединение потеряно. Отправьте сообщение снова после восстановления соединения.</translation>
+    </message>
 </context>
 <context>
     <name>ManagementLayer::AudioplayStatisticsManager</name>
@@ -9162,6 +9166,10 @@ This action can&apos;t be canceled.</source>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1469"/>
         <source>purchase</source>
         <translation>пополнить</translation>
+    </message>
+    <message>
+        <source>Back to chat</source>
+        <translation>Вернуться в чат</translation>
     </message>
 </context>
 <context>
@@ -22688,6 +22696,116 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="393"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
         <translation>Во время загрузки возникла ошибка. Текст ошибки: %1</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::AiChatSession</name>
+    <message>
+        <source>Could not save the chat. Check the available disk space and try again.</source>
+        <translation>Не удалось сохранить чат. Проверьте свободное место на диске и попробуйте снова.</translation>
+    </message>
+    <message>
+        <source>New chat</source>
+        <translation>Новый чат</translation>
+    </message>
+    <message>
+        <source>No document is open. The chat history is still available.</source>
+        <translation>Документ не открыт. История переписки по-прежнему доступна.</translation>
+    </message>
+    <message>
+        <source>Context changed: %1. Only this document is available; the chat history is retained.</source>
+        <translation>Контекст изменён: %1. Теперь доступен только этот документ; история переписки сохранена.</translation>
+    </message>
+    <message>
+        <source>The assistant did not respond in time. Please reconnect before trying again.</source>
+        <translation>Помощник не ответил вовремя. Восстановите соединение и попробуйте снова.</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::AiChatView</name>
+    <message>
+        <source>Use /rephrase, /expand, /shorten, /insert, /summarize, /translate, /synopsis, /novel, /script, /generate, /character or /mindmap. Add instructions or text after the command. Without text, the current document is used.</source>
+        <translation>Используйте /rephrase, /expand, /shorten, /insert, /summarize, /translate, /synopsis, /novel, /script, /generate, /character или /mindmap. После команды добавьте инструкции или текст. Если текст не указан, используется текущий документ.</translation>
+    </message>
+    <message>
+        <source>No document is open</source>
+        <translation>Документ не открыт</translation>
+    </message>
+    <message>
+        <source>Context: %1</source>
+        <translation>Контекст: %1</translation>
+    </message>
+    <message>
+        <source>You</source>
+        <translation>Вы</translation>
+    </message>
+    <message>
+        <source>Assistant</source>
+        <translation>Помощник</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>Context</source>
+        <translation>Контекст</translation>
+    </message>
+    <message>
+        <source>Discuss the current document, ask a question, or choose a /command.</source>
+        <translation>Обсудите текущий документ, задайте вопрос или выберите /команду.</translation>
+    </message>
+    <message>
+        <source>Waiting for the assistant…</source>
+        <translation>Помощник готовит ответ…</translation>
+    </message>
+    <message>
+        <source>The assistant is unavailable. You can still read your chats.</source>
+        <translation>Помощник недоступен. Вы можете просматривать историю чатов.</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Чат</translation>
+    </message>
+    <message>
+        <source>New chat</source>
+        <translation>Новый чат</translation>
+    </message>
+    <message>
+        <source>Delete chat</source>
+        <translation>Удалить чат</translation>
+    </message>
+    <message>
+        <source>Commands</source>
+        <translation>Команды</translation>
+    </message>
+    <message>
+        <source>Choose a /command</source>
+        <translation>Выберите /команду</translation>
+    </message>
+    <message>
+        <source>Message</source>
+        <translation>Сообщение</translation>
+    </message>
+    <message>
+        <source>Ask about this document or type /help</source>
+        <translation>Задайте вопрос о документе или введите /help</translation>
+    </message>
+    <message>
+        <source>Enter to send · Shift+Enter for a new line</source>
+        <translation>Enter — отправить · Shift+Enter — новая строка</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Отправить</translation>
+    </message>
+    <message>
+        <source>Insert last reply into the current document</source>
+        <translation>Вставить последний ответ в текущий документ</translation>
+    </message>
+    <message>
+        <source>Writing tools</source>
+        <translation>Инструменты</translation>
     </message>
 </context>
 </TS>

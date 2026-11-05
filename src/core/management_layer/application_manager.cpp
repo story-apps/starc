@@ -14,6 +14,8 @@
 #include "crashpad_paths.h"
 #include "plugins_builder.h"
 
+#include <ui/modules/ai_assistant/ai_chat_session.h>
+
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
@@ -3685,6 +3687,7 @@ void ApplicationManager::initConnections()
             [this](const Domain::AccountInfo& _accountInfo) {
                 d->onboardingManager->setAccountInfo(_accountInfo);
                 d->accountManager->setAccountInfo(_accountInfo);
+                Ui::AiChatSession::instance()->setAccount(_accountInfo.email);
 
                 d->menuView->setSignInVisible(false);
                 d->menuView->setAccountVisible(true);
@@ -3736,6 +3739,7 @@ void ApplicationManager::initConnections()
 
         d->cloudServiceManager->logout();
         d->accountManager->clearAccountInfo();
+        Ui::AiChatSession::instance()->setAccount({});
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->projectManager->checkAvailabilityToEdit();
@@ -4171,7 +4175,23 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::generateScriptRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateScript);
     connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
-            d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateText);
+            this, [this](const QString& _prefix, const QString& _text, const QString& _suffix) {
+                auto chat = Ui::AiChatSession::instance();
+                if (!chat->beginLegacyRequest()) {
+                    return;
+                }
+                d->cloudServiceManager->aiGenerateText(_prefix, _text, _suffix);
+            });
+    auto chat = Ui::AiChatSession::instance();
+    connect(chat, &Ui::AiChatSession::replyRequested, this, [this](const QString& _prompt) {
+        d->cloudServiceManager->aiGenerateText({}, _prompt, {});
+    });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::disconnected, chat, [chat] {
+        chat->setBackendAvailable(false);
+        chat->failReply(tr("Connection lost. Please send your message again after reconnecting."));
+    });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::connected, chat,
+            [chat] { chat->setBackendAvailable(true); });
     connect(d->projectManager.data(), &ProjectManager::generateImageRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateImage);
     //
@@ -4239,7 +4259,12 @@ void ApplicationManager::initConnections()
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
-            d->projectManager.data(), &ProjectManager::setGeneratedText);
+            this, [this](const QString& _text) {
+                auto chat = Ui::AiChatSession::instance();
+                if (!chat->finishReply(_text)) {
+                    d->projectManager->setGeneratedText(_text);
+                }
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::imageGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedImage);
 #endif

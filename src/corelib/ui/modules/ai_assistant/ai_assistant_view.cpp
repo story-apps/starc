@@ -1,5 +1,7 @@
 #include "ai_assistant_view.h"
 
+#include "ai_chat_view.h"
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -83,9 +85,12 @@ public:
 
 
     bool isReadOnly = false;
+    bool insertionAvailable = true;
     int availableWords = 0;
 
     StackWidget* pages = nullptr;
+    AiChatView* chat = nullptr;
+    Button* backToChat = nullptr;
 
     Widget* buttonsPage = nullptr;
     Button* openRephraseButton = nullptr;
@@ -686,6 +691,16 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     layout->addWidget(d->pages, 1);
     layout->addLayout(d->buttonsLayout);
 
+    d->chat = new AiChatView(d->pages);
+    d->pages->addWidget(d->chat);
+    d->pages->setCurrentWidget(d->chat);
+    d->backToChat = new Button(d->buttonsPage);
+    qobject_cast<QVBoxLayout*>(d->buttonsPage->layout())->insertWidget(0, d->backToChat);
+    connect(d->backToChat, &Button::clicked, this, [this] { d->pages->setCurrentWidget(d->chat); });
+    connect(d->chat, &AiChatView::toolsRequested, this,
+            [this] { d->pages->setCurrentWidget(d->buttonsPage); });
+    connect(d->chat, &AiChatView::insertRequested, this, &AiAssistantView::insertTextRequested);
+
     connect(d->openRephraseButton, &Button::clicked, this, [this] {
         d->rephraseSourceText->clear();
         d->rephraseStyleText->clear();
@@ -992,6 +1007,7 @@ void AiAssistantView::setReadOnly(bool _readOnly)
     }
 
     d->isReadOnly = _readOnly;
+    d->chat->setInsertionAvailable(d->insertionAvailable && !_readOnly);
     for (auto button : std::vector<QWidget*>{
              d->buttonsPage,
              d->rephrasePage,
@@ -1031,6 +1047,8 @@ void AiAssistantView::setReadOnly(bool _readOnly)
 
 void AiAssistantView::setInsertionAvailable(bool _available)
 {
+    d->insertionAvailable = _available;
+    d->chat->setInsertionAvailable(_available && !d->isReadOnly);
     for (auto button : {
              d->rephraseInsertButton,
              d->expandInsertButton,
@@ -1192,6 +1210,7 @@ void AiAssistantView::setGenerateSynopsisResult(const QString& _text)
 
 void AiAssistantView::setAvailableWords(int _availableWords)
 {
+    d->chat->setAvailableWords(_availableWords);
     d->availableWords = _availableWords;
     d->availableWordsLabel->setText(d->availableWords > 0
                                         ? tr("%n word(s) available", nullptr, d->availableWords)
@@ -1218,6 +1237,7 @@ void AiAssistantView::setAvailableWords(int _availableWords)
 
 void AiAssistantView::updateTranslations()
 {
+    d->backToChat->setText(tr("Back to chat"));
     d->openRephraseButton->setText(tr("Rephrase"));
     d->openExpandButton->setText(tr("Expand"));
     d->openShortenButton->setText(tr("Shorten"));
@@ -1474,6 +1494,8 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().primary());
+    d->backToChat->setBackgroundColor(DesignSystem::color().primary());
+    d->backToChat->setTextColor(DesignSystem::color().onPrimary());
     d->pages->setBackgroundColor(DesignSystem::color().primary());
 
     d->buttonsPage->setBackgroundColor(DesignSystem::color().primary());

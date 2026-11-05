@@ -43,6 +43,7 @@
 #include <management_layer/content/projects/projects_model_team_item.h>
 #include <management_layer/plugins_builder.h>
 #include <ui/abstract_navigator.h>
+#include <ui/modules/ai_assistant/ai_chat_session.h>
 #include <ui/account/collaborators_tool_bar.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/compare_draft_dialog.h>
@@ -225,6 +226,7 @@ public:
      * @brief Переключить активное представление
      */
     void switchViews(bool _withActivation = true);
+    void updateChatDocument(BusinessLayer::AbstractModel* _model);
 
     /**
      * @brief Действия контекстного меню
@@ -368,6 +370,7 @@ public:
         struct Window {
             Ui::IDocumentView* view = nullptr;
             QModelIndex itemIndex = {};
+            QPointer<BusinessLayer::AbstractModel> model;
         };
         QVector<Window> windows = {};
 
@@ -593,6 +596,26 @@ void ProjectManager::Implementation::updateOptionsText()
                                                               : tr("Split window"));
 }
 
+void ProjectManager::Implementation::updateChatDocument(BusinessLayer::AbstractModel* _model)
+{
+    if (_model == nullptr || _model->document() == nullptr) {
+        Ui::AiChatSession::instance()->setDocument({}, {}, {});
+        return;
+    }
+    auto name = _model->documentName();
+    const auto item = projectStructureModel->itemForUuid(_model->document()->uuid());
+    if (item != nullptr) {
+        name = item->name();
+        if (!item->draftName().isEmpty()) {
+            name += " / " + item->draftName();
+        }
+    }
+    QPointer<BusinessLayer::AbstractModel> model(_model);
+    Ui::AiChatSession::instance()->setDocument(_model->document()->uuid(), name, [model] {
+        return model ? QString::fromUtf8(model->contentSnapshot()) : QString();
+    });
+}
+
 void ProjectManager::Implementation::switchViews(bool _withActivation)
 {
     std::swap(view.active, view.inactive);
@@ -609,6 +632,7 @@ void ProjectManager::Implementation::switchViews(bool _withActivation)
 
     if (_withActivation) {
         q->activateView(activeIndex, view.activeViewMimeType);
+        q->updateCurrentDocument(view.activeModel, view.activeViewMimeType);
     }
 
     //
@@ -944,7 +968,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         //
         windowWidget->setWindowTitle(view.activeModel->documentName());
 
-        view.windows.append({ windowView, view.activeIndex });
+        view.windows.append({ windowView, view.activeIndex, view.activeModel });
 
         const auto item = projectStructureModel->itemForIndex(view.activeIndex);
         windowView->setEditingMode(documentEditingMode(item));
@@ -3680,6 +3704,9 @@ void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem*
         d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Project)));
     emit projectUuidChanged(projectInformationModel->document()->uuid());
+    Ui::AiChatSession::instance()->setProject(
+        projectInformationModel->document()->uuid(),
+        DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
     if (projectInformationModel->name().isEmpty()) {
         //
         // При создании нового проекта, применим его название и сразу сохраним изменения в документ
@@ -3763,6 +3790,7 @@ void ProjectManager::restoreCurrentProjectState(const QString& _path)
 
 void ProjectManager::closeCurrentProject(const QString& _path)
 {
+    Ui::AiChatSession::instance()->setProject({}, {});
     //
     // Сохранить состояние дерева
     //
@@ -5380,12 +5408,23 @@ bool ProjectManager::event(QEvent* _event)
         // При смене сфокусированного виджета, проверяем не изменился ли активный из редакторов
         //
 
-        if (!d->view.right->isVisible()) {
+        auto targetWidget = QApplication::focusWidget();
+        if (targetWidget == nullptr) {
             break;
         }
 
-        auto targetWidget = QApplication::focusWidget();
-        if (targetWidget == nullptr) {
+        for (const auto& window : std::as_const(d->view.windows)) {
+            const auto widget = window.view->asQWidget();
+            if (widget != nullptr
+                && (widget == targetWidget || widget->isAncestorOf(targetWidget))) {
+                d->updateChatDocument(window.model);
+                return QObject::event(_event);
+            }
+        }
+        if (!d->view.right->isVisible()) {
+            if (d->view.active->isAncestorOf(targetWidget)) {
+                d->updateChatDocument(d->view.activeModel);
+            }
             break;
         }
 
@@ -5394,11 +5433,13 @@ bool ProjectManager::event(QEvent* _event)
                 if (d->view.active != d->view.left) {
                     d->switchViews();
                 }
+                d->updateChatDocument(d->view.activeModel);
                 break;
             } else if (targetWidget == d->view.right) {
                 if (d->view.active != d->view.right) {
                     d->switchViews();
                 }
+                d->updateChatDocument(d->view.activeModel);
                 break;
             }
 
@@ -6103,6 +6144,8 @@ void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,
 {
     d->view.activeModel = _model;
     d->view.activeViewMimeType = _viewMimeType;
+
+    d->updateChatDocument(_model);
 
     emit currentModelChanged(d->view.activeModel);
 }

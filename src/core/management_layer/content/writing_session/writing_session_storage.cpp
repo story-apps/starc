@@ -49,7 +49,7 @@ WritingSessionStorage::WritingSessionStorage()
     //
     // Проверяем создана ли структура базы данных файла сессий
     //
-    if (query.exec("SELECT COUNT(*) as size FROM sqlite_master WHERE type = 'table' ")
+    if (query.exec("SELECT COUNT(*) as size FROM sqlite_master WHERE type = 'table' AND name = 'sessions' ")
         && query.next() && query.record().value("size").toInt() > 0) {
         //
         // ... если структура создана, то ничего не делаем
@@ -58,7 +58,7 @@ WritingSessionStorage::WritingSessionStorage()
         //
         // ... а если структура не создана, то создаём её
         //
-        query.exec("CREATE TABLE sessions "
+        query.exec("CREATE TABLE IF NOT EXISTS sessions "
                    "("
                    "uuid TEXT PRIMARY KEY ON CONFLICT REPLACE, "
                    "project_uuid TEXT NOT NULL, "
@@ -71,7 +71,7 @@ WritingSessionStorage::WritingSessionStorage()
                    "characters INTEGER NOT NULL, "
                    "account_email TEXT NOT NULL "
                    ");");
-        query.exec("CREATE TABLE system_variables "
+        query.exec("CREATE TABLE IF NOT EXISTS system_variables "
                    "("
                    "variable TEXT PRIMARY KEY ON CONFLICT REPLACE, "
                    "value TEXT NOT NULL "
