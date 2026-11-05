@@ -3608,6 +3608,10 @@ void ApplicationManager::initConnections()
             [configureConnectionStatus] { configureConnectionStatus(false); });
     connect(d->connectionStatus, &Ui::ConnectionStatusToolBar::checkConnectionPressed,
             d->cloudServiceManager.data(), &CloudServiceManager::start);
+    connect(d->projectManager.data(), &ProjectManager::collaboratorsChanged,
+            d->connectionStatus, &Ui::ConnectionStatusToolBar::setCollaborators);
+    connect(d->connectionStatus, &Ui::ConnectionStatusToolBar::collaboratorClicked,
+            d->projectManager.data(), &ProjectManager::followCollaborator);
     //
     // Уведомления
     //

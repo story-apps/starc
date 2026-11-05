@@ -11919,6 +11919,50 @@ This action can&apos;t be canceled.</source>
         <source>Reconnect</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>No connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synchronization needs attention</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synchronizing…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synchronized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active in this project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to collaborator’s position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collaborators (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show all collaborators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changes are saved locally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Waiting for the server to confirm changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last synchronization: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Ui::CountersInfoWidget</name>
