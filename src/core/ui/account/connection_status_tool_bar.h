@@ -34,9 +34,11 @@ public:
     void setUploadStarted(const QUuid& _uuid);
     void setUploadFinished(const QUuid& _uuid, bool _hasPendingChanges);
     void removeDocument(const QUuid& _uuid);
+    void setDocumentClosed(const QUuid& _uuid);
 
     /**
-     * @brief Загрузка документа или служебного документа, UUID которого ещё неизвестен
+     * @brief Подписка на документ или загрузка служебного документа с ещё неизвестным UUID
+     * @note Сервер не отвечает на повторную подписку в рамках одного соединения.
      */
     void setDownloadStarted(const QUuid& _uuid);
     void setDownloadStarted(int _documentType);

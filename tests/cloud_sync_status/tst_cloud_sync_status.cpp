@@ -110,6 +110,103 @@ private slots:
         QVERIFY(status.accessibleDescription().contains("saved to the cloud at"));
     }
 
+    void repeatedBundleSubscriptionsDoNotWaitForSilentReplies()
+    {
+        QWidget window;
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setCloudProjectOpen(true);
+        status.setConnectionAvailable(true);
+        const auto information = QUuid::createUuid();
+        const auto text = QUuid::createUuid();
+        const auto statistics = QUuid::createUuid();
+        const auto unrelated = QUuid::createUuid();
+        const QVector<QUuid> bundle{ information, text, statistics };
+        for (const auto& uuid : bundle) {
+            status.setDownloadStarted(uuid);
+        }
+        status.setDownloadFinished(information, 10100);
+        status.setDownloadFinished(text, 10104);
+
+        // Applying the text opens its view and requests the same bundle again.
+        // The server silently skips documents to which this session is subscribed.
+        for (const auto& uuid : bundle) {
+            status.setDownloadStarted(uuid);
+        }
+        status.setDownloadFinished(statistics, 10106);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+
+        // A collaborator's patch must update the receipt status without leaving
+        // the already received information/statistics documents waiting forever.
+        status.setDownloadStarted(text);
+        status.setDownloadFinished(text, 10104);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+
+        // Successful traffic must not hide a genuinely outstanding document.
+        status.setDownloadStarted(unrelated);
+        status.setDownloadFinished(text, 10104);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: receiving"));
+        status.setDownloadFinished(unrelated, 10104);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+    }
+
+    void subscriptionLifetimeMatchesConnectionAndProject()
+    {
+        QWidget window;
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setCloudProjectOpen(true);
+        status.setConnectionAvailable(true);
+        const auto document = QUuid::createUuid();
+        const auto obsoleteRequest = QUuid::createUuid();
+        status.setDownloadStarted(document);
+        status.setDownloadFinished(document, 10104);
+        status.setDownloadStarted(document);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+
+        status.setDownloadStarted(obsoleteRequest);
+        status.setDocumentPending(document);
+        status.setConnectionAvailable(false);
+        status.setConnectionAvailable(true);
+        // Old requests are cancelled; login will request only the current documents.
+        QVERIFY(!status.accessibleDescription().contains("Incoming changes: receiving"));
+        QVERIFY(status.accessibleDescription().contains("Your changes: waiting to be sent"));
+        status.setDownloadStarted(document);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: receiving"));
+        status.setDownloadFinished(document, 10104);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: received at"));
+
+        status.setCloudProjectOpen(false);
+        status.setCloudProjectOpen(true);
+        status.setDownloadStarted(document);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: receiving"));
+    }
+
+    void closingDocumentAllowsResubscriptionWithoutConfirmingUpload()
+    {
+        QWidget window;
+        Ui::ConnectionStatusToolBar status(&window);
+        status.setCloudProjectOpen(true);
+        status.setConnectionAvailable(true);
+        const auto document = QUuid::createUuid();
+        status.setDownloadStarted(document);
+        status.setDownloadFinished(document, 10104);
+        status.setDocumentPending(document);
+        status.setDocumentClosed(document);
+        QVERIFY(status.accessibleDescription().contains("Your changes: waiting to be sent"));
+        status.setDownloadStarted(document);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: receiving"));
+        status.setDocumentClosed(document); // Cancel a still outstanding subscription.
+        QVERIFY(!status.accessibleDescription().contains("Incoming changes: receiving"));
+        QVERIFY(status.accessibleDescription().contains("Your changes: waiting to be sent"));
+
+        status.setDownloadStarted(document);
+        status.setDownloadFinished(document, 0, false); // An acknowledgement without local data.
+        status.setDownloadStarted(document);
+        QVERIFY(!status.accessibleDescription().contains("Incoming changes: receiving"));
+        status.removeDocument(document);
+        status.setDownloadStarted(document);
+        QVERIFY(status.accessibleDescription().contains("Incoming changes: receiving"));
+    }
+
     void ownDocumentAcknowledgementIsNotIncomingChange()
     {
         QWidget window;

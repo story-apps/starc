@@ -4054,11 +4054,16 @@ void ApplicationManager::initConnections()
                     return;
                 }
                 const auto document = d->projectManager->documentToSync(_documentUuid);
+                // An acknowledgement also completes subscriptions made using temporary
+                // document placeholders, which are not present in local storage yet.
+                d->connectionStatus->setDownloadFinished(
+                    _documentUuid,
+                    static_cast<int>(document != nullptr ? document->type()
+                                                         : Domain::DocumentObjectType::Undefined),
+                    false);
                 if (document == nullptr) {
                     return;
                 }
-                d->connectionStatus->setDownloadFinished(_documentUuid,
-                                                         static_cast<int>(document->type()), false);
                 const bool hasPendingChanges
                     = !DataStorageLayer::StorageFacade::documentChangeStorage()
                            ->unsyncedDocumentChanges(_documentUuid)
@@ -4178,6 +4183,7 @@ void ApplicationManager::initConnections()
                     return;
                 }
 
+                d->connectionStatus->setDocumentClosed(_documentUuid);
                 d->cloudServiceManager->closeDocument(currentProject->id(), _documentUuid);
             });
     connect(d->projectManager.data(), &ProjectManager::documentRemoved, this,

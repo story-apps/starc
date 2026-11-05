@@ -4,6 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card_popup.h>
 #include <ui/widgets/label/label.h>
+#include <utils/logging.h>
 
 #include <QAction>
 #include <QApplication>
@@ -55,6 +56,7 @@ public:
     QHash<QString, qint64> pending;
     QSet<QString> uploading;
     QHash<QString, qint64> downloading;
+    QSet<QUuid> subscribedDocuments;
     QDateTime lastUpload;
     QDateTime lastDownload;
     QElapsedTimer clock;
@@ -285,14 +287,17 @@ ConnectionStatusToolBar::~ConnectionStatusToolBar() = default;
 
 void ConnectionStatusToolBar::setConnectionAvailable(bool _available)
 {
+    if (_available != d->connected) {
+        // Subscriptions and their outstanding replies belong to one connection.
+        // Login will request the current documents again on the new connection.
+        d->subscribedDocuments.clear();
+        d->downloading.clear();
+    }
     if (_available && !d->connected) {
         // Offline time is not a server timeout. Keep the queue, but give the new
         // connection time to authenticate and retry the outstanding operations.
         const auto now = d->clock.elapsed();
         for (auto it = d->pending.begin(); it != d->pending.end(); ++it) {
-            it.value() = now;
-        }
-        for (auto it = d->downloading.begin(); it != d->downloading.end(); ++it) {
             it.value() = now;
         }
         d->uploading.clear();
@@ -309,6 +314,7 @@ void ConnectionStatusToolBar::setCloudProjectOpen(bool _open)
     d->pending.clear();
     d->uploading.clear();
     d->downloading.clear();
+    d->subscribedDocuments.clear();
     d->syncError.clear();
     d->uploadError.clear();
     d->lastUpload = { };
@@ -371,14 +377,27 @@ void ConnectionStatusToolBar::removeDocument(const QUuid& _uuid)
     d->pending.remove(key);
     d->uploading.remove(key);
     d->downloading.remove(key);
+    d->subscribedDocuments.remove(_uuid);
     if (d->pending.isEmpty()) {
         d->uploadError.clear();
     }
     d->refresh();
 }
 
+void ConnectionStatusToolBar::setDocumentClosed(const QUuid& _uuid)
+{
+    d->subscribedDocuments.remove(_uuid);
+    d->downloading.remove(_uuid.toString());
+    d->refresh();
+}
+
 void ConnectionStatusToolBar::setDownloadStarted(const QUuid& _uuid)
 {
+    if (d->subscribedDocuments.contains(_uuid)) {
+        // OpenDocuments can include an already opened bundle. The server deliberately
+        // sends no reply for its existing subscriptions, so there is nothing to await.
+        return;
+    }
     d->begin(d->downloading, _uuid.toString());
 }
 
@@ -395,6 +414,9 @@ void ConnectionStatusToolBar::setDownloadFinished(const QUuid& _uuid, int _docum
     }
     d->downloading.remove(_uuid.toString());
     d->downloading.remove(QString::number(_documentType));
+    d->subscribedDocuments.insert(_uuid);
+    Log::trace("[CloudSync] Document %1 received. Pending downloads: %2", _uuid.toString(),
+               QStringList(d->downloading.keys()).join(", "));
     if (_receivedChanges) {
         d->lastDownload = QDateTime::currentDateTimeUtc();
         d->receivedTimer.start();
