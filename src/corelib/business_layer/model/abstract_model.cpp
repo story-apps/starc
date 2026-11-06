@@ -316,7 +316,7 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
             //
             // ... логгируем и пропускаем патч, чтобы собрать какой-никакой результат
             //
-            Log::warning("Can't apply patch for document: Patch is\n\n%1\n",
+            Log::warning("[AbstractModel] Can't apply patch for document: Patch is\n\n%1\n",
                          qUtf8Printable(QByteArray::fromPercentEncoding(patch)));
             continue;
         }

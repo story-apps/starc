@@ -930,7 +930,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         return;
     }
 
-    Log::info("Activate plugin \"%1\" in new window", view.activeViewMimeType);
+    Log::info("[ProjectManager] Activate plugin \"%1\" in new window", view.activeViewMimeType);
     auto windowView = pluginsBuilder.activateWindowView(view.activeViewMimeType, view.activeModel);
     if (windowView == nullptr) {
         return;
@@ -2341,7 +2341,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateOptionsText();
         if (_checked) {
-            Log::info("Split screen turned on");
+            Log::info("[ProjectManager] Split screen turned on");
 
             const bool isFirstSplit = !d->view.inactiveIndex.isValid();
             if (isFirstSplit) {
@@ -2357,7 +2357,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                          d->view.activeViewMimeType);
             }
         } else {
-            Log::info("Split screen turned off");
+            Log::info("[ProjectManager] Split screen turned off");
 
             d->view.right->hide();
             d->view.container->setSizes({ 1, 0 });
@@ -4470,7 +4470,7 @@ QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 
 void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
-    Log::trace("Merge content for document %1", _documentInfo.uuid.toString());
+    Log::trace("[ProjectManager] Merge content for document %1", _documentInfo.uuid.toString());
 
     const auto syncDatetime = QDateTime::currentDateTimeUtc();
 
@@ -5489,7 +5489,8 @@ void ProjectManager::showView(const QModelIndex& _index)
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType,
                               const QString& _defaultMimeType)
 {
-    Log::info("Activate plugin \"%1\" (default \"%2\")", _viewMimeType, _defaultMimeType);
+    Log::info("[ProjectManager] Activate plugin \"%1\" (default \"%2\")", _viewMimeType,
+              _defaultMimeType);
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
 
@@ -5556,7 +5557,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим представление и отобразим
     //
-    Log::debug("Activate plugin view");
+    Log::debug("[ProjectManager] Activate plugin view");
     Ui::IDocumentView* view = nullptr;
     const bool isPrimaryView = d->view.active == d->view.left;
     if (isPrimaryView) {
@@ -5577,7 +5578,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // и документ доступен пользователю для редактирования либо в рамках базового разрешения
     // на весь проект, либо на конкретный документ
     //
-    Log::trace("Set project info");
+    Log::trace("[ProjectManager] Set project info");
     const bool canBeSentForChecking = d->isReviewEnabled
         && (d->editingMode == DocumentEditingMode::Edit
             || d->editingPermissions.value(itemForShow->uuid(), DocumentEditingMode::Read)
@@ -5585,13 +5586,13 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     d->pluginsBuilder.setProjectInfo(d->isProjectRemote, d->isProjectOwner,
                                      d->allowGrantAccessToProject, canBeSentForChecking,
                                      d->projectComplianceRules);
-    Log::trace("Set editing mode");
+    Log::trace("[ProjectManager] Set editing mode");
     view->setEditingMode(d->documentEditingMode(itemForShow));
-    Log::trace("Set view cursors");
+    Log::trace("[ProjectManager] Set view cursors");
     view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
-    Log::trace("Set document versions");
+    Log::trace("[ProjectManager] Set document drafts");
     d->view.active->setDocumentDrafts(aliasedItem);
-    Log::trace("Show view");
+    Log::trace("[ProjectManager] Show view");
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
 
@@ -5635,7 +5636,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим уведомления плагина
     //
-    Log::debug("Activate plugin manager");
+    Log::debug("[ProjectManager] Activate plugin manager");
     if (auto documentManager = d->pluginsBuilder.plugin(viewMimeType)->asQObject();
         documentManager != nullptr) {
         const auto invalidSignalIndex = -1;

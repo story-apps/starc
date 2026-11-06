@@ -647,7 +647,7 @@ void ApplicationManager::Implementation::initLogging()
 #endif
     QApplication::setApplicationVersion(applicationVersion);
 
-    Log::info("%1 version %2, %3, %4", QApplication::applicationName(),
+    Log::info("[ApplicationManager] %1 version %2, %3, %4", QApplication::applicationName(),
               QApplication::applicationVersion(), QSysInfo().prettyProductName(),
               QSysInfo().currentCpuArchitecture());
 }
@@ -655,7 +655,7 @@ void ApplicationManager::Implementation::initLogging()
 void ApplicationManager::Implementation::initDockMenu()
 {
 #ifdef Q_OS_MAC
-    Log::info("Init dock menu");
+    Log::info("[ApplicationManager] Init dock menu");
     //
     // Добавляем в маке возможность открытия ещё одного окна приложения
     //
@@ -1201,7 +1201,7 @@ void ApplicationManager::Implementation::askUpdateToLatestVersion()
 
 void ApplicationManager::Implementation::configureAutoSave()
 {
-    Log::info("Configure autosaving");
+    Log::info("[ApplicationManager] Configure autosaving");
     autosaveTimer.stop();
     autosaveTimer.disconnect();
 
@@ -1248,20 +1248,20 @@ void ApplicationManager::Implementation::showMenu()
 
 void ApplicationManager::Implementation::showAccount()
 {
-    Log::info("Show account screen");
+    Log::info("[ApplicationManager] Show account screen");
     showContent(accountManager.data());
 }
 
 void ApplicationManager::Implementation::showOnboarding()
 {
-    Log::info("Show onboarding screen");
+    Log::info("[ApplicationManager] Show onboarding screen");
     onboardingManager->showWelcomePage();
     showContent(onboardingManager.data());
 }
 
 void ApplicationManager::Implementation::showProjects()
 {
-    Log::info("Show projects screen");
+    Log::info("[ApplicationManager] Show projects screen");
     menuView->checkProjects();
     showContent(projectsManager.data());
     saveLastContent(projectsManager.data());
@@ -1271,7 +1271,7 @@ void ApplicationManager::Implementation::showProjects()
 
 void ApplicationManager::Implementation::showProject()
 {
-    Log::info("Show project screen");
+    Log::info("[ApplicationManager] Show project screen");
     menuView->checkProject();
     showContent(projectManager.data());
     saveLastContent(projectManager.data());
@@ -1279,13 +1279,13 @@ void ApplicationManager::Implementation::showProject()
 
 void ApplicationManager::Implementation::showSettings()
 {
-    Log::info("Show settings screen");
+    Log::info("[ApplicationManager] Show settings screen");
     showContent(settingsManager.data());
 }
 
 void ApplicationManager::Implementation::showSessionStatistics()
 {
-    Log::info("Show session statistics screen");
+    Log::info("[ApplicationManager] Show session statistics screen");
     showContent(writingSessionManager.data());
 }
 
@@ -1296,7 +1296,7 @@ void ApplicationManager::Implementation::showLastContent()
         return;
     }
 
-    Log::info("Show last content");
+    Log::info("[ApplicationManager] Show last content");
     applicationView->showContent(lastContent.toolBar, lastContent.navigator, lastContent.view);
     applicationView->setHideNavigationButtonAvailable(lastContent.isHideNavigatorButtonAvailable);
 }
@@ -1477,7 +1477,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     // Подключим файл переводов программы
     //
-    Log::info("Setup translation for %1", translation);
+    Log::info("[ApplicationManager] Setup translation for %1", translation);
     static QTranslator* appTranslator = [] {
         //
         // ... небольшой workaround для того, чтобы при запуске приложения кинуть событие о смене
@@ -1558,7 +1558,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
 void ApplicationManager::Implementation::setDesignSystemTheme(Ui::ApplicationTheme _theme)
 {
-    Log::info("Setup design system theme");
+    Log::info("[ApplicationManager] Setup design system theme");
     if (state == ApplicationState::Working) {
         WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(),
                                             applicationView->grab());
@@ -1574,7 +1574,7 @@ void ApplicationManager::Implementation::setDesignSystemCustomThemeColors(
         return;
     }
 
-    Log::info("Setup design system theme custom colors");
+    Log::info("[ApplicationManager] Setup design system theme custom colors");
     if (state == ApplicationState::Working) {
         WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(),
                                             applicationView->grab());
@@ -1585,14 +1585,14 @@ void ApplicationManager::Implementation::setDesignSystemCustomThemeColors(
 
 void ApplicationManager::Implementation::setDesignSystemScaleFactor(qreal _scaleFactor)
 {
-    Log::info("Setup design system scale factor");
+    Log::info("[ApplicationManager] Setup design system scale factor");
     Ui::DesignSystem::setScaleFactor(_scaleFactor);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
 void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
 {
-    Log::info("Setup design system density");
+    Log::info("[ApplicationManager] Setup design system density");
     Ui::DesignSystem::setDensity(_density);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
@@ -1665,7 +1665,7 @@ void ApplicationManager::Implementation::saveChanges()
         return;
     }
 
-    Log::info("Save changes triggered");
+    Log::info("[ApplicationManager] Save changes triggered");
 
     constexpr int maximumSaveAttempts = 3;
     for (int attempt = 1; attempt <= maximumSaveAttempts; ++attempt) {
@@ -1692,7 +1692,7 @@ void ApplicationManager::Implementation::saveChanges()
         //
         // Если сохранение не удалось, то логгируем ошибку и пробуем переподключиться к проекту
         //
-        Log::warning(QStringLiteral("Saving attempt %1 of %2 failed: %3")
+        Log::warning(QStringLiteral("[ApplicationManager] Saving attempt %1 of %2 failed: %3")
                          .arg(attempt)
                          .arg(maximumSaveAttempts)
                          .arg(DatabaseLayer::Database::lastError()));
@@ -1834,7 +1834,7 @@ void ApplicationManager::Implementation::saveChanges()
             baseBackupName, settingsValue(DataStorageLayer::kApplicationBackupsQtyKey).toInt()));
     }
 
-    Log::info("All changes saved");
+    Log::info("[ApplicationManager] All changes saved");
 }
 
 void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _callback)
@@ -1907,7 +1907,8 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
 void ApplicationManager::Implementation::saveAs()
 {
     if (projectsManager->currentProject() == nullptr) {
-        Log::info("The current project is not defined and saving cannot be performed.");
+        Log::info("[ApplicationManager] The current project is not defined and saving cannot be "
+                  "performed.");
         return;
     }
 
@@ -2521,10 +2522,10 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
 
 void ApplicationManager::Implementation::closeCurrentProject()
 {
-    Log::info("Closing current project");
+    Log::info("[ApplicationManager] Closing current project");
 
     if (projectsManager->currentProject() == nullptr) {
-        Log::warning("Current project is not valid. Skip closing.");
+        Log::warning("[ApplicationManager] Current project is not valid. Skip closing.");
         return;
     }
 
@@ -2567,7 +2568,8 @@ void ApplicationManager::Implementation::importProject()
 void ApplicationManager::Implementation::exportCurrentDocument()
 {
     if (projectsManager->currentProject() == nullptr) {
-        Log::info("The current project is not defined and export cannot be performed.");
+        Log::info("[ApplicationManager] The current project is not defined and export cannot be "
+                  "performed.");
         return;
     }
 
@@ -2725,7 +2727,7 @@ void ApplicationManager::Implementation::imitateTypewriterSound(QKeyEvent* _even
 
 void ApplicationManager::Implementation::exit()
 {
-    Log::info("Closing application");
+    Log::info("[ApplicationManager] Closing application");
 
     //
     // Скрываем интерфейс, чтобы для пользователя всё было максимально быстро
@@ -2797,7 +2799,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
     //
-    Log::info("Loading fonts [embedded]");
+    Log::info("[ApplicationManager] Loading fonts [embedded]");
     //
     // ... встроенные в бинарник
     //
@@ -2839,7 +2841,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // ... скаченные
     //
-    Log::info("Loading fonts [downloaded]");
+    Log::info("[ApplicationManager] Loading fonts [downloaded]");
     const auto fontsFolderPath
         = QString("%1/fonts")
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
@@ -2847,7 +2849,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     for (const auto& font : fonts) {
         const auto rawFont = QRawFont(font.absoluteFilePath(), 12);
         if (!rawFont.isValid()) {
-            Log::warning("Font %1 is invalid and will be removed", font.fileName());
+            Log::warning("[ApplicationManager] Font %1 is invalid and will be removed",
+                         font.fileName());
             QFile::remove(font.absoluteFilePath());
             continue;
         }
@@ -2858,13 +2861,13 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Инициилизируем данные после подгрузки шрифтов, чтобы они сразу подхватились системой
     //
-    Log::info("Init application managers");
+    Log::info("[ApplicationManager] Init application managers");
     d.reset(new Implementation(this));
 
     //
     // Настроим соединения с менеджерами и представлением приложения
     //
-    Log::info("Init business logic between managers");
+    Log::info("[ApplicationManager] Init business logic between managers");
     initConnections();
 
     //
@@ -2917,7 +2920,7 @@ QString ApplicationManager::logFilePath() const
 
 void ApplicationManager::exec(const QString& _fileToOpenPath)
 {
-    Log::info("Starting the application");
+    Log::info("[ApplicationManager] Starting the application");
 
     //
     // Самое главное - настроить заголовок!
@@ -2977,7 +2980,7 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     //
     // Покажем интерфейс
     //
-    Log::info("Show application window");
+    Log::info("[ApplicationManager] Show application window");
     d->applicationView->show();
 
     //
@@ -2987,7 +2990,7 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     QMetaObject::invokeMethod(
         this,
         [this, _fileToOpenPath] {
-            Log::info("Make startup checks");
+            Log::info("[ApplicationManager] Make startup checks");
 
 #ifdef CLOUD_SERVICE_MANAGER
             //
