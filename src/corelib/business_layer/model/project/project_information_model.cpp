@@ -587,11 +587,25 @@ QVector<Domain::ProjectCollaboratorInfo> ProjectInformationModel::collaborators(
 void ProjectInformationModel::setCollaborators(
     const QVector<Domain::ProjectCollaboratorInfo>& _collaborators)
 {
-    if (d->collaborators == _collaborators) {
+    //
+    // Отсортируем соавторов по ролям и по именам
+    //
+    auto orderedCollaborators = _collaborators;
+    std::sort(orderedCollaborators.begin(), orderedCollaborators.end(),
+              [](const Domain::ProjectCollaboratorInfo& _lhs,
+                 const Domain::ProjectCollaboratorInfo& _rhs) {
+                  if (_lhs.role != _rhs.role) {
+                      return _lhs.role < _rhs.role;
+                  }
+
+                  return _lhs.name < _rhs.name;
+              });
+
+    if (d->collaborators == orderedCollaborators) {
         return;
     }
 
-    d->collaborators = _collaborators;
+    d->collaborators = orderedCollaborators;
     emit collaboratorsChanged(d->collaborators);
 }
 

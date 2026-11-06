@@ -356,6 +356,14 @@ void AccountViewTeams::showTeam(int _teamId)
 
         break;
     }
+    std::sort(members.begin(), members.end(),
+              [](const Domain::TeamMemberInfo& _lhs, const Domain::TeamMemberInfo& _rhs) {
+                  if (_lhs.role != _rhs.role) {
+                      return _lhs.role < _rhs.role;
+                  }
+                  return (!_lhs.nameForTeam.isEmpty() ? _lhs.nameForTeam : _lhs.name)
+                      < (!_rhs.nameForTeam.isEmpty() ? _rhs.nameForTeam : _rhs.name);
+              });
     d->currentTeamMembers = members;
 
     d->membersModel->clear();
