@@ -1268,6 +1268,22 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
         return reviewMarkWrapper.reviewMark.isDone;
     }
 
+    case ReviewMarkHasRepliesRole: {
+        const auto& comments = reviewMarkWrapper.reviewMark.comments;
+        if (comments.isEmpty()) {
+            return false;
+        }
+
+        //
+        // Если есть хотя бы один комментарий с текстом и он не первый
+        //
+        return std::find_if(std::next(comments.begin()), comments.end(),
+                            [](const BusinessLayer::TextModelTextItem::ReviewComment& _comment) {
+                                return !_comment.text.isEmpty();
+                            })
+            != comments.end();
+    }
+
     case ReviewMarkRepliesRole: {
         if (reviewMarkWrapper.reviewMark.comments.isEmpty()) {
             return {};
@@ -1277,6 +1293,14 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
 
     case ReviewMarkRepliesWithTextRole: {
         auto commentsWithText = reviewMarkWrapper.reviewMark.comments;
+
+        //
+        // Первый комментарий от автора, нам он не нужен
+        //
+        if (!commentsWithText.isEmpty()) {
+            commentsWithText.removeFirst();
+        }
+
         commentsWithText.erase(
             std::remove_if(commentsWithText.begin(), commentsWithText.end(),
                            [](const BusinessLayer::TextModelTextItem::ReviewComment& _comment) {

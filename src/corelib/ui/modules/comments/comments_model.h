@@ -34,6 +34,7 @@ public:
         ReviewMarkIsAdditionRole,
         ReviewMarkIsRemovalRole,
         ReviewMarkIsDoneRole,
+        ReviewMarkHasRepliesRole,
         ReviewMarkRepliesRole,
         ReviewMarkRepliesWithTextRole,
     };

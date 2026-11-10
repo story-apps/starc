@@ -247,9 +247,8 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     // ... ответы
     //
-    const auto comments = _index.data(CommentsModel::ReviewMarkRepliesWithTextRole)
-                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
-    if (m_isSingleCommentMode || comments.size() <= 1) {
+    const auto hasComments = _index.data(CommentsModel::ReviewMarkHasRepliesRole).toBool();
+    if (m_isSingleCommentMode || !hasComments) {
         return;
     }
 
@@ -258,7 +257,9 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     // ... суммарная информация
     //
     QRectF summaryRect;
-    if (comments.size() > 2) {
+    const auto comments = _index.data(CommentsModel::ReviewMarkRepliesWithTextRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
+    if (comments.size() > 1) {
         summaryRect = QRectF(commentRect.left(),
                              commentRect.bottom() + DesignSystem::compactLayout().px12(),
                              commentRect.width(), avatarSize.height());
@@ -267,7 +268,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
         //
         QVector<QPair<QString, QString>> commentators;
         for (const auto& comment : comments) {
-            if (comment == comments.constFirst() || comment == comments.constLast()) {
+            if (comment == comments.constLast()) {
                 continue;
             }
 
@@ -326,7 +327,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                 - DesignSystem::layout().px24(),
             avatarRect.height());
         _painter->drawText(commentsSummaryRect, Qt::AlignVCenter | Qt::AlignLeft,
-                           tr("%n reply(s)", "", comments.size() - 2));
+                           tr("%n reply(s)", "", comments.size() - 1));
     }
 
     //
@@ -415,6 +416,7 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     const auto isRemoval = _index.data(CommentsModel::ReviewMarkIsRemovalRole).toBool();
     const auto sourceText = _index.data(CommentsModel::ReviewMarkSourceTextRole).toString();
     const auto comment = _index.data(CommentsModel::ReviewMarkCommentRole).toString();
+    const auto hasComments = _index.data(CommentsModel::ReviewMarkHasRepliesRole).toBool();
     const auto comments = _index.data(CommentsModel::ReviewMarkRepliesWithTextRole)
                               .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
 
@@ -427,8 +429,7 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     //
     // ... высота без комментария
     //
-    if ((!m_isSingleCommentMode
-         && (!isAddition && !isRemoval && comment.isEmpty() && comments.size() == 1))
+    if ((!m_isSingleCommentMode && (!isAddition && !isRemoval && comment.isEmpty() && !hasComments))
         || (m_isSingleCommentMode && !isAddition && !isRemoval && comment.isEmpty())) {
         return { width, headerHeight };
     }
@@ -457,8 +458,8 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     // ... комментарии
     //
     if (!m_isSingleCommentMode) {
-        if (comments.size() > 1) {
-            if (comments.size() > 2) {
+        if (hasComments) {
+            if (comments.size() > 1) {
                 height += DesignSystem::treeOneLineItem().iconSize().height()
                     + DesignSystem::compactLayout().px12() * 2;
             } else {

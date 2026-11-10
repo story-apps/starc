@@ -133,12 +133,10 @@ AddCommentView::AddCommentView(QWidget* _parent)
                 const auto progress = _value.toReal();
                 const auto amplitude = Ui::DesignSystem::layout().px12();
                 const auto offset = amplitude * (1.0 - progress) * qSin(progress * 4 * 2 * M_PI);
-                d->commentContainer->move(d->shakeBaseX + qRound(offset),
-                                          d->commentContainer->y());
+                d->commentContainer->move(d->shakeBaseX + qRound(offset), d->commentContainer->y());
             });
-    connect(&d->shakeAnimation, &QVariantAnimation::finished, this, [this] {
-        d->commentContainer->move(d->shakeBaseX, d->commentContainer->y());
-    });
+    connect(&d->shakeAnimation, &QVariantAnimation::finished, this,
+            [this] { d->commentContainer->move(d->shakeBaseX, d->commentContainer->y()); });
     connect(d->saveButton, &Button::clicked, this, &AddCommentView::savePressed);
     connect(d->cancelButton, &Button::clicked, this, &AddCommentView::cancelPressed);
 }
