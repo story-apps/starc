@@ -11,10 +11,14 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
+#include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <ui/widgets/tree/tree.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 
 #include <QAction>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QPointer>
 #include <QSortFilterProxyModel>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -95,8 +99,18 @@ public:
      */
     QModelIndexList selectedSourceIndexes() const;
 
+    /**
+     * @brief Находится ли пользователь в процессе добавления нового комментария
+     */
+    bool isNewCommentAdding() const;
+
 
     CommentsView* q = nullptr;
+
+    /**
+     * @brief Редактор текста, к выделению в котором добавляются комментарии
+     */
+    QPointer<PageTextEdit> textEdit;
 
     bool isReadOnly = false;
 
@@ -341,6 +355,16 @@ QModelIndexList CommentsView::Implementation::selectedSourceIndexes() const
     return indexes;
 }
 
+bool CommentsView::Implementation::isNewCommentAdding() const
+{
+    //
+    // Новый комментарий привязывается к текущему выделению в редакторе, а при редактировании
+    // существующего комментария выделение не используется
+    //
+    return q->currentWidget() == addCommentView && addCommentView->isVisible()
+        && !commentIndex.isValid();
+}
+
 
 // ****
 
@@ -556,6 +580,100 @@ void CommentsView::attachToTabBar(TabBar* _tabBar, int _tabIndex)
             d->filterMenu->showContextMenu(QCursor::pos());
         }
     });
+}
+
+void CommentsView::setTextEdit(PageTextEdit* _textEdit)
+{
+    if (d->textEdit == _textEdit) {
+        return;
+    }
+
+    if (d->textEdit != nullptr) {
+        d->textEdit->removeEventFilter(this);
+        d->textEdit->viewport()->removeEventFilter(this);
+    }
+
+    d->textEdit = _textEdit;
+
+    if (d->textEdit != nullptr) {
+        d->textEdit->installEventFilter(this);
+        d->textEdit->viewport()->installEventFilter(this);
+    }
+}
+
+bool CommentsView::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (d->textEdit != nullptr && (_watched == d->textEdit || _watched == d->textEdit->viewport())
+        && d->isNewCommentAdding()) {
+        bool needToBlock = false;
+        switch (_event->type()) {
+        //
+        // Любые нажатия мышью и перетаскивание в редакторе сбросят выделение
+        //
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonDblClick:
+        case QEvent::ContextMenu:
+        case QEvent::DragEnter:
+        case QEvent::Drop: {
+            needToBlock = true;
+            break;
+        }
+
+        case QEvent::MouseMove: {
+            needToBlock = static_cast<QMouseEvent*>(_event)->buttons() != Qt::NoButton;
+            break;
+        }
+
+        case QEvent::MouseButtonRelease: {
+            //
+            // ... отпускание кнопки просто глотаем, т.к. нажатие уже было заблокировано
+            //
+            return true;
+        }
+
+        //
+        // ... как и нажатия клавиш, если фокус каким-то образом оказался в редакторе
+        //
+        case QEvent::KeyPress: {
+            needToBlock = true;
+            break;
+        }
+
+        default: {
+            break;
+        }
+        }
+
+        if (needToBlock) {
+            //
+            // Оставляем выделение на месте и сигнализируем пользователю, что сначала нужно
+            // завершить ввод комментария
+            //
+            if (_event->type() != QEvent::MouseMove) {
+                d->addCommentView->shake();
+            }
+            //
+            // ... возвращаем фокус в поле ввода комментария (отложенно, т.к. при нажатии мышью
+            //     фокус передаётся редактору ещё до того, как событие попадёт в фильтр)
+            //
+            QTimer::singleShot(0, d->addCommentView, [this] {
+                if (d->isNewCommentAdding()) {
+                    d->addCommentView->setFocus();
+                }
+            });
+            //
+            // ... перетаскивание отклоняем, чтобы вставка в редактор была недоступна
+            //
+            if (_event->type() == QEvent::DragEnter || _event->type() == QEvent::Drop) {
+                _event->ignore();
+            } else {
+                _event->accept();
+            }
+            return true;
+        }
+    }
+
+    return StackWidget::eventFilter(_watched, _event);
 }
 
 void CommentsView::updateTranslations()

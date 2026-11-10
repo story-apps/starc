@@ -11,6 +11,8 @@
 #include <QScrollArea>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QVariantAnimation>
+#include <QtMath>
 
 
 namespace Ui {
@@ -34,6 +36,12 @@ public:
     Button* saveButton = nullptr;
 
     int commentTopMargin = 0;
+
+    /**
+     * @brief Анимация тряски поля ввода комментария
+     */
+    QVariantAnimation shakeAnimation;
+    int shakeBaseX = 0;
 };
 
 AddCommentView::Implementation::Implementation(QWidget* _parent)
@@ -61,6 +69,10 @@ AddCommentView::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(saveButton);
+
+    shakeAnimation.setDuration(400);
+    shakeAnimation.setStartValue(0.0);
+    shakeAnimation.setEndValue(1.0);
 }
 
 void AddCommentView::Implementation::updateTopMargin()
@@ -113,6 +125,20 @@ AddCommentView::AddCommentView(QWidget* _parent)
 
         d->content->ensureVisible(0, d->comment->pos().y() + d->comment->cursorRect().bottom());
     });
+    connect(&d->shakeAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                //
+                // Затухающее колебание по горизонтали
+                //
+                const auto progress = _value.toReal();
+                const auto amplitude = Ui::DesignSystem::layout().px12();
+                const auto offset = amplitude * (1.0 - progress) * qSin(progress * 4 * 2 * M_PI);
+                d->commentContainer->move(d->shakeBaseX + qRound(offset),
+                                          d->commentContainer->y());
+            });
+    connect(&d->shakeAnimation, &QVariantAnimation::finished, this, [this] {
+        d->commentContainer->move(d->shakeBaseX, d->commentContainer->y());
+    });
     connect(d->saveButton, &Button::clicked, this, &AddCommentView::savePressed);
     connect(d->cancelButton, &Button::clicked, this, &AddCommentView::cancelPressed);
 }
@@ -137,6 +163,19 @@ QString AddCommentView::comment() const
 void AddCommentView::setComment(const QString& _comment)
 {
     d->comment->setText(_comment);
+}
+
+void AddCommentView::shake()
+{
+    //
+    // Если анимация уже идёт, просто перезапускаем её с исходной позиции
+    //
+    if (d->shakeAnimation.state() == QVariantAnimation::Running) {
+        d->shakeAnimation.stop();
+    } else {
+        d->shakeBaseX = d->commentContainer->x();
+    }
+    d->shakeAnimation.start();
 }
 
 bool AddCommentView::eventFilter(QObject* _watched, QEvent* _event)

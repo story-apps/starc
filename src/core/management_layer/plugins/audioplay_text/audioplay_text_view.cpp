@@ -245,6 +245,7 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
+    commentsView->setTextEdit(textEdit);
     commentsView->attachToTabBar(sidebarTabs, kCommentsTabIndex);
     commentsView->hide();
     aiAssistantView->hide();

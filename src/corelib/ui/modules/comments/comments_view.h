@@ -5,6 +5,7 @@
 #include <QModelIndex>
 #include <QtContainerFwd>
 
+class PageTextEdit;
 class TabBar;
 
 
@@ -36,6 +37,13 @@ public:
      * @brief Добавить меню фильтрации на вкладку комментариев
      */
     void attachToTabBar(TabBar* _tabBar, int _tabIndex);
+
+    /**
+     * @brief Задать редактор текста, к которому относятся комментарии
+     * @note Пока пользователь вводит новый комментарий, редактор блокируется от действий,
+     *       которые могут сбросить выделение текста, к которому добавляется комментарий
+     */
+    void setTextEdit(PageTextEdit* _textEdit);
 
     /**
      * @brief Установить текущим элемент для заданного индекса модели сценария и позиции в блоке
@@ -112,6 +120,11 @@ signals:
     void removeRequested(const QModelIndexList& _indexes);
 
 protected:
+    /**
+     * @brief Блокируем снятие выделения в редакторе текста, пока вводится новый комментарий
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
     /**
      * @brief Обновить переводы
      */

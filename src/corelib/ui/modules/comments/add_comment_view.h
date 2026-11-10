@@ -28,6 +28,12 @@ public:
     QString comment() const;
     void setComment(const QString& _comment);
 
+    /**
+     * @brief Потрясти поле ввода комментария, чтобы привлечь внимание пользователя к тому, что
+     *        необходимо завершить ввод комментария
+     */
+    void shake();
+
 signals:
     /**
      * @brief Пользователь нажал кнопку сохранить
