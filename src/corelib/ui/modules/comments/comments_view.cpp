@@ -455,6 +455,25 @@ CommentsView::CommentsView(QWidget* _parent)
         d->contextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
     });
     connect(d->addCommentView, &AddCommentView::savePressed, this, [this] {
+        //
+        // Прерываем добавление коммента, если текст не задан
+        //
+        if (d->addCommentView->comment().isEmpty()) {
+            d->addCommentView->setCommentError(tr("Can't save empty comment"));
+            d->addCommentView->shake();
+            return;
+        }
+
+        //
+        // Прерываем добавление коммента, если по какой-то причине не выделен текст в редакторе
+        //
+        if (!d->commentIndex.isValid() && !d->addCommentView->comment().isEmpty()
+            && !d->textEdit->textCursor().hasSelection()) {
+            d->addCommentView->setCommentError(tr("There are no text selected for adding comment"));
+            d->addCommentView->shake();
+            return;
+        }
+
         if (d->commentIndex.isValid()) {
             emit changeReviewMarkRequested(d->commentIndex, d->addCommentView->comment());
             d->commentIndex = {};

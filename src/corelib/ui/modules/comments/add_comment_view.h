@@ -29,6 +29,12 @@ public:
     void setComment(const QString& _comment);
 
     /**
+     * @brief Задать текст ошибки в поле ввода комментария
+     */
+    void clearCommentError();
+    void setCommentError(const QString& _error);
+
+    /**
      * @brief Потрясти поле ввода комментария, чтобы привлечь внимание пользователя к тому, что
      *        необходимо завершить ввод комментария
      */

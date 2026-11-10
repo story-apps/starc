@@ -125,6 +125,7 @@ AddCommentView::AddCommentView(QWidget* _parent)
 
         d->content->ensureVisible(0, d->comment->pos().y() + d->comment->cursorRect().bottom());
     });
+    connect(d->comment, &TextField::textChanged, d->comment, &TextField::clearError);
     connect(&d->shakeAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
                 //
@@ -161,6 +162,16 @@ QString AddCommentView::comment() const
 void AddCommentView::setComment(const QString& _comment)
 {
     d->comment->setText(_comment);
+}
+
+void AddCommentView::clearCommentError()
+{
+    d->comment->clearError();
+}
+
+void AddCommentView::setCommentError(const QString& _error)
+{
+    d->comment->setError(_error);
 }
 
 void AddCommentView::shake()
