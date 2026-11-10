@@ -405,6 +405,8 @@ void AiAssistantView::initChat()
     d->chat.history->setObjectName("aiChatHistory");
     d->chat.commands = new ComboBox(d->chat.widget);
     d->chat.commands->setObjectName("aiChatCommands");
+    d->chat.commands->setDefaultMarginsEnabled(false);
+    d->chat.commands->setUnderlineDecorationVisible(false);
     const QStringList commands{ "/rephrase", "/expand", "/shorten", "/insert", "/summarize",
                                 "/translate", "/synopsis", "/novel", "/script", "/generate",
                                 "/character", "/mindmap", "/help" };
@@ -418,6 +420,8 @@ void AiAssistantView::initChat()
     d->chat.commands->setCurrentIndex({});
     d->chat.input = new TextField(d->chat.widget);
     d->chat.input->setObjectName("aiChatInput");
+    d->chat.input->setDefaultMarginsEnabled(false);
+    d->chat.input->setUnderlineDecorationVisible(false);
     d->chat.input->setEnterMakesNewLine(true);
     d->chat.input->installEventFilter(this);
     d->chat.input->setMinimumHeight(80);
@@ -738,7 +742,8 @@ void AiAssistantView::updateChatDesign()
     const auto foreground = DesignSystem::color().onPrimary();
     d->chat.widget->setBackgroundColor(background);
     for (auto field : { static_cast<TextField*>(d->chat.chats), static_cast<TextField*>(d->chat.commands), d->chat.input }) {
-        field->setBackgroundColor(background);
+        // TextField applies its own translucent fill, as in review discussions.
+        field->setBackgroundColor(field == d->chat.chats ? background : foreground);
         field->setTextColor(foreground);
     }
     for (auto label : { d->chat.context, d->chat.status, d->chat.emptyHint }) {
@@ -753,12 +758,22 @@ void AiAssistantView::updateChatDesign()
         button->setBackgroundColor(background);
         button->setTextColor(foreground);
     }
-    d->chat.history->setBackgroundColor(background);
+    const auto historyBackground = ColorHelper::flattenAlpha(
+        ColorHelper::transparent(foreground, 0.04), background);
+    const auto outline = ColorHelper::flattenAlpha(
+        ColorHelper::transparent(foreground, 0.16), background);
+    d->chat.history->setBackgroundColor(historyBackground);
     d->chat.history->setTextColor(foreground);
     auto palette = d->chat.historyContainer->palette();
-    palette.setColor(QPalette::Base, background);
-    palette.setColor(QPalette::Window, background);
+    palette.setColor(QPalette::Base, historyBackground);
+    palette.setColor(QPalette::Window, historyBackground);
     d->chat.historyContainer->setPalette(palette);
+    d->chat.historyContainer->setStyleSheet(
+        QString("QScrollArea#aiChatHistoryContainer { border: 1px solid %1; border-radius: 6px; }")
+            .arg(outline.name()));
+    auto scrollBar = static_cast<ScrollBar*>(d->chat.historyContainer->verticalScrollBar());
+    scrollBar->setBackgroundColor(historyBackground);
+    scrollBar->setHandleColor(ColorHelper::transparent(foreground, DesignSystem::focusBackgroundOpacity()));
 }
 
 

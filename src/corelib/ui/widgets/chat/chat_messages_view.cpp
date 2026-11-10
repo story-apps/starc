@@ -6,6 +6,9 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QResizeEvent>
+#include <QMouseEvent>
+#include <QScrollBar>
+#include <QTextBlock>
 #include <QTextBrowser>
 #include <QTextDocumentFragment>
 #include <QTextFrame>
@@ -20,6 +23,17 @@ public:
     {
     protected:
         QVariant loadResource(int, const QUrl&) override { return {}; }
+
+        void mouseMoveEvent(QMouseEvent* _event) override
+        {
+            QTextBrowser::mouseMoveEvent(_event);
+            const auto point = _event->pos() + QPoint(horizontalScrollBar()->value(),
+                                                       verticalScrollBar()->value());
+            const auto position = document()->documentLayout()->hitTest(point, Qt::ExactHit);
+            const auto block = document()->findBlock(position);
+            const bool overText = position >= 0 && block.isValid() && !block.text().isEmpty();
+            viewport()->setCursor(overText ? Qt::IBeamCursor : Qt::ArrowCursor);
+        }
     };
     class MessageDocument : public QTextDocument
     {
@@ -40,6 +54,9 @@ ChatMessagesView::ChatMessagesView(QWidget* _parent)
     d->browser->setObjectName("chatMessageText");
     d->browser->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     d->browser->setFrameShape(QFrame::NoFrame);
+    d->browser->setCursorWidth(0);
+    d->browser->viewport()->setMouseTracking(true);
+    d->browser->viewport()->setCursor(Qt::ArrowCursor);
     d->browser->setOpenLinks(false);
     d->browser->setOpenExternalLinks(false);
     d->browser->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
@@ -103,6 +120,11 @@ void ChatMessagesView::rebuildDocument()
     d->ranges.clear();
     QDate date;
     for (const auto& message : std::as_const(d->messages)) {
+        // Root-level notices use paragraph margins for spacing, rather than frames
+        // with empty separator paragraphs that would become part of the selection.
+        if (!cursor.block().text().isEmpty()) {
+            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+        }
         if (message.dateTime().isValid() && date != message.dateTime().date()) {
             date = message.dateTime().date();
             QTextBlockFormat format;
@@ -111,7 +133,23 @@ void ChatMessagesView::rebuildDocument()
             format.setBottomMargin(8);
             cursor.setBlockFormat(format);
             cursor.insertText(message.dateTime().toString("d MMMM"));
-            cursor.insertBlock();
+            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+        }
+        if (message.isSistemMessage()) {
+            QTextBlockFormat format;
+            format.setTopMargin(8);
+            format.setBottomMargin(8);
+            format.setLeftMargin(10);
+            format.setRightMargin(10);
+            cursor.setBlockFormat(format);
+            QTextCharFormat textFormat;
+            textFormat.setForeground(textColor());
+            textFormat.setFontItalic(true);
+            cursor.setCharFormat(textFormat);
+            const int start = cursor.position();
+            cursor.insertText(message.text());
+            d->ranges.append({ start, cursor.position() });
+            continue;
         }
         QTextFrameFormat frame;
         frame.setBorder(0);

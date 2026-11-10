@@ -18,6 +18,7 @@
 #include <QTemporaryDir>
 #include <QTextBrowser>
 #include <QTextBlock>
+#include <QAbstractTextDocumentLayout>
 #include <QInputDialog>
 #include <QClipboard>
 #include <QFontDatabase>
@@ -235,6 +236,49 @@ private slots:
             listFound |= block.textList() != nullptr;
         }
         QVERIFY(listFound);
+    }
+
+    void contextNoticesSelectWithoutEmptyParagraphsAndUseTextHitTesting()
+    {
+        ChatMessagesView history;
+        history.resize(420, 400);
+        const User context("Context", "context");
+        const auto now = QDateTime::currentDateTime();
+        history.setMessages({ ChatMessage(now, "First context notice", context, true),
+                              ChatMessage(now, "Second context notice", context, true) });
+        history.show();
+        QTest::qWait(20);
+        auto browser = history.findChild<QTextBrowser*>("chatMessageText");
+        QVERIFY(browser);
+        auto first = browser->document()->find("First context notice");
+        auto second = browser->document()->find("Second context notice");
+        QVERIFY(!first.isNull() && !second.isNull());
+        auto selection = first;
+        selection.setPosition(first.selectionStart());
+        selection.setPosition(second.selectionEnd(), QTextCursor::KeepAnchor);
+        browser->setTextCursor(selection);
+        QCOMPARE(history.selectedText(), QString("First context notice\nSecond context notice"));
+        browser->setFocus();
+        QTest::keyClick(browser, Qt::Key_C, Qt::ControlModifier);
+        QCOMPARE(QApplication::clipboard()->text(), history.selectedText());
+        QCOMPARE(browser->cursorWidth(), 0);
+
+        auto start = first;
+        start.setPosition(first.selectionStart());
+        const auto textPoint = browser->cursorRect(start).center() + QPoint(3, 0);
+        QTest::mouseMove(browser->viewport(), textPoint);
+        QCOMPARE(browser->viewport()->cursor().shape(), Qt::IBeamCursor);
+        auto layout = browser->document()->documentLayout();
+        const auto firstRect = layout->blockBoundingRect(first.block());
+        const auto secondRect = layout->blockBoundingRect(second.block());
+        QVERIFY(secondRect.top() > firstRect.bottom());
+        const QPoint gap(textPoint.x(), qRound((firstRect.bottom() + secondRect.top()) / 2));
+        QTest::mouseMove(browser->viewport(), gap);
+        QCOMPARE(browser->viewport()->cursor().shape(), Qt::ArrowCursor);
+        QTest::mouseMove(browser->viewport(), textPoint);
+        QCOMPARE(browser->viewport()->cursor().shape(), Qt::IBeamCursor);
+        QTest::mouseMove(browser->viewport(), QPoint(2, 2));
+        QCOMPARE(browser->viewport()->cursor().shape(), Qt::ArrowCursor);
     }
 
     void commandsCallExistingToolsAndValidateDocumentAccess()
