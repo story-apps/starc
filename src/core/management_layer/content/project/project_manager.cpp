@@ -606,6 +606,9 @@ void ProjectManager::Implementation::updateChatDocument(BusinessLayer::AbstractM
     const auto item = projectStructureModel->itemForUuid(_model->document()->uuid());
     if (item != nullptr) {
         name = item->name();
+        if (item->parent() != nullptr && item->parent()->parent() != nullptr) {
+            name = item->parent()->name() + " / " + name;
+        }
         if (!item->draftName().isEmpty()) {
             name += " / " + item->draftName();
         }

@@ -3785,6 +3785,10 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
         <source>Connection lost. Please send your message again after reconnecting.</source>
         <translation>Соединение потеряно. Отправьте сообщение снова после восстановления соединения.</translation>
     </message>
+    <message>
+        <source>Character image generated.</source>
+        <translation>Изображение персонажа создано.</translation>
+    </message>
 </context>
 <context>
     <name>ManagementLayer::AudioplayStatisticsManager</name>
@@ -9258,6 +9262,172 @@ This action can&apos;t be canceled.</source>
     <message>
         <source>Copy</source>
         <translation>Копировать</translation>
+    </message>
+    <message>
+        <source>This conversation will be permanently deleted from this device.</source>
+        <translation>Эта переписка будет безвозвратно удалена с этого устройства.</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <source>Insert last reply</source>
+        <translation>Вставить последний ответ</translation>
+    </message>
+    <message>
+        <source>Insert into current document</source>
+        <translation>Вставить в текущий документ</translation>
+    </message>
+    <message>
+        <source>Character</source>
+        <translation>Персонаж</translation>
+    </message>
+    <message>
+        <source>Mind map</source>
+        <translation>Интеллект-карта</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Справка</translation>
+    </message>
+    <message>
+        <source>Replenish credits to send a message.</source>
+        <translation>Пополните баланс кредитов, чтобы отправить сообщение.</translation>
+    </message>
+    <message>
+        <source>The assistant is answering another chat…</source>
+        <translation>Помощник готовит ответ в другом чате…</translation>
+    </message>
+    <message>
+        <source>Purchase credits</source>
+        <translation>Купить слова</translation>
+    </message>
+    <message>
+        <source>Unknown command. Use /help to see available commands.</source>
+        <translation>Неизвестная команда. Список команд — /help.</translation>
+    </message>
+    <message>
+        <source>Open an editable document to use this command.</source>
+        <translation>Для этой команды откройте документ с доступом к редактированию.</translation>
+    </message>
+    <message>
+        <source>Use /insert text before | text after.</source>
+        <translation>Введите /insert текст до вставки | текст после вставки.</translation>
+    </message>
+    <message>
+        <source>Add text after the command or open a document.</source>
+        <translation>Добавьте текст после команды или откройте документ.</translation>
+    </message>
+    <message>
+        <source>This tool accepts up to 1000 words. Provide a shorter excerpt after the command.</source>
+        <translation>Лимит инструмента — 1000 слов. Укажите после команды более короткий отрывок.</translation>
+    </message>
+    <message>
+        <source>Specify a language: /translate English.</source>
+        <translation>Укажите язык, например: /translate английский.</translation>
+    </message>
+    <message>
+        <source>Provide between 1 and 1000 words after the | separator.</source>
+        <translation>Укажите от 1 до 1000 слов после разделителя |.</translation>
+    </message>
+    <message>
+        <source>Whole-document translation is unavailable in this editor. Use /translate language | text.</source>
+        <translation>В этом редакторе нельзя перевести документ целиком. Используйте /translate язык | текст.</translation>
+    </message>
+    <message>
+        <source>Translate document</source>
+        <translation>Перевести документ</translation>
+    </message>
+    <message>
+        <source>The translation will replace the contents of %1.</source>
+        <translation>Перевод заменит содержимое документа «%1».</translation>
+    </message>
+    <message>
+        <source>This conversion is unavailable for the current document.</source>
+        <translation>Это преобразование недоступно для текущего документа.</translation>
+    </message>
+    <message>
+        <source>Use /synopsis with 20, 45 or -1 words per scene.</source>
+        <translation>Укажите после /synopsis число слов на сцену: 20, 45 или -1 (без ограничения).</translation>
+    </message>
+    <message>
+        <source>Open a character document to use /character.</source>
+        <translation>Для команды /character откройте карточку персонажа.</translation>
+    </message>
+    <message>
+        <source>Open a mind map to use /mindmap.</source>
+        <translation>Для команды /mindmap откройте интеллект-карту.</translation>
+    </message>
+    <message>
+        <source>Unknown character option. Use --personal, --physique, --life, --attitude, --biography or --image.</source>
+        <translation>Неизвестный параметр персонажа. Доступны --personal, --physique, --life, --attitude, --biography и --image.</translation>
+    </message>
+    <message>
+        <source>Add a generation prompt of up to 1000 words.</source>
+        <translation>Опишите, что нужно создать. Лимит — 1000 слов.</translation>
+    </message>
+    <message>
+        <source>Rename chat</source>
+        <translation>Переименовать чат</translation>
+    </message>
+    <message>
+        <source>Chat name</source>
+        <translation>Название чата</translation>
+    </message>
+    <message>
+        <source>Enter a chat name between 1 and 160 characters.</source>
+        <translation>Введите название чата длиной от 1 до 160 символов.</translation>
+    </message>
+    <message>
+        <source>Document context cleared</source>
+        <translation>Контекст очищен</translation>
+    </message>
+    <message>
+        <source>Current document: %1</source>
+        <translation>Текущий документ: %1</translation>
+    </message>
+    <message>
+        <source>/rephrase style | text — rephrase text (or the current document)
+/expand, /shorten, /summarize [text] — reply in chat
+/insert text before | text after — write a transition in chat
+/translate language [| text] — translate into the document
+/generate [--begin|--cursor|--end] prompt — write into the document
+/synopsis [20|45|-1], /novel, /script — use the document conversion tools
+/character prompt, /mindmap prompt — generate in the current editor
+Document translation replaces its content and asks for confirmation.</source>
+        <translation>/rephrase стиль | текст — перефразировать текст (без | — текущий документ)
+/expand, /shorten, /summarize [текст] — расширить, сократить, пересказать в чате
+/insert текст до | текст после — написать связующий фрагмент в чате
+/translate язык [| текст] — перевести и добавить в документ
+/generate [--begin|--cursor|--end] запрос — создать текст в начале, у курсора или в конце документа
+/synopsis [20|45|-1], /novel, /script — создать синопсис, роман или сценарий
+/character запрос, /mindmap запрос — создать персонажа или интеллект-карту в текущем редакторе
+Перевод всего документа заменяет его содержимое и требует подтверждения.</translation>
+    </message>
+    <message>
+        <source>/rephrase style | text — reply in chat</source>
+        <translation>/rephrase стиль | текст — ответ в чате</translation>
+    </message>
+    <message>
+        <source>/insert text before | text after — reply in chat</source>
+        <translation>/insert текст до | текст после — ответ в чате</translation>
+    </message>
+    <message>
+        <source>%1 [text] — reply in chat; omit text to use the current document</source>
+        <translation>%1 [текст] — ответ в чате; без текста используется текущий документ</translation>
+    </message>
+    <message>
+        <source>/translate language [| text] — write into the document</source>
+        <translation>/translate язык [| текст] — перевод в документ</translation>
+    </message>
+    <message>
+        <source>%1 prompt — write into the document</source>
+        <translation>%1 запрос — результат в документ</translation>
+    </message>
+    <message>
+        <source>/synopsis [20|45|-1] — words per scene; -1 means no limit</source>
+        <translation>/synopsis [20|45|-1] — слов на сцену; -1 — без ограничения</translation>
     </message>
 </context>
 <context>
@@ -22807,6 +22977,18 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <source>The assistant did not respond in time. Please reconnect before trying again.</source>
         <translation>Помощник не ответил вовремя. Восстановите соединение и попробуйте снова.</translation>
+    </message>
+    <message>
+        <source>Document context cleared. Your chat history is kept.</source>
+        <translation>Контекст очищен. История переписки сохранена.</translation>
+    </message>
+    <message>
+        <source>Now discussing: %1. I can read this document and our chat history.</source>
+        <translation>Теперь работаем с «%1». Я вижу этот документ и историю переписки.</translation>
+    </message>
+    <message>
+        <source>The result is saved here. It was not added to the document because the document changed or is no longer active.</source>
+        <translation>Результат сохранён в чате. Он не добавлен в документ, потому что документ изменился или вы переключились на другой.</translation>
     </message>
 </context>
 

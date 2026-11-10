@@ -1,107 +1,84 @@
 #include "chat_messages_view.h"
-
 #include "chat_message.h"
 
 #include <ui/design_system/design_system.h>
-#include <ui/modules/avatar_generator/avatar_generator.h>
 #include <utils/helpers/color_helper.h>
-#include <utils/helpers/image_helper.h>
-#include <utils/helpers/text_helper.h>
 
-#include <QPaintEvent>
-#include <QPainter>
-
+#include <QAbstractTextDocumentLayout>
+#include <QResizeEvent>
+#include <QTextBrowser>
+#include <QTextDocumentFragment>
+#include <QTextFrame>
+#include <QtMath>
 
 class ChatMessagesView::Implementation
 {
 public:
-    User currectUser;
+    // Chat text may contain Markdown image URLs. Rendering must never load local files
+    // or make network requests on behalf of message authors.
+    class MessageBrowser : public QTextBrowser
+    {
+    protected:
+        QVariant loadResource(int, const QUrl&) override { return {}; }
+    };
+    class MessageDocument : public QTextDocument
+    {
+    protected:
+        QVariant loadResource(int, const QUrl&) override { return {}; }
+    };
+    MessageBrowser* browser = nullptr;
+    User currentUser;
     QVector<ChatMessage> messages;
+    QVector<QPair<int, int>> ranges;
 };
-
-
-// ****
-
 
 ChatMessagesView::ChatMessagesView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
-    setContextMenuPolicy(Qt::CustomContextMenu);
-    auto sizePolicy = this->sizePolicy();
-    sizePolicy.setHeightForWidth(true);
-    setSizePolicy(sizePolicy);
-
-    connect(
-        this, &ChatMessagesView::customContextMenuRequested, this, [this](const QPoint& _position) {
-            const auto titleFont = Ui::DesignSystem::font().subtitle2();
-            const auto titleFontLineSpacing = TextHelper::fineLineSpacing(titleFont);
-            const auto textFont = Ui::DesignSystem::font().body2();
-            const auto textFontLineSpacing = TextHelper::fineLineSpacing(textFont);
-            const qreal maximumTextWidth = width()
-                - Ui::DesignSystem::layout().px48() // отступ слева под авку и между авкой и текстом
-                - Ui::DesignSystem::layout().px24() // марджины текста от балуна
-                - Ui::DesignSystem::layout().px16(); // отступ справа от границы
-            qreal lastY = Ui::DesignSystem::layout().px16();
-            bool isDateChanged = false;
-            bool isAuthorChanged = false;
-            bool isCurrentAuthor = false;
-            ChatMessage lastMessage;
-            for (int index = 0; index < d->messages.size(); ++index) {
-                const auto& message = d->messages[index];
-                isDateChanged = lastMessage.dateTime().date() != message.dateTime().date();
-                isAuthorChanged = lastMessage.author() != message.author();
-                isCurrentAuthor = message.author() == d->currectUser;
-
-                if (isDateChanged) {
-                    lastY += Ui::DesignSystem::layout().px16() + textFontLineSpacing;
-                }
-
-                const qreal messageTextWidth
-                    = std::max(std::min(maximumTextWidth,
-                                        TextHelper::fineTextWidthF(message.text(), textFont)),
-                               TextHelper::fineTextWidthF(
-                                   isCurrentAuthor ? "" : message.author().name(), titleFont));
-                const qreal messageTextHeight = TextHelper::heightForWidth(
-                    message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
-                const qreal messageTopDelta = isDateChanged
-                    ? Ui::DesignSystem::layout().px16()
-                    : (isAuthorChanged ? Ui::DesignSystem::layout().px8()
-                                       : Ui::DesignSystem::layout().px2());
-                const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
-                    ? titleFontLineSpacing + Ui::DesignSystem::layout().px4()
-                    : 0.0;
-
-                if (lastY <= _position.y()
-                    && _position.y()
-                        <= (lastY + messageTopDelta + messageTextHeight + messageHeightDelta
-                            + Ui::DesignSystem::layout().px24())) {
-                    emit messageContextMenuRequested(index);
-                    return;
-                }
-
-                lastY += messageTopDelta + messageTextHeight + messageHeightDelta
-                    + Ui::DesignSystem::layout().px24();
-
-                lastMessage = message;
+    d->browser = new Implementation::MessageBrowser;
+    d->browser->setObjectName("chatMessageText");
+    d->browser->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    d->browser->setFrameShape(QFrame::NoFrame);
+    d->browser->setOpenLinks(false);
+    d->browser->setOpenExternalLinks(false);
+    d->browser->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    d->browser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->browser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->browser->setContextMenuPolicy(Qt::CustomContextMenu);
+    d->browser->setParent(this);
+    auto policy = sizePolicy();
+    policy.setHeightForWidth(true);
+    setSizePolicy(policy);
+    connect(d->browser, &QWidget::customContextMenuRequested, this, [this](const QPoint& _point) {
+        const auto position = d->browser->cursorForPosition(_point).position();
+        for (int index = 0; index < d->ranges.size(); ++index) {
+            if (position >= d->ranges.at(index).first && position <= d->ranges.at(index).second) {
+                emit messageContextMenuRequested(index);
+                return;
             }
-        });
+        }
+    });
 }
 
 ChatMessagesView::~ChatMessagesView() = default;
 
 void ChatMessagesView::setCurrentUser(const User& _user)
 {
-    d->currectUser = _user;
-    updateGeometry();
-    update();
+    if (d->currentUser == _user) {
+        return;
+    }
+    d->currentUser = _user;
+    rebuildDocument();
 }
 
 void ChatMessagesView::setMessages(const QVector<ChatMessage>& _messages)
 {
+    if (d->messages == _messages) {
+        return;
+    }
     d->messages = _messages;
-    updateGeometry();
-    update();
+    rebuildDocument();
 }
 
 QVector<ChatMessage> ChatMessagesView::messages() const
@@ -109,216 +86,108 @@ QVector<ChatMessage> ChatMessagesView::messages() const
     return d->messages;
 }
 
-int ChatMessagesView::heightForWidth(int _width) const
+QString ChatMessagesView::selectedText() const
 {
-    //
-    // Пересчитываем высоту в зависимости от ширины
-    // NOTE: тут многое повторяется с методом отрисовки, при изменении быть внимательным
-    //
-
-    const auto titleFont = Ui::DesignSystem::font().subtitle2();
-    const auto titleFontLineSpacing = TextHelper::fineLineSpacing(titleFont);
-    const auto textFont = Ui::DesignSystem::font().body2();
-    const auto textFontLineSpacing = TextHelper::fineLineSpacing(textFont);
-    const qreal maximumTextWidth = _width
-        - Ui::DesignSystem::layout().px48() // отступ слева под авку и между авкой и текстом
-        - Ui::DesignSystem::layout().px24() // марджины текста от балуна
-        - Ui::DesignSystem::layout().px16(); // отступ справа от границы
-    qreal lastY = Ui::DesignSystem::layout().px16();
-    bool isDateChanged = false;
-    bool isAuthorChanged = false;
-    bool isCurrentAuthor = false;
-    ChatMessage lastMessage;
-    for (const auto& message : std::as_const(d->messages)) {
-        isDateChanged = lastMessage.dateTime().date() != message.dateTime().date();
-        isAuthorChanged = lastMessage.author() != message.author();
-        isCurrentAuthor = message.author() == d->currectUser;
-
-        if (isDateChanged) {
-            lastY += Ui::DesignSystem::layout().px16() + textFontLineSpacing;
-        }
-
-        const qreal messageTextWidth = std::max(
-            std::min(maximumTextWidth, TextHelper::fineTextWidthF(message.text(), textFont)),
-            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(), titleFont));
-        const qreal messageTextHeight = TextHelper::heightForWidth(
-            message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
-        const qreal messageTopDelta = isDateChanged
-            ? Ui::DesignSystem::layout().px16()
-            : (isAuthorChanged ? Ui::DesignSystem::layout().px8()
-                               : Ui::DesignSystem::layout().px2());
-        const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
-            ? titleFontLineSpacing + Ui::DesignSystem::layout().px4()
-            : 0.0;
-        lastY += messageTopDelta + messageTextHeight + messageHeightDelta
-            + Ui::DesignSystem::layout().px24();
-
-        lastMessage = message;
-    }
-
-    return lastY + Ui::DesignSystem::layout().px16();
+    return d->browser->textCursor().selectedText().replace(QChar::ParagraphSeparator, '\n');
 }
 
-void ChatMessagesView::paintEvent(QPaintEvent* _event)
+void ChatMessagesView::rebuildDocument()
 {
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
-    painter.setFont(Ui::DesignSystem::font().body2());
-
-    //
-    // Рисуем фон
-    //
-    painter.fillRect(_event->rect(), backgroundColor());
-
-    //
-    // Рисуем сообщения
-    //
-
-    const auto titleFont = Ui::DesignSystem::font().subtitle2();
-    const auto titleFontLineSpacing = TextHelper::fineLineSpacing(titleFont);
-    const auto textFont = Ui::DesignSystem::font().body2();
-    const auto textFontLineSpacing = TextHelper::fineLineSpacing(textFont);
-    const QColor defaultBaloonColor = ColorHelper::nearby(backgroundColor());
-    const QColor currentAuthorBaloonColor = ColorHelper::nearby(defaultBaloonColor);
-    const qreal maximumTextWidth = width()
-        - Ui::DesignSystem::layout().px48() // отступ слева под авку и между авкой и текстом
-        - Ui::DesignSystem::layout().px24() // марджины текста от балуна
-        - Ui::DesignSystem::layout().px16(); // отступ справа от границы
-    qreal lastY = 0.0;
-    bool isDateChanged = true;
-    bool isAuthorChanged = true;
-    bool isCurrentAuthor = false;
-    ChatMessage lastMessage;
-    auto drawAvatar = [this, &painter, &lastY, &isDateChanged, &isAuthorChanged, &isCurrentAuthor,
-                       &lastMessage] {
-        if (!lastMessage.author().isValid()) {
-            return;
-        }
-
-        //
-        // Если предыдущее сообщение было не своё, и при этом изменяется пользователь, или
-        // день, то отрисуем авку
-        //
-        if (!isCurrentAuthor && (isDateChanged || isAuthorChanged)) {
-            const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
-            const QRectF avatarRect(
-                QPointF(isLeftToRight()
-                            ? Ui::DesignSystem::layout().px12()
-                            : (width() - Ui::DesignSystem::layout().px12() - avatarSize.width()),
-                        lastY - avatarSize.height()),
-                avatarSize);
-            const auto avatar = Ui::AvatarGenerator::avatar(lastMessage.author().name(),
-                                                            lastMessage.author().email());
-            painter.drawPixmap(avatarRect, avatar, avatar.rect());
-        }
-    };
-
+    auto document = d->browser->document();
+    document->clear();
+    document->setDefaultFont(Ui::DesignSystem::font().body2());
+    document->setDocumentMargin(12);
+    document->setDefaultStyleSheet("pre { white-space: pre-wrap; } code { font-family: monospace; } "
+                                  "table { border-collapse: collapse; } td, th { padding: 4px; }");
+    QTextCursor cursor(document);
+    d->ranges.clear();
+    QDate date;
     for (const auto& message : std::as_const(d->messages)) {
-        //
-        // Определим изменилась ли дата
-        //
-        isDateChanged = lastMessage.dateTime().date() != message.dateTime().date();
-
-        //
-        // Определим изменился ли пользователь
-        //
-        isAuthorChanged = lastMessage.author() != message.author();
-
-        //
-        // Рисуем авку
-        //
-        drawAvatar();
-
-        //
-        // Определим, принадлежит ли текущее сообщение пользователю программы
-        //
-        isCurrentAuthor = message.author() == d->currectUser;
-
-
-        //
-        // Если дата изменилась, отрисуем новую дату
-        //
-        if (isDateChanged) {
-            painter.setPen(textColor());
-            const QRectF dateRect(0.0, lastY + Ui::DesignSystem::layout().px16(), width(),
-                                  textFontLineSpacing);
-            painter.drawText(dateRect, Qt::AlignCenter, message.dateTime().toString("d MMMM"));
-
-            lastY = dateRect.bottom();
+        if (message.dateTime().isValid() && date != message.dateTime().date()) {
+            date = message.dateTime().date();
+            QTextBlockFormat format;
+            format.setAlignment(Qt::AlignCenter);
+            format.setTopMargin(8);
+            format.setBottomMargin(8);
+            cursor.setBlockFormat(format);
+            cursor.insertText(message.dateTime().toString("d MMMM"));
+            cursor.insertBlock();
         }
-
-
-        //
-        // Определим область текста
-        //
-        const qreal messageTextWidth = std::max(
-            std::min(maximumTextWidth, TextHelper::fineTextWidthF(message.text(), textFont)),
-            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(), titleFont));
-        const qreal messageTextHeight = TextHelper::heightForWidth(
-            message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
-        //
-        // Определим область балуна под текст
-        //
-        const qreal messageTopDelta = isDateChanged
-            ? Ui::DesignSystem::layout().px16()
-            : (isAuthorChanged ? Ui::DesignSystem::layout().px8()
-                               : Ui::DesignSystem::layout().px2());
-        const qreal messageWidth = messageTextWidth + Ui::DesignSystem::layout().px24();
-        const qreal messageX = isCurrentAuthor && messageTextWidth < maximumTextWidth
-            ? (isLeftToRight() ? (width() - messageWidth - Ui::DesignSystem::layout().px16())
-                               : Ui::DesignSystem::layout().px16())
-            : (isLeftToRight() ? Ui::DesignSystem::layout().px48()
-                               : (width() - messageWidth - Ui::DesignSystem::layout().px48()));
-        const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
-            ? titleFontLineSpacing + Ui::DesignSystem::layout().px4()
-            : 0.0;
-        const QRectF messageRect(messageX, lastY + messageTopDelta, messageWidth,
-                                 messageTextHeight + messageHeightDelta
-                                     + Ui::DesignSystem::layout().px24());
-        const QRectF messageTextRect = messageRect.adjusted(
-            Ui::DesignSystem::layout().px12(),
-            Ui::DesignSystem::layout().px12() + messageHeightDelta,
-            -Ui::DesignSystem::layout().px12(), -Ui::DesignSystem::layout().px12());
-        //
-        // ... фон рисуем только для сообщений пользователей
-        //
+        QTextFrameFormat frame;
+        frame.setBorder(0);
+        frame.setPadding(10);
+        frame.setTopMargin(4);
+        frame.setBottomMargin(8);
+        const bool own = message.author() == d->currentUser;
+        frame.setLeftMargin(own ? 36 : 0);
+        frame.setRightMargin(own ? 0 : 16);
         if (!message.isSistemMessage()) {
-            painter.setPen(Qt::NoPen);
-            painter.setBrush(isCurrentAuthor ? currentAuthorBaloonColor : defaultBaloonColor);
-            painter.drawRoundedRect(messageRect, Ui::DesignSystem::card().borderRadius(),
-                                    Ui::DesignSystem::card().borderRadius());
+            frame.setBackground(ColorHelper::nearby(backgroundColor()));
         }
-        //
-        QTextOption textOption;
-        textOption.setAlignment(isLeftToRight() ? Qt::AlignLeft : Qt::AlignRight);
-        if (isAuthorChanged && !isCurrentAuthor) {
-            painter.setFont(Ui::DesignSystem::font().subtitle2());
-            painter.setPen(message.author().avatarColor());
-            painter.drawText(QRectF(QPointF(messageTextRect.left(),
-                                            messageRect.top() + Ui::DesignSystem::layout().px8()),
-                                    QSizeF(messageTextRect.width(), titleFontLineSpacing)),
-                             message.author().name(), textOption);
+        auto messageFrame = cursor.insertFrame(frame);
+        cursor = messageFrame->firstCursorPosition();
+        QTextBlockFormat normal;
+        normal.setAlignment(Qt::AlignLeft);
+        cursor.setBlockFormat(normal);
+        QTextCharFormat textFormat;
+        textFormat.setForeground(textColor());
+        textFormat.setFontItalic(message.isSistemMessage());
+        cursor.setCharFormat(textFormat);
+        const int start = cursor.position();
+        if (!message.isSistemMessage()) {
+            auto authorFormat = textFormat;
+            authorFormat.setFontWeight(QFont::DemiBold);
+            cursor.insertText(message.author().name(), authorFormat);
+            cursor.insertBlock(normal, textFormat);
         }
-        //
-        textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-        auto messageFont = Ui::DesignSystem::font().body2();
-        messageFont.setItalic(message.isSistemMessage());
-        painter.setFont(messageFont);
-        painter.setPen(textColor());
-        painter.drawText(messageTextRect, message.text(), textOption);
-
-        lastY = messageRect.bottom();
-
-        //
-        // Запомним текущее обработанное сообщение
-        //
-        lastMessage = message;
+        if (message.isMarkdown()) {
+            Implementation::MessageDocument fragment;
+            fragment.setDefaultFont(document->defaultFont());
+            fragment.setMarkdown(message.text(), QTextDocument::MarkdownFeatures(QTextDocument::MarkdownDialectGitHub)
+                                                     | QTextDocument::MarkdownNoHTML);
+            cursor.insertFragment(QTextDocumentFragment(&fragment));
+        } else {
+            cursor.insertText(message.text(), textFormat);
+        }
+        d->ranges.append({ start, cursor.position() });
+        cursor = messageFrame->lastCursorPosition();
+        cursor.movePosition(QTextCursor::NextCharacter);
+        cursor.setBlockFormat(QTextBlockFormat());
+        cursor.setCharFormat(QTextCharFormat());
     }
+    auto palette = d->browser->palette();
+    palette.setColor(QPalette::Base, backgroundColor());
+    palette.setColor(QPalette::Text, textColor());
+    d->browser->setPalette(palette);
+    document->setTextWidth(qMax(1, width() - 4));
+    updateGeometry();
+}
 
-    //
-    // Рисуем авку после того, как нарисовали последнее сообщение
-    //
-    isAuthorChanged = true;
-    drawAvatar();
+int ChatMessagesView::heightForWidth(int _width) const
+{
+    d->browser->document()->setTextWidth(qMax(1, _width - 4));
+    return qCeil(d->browser->document()->size().height()) + 4;
+}
+
+void ChatMessagesView::resizeEvent(QResizeEvent* _event)
+{
+    Widget::resizeEvent(_event);
+    d->browser->setGeometry(rect());
+    d->browser->document()->setTextWidth(qMax(1, _event->size().width() - 4));
+}
+
+void ChatMessagesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Widget::designSystemChangeEvent(_event);
+    rebuildDocument();
+}
+
+void ChatMessagesView::processBackgroundColorChange()
+{
+    rebuildDocument();
+}
+
+void ChatMessagesView::processTextColorChange()
+{
+    rebuildDocument();
 }

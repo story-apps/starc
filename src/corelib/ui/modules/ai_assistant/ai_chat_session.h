@@ -30,10 +30,18 @@ public:
     QString currentChat() const;
     QString documentName() const;
     bool createChat();
+    bool renameChat(const QString& _title);
+    QString documentText() const;
+    QString documentId() const;
+    bool startTool(const QString& _message, const QString& _action, int _replyCount = 1);
+    bool isToolRequest(const QString& _action) const;
+    bool toolTargetsCurrentDocument() const;
+    bool finishToolReply(const QString& _action, const QString& _text);
     bool selectChat(const QString& _id);
     bool deleteChat();
     bool send(const QString& _text);
     bool hasPendingReply() const;
+    bool isWaitingForCurrentChat() const;
     // Returns false only for a legacy generation explicitly requested by an editor.
     bool finishReply(const QString& _text);
     void failReply(const QString& _error, bool _releaseTransport = true);
@@ -51,6 +59,7 @@ private:
                 const QString& _document = {});
     bool ensureContext(bool* _added = nullptr);
     bool check(bool _success);
+    void updateAutomaticTitle(const QString& _message);
 
     QSqlDatabase m_database;
     QString m_connection;
@@ -62,9 +71,17 @@ private:
     std::function<QString()> m_content;
     QString m_pendingChat;
     bool m_backendAvailable = false;
-    enum class RequestKind { None, Chat, Legacy };
+    enum class RequestKind { None, Chat, Legacy, Tool };
     RequestKind m_requestKind = RequestKind::None;
     QTimer m_replyTimer;
+    QString m_toolAction;
+    QString m_toolDocument;
+    QString m_toolDocumentName;
+    QString m_toolContent;
+    int m_toolRepliesRemaining = 0;
+    QString m_toolProject;
+    QString m_toolAccount;
+    bool m_toolDispatched = false;
 };
 
 } // namespace Ui

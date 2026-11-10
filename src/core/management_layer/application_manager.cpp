@@ -4215,24 +4215,61 @@ void ApplicationManager::initConnections()
                 QTimer::singleShot(2400, this, [taskId] { TaskBar::finishTask(taskId); });
             });
     //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased,
-            d->projectManager.data(), &ProjectManager::setRephrasedText);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::textExpanded,
-            d->projectManager.data(), &ProjectManager::setExpandedText);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::textShortened,
-            d->projectManager.data(), &ProjectManager::setShortenedText);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::textInserted,
-            d->projectManager.data(), &ProjectManager::setInsertedText);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::textSummarizeed,
-            d->projectManager.data(), &ProjectManager::setSummarizeedText);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::textTranslated,
-            d->projectManager.data(), &ProjectManager::setTranslatedText);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentTranslated,
-            d->projectManager.data(), &ProjectManager::setTranslatedDocument);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::synopsisGenerated,
-            d->projectManager.data(), &ProjectManager::setGeneratedSynopsis);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased, this,
+            [](const QString& _text) {
+                Ui::AiChatSession::instance()->finishToolReply("rephrase", _text);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textExpanded, this,
+            [](const QString& _text) {
+                Ui::AiChatSession::instance()->finishToolReply("expand", _text);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textShortened, this,
+            [](const QString& _text) {
+                Ui::AiChatSession::instance()->finishToolReply("shorten", _text);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textInserted, this,
+            [](const QString& _text) {
+                Ui::AiChatSession::instance()->finishToolReply("insert", _text);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textSummarizeed, this,
+            [](const QString& _text) {
+                Ui::AiChatSession::instance()->finishToolReply("summarize", _text);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textTranslated, this,
+            [this](const QString& _text) {
+                auto chat = Ui::AiChatSession::instance();
+                const bool apply = chat->isToolRequest("translate") && chat->toolTargetsCurrentDocument();
+                chat->finishToolReply("translate", _text);
+                if (apply) {
+                    d->projectManager->setTranslatedText(_text);
+                }
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentTranslated, this,
+            [this](const QVector<QString>& _text) {
+                auto chat = Ui::AiChatSession::instance();
+                const bool apply = chat->isToolRequest("translate-document") && chat->toolTargetsCurrentDocument();
+                chat->finishToolReply("translate-document", QStringList(_text.toList()).join("\n"));
+                if (apply) {
+                    d->projectManager->setTranslatedDocument(_text);
+                }
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::synopsisGenerated, this,
+            [this](const QString& _text) {
+                auto chat = Ui::AiChatSession::instance();
+                const bool apply = chat->isToolRequest("synopsis") && chat->toolTargetsCurrentDocument();
+                chat->finishToolReply("synopsis", _text);
+                if (apply) {
+                    d->projectManager->setGeneratedSynopsis(_text);
+                }
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::novelGenerated, this,
             [this](const QString& _text) {
+                auto chat = Ui::AiChatSession::instance();
+                const bool apply = chat->isToolRequest("novel") && chat->toolTargetsCurrentDocument();
+                chat->finishToolReply("novel", _text);
+                if (!apply) {
+                    return;
+                }
                 const auto novelFilePath
                     = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
                     + QDir::separator() + tr("Novel") + ".md";
@@ -4246,6 +4283,12 @@ void ApplicationManager::initConnections()
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::scriptGenerated, this,
             [this](const QString& _text) {
+                auto chat = Ui::AiChatSession::instance();
+                const bool apply = chat->isToolRequest("script") && chat->toolTargetsCurrentDocument();
+                chat->finishToolReply("script", _text);
+                if (!apply) {
+                    return;
+                }
                 const auto scriptFilePath
                     = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
                     + QDir::separator() + tr("Screenplay") + ".fountain";
@@ -4261,12 +4304,25 @@ void ApplicationManager::initConnections()
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
             this, [this](const QString& _text) {
                 auto chat = Ui::AiChatSession::instance();
-                if (!chat->finishReply(_text)) {
+                if (chat->isToolRequest("generate")) {
+                    const bool apply = chat->toolTargetsCurrentDocument();
+                    chat->finishToolReply("generate", _text);
+                    if (apply) {
+                        d->projectManager->setGeneratedText(_text);
+                    }
+                } else if (!chat->finishReply(_text)) {
                     d->projectManager->setGeneratedText(_text);
                 }
             });
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::imageGenerated,
-            d->projectManager.data(), &ProjectManager::setGeneratedImage);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::imageGenerated, this,
+            [this](const QPixmap& _image) {
+                auto chat = Ui::AiChatSession::instance();
+                const bool apply = chat->isToolRequest("generate") && chat->toolTargetsCurrentDocument();
+                chat->finishToolReply("generate", tr("Character image generated."));
+                if (apply) {
+                    d->projectManager->setGeneratedImage(_image);
+                }
+            });
 #endif
 }
 

@@ -6,7 +6,7 @@
 namespace Ui {
 
 /**
- * @brief Сайдбар с инструментами ИИ помощника
+ * @brief Чат с ИИ помощником и командами для работы с документом
  */
 class CORE_LIBRARY_EXPORT AiAssistantView : public Widget
 {
@@ -209,8 +209,10 @@ protected:
 
 private:
     void initChat();
+    bool sendChatMessage(const QString& _message);
     void refreshChat();
     void updateChatTranslations();
+    void updateChatComposer();
     void updateChatDesign();
 
     class Implementation;

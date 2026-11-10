@@ -20,6 +20,9 @@ private slots:
     void timeoutConsumesLateReplies();
     void legacyRequestsCannotOverlapChatRequests();
     void changingAccountKeepsOnlyCurrentDocument();
+    void renamesPersistAndSurviveFirstMessage();
+    void toolRepliesKeepTheirOriginAndIgnoreStaleTargets();
+    void toolTimeoutAndMultipleResults();
 };
 
 void AiChatTest::persistsAndIsolatesProjectsAndAccounts()
@@ -266,6 +269,109 @@ void AiChatTest::changingAccountKeepsOnlyCurrentDocument()
     QVERIFY(prompt.contains("CURRENT_CONTENT"));
     QVERIFY(!prompt.contains("PRIVATE_ACCOUNT_MESSAGE"));
     QVERIFY(!prompt.contains("PRIVATE_ACCOUNT_REPLY"));
+}
+
+void AiChatTest::renamesPersistAndSurviveFirstMessage()
+{
+    QTemporaryDir dir;
+    const auto path = dir.filePath("sessions.db");
+    const auto project = QUuid::createUuid();
+    QString id;
+    {
+        // Emulate the schema shipped before rename support.
+        auto db = QSqlDatabase::addDatabase("QSQLITE", "old-chat-schema");
+        db.setDatabaseName(path);
+        QVERIFY(db.open());
+        QSqlQuery query(db);
+        QVERIFY(query.exec("CREATE TABLE ai_chats (id TEXT PRIMARY KEY, project_uuid TEXT NOT NULL, "
+                           "account_email TEXT NOT NULL, title TEXT NOT NULL, created_at TEXT NOT NULL, selected_at TEXT NOT NULL)"));
+    }
+    QSqlDatabase::removeDatabase("old-chat-schema");
+    {
+        Ui::AiChatSession chat(path);
+        chat.setProject(project, {});
+        chat.setBackendAvailable(true);
+        QVERIFY(chat.createChat());
+        id = chat.currentChat();
+        QVERIFY(!chat.renameChat(" "));
+        QVERIFY(!chat.renameChat(QString(161, 'x')));
+        QVERIFY(chat.renameChat("  My   story  "));
+        QVERIFY(chat.send("First message must not replace my name"));
+        chat.finishReply("Reply");
+        QCOMPARE(chat.chats().first().toObject().value("title").toString(), QString("My story"));
+    }
+    Ui::AiChatSession restored(path);
+    restored.setProject(project, {});
+    QCOMPARE(restored.currentChat(), id);
+    QCOMPARE(restored.chats().first().toObject().value("title").toString(), QString("My story"));
+    restored.setBackendAvailable(true);
+    QVERIFY(restored.createChat());
+    QVERIFY(restored.startTool("/expand An idea", "expand"));
+    QCOMPARE(restored.chats().first().toObject().value("title").toString(), QString("/expand An idea"));
+    restored.finishToolReply("expand", "An expanded idea");
+}
+
+void AiChatTest::toolRepliesKeepTheirOriginAndIgnoreStaleTargets()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    const auto project = QUuid::createUuid();
+    const auto doc = QUuid::createUuid();
+    QString content = "Original content";
+    chat.setProject(project, {});
+    chat.setBackendAvailable(true);
+    chat.setDocument(doc, "Book / Draft", [&content] { return content; });
+    QVERIFY(chat.startTool("/generate A scene", "generate"));
+    const auto origin = chat.currentChat();
+    QVERIFY(chat.toolTargetsCurrentDocument());
+    QVERIFY(!chat.startTool("/expand", "expand"));
+    QVERIFY(chat.beginLegacyRequest());
+    QVERIFY(!chat.beginLegacyRequest());
+    QVERIFY(!chat.finishToolReply("expand", "Wrong tool"));
+    QVERIFY(chat.createChat());
+    QVERIFY(chat.toolTargetsCurrentDocument());
+    chat.setDocument(doc, "Book / Other draft", [&content] { return content; });
+    QVERIFY(!chat.toolTargetsCurrentDocument());
+    QVERIFY(chat.messages().last().toObject().value("text").toString().contains("Other draft"));
+    QVERIFY(chat.finishToolReply("generate", "Result for the first chat"));
+    QVERIFY(chat.selectChat(origin));
+    const auto reply = chat.messages().at(chat.messages().size() - 2).toObject();
+    QCOMPARE(reply.value("role").toString(), QString("assistant"));
+    QVERIFY(reply.value("text").toString().startsWith("Result for the first chat"));
+    QVERIFY(reply.value("text").toString().contains("not added"));
+    QVERIFY(chat.startTool("/translate English", "translate-document"));
+    QVERIFY(chat.toolTargetsCurrentDocument());
+    content += " Edited while translating";
+    QVERIFY(!chat.toolTargetsCurrentDocument());
+    chat.finishToolReply("translate-document", "Translation");
+    QVERIFY(chat.startTool("/generate Again", "generate"));
+    QVERIFY(chat.deleteChat());
+    QVERIFY(!chat.toolTargetsCurrentDocument());
+    chat.finishToolReply("generate", "Late result");
+    QVERIFY(!chat.selectChat(origin));
+    QVERIFY(chat.canSend());
+}
+
+void AiChatTest::toolTimeoutAndMultipleResults()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setDocument(QUuid::createUuid(), "Character", [] { return "Content"; });
+    chat.setBackendAvailable(true);
+    QVERIFY(chat.startTool("/character --personal --image Hero", "generate", 2));
+    QVERIFY(chat.finishToolReply("generate", "Character description"));
+    QVERIFY(chat.hasPendingReply());
+    QVERIFY(!chat.canSend());
+    QVERIFY(chat.finishToolReply("generate", "Character image generated"));
+    QVERIFY(chat.canSend());
+    QVERIFY(chat.startTool("/generate Slow", "generate"));
+    QVERIFY(QMetaObject::invokeMethod(chat.findChild<QTimer*>("aiChatReplyTimeout"), "timeout", Qt::DirectConnection));
+    QVERIFY(!chat.toolTargetsCurrentDocument());
+    QVERIFY(!chat.canSend());
+    QVERIFY(chat.finishToolReply("generate", "Late reply"));
+    QCOMPARE(chat.messages().last().toObject().value("role").toString(), QString("error"));
+    QVERIFY(chat.canSend());
 }
 
 QTEST_GUILESS_MAIN(AiChatTest)

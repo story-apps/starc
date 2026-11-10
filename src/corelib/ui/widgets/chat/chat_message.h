@@ -19,12 +19,15 @@ public:
     QString text() const;
     User author() const;
     bool isSistemMessage() const;
+    bool isMarkdown() const;
+    void setMarkdown(bool _enabled);
 
 private:
     QDateTime m_dateTime;
     QString m_text;
     User m_author;
     bool m_isSistemMessage = false;
+    bool m_isMarkdown = false;
 };
 
 

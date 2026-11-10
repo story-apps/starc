@@ -32,10 +32,22 @@ bool ChatMessage::isSistemMessage() const
     return m_isSistemMessage;
 }
 
+bool ChatMessage::isMarkdown() const
+{
+    return m_isMarkdown;
+}
+
+void ChatMessage::setMarkdown(bool _enabled)
+{
+    m_isMarkdown = _enabled;
+}
+
+
 bool operator==(const ChatMessage& _lhs, const ChatMessage& _rhs)
 {
     return _lhs.dateTime() == _rhs.dateTime() && _lhs.text() == _rhs.text()
-        && _lhs.author() == _rhs.author() && _lhs.isSistemMessage() == _rhs.isSistemMessage();
+        && _lhs.author() == _rhs.author() && _lhs.isSistemMessage() == _rhs.isSistemMessage()
+        && _lhs.isMarkdown() == _rhs.isMarkdown();
 }
 
 bool operator!=(const ChatMessage& _lhs, const ChatMessage& _rhs)

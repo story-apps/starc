@@ -31,6 +31,7 @@ public:
      * @brief Получить текущие сообщения, например, для действий контекстного меню
      */
     QVector<ChatMessage> messages() const;
+    QString selectedText() const;
 
     /**
      * @brief Получить необходимую высоту в зависимости от ширины
@@ -45,11 +46,15 @@ signals:
 
 protected:
     /**
-     * @brief Переопределяем для собственной отрисовки
+     * @brief Согласуем размеры текста и внешней области прокрутки
      */
-    void paintEvent(QPaintEvent* _event) override;
+    void resizeEvent(QResizeEvent* _event) override;
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+    void processBackgroundColorChange() override;
+    void processTextColorChange() override;
 
 private:
+    void rebuildDocument();
     class Implementation;
     QScopedPointer<Implementation> d;
 };
