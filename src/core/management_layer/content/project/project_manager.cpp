@@ -76,6 +76,7 @@ namespace {
 
 const QLatin1String kCurrentViewMimeTypeKey("view-mime-type");
 const QLatin1String kCurrentDraftKey("current-draft");
+const QLatin1String kStatisticsDraftKey("statistics-draft");
 constexpr int kCollaboratorsUpdateTimeoutMs = 60 * 1000;
 
 /**
@@ -274,6 +275,8 @@ public:
      * @brief Получить реальную модель, если в индексе элемент-алиас
      */
     BusinessLayer::StructureModelItem* aliasedItemForIndex(const QModelIndex& _index);
+
+    BusinessLayer::StructureModelItem* draftsItemForIndex(const QModelIndex& _index);
 
     /**
      * @brief Создать новый драфт заданного документа
@@ -1201,8 +1204,8 @@ BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemFo
     const QModelIndex& _index)
 {
     auto item = projectStructureModel->itemForIndex(_index);
-    if (item->type() != Domain::DocumentObjectType::ScreenplayTreatment
-        && item->type() != Domain::DocumentObjectType::NovelOutline) {
+    if (item == nullptr || (item->type() != Domain::DocumentObjectType::ScreenplayTreatment
+                           && item->type() != Domain::DocumentObjectType::NovelOutline)) {
         return item;
     }
 
@@ -1212,6 +1215,12 @@ BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemFo
     }
 
     return projectStructureModel->itemForUuid(model->document()->uuid());
+}
+
+BusinessLayer::StructureModelItem* ProjectManager::Implementation::draftsItemForIndex(
+    const QModelIndex& _index)
+{
+    return modelsFacade.draftsItemFor(aliasedItemForIndex(_index));
 }
 
 void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemIndex)
@@ -2502,12 +2511,33 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
 
                 const auto sourceIndex
                     = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
-                if (sourceIndex != _topLeft) {
+                const auto documentItem = d->aliasedItemForIndex(sourceIndex);
+                const auto item = d->modelsFacade.draftsItemFor(documentItem);
+                if (item == nullptr
+                    || (sourceIndex != _topLeft
+                        && d->projectStructureModel->indexForItem(item) != _topLeft)) {
                     return;
                 }
 
-                auto item = d->aliasedItemForIndex(sourceIndex);
                 d->view.active->setDocumentDrafts(item);
+                if (documentItem != item) {
+                    const auto selectedUuid
+                        = settingsValue(documentSettingsKey(documentItem->uuid(),
+                                                            kStatisticsDraftKey))
+                              .toUuid();
+                    int draftIndex = 0;
+                    for (int index = 0; index < item->drafts().size(); ++index) {
+                        if (item->drafts().at(index)->uuid() == selectedUuid) {
+                            draftIndex = index + 1;
+                            break;
+                        }
+                    }
+                    const QSignalBlocker blocker(d->view.active);
+                    d->view.active->setCurrentDraft(draftIndex);
+                    if (draftIndex == 0 && selectedUuid != item->uuid()) {
+                        showViewForDraft(item);
+                    }
+                }
             });
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted, this,
@@ -2807,14 +2837,16 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
             }
         });
+    const auto updateDraftsVisibility = [this](const QUuid& _uuid) {
+        const auto item = d->draftsItemForIndex(d->view.activeIndex);
+        if (item != nullptr && item->uuid() == _uuid) {
+            d->view.active->setDraftsVisible(!item->drafts().isEmpty());
+        }
+    };
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::draftAdded, this,
-            [this] { d->view.active->setDraftsVisible(true); });
+            updateDraftsVisibility);
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::draftRemoved, this,
-            [this](const QUuid& _uuid) {
-                const auto draftsCount
-                    = d->projectStructureModel->itemForUuid(_uuid)->drafts().count();
-                d->view.active->setDraftsVisible(draftsCount > 0);
-            });
+            updateDraftsVisibility);
 
     //
     // Соединения представления
@@ -2822,9 +2854,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     for (auto view : { d->view.left, d->view.right }) {
         connect(view, &Ui::ProjectView::createNewItemPressed, this, [this] { d->addDocument(); });
         connect(view, &Ui::ProjectView::showDraftPressed, this, [this](int _draftIndex) {
-            const auto currentItemIndex
-                = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
-            const auto currentItem = d->aliasedItemForIndex(currentItemIndex);
+            const auto currentItem = d->draftsItemForIndex(d->view.activeIndex);
+            if (currentItem == nullptr || _draftIndex < 0
+                || _draftIndex > currentItem->drafts().size()) {
+                return;
+            }
 
             //
             // Показать текущий драфт
@@ -2843,6 +2877,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             const auto currentItemIndex
                 = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
             const auto item = d->aliasedItemForIndex(currentItemIndex);
+            // В статистике вкладки выбирают источник отчётов. Управление драфтами — в тексте.
+            if (item == nullptr || d->modelsFacade.draftsItemFor(item) != item) {
+                return;
+            }
             const auto isCurrentDraft = _draftIndex == 0;
             const auto realDraftIndex = _draftIndex - 1;
             const auto hasActualDrafts
@@ -3547,8 +3585,8 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
             d->view.container->restoreState(d->view.stateBeforeFullscreen);
         }
 
-        const auto item = d->aliasedItemForIndex(d->view.activeIndex);
-        d->view.active->setDraftsVisible(item->drafts().count() > 0);
+        const auto item = d->draftsItemForIndex(d->view.activeIndex);
+        d->view.active->setDraftsVisible(item != nullptr && !item->drafts().isEmpty());
     }
 }
 
@@ -4778,10 +4816,18 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     // Если не структура, а какая-либо из моделей, то обновим представление для неё
     //
     else {
-        const auto item = d->projectStructureModel->itemForIndex(
-            d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
+        const auto item = d->draftsItemForIndex(d->view.activeIndex);
         if (item != nullptr) {
-            if (d->view.active->currentDraft() == 0 && item->uuid() == _documentInfo.uuid) {
+            const auto documentItem = d->aliasedItemForIndex(d->view.activeIndex);
+            const auto selectedDraft = d->view.active->currentDraft() == 0
+                ? item
+                : item->drafts().value(d->view.active->currentDraft() - 1);
+            if (documentItem != item && selectedDraft != nullptr
+                && (selectedDraft->uuid() == _documentInfo.uuid
+                    || documentItem->uuid() == _documentInfo.uuid)) {
+                showView(d->projectStructureProxyModel->mapFromSource(d->view.activeIndex),
+                         d->view.activeViewMimeType);
+            } else if (d->view.active->currentDraft() == 0 && item->uuid() == _documentInfo.uuid) {
                 showView(d->navigator->currentIndex(), d->view.activeViewMimeType);
             } else if (const auto draftItem
                        = item->drafts().value(d->view.active->currentDraft() - 1);
@@ -5511,17 +5557,43 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     const auto sourceItem = d->projectStructureModel->itemForIndex(sourceItemIndex);
-    auto aliasedItem = d->aliasedItemForIndex(sourceItemIndex);
-    auto itemForShow = aliasedItem;
-    if (const auto versionIndex
-        = settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentDraftKey), 0).toInt() - 1;
-        versionIndex != -1 && !aliasedItem->drafts().isEmpty()
-        && versionIndex < aliasedItem->drafts().size()) {
-        itemForShow = aliasedItem->drafts().at(versionIndex);
+    const auto aliasedItem = d->aliasedItemForIndex(sourceItemIndex);
+    const auto draftsItem = d->modelsFacade.draftsItemFor(aliasedItem);
+    if (draftsItem == nullptr) {
+        updateCurrentDocument(nullptr, {});
+        d->view.active->setDraftsVisible(false);
+        d->view.active->showDocumentLoadingPage();
+        return;
+    }
+    const auto savedDraftIndex
+        = settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentDraftKey), 0).toInt();
+    auto draftIndex = savedDraftIndex >= 0 && savedDraftIndex <= draftsItem->drafts().size()
+        ? savedDraftIndex
+        : 0;
+    if (draftsItem != aliasedItem) {
+        // Позиция драфта меняется при добавлении и удалении других версий.
+        const auto selectedUuid
+            = settingsValue(documentSettingsKey(aliasedItem->uuid(), kStatisticsDraftKey)).toUuid();
+        draftIndex = 0;
+        for (int index = 0; index < draftsItem->drafts().size(); ++index) {
+            if (draftsItem->drafts().at(index)->uuid() == selectedUuid) {
+                draftIndex = index + 1;
+                break;
+            }
+        }
+    }
+    const auto itemForShow
+        = draftIndex == 0 ? draftsItem : draftsItem->drafts().at(draftIndex - 1);
+    if (draftsItem != aliasedItem) {
+        setSettingsValue(documentSettingsKey(aliasedItem->uuid(), kStatisticsDraftKey),
+                         itemForShow->uuid());
     }
     Log::debug("[ProjectManager] Requesting document for editor: document=%1",
                itemForShow->uuid().toString());
     emit downloadDocumentRequested(itemForShow->uuid());
+    if (draftsItem != aliasedItem) {
+        emit downloadDocumentRequested(aliasedItem->uuid());
+    }
 
     //
     // Определим редактор для отображения
@@ -5544,7 +5616,14 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим модель
     //
-    updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), viewMimeType);
+    d->view.activeIndex = sourceItemIndex;
+    d->view.active->setDocumentDrafts(draftsItem);
+    {
+        const QSignalBlocker blocker(d->view.active);
+        d->view.active->setCurrentDraft(draftIndex);
+    }
+    updateCurrentDocument(d->modelsFacade.modelForDraft(aliasedItem->uuid(), itemForShow->uuid()),
+                          viewMimeType);
     if (d->view.activeModel == nullptr) {
         Log::debug("[ProjectManager] Waiting for document model: document=%1, mime=%2",
                    itemForShow->uuid().toString(), viewMimeType);
@@ -5589,11 +5668,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     view->setEditingMode(d->documentEditingMode(itemForShow));
     Log::trace("Set view cursors");
     view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
-    Log::trace("Set document versions");
-    d->view.active->setDocumentDrafts(aliasedItem);
     Log::trace("Show view");
     d->view.active->showEditor(view->asQWidget());
-    d->view.activeIndex = sourceItemIndex;
 
     //
     // Связываем редакторы
@@ -5630,7 +5706,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Установим видимость панели драфтов
     //
-    d->view.active->setDraftsVisible(aliasedItem->drafts().count() > 0);
+    d->view.active->setDraftsVisible(!draftsItem->drafts().isEmpty());
 
     //
     // Настроим уведомления плагина
@@ -5758,12 +5834,6 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     //
-    // Выберем нужный драфт документа
-    //
-    d->view.active->setCurrentDraft(
-        settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentDraftKey), 0).toInt());
-
-    //
     // Фокусируем представление
     //
     QTimer::singleShot(d->view.active->animationDuration() * 1.3, this, [this] {
@@ -5778,6 +5848,14 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
 void ProjectManager::showViewForDraft(BusinessLayer::StructureModelItem* _item)
 {
+    const auto documentItem = d->aliasedItemForIndex(d->view.activeIndex);
+    if (documentItem == nullptr || _item == nullptr) {
+        return;
+    }
+    if (d->modelsFacade.draftsItemFor(documentItem) != documentItem) {
+        setSettingsValue(documentSettingsKey(documentItem->uuid(), kStatisticsDraftKey),
+                         _item->uuid());
+    }
     emit downloadDocumentRequested(_item->uuid());
 
     const auto viewMimeType = d->view.activeViewMimeType;
@@ -5785,7 +5863,8 @@ void ProjectManager::showViewForDraft(BusinessLayer::StructureModelItem* _item)
     //
     // Определим модель
     //
-    updateCurrentDocument(d->modelsFacade.modelFor(_item->uuid()), viewMimeType);
+    updateCurrentDocument(d->modelsFacade.modelForDraft(documentItem->uuid(), _item->uuid()),
+                          viewMimeType);
     if (d->view.activeModel == nullptr) {
         d->view.active->showDocumentLoadingPage();
         return;
@@ -5898,16 +5977,21 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
         return;
     }
 
-    auto item = d->aliasedItemForIndex(sourceItemIndex);
+    const auto documentItem = d->aliasedItemForIndex(sourceItemIndex);
+    auto item = d->modelsFacade.draftsItemFor(documentItem);
+    if (item == nullptr) {
+        d->navigator->showProjectNavigator();
+        return;
+    }
     if (int versionIndex = d->view.active->currentDraft() - 1;
-        versionIndex != -1 && item->drafts().size() > versionIndex) {
+        versionIndex >= 0 && item->drafts().size() > versionIndex) {
         item = item->drafts().at(versionIndex);
     }
 
     //
     // Определим модель
     //
-    auto model = d->modelsFacade.modelFor(item->uuid());
+    auto model = d->modelsFacade.modelForDraft(documentItem->uuid(), item->uuid());
     if (model == nullptr) {
         d->navigator->showProjectNavigator();
         return;
@@ -5948,10 +6032,15 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
 
 void ProjectManager::showNavigatorForDraft(BusinessLayer::StructureModelItem* _item)
 {
+    const auto documentItem = d->aliasedItemForIndex(d->view.activeIndex);
+    if (documentItem == nullptr) {
+        d->navigator->showProjectNavigator();
+        return;
+    }
     //
     // Определим модель
     //
-    auto model = d->modelsFacade.modelFor(_item->uuid());
+    auto model = d->modelsFacade.modelForDraft(documentItem->uuid(), _item->uuid());
     if (model == nullptr) {
         d->navigator->showProjectNavigator();
         return;

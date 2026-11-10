@@ -8,6 +8,7 @@ class AbstractImageWrapper;
 class AbstractRawDataWrapper;
 class AbstractModel;
 class StructureModel;
+class StructureModelItem;
 } // namespace BusinessLayer
 
 namespace Domain {
@@ -43,6 +44,18 @@ public:
     BusinessLayer::AbstractModel* modelFor(const QUuid& _uuid);
     BusinessLayer::AbstractModel* modelFor(Domain::DocumentObjectType _type);
     BusinessLayer::AbstractModel* modelFor(Domain::DocumentObject* _document);
+
+    /**
+     * @brief Источник драфтов документа (для статистики — соответствующий текст)
+     */
+    BusinessLayer::StructureModelItem* draftsItemFor(
+        BusinessLayer::StructureModelItem* _item) const;
+
+    /**
+     * @brief Модель представления документа для выбранного драфта
+     */
+    BusinessLayer::AbstractModel* modelForDraft(const QUuid& _documentUuid,
+                                               const QUuid& _draftUuid);
 
     /**
      * @brief Получить список всех моделей заданного типа

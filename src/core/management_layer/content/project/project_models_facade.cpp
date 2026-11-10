@@ -67,6 +67,7 @@ public:
     BusinessLayer::AbstractImageWrapper* imageWrapper = nullptr;
     BusinessLayer::AbstractRawDataWrapper* rawDataWrapper = nullptr;
     QHash<Domain::DocumentObject*, BusinessLayer::AbstractModel*> documentsToModels;
+    QHash<QUuid, QHash<QUuid, BusinessLayer::AbstractModel*>> draftStatisticsModels;
 };
 
 ProjectModelsFacade::Implementation::Implementation(
@@ -99,6 +100,12 @@ ProjectModelsFacade::~ProjectModelsFacade()
 
 void ProjectModelsFacade::clear()
 {
+    // Модели отчётов должны быть удалены до моделей текста, на которые они ссылаются.
+    for (const auto& models : std::as_const(d->draftStatisticsModels)) {
+        qDeleteAll(models);
+    }
+    d->draftStatisticsModels.clear();
+
     //
     // Формируем список моделей для удаления, т.к. некоторые модели являются лишь ссылками на другие
     // модели, например модель тритмента - это ссылка на модель текста сценария
@@ -136,6 +143,119 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(const QUuid& _uuid)
     }
 
     return modelFor(document);
+}
+
+BusinessLayer::StructureModelItem* ProjectModelsFacade::draftsItemFor(
+    BusinessLayer::StructureModelItem* _item) const
+{
+    if (_item == nullptr) {
+        return nullptr;
+    }
+
+    Domain::DocumentObjectType textType;
+    switch (_item->type()) {
+    case Domain::DocumentObjectType::ScreenplayStatistics:
+        textType = Domain::DocumentObjectType::ScreenplayText;
+        break;
+    case Domain::DocumentObjectType::ComicBookStatistics:
+        textType = Domain::DocumentObjectType::ComicBookText;
+        break;
+    case Domain::DocumentObjectType::AudioplayStatistics:
+        textType = Domain::DocumentObjectType::AudioplayText;
+        break;
+    case Domain::DocumentObjectType::StageplayStatistics:
+        textType = Domain::DocumentObjectType::StageplayText;
+        break;
+    case Domain::DocumentObjectType::NovelStatistics:
+        textType = Domain::DocumentObjectType::NovelText;
+        break;
+    default:
+        return _item;
+    }
+
+    const auto parent = _item->parent();
+    if (parent != nullptr) {
+        for (int index = 0; index < parent->childCount(); ++index) {
+            const auto child = parent->childAt(index);
+            if (child->type() == textType) {
+                return child;
+            }
+        }
+    }
+    return nullptr;
+}
+
+BusinessLayer::AbstractModel* ProjectModelsFacade::modelForDraft(const QUuid& _documentUuid,
+                                                                const QUuid& _draftUuid)
+{
+    const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
+    const auto source = draftsItemFor(item);
+    if (source == nullptr) {
+        return nullptr;
+    }
+    const auto draft = d->projectStructureModel->itemForUuid(_draftUuid);
+    if (draft == nullptr || (draft != source && !source->drafts().contains(draft))) {
+        return nullptr;
+    }
+    if (source == item) {
+        return modelFor(_draftUuid);
+    }
+    if (draft == source) {
+        return modelFor(_documentUuid);
+    }
+    if (const auto cached = d->draftStatisticsModels.value(_documentUuid).value(_draftUuid)) {
+        return cached;
+    }
+
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(_documentUuid);
+    auto textModel = modelFor(_draftUuid);
+    if (document == nullptr || textModel == nullptr) {
+        return nullptr;
+    }
+
+    // Отдельный экземпляр на драфт сохраняет независимость отчётов в двух панелях.
+    BusinessLayer::AbstractModel* model = nullptr;
+    switch (item->type()) {
+    case Domain::DocumentObjectType::ScreenplayStatistics: {
+        auto statistics = new BusinessLayer::ScreenplayStatisticsModel;
+        statistics->setScreenplayTextModel(
+            qobject_cast<BusinessLayer::ScreenplayTextModel*>(textModel));
+        model = statistics;
+        break;
+    }
+    case Domain::DocumentObjectType::ComicBookStatistics: {
+        auto statistics = new BusinessLayer::ComicBookStatisticsModel;
+        statistics->setComicBookTextModel(
+            qobject_cast<BusinessLayer::ComicBookTextModel*>(textModel));
+        model = statistics;
+        break;
+    }
+    case Domain::DocumentObjectType::AudioplayStatistics: {
+        auto statistics = new BusinessLayer::AudioplayStatisticsModel;
+        statistics->setAudioplayTextModel(
+            qobject_cast<BusinessLayer::AudioplayTextModel*>(textModel));
+        model = statistics;
+        break;
+    }
+    case Domain::DocumentObjectType::StageplayStatistics: {
+        auto statistics = new BusinessLayer::StageplayStatisticsModel;
+        statistics->setStageplayTextModel(
+            qobject_cast<BusinessLayer::StageplayTextModel*>(textModel));
+        model = statistics;
+        break;
+    }
+    case Domain::DocumentObjectType::NovelStatistics: {
+        auto statistics = new BusinessLayer::NovelStatisticsModel;
+        statistics->setNovelTextModel(qobject_cast<BusinessLayer::NovelTextModel*>(textModel));
+        model = statistics;
+        break;
+    }
+    default:
+        return nullptr;
+    }
+    model->setDocument(document);
+    d->draftStatisticsModels[_documentUuid].insert(_draftUuid, model);
+    return model;
 }
 
 BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObjectType _type)
@@ -1765,6 +1885,27 @@ QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::modelsFor(
 
 void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
 {
+    if (_document == nullptr) {
+        return;
+    }
+    for (auto it = d->draftStatisticsModels.begin(); it != d->draftStatisticsModels.end();) {
+        if (it.key() == _document->uuid()) {
+            for (auto model : std::as_const(it.value())) {
+                model->disconnect();
+                model->clear();
+                model->deleteLater();
+            }
+            it = d->draftStatisticsModels.erase(it);
+        } else {
+            if (auto model = it.value().take(_document->uuid())) {
+                model->disconnect();
+                model->clear();
+                model->deleteLater();
+            }
+            ++it;
+        }
+    }
+
     if (!d->documentsToModels.contains(_document)) {
         return;
     }
