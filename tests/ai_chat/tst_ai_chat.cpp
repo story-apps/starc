@@ -12,6 +12,9 @@ class AiChatTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void concatenatedRetrievalCommandsStayOutOfChat();
+    void malformedRetrievalRepairsOnce();
+    void documentIdsRecoverOnlyKnownUuids();
     void projectCorpusFindsLateEpisodesAndScenes();
     void scopeAndSourcesSurviveRestart();
     void projectPreparationWaitsForCloudAndCancels();
@@ -604,6 +607,100 @@ void AiChatTest::retrievalKeepsOriginAndHasABudget()
     chat.finishReply("```json\n{\"tool\":\"catalog\",\"offset\":80}\n```");
     QVERIFY(chat.canSend());
     QVERIFY(chat.messages().last().toObject().value("text").toString().contains("step limit"));
+}
+
+
+void AiChatTest::concatenatedRetrievalCommandsStayOutOfChat()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    const auto document = QUuid::createUuid();
+    chat.setDocument(document, "Episode", [] { return QString("Scene text with important events. ").repeated(600); });
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Собери синопсис серии."));
+    const auto messageCount = chat.messages().size();
+    auto malformedId = document.toString();
+    malformedId.chop(1); // As in the reported response: the UUID loses its closing brace.
+    const auto command = [&](int offset, const QString& notes) {
+        return QString::fromUtf8(QJsonDocument(QJsonObject{
+            { "tool", "read" }, { "document", malformedId }, { "offset", offset }, { "notes", notes }
+        }).toJson(QJsonDocument::Compact));
+    };
+    const auto response = command(0, "A quoted \"word\" and {braces} in notes") + " "
+        + command(5, "Continue reading") + " transport separator\n"
+        + command(5, "Repeated command with different notes");
+    QVERIFY(chat.finishReply(response));
+    QCOMPARE(requests.size(), 2); // One transport request for the bounded batch.
+    QCOMPARE(chat.messages().size(), messageCount);
+    const auto prompt = requests.last().first().toString();
+    QVERIFY(prompt.contains("\"offset\":0,\"tool\":\"read\""));
+    QVERIFY(prompt.contains("\"offset\":5,\"tool\":\"read\""));
+    QVERIFY(!prompt.contains("Unknown document"));
+    QVERIFY(!prompt.contains("transport separator"));
+    QVERIFY(!prompt.contains("Repeated command"));
+    QVERIFY(prompt.size() < 65000);
+    QVERIFY(chat.preparationStatus().contains("2 of 8"));
+    chat.finishReply("Синопсис серии: герои находят важные сведения.");
+    QCOMPARE(chat.messages().size(), messageCount + 1);
+    QVERIFY(!chat.messages().last().toObject().value("text").toString().contains("tool"));
+    QVERIFY(chat.canSend());
+
+    // Concatenated/fenced commands must also remain hidden after the step budget.
+    QVERIFY(chat.send("Read more"));
+    for (int i = 0; i < 4; ++i) {
+        chat.finishReply("```json\n[" + command(0, "") + ',' + command(5, "") + "]\n```");
+    }
+    QCOMPARE(requests.size(), 7);
+    chat.finishReply(response);
+    QCOMPARE(requests.size(), 7);
+    QCOMPARE(chat.messages().last().toObject().value("role").toString(), QString("error"));
+    QVERIFY(chat.messages().last().toObject().value("text").toString().contains("step limit"));
+    QVERIFY(chat.canSend());
+}
+
+void AiChatTest::malformedRetrievalRepairsOnce()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setDocument(QUuid::createUuid(), "Document", [] { return "A story"; });
+    chat.setBackendAvailable(true);
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Summarize"));
+    const auto count = chat.messages().size();
+    const QString malformed = "```json\n{\"tool\":\"read\",\"document\":\"unfinished";
+    chat.finishReply(malformed);
+    QCOMPARE(requests.size(), 2);
+    QCOMPARE(chat.messages().size(), count);
+    QVERIFY(requests.last().first().toString().contains("could not be parsed"));
+    chat.finishReply(malformed);
+    QCOMPARE(requests.size(), 2);
+    QCOMPARE(chat.messages().last().toObject().value("role").toString(), QString("error"));
+    QVERIFY(!chat.messages().last().toObject().value("text").toString().contains("tool"));
+    QVERIFY(chat.canSend());
+    QVERIFY(chat.send("Try again"));
+    chat.finishReply(malformed);
+    QCOMPARE(requests.size(), 4); // Repair budget resets for the new question.
+    chat.finishReply("A normal answer with JSON data: {\"theme\":\"hope\"}");
+    QCOMPARE(requests.size(), 4);
+    QVERIFY(chat.messages().last().toObject().value("text").toString().contains("hope"));
+}
+
+void AiChatTest::documentIdsRecoverOnlyKnownUuids()
+{
+    Ui::AiProjectContext corpus;
+    const auto uuid = QUuid::createUuid();
+    const Ui::AiContextDocument document{ uuid.toString(), "Episode", "Searchable evidence" };
+    corpus.resetDocuments({ document }); corpus.updateDocument(document);
+    const auto expected = corpus.read(uuid.toString());
+    auto missingBrace = uuid.toString(); missingBrace.chop(1);
+    QCOMPARE(corpus.read(missingBrace), expected);
+    QCOMPARE(corpus.read(uuid.toString(QUuid::WithoutBraces).toUpper()), expected);
+    QCOMPARE(corpus.search("evidence", 0, missingBrace), corpus.search("evidence", 0, uuid.toString()));
+    QVERIFY(corpus.read(QUuid::createUuid().toString()).contains("error"));
+    QVERIFY(corpus.search("evidence", 0, "invalid-id").contains("error"));
 }
 
 QTEST_GUILESS_MAIN(AiChatTest)

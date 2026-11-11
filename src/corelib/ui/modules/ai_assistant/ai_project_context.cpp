@@ -90,7 +90,7 @@ void AiProjectContext::updateDocument(const AiContextDocument& input)
                 if (!value.isEmpty()) {
                     if (sceneTitle.isEmpty() && !scene.isEmpty()) { sceneTitle = value.left(140); }
                     const auto tag = elements.isEmpty() ? QString() : elements.last();
-                    text += (tag == "value" || tag.isEmpty() ? QString() : tag + ": ") + value + '\n';
+                    text += (tag == "value" || tag == "v" || tag.isEmpty() ? QString() : tag + ": ") + value + '\n';
                 }
             } else if (xml.isEndElement()) {
                 if (!containers.isEmpty() && containers.last().tag == xml.name()) {
@@ -171,16 +171,33 @@ QJsonObject AiProjectContext::catalog(int offset) const
              { "next_offset", offset + documents.size() < m_order.size() ? offset + documents.size() : -1 } };
 }
 
+QString AiProjectContext::resolveDocumentId(const QString& id) const
+{
+    if (m_documents.contains(id)) { return id; }
+    // Recover a missing outer brace or case differences, but never fuzzy-match a
+    // different UUID or silently substitute the current document for an unknown ID.
+    auto value = id.trimmed();
+    if (value.startsWith('{')) { value.remove(0, 1); }
+    if (value.endsWith('}')) { value.chop(1); }
+    const auto uuid = QUuid(value);
+    if (!uuid.isNull() && m_documents.contains(uuid.toString())) { return uuid.toString(); }
+    return {};
+}
+
 QJsonObject AiProjectContext::search(const QString& query, int offset, const QString& document)
 {
     buildIndex();
+    const auto documentId = resolveDocumentId(document);
+    if (!document.isEmpty() && documentId.isEmpty()) {
+        return { { "error", "Unknown document. Copy a document ID from the catalog." } };
+    }
     QHash<int, double> scores;
     for (const auto& term : terms(query)) {
         const auto positions = m_postings.value(term);
         const double weight = std::log(1.0 + double(m_chunks.size()) / (1 + positions.size()))
             * (term.endsWith('*') ? 0.45 : 1.0);
         for (const auto pos : positions) {
-            if (!document.isEmpty() && m_chunks.at(pos).document != document) { continue; }
+            if (!document.isEmpty() && m_chunks.at(pos).document != documentId) { continue; }
             scores[pos] += weight;
         }
     }
@@ -197,8 +214,9 @@ QJsonObject AiProjectContext::search(const QString& query, int offset, const QSt
 
 QJsonObject AiProjectContext::read(const QString& id, int offset) const
 {
-    if (!m_documents.contains(id)) { return { { "error", "Unknown document. Use catalog to find a document ID." } }; }
-    const auto& document = m_documents[id];
+    const auto documentId = resolveDocumentId(id);
+    if (documentId.isEmpty()) { return { { "error", "Unknown document. Use catalog to find a document ID." } }; }
+    const auto& document = m_documents[documentId];
     offset = qMax(0, offset);
     QJsonArray results;
     for (int i = offset; i < qMin(offset + kPageSize, document.chunks.size()); ++i) { results.append(chunkJson(document.chunks.at(i))); }

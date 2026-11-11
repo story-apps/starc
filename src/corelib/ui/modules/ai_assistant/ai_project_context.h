@@ -39,6 +39,7 @@ private:
         QByteArray hash;
         QVector<Chunk> chunks;
     };
+    QString resolveDocumentId(const QString& _id) const;
     void buildIndex();
     QJsonObject chunkJson(const Chunk& _chunk) const;
     static QStringList terms(const QString& _text);

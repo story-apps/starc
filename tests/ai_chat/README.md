@@ -67,7 +67,8 @@ question, a 40-document catalog page and bounded evidence pages (six excerpts pe
 48 KB of UTF-8 evidence, with an additional prompt-size budget). A current document
 smaller than 8,000 characters also travels inline. Larger documents remain readable
 through paginated retrieval. Full chat history stays in SQLite. Research has eight
-additional retrieval steps and at most one citation-repair request, using the existing
+additional retrieval steps, at most one protocol-repair request and at most one
+citation-repair request, using the existing
 AI transport. Each step is an AI request and may consume the account's word allowance.
 If the budget is exhausted, the assistant is asked to disclose remaining uncertainty;
 a further tool request is replaced with a message asking the user to narrow the question.
@@ -93,3 +94,16 @@ scope and citations, source isolation, bounded retrieval, and response routing a
 chat switch. UI tests cover context selection, clicking citations and group navigation
 inside folders, in addition to the existing selection and Markdown tests. Live AI
 reasoning and cloud-download integration still require the proprietary cloud submodule.
+
+Retrieval replies may contain concatenated JSON objects, fenced objects or arrays.
+The session extracts complete commands with a string-aware parser, executes a bounded
+batch, and deduplicates identical calls within that reply (ignoring research notes).
+Each executed command counts against the eight-step budget; excess commands must be
+requested again after the model reads the supplied results. The batch retains request
+metadata and pagination offsets. A missing outer UUID brace is recoverable only when
+the remaining UUID matches a document in the captured corpus; unknown IDs never fall
+back to a different document. Malformed control output gets one format-repair attempt,
+then a localized error. Control output and transport separators do not become assistant
+messages, and legacy control replies already on disk are excluded from model history.
+Tests reproduce concatenated commands with a malformed UUID, duplicate calls, arbitrary
+separators, escaped quotes/braces, malformed JSON and exhaustion of the retrieval budget.

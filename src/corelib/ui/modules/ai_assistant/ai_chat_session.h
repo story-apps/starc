@@ -97,6 +97,7 @@ private:
     int m_retrievalRounds = 0;
     bool m_pendingProjectScope = false;
     bool m_citationRepair = false;
+    bool m_protocolRepair = false;
 
     QSqlDatabase m_database;
     QString m_connection;

@@ -23198,6 +23198,10 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <source>The project search reached its step limit. Please narrow the question or specify an episode.</source>
         <translation>Не удалось завершить поиск за один запрос. Уточните вопрос или укажите серию.</translation>
     </message>
+    <message>
+        <source>Could not read the assistant's response. Please send your message again.</source>
+        <translation>Не удалось обработать ответ помощника. Отправьте сообщение ещё раз.</translation>
+    </message>
 </context>
 
 </TS>

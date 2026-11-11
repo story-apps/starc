@@ -16,6 +16,51 @@
 #include <QtConcurrent>
 
 namespace Ui {
+namespace {
+struct RetrievalReply {
+    QVector<QJsonObject> commands;
+    bool attempted = false;
+};
+
+RetrievalReply parseRetrievalReply(const QString& text)
+{
+    RetrievalReply reply;
+    // Generation transports may concatenate several messages, fences and other
+    // non-JSON separators. Find complete objects without treating braces in quoted
+    // UUIDs/notes as structure. Never show a malformed control reply as prose.
+    static const QRegularExpression marker(
+        R"protocol("tool"\s*:\s*"(?:read|search|catalog)")protocol");
+    reply.attempted = marker.match(text).hasMatch();
+    int start = -1, depth = 0;
+    bool quoted = false, escaped = false;
+    for (int i = 0; i < text.size(); ++i) {
+        const auto ch = text.at(i);
+        if (start < 0) {
+            if (ch == '{') { start = i; depth = 1; quoted = false; escaped = false; }
+            continue;
+        }
+        if (quoted) {
+            if (escaped) { escaped = false; }
+            else if (ch == '\\') { escaped = true; }
+            else if (ch == '"') { quoted = false; }
+            continue;
+        }
+        if (ch == '"') { quoted = true; }
+        else if (ch == '{') { ++depth; }
+        else if (ch == '}' && --depth == 0) {
+            const auto command = QJsonDocument::fromJson(text.mid(start, i - start + 1).toUtf8()).object();
+            const auto tool = command.value("tool").toString();
+            reply.attempted |= command.contains("tool");
+            if (tool == "read" || tool == "search" || tool == "catalog") {
+                reply.attempted = true;
+                if (reply.commands.size() < 32) { reply.commands.append(command); }
+            }
+            start = -1;
+        }
+    }
+    return reply;
+}
+} // namespace
 
 AiChatSession::AiChatSession(const QString& _databasePath, QObject* _parent)
     : QObject(_parent)
@@ -216,6 +261,7 @@ void AiChatSession::dispatchContextRequest(const QString& question, const QJsonA
         "{\"tool\":\"search\",\"query\":\"keywords\",\"offset\":0,\"document\":\"optional document ID\",\"notes\":\"compact findings so far with source IDs\"}, "
         "{\"tool\":\"read\",\"document\":\"document ID\",\"offset\":0,\"notes\":\"...\"}, "
         "or {\"tool\":\"catalog\",\"offset\":40,\"notes\":\"...\"}. "
+        "Send exactly one command, then wait for its result. Copy document IDs exactly, including both UUID braces. "
         "Use next_offset to access later pages, including later episodes. Maintain compact notes when paging; older pages may leave the prompt. "
         "After collecting evidence, respond in Markdown with source citations, not JSON. Maximum 8 retrieval steps.\n"
         "CURRENT DOCUMENT (JSON):\n%2\nPROJECT CATALOG (first page, JSON):\n%3\nCONVERSATION (JSON):\n%4\nLATEST QUESTION:\n%5")
@@ -250,9 +296,9 @@ void AiChatSession::dispatchRetrieval(const QJsonObject& result, const QString& 
     if (!result.isEmpty()) {
         rememberSources(result);
         m_evidencePages.append(result);
-        while (m_evidencePages.size() > 1 && QJsonDocument(m_evidencePages).toJson(QJsonDocument::Compact).size() > 48000) {
-            m_evidencePages.removeFirst();
-        }
+    }
+    while (m_evidencePages.size() > 1 && QJsonDocument(m_evidencePages).toJson(QJsonDocument::Compact).size() > 48000) {
+        m_evidencePages.removeFirst();
     }
     m_preparationStatus = m_retrievalRounds > 0 ? tr("Searching project sources… Step %1 of 8").arg(m_retrievalRounds) : QString();
     m_replyTimer.start();
@@ -735,6 +781,10 @@ bool AiChatSession::send(const QString& _text)
     for (int i = transcript.size() - 1; i >= 0 && remaining > 0; --i) {
         const auto message = transcript.at(i).toObject();
         if (message.value("role") == "error") { continue; }
+        // Older versions could persist raw retrieval commands as assistant replies.
+        // Keep that history on disk, but do not feed failed control output back to AI.
+        if (message.value("role") == "assistant"
+            && parseRetrievalReply(message.value("text").toString()).attempted) { continue; }
         const auto content = message.value("text").toString().right(qMin(4000, remaining));
         history.prepend(QJsonObject{ { "role", message.value("role") }, { "content", content } });
         remaining -= content.size();
@@ -744,7 +794,7 @@ bool AiChatSession::send(const QString& _text)
     m_question = text;
     m_requestHistory = history;
     m_pendingProjectScope = m_scope == ContextScope::Project;
-    m_pendingSources.clear(); m_evidencePages = {}; m_retrievalRounds = 0; m_citationRepair = false; m_searchNotes.clear();
+    m_pendingSources.clear(); m_evidencePages = {}; m_retrievalRounds = 0; m_citationRepair = false; m_protocolRepair = false; m_searchNotes.clear();
     m_replyTimer.start();
     if (m_pendingProjectScope) {
         if (!m_projectDocuments) {
@@ -780,25 +830,66 @@ bool AiChatSession::finishReply(const QString& _text)
         emit changed();
         return !isLegacy;
     }
-    auto jsonText = _text.trimmed();
-    if (jsonText.startsWith("```")) {
-        jsonText = jsonText.mid(jsonText.indexOf('\n') + 1);
-        jsonText = jsonText.left(jsonText.lastIndexOf("```"));
-    }
-    const auto command = QJsonDocument::fromJson(jsonText.toUtf8()).object();
-    if (!m_pendingChat.isEmpty() && m_pendingIndex && m_retrievalRounds < 8) {
-        const auto tool = command.value("tool").toString();
-        if (tool == "search" || tool == "read" || tool == "catalog") {
-            ++m_retrievalRounds;
-            if (command.contains("notes")) { m_searchNotes = command.value("notes").toString().left(6000); }
-            const int offset = qBound(0, command.value("offset").toInt(), 10000000);
-            QJsonObject result;
-            if (tool == "search") { result = m_pendingIndex->search(command.value("query").toString().left(2000), offset, command.value("document").toString()); }
-            else if (tool == "read") { result = m_pendingIndex->read(command.value("document").toString(), offset); }
-            else { result = m_pendingIndex->catalog(offset); }
-            dispatchRetrieval(result);
+    const auto control = m_pendingIndex ? parseRetrievalReply(_text) : RetrievalReply{};
+    if (!m_pendingChat.isEmpty() && control.attempted) {
+        if (m_retrievalRounds >= 8) {
+            failReply(tr("The project search reached its step limit. Please narrow the question or specify an episode."));
             return true;
         }
+        if (control.commands.isEmpty()) {
+            if (m_protocolRepair) {
+                failReply(tr("Could not read the assistant's response. Please send your message again."));
+            } else {
+                m_protocolRepair = true;
+                dispatchRetrieval({}, "Your previous retrieval command could not be parsed. "
+                    "Return exactly ONE valid JSON command using a document ID from the catalog, "
+                    "or a final Markdown answer supported by the evidence. Do not include partial commands or commentary.");
+            }
+            return true;
+        }
+        QSet<QByteArray> executed;
+        int batchBytes = 0;
+        int accepted = 0;
+        const int batchBudget = qMin(32000, qMax(0, 58000 - m_basePrompt.size() - 6000));
+        for (const auto& rawCommand : control.commands) {
+            const auto notes = rawCommand.value("notes").toString();
+            const auto tool = rawCommand.value("tool").toString();
+            const int offset = qBound(0, rawCommand.value("offset").toInt(), 10000000);
+            QJsonObject command{ { "tool", tool }, { "offset", offset } };
+            if (tool != "catalog") {
+                command.insert("document", rawCommand.value("document").toString().left(80));
+            }
+            if (tool == "search") { command.insert("query", rawCommand.value("query").toString().left(2000)); }
+            const auto key = QJsonDocument(command).toJson(QJsonDocument::Compact);
+            if (executed.contains(key)) { continue; }
+            if (m_retrievalRounds >= 8) { break; }
+            QJsonObject result;
+            if (tool == "search") {
+                result = m_pendingIndex->search(command.value("query").toString().left(2000), offset,
+                                               command.value("document").toString());
+            } else if (tool == "read") {
+                result = m_pendingIndex->read(command.value("document").toString(), offset);
+            } else {
+                result = m_pendingIndex->catalog(offset);
+            }
+            result.insert("request", command);
+            const int bytes = QJsonDocument(result).toJson(QJsonDocument::Compact).size();
+            // Do not evict a new batch page before the model has even seen it.
+            // Unprocessed commands can be requested again after this bounded batch.
+            if (accepted > 0 && batchBytes + bytes > batchBudget) { break; }
+            batchBytes += bytes;
+            ++accepted;
+            ++m_retrievalRounds;
+            executed.insert(key);
+            if (!notes.isEmpty()) { m_searchNotes = notes.left(6000); }
+            rememberSources(result);
+            m_evidencePages.append(result);
+        }
+        dispatchRetrieval({}, "Only commands identified in the evidence pages' request fields have been executed. "
+            "Read these results before requesting another page, using next_offset. "
+            "Return exactly one JSON command per response, or the final Markdown answer. "
+            "Do not repeat pages already supplied. Never present tool commands to the user.");
+        return true;
     }
     bool hasCitation = false;
     for (auto it = m_pendingSources.cbegin(); it != m_pendingSources.cend(); ++it) {
@@ -814,9 +905,6 @@ bool AiChatSession::finishReply(const QString& _text)
     auto reply = m_pendingIndex ? resolveCitations(_text) : _text;
     if (m_pendingProjectScope && !m_pendingSources.isEmpty() && !hasCitation) {
         reply += "\n\n" + tr("The assistant did not provide verifiable source citations for this answer.");
-    }
-    if (command.contains("tool") && m_retrievalRounds >= 8) {
-        reply = tr("The project search reached its step limit. Please narrow the question or specify an episode.");
     }
     m_preparationStatus.clear();
     m_replyTimer.stop();
