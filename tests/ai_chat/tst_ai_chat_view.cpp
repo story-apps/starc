@@ -4,6 +4,7 @@
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/combo_box/combo_box.h>
+#include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <management_layer/content/writing_session/writing_session_storage.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
@@ -55,10 +56,14 @@ private slots:
         view.setAvailableWords(1000);
         view.resize(440, 800);
         view.show();
-        auto scope = view.findChild<ComboBox*>("aiContextScope");
-        QVERIFY(scope);
-        QCOMPARE(scope->model()->rowCount(), 2);
-        scope->currentIndexChanged(scope->model()->index(1, 0));
+        auto documentScope = view.findChild<RadioButton*>("aiDocumentScope");
+        auto projectScope = view.findChild<RadioButton*>("aiProjectScope");
+        QVERIFY(documentScope && projectScope);
+        QVERIFY(documentScope->isChecked());
+        QVERIFY(!projectScope->isChecked());
+        QTest::mouseClick(projectScope, Qt::LeftButton);
+        QVERIFY(projectScope->isChecked());
+        QVERIFY(!documentScope->isChecked());
         QCOMPARE(session->contextScope(), Ui::AiChatSession::ContextScope::Project);
         QSignalSpy requests(session, &Ui::AiChatSession::replyRequested);
         QVERIFY(session->send("Find the discovery"));
@@ -84,8 +89,14 @@ private slots:
         QCOMPARE(navigation.first().first().toUuid(), document);
         const auto screenshot = qEnvironmentVariable("AI_PROJECT_SCREENSHOT");
         if (!screenshot.isEmpty()) { QVERIFY(view.grab().save(screenshot)); }
-        scope->currentIndexChanged(scope->model()->index(0, 0));
+        documentScope->setFocus();
+        QTest::keyClick(documentScope, Qt::Key_Space);
         QCOMPARE(session->contextScope(), Ui::AiChatSession::ContextScope::Document);
+        QVERIFY(documentScope->isChecked());
+        QVERIFY(!projectScope->isChecked());
+        session->setContextScope(Ui::AiChatSession::ContextScope::Project);
+        QVERIFY(projectScope->isChecked());
+        QVERIFY(!documentScope->isChecked());
     }
 
     void sourceNavigationFindsGroupsInsideFolders()

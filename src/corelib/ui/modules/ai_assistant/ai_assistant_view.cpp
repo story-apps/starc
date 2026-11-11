@@ -13,6 +13,8 @@
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
+#include <ui/widgets/radio_button/radio_button.h>
+#include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
@@ -60,8 +62,9 @@ public:
         QAction* newChat = nullptr;
         QAction* deleteChat = nullptr;
         QAction* clearChat = nullptr;
-        Body2Label* context = nullptr;
-        ComboBox* contextScope = nullptr;
+        Widget* contextScope = nullptr;
+        RadioButton* documentScope = nullptr;
+        RadioButton* projectScope = nullptr;
         Widget* widget = nullptr;
         ChatMessagesView* history = nullptr;
         QScrollArea* historyContainer = nullptr;
@@ -682,16 +685,23 @@ void AiAssistantView::initChat()
     d->chat.clearChat = new QAction(d->chat.widget);
     d->chat.clearChat->setObjectName("aiClearChat");
 
-    d->chat.context = new Body2Label(d->chat.widget);
-    d->chat.contextScope = new ComboBox(d->chat.widget);
+    d->chat.contextScope = new Widget(d->chat.widget);
     d->chat.contextScope->setObjectName("aiContextScope");
-    d->chat.contextScope->setDefaultMarginsEnabled(false);
-    d->chat.contextScope->setLabelVisible(false);
-    d->chat.contextScope->setModel(new QStandardItemModel(d->chat.contextScope));
-    connect(d->chat.contextScope, &ComboBox::currentIndexChanged, this, [](const QModelIndex& index) {
-        if (!index.isValid()) { return; }
-        AiChatSession::instance()->setContextScope(index.row() == 1
-            ? AiChatSession::ContextScope::Project : AiChatSession::ContextScope::Document);
+    d->chat.documentScope = new RadioButton(d->chat.contextScope);
+    d->chat.documentScope->setObjectName("aiDocumentScope");
+    d->chat.projectScope = new RadioButton(d->chat.contextScope);
+    d->chat.projectScope->setObjectName("aiProjectScope");
+    auto scopeGroup = new RadioButtonGroup(d->chat.contextScope);
+    auto scopeLayout = new FlowLayout(d->chat.contextScope, 0, 8, 0);
+    for (auto button : { d->chat.documentScope, d->chat.projectScope }) {
+        scopeGroup->add(button);
+        scopeLayout->addWidget(button);
+    }
+    connect(d->chat.documentScope, &RadioButton::checkedChanged, this, [](bool checked) {
+        if (checked) { AiChatSession::instance()->setContextScope(AiChatSession::ContextScope::Document); }
+    });
+    connect(d->chat.projectScope, &RadioButton::checkedChanged, this, [](bool checked) {
+        if (checked) { AiChatSession::instance()->setContextScope(AiChatSession::ContextScope::Project); }
     });
     d->chat.history = new ChatMessagesView;
     d->chat.history->setConversationStyle(true);
@@ -772,7 +782,6 @@ void AiAssistantView::initChat()
     header->addWidget(d->chat.chatMenu);
     layout->addLayout(header);
     layout->addWidget(d->chat.contextScope);
-    layout->addWidget(d->chat.context);
     layout->addWidget(d->chat.historyContainer, 1);
     layout->addWidget(d->chat.status);
     auto composer = new QHBoxLayout(d->chat.composer);
@@ -1001,14 +1010,13 @@ void AiAssistantView::refreshChat()
     d->chat.deleteChat->setEnabled(!session->currentChat().isEmpty());
     d->chat.clearChat->setEnabled(!session->currentChat().isEmpty());
     d->chat.renameChat->setEnabled(!session->currentChat().isEmpty());
-    const QSignalBlocker scopeBlocker(d->chat.contextScope);
-    d->chat.contextScope->setCurrentIndex(d->chat.contextScope->model()->index(
-        session->contextScope() == AiChatSession::ContextScope::Project ? 1 : 0, 0));
-    d->chat.context->setText(session->contextScope() == AiChatSession::ContextScope::Project
-        ? tr("Latest drafts · Search across the entire project")
-        : session->documentName().isEmpty() ? tr("Document context cleared")
-                                                        : tr("Current document: %1").arg(session->documentName()));
-    d->chat.context->setToolTip(d->chat.context->text());
+    const QSignalBlocker documentScopeBlocker(d->chat.documentScope);
+    const QSignalBlocker projectScopeBlocker(d->chat.projectScope);
+    const bool projectScope = session->contextScope() == AiChatSession::ContextScope::Project;
+    d->chat.documentScope->setChecked(!projectScope);
+    d->chat.projectScope->setChecked(projectScope);
+    d->chat.documentScope->setToolTip(session->documentName().isEmpty()
+        ? tr("Document context cleared") : tr("Current document: %1").arg(session->documentName()));
     QVector<ChatMessage> messages;
     const User currentUser(tr("You"), QStringLiteral("ai-chat-user"));
     const User assistant(tr("Assistant"), QStringLiteral("ai-chat-assistant"));
@@ -1147,12 +1155,11 @@ void AiAssistantView::updateChatComposer()
 
 void AiAssistantView::updateChatTranslations()
 {
-    const QSignalBlocker scopeBlocker(d->chat.contextScope);
-    auto scopeModel = qobject_cast<QStandardItemModel*>(d->chat.contextScope->model());
-    scopeModel->clear();
-    scopeModel->appendRow(new QStandardItem(tr("Current document")));
-    scopeModel->appendRow(new QStandardItem(tr("Entire project")));
-    d->chat.contextScope->setToolTip(tr("Project mode searches all latest drafts and can read sources in several steps. Commands still apply to the open document."));
+    d->chat.documentScope->setText(tr("Current document"));
+    d->chat.documentScope->setAccessibleName(tr("Current document"));
+    d->chat.projectScope->setText(tr("Entire project"));
+    d->chat.projectScope->setAccessibleName(tr("Entire project"));
+    d->chat.projectScope->setToolTip(tr("Project mode searches all latest drafts and can read sources in several steps. Commands still apply to the open document."));
     d->chat.contextScope->setAccessibleName(tr("Conversation context"));
     d->chat.chats->setLabelVisible(false);
     d->chat.chats->setDefaultMarginsEnabled(false);
@@ -1190,8 +1197,11 @@ void AiAssistantView::updateChatDesign()
     d->chat.widget->setBackgroundColor(background);
     d->chat.chats->setBackgroundColor(background);
     d->chat.chats->setTextColor(foreground);
-    d->chat.contextScope->setBackgroundColor(foreground);
-    d->chat.contextScope->setTextColor(foreground);
+    d->chat.contextScope->setBackgroundColor(background);
+    for (auto button : { d->chat.documentScope, d->chat.projectScope }) {
+        button->setBackgroundColor(background);
+        button->setTextColor(foreground);
+    }
     // The composer owns its rounded surface; the TextField fill blends into it.
     d->chat.input->setBackgroundColor(composerBackground);
     d->chat.input->setTextColor(foreground);
@@ -1201,10 +1211,8 @@ void AiAssistantView::updateChatDesign()
         "QPushButton { color: %2; background: transparent; border: 1px solid %3; border-radius: 13px; padding: 5px 10px; } "
         "QPushButton:hover { background: %3; } QPushButton:disabled { color: %3; border-color: %3; }")
         .arg(background.name(), foreground.name(), ColorHelper::flattenAlpha(ColorHelper::transparent(foreground, 0.25), background).name()));
-    for (auto label : { d->chat.context, d->chat.status }) {
-        label->setBackgroundColor(background);
-        label->setTextColor(ColorHelper::transparent(foreground, 0.65));
-    }
+    d->chat.status->setBackgroundColor(background);
+    d->chat.status->setTextColor(ColorHelper::transparent(foreground, 0.65));
     for (auto button : { d->chat.send, d->chat.commandsToggle, d->chat.chatMenu }) {
         button->setBackgroundColor(button == d->chat.chatMenu ? background : composerBackground);
         button->setTextColor(button == d->chat.send ? DesignSystem::color().accent() : foreground);
