@@ -80,6 +80,7 @@ private:
     void dispatchContextRequest(const QString& _question, const QJsonArray& _history);
     void dispatchRetrieval(const QJsonObject& _result, const QString& _instruction = {});
     void rememberSources(const QJsonObject& _result);
+    QJsonArray sourceCoverage() const;
     QString resolveCitations(const QString& _text);
 
     ContextScope m_scope = ContextScope::Document;
@@ -92,6 +93,7 @@ private:
     int m_preparingIndex = -1;
     QString m_preparationStatus;
     QString m_question, m_basePrompt, m_pendingProject, m_searchNotes;
+    QString m_completeDocument;
     QJsonArray m_requestHistory, m_evidencePages;
     QHash<QString, QJsonObject> m_pendingSources;
     int m_retrievalRounds = 0;

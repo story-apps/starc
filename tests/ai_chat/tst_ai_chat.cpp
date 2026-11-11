@@ -12,6 +12,8 @@ class AiChatTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void completeEpisodeStaysInContext();
+    void pagedResearchRetainsFindingsAndCoverage();
     void concatenatedRetrievalCommandsStayOutOfChat();
     void malformedRetrievalRepairsOnce();
     void documentIdsRecoverOnlyKnownUuids();
@@ -701,6 +703,87 @@ void AiChatTest::documentIdsRecoverOnlyKnownUuids()
     QCOMPARE(corpus.search("evidence", 0, missingBrace), corpus.search("evidence", 0, uuid.toString()));
     QVERIFY(corpus.read(QUuid::createUuid().toString()).contains("error"));
     QVERIFY(corpus.search("evidence", 0, "invalid-id").contains("error"));
+}
+
+
+void AiChatTest::completeEpisodeStaysInContext()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    const auto document = QUuid::createUuid();
+    QString content = "<document>";
+    // Reproduce the report's 45 chunks and approximately 48k characters of text.
+    for (int i = 0; i < 45; ++i) {
+        content += QString("<scene uuid=\"%1\"><v>Scene %2</v><v>%3 MARKER_%2_END</v></scene>")
+            .arg(QUuid::createUuid().toString()).arg(i).arg(QString::fromUtf8("Важное событие в истории. ").repeated(44));
+    }
+    content += "</document>";
+    chat.setDocument(document, "Episode / Screenplay / Latest draft", [content] { return content; });
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Собери синопсис серии."));
+    QCOMPARE(requests.size(), 1);
+    auto prompt = requests.last().first().toString();
+    QVERIFY(prompt.contains("COMPLETE CURRENT DOCUMENT"));
+    QVERIFY(prompt.contains("\"total_chunks\":45"));
+    QVERIFY(prompt.contains("\"chunks_supplied\":45"));
+    QVERIFY(prompt.contains("\"all_chunks_supplied\":true"));
+    QVERIFY(prompt.contains("MARKER_0_END"));
+    QVERIFY(prompt.contains("MARKER_22_END"));
+    QVERIFY(prompt.contains("MARKER_44_END"));
+    QVERIFY(prompt.size() < 96000);
+    // If the model still asks for pages, no scene is evicted and no source bundle
+    // is duplicated. Even returning to the beginning retains the middle and end.
+    for (int offset : { 6, 12, 18, 24, 30, 36, 42, 0 }) {
+        chat.finishReply(QString::fromUtf8(QJsonDocument(QJsonObject{
+            { "tool", "read" }, { "document", document.toString() }, { "offset", offset }
+        }).toJson(QJsonDocument::Compact)));
+        prompt = requests.last().first().toString();
+        QCOMPARE(prompt.count("MARKER_0_END"), 1);
+        QCOMPARE(prompt.count("MARKER_22_END"), 1);
+        QCOMPARE(prompt.count("MARKER_44_END"), 1);
+        QVERIFY(prompt.size() < 96000);
+    }
+    chat.finishReply("A synopsis covering the opening, middle and ending.");
+    QVERIFY(chat.canSend());
+    QCOMPARE(chat.messages().last().toObject().value("role").toString(), QString("assistant"));
+}
+
+void AiChatTest::pagedResearchRetainsFindingsAndCoverage()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    const auto document = QUuid::createUuid();
+    QString content = "<document>";
+    for (int i = 0; i < 54; ++i) {
+        content += QString("<scene uuid=\"%1\"><v>Scene %2</v><v>%3</v></scene>")
+            .arg(QUuid::createUuid().toString()).arg(i).arg(QString::fromUtf8("События большого документа. ").repeated(70));
+    }
+    content += "</document>";
+    chat.setDocument(document, "Long document", [content] { return content; });
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Обсуди всю историю"));
+    QVERIFY(!requests.last().first().toString().contains("COMPLETE CURRENT DOCUMENT"));
+    for (int step = 1; step <= 8; ++step) {
+        chat.finishReply(QString::fromUtf8(QJsonDocument(QJsonObject{
+            { "tool", "read" }, { "document", document.toString() }, { "offset", step * 6 },
+            { "notes", QString("FACT_STEP_%1: a decision and its consequences.").arg(step) }
+        }).toJson(QJsonDocument::Compact)));
+        const auto prompt = requests.last().first().toString();
+        for (int previous = 1; previous <= step; ++previous) {
+            QVERIFY(prompt.contains(QString("FACT_STEP_%1:").arg(previous)));
+        }
+        QVERIFY(prompt.contains(QString("\"chunks_supplied\":%1").arg((step + 1) * 6)));
+        QVERIFY(prompt.size() < 96000);
+    }
+    const auto prompt = requests.last().first().toString();
+    QVERIFY(prompt.contains("\"all_chunks_supplied\":true"));
+    QVERIFY(prompt.contains("\"complete_text_in_prompt\":false"));
+    chat.finishReply("Synthesis from the retained findings and final scenes.");
+    QVERIFY(chat.canSend());
 }
 
 QTEST_GUILESS_MAIN(AiChatTest)

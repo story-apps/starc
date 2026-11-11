@@ -62,16 +62,29 @@ inflections, not an embedding-based semantic index; the model must reformulate q
 or page through documents when needed. No claim of exhaustive review is warranted
 merely because a query returned no matches.
 
-Transport includes at most 10,000 characters of recent conversation, a 6,000-character
-question, a 40-document catalog page and bounded evidence pages (six excerpts per page,
-48 KB of UTF-8 evidence, with an additional prompt-size budget). A current document
-smaller than 8,000 characters also travels inline. Larger documents remain readable
-through paginated retrieval. Full chat history stays in SQLite. Research has eight
-additional retrieval steps, at most one protocol-repair request and at most one
-citation-repair request, using the existing
-AI transport. Each step is an AI request and may consume the account's word allowance.
-If the budget is exhausted, the assistant is asked to disclose remaining uncertainty;
-a further tool request is replaced with a message asking the user to narrow the question.
+Transport includes at most 10,000 characters of recent conversation and a
+6,000-character question. In current-document mode, a complete source bundle of up
+to 80,000 serialized characters is pinned in every request (within a 96,000-character
+prompt budget). This includes all scenes in order and their citation IDs, so an ordinary
+episode can be summarized in one AI call without paging. Repeated reads do not duplicate
+or evict that bundle. Raw XML is not additionally sent alongside the extracted text.
+
+Larger documents and project searches use a 40-document catalog page and bounded
+evidence pages (six excerpts per page, 48 KB of UTF-8 evidence). Research notes from
+successive steps are accumulated, at most 3,000 characters per step, rather than replacing
+earlier findings. Source coverage reports how many unique chunks of each document have
+been supplied over the whole request, distinguishing a pinned full text from pages that
+are now represented by research notes. An evicted page is not a missing document page;
+notes remain a model-generated summary, not a lossless replacement for original text.
+Full chat history stays in SQLite. Research has eight additional retrieval steps, at
+most one protocol-repair request and at most one citation-repair request, using the
+existing AI transport. Each step is an AI request and may consume the account's word
+allowance. The eight-step limit still applies to paginated research; it does not limit
+the number of scenes in a complete pinned document. If the budget is exhausted, the
+assistant is asked to disclose remaining uncertainty; a further tool request is replaced
+with a message asking the user to narrow the question. Exhaustive synthesis of a corpus
+larger than these budgets requires additional passes; source coverage must not be
+misrepresented as proof that all facts have been understood or retained.
 
 Cloud documents are fetched in batches of up to four before the first AI request.
 Missing data fails explicitly after a timeout, rather than being represented as the
@@ -107,3 +120,9 @@ then a localized error. Control output and transport separators do not become as
 messages, and legacy control replies already on disk are excluded from model history.
 Tests reproduce concatenated commands with a malformed UUID, duplicate calls, arbitrary
 separators, escaped quotes/braces, malformed JSON and exhaustion of the retrieval budget.
+
+Coverage regression tests reproduce an episode of 45 chunks / approximately 48k text
+characters, ensuring that its beginning, middle and ending remain available even after
+repeated reads. A larger 54-chunk document exercises pagination and verifies that early
+findings survive eviction and that complete coverage is recorded only after the final
+page. These tests validate context assembly, not the quality of live model summaries.

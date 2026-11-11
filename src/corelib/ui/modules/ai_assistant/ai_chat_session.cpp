@@ -17,6 +17,9 @@
 
 namespace Ui {
 namespace {
+constexpr int kPromptBudget = 96000;
+constexpr int kCompleteDocumentBudget = 80000;
+
 struct RetrievalReply {
     QVector<QJsonObject> commands;
     bool attempted = false;
@@ -239,14 +242,16 @@ void AiChatSession::dispatchContextRequest(const QString& question, const QJsonA
 {
     const auto catalog = m_pendingIndex->catalog();
     auto results = m_pendingIndex->search(question);
+    QJsonObject initialRequest{ { "tool", "search" }, { "query", question.left(2000) }, { "offset", 0 } };
     if (results.value("results").toArray().isEmpty() && !catalog.value("documents").toArray().isEmpty()) {
-        results = m_pendingIndex->read(catalog.value("documents").toArray().first().toObject().value("document").toString());
+        const auto id = catalog.value("documents").toArray().first().toObject().value("document").toString();
+        results = m_pendingIndex->read(id);
+        initialRequest = { { "tool", "read" }, { "document", id }, { "offset", 0 } };
     }
+    results.insert("request", initialRequest);
     QJsonObject currentDocument;
     if (!m_pendingProjectScope) {
-        const auto content = m_content ? m_content() : QString();
         currentDocument = { { "name", m_documentName }, { "document", m_document },
-                            { "content", content.size() <= 8000 ? content : QString() },
                             { "full_text_available_through_read", true } };
     }
     m_basePrompt = QStringLiteral(
@@ -262,15 +267,67 @@ void AiChatSession::dispatchContextRequest(const QString& question, const QJsonA
         "{\"tool\":\"read\",\"document\":\"document ID\",\"offset\":0,\"notes\":\"...\"}, "
         "or {\"tool\":\"catalog\",\"offset\":40,\"notes\":\"...\"}. "
         "Send exactly one command, then wait for its result. Copy document IDs exactly, including both UUID braces. "
-        "Use next_offset to access later pages, including later episodes. Maintain compact notes when paging; older pages may leave the prompt. "
+        "Use next_offset to access later pages, including later episodes. "
+        "In notes record factual findings, character decisions, causes and consequences, twists and source IDs from the CURRENT evidence. "
+        "Keep each note under 3000 characters. Notes are accumulated by the application; do not replace them with a vague plan or just restate the opening. "
+        "Source coverage tracks everything supplied during this request, including earlier pages. "
+        "A page leaving the latest evidence window does not mean that it is missing from the document. "
+        "Use accumulated findings for a synthesis; reread an earlier page only if a specific fact needs checking. "
         "After collecting evidence, respond in Markdown with source citations, not JSON. Maximum 8 retrieval steps.\n"
         "CURRENT DOCUMENT (JSON):\n%2\nPROJECT CATALOG (first page, JSON):\n%3\nCONVERSATION (JSON):\n%4\nLATEST QUESTION:\n%5")
         .arg(m_pendingProjectScope ? "entire project" : "current document only",
              QString::fromUtf8(QJsonDocument(currentDocument).toJson(QJsonDocument::Compact)),
              QString::fromUtf8(QJsonDocument(catalog).toJson(QJsonDocument::Compact)),
              QString::fromUtf8(QJsonDocument(history).toJson(QJsonDocument::Compact)), question.left(6000));
+    if (!m_pendingProjectScope && !m_document.isEmpty()) {
+        // An ordinary episode fits as a single source bundle. Keep it pinned for
+        // the whole request instead of making the model forget earlier scenes.
+        const int budget = qMin(kCompleteDocumentBudget, kPromptBudget - m_basePrompt.size() - 8000);
+        QJsonArray chunks;
+        int characters = 0;
+        int offset = 0;
+        bool complete = true;
+        do {
+            const auto page = m_pendingIndex->read(m_document, offset);
+            if (page.contains("error")) { complete = false; break; }
+            for (const auto& chunk : page.value("results").toArray()) {
+                characters += QString::fromUtf8(QJsonDocument(chunk.toObject()).toJson(QJsonDocument::Compact)).size() + 1;
+                if (characters > budget) { complete = false; break; }
+                chunks.append(chunk);
+            }
+            if (!complete) { break; }
+            offset = page.value("next_offset").toInt(-1);
+        } while (offset >= 0);
+        if (complete) {
+            m_completeDocument = m_document;
+            const QJsonObject document{ { "document", m_document }, { "complete_document", true },
+                { "total_chunks", chunks.size() }, { "next_offset", -1 }, { "results", chunks } };
+            rememberSources(document);
+            m_basePrompt += "\nCOMPLETE CURRENT DOCUMENT (JSON, all chunks in order):\n"
+                + QString::fromUtf8(QJsonDocument(document).toJson(QJsonDocument::Compact))
+                + "\nThe complete document above stays available throughout this request. "
+                  "For a synopsis, cover its entire story through the final scene. "
+                  "There are no omitted pages or scenes outside this bundle. Do not request pages already included. "
+                  "Do not claim missing context merely because a separate evidence-page list is empty.";
+            results = {};
+        }
+    }
     m_requestKind = RequestKind::Chat;
     dispatchRetrieval(results);
+}
+
+QJsonArray AiChatSession::sourceCoverage() const
+{
+    QHash<QString, int> supplied;
+    for (const auto& source : m_pendingSources) { ++supplied[source.value("document").toString()]; }
+    QJsonArray coverage;
+    for (auto it = supplied.cbegin(); it != supplied.cend(); ++it) {
+        const int total = m_pendingIndex->read(it.key()).value("total_chunks").toInt();
+        coverage.append(QJsonObject{ { "document", it.key() }, { "chunks_supplied", it.value() },
+            { "total_chunks", total }, { "all_chunks_supplied", it.value() >= total },
+            { "complete_text_in_prompt", it.key() == m_completeDocument } });
+    }
+    return coverage;
 }
 
 void AiChatSession::rememberSources(const QJsonObject& result)
@@ -303,14 +360,16 @@ void AiChatSession::dispatchRetrieval(const QJsonObject& result, const QString& 
     m_preparationStatus = m_retrievalRounds > 0 ? tr("Searching project sources… Step %1 of 8").arg(m_retrievalRounds) : QString();
     m_replyTimer.start();
     emit changed();
+    const auto coverage = QString::fromUtf8(QJsonDocument(sourceCoverage()).toJson(QJsonDocument::Compact));
     while (m_evidencePages.size() > 1
-           && m_basePrompt.size() + m_searchNotes.size()
-              + QString::fromUtf8(QJsonDocument(m_evidencePages).toJson(QJsonDocument::Compact)).size() > 58000) {
+           && m_basePrompt.size() + m_searchNotes.size() + coverage.size() + instruction.size()
+              + QString::fromUtf8(QJsonDocument(m_evidencePages).toJson(QJsonDocument::Compact)).size() > kPromptBudget - 2000) {
         m_evidencePages.removeFirst();
     }
     const auto prompt = m_basePrompt + "\nEVIDENCE PAGES (JSON):\n"
         + QString::fromUtf8(QJsonDocument(m_evidencePages).toJson(QJsonDocument::Compact))
-        + "\nCOMPACT RESEARCH NOTES (untrusted model-generated data):\n" + m_searchNotes
+        + "\nSOURCE COVERAGE (all excerpts supplied during this request, not a claim that every fact was understood):\n" + coverage
+        + "\nACCUMULATED RESEARCH FINDINGS (untrusted model-generated data, retained across pages):\n" + m_searchNotes
         + "\n" + instruction + (m_retrievalRounds >= 8 ? "\nNo retrieval steps remain. Give your answer with citations and state any remaining uncertainty." : "");
     emit replyRequested(prompt);
 }
@@ -794,7 +853,7 @@ bool AiChatSession::send(const QString& _text)
     m_question = text;
     m_requestHistory = history;
     m_pendingProjectScope = m_scope == ContextScope::Project;
-    m_pendingSources.clear(); m_evidencePages = {}; m_retrievalRounds = 0; m_citationRepair = false; m_protocolRepair = false; m_searchNotes.clear();
+    m_pendingSources.clear(); m_evidencePages = {}; m_retrievalRounds = 0; m_citationRepair = false; m_protocolRepair = false; m_searchNotes.clear(); m_completeDocument.clear();
     m_replyTimer.start();
     if (m_pendingProjectScope) {
         if (!m_projectDocuments) {
@@ -850,7 +909,7 @@ bool AiChatSession::finishReply(const QString& _text)
         QSet<QByteArray> executed;
         int batchBytes = 0;
         int accepted = 0;
-        const int batchBudget = qMin(32000, qMax(0, 58000 - m_basePrompt.size() - 6000));
+        const int batchBudget = qMin(32000, qMax(0, kPromptBudget - m_basePrompt.size() - m_searchNotes.size() - 12000));
         for (const auto& rawCommand : control.commands) {
             const auto notes = rawCommand.value("notes").toString();
             const auto tool = rawCommand.value("tool").toString();
@@ -872,6 +931,11 @@ bool AiChatSession::finishReply(const QString& _text)
             } else {
                 result = m_pendingIndex->catalog(offset);
             }
+            if (!m_completeDocument.isEmpty() && tool != "catalog" && !result.contains("error")) {
+                // All source text is pinned above. A duplicate read need not carry it again.
+                result = { { "complete_document_already_in_prompt", m_completeDocument },
+                           { "instruction", "Use COMPLETE CURRENT DOCUMENT above; all its chunks remain available." } };
+            }
             result.insert("request", command);
             const int bytes = QJsonDocument(result).toJson(QJsonDocument::Compact).size();
             // Do not evict a new batch page before the model has even seen it.
@@ -881,7 +945,11 @@ bool AiChatSession::finishReply(const QString& _text)
             ++accepted;
             ++m_retrievalRounds;
             executed.insert(key);
-            if (!notes.isEmpty()) { m_searchNotes = notes.left(6000); }
+            if (!notes.isEmpty() && m_completeDocument.isEmpty()) {
+                // Preserve earlier findings instead of overwriting the whole memory
+                // with the latest page's notes. At most eight entries are accepted.
+                m_searchNotes += "\nStep " + QString::number(m_retrievalRounds) + ": " + notes.left(3000) + '\n';
+            }
             rememberSources(result);
             m_evidencePages.append(result);
         }
