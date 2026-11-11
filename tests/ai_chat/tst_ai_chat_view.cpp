@@ -13,6 +13,9 @@
 #include <domain/objects_builder.h>
 
 #include <QJsonObject>
+#include <QAction>
+#include <QPushButton>
+#include <QLabel>
 #include <QSignalSpy>
 #include <QSqlDatabase>
 #include <QTemporaryDir>
@@ -57,7 +60,7 @@ private slots:
         view.show();
         QTest::qWait(30);
         auto input = view.findChild<TextField*>("aiChatInput");
-        auto send = view.findChild<Button*>("aiChatSend");
+        auto send = view.findChild<IconButton*>("aiChatSend");
         auto history = view.findChild<ChatMessagesView*>("aiChatHistory");
         QVERIFY(input && send && history);
         QVERIFY(input->isVisible());
@@ -81,10 +84,10 @@ private slots:
         QVERIFY(history->messages().first().isSistemMessage());
         QVERIFY(history->messages().last().dateTime().isValid());
         QVERIFY(history->messages().at(1).author() != history->messages().last().author());
-        auto insert = view.findChild<Button*>("aiChatInsert");
+        auto insert = view.findChild<QAction*>("aiChatInsert");
         QVERIFY(insert->isVisible());
         QSignalSpy insertions(&view, &Ui::AiAssistantView::insertTextRequested);
-        insert->click();
+        insert->trigger();
         QCOMPARE(insertions.size(), 1);
         QCOMPARE(insertions.first().first().toString(), QString("<b>Literal text</b>\nSecond paragraph"));
         view.setReadOnly(true);
@@ -135,27 +138,27 @@ private slots:
         view.resize(440, 800);
         view.show();
         QTest::qWait(30);
-        auto create = view.findChild<IconButton*>("aiNewChat");
-        auto remove = view.findChild<IconButton*>("aiDeleteChat");
+        auto create = view.findChild<QAction*>("aiNewChat");
+        auto remove = view.findChild<QAction*>("aiDeleteChat");
         QVERIFY(create && remove);
-        create->click();
+        create->trigger();
         QCOMPARE(session->chats().size(), 1);
-        create->click();
+        create->trigger();
         QCOMPARE(session->chats().size(), 2);
-        remove->click();
+        remove->trigger();
         QCOMPARE(session->chats().size(), 2);
         auto dialog = view.findChild<Dialog*>("aiDeleteChatConfirmation");
         QVERIFY(dialog);
         dialog->finished({ 0, {}, Dialog::RejectButton });
         QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
         QCOMPARE(session->chats().size(), 2);
-        remove->click();
+        remove->trigger();
         dialog = view.findChild<Dialog*>("aiDeleteChatConfirmation");
         QVERIFY(dialog);
         dialog->finished({ 1, {}, Dialog::AcceptCriticalButton });
         QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
         QCOMPARE(session->chats().size(), 1);
-        remove->click();
+        remove->trigger();
         dialog = view.findChild<Dialog*>("aiDeleteChatConfirmation");
         QVERIFY(dialog);
         dialog->finished({ 1, {}, Dialog::AcceptCriticalButton });
@@ -170,13 +173,20 @@ private slots:
         session->setBackendAvailable(false);
         Ui::AiAssistantView view;
         auto input = view.findChild<TextField*>("aiChatInput");
-        auto commands = view.findChild<ComboBox*>("aiChatCommands");
-        auto send = view.findChild<Button*>("aiChatSend");
+        auto commands = view.findChild<IconButton*>("aiChatCommandsToggle");
+        auto send = view.findChild<IconButton*>("aiChatSend");
         input->setText("Keep my text\nincluding line breaks");
-        commands->currentIndexChanged(commands->model()->index(0, 0));
-        QCOMPARE(input->text(), QString("/rephrase Keep my text\nincluding line breaks"));
-        commands->currentIndexChanged(commands->model()->index(1, 0));
-        QCOMPARE(input->text(), QString("/expand Keep my text\nincluding line breaks"));
+        commands->click();
+        view.findChild<QPushButton*>("aiCommand_rephrase")->click();
+        QVERIFY(input->text().isEmpty());
+        view.findChild<QPushButton*>("aiToolCancel")->click();
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QCOMPARE(input->text(), QString("Keep my text\nincluding line breaks"));
+        view.findChild<QPushButton*>("aiCommand_expand")->click();
+        QCOMPARE(view.findChild<QLabel*>("aiToolArguments")->text(), QString("Keep my text\nincluding line breaks"));
+        view.findChild<QPushButton*>("aiToolCancel")->click();
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QCOMPARE(input->text(), QString("Keep my text\nincluding line breaks"));
         QVERIFY(!send->isEnabled());
         input->setText("/help");
         QVERIFY(send->isEnabled());
@@ -209,6 +219,7 @@ private slots:
     {
         ChatMessagesView history;
         history.resize(420, 800);
+        history.setConversationStyle(true);
         history.setCurrentUser(User("You", "user"));
         ChatMessage reply(QDateTime::currentDateTime(),
                           "## Heading\n\nA **bold** word and `code`.\n\n- First\n- Second",
@@ -292,7 +303,7 @@ private slots:
         Ui::AiAssistantView view;
         view.setAvailableWords(100);
         auto input = view.findChild<TextField*>("aiChatInput");
-        auto send = view.findChild<Button*>("aiChatSend");
+        auto send = view.findChild<IconButton*>("aiChatSend");
         QSignalSpy freeChat(session, &Ui::AiChatSession::replyRequested);
         QSignalSpy rephrase(&view, &Ui::AiAssistantView::rephraseRequested);
         QSignalSpy generate(&view, &Ui::AiAssistantView::generateTextRequested);
@@ -334,6 +345,128 @@ private slots:
         QCOMPARE(input->text(), QString("/unknown"));
     }
 
+    void synopsisMenuCollectsParametersBeforeStarting()
+    {
+        auto session = Ui::AiChatSession::instance();
+        session->setProject(QUuid::createUuid(), {});
+        session->setDocument(QUuid::createUuid(), "Screenplay / Draft", [] { return "Scene text"; });
+        session->setBackendAvailable(true);
+        Ui::AiAssistantView view;
+        view.setSynopsisGenerationAvaiable(true);
+        view.setGenerationSynopsisOptions("Uses 200 words");
+        view.setAvailableWords(1000);
+        view.resize(320, 700);
+        view.show();
+        QSignalSpy generate(&view, &Ui::AiAssistantView::generateSynopsisRequested);
+        auto toggle = view.findChild<IconButton*>("aiChatCommandsToggle");
+        QTest::mouseClick(toggle, Qt::LeftButton);
+        QVERIFY(view.findChild<QFrame*>("aiChatCommands")->isVisible());
+        view.findChild<QPushButton*>("aiCommand_synopsis")->click();
+        QVERIFY(!toggle->isChecked());
+        QVERIFY(view.findChild<QFrame*>("aiToolFlowCard")->isVisible());
+        QCOMPARE(generate.size(), 0);
+        view.findChild<QPushButton*>("aiSynopsis_45")->click();
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QVERIFY(view.findChild<QLabel*>("aiToolPrompt")->text().contains("45"));
+        QCOMPARE(view.findChild<QLabel*>("aiToolCost")->text(), QString("Uses 200 words"));
+        auto start = view.findChild<QPushButton*>("aiToolStart");
+        QVERIFY(start && start->isEnabled());
+        QCOMPARE(generate.size(), 0);
+        session->setBackendAvailable(false);
+        QVERIFY(!start->isEnabled());
+        session->setBackendAvailable(true);
+        QVERIFY(start->isEnabled());
+        QTest::qWait(30);
+        const auto screenshot = qEnvironmentVariable("AI_CHAT_REFERENCE_SCREENSHOT");
+        if (!screenshot.isEmpty()) { QVERIFY(view.grab().save(screenshot)); }
+        start->click();
+        QCOMPARE(generate.size(), 1);
+        QCOMPARE(generate.first().first().toInt(), 45);
+        QVERIFY(!view.findChild<QFrame*>("aiToolFlowCard")->isVisible());
+        QVERIFY(session->finishToolReply("synopsis", "Synopsis"));
+    }
+
+    void translationFlowUsesOneExplicitStart()
+    {
+        auto session = Ui::AiChatSession::instance();
+        session->setProject(QUuid::createUuid(), {});
+        session->setDocument(QUuid::createUuid(), "Chapter", [] { return "Text"; });
+        session->setBackendAvailable(true);
+        Ui::AiAssistantView view;
+        view.setDocumentTranslationAvailable(true);
+        view.setAvailableWords(100);
+        QSignalSpy translate(&view, &Ui::AiAssistantView::translateDocumentRequested);
+        view.findChild<QPushButton*>("aiCommand_translate")->click();
+        view.findChild<TextField*>("aiChatInput")->setText("French");
+        view.findChild<IconButton*>("aiChatSend")->click();
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QCOMPARE(translate.size(), 0);
+        QVERIFY(view.findChild<QLabel*>("aiToolDestination")->text().contains("replace"));
+        view.findChild<QPushButton*>("aiToolStart")->click();
+        QCOMPARE(translate.size(), 1);
+        QCOMPARE(translate.first().first().toString(), QString("French"));
+        QVERIFY(!view.findChild<Dialog*>("aiTranslateConfirmation"));
+        session->finishToolReply("translate-document", "Texte");
+    }
+
+    void clearingFromMenuRequiresConfirmationAndKeepsChat()
+    {
+        auto session = Ui::AiChatSession::instance();
+        session->setProject(QUuid::createUuid(), {});
+        session->setBackendAvailable(true);
+        QVERIFY(session->send("Old message"));
+        session->finishReply("Old answer");
+        const auto id = session->currentChat();
+        QVERIFY(session->renameChat("Keep this name"));
+        Ui::AiAssistantView view;
+        auto clear = view.findChild<QAction*>("aiClearChat");
+        QVERIFY(clear && clear->isEnabled());
+        clear->trigger();
+        auto dialog = view.findChild<Dialog*>("aiClearChatConfirmation");
+        QVERIFY(dialog);
+        dialog->finished({ 0, {}, Dialog::RejectButton });
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QCOMPARE(session->messages().size(), 3);
+        clear->trigger();
+        dialog = view.findChild<Dialog*>("aiClearChatConfirmation");
+        QVERIFY(dialog);
+        dialog->finished({ 1, {}, Dialog::AcceptCriticalButton });
+        QCOMPARE(session->currentChat(), id);
+        QCOMPARE(session->messages().size(), 1);
+        QCOMPARE(session->chats().first().toObject().value("title").toString(), QString("Keep this name"));
+    }
+
+    void generationFlowCancelsWhenContextChanges()
+    {
+        auto session = Ui::AiChatSession::instance();
+        session->setProject(QUuid::createUuid(), {});
+        session->setDocument(QUuid::createUuid(), "Document", [] { return "Text"; });
+        session->setBackendAvailable(true);
+        Ui::AiAssistantView view;
+        view.setAvailableWords(100);
+        QSignalSpy generate(&view, &Ui::AiAssistantView::generateTextRequested);
+        auto input = view.findChild<TextField*>("aiChatInput");
+        auto send = view.findChild<IconButton*>("aiChatSend");
+        view.findChild<QPushButton*>("aiCommand_generate")->click();
+        input->setText("Describe a seaside town");
+        send->click();
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        QCOMPARE(generate.size(), 0);
+        QVERIFY(view.findChild<QPushButton*>("aiToolStart"));
+        session->setDocument(QUuid::createUuid(), "Other document", [] { return "Other text"; });
+        QVERIFY(view.findChild<QFrame*>("aiToolFlowCard")->isHidden());
+        QCOMPARE(generate.size(), 0);
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        view.findChild<QPushButton*>("aiCommand_generate")->click();
+        input->setText("Describe a forest");
+        send->click();
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        view.findChild<QPushButton*>("aiToolStart")->click();
+        QCOMPARE(generate.size(), 1);
+        QCOMPARE(generate.first().first().toString(), QString("Describe a forest"));
+        session->finishToolReply("generate", "A forest");
+    }
+
     void wholeDocumentTranslationRequiresConfirmation()
     {
         auto session = Ui::AiChatSession::instance();
@@ -344,7 +477,7 @@ private slots:
         view.setAvailableWords(100);
         view.setDocumentTranslationAvailable(true);
         auto input = view.findChild<TextField*>("aiChatInput");
-        auto send = view.findChild<Button*>("aiChatSend");
+        auto send = view.findChild<IconButton*>("aiChatSend");
         QSignalSpy translate(&view, &Ui::AiAssistantView::translateDocumentRequested);
         input->setText("/translate French");
         send->click();
@@ -370,7 +503,7 @@ private slots:
         session->setProject(QUuid::createUuid(), {});
         QVERIFY(session->createChat());
         Ui::AiAssistantView view;
-        auto rename = view.findChild<IconButton*>("aiRenameChat");
+        auto rename = view.findChild<QAction*>("aiRenameChat");
         QVERIFY(rename && rename->isEnabled());
         QTimer::singleShot(0, &view, [&view] {
             auto dialog = view.findChild<QInputDialog*>();
@@ -379,7 +512,7 @@ private slots:
                 dialog->accept();
             }
         });
-        rename->click();
+        rename->trigger();
         QCOMPARE(session->chats().first().toObject().value("title").toString(), QString("My renamed conversation"));
     }
 

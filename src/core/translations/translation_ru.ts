@@ -9429,6 +9429,118 @@ Document translation replaces its content and asks for confirmation.</source>
         <source>/synopsis [20|45|-1] — words per scene; -1 means no limit</source>
         <translation>/synopsis [20|45|-1] — слов на сцену; -1 — без ограничения</translation>
     </message>
+    <message>
+        <source>%1 words per scene</source>
+        <translation>%1 слов на сцену</translation>
+    </message>
+    <message>
+        <source>Change parameters</source>
+        <translation>Изменить параметры</translation>
+    </message>
+    <message>
+        <source>Choose the synopsis length — words per scene.</source>
+        <translation>Выберите длину синопсиса — количество слов на сцену.</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Очистить</translation>
+    </message>
+    <message>
+        <source>Clear chat</source>
+        <translation>Очистить чат</translation>
+    </message>
+    <message>
+        <source>Delete all messages in this chat? Its name will be kept.</source>
+        <translation>Удалить все сообщения в этом чате? Название чата сохранится.</translation>
+    </message>
+    <message>
+        <source>Describe what to create</source>
+        <translation>Опишите, что нужно создать</translation>
+    </message>
+    <message>
+        <source>For example: English</source>
+        <translation>Например: английский</translation>
+    </message>
+    <message>
+        <source>For example: simpler and more vivid</source>
+        <translation>Например: проще и выразительнее</translation>
+    </message>
+    <message>
+        <source>How should I rephrase the text? Describe the style in your next message.</source>
+        <translation>Как перефразировать текст? Опишите желаемый стиль в следующем сообщении.</translation>
+    </message>
+    <message>
+        <source>I can help you develop ideas, work on the text, or discuss this document. Write a message or choose a task from the menu.</source>
+        <translation>Помогу развить идеи, поработать с текстом и обсудить документ. Напишите сообщение или выберите задачу из меню.</translation>
+    </message>
+    <message>
+        <source>Manage chats</source>
+        <translation>Управление чатами</translation>
+    </message>
+    <message>
+        <source>Medium (45 words per scene)</source>
+        <translation>Средний (45 слов на сцену)</translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation>Без ограничений</translation>
+    </message>
+    <message>
+        <source>Send the text before and after the insertion, separated by |.</source>
+        <translation>Пришлите текст до и после вставки, разделив их символом |.</translation>
+    </message>
+    <message>
+        <source>Short (20 words per scene)</source>
+        <translation>Краткий (20 слов на сцену)</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Начать</translation>
+    </message>
+    <message>
+        <source>The result will appear here in the chat.</source>
+        <translation>Результат появится здесь, в чате.</translation>
+    </message>
+    <message>
+        <source>The result will be added to %1.</source>
+        <translation>Результат будет добавлен в «%1».</translation>
+    </message>
+    <message>
+        <source>Top up</source>
+        <translation>Пополнить</translation>
+    </message>
+    <message>
+        <source>What would you like to create? Describe it in your next message.</source>
+        <translation>Что нужно создать? Опишите это в следующем сообщении.</translation>
+    </message>
+    <message>
+        <source>Which language should I translate into? Write the language in your next message.</source>
+        <translation>На какой язык перевести? Укажите язык в следующем сообщении.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n word(s)</source>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform></translation>
+    </message>
+    <message>
+        <source>Send the text you would like to work on.</source>
+        <translation>Пришлите текст, с которым нужно поработать.</translation>
+    </message>
+    <message>
+        <source>Novel</source>
+        <translation>Роман</translation>
+    </message>
+    <message>
+        <source>Script</source>
+        <translation>Сценарий</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation><numerusform>%Ln слово</numerusform><numerusform>%Ln слова</numerusform><numerusform>%Ln слов</numerusform></translation>
+    </message>
+    <message>
+        <source>Change</source>
+        <translation>Изменить</translation>
+    </message>
 </context>
 <context>
     <name>Ui::ApplicationView</name>

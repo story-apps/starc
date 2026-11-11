@@ -39,6 +39,7 @@ public:
     bool finishToolReply(const QString& _action, const QString& _text);
     bool selectChat(const QString& _id);
     bool deleteChat();
+    bool clearChat();
     bool send(const QString& _text);
     bool hasPendingReply() const;
     bool isWaitingForCurrentChat() const;

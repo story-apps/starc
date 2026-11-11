@@ -209,7 +209,13 @@ protected:
 
 private:
     void initChat();
-    bool sendChatMessage(const QString& _message);
+    bool sendChatMessage(const QString& _message, bool _confirmed = false);
+    static bool toolWritesDocument(const QString& _command);
+    void positionCommandMenu();
+    void beginToolFlow(const QString& _command);
+    void prepareToolArguments(const QString& _text);
+    void renderToolFlow();
+    void cancelToolFlow(bool _restoreDraft);
     void refreshChat();
     void updateChatTranslations();
     void updateChatComposer();

@@ -347,6 +347,24 @@ bool AiChatSession::selectChat(const QString& _id)
     return true;
 }
 
+bool AiChatSession::clearChat()
+{
+    if (m_chat.isEmpty()) { return false; }
+    QSqlQuery query(m_database);
+    query.prepare("DELETE FROM ai_chat_messages WHERE chat_id = ? AND EXISTS "
+                  "(SELECT 1 FROM ai_chats WHERE id = ? AND project_uuid = ? AND account_email = ?)");
+    query.addBindValue(m_chat);
+    query.addBindValue(m_chat);
+    query.addBindValue(m_project);
+    query.addBindValue(m_account);
+    if (!check(query.exec())) { return false; }
+    // Keep the untagged transport owned, but discard any answer to the cleared history.
+    if (m_pendingChat == m_chat) { m_pendingChat.clear(); }
+    ensureContext();
+    emit changed();
+    return true;
+}
+
 bool AiChatSession::deleteChat()
 {
     QSqlQuery query(m_database);

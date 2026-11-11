@@ -11,6 +11,9 @@ multiline input, safe rendering, explicit insertion, read-only documents and cha
 The assistant uses the existing `ChatMessagesView`, `ChatMessage` and `User` widgets
 and types. The tests also check Markdown formatting, partial text selection, command dispatch,
 translation confirmation, scrolling long replies and system context messages.
+The compact command menu opens a configuration card inside the shared chat view.
+Tests cover synopsis length selection, the explicit Start step, cancellation when
+the document changes, draft restoration, and clearing history without restoring late replies.
 
 Build each target in its own directory with `qmake /path/to/ai_chat.pro` (or
 `ai_chat_view.pro`), followed by `make` and the resulting test executable.
@@ -26,7 +29,9 @@ Results always remain in their originating conversation unless it was deleted.
 The timeout leaves this untagged transport unavailable until its outstanding reply
 arrives or the connection is re-established.
 
-Command syntax is available through `/help` and inline composer hints. For example:
+Commands can be chosen from the menu next to the composer; configuration does not
+send a request until Start is pressed. Complete slash commands also remain available
+for keyboard users. Command syntax is available through `/help` and inline composer hints. For example:
 
 - `/rephrase friendly | An excerpt` replies in chat; `/rephrase friendly` uses the current document.
 - `/expand`, `/shorten`, `/summarize` accept an excerpt or default to the current document.

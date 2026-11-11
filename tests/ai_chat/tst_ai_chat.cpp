@@ -23,6 +23,7 @@ private slots:
     void renamesPersistAndSurviveFirstMessage();
     void toolRepliesKeepTheirOriginAndIgnoreStaleTargets();
     void toolTimeoutAndMultipleResults();
+    void clearingChatKeepsNameAndDiscardsPendingReply();
 };
 
 void AiChatTest::persistsAndIsolatesProjectsAndAccounts()
@@ -372,6 +373,33 @@ void AiChatTest::toolTimeoutAndMultipleResults()
     QVERIFY(chat.finishToolReply("generate", "Late reply"));
     QCOMPARE(chat.messages().last().toObject().value("role").toString(), QString("error"));
     QVERIFY(chat.canSend());
+}
+
+void AiChatTest::clearingChatKeepsNameAndDiscardsPendingReply()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    chat.setDocument(QUuid::createUuid(), "Document", [] { return "Text"; });
+    QVERIFY(chat.createChat());
+    const auto id = chat.currentChat();
+    QVERIFY(chat.renameChat("My notes"));
+    QVERIFY(chat.send("Old question"));
+    QVERIFY(chat.clearChat());
+    QCOMPARE(chat.currentChat(), id);
+    QCOMPARE(chat.chats().first().toObject().value("title").toString(), QString("My notes"));
+    QCOMPARE(chat.messages().size(), 1);
+    QCOMPARE(chat.messages().first().toObject().value("role").toString(), QString("context"));
+    QVERIFY(!chat.canSend());
+    chat.finishReply("Late reply must not restore cleared messages");
+    QCOMPARE(chat.messages().size(), 1);
+    QVERIFY(chat.canSend());
+    QVERIFY(chat.startTool("/generate More", "generate"));
+    QVERIFY(chat.clearChat());
+    QVERIFY(!chat.toolTargetsCurrentDocument());
+    chat.finishToolReply("generate", "Late result");
+    QCOMPARE(chat.messages().size(), 1);
 }
 
 QTEST_GUILESS_MAIN(AiChatTest)

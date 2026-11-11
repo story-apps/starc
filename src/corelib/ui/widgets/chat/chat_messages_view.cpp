@@ -6,6 +6,9 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QResizeEvent>
+#include <QPainter>
+#include <QLayout>
+#include <QLocale>
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QTextBlock>
@@ -21,8 +24,46 @@ public:
     // or make network requests on behalf of message authors.
     class MessageBrowser : public QTextBrowser
     {
+    public:
+        bool conversationStyle = false;
+        QVector<QPair<QTextFrame*, QColor>> bubbles;
+
     protected:
         QVariant loadResource(int, const QUrl&) override { return {}; }
+
+        void paintEvent(QPaintEvent* _event) override
+        {
+            if (!conversationStyle) {
+                QTextBrowser::paintEvent(_event);
+                return;
+            }
+            QPainter painter(viewport());
+            painter.fillRect(viewport()->rect(), palette().brush(QPalette::Base));
+            painter.translate(-horizontalScrollBar()->value(), -verticalScrollBar()->value());
+            painter.setRenderHint(QPainter::Antialiasing);
+            const auto layout = document()->documentLayout();
+            for (const auto& bubble : bubbles) {
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(bubble.second);
+                const auto format = bubble.first->frameFormat();
+                const auto rect = layout->frameBoundingRect(bubble.first).adjusted(
+                    format.leftMargin(), format.topMargin(), -format.rightMargin(), -format.bottomMargin());
+                painter.drawRoundedRect(rect, 8, 8);
+            }
+            QAbstractTextDocumentLayout::PaintContext context;
+            context.palette = palette();
+            context.clip = QRectF(horizontalScrollBar()->value(), verticalScrollBar()->value(),
+                                  viewport()->width(), viewport()->height());
+            // Selection is painted by the document layout; the insertion caret is omitted.
+            if (textCursor().hasSelection()) {
+                QAbstractTextDocumentLayout::Selection selection;
+                selection.cursor = textCursor();
+                selection.format.setBackground(palette().brush(QPalette::Highlight));
+                selection.format.setForeground(palette().brush(QPalette::HighlightedText));
+                context.selections.append(selection);
+            }
+            layout->draw(&painter, context);
+        }
 
         void mouseMoveEvent(QMouseEvent* _event) override
         {
@@ -41,6 +82,7 @@ public:
         QVariant loadResource(int, const QUrl&) override { return {}; }
     };
     MessageBrowser* browser = nullptr;
+    QWidget* footer = nullptr;
     User currentUser;
     QVector<ChatMessage> messages;
     QVector<QPair<int, int>> ranges;
@@ -108,9 +150,48 @@ QString ChatMessagesView::selectedText() const
     return d->browser->textCursor().selectedText().replace(QChar::ParagraphSeparator, '\n');
 }
 
+void ChatMessagesView::setConversationStyle(bool _enabled)
+{
+    if (d->browser->conversationStyle == _enabled) {
+        return;
+    }
+    d->browser->conversationStyle = _enabled;
+    rebuildDocument();
+}
+
+void ChatMessagesView::setFooterWidget(QWidget* _widget)
+{
+    if (d->footer != _widget) {
+        if (d->footer) {
+            d->footer->hide();
+        }
+        d->footer = _widget;
+        if (_widget) {
+            _widget->setParent(this);
+        }
+    }
+    updateFooterGeometry();
+    updateGeometry();
+}
+
+void ChatMessagesView::updateFooterGeometry()
+{
+    if (!d->footer || d->footer->isHidden()) {
+        return;
+    }
+    const int footerWidth = qMax(1, width() - 24);
+    const auto layout = d->footer->layout();
+    const int footerHeight = layout && layout->hasHeightForWidth()
+        ? layout->heightForWidth(footerWidth) : d->footer->sizeHint().height();
+    d->footer->setGeometry(12, qCeil(d->browser->document()->size().height()) + 8,
+                           footerWidth, footerHeight);
+    d->footer->raise();
+}
+
 void ChatMessagesView::rebuildDocument()
 {
     auto document = d->browser->document();
+    d->browser->bubbles.clear();
     document->clear();
     document->setDefaultFont(Ui::DesignSystem::font().body2());
     document->setDocumentMargin(12);
@@ -132,7 +213,7 @@ void ChatMessagesView::rebuildDocument()
             format.setTopMargin(8);
             format.setBottomMargin(8);
             cursor.setBlockFormat(format);
-            cursor.insertText(message.dateTime().toString("d MMMM"));
+            cursor.insertText(QLocale().toString(message.dateTime().date(), "d MMMM"));
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
         }
         if (message.isSistemMessage()) {
@@ -159,20 +240,23 @@ void ChatMessagesView::rebuildDocument()
         const bool own = message.author() == d->currentUser;
         frame.setLeftMargin(own ? 36 : 0);
         frame.setRightMargin(own ? 0 : 16);
-        if (!message.isSistemMessage()) {
-            frame.setBackground(ColorHelper::nearby(backgroundColor()));
+        const auto bubbleColor = d->browser->conversationStyle && own
+            ? Ui::DesignSystem::color().accent() : ColorHelper::nearby(backgroundColor());
+        if (!d->browser->conversationStyle) {
+            frame.setBackground(bubbleColor);
         }
         auto messageFrame = cursor.insertFrame(frame);
+        d->browser->bubbles.append({ messageFrame, bubbleColor });
         cursor = messageFrame->firstCursorPosition();
         QTextBlockFormat normal;
         normal.setAlignment(Qt::AlignLeft);
         cursor.setBlockFormat(normal);
         QTextCharFormat textFormat;
-        textFormat.setForeground(textColor());
-        textFormat.setFontItalic(message.isSistemMessage());
+        textFormat.setForeground(d->browser->conversationStyle && own
+                                     ? Ui::DesignSystem::color().onAccent() : textColor());
         cursor.setCharFormat(textFormat);
         const int start = cursor.position();
-        if (!message.isSistemMessage()) {
+        if (!d->browser->conversationStyle) {
             auto authorFormat = textFormat;
             authorFormat.setFontWeight(QFont::DemiBold);
             cursor.insertText(message.author().name(), authorFormat);
@@ -187,10 +271,24 @@ void ChatMessagesView::rebuildDocument()
         } else {
             cursor.insertText(message.text(), textFormat);
         }
+        if (d->browser->conversationStyle && message.dateTime().isValid()) {
+            QTextBlockFormat timestamp;
+            timestamp.setAlignment(Qt::AlignRight);
+            timestamp.setTopMargin(4);
+            QTextCharFormat timeFormat;
+            timeFormat.setFont(Ui::DesignSystem::font().caption());
+            timeFormat.setForeground(ColorHelper::transparent(textFormat.foreground().color(), 0.55));
+            cursor.insertBlock(timestamp, timeFormat);
+            cursor.insertText(message.dateTime().toString("HH:mm"));
+        }
         d->ranges.append({ start, cursor.position() });
         cursor = messageFrame->lastCursorPosition();
         cursor.movePosition(QTextCursor::NextCharacter);
-        cursor.setBlockFormat(QTextBlockFormat());
+        QTextBlockFormat separator;
+        if (d->browser->conversationStyle) {
+            separator.setLineHeight(1, QTextBlockFormat::FixedHeight);
+        }
+        cursor.setBlockFormat(separator);
         cursor.setCharFormat(QTextCharFormat());
     }
     auto palette = d->browser->palette();
@@ -198,13 +296,21 @@ void ChatMessagesView::rebuildDocument()
     palette.setColor(QPalette::Text, textColor());
     d->browser->setPalette(palette);
     document->setTextWidth(qMax(1, width() - 4));
+    updateFooterGeometry();
     updateGeometry();
+    d->browser->viewport()->update();
 }
 
 int ChatMessagesView::heightForWidth(int _width) const
 {
     d->browser->document()->setTextWidth(qMax(1, _width - 4));
-    return qCeil(d->browser->document()->size().height()) + 4;
+    int footerHeight = 0;
+    if (d->footer && !d->footer->isHidden()) {
+        const auto layout = d->footer->layout();
+        footerHeight = 16 + (layout && layout->hasHeightForWidth()
+            ? layout->heightForWidth(qMax(1, _width - 24)) : d->footer->sizeHint().height());
+    }
+    return qCeil(d->browser->document()->size().height()) + 4 + footerHeight;
 }
 
 void ChatMessagesView::resizeEvent(QResizeEvent* _event)
@@ -212,6 +318,7 @@ void ChatMessagesView::resizeEvent(QResizeEvent* _event)
     Widget::resizeEvent(_event);
     d->browser->setGeometry(rect());
     d->browser->document()->setTextWidth(qMax(1, _event->size().width() - 4));
+    updateFooterGeometry();
 }
 
 void ChatMessagesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

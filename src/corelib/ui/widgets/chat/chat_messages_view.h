@@ -33,6 +33,12 @@ public:
     QVector<ChatMessage> messages() const;
     QString selectedText() const;
 
+    // Compact bubbles with timestamps for conversational sidebars.
+    void setConversationStyle(bool _enabled);
+    // Optional in-conversation controls, e.g. a command configuration card.
+    // Ownership is transferred to this view; call again after changing its content.
+    void setFooterWidget(QWidget* _widget);
+
     /**
      * @brief Получить необходимую высоту в зависимости от ширины
      */
@@ -55,6 +61,7 @@ protected:
 
 private:
     void rebuildDocument();
+    void updateFooterGeometry();
     class Implementation;
     QScopedPointer<Implementation> d;
 };
