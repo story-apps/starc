@@ -4,6 +4,7 @@
 
 class ChatMessage;
 class User;
+class QUrl;
 
 
 /**
@@ -49,6 +50,7 @@ signals:
      * @brief Пользователь хочет отобразить контекстное меню для сообщения
      */
     void messageContextMenuRequested(int _messageIndex);
+    void linkActivated(const QUrl& _url);
 
 protected:
     /**

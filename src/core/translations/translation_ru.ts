@@ -4733,6 +4733,22 @@ The following files will not be imported:
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
+    <message>
+        <source>This source document has been removed from the project.</source>
+        <translation>Документ, на который ведёт ссылка, удалён из проекта.</translation>
+    </message>
+    <message>
+        <source>No editor is available for this source document.</source>
+        <translation>Не удалось открыть редактор этого документа.</translation>
+    </message>
+    <message>
+        <source>Could not load the source document. Please try again.</source>
+        <translation>Не удалось загрузить документ по ссылке. Попробуйте ещё раз.</translation>
+    </message>
+    <message>
+        <source>The source scene has changed or was removed. The document was opened instead.</source>
+        <translation>Сцена изменилась или удалена. Открыт документ, в котором она находилась.</translation>
+    </message>
 </context>
 <context>
     <name>ManagementLayer::ProjectsManager</name>
@@ -9540,6 +9556,30 @@ Document translation replaces its content and asks for confirmation.</source>
     <message>
         <source>Change</source>
         <translation>Изменить</translation>
+    </message>
+    <message>
+        <source>Latest drafts · Search across the entire project</source>
+        <translation>Последние драфты · Поиск по всему проекту</translation>
+    </message>
+    <message>
+        <source>Ask about any document or episode in the project. I will search the latest drafts and link to the sources.</source>
+        <translation>Спросите о любом документе или серии проекта. Я найду информацию в последних драфтах и дам ссылки на источники.</translation>
+    </message>
+    <message>
+        <source>Current document</source>
+        <translation>Текущий документ</translation>
+    </message>
+    <message>
+        <source>Entire project</source>
+        <translation>Весь проект</translation>
+    </message>
+    <message>
+        <source>Project mode searches all latest drafts and can read sources in several steps. Commands still apply to the open document.</source>
+        <translation>Поиск по всему проекту учитывает последние драфты и может занять несколько шагов. Команды по-прежнему работают с открытым документом.</translation>
+    </message>
+    <message>
+        <source>Conversation context</source>
+        <translation>Контекст беседы</translation>
     </message>
 </context>
 <context>
@@ -23101,6 +23141,62 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <source>The result is saved here. It was not added to the document because the document changed or is no longer active.</source>
         <translation>Результат сохранён в чате. Он не добавлен в документ, потому что документ изменился или вы переключились на другой.</translation>
+    </message>
+    <message>
+        <source>Could not load all project documents. Check the connection and try again.</source>
+        <translation>Не удалось загрузить все документы проекта. Проверьте соединение и попробуйте снова.</translation>
+    </message>
+    <message>
+        <source>Project context preparation stopped. Please send the message again.</source>
+        <translation>Подготовка проекта остановлена. Отправьте сообщение ещё раз.</translation>
+    </message>
+    <message>
+        <source>Loading project documents: %1 of %2</source>
+        <translation>Загружаю документы: %1 из %2</translation>
+    </message>
+    <message>
+        <source>Indexing project: %1 of %2 documents</source>
+        <translation>Готовлю поиск: %1 из %2 документов</translation>
+    </message>
+    <message>
+        <source>Building project search index…</source>
+        <translation>Готовлю поиск по проекту…</translation>
+    </message>
+    <message>
+        <source>Searching project sources… Step %1 of 8</source>
+        <translation>Ищу в проекте… Шаг %1 из 8</translation>
+    </message>
+    <message>
+        <source>[Source unavailable]</source>
+        <translation>[Источник недоступен]</translation>
+    </message>
+    <message>
+        <source>This source is not available in the current chat and project.</source>
+        <translation>Этот источник недоступен в текущем чате и проекте.</translation>
+    </message>
+    <message>
+        <source>Project context preparation stopped because the project changed. Please send the message again.</source>
+        <translation>Вы открыли другой проект. Отправьте сообщение ещё раз, чтобы обсудить его.</translation>
+    </message>
+    <message>
+        <source>Now discussing the whole project. Only the latest document drafts are included.</source>
+        <translation>Теперь работаем со всем проектом. Я вижу последние драфты документов и историю переписки.</translation>
+    </message>
+    <message>
+        <source>Project context is not available. Reopen the project and try again.</source>
+        <translation>Не удалось получить документы проекта. Откройте проект заново и попробуйте ещё раз.</translation>
+    </message>
+    <message>
+        <source>Preparing project context…</source>
+        <translation>Готовлю документы проекта…</translation>
+    </message>
+    <message>
+        <source>The assistant did not provide verifiable source citations for this answer.</source>
+        <translation>В этом ответе нет подтверждённых ссылок на источники. Указанные факты стоит проверить.</translation>
+    </message>
+    <message>
+        <source>The project search reached its step limit. Please narrow the question or specify an episode.</source>
+        <translation>Не удалось завершить поиск за один запрос. Уточните вопрос или укажите серию.</translation>
     </message>
 </context>
 

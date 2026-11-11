@@ -1795,11 +1795,11 @@ QModelIndex TextModel::indexForUuid(const QUuid& _uuid) const
                 if (group->uuid() == _uuid) {
                     return indexForItem(group);
                 }
-
-                const auto childIndex = searchItem(child);
-                if (childIndex.isValid()) {
-                    return childIndex;
-                }
+            }
+            // Scenes may be inside folders as well as inside other groups.
+            const auto childIndex = searchItem(child);
+            if (childIndex.isValid()) {
+                return childIndex;
             }
         }
 

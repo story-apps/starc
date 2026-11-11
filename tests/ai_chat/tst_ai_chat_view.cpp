@@ -8,6 +8,8 @@
 #include <management_layer/content/writing_session/writing_session_storage.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/text/text_model_folder_item.h>
+#include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/text_template.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
@@ -38,6 +40,78 @@ class AiChatViewTest : public QObject
     QTemporaryDir data;
 
 private slots:
+
+    void scopeSelectorAndSourceLinks()
+    {
+        auto session = Ui::AiChatSession::instance();
+        session->setProject(QUuid::createUuid(), {});
+        const auto document = QUuid::createUuid();
+        session->setDocument(document, "Episode 90", [] { return "Final discovery"; });
+        session->setProjectDocumentsProvider([document](bool) {
+            return QVector<Ui::AiContextDocument>{ { document.toString(), "Episode 90", "Final discovery" } };
+        });
+        session->setBackendAvailable(true);
+        Ui::AiAssistantView view;
+        view.setAvailableWords(1000);
+        view.resize(440, 800);
+        view.show();
+        auto scope = view.findChild<ComboBox*>("aiContextScope");
+        QVERIFY(scope);
+        QCOMPARE(scope->model()->rowCount(), 2);
+        scope->currentIndexChanged(scope->model()->index(1, 0));
+        QCOMPARE(session->contextScope(), Ui::AiChatSession::ContextScope::Project);
+        QSignalSpy requests(session, &Ui::AiChatSession::replyRequested);
+        QVERIFY(session->send("Find the discovery"));
+        QTRY_COMPARE(requests.size(), 1);
+        Ui::AiProjectContext corpus;
+        const Ui::AiContextDocument doc{ document.toString(), "Episode 90", "Final discovery" };
+        corpus.resetDocuments({ doc }); corpus.updateDocument(doc);
+        const auto source = corpus.search("discovery").value("results").toArray().first().toObject().value("source").toString();
+        session->finishReply("Found it [[source:" + source + "]].");
+        auto browser = view.findChild<QTextBrowser*>("chatMessageText");
+        QVERIFY(browser);
+        QTest::qWait(30);
+        const auto link = browser->document()->find("Episode 90", browser->document()->find("Found it"));
+        QVERIFY(!link.isNull());
+        auto cursor = link;
+        cursor.setPosition(link.selectionStart() + 2);
+        const auto point = browser->cursorRect(cursor).center();
+        QTest::mouseMove(browser->viewport(), point);
+        QCOMPARE(browser->viewport()->cursor().shape(), Qt::PointingHandCursor);
+        QSignalSpy navigation(session, &Ui::AiChatSession::sourceRequested);
+        QTest::mouseClick(browser->viewport(), Qt::LeftButton, Qt::NoModifier, point);
+        QCOMPARE(navigation.size(), 1);
+        QCOMPARE(navigation.first().first().toUuid(), document);
+        const auto screenshot = qEnvironmentVariable("AI_PROJECT_SCREENSHOT");
+        if (!screenshot.isEmpty()) { QVERIFY(view.grab().save(screenshot)); }
+        scope->currentIndexChanged(scope->model()->index(0, 0));
+        QCOMPARE(session->contextScope(), Ui::AiChatSession::ContextScope::Document);
+    }
+
+    void sourceNavigationFindsGroupsInsideFolders()
+    {
+        std::unique_ptr<Domain::DocumentObject> document(Domain::ObjectsBuilder::createDocument(
+            {}, QUuid::createUuid(), Domain::DocumentObjectType::SimpleText, {}, {}));
+        BusinessLayer::SimpleTextModel model;
+        model.setDocument(document.get());
+        auto folder = model.createFolderItem(BusinessLayer::TextFolderType::Part);
+        model.appendItem(folder);
+        auto chapter = model.createGroupItem(BusinessLayer::TextGroupType::Chapter1);
+        model.appendItem(chapter, folder);
+        auto paragraph = model.createTextItem();
+        paragraph->setParagraphType(BusinessLayer::TextParagraphType::Text);
+        paragraph->setText("Chapter evidence");
+        model.appendItem(paragraph, chapter);
+        const auto index = model.indexForUuid(chapter->uuid());
+        QVERIFY(index.isValid());
+        QCOMPARE(model.itemForIndex(index), chapter);
+        Ui::AiProjectContext corpus;
+        const Ui::AiContextDocument doc{ document->uuid().toString(), "Novel", QString::fromUtf8(model.contentSnapshot()) };
+        corpus.resetDocuments({ doc }); corpus.updateDocument(doc);
+        const auto source = corpus.search("evidence").value("results").toArray().first().toObject();
+        QCOMPARE(QUuid(source.value("scene").toString()), chapter->uuid());
+    }
+
     void initTestCase()
     {
         qputenv("XDG_DATA_HOME", data.path().toUtf8());

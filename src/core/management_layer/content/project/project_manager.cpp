@@ -63,6 +63,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QDateTime>
+#include <QTimer>
 #include <QHBoxLayout>
 #include <QSet>
 #include <QShortcut>
@@ -227,6 +228,7 @@ public:
      */
     void switchViews(bool _withActivation = true);
     void updateChatDocument(BusinessLayer::AbstractModel* _model);
+    QVector<Ui::AiContextDocument> chatProjectDocuments(bool includeContent) const;
 
     /**
      * @brief Действия контекстного меню
@@ -594,6 +596,51 @@ void ProjectManager::Implementation::updateOptionsText()
 {
     splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Remove split")
                                                               : tr("Split window"));
+}
+
+QVector<Ui::AiContextDocument> ProjectManager::Implementation::chatProjectDocuments(bool includeContent) const
+{
+    QVector<Ui::AiContextDocument> documents;
+    QHash<QUuid, BusinessLayer::AbstractModel*> loaded;
+    for (auto model : modelsFacade.loadedModels()) {
+        if (model && model->document()) { loaded.insert(model->document()->uuid(), model); }
+    }
+    using Type = Domain::DocumentObjectType;
+    const QSet<Type> skipped{ Type::Structure, Type::RecycleBin, Type::Folder, Type::ImageData,
+        Type::BinaryData, Type::Image, Type::Link,
+        Type::ScreenplayStatistics, Type::ScreenplaySeriesStatistics, Type::ComicBookStatistics,
+        Type::AudioplayStatistics, Type::StageplayStatistics, Type::NovelStatistics,
+        Type::ScreenplayDictionaries, Type::ComicBookDictionaries, Type::AudioplayDictionaries,
+        Type::StageplayDictionaries, Type::NovelDictionaries,
+        // These views alias the text document, rather than containing another draft.
+        Type::ScreenplayTreatment, Type::NovelOutline, Type::ScreenplaySeriesText,
+        Type::ScreenplaySeriesTreatment, Type::Plots };
+    std::function<void(const QModelIndex&, const QString&)> visit;
+    visit = [&](const QModelIndex& parent, const QString& path) {
+        for (int row = 0; row < projectStructureModel->rowCount(parent); ++row) {
+            const auto index = projectStructureModel->index(row, 0, parent);
+            const auto item = projectStructureModel->itemForIndex(index);
+            if (!item || item->type() == Type::RecycleBin || item->isComparison()) { continue; }
+            const auto name = path.isEmpty() ? item->name() : path + " / " + item->name();
+            if (!skipped.contains(item->type())) {
+                Ui::AiContextDocument entry;
+                entry.id = item->uuid().toString();
+                entry.name = name + (item->draftName().isEmpty() ? QString() : " / " + item->draftName());
+                if (auto model = loaded.value(item->uuid())) {
+                    // Read unsaved edits without instantiating all 90 episode editors.
+                    if (includeContent) { entry.content = QString::fromUtf8(model->contentSnapshot()); }
+                } else if (auto document = DataStorageLayer::StorageFacade::documentStorage()->document(item->uuid())) {
+                    if (includeContent) { entry.content = QString::fromUtf8(document->content()); }
+                } else { entry.available = false; }
+                documents.append(entry);
+            }
+            // Archived drafts live in item->drafts(), not in the child tree. Deliberately
+            // traverse only the tree: item->uuid() is always the latest draft.
+            visit(index, name);
+        }
+    };
+    visit({}, {});
+    return documents;
 }
 
 void ProjectManager::Implementation::updateChatDocument(BusinessLayer::AbstractModel* _model)
@@ -2308,6 +2355,62 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
         showView(d->navigator->currentIndex(), _mimeType);
     });
 
+    auto chat = Ui::AiChatSession::instance();
+    connect(chat, &Ui::AiChatSession::projectDocumentRequested, this,
+            [this](const QUuid& project, const QUuid& document) {
+        if (!d->projectStructureModel->document()) { return; }
+        auto current = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Project);
+        if (current && current->uuid() == project && d->projectStructureModel->itemForUuid(document)) {
+            emit downloadDocumentRequested(document);
+        }
+    });
+    connect(chat, &Ui::AiChatSession::sourceRequested, this,
+            [this, chat](const QUuid& document, const QUuid& scene) {
+        if (auto previous = findChild<QTimer*>("aiSourceNavigation")) {
+            previous->stop(); previous->setObjectName({}); previous->deleteLater();
+        }
+        const auto item = d->projectStructureModel->itemForUuid(document);
+        if (!item || !d->projectStructureModel->document()) {
+            emit chat->errorOccurred(tr("This source document has been removed from the project."));
+            return;
+        }
+        const auto structure = d->projectStructureModel->document()->uuid();
+        const auto views = d->pluginsBuilder.editorsInfoFor(Domain::mimeTypeFor(item->type()), d->isProjectRemote);
+        if (views.isEmpty()) {
+            emit chat->errorOccurred(tr("No editor is available for this source document."));
+            return;
+        }
+        auto timer = new QTimer(this);
+        timer->setObjectName("aiSourceNavigation");
+        timer->setInterval(200);
+        auto attempts = std::make_shared<int>(0);
+        connect(timer, &QTimer::timeout, this, [this, chat, timer, attempts, structure, document, scene] {
+            if (!d->projectStructureModel->document() || d->projectStructureModel->document()->uuid() != structure
+                || !d->projectStructureModel->itemForUuid(document)) {
+                timer->stop(); timer->deleteLater(); return;
+            }
+            auto model = d->modelsFacade.modelFor(document);
+            if (!model) {
+                if (++*attempts == 1) { emit downloadDocumentRequested(document); }
+                if (*attempts > 100) {
+                    emit chat->errorOccurred(tr("Could not load the source document. Please try again."));
+                    timer->stop(); timer->deleteLater();
+                }
+                return;
+            }
+            QModelIndex index;
+            if (auto text = qobject_cast<BusinessLayer::TextModel*>(model); text && !scene.isNull()) {
+                index = text->indexForUuid(scene);
+            }
+            activateLink(document, index, {});
+            if (!scene.isNull() && !index.isValid()) {
+                emit chat->errorOccurred(tr("The source scene has changed or was removed. The document was opened instead."));
+            }
+            timer->stop(); timer->deleteLater();
+        });
+        timer->start();
+    });
+
     //
     // Отображаем необходимый редактор при выборе документа в списке
     //
@@ -3710,6 +3813,7 @@ void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem*
     Ui::AiChatSession::instance()->setProject(
         projectInformationModel->document()->uuid(),
         DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
+    Ui::AiChatSession::instance()->setProjectDocumentsProvider([this](bool includeContent) { return d->chatProjectDocuments(includeContent); });
     if (projectInformationModel->name().isEmpty()) {
         //
         // При создании нового проекта, применим его название и сразу сохраним изменения в документ

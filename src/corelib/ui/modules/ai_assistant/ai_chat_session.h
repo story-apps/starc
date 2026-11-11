@@ -1,6 +1,10 @@
 #pragma once
 
 #include <corelib_global.h>
+#include "ai_project_context.h"
+#include <QSet>
+#include <QUrl>
+#include <memory>
 
 #include <QJsonArray>
 #include <QObject>
@@ -21,6 +25,13 @@ public:
     ~AiChatSession() override;
     static AiChatSession* instance();
 
+    enum class ContextScope { Document, Project };
+    ContextScope contextScope() const;
+    void setContextScope(ContextScope _scope);
+    // The provider checks availability first (false), then captures content once (true).
+    void setProjectDocumentsProvider(std::function<QVector<AiContextDocument>(bool)> _provider);
+    QString preparationStatus() const;
+    bool openSource(const QUrl& _url);
     void setProject(const QUuid& _project, const QString& _account);
     void setAccount(const QString& _account);
     void setDocument(const QUuid& _document, const QString& _name,
@@ -54,6 +65,8 @@ signals:
     void changed();
     void errorOccurred(const QString& _error);
     void replyRequested(const QString& _prompt);
+    void projectDocumentRequested(const QUuid& _project, const QUuid& _document);
+    void sourceRequested(const QUuid& _document, const QUuid& _scene);
 
 private:
     bool append(const QString& _chat, const QString& _role, const QString& _text,
@@ -61,6 +74,29 @@ private:
     bool ensureContext(bool* _added = nullptr);
     bool check(bool _success);
     void updateAutomaticTitle(const QString& _message);
+    void restoreScope();
+    QString nextSelectionTimestamp() const;
+    void prepareProjectContext();
+    void dispatchContextRequest(const QString& _question, const QJsonArray& _history);
+    void dispatchRetrieval(const QJsonObject& _result, const QString& _instruction = {});
+    void rememberSources(const QJsonObject& _result);
+    QString resolveCitations(const QString& _text);
+
+    ContextScope m_scope = ContextScope::Document;
+    std::function<QVector<AiContextDocument>(bool)> m_projectDocuments;
+    std::shared_ptr<AiProjectContext> m_projectIndex;
+    std::shared_ptr<AiProjectContext> m_pendingIndex;
+    QTimer m_preparationTimer;
+    QSet<QString> m_requestedDocuments;
+    QVector<AiContextDocument> m_preparingDocuments;
+    int m_preparingIndex = -1;
+    QString m_preparationStatus;
+    QString m_question, m_basePrompt, m_pendingProject, m_searchNotes;
+    QJsonArray m_requestHistory, m_evidencePages;
+    QHash<QString, QJsonObject> m_pendingSources;
+    int m_retrievalRounds = 0;
+    bool m_pendingProjectScope = false;
+    bool m_citationRepair = false;
 
     QSqlDatabase m_database;
     QString m_connection;
@@ -72,7 +108,7 @@ private:
     std::function<QString()> m_content;
     QString m_pendingChat;
     bool m_backendAvailable = false;
-    enum class RequestKind { None, Chat, Legacy, Tool };
+    enum class RequestKind { None, Preparing, Chat, Legacy, Tool };
     RequestKind m_requestKind = RequestKind::None;
     QTimer m_replyTimer;
     QString m_toolAction;

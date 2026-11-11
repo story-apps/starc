@@ -61,6 +61,7 @@ public:
         QAction* deleteChat = nullptr;
         QAction* clearChat = nullptr;
         Body2Label* context = nullptr;
+        ComboBox* contextScope = nullptr;
         Widget* widget = nullptr;
         ChatMessagesView* history = nullptr;
         QScrollArea* historyContainer = nullptr;
@@ -682,6 +683,16 @@ void AiAssistantView::initChat()
     d->chat.clearChat->setObjectName("aiClearChat");
 
     d->chat.context = new Body2Label(d->chat.widget);
+    d->chat.contextScope = new ComboBox(d->chat.widget);
+    d->chat.contextScope->setObjectName("aiContextScope");
+    d->chat.contextScope->setDefaultMarginsEnabled(false);
+    d->chat.contextScope->setLabelVisible(false);
+    d->chat.contextScope->setModel(new QStandardItemModel(d->chat.contextScope));
+    connect(d->chat.contextScope, &ComboBox::currentIndexChanged, this, [](const QModelIndex& index) {
+        if (!index.isValid()) { return; }
+        AiChatSession::instance()->setContextScope(index.row() == 1
+            ? AiChatSession::ContextScope::Project : AiChatSession::ContextScope::Document);
+    });
     d->chat.history = new ChatMessagesView;
     d->chat.history->setConversationStyle(true);
     d->chat.history->findChild<QTextBrowser*>("chatMessageText")->viewport()->installEventFilter(this);
@@ -760,6 +771,7 @@ void AiAssistantView::initChat()
     d->chat.chatMenu->setIcon(u8"\U000F01D9");
     header->addWidget(d->chat.chatMenu);
     layout->addLayout(header);
+    layout->addWidget(d->chat.contextScope);
     layout->addWidget(d->chat.context);
     layout->addWidget(d->chat.historyContainer, 1);
     layout->addWidget(d->chat.status);
@@ -781,6 +793,9 @@ void AiAssistantView::initChat()
 
     auto session = AiChatSession::instance();
     connect(session, &AiChatSession::changed, this, &AiAssistantView::refreshChat);
+    connect(d->chat.history, &ChatMessagesView::linkActivated, this, [session](const QUrl& url) {
+        session->openSource(url);
+    });
     connect(session, &AiChatSession::errorOccurred, this,
             [this](const QString& _error) { d->chat.input->setError(_error); });
     connect(d->chat.newChat, &QAction::triggered, session, [session] { session->createChat(); });
@@ -986,7 +1001,12 @@ void AiAssistantView::refreshChat()
     d->chat.deleteChat->setEnabled(!session->currentChat().isEmpty());
     d->chat.clearChat->setEnabled(!session->currentChat().isEmpty());
     d->chat.renameChat->setEnabled(!session->currentChat().isEmpty());
-    d->chat.context->setText(session->documentName().isEmpty() ? tr("Document context cleared")
+    const QSignalBlocker scopeBlocker(d->chat.contextScope);
+    d->chat.contextScope->setCurrentIndex(d->chat.contextScope->model()->index(
+        session->contextScope() == AiChatSession::ContextScope::Project ? 1 : 0, 0));
+    d->chat.context->setText(session->contextScope() == AiChatSession::ContextScope::Project
+        ? tr("Latest drafts · Search across the entire project")
+        : session->documentName().isEmpty() ? tr("Document context cleared")
                                                         : tr("Current document: %1").arg(session->documentName()));
     d->chat.context->setToolTip(d->chat.context->text());
     QVector<ChatMessage> messages;
@@ -1019,7 +1039,9 @@ void AiAssistantView::refreshChat()
     const bool hasConversation = std::any_of(messages.cbegin(), messages.cend(),
                                            [](const ChatMessage& message) { return !message.isSistemMessage(); });
     if (!hasConversation) {
-        ChatMessage welcome({}, tr("I can help you develop ideas, work on the text, or discuss this document. Write a message or choose a task from the menu."), guide, false);
+        ChatMessage welcome({}, session->contextScope() == AiChatSession::ContextScope::Project
+            ? tr("Ask about any document or episode in the project. I will search the latest drafts and link to the sources.")
+            : tr("I can help you develop ideas, work on the text, or discuss this document. Write a message or choose a task from the menu."), guide, false);
         messages.append(welcome);
     }
     if (d->flow.step != Implementation::ToolFlow::None) {
@@ -1113,7 +1135,8 @@ void AiAssistantView::updateChatComposer()
     d->chat.send->setEnabled(text == "/help"
                             || (!text.isEmpty() && (d->flow.step == Implementation::ToolFlow::Arguments
                                 || (d->availableWords > 0 && session->canSend()))));
-    const auto status = session->hasPendingReply()
+    const auto status = !session->preparationStatus().isEmpty() ? session->preparationStatus()
+        : session->hasPendingReply()
         ? (session->isWaitingForCurrentChat() ? tr("Waiting for the assistant…")
                                              : tr("The assistant is answering another chat…"))
         : !session->canSend() ? tr("The assistant is unavailable. You can still read your chats.")
@@ -1124,6 +1147,13 @@ void AiAssistantView::updateChatComposer()
 
 void AiAssistantView::updateChatTranslations()
 {
+    const QSignalBlocker scopeBlocker(d->chat.contextScope);
+    auto scopeModel = qobject_cast<QStandardItemModel*>(d->chat.contextScope->model());
+    scopeModel->clear();
+    scopeModel->appendRow(new QStandardItem(tr("Current document")));
+    scopeModel->appendRow(new QStandardItem(tr("Entire project")));
+    d->chat.contextScope->setToolTip(tr("Project mode searches all latest drafts and can read sources in several steps. Commands still apply to the open document."));
+    d->chat.contextScope->setAccessibleName(tr("Conversation context"));
     d->chat.chats->setLabelVisible(false);
     d->chat.chats->setDefaultMarginsEnabled(false);
     d->chat.chats->setPlaceholderText(tr("New chat"));
@@ -1160,6 +1190,8 @@ void AiAssistantView::updateChatDesign()
     d->chat.widget->setBackgroundColor(background);
     d->chat.chats->setBackgroundColor(background);
     d->chat.chats->setTextColor(foreground);
+    d->chat.contextScope->setBackgroundColor(foreground);
+    d->chat.contextScope->setTextColor(foreground);
     // The composer owns its rounded surface; the TextField fill blends into it.
     d->chat.input->setBackgroundColor(composerBackground);
     d->chat.input->setTextColor(foreground);

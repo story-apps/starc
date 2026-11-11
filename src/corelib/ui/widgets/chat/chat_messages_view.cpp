@@ -73,7 +73,8 @@ public:
             const auto position = document()->documentLayout()->hitTest(point, Qt::ExactHit);
             const auto block = document()->findBlock(position);
             const bool overText = position >= 0 && block.isValid() && !block.text().isEmpty();
-            viewport()->setCursor(overText ? Qt::IBeamCursor : Qt::ArrowCursor);
+            viewport()->setCursor(!anchorAt(_event->pos()).isEmpty()
+                ? Qt::PointingHandCursor : overText ? Qt::IBeamCursor : Qt::ArrowCursor);
         }
     };
     class MessageDocument : public QTextDocument
@@ -101,7 +102,9 @@ ChatMessagesView::ChatMessagesView(QWidget* _parent)
     d->browser->viewport()->setCursor(Qt::ArrowCursor);
     d->browser->setOpenLinks(false);
     d->browser->setOpenExternalLinks(false);
-    d->browser->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    connect(d->browser, &QTextBrowser::anchorClicked, this, &ChatMessagesView::linkActivated);
+    d->browser->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard
+                                         | Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
     d->browser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->browser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->browser->setContextMenuPolicy(Qt::CustomContextMenu);

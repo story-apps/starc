@@ -40,3 +40,56 @@ for keyboard users. Command syntax is available through `/help` and inline compo
 - `/generate --end A scene` writes at the end; `--begin` and `--cursor` are also supported.
 - `/synopsis 20`, `/novel`, `/script` invoke the existing document conversion tools where supported.
 - `/character` and `/mindmap` use their respective editors. Character flags are `--personal`, `--physique`, `--life`, `--attitude`, `--biography`, `--image`.
+
+## Project context and sources
+
+Each chat remembers its context choice: the open document or the entire project.
+Project context walks the live structure, taking the main document UUID (the latest
+working draft), never `item->drafts()` (archived drafts), comparisons or the recycle
+bin. Unsaved edits in loaded models are included. Text, information cards, groups,
+series story lines and presentation/gallery descriptions are searchable; binary
+assets, external links, derived statistics and duplicate text views are excluded.
+Writing commands continue to target the open document regardless of research scope.
+
+The project is **not replaced with a summary**. A local in-memory index keeps all
+extracted text in overlapping 2,800-character chunks, with document and scene/chapter
+UUIDs. Initial evidence and additional `search`, `read` and `catalog` requests are
+paginated. Searches cover the entire corpus, including documents outside the first
+catalog page. The model can change search terms and read original excerpts, retaining
+compact research notes as earlier evidence pages leave the prompt. This avoids losing
+late-episode facts through truncation. Search is lexical with prefix matching for
+inflections, not an embedding-based semantic index; the model must reformulate queries
+or page through documents when needed. No claim of exhaustive review is warranted
+merely because a query returned no matches.
+
+Transport includes at most 10,000 characters of recent conversation, a 6,000-character
+question, a 40-document catalog page and bounded evidence pages (six excerpts per page,
+48 KB of UTF-8 evidence, with an additional prompt-size budget). A current document
+smaller than 8,000 characters also travels inline. Larger documents remain readable
+through paginated retrieval. Full chat history stays in SQLite. Research has eight
+additional retrieval steps and at most one citation-repair request, using the existing
+AI transport. Each step is an AI request and may consume the account's word allowance.
+If the budget is exhausted, the assistant is asked to disclose remaining uncertainty;
+a further tool request is replaced with a message asking the user to narrow the question.
+
+Cloud documents are fetched in batches of up to four before the first AI request.
+Missing data fails explicitly after a timeout, rather than being represented as the
+whole project. Availability polling does not serialize loaded document content.
+Snapshots are captured once all documents are present; unchanged parsed documents are
+reused, parsing yields between documents, and inverted-index construction runs off the
+GUI thread. Index content is local, transient and rebuilt from project documents;
+chat/source metadata stays in `sessions.db` and is not synchronized across devices.
+
+The model cites supplied IDs using `[[source:ID]]`; validated IDs become Markdown links.
+The local source table persists document/scene targets across restarts. Link activation
+checks the current chat, project and account. It opens the corresponding editor and
+selects the scene/chapter; if that scene no longer exists, it opens the document with an
+explanation. Deleted documents and unavailable editors produce a visible error. External
+links do not trigger browsing or downloads from the shared chat widget.
+
+Session tests cover a 90-episode corpus, late-scene discovery, catalog/read pagination,
+metadata extraction, stale-index removal, cloud preparation/cancellation, persisted
+scope and citations, source isolation, bounded retrieval, and response routing after a
+chat switch. UI tests cover context selection, clicking citations and group navigation
+inside folders, in addition to the existing selection and Markdown tests. Live AI
+reasoning and cloud-download integration still require the proprietary cloud submodule.

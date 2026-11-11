@@ -1,6 +1,8 @@
 #include <ui/modules/ai_assistant/ai_chat_session.h>
 
 #include <QJsonObject>
+#include <QJsonDocument>
+#include <QRegularExpression>
 #include <QSignalSpy>
 #include <QSqlQuery>
 #include <QTemporaryDir>
@@ -10,6 +12,10 @@ class AiChatTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void projectCorpusFindsLateEpisodesAndScenes();
+    void scopeAndSourcesSurviveRestart();
+    void projectPreparationWaitsForCloudAndCancels();
+    void retrievalKeepsOriginAndHasABudget();
     void persistsAndIsolatesProjectsAndAccounts();
     void replacesDocumentButKeepsConversation();
     void routesReplyToOriginalConversation();
@@ -400,6 +406,204 @@ void AiChatTest::clearingChatKeepsNameAndDiscardsPendingReply()
     QVERIFY(!chat.toolTargetsCurrentDocument());
     chat.finishToolReply("generate", "Late result");
     QCOMPARE(chat.messages().size(), 1);
+}
+
+
+void AiChatTest::projectCorpusFindsLateEpisodesAndScenes()
+{
+    Ui::AiProjectContext corpus;
+    QVector<Ui::AiContextDocument> documents;
+    const auto scene = QUuid::createUuid().toString();
+    for (int i = 1; i <= 90; ++i) {
+        const auto content = i == 90
+            ? QString("<document><scene uuid=\"%1\"><heading><value>INT. ARCHIVE</value></heading>"
+                      "<action><value>%2</value></action><action><value>Ксения спрятала завещание в сейфе.</value>"
+                      "</action></scene><facts><occupation value=\"ASTRONOMER\"/><secret>HIDDEN_METADATA</secret></facts></document>")
+                  .arg(scene, QString("Long scene text. ").repeated(3000))
+            : QString("Ordinary episode %1. ").arg(i).repeated(1000);
+        documents.append({ QUuid::createUuid().toString(), QString("Series / Episode %1 / Latest draft").arg(i), content });
+    }
+    corpus.resetDocuments(documents);
+    for (const auto& document : documents) { corpus.updateDocument(document); }
+    QCOMPARE(corpus.documentCount(), 90);
+    QVERIFY(corpus.chunkCount() > 600); // Several megabytes, not just a catalog of empty episodes.
+    QCOMPARE(corpus.catalog().value("documents").toArray().size(), 40);
+    QCOMPARE(corpus.catalog(80).value("documents").toArray().size(), 10);
+    auto results = corpus.search("завещание").value("results").toArray();
+    QCOMPARE(results.size(), 1);
+    const auto result = results.first().toObject();
+    QCOMPARE(result.value("document").toString(), documents.last().id);
+    QCOMPARE(result.value("scene").toString(), scene);
+    QVERIFY(result.value("title").toString().contains("INT. ARCHIVE"));
+    QVERIFY(result.value("text").toString().contains("сейфе"));
+    QCOMPARE(corpus.source(result.value("source").toString()), result);
+    QVERIFY(!corpus.search("ASTRONOMER").value("results").toArray().isEmpty());
+    QVERIFY(!corpus.search("HIDDEN_METADATA").value("results").toArray().isEmpty());
+    QCOMPARE(corpus.read(documents.last().id).value("results").toArray().size(), 6);
+    QString reconstructed;
+    for (int offset = 0; offset >= 0;) {
+        const auto page = corpus.read(documents.last().id, offset);
+        for (const auto& chunk : page.value("results").toArray()) { reconstructed += chunk.toObject().value("text").toString(); }
+        offset = page.value("next_offset").toInt();
+    }
+    QVERIFY(reconstructed.contains("завещание"));
+    documents.last().content = "Updated latest draft, no old secrets.";
+    corpus.updateDocument(documents.last());
+    QVERIFY(corpus.search("завещание").value("results").toArray().isEmpty());
+    QVERIFY(corpus.source(result.value("source").toString()).isEmpty());
+    documents.removeLast();
+    corpus.resetDocuments(documents);
+    QCOMPARE(corpus.documentCount(), 89);
+    QVERIFY(corpus.search("Updated").value("results").toArray().isEmpty());
+}
+
+void AiChatTest::scopeAndSourcesSurviveRestart()
+{
+    QTemporaryDir dir;
+    const auto project = QUuid::createUuid();
+    const auto document = QUuid::createUuid();
+    const auto scene = QUuid::createUuid();
+    const Ui::AiContextDocument latest{ document.toString(), "Series / Episode 90 / Latest draft",
+        QString("<text><scene uuid=\"%1\"><value>Final scene</value><value>LATEST_SECRET</value></scene></text>").arg(scene.toString()) };
+    Ui::AiProjectContext corpus;
+    corpus.resetDocuments({ latest }); corpus.updateDocument(latest);
+    const auto source = corpus.search("LATEST_SECRET").value("results").toArray().first().toObject().value("source").toString();
+    const QUrl url("starc-source:" + source);
+    QString origin;
+    {
+        Ui::AiChatSession chat(dir.filePath("sessions.db"));
+        chat.setProject(project, "author");
+        chat.setBackendAvailable(true);
+        chat.setDocument(QUuid::createUuid(), "Archived draft", [] { return "ARCHIVE_SECRET"; });
+        chat.setProjectDocumentsProvider([latest](bool) { return QVector<Ui::AiContextDocument>{ latest }; });
+        chat.setContextScope(Ui::AiChatSession::ContextScope::Project);
+        QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+        QVERIFY(chat.send("Find LATEST_SECRET"));
+        origin = chat.currentChat();
+        QTRY_COMPARE(requests.size(), 1);
+        const auto prompt = requests.last().first().toString();
+        QVERIFY(prompt.contains("LATEST_SECRET"));
+        QVERIFY(!prompt.contains("ARCHIVE_SECRET"));
+        QVERIFY(prompt.size() < 65000);
+        const auto count = chat.messages().size();
+        chat.setDocument(QUuid::createUuid(), "Another document", [] { return "UNRELATED"; });
+        QCOMPARE(chat.messages().size(), count); // Project context did not change.
+        QVERIFY(chat.finishReply("The secret is here [[source:" + source + "]]."));
+        QVERIFY(chat.messages().last().toObject().value("text").toString().contains(url.toString()));
+        QSignalSpy navigation(&chat, &Ui::AiChatSession::sourceRequested);
+        QVERIFY(chat.openSource(url));
+        QCOMPARE(navigation.last().at(0).toUuid(), document);
+        QCOMPARE(navigation.last().at(1).toUuid(), scene);
+        QVERIFY(!chat.openSource(QUrl("https://example.com")));
+        QVERIFY(!chat.openSource(QUrl("starc-source:000000000000000000000000")));
+        QVERIFY(chat.createChat());
+        QVERIFY(!chat.openSource(url));
+        chat.setContextScope(Ui::AiChatSession::ContextScope::Document);
+        QVERIFY(chat.selectChat(origin));
+        QCOMPARE(chat.contextScope(), Ui::AiChatSession::ContextScope::Project);
+    }
+    Ui::AiChatSession restored(dir.filePath("sessions.db"));
+    restored.setProject(project, "author");
+    QCOMPARE(restored.contextScope(), Ui::AiChatSession::ContextScope::Project);
+    QVERIFY(restored.openSource(url));
+    restored.setAccount("other");
+    QVERIFY(!restored.openSource(url));
+    restored.setAccount("author");
+    QVERIFY(restored.openSource(url));
+    QVERIFY(restored.clearChat());
+    QVERIFY(!restored.openSource(url));
+}
+
+void AiChatTest::projectPreparationWaitsForCloudAndCancels()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    const auto project = QUuid::createUuid();
+    chat.setProject(project, {});
+    chat.setBackendAvailable(true);
+    QVector<Ui::AiContextDocument> documents;
+    for (int i = 0; i < 7; ++i) {
+        documents.append({ QUuid::createUuid().toString(), "Episode", "Cloud text", false });
+    }
+    int snapshots = 0;
+    chat.setProjectDocumentsProvider([&documents, &snapshots](bool includeContent) {
+        if (includeContent) { ++snapshots; }
+        return documents;
+    });
+    chat.setContextScope(Ui::AiChatSession::ContextScope::Project);
+    QSignalSpy downloads(&chat, &Ui::AiChatSession::projectDocumentRequested);
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Question"));
+    QTRY_COMPARE(downloads.size(), 4);
+    QCOMPARE(requests.size(), 0);
+    QTest::qWait(450);
+    QCOMPARE(downloads.size(), 4); // Don't request the same missing documents repeatedly.
+    QCOMPARE(snapshots, 0);
+    for (auto& document : documents) { document.available = true; }
+    QTRY_COMPARE(requests.size(), 1);
+    QCOMPARE(snapshots, 1);
+    chat.failReply("Test complete");
+    for (auto& document : documents) { document.available = false; }
+    QVERIFY(chat.send("Cancelled"));
+    QTRY_COMPARE(downloads.size(), 8);
+    QVERIFY(chat.clearChat());
+    for (auto& document : documents) { document.available = true; }
+    QTest::qWait(500);
+    QCOMPARE(requests.size(), 1);
+    QVERIFY(chat.canSend());
+    for (auto& document : documents) { document.available = false; }
+    QVERIFY(chat.send("Cloud timeout"));
+    QTRY_COMPARE(downloads.size(), 12);
+    QVERIFY(QMetaObject::invokeMethod(chat.findChild<QTimer*>("aiChatReplyTimeout"), "timeout", Qt::DirectConnection));
+    QCOMPARE(chat.messages().last().toObject().value("role").toString(), QString("error"));
+    QVERIFY(chat.canSend());
+    QVERIFY(chat.send("Switch project before indexing"));
+    chat.setProject(QUuid::createUuid(), {});
+    QTest::qWait(50);
+    QCOMPARE(requests.size(), 1);
+    QVERIFY(chat.canSend());
+}
+
+void AiChatTest::retrievalKeepsOriginAndHasABudget()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    QVector<Ui::AiContextDocument> documents;
+    for (int i = 1; i <= 90; ++i) {
+        documents.append({ QUuid::createUuid().toString(), QString("Episode %1").arg(i),
+                           i == 90 ? "RARE_DISCOVERY" : "Ordinary dialogue" });
+    }
+    chat.setProjectDocumentsProvider([documents](bool) { return documents; });
+    chat.setContextScope(Ui::AiChatSession::ContextScope::Project);
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Research the ending"));
+    const auto origin = chat.currentChat();
+    QTRY_COMPARE(requests.size(), 1);
+    QVERIFY(chat.createChat());
+    chat.finishReply(R"({"tool":"search","query":"RARE_DISCOVERY","notes":"Search episode endings"})");
+    QCOMPARE(requests.size(), 2);
+    QVERIFY(requests.last().first().toString().contains("RARE_DISCOVERY"));
+    QVERIFY(!chat.messages().last().toObject().value("text").toString().contains("RARE_DISCOVERY"));
+    Ui::AiProjectContext corpus;
+    corpus.resetDocuments(documents);
+    for (const auto& document : documents) { corpus.updateDocument(document); }
+    const auto source = corpus.search("RARE_DISCOVERY").value("results").toArray().first().toObject().value("source").toString();
+    chat.finishReply("An unsupported answer without citations.");
+    QCOMPARE(requests.size(), 3); // One citation repair request.
+    chat.finishReply("Episode 90 [[source:" + source + "]]");
+    QVERIFY(chat.selectChat(origin));
+    QVERIFY(chat.messages().last().toObject().value("text").toString().contains("starc-source:" + source));
+    QVERIFY(chat.send("Keep searching"));
+    QTRY_COMPARE(requests.size(), 4);
+    for (int i = 0; i < 8; ++i) { chat.finishReply("```json\n{\"tool\":\"catalog\",\"offset\":40}\n```"); }
+    QCOMPARE(requests.size(), 12);
+    chat.finishReply("Still no citations");
+    QCOMPARE(requests.size(), 13);
+    chat.finishReply("```json\n{\"tool\":\"catalog\",\"offset\":80}\n```");
+    QVERIFY(chat.canSend());
+    QVERIFY(chat.messages().last().toObject().value("text").toString().contains("step limit"));
 }
 
 QTEST_GUILESS_MAIN(AiChatTest)
