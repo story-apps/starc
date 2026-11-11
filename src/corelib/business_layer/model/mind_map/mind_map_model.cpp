@@ -598,7 +598,7 @@ void MindMapModel::initDocument()
         if (nodeGroupNode.hasAttribute(kColorKey)) {
             group.color = nodeGroupNode.attribute(kColorKey);
         }
-        auto nodeConnectionNode = nodeNode.firstChildElement(kNodeConnectionKey);
+        auto nodeConnectionNode = nodeGroupNode.firstChildElement(kNodeConnectionKey);
         while (!nodeConnectionNode.isNull()
                && nodeConnectionNode.nodeName() == kNodeConnectionKey) {
             MindMapNodeConnection connection;
@@ -780,7 +780,7 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
                 = TextHelper::fromHtmlEscaped(connectionNode.attribute(kDescriptionKey));
             connection.lineType = connectionNode.attribute(kLineTypeKey).toInt();
             if (connectionNode.hasAttribute(kColorKey)) {
-                connection.color = connectionNode.attribute(kColorKey).toInt();
+                connection.color = connectionNode.attribute(kColorKey);
             }
             node.connections.append(connection);
             connectionNode = connectionNode.nextSiblingElement(kNodeConnectionKey);
@@ -840,18 +840,20 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
                 removeNodeConnection(connection.fromNodeUuid, connection.toNodeUuid);
             }
             removeNode(node.uuid);
-            --nodeIndex;
         }
     }
     //
     // Добавляем новые ячейки и отдельно - их соединения
     //
+    QVector<MindMapNodeConnection> connectionsToAdd;
     for (auto& node : newNodes) {
         const auto newConnections = node.connections;
         node.connections.clear();
         addNode(node);
         for (const auto& connection : std::as_const(newConnections)) {
-            addNodeConnection(connection);
+            if (!connectionsToAdd.contains(connection)) {
+                connectionsToAdd.append(connection);
+            }
         }
     }
 
@@ -876,7 +878,7 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         //
         // ... соединения ячейки
         //
-        QDomElement connectionNode = nodeNode.firstChildElement(kNodeConnectionKey);
+        QDomElement connectionNode = nodeGroupNode.firstChildElement(kNodeConnectionKey);
         while (!connectionNode.isNull()) {
             MindMapNodeConnection connection;
             connection.fromNodeUuid = QUuid::fromString(connectionNode.attribute(kFromUuidKey));
@@ -886,7 +888,7 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
                 = TextHelper::fromHtmlEscaped(connectionNode.attribute(kDescriptionKey));
             connection.lineType = connectionNode.attribute(kLineTypeKey).toInt();
             if (connectionNode.hasAttribute(kColorKey)) {
-                connection.color = connectionNode.attribute(kColorKey).toInt();
+                connection.color = connectionNode.attribute(kColorKey);
             }
             group.connections.append(connection);
             connectionNode = connectionNode.nextSiblingElement(kNodeConnectionKey);
@@ -904,11 +906,11 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         // ... если такая ячейка осталась актуальной, то оставим её в списке текущих
         //     и удалим из списка новых
         //
-        if (int groupIndex = newNodeGroups.indexOf(group); groupIndex != -1) {
+        if (int newGroupIndex = newNodeGroups.indexOf(group); newGroupIndex != -1) {
             //
             // ... при этом обновим список связей если необходимо
             //
-            auto newConnections = newNodeGroups[groupIndex].connections;
+            auto newConnections = newNodeGroups[newGroupIndex].connections;
             for (int connectionIndex = 0; connectionIndex < group.connections.size();
                  ++connectionIndex) {
                 const auto& connection = group.connections[connectionIndex];
@@ -945,7 +947,7 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
                 const auto& connection = group.connections[i];
                 removeNodeConnection(connection.fromNodeUuid, connection.toNodeUuid);
             }
-            removeNode(group.uuid);
+            removeNodeGroup(group.uuid);
             --groupIndex;
         }
     }
@@ -957,8 +959,15 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         group.connections.clear();
         addNodeGroup(group);
         for (const auto& connection : std::as_const(newConnections)) {
-            addNodeConnection(connection);
+            if (!connectionsToAdd.contains(connection)) {
+                connectionsToAdd.append(connection);
+            }
         }
+    }
+
+    // Восстанавливаем связи после всех ячеек и групп, когда оба конца уже существуют.
+    for (const auto& connection : std::as_const(connectionsToAdd)) {
+        addNodeConnection(connection);
     }
 
     //
