@@ -23218,6 +23218,10 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <source>Documents are excluded. I can use only our chat history.</source>
         <translation>Документы не подключены. Я вижу только историю нашей переписки.</translation>
     </message>
+    <message>
+        <source>Scene</source>
+        <translation>Сцена</translation>
+    </message>
 </context>
 
 </TS>

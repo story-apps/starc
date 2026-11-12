@@ -176,6 +176,12 @@ void AiChatSession::setProjectDocumentsProvider(std::function<QVector<AiContextD
     m_projectDocuments = std::move(provider);
 }
 
+void AiChatSession::setSourceNumberProvider(
+    std::function<QString(const QUuid&, const QUuid&, const QUuid&)> provider)
+{
+    m_sourceNumber = std::move(provider);
+}
+
 QString AiChatSession::preparationStatus() const { return m_preparationStatus; }
 
 void AiChatSession::prepareProjectContext()
@@ -387,8 +393,17 @@ QString AiChatSession::resolveCitations(const QString& text)
         const auto source = m_pendingSources.value(match.captured(1));
         if (!source.isEmpty()) {
             auto title = source.value("title").toString().simplified();
-            title.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]");
-            result += "[" + title + "](starc-source:" + match.captured(1) + ")";
+            auto label = title;
+            if (!source.value("scene").toString().isEmpty()) {
+                auto number = m_sourceNumber
+                    ? m_sourceNumber(QUuid(m_pendingProject), QUuid(source.value("document").toString()),
+                                     QUuid(source.value("scene").toString())).simplified() : QString();
+                if (number.isEmpty()) { number = source.value("number").toString(); }
+                label = "[" + (number.isEmpty() ? tr("Scene") : number) + "]";
+            }
+            label.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]");
+            title.replace("\\", "\\\\").replace("\"", "\\\"");
+            result += "[" + label + "](starc-source:" + match.captured(1) + " \"" + title + "\")";
         } else { result += tr("[Source unavailable]"); }
         end = match.capturedEnd();
     }

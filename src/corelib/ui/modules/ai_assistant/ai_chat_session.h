@@ -30,6 +30,7 @@ public:
     void setContextScope(ContextScope _scope);
     // The provider checks availability first (false), then captures content once (true).
     void setProjectDocumentsProvider(std::function<QVector<AiContextDocument>(bool)> _provider);
+    void setSourceNumberProvider(std::function<QString(const QUuid&, const QUuid&, const QUuid&)> _provider);
     QString preparationStatus() const;
     bool openSource(const QUrl& _url);
     void setProject(const QUuid& _project, const QString& _account);
@@ -83,6 +84,7 @@ private:
     QJsonArray sourceCoverage() const;
     QString resolveCitations(const QString& _text);
 
+    std::function<QString(const QUuid&, const QUuid&, const QUuid&)> m_sourceNumber;
     ContextScope m_scope = ContextScope::Document;
     std::function<QVector<AiContextDocument>(bool)> m_projectDocuments;
     std::shared_ptr<AiProjectContext> m_projectIndex;

@@ -42,7 +42,7 @@ void AiProjectContext::updateDocument(const AiContextDocument& input)
     const auto hash = QCryptographicHash::hash((input.name + '\n' + input.content).toUtf8(), QCryptographicHash::Sha256);
     if (m_documents.contains(input.id) && m_documents.value(input.id).hash == hash) { return; }
     Document document{ input.id, input.name, hash, {} };
-    QString scene, sceneTitle, text;
+    QString scene, sceneTitle, text, sceneNumber;
     auto flush = [&] {
         const auto body = text.trimmed();
         for (int offset = 0; offset < body.size();) {
@@ -50,7 +50,7 @@ void AiProjectContext::updateDocument(const AiContextDocument& input)
             const auto key = input.id + '\n' + scene + '\n' + QString::number(offset) + '\n' + part;
             const auto id = QString::fromLatin1(QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Sha256).toHex().left(24));
             document.chunks.append({ id, input.id, scene,
-                sceneTitle.isEmpty() ? input.name : input.name + " / " + sceneTitle, part });
+                sceneTitle.isEmpty() ? input.name : input.name + " / " + sceneTitle, part, sceneNumber });
             if (offset + kChunkSize >= body.size()) { break; }
             offset += kChunkSize - 200; // Keep context around chunk boundaries.
         }
@@ -58,7 +58,7 @@ void AiProjectContext::updateDocument(const AiContextDocument& input)
     };
     if (input.content.trimmed().startsWith('<')) {
         QXmlStreamReader xml(input.content);
-        struct Container { QString tag, scene, title; };
+        struct Container { QString tag, scene, title, number; };
         QVector<Container> containers;
         QStringList elements;
         while (!xml.atEnd()) {
@@ -71,9 +71,13 @@ void AiProjectContext::updateDocument(const AiContextDocument& input)
                 if (!uuid.isEmpty() && (tag == "scene" || tag.startsWith("chapter")
                                        || tag == "beat" || tag == "page" || tag == "panel")) {
                     flush();
-                    containers.append({ tag, scene, sceneTitle });
+                    containers.append({ tag, scene, sceneTitle, sceneNumber });
                     scene = QUuid(uuid).toString();
                     sceneTitle.clear();
+                    sceneNumber.clear();
+                }
+                if (tag == "number" && !scene.isEmpty()) {
+                    sceneNumber = xml.attributes().value("value").toString();
                 }
                 for (const auto& attribute : xml.attributes()) {
                     const auto name = attribute.name();
@@ -98,6 +102,7 @@ void AiProjectContext::updateDocument(const AiContextDocument& input)
                     const auto parent = containers.takeLast();
                     scene = parent.scene;
                     sceneTitle = parent.title;
+                    sceneNumber = parent.number;
                 }
                 if (!elements.isEmpty()) { elements.removeLast(); }
             }
@@ -105,11 +110,11 @@ void AiProjectContext::updateDocument(const AiContextDocument& input)
         if (xml.hasError()) {
             document.chunks.clear();
             text = input.content;
-            scene.clear(); sceneTitle.clear();
+            scene.clear(); sceneTitle.clear(); sceneNumber.clear();
         } else if (text.trimmed().isEmpty() && document.chunks.isEmpty()) {
             // Preserve metadata-only documents as a fallback too.
             text = input.content;
-            scene.clear(); sceneTitle.clear();
+            scene.clear(); sceneTitle.clear(); sceneNumber.clear();
         }
     } else { text = input.content; }
     flush();
@@ -154,8 +159,10 @@ void AiProjectContext::buildIndex()
 
 QJsonObject AiProjectContext::chunkJson(const Chunk& chunk) const
 {
-    return { { "source", chunk.id }, { "document", chunk.document }, { "scene", chunk.scene },
-             { "title", chunk.title }, { "text", chunk.text } };
+    QJsonObject result{ { "source", chunk.id }, { "document", chunk.document }, { "scene", chunk.scene },
+                        { "title", chunk.title }, { "text", chunk.text } };
+    if (!chunk.number.isEmpty()) { result.insert("number", chunk.number); }
+    return result;
 }
 
 QJsonObject AiProjectContext::catalog(int offset) const

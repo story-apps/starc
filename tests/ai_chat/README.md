@@ -132,3 +132,14 @@ characters, ensuring that its beginning, middle and ending remain available even
 repeated reads. A larger 54-chunk document exercises pagination and verifies that early
 findings survive eviction and that complete coverage is recorded only after the final
 page. These tests validate context assembly, not the quality of live model summaries.
+
+Assistant Markdown uses compact list indentation with small margins around list items.
+Links use the current theme accent, with transient hover underlining that preserves
+text selection. Scene citations display the editor's scene number in brackets (including
+custom/locked numbering), with the full source path in the Markdown link title / tooltip.
+An explicit number in the source snapshot is the fallback if the editor is unavailable;
+an unknown number is labeled “Scene” instead of inventing a number. Citation labels and
+titles are stored with the answer, so they survive restarting the app. Their document
+and scene UUID navigation targets are unchanged. Existing saved message text is retained.
+UI tests cover nested/numbered list spacing, theme changes, hover and leave events,
+selection during hover, tooltips and clicking a compact scene citation.

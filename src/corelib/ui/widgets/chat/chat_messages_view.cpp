@@ -8,6 +8,7 @@
 #include <QResizeEvent>
 #include <QPainter>
 #include <QLayout>
+#include <QHelpEvent>
 #include <QLocale>
 #include <QMouseEvent>
 #include <QScrollBar>
@@ -15,6 +16,8 @@
 #include <QTextBrowser>
 #include <QTextDocumentFragment>
 #include <QTextFrame>
+#include <QTextList>
+#include <QToolTip>
 #include <QtMath>
 
 class ChatMessagesView::Implementation
@@ -54,7 +57,14 @@ public:
             context.palette = palette();
             context.clip = QRectF(horizontalScrollBar()->value(), verticalScrollBar()->value(),
                                   viewport()->width(), viewport()->height());
-            // Selection is painted by the document layout; the insertion caret is omitted.
+            // Paint transient link hover formatting without modifying message text
+            // or the user's selection. The insertion caret remains omitted.
+            for (const auto& extra : extraSelections()) {
+                QAbstractTextDocumentLayout::Selection selection;
+                selection.cursor = extra.cursor;
+                selection.format = extra.format;
+                context.selections.append(selection);
+            }
             if (textCursor().hasSelection()) {
                 QAbstractTextDocumentLayout::Selection selection;
                 selection.cursor = textCursor();
@@ -68,6 +78,15 @@ public:
         void mouseMoveEvent(QMouseEvent* _event) override
         {
             QTextBrowser::mouseMoveEvent(_event);
+            const auto link = linkCursorAt(_event->pos());
+            QList<QTextEdit::ExtraSelection> hover;
+            if (!link.isNull()) {
+                QTextEdit::ExtraSelection selection;
+                selection.cursor = link;
+                selection.format.setFontUnderline(true);
+                hover.append(selection);
+            }
+            setExtraSelections(hover);
             const auto point = _event->pos() + QPoint(horizontalScrollBar()->value(),
                                                        verticalScrollBar()->value());
             const auto position = document()->documentLayout()->hitTest(point, Qt::ExactHit);
@@ -75,6 +94,47 @@ public:
             const bool overText = position >= 0 && block.isValid() && !block.text().isEmpty();
             viewport()->setCursor(!anchorAt(_event->pos()).isEmpty()
                 ? Qt::PointingHandCursor : overText ? Qt::IBeamCursor : Qt::ArrowCursor);
+        }
+
+        bool viewportEvent(QEvent* event) override
+        {
+            if (event->type() == QEvent::Leave) {
+                setExtraSelections({});
+                QToolTip::hideText();
+            } else if (event->type() == QEvent::ToolTip) {
+                const auto help = static_cast<QHelpEvent*>(event);
+                const auto link = linkCursorAt(help->pos());
+                if (!link.isNull()) {
+                    const auto format = link.charFormat();
+                    const auto title = format.toolTip().isEmpty() ? format.anchorHref() : format.toolTip();
+                    QToolTip::showText(help->globalPos(), "<qt>" + title.toHtmlEscaped() + "</qt>", viewport());
+                } else { QToolTip::hideText(); }
+                return true;
+            }
+            return QTextBrowser::viewportEvent(event);
+        }
+
+        QTextCursor linkCursorAt(const QPoint& point) const
+        {
+            const auto href = anchorAt(point);
+            if (href.isEmpty()) { return {}; }
+            const auto cursor = cursorForPosition(point);
+            int start = -1, end = -1;
+            for (auto it = cursor.block().begin(); !it.atEnd(); ++it) {
+                const auto fragment = it.fragment();
+                if (fragment.charFormat().anchorHref() == href) {
+                    if (start < 0) { start = fragment.position(); }
+                    end = fragment.position() + fragment.length();
+                } else if (start >= 0) {
+                    if (cursor.position() >= start && cursor.position() <= end) { break; }
+                    start = end = -1;
+                }
+            }
+            if (start < 0 || cursor.position() < start || cursor.position() > end) { return {}; }
+            auto link = cursor;
+            link.setPosition(start);
+            link.setPosition(end, QTextCursor::KeepAnchor);
+            return link;
         }
     };
     class MessageDocument : public QTextDocument
@@ -195,9 +255,11 @@ void ChatMessagesView::rebuildDocument()
 {
     auto document = d->browser->document();
     d->browser->bubbles.clear();
+    d->browser->setExtraSelections({});
     document->clear();
     document->setDefaultFont(Ui::DesignSystem::font().body2());
     document->setDocumentMargin(12);
+    document->setIndentWidth(20);
     document->setDefaultStyleSheet("pre { white-space: pre-wrap; } code { font-family: monospace; } "
                                   "table { border-collapse: collapse; } td, th { padding: 4px; }");
     QTextCursor cursor(document);
@@ -270,6 +332,31 @@ void ChatMessagesView::rebuildDocument()
             fragment.setDefaultFont(document->defaultFont());
             fragment.setMarkdown(message.text(), QTextDocument::MarkdownFeatures(QTextDocument::MarkdownDialectGitHub)
                                                      | QTextDocument::MarkdownNoHTML);
+            QVector<QTextCursor> links;
+            for (auto block = fragment.begin(); block.isValid(); block = block.next()) {
+                if (block.textList()) {
+                    auto format = block.blockFormat();
+                    format.setTopMargin(4);
+                    format.setBottomMargin(4);
+                    format.setLeftMargin(0);
+                    format.setRightMargin(0);
+                    format.setIndent(0);
+                    QTextCursor(block).setBlockFormat(format);
+                }
+                for (auto it = block.begin(); !it.atEnd(); ++it) {
+                    const auto part = it.fragment();
+                    if (part.charFormat().isAnchor()) {
+                        QTextCursor link(&fragment);
+                        link.setPosition(part.position());
+                        link.setPosition(part.position() + part.length(), QTextCursor::KeepAnchor);
+                        links.append(link);
+                    }
+                }
+            }
+            QTextCharFormat linkStyle;
+            linkStyle.setForeground(Ui::DesignSystem::color().accent());
+            linkStyle.setFontUnderline(false);
+            for (auto& link : links) { link.mergeCharFormat(linkStyle); }
             cursor.insertFragment(QTextDocumentFragment(&fragment));
         } else {
             cursor.insertText(message.text(), textFormat);
@@ -297,6 +384,8 @@ void ChatMessagesView::rebuildDocument()
     auto palette = d->browser->palette();
     palette.setColor(QPalette::Base, backgroundColor());
     palette.setColor(QPalette::Text, textColor());
+    palette.setColor(QPalette::Link, Ui::DesignSystem::color().accent());
+    palette.setColor(QPalette::LinkVisited, Ui::DesignSystem::color().accent());
     d->browser->setPalette(palette);
     document->setTextWidth(qMax(1, width() - 4));
     updateFooterGeometry();

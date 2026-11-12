@@ -32,7 +32,7 @@ public:
 
 private:
     struct Chunk {
-        QString id, document, scene, title, text;
+        QString id, document, scene, title, text, number;
     };
     struct Document {
         QString id, name;

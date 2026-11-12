@@ -12,6 +12,7 @@ class AiChatTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void sceneCitationsUseEditorNumbersAndPersistTooltip();
     void chatOnlyContextNeverReadsDocuments();
     void completeEpisodeStaysInContext();
     void pagedResearchRetainsFindingsAndCoverage();
@@ -853,6 +854,52 @@ void AiChatTest::chatOnlyContextNeverReadsDocuments()
     QCOMPARE(restored.contextScope(), Ui::AiChatSession::ContextScope::Document);
     restored.setProject(project, "author");
     QCOMPARE(restored.contextScope(), Ui::AiChatSession::ContextScope::None);
+}
+
+
+void AiChatTest::sceneCitationsUseEditorNumbersAndPersistTooltip()
+{
+    QTemporaryDir dir;
+    const auto project = QUuid::createUuid();
+    const auto document = QUuid::createUuid();
+    const auto scene = QUuid::createUuid();
+    const QString title = "Series \"A\" / Episode / Draft";
+    const QString content = QString("<document><scene uuid=\"%1\"><number value=\"7\" custom=\"true\"/>"
+                                    "<v>INT. ROOM</v><v>Evidence</v></scene></document>").arg(scene.toString());
+    Ui::AiProjectContext corpus;
+    const Ui::AiContextDocument input{ document.toString(), title, content };
+    corpus.resetDocuments({ input }); corpus.updateDocument(input);
+    const auto result = corpus.search("Evidence").value("results").toArray().first().toObject();
+    QCOMPARE(result.value("number").toString(), QString("7"));
+    const auto source = result.value("source").toString();
+    QString saved;
+    {
+        Ui::AiChatSession chat(dir.filePath("sessions.db"));
+        chat.setProject(project, {});
+        chat.setBackendAvailable(true);
+        chat.setDocument(document, title, [content] { return content; });
+        bool correctTarget = false;
+        chat.setSourceNumberProvider([&](const QUuid& p, const QUuid& d, const QUuid& s) {
+            correctTarget = p == project && d == document && s == scene;
+            return QString("19B");
+        });
+        QVERIFY(chat.send("Find evidence"));
+        chat.finishReply("Evidence [[source:" + source + "]].");
+        QVERIFY(correctTarget);
+        saved = chat.messages().last().toObject().value("text").toString();
+        QVERIFY(saved.contains("[\\[19B\\]](starc-source:" + source));
+        QVERIFY(saved.contains("Series \\\"A\\\" / Episode / Draft / INT. ROOM"));
+        chat.setSourceNumberProvider({});
+        QVERIFY(chat.send("Again"));
+        chat.finishReply("Evidence [[source:" + source + "]].");
+        QVERIFY(chat.messages().last().toObject().value("text").toString().contains("[\\[7\\]]"));
+    }
+    Ui::AiChatSession restored(dir.filePath("sessions.db"));
+    restored.setProject(project, {});
+    QVERIFY(restored.messages().at(2).toObject().value("text").toString() == saved);
+    QSignalSpy navigation(&restored, &Ui::AiChatSession::sourceRequested);
+    QVERIFY(restored.openSource(QUrl("starc-source:" + source)));
+    QCOMPARE(navigation.last().at(1).toUuid(), scene);
 }
 
 QTEST_GUILESS_MAIN(AiChatTest)

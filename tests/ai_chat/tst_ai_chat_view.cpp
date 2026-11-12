@@ -24,6 +24,11 @@
 #include <QTemporaryDir>
 #include <QTextBrowser>
 #include <QTextBlock>
+#include <QTextList>
+#include <include/custom_events.h>
+#include <QHelpEvent>
+#include <QToolTip>
+#include <ui/design_system/design_system.h>
 #include <QAbstractTextDocumentLayout>
 #include <QInputDialog>
 #include <QClipboard>
@@ -47,9 +52,12 @@ private slots:
         auto session = Ui::AiChatSession::instance();
         session->setProject(QUuid::createUuid(), {});
         const auto document = QUuid::createUuid();
-        session->setDocument(document, "Episode 90", [] { return "Final discovery"; });
-        session->setProjectDocumentsProvider([document](bool) {
-            return QVector<Ui::AiContextDocument>{ { document.toString(), "Episode 90", "Final discovery" } };
+        const auto scene = QUuid::createUuid();
+        const auto content = QString("<document><scene uuid=\"%1\"><number value=\"12A\" custom=\"true\"/>"
+                                     "<v>INT. ROOM</v><v>Final discovery</v></scene></document>").arg(scene.toString());
+        session->setDocument(document, "Episode 90", [content] { return content; });
+        session->setProjectDocumentsProvider([document, content](bool) {
+            return QVector<Ui::AiContextDocument>{ { document.toString(), "Episode 90", content } };
         });
         session->setBackendAvailable(true);
         Ui::AiAssistantView view;
@@ -71,24 +79,36 @@ private slots:
         QVERIFY(session->send("Find the discovery"));
         QTRY_COMPARE(requests.size(), 1);
         Ui::AiProjectContext corpus;
-        const Ui::AiContextDocument doc{ document.toString(), "Episode 90", "Final discovery" };
+        const Ui::AiContextDocument doc{ document.toString(), "Episode 90", content };
         corpus.resetDocuments({ doc }); corpus.updateDocument(doc);
         const auto source = corpus.search("discovery").value("results").toArray().first().toObject().value("source").toString();
         session->finishReply("Found it [[source:" + source + "]].");
         auto browser = view.findChild<QTextBrowser*>("chatMessageText");
         QVERIFY(browser);
         QTest::qWait(30);
-        const auto link = browser->document()->find("Episode 90", browser->document()->find("Found it"));
+        const auto link = browser->document()->find("[12A]", browser->document()->find("Found it"));
         QVERIFY(!link.isNull());
+        QCOMPARE(link.charFormat().toolTip(), QString("Episode 90 / INT. ROOM"));
+        QCOMPARE(link.charFormat().foreground().color(), Ui::DesignSystem::color().accent());
+        QVERIFY(!link.charFormat().fontUnderline());
         auto cursor = link;
         cursor.setPosition(link.selectionStart() + 2);
         const auto point = browser->cursorRect(cursor).center();
         QTest::mouseMove(browser->viewport(), point);
         QCOMPARE(browser->viewport()->cursor().shape(), Qt::PointingHandCursor);
+        QCOMPARE(browser->extraSelections().size(), 1);
+        QVERIFY(browser->extraSelections().first().format.fontUnderline());
+        QHelpEvent tooltip(QEvent::ToolTip, point, browser->viewport()->mapToGlobal(point));
+        QApplication::sendEvent(browser->viewport(), &tooltip);
+        QVERIFY(QToolTip::text().contains("Episode 90 / INT. ROOM"));
+        QToolTip::hideText();
         QSignalSpy navigation(session, &Ui::AiChatSession::sourceRequested);
         QTest::mouseClick(browser->viewport(), Qt::LeftButton, Qt::NoModifier, point);
         QCOMPARE(navigation.size(), 1);
         QCOMPARE(navigation.first().first().toUuid(), document);
+        QCOMPARE(navigation.first().at(1).toUuid(), scene);
+        QTest::mouseMove(browser->viewport(), QPoint(2, 2));
+        QVERIFY(browser->extraSelections().isEmpty());
         const auto screenshot = qEnvironmentVariable("AI_PROJECT_SCREENSHOT");
         if (!screenshot.isEmpty()) { QVERIFY(view.grab().save(screenshot)); }
         documentScope->setFocus();
@@ -312,10 +332,12 @@ private slots:
     {
         ChatMessagesView history;
         history.resize(420, 800);
+        history.setBackgroundColor(Ui::DesignSystem::color().primary());
+        history.setTextColor(Ui::DesignSystem::color().onPrimary());
         history.setConversationStyle(true);
         history.setCurrentUser(User("You", "user"));
         ChatMessage reply(QDateTime::currentDateTime(),
-                          "## Heading\n\nA **bold** word and `code`.\n\n- First\n- Second",
+                          "## Heading\n\nA **bold** word and `code`.\n\n- First\n  - Nested\n- Second\n\n1. Ordered\n2. Next\n\n[Website](https://example.com \"Website\")",
                           User("Assistant", "assistant"), false);
         reply.setMarkdown(true);
         history.setMessages({ ChatMessage(QDateTime::currentDateTime(), "**literal user input**",
@@ -338,8 +360,47 @@ private slots:
         bool listFound = false;
         for (auto block = browser->document()->begin(); block.isValid(); block = block.next()) {
             listFound |= block.textList() != nullptr;
+            if (block.textList()) {
+                QVERIFY(block.blockFormat().topMargin() > 0);
+                QVERIFY(block.blockFormat().topMargin() <= 6);
+                QVERIFY(block.blockFormat().bottomMargin() > 0);
+                QVERIFY(block.blockFormat().bottomMargin() <= 6);
+                QCOMPARE(block.blockFormat().leftMargin(), 0.0);
+            }
         }
         QVERIFY(listFound);
+        QVERIFY(browser->document()->indentWidth() <= 24);
+        const auto first = browser->document()->find("First").block().textList();
+        const auto nested = browser->document()->find("Nested").block().textList();
+        QVERIFY(first && nested);
+        QVERIFY(nested->format().indent() > first->format().indent());
+        struct RestoreColors {
+            Ui::DesignSystem::Color colors;
+            ~RestoreColors() { Ui::DesignSystem::setColor(colors); }
+        } restore{ Ui::DesignSystem::color() };
+        auto colors = restore.colors;
+        colors.setAccent(QColor("#d2a130"));
+        Ui::DesignSystem::setColor(colors);
+        DesignSystemChangeEvent themeChanged;
+        QApplication::sendEvent(&history, &themeChanged);
+        const auto website = browser->document()->find("Website");
+        QVERIFY(!website.isNull());
+        QCOMPARE(website.charFormat().foreground().color(), QColor("#d2a130"));
+        QVERIFY(!website.charFormat().fontUnderline());
+        auto selected = browser->document()->find("bold");
+        browser->setTextCursor(selected);
+        auto hoverCursor = website;
+        hoverCursor.setPosition(website.selectionStart() + 2);
+        QTest::mouseMove(browser->viewport(), browser->cursorRect(hoverCursor).center());
+        QCOMPARE(history.selectedText(), QString("bold"));
+        QCOMPARE(browser->extraSelections().size(), 1);
+        QVERIFY(browser->extraSelections().first().format.fontUnderline());
+        QEvent leave(QEvent::Leave);
+        QApplication::sendEvent(browser->viewport(), &leave);
+        QVERIFY(browser->extraSelections().isEmpty());
+        const auto screenshot = qEnvironmentVariable("AI_MESSAGE_STYLE_SCREENSHOT");
+        if (!screenshot.isEmpty()) { QVERIFY(history.grab().save(screenshot)); }
+
     }
 
     void contextNoticesSelectWithoutEmptyParagraphsAndUseTextHitTesting()

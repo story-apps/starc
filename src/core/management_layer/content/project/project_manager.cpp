@@ -19,6 +19,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/stageplay/stageplay_information_model.h>
 #include <business_layer/model/stageplay/text/stageplay_text_model.h>
+#include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/structure/structure_proxy_model.h>
@@ -652,10 +653,11 @@ void ProjectManager::Implementation::updateChatDocument(BusinessLayer::AbstractM
     auto name = _model->documentName();
     const auto item = projectStructureModel->itemForUuid(_model->document()->uuid());
     if (item != nullptr) {
-        name = item->name();
-        if (item->parent() != nullptr && item->parent()->parent() != nullptr) {
-            name = item->parent()->name() + " / " + name;
+        QStringList path;
+        for (auto current = item; current && current->parent(); current = current->parent()) {
+            path.prepend(current->name());
         }
+        name = path.join(" / ");
         if (!item->draftName().isEmpty()) {
             name += " / " + item->draftName();
         }
@@ -2356,6 +2358,21 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     });
 
     auto chat = Ui::AiChatSession::instance();
+    chat->setSourceNumberProvider([this](const QUuid& project, const QUuid& document, const QUuid& scene) -> QString {
+        auto current = DataStorageLayer::StorageFacade::documentStorage()->document(Domain::DocumentObjectType::Project);
+        if (!current || current->uuid() != project || !d->projectStructureModel->itemForUuid(document)) { return {}; }
+        // Resolve only cited documents, using the editor's numbering (including
+        // custom starts and locked numbers), rather than guessing from tree order.
+        auto model = qobject_cast<BusinessLayer::TextModel*>(d->modelsFacade.modelFor(document));
+        if (!model) { return {}; }
+        const auto index = model->indexForUuid(scene);
+        const auto item = index.isValid() ? model->itemForIndex(index) : nullptr;
+        if (!item || item->type() != BusinessLayer::TextModelItemType::Group) { return {}; }
+        const auto number = static_cast<BusinessLayer::TextModelGroupItem*>(item)->number();
+        return number ? number->followNumber + number->value : QString();
+    });
+    connect(this, &QObject::destroyed, chat, [chat] { chat->setSourceNumberProvider({}); });
+
     connect(chat, &Ui::AiChatSession::projectDocumentRequested, this,
             [this](const QUuid& project, const QUuid& document) {
         if (!d->projectStructureModel->document()) { return; }
