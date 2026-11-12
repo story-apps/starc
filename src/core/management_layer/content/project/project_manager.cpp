@@ -626,6 +626,14 @@ QVector<Ui::AiContextDocument> ProjectManager::Implementation::chatProjectDocume
             if (!skipped.contains(item->type())) {
                 Ui::AiContextDocument entry;
                 entry.id = item->uuid().toString();
+                if (item->type() == Type::ScreenplayText) {
+                    for (auto ancestor = item->parent(); ancestor; ancestor = ancestor->parent()) {
+                        if (ancestor->type() == Type::Screenplay) {
+                            entry.storyTitle = ancestor->name();
+                            break;
+                        }
+                    }
+                }
                 entry.name = name + (item->draftName().isEmpty() ? QString() : " / " + item->draftName());
                 if (auto model = loaded.value(item->uuid())) {
                     // Read unsaved edits without instantiating all 90 episode editors.

@@ -82,15 +82,15 @@ earlier findings. Source coverage reports how many unique chunks of each documen
 been supplied over the whole request, distinguishing a pinned full text from pages that
 are now represented by research notes. An evicted page is not a missing document page;
 notes remain a model-generated summary, not a lossless replacement for original text.
-Full chat history stays in SQLite. Research has eight additional retrieval steps, at
+Full chat history stays in SQLite. Ordinary question answering has eight additional retrieval steps, at
 most one protocol-repair request and at most one citation-repair request, using the
 existing AI transport. Each step is an AI request and may consume the account's word
 allowance. The eight-step limit still applies to paginated research; it does not limit
 the number of scenes in a complete pinned document. If the budget is exhausted, the
 assistant is asked to disclose remaining uncertainty; a further tool request is replaced
-with a message asking the user to narrow the question. Exhaustive synthesis of a corpus
-larger than these budgets requires additional passes; source coverage must not be
-misrepresented as proof that all facts have been understood or retained.
+with a message asking the user to narrow the question. The sequential synopsis workflow below performs additional passes for selected episodes.
+Source coverage must not be misrepresented as proof that all facts have been understood
+or retained.
 
 Cloud documents are fetched in batches of up to four before the first AI request.
 Missing data fails explicitly after a timeout, rather than being represented as the
@@ -143,3 +143,46 @@ titles are stored with the answer, so they survive restarting the app. Their doc
 and scene UUID navigation targets are unchanged. Existing saved message text is retained.
 UI tests cover nested/numbered list spacing, theme changes, hover and leave events,
 selection during hover, tooltips and clicking a compact scene citation.
+
+## Reliable episode discovery and sequential synopses
+
+The project provider marks screenplay texts with the name of their containing screenplay.
+A separate story directory lists **all** latest screenplay texts, even when hundreds of
+character cards, metadata or empty synopsis documents precede them in the catalog.
+Episode numbers come from the screenplay name, never from draft or scene numbers;
+Christmas/special episodes are identified separately. Numbered ranges and requests such
+as “синопсисы последних восьми серий” select the corresponding numbered documents
+locally. Ambiguous duplicate episode numbers fall back to research with the directory.
+The model can also select explicit directory IDs via the `synopses` tool (up to 100).
+
+Synopses read every selected document sequentially, with no search filter and no eight-step
+research limit. Each request contains whole source chunks up to approximately 18,000
+serialized characters; short scenes share a request. Running story notes (up to 6,000
+characters) carry earlier events and citations to subsequent pages. The final page produces
+that episode's requested synopsis. The application combines these separate results without
+another model rewrite that could omit an episode. Progress identifies the current episode
+and source range. Missing or unreadable texts fail explicitly. On a later failure, already
+completed episode summaries are saved in the originating conversation. Cleared or deleted
+conversations never restart the queue when a late reply arrives. Each part permits at most
+one format/citation repair. These extra AI calls consume the usual word allowance.
+Compression is model-generated, so complete delivery of source text does not guarantee
+perfect factual recall or summary quality.
+
+Search pagination is keyed by query and document filter. A changed query starts at zero,
+even if the model carries an offset over from its previous search. Body matches rank above
+repeated path/title matches; short inflection prefixes also match names such as Юля/Юли
+and Симка/Симку. Exact known citation IDs accept `[[starc-source:ID]]` and hexadecimal case
+variants; unknown IDs are never guessed from nearby IDs or old chat sources.
+
+Empty service completions and citation-only responses produce a service error immediately,
+not a citation-repair request or a standalone “no verified sources” warning. Nonempty
+unsupported answers still receive the existing citation repair and, if needed, warning.
+A genuine client timeout retains ownership of the untagged transport until completion or
+reconnection. The server's observed empty outputs after approximately 60 seconds require
+investigation in the proprietary cloud module; client tests do not exercise that service.
+
+Regressions cover 665 documents with 90 numbered episodes and a special; last-eight and
+explicit-range selection; all chunks through all eight endings; bounded prompts; partial
+results after failure; model-selected synopsis targets; cancellation and late-response
+isolation; changed-query pagination; inflected name searches; empty/citation-only responses;
+and normalization of known citation spellings.

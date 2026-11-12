@@ -23222,6 +23222,22 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <source>Scene</source>
         <translation>Сцена</translation>
     </message>
+    <message>
+        <source>The AI service returned an empty response. Please try again.</source>
+        <translation>Сервис ИИ не вернул ответ. Попробуйте отправить запрос ещё раз.</translation>
+    </message>
+    <message>
+        <source>Could not read the complete text of %1. Completed synopses have been kept.</source>
+        <translation>Не удалось прочитать полный текст «%1». Готовые синопсисы сохранены в чате.</translation>
+    </message>
+    <message>
+        <source>Reading episode %1 of %2 · excerpts %3–%4 of %5</source>
+        <translation>Читаю серию %1 из %2 · фрагменты %3–%4 из %5</translation>
+    </message>
+    <message>
+        <source>Could not obtain a synopsis with source citations for %1. Completed synopses have been kept.</source>
+        <translation>Не удалось получить синопсис со ссылками на источники для «%1». Готовые синопсисы сохранены в чате.</translation>
+    </message>
 </context>
 
 </TS>

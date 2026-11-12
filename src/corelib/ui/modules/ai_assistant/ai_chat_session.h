@@ -82,6 +82,10 @@ private:
     void dispatchRetrieval(const QJsonObject& _result, const QString& _instruction = {});
     void rememberSources(const QJsonObject& _result);
     QJsonArray sourceCoverage() const;
+    void resetSynopsis();
+    void dispatchSynopsis();
+    bool finishSynopsis(const QString& _text);
+    QString normalizeCitations(const QString& _text) const;
     QString resolveCitations(const QString& _text);
 
     std::function<QString(const QUuid&, const QUuid&, const QUuid&)> m_sourceNumber;
@@ -96,6 +100,11 @@ private:
     QString m_preparationStatus;
     QString m_question, m_basePrompt, m_pendingProject, m_searchNotes;
     QString m_completeDocument;
+    QHash<QString, int> m_searchOffsets;
+    QJsonArray m_synopsisDocuments;
+    int m_synopsisDocument = 0, m_synopsisOffset = 0;
+    QString m_synopsisNotes, m_synopsisPrompt;
+    QStringList m_synopsisAnswers;
     QJsonArray m_requestHistory, m_evidencePages;
     QHash<QString, QJsonObject> m_pendingSources;
     int m_retrievalRounds = 0;

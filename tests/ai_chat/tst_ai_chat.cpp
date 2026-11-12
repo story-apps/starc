@@ -12,6 +12,12 @@ class AiChatTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void episodeDirectorySelectsRangesAndSpecials();
+    void modelCanSelectSynopsesAndCancellationStopsTheQueue();
+    void synopsesReadEverySceneAndPreserveCompletedResults();
+    void changedSearchQueryStartsAtFirstPage();
+    void emptyRepliesNeverBecomeCitationWarnings();
+    void searchPrefersDialogueToRepeatedTitles();
     void sceneCitationsUseEditorNumbersAndPersistTooltip();
     void chatOnlyContextNeverReadsDocuments();
     void completeEpisodeStaysInContext();
@@ -38,6 +44,235 @@ private slots:
     void toolTimeoutAndMultipleResults();
     void clearingChatKeepsNameAndDiscardsPendingReply();
 };
+
+namespace {
+QVector<Ui::AiContextDocument> episodeProject()
+{
+    QVector<Ui::AiContextDocument> documents;
+    for (int i = 0; i < 574; ++i) {
+        documents.append({ QUuid::createUuid().toString(), QString("Metadata %1").arg(i), "Description" });
+    }
+    for (int episode = 1; episode <= 90; ++episode) {
+        QString xml = "<document>";
+        for (int scene = 1; scene <= 14; ++scene) {
+            xml += QString("<scene uuid=\"%1\"><value>EP_%2_SCENE_%3. Симка узнаёт новости. %4</value></scene>")
+                .arg(QUuid::createUuid().toString()).arg(episode).arg(scene).arg(QString(2400, QChar('x')));
+        }
+        xml += "</document>";
+        documents.append({ QUuid::createUuid().toString(), QString("ИЕС_%1 серия / Сценарий / Драфт 3.3").arg(episode),
+                           xml, true, QString("ИЕС_%1 серия").arg(episode) });
+    }
+    documents.append({ QUuid::createUuid().toString(), "Рождественский спешл / Сценарий / Драфт 91",
+                       "Christmas story", true, "Рождественский спешл" });
+    return documents;
+}
+QJsonObject synopsisPage(const QString& prompt)
+{
+    return QJsonDocument::fromJson(prompt.section("SOURCE PAGE (JSON):\n", 1).toUtf8()).object();
+}
+QJsonArray evidencePages(const QString& prompt)
+{
+    return QJsonDocument::fromJson(prompt.section("EVIDENCE PAGES (JSON):\n", 1)
+        .section("\nSOURCE COVERAGE", 0, 0).toUtf8()).array();
+}
+}
+
+void AiChatTest::episodeDirectorySelectsRangesAndSpecials()
+{
+    auto documents = episodeProject();
+    Ui::AiProjectContext corpus;
+    corpus.resetDocuments(documents);
+    for (const auto& doc : documents) { corpus.updateDocument(doc); }
+    QCOMPARE(corpus.documentCount(), 665);
+    QCOMPARE(corpus.stories().size(), 91);
+    auto selected = corpus.synopsisDocuments("Подготовь краткие синопсисы последних восьми серий");
+    QCOMPARE(selected.size(), 8);
+    QCOMPARE(selected.first().toObject().value("episode").toInt(), 83);
+    QCOMPARE(selected.last().toObject().value("episode").toInt(), 90);
+    selected = corpus.synopsisDocuments("сделай краткий синопсис для серий 86–90, по предложению на каждую серию");
+    QCOMPARE(selected.size(), 5);
+    QCOMPARE(selected.first().toObject().value("episode").toInt(), 86);
+    selected = corpus.synopsisDocuments("Синопсисы последних пяти серий и рождественского спешла");
+    QCOMPARE(selected.size(), 6);
+    QVERIFY(selected.last().toObject().value("special").toBool());
+    QVERIFY(corpus.synopsisDocuments("В какой серии Симка узнала новость?").isEmpty());
+    QVERIFY(corpus.synopsisDocuments("синопсисы последних восьми серий, включая спешл").isEmpty());
+    QVERIFY(corpus.synopsisDocuments("синопсисы последних восьми серий без спешла").isEmpty());
+    documents.removeAt(574 + 87 - 1);
+    corpus.resetDocuments(documents);
+    selected = corpus.synopsisDocuments("синопсисы серий 86-90");
+    QCOMPARE(selected.size(), 5);
+    QVERIFY(selected.at(1).toObject().value("missing").toBool());
+    // Ambiguous episode numbers from different seasons must not be silently merged.
+    documents.append({ QUuid::createUuid().toString(), "Season 2 / Episode 90", "Other story", true, "Episode 90" });
+    corpus.resetDocuments(documents);
+    corpus.updateDocument(documents.last());
+    QVERIFY(corpus.synopsisDocuments("синопсисы последних восьми серий").isEmpty());
+}
+
+void AiChatTest::synopsesReadEverySceneAndPreserveCompletedResults()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    const auto documents = episodeProject();
+    chat.setProjectDocumentsProvider([documents](bool) { return documents; });
+    chat.setContextScope(Ui::AiChatSession::ContextScope::Project);
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Подготовь краткие синопсисы последних восьми серий, по предложению на каждую"));
+    const auto origin = chat.currentChat();
+    QTRY_COMPARE(requests.size(), 1);
+    QVERIFY(chat.createChat()); // Research retains its original conversation.
+    int expectedRequest = 1;
+    for (int episode = 83; episode <= 90; ++episode) {
+        QSet<QString> sources;
+        for (int part = 0; part < 3; ++part) {
+            QCOMPARE(requests.size(), expectedRequest++);
+            const auto prompt = requests.last().first().toString();
+            QVERIFY(prompt.size() < 40000);
+            const auto page = synopsisPage(prompt);
+            QCOMPARE(page.value("total_chunks").toInt(), 14);
+            for (const auto& source : page.value("results").toArray()) {
+                const auto item = source.toObject();
+                QVERIFY(item.value("text").toString().contains(QString("EP_%1_SCENE_").arg(episode)));
+                sources.insert(item.value("source").toString());
+            }
+            if (part > 0) { QVERIFY(prompt.contains(QString("NOTES_%1_%2").arg(episode).arg(part - 1))); }
+            if (part == 2) { QVERIFY(prompt.contains(QString("EP_%1_SCENE_14").arg(episode))); }
+            const auto id = page.value("results").toArray().first().toObject().value("source").toString();
+            chat.finishReply(QString("NOTES_%1_%2 [[source:%3]]").arg(episode).arg(part).arg(id));
+        }
+        QCOMPARE(sources.size(), 14);
+    }
+    QVERIFY(chat.canSend());
+    QVERIFY(!chat.messages().last().toObject().value("text").toString().contains("NOTES_83"));
+    QVERIFY(chat.selectChat(origin));
+    auto answer = chat.messages().last().toObject().value("text").toString();
+    for (int episode = 83; episode <= 90; ++episode) {
+        QVERIFY(answer.contains(QString("NOTES_%1_2").arg(episode)));
+        QVERIFY(answer.contains(QString("ИЕС_%1 серия").arg(episode)));
+    }
+    QVERIFY(!answer.contains("Christmas"));
+    QCOMPARE(answer.count("starc-source:"), 8);
+    // Terminal service failure on the second episode keeps the completed first one.
+    QVERIFY(chat.send("синопсисы серий 89-90"));
+    QTRY_COMPARE(requests.size(), 25);
+    for (int part = 0; part < 3; ++part) {
+        const auto id = synopsisPage(requests.last().first().toString()).value("results")
+            .toArray().first().toObject().value("source").toString();
+        chat.finishReply("Completed episode [[source:" + id + "]]");
+    }
+    QCOMPARE(requests.size(), 28);
+    chat.finishReply("");
+    QVERIFY(chat.canSend());
+    QCOMPARE(requests.size(), 28); // No citation-repair request for an empty response.
+    const auto messages = chat.messages();
+    QCOMPARE(messages.last().toObject().value("role").toString(), QString("error"));
+    QVERIFY(messages.at(messages.size() - 2).toObject().value("text").toString().contains("Completed episode"));
+}
+
+void AiChatTest::modelCanSelectSynopsesAndCancellationStopsTheQueue()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    const auto documents = episodeProject();
+    chat.setProjectDocumentsProvider([documents](bool) { return documents; });
+    chat.setContextScope(Ui::AiChatSession::ContextScope::Project);
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("Кратко перескажи две финальные серии"));
+    QTRY_COMPARE(requests.size(), 1);
+    const auto episode = documents.at(574 + 89 - 1).id;
+    chat.finishReply(QString::fromUtf8(QJsonDocument(QJsonObject{ { "tool", "synopses" },
+        { "documents", QJsonArray{ episode, documents.at(574 + 90 - 1).id } } }).toJson()));
+    QCOMPARE(requests.size(), 2);
+    QVERIFY(requests.last().first().toString().contains("EP_89_SCENE_1"));
+    const auto source = synopsisPage(requests.last().first().toString()).value("results")
+        .toArray().first().toObject().value("source").toString();
+    QVERIFY(chat.clearChat());
+    QVERIFY(!chat.canSend());
+    chat.finishReply("Late notes [[source:" + source + "]]");
+    QCOMPARE(requests.size(), 2); // Deleted research never advances to another page.
+    QVERIFY(chat.canSend());
+    QVERIFY(chat.startTool("/rephrase", "rephrase"));
+    QVERIFY(chat.finishToolReply("rephrase", "Tool result"));
+    QCOMPARE(chat.messages().last().toObject().value("text").toString(), QString("Tool result"));
+}
+
+void AiChatTest::changedSearchQueryStartsAtFirstPage()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    QVector<Ui::AiContextDocument> documents;
+    for (int i = 0; i < 20; ++i) {
+        documents.append({ QUuid::createUuid().toString(), QString("Episode %1").arg(i),
+                           "Симка беременна. Потап приехал. Other evidence." });
+    }
+    chat.setProjectDocumentsProvider([documents](bool) { return documents; });
+    chat.setContextScope(Ui::AiChatSession::ContextScope::Project);
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    QVERIFY(chat.send("В какой сцене Симка узнает, что беременна?"));
+    QTRY_COMPARE(requests.size(), 1);
+    chat.finishReply(R"({"tool":"search","query":"Симка беременность Потап","offset":18})");
+    auto pages = evidencePages(requests.last().first().toString());
+    QCOMPARE(pages.last().toObject().value("request").toObject().value("offset").toInt(), 0);
+    QCOMPARE(pages.last().toObject().value("next_offset").toInt(), 6);
+    chat.finishReply(R"({"tool":"search","query":"Симка беременность Потап","offset":6})");
+    pages = evidencePages(requests.last().first().toString());
+    QCOMPARE(pages.last().toObject().value("request").toObject().value("offset").toInt(), 6);
+    chat.finishReply(R"({"tool":"search","query":"Симка врач","offset":12})");
+    pages = evidencePages(requests.last().first().toString());
+    QCOMPARE(pages.last().toObject().value("request").toObject().value("offset").toInt(), 0);
+    const auto id = pages.last().toObject().value("results").toArray().first().toObject().value("source").toString();
+    chat.finishReply("Answer [[starc-source:" + id.toUpper() + "]]");
+    QVERIFY(chat.canSend());
+    QCOMPARE(requests.size(), 4); // A valid spelling variant doesn't need citation repair.
+    QVERIFY(chat.messages().last().toObject().value("text").toString().contains("starc-source:" + id));
+}
+
+void AiChatTest::emptyRepliesNeverBecomeCitationWarnings()
+{
+    QTemporaryDir dir;
+    Ui::AiChatSession chat(dir.filePath("sessions.db"));
+    chat.setProject(QUuid::createUuid(), {});
+    chat.setBackendAvailable(true);
+    const Ui::AiContextDocument document{ QUuid::createUuid().toString(), "Episode", "Evidence" };
+    chat.setProjectDocumentsProvider([document](bool) { return QVector<Ui::AiContextDocument>{ document }; });
+    chat.setContextScope(Ui::AiChatSession::ContextScope::Project);
+    QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+    for (const auto& empty : QStringList{ "", "   \n", "[[source:000000000000000000000000]]" }) {
+        const int before = requests.size();
+        QVERIFY(chat.send("Evidence?"));
+        QTRY_COMPARE(requests.size(), before + 1);
+        chat.finishReply(empty);
+        QCOMPARE(requests.size(), before + 1);
+        QVERIFY(chat.canSend());
+        const auto message = chat.messages().last().toObject();
+        QCOMPARE(message.value("role").toString(), QString("error"));
+        QVERIFY(message.value("text").toString().contains("empty response"));
+        QVERIFY(!message.value("text").toString().contains("citations"));
+    }
+}
+
+void AiChatTest::searchPrefersDialogueToRepeatedTitles()
+{
+    Ui::AiProjectContext corpus;
+    QVector<Ui::AiContextDocument> documents;
+    for (int i = 0; i < 10; ++i) {
+        documents.append({ QUuid::createUuid().toString(), "Юля Смирнов любовь поцелуй", "Николай осмотрел дуб." });
+    }
+    const auto target = QUuid::createUuid().toString();
+    documents.append({ target, "Series / Episode 90", "Юли поцелуй. Смирнова она любит." });
+    corpus.resetDocuments(documents);
+    for (const auto& document : documents) { corpus.updateDocument(document); }
+    const auto hits = corpus.search("Юля целует Смирнова по любви").value("results").toArray();
+    QVERIFY(!hits.isEmpty());
+    QCOMPARE(hits.first().toObject().value("document").toString(), target);
+}
 
 void AiChatTest::persistsAndIsolatesProjectsAndAccounts()
 {
