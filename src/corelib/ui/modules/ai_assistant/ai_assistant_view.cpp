@@ -65,6 +65,7 @@ public:
         Widget* contextScope = nullptr;
         RadioButton* documentScope = nullptr;
         RadioButton* projectScope = nullptr;
+        RadioButton* noDocumentScope = nullptr;
         Widget* widget = nullptr;
         ChatMessagesView* history = nullptr;
         QScrollArea* historyContainer = nullptr;
@@ -691,9 +692,11 @@ void AiAssistantView::initChat()
     d->chat.documentScope->setObjectName("aiDocumentScope");
     d->chat.projectScope = new RadioButton(d->chat.contextScope);
     d->chat.projectScope->setObjectName("aiProjectScope");
+    d->chat.noDocumentScope = new RadioButton(d->chat.contextScope);
+    d->chat.noDocumentScope->setObjectName("aiNoDocumentScope");
     auto scopeGroup = new RadioButtonGroup(d->chat.contextScope);
     auto scopeLayout = new FlowLayout(d->chat.contextScope, 0, 8, 0);
-    for (auto button : { d->chat.documentScope, d->chat.projectScope }) {
+    for (auto button : { d->chat.documentScope, d->chat.projectScope, d->chat.noDocumentScope }) {
         scopeGroup->add(button);
         scopeLayout->addWidget(button);
     }
@@ -702,6 +705,9 @@ void AiAssistantView::initChat()
     });
     connect(d->chat.projectScope, &RadioButton::checkedChanged, this, [](bool checked) {
         if (checked) { AiChatSession::instance()->setContextScope(AiChatSession::ContextScope::Project); }
+    });
+    connect(d->chat.noDocumentScope, &RadioButton::checkedChanged, this, [](bool checked) {
+        if (checked) { AiChatSession::instance()->setContextScope(AiChatSession::ContextScope::None); }
     });
     d->chat.history = new ChatMessagesView;
     d->chat.history->setConversationStyle(true);
@@ -1012,9 +1018,10 @@ void AiAssistantView::refreshChat()
     d->chat.renameChat->setEnabled(!session->currentChat().isEmpty());
     const QSignalBlocker documentScopeBlocker(d->chat.documentScope);
     const QSignalBlocker projectScopeBlocker(d->chat.projectScope);
-    const bool projectScope = session->contextScope() == AiChatSession::ContextScope::Project;
-    d->chat.documentScope->setChecked(!projectScope);
-    d->chat.projectScope->setChecked(projectScope);
+    const QSignalBlocker noDocumentScopeBlocker(d->chat.noDocumentScope);
+    d->chat.documentScope->setChecked(session->contextScope() == AiChatSession::ContextScope::Document);
+    d->chat.projectScope->setChecked(session->contextScope() == AiChatSession::ContextScope::Project);
+    d->chat.noDocumentScope->setChecked(session->contextScope() == AiChatSession::ContextScope::None);
     d->chat.documentScope->setToolTip(session->documentName().isEmpty()
         ? tr("Document context cleared") : tr("Current document: %1").arg(session->documentName()));
     QVector<ChatMessage> messages;
@@ -1047,7 +1054,9 @@ void AiAssistantView::refreshChat()
     const bool hasConversation = std::any_of(messages.cbegin(), messages.cend(),
                                            [](const ChatMessage& message) { return !message.isSistemMessage(); });
     if (!hasConversation) {
-        ChatMessage welcome({}, session->contextScope() == AiChatSession::ContextScope::Project
+        ChatMessage welcome({}, session->contextScope() == AiChatSession::ContextScope::None
+            ? tr("Let's discuss your ideas. I can use our chat history and any text you send here; documents are not attached.")
+            : session->contextScope() == AiChatSession::ContextScope::Project
             ? tr("Ask about any document or episode in the project. I will search the latest drafts and link to the sources.")
             : tr("I can help you develop ideas, work on the text, or discuss this document. Write a message or choose a task from the menu."), guide, false);
         messages.append(welcome);
@@ -1159,6 +1168,9 @@ void AiAssistantView::updateChatTranslations()
     d->chat.documentScope->setAccessibleName(tr("Current document"));
     d->chat.projectScope->setText(tr("Entire project"));
     d->chat.projectScope->setAccessibleName(tr("Entire project"));
+    d->chat.noDocumentScope->setText(tr("Chat only"));
+    d->chat.noDocumentScope->setAccessibleName(tr("Chat only"));
+    d->chat.noDocumentScope->setToolTip(tr("Use only the conversation, without attaching documents. Explicit commands still apply to the open document."));
     d->chat.projectScope->setToolTip(tr("Project mode searches all latest drafts and can read sources in several steps. Commands still apply to the open document."));
     d->chat.contextScope->setAccessibleName(tr("Conversation context"));
     d->chat.chats->setLabelVisible(false);
@@ -1198,7 +1210,7 @@ void AiAssistantView::updateChatDesign()
     d->chat.chats->setBackgroundColor(background);
     d->chat.chats->setTextColor(foreground);
     d->chat.contextScope->setBackgroundColor(background);
-    for (auto button : { d->chat.documentScope, d->chat.projectScope }) {
+    for (auto button : { d->chat.documentScope, d->chat.projectScope, d->chat.noDocumentScope }) {
         button->setBackgroundColor(background);
         button->setTextColor(foreground);
     }

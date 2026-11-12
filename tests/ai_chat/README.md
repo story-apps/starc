@@ -43,7 +43,13 @@ for keyboard users. Command syntax is available through `/help` and inline compo
 
 ## Project context and sources
 
-Each chat remembers its context choice: the open document or the entire project.
+Each chat remembers its context choice: the open document, the entire project, or
+chat history only. Chat-only mode does not invoke document snapshots, project providers
+or source retrieval, and does not attach current document metadata. Earlier discussion
+is retained, including facts previously discussed about documents. Changing the open
+document in this mode does not add context-change notices. Explicit writing commands
+still target the open document; the selector controls automatic context for free chat.
+Persisted scope values remain compatible: Document = 0, Project = 1, None = 2.
 Project context walks the live structure, taking the main document UUID (the latest
 working draft), never `item->drafts()` (archived drafts), comparisons or the recycle
 bin. Unsaved edits in loaded models are included. Text, information cards, groups,

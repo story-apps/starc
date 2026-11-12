@@ -25,7 +25,7 @@ public:
     ~AiChatSession() override;
     static AiChatSession* instance();
 
-    enum class ContextScope { Document, Project };
+    enum class ContextScope { Document = 0, Project = 1, None = 2 };
     ContextScope contextScope() const;
     void setContextScope(ContextScope _scope);
     // The provider checks availability first (false), then captures content once (true).

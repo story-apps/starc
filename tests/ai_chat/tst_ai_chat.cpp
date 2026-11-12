@@ -12,6 +12,7 @@ class AiChatTest : public QObject
 {
     Q_OBJECT
 private slots:
+    void chatOnlyContextNeverReadsDocuments();
     void completeEpisodeStaysInContext();
     void pagedResearchRetainsFindingsAndCoverage();
     void concatenatedRetrievalCommandsStayOutOfChat();
@@ -784,6 +785,74 @@ void AiChatTest::pagedResearchRetainsFindingsAndCoverage()
     QVERIFY(prompt.contains("\"complete_text_in_prompt\":false"));
     chat.finishReply("Synthesis from the retained findings and final scenes.");
     QVERIFY(chat.canSend());
+}
+
+
+void AiChatTest::chatOnlyContextNeverReadsDocuments()
+{
+    QTemporaryDir dir;
+    const auto project = QUuid::createUuid();
+    const auto path = dir.filePath("sessions.db");
+    QString chatOnly;
+    QString documentChat;
+    {
+        Ui::AiChatSession chat(path);
+        chat.setProject(project, "author");
+        chat.setBackendAvailable(true);
+        int documentReads = 0, projectReads = 0;
+        chat.setDocument(QUuid::createUuid(), "PRIVATE_DOCUMENT_TITLE", [&documentReads] {
+            ++documentReads; return "PRIVATE_DOCUMENT_CONTENT";
+        });
+        chat.setProjectDocumentsProvider([&projectReads](bool) {
+            ++projectReads; return QVector<Ui::AiContextDocument>{};
+        });
+        chat.setContextScope(Ui::AiChatSession::ContextScope::None);
+        QSignalSpy requests(&chat, &Ui::AiChatSession::replyRequested);
+        QSignalSpy downloads(&chat, &Ui::AiChatSession::projectDocumentRequested);
+        QVERIFY(chat.send("Let's discuss MY_IDEA"));
+        chatOnly = chat.currentChat();
+        QCOMPARE(requests.size(), 1);
+        const auto prompt = requests.last().first().toString();
+        QVERIFY(prompt.contains("MY_IDEA"));
+        QVERIFY(prompt.contains("chat history only"));
+        QVERIFY(!prompt.contains("PRIVATE_DOCUMENT"));
+        QVERIFY(!prompt.contains("PROJECT CATALOG"));
+        QCOMPARE(documentReads, 0);
+        QCOMPARE(projectReads, 0);
+        QCOMPARE(downloads.size(), 0);
+        QVERIFY(chat.messages().last().toObject().value("document").toString().isEmpty());
+        chat.finishReply("A useful IDEA_FROM_HISTORY");
+        const auto count = chat.messages().size();
+        chat.setDocument(QUuid::createUuid(), "OTHER_PRIVATE_TITLE", [&documentReads] {
+            ++documentReads; return "OTHER_PRIVATE_CONTENT";
+        });
+        QCOMPARE(chat.messages().size(), count); // No spurious context-change notice.
+        QVERIFY(chat.send("Continue"));
+        QVERIFY(requests.last().first().toString().contains("IDEA_FROM_HISTORY"));
+        QVERIFY(!requests.last().first().toString().contains("OTHER_PRIVATE"));
+        QCOMPARE(documentReads, 0);
+        chat.finishReply("More ideas");
+        QVERIFY(chat.createChat());
+        documentChat = chat.currentChat();
+        chat.setContextScope(Ui::AiChatSession::ContextScope::Document);
+        QVERIFY(chat.send("Discuss the document"));
+        QVERIFY(requests.last().first().toString().contains("OTHER_PRIVATE_CONTENT"));
+        QVERIFY(documentReads > 0);
+        chat.finishReply("Document answer");
+        QVERIFY(chat.selectChat(chatOnly));
+        QCOMPARE(chat.contextScope(), Ui::AiChatSession::ContextScope::None);
+    }
+    Ui::AiChatSession restored(path);
+    restored.setProject(project, "author");
+    QCOMPARE(restored.currentChat(), chatOnly);
+    QCOMPARE(restored.contextScope(), Ui::AiChatSession::ContextScope::None);
+    QVERIFY(restored.selectChat(documentChat));
+    QCOMPARE(restored.contextScope(), Ui::AiChatSession::ContextScope::Document);
+    QVERIFY(restored.selectChat(chatOnly));
+    restored.setProject(QUuid::createUuid(), "author");
+    QCOMPARE(restored.contextScope(), Ui::AiChatSession::ContextScope::Document);
+    restored.setProject(project, "author");
+    QCOMPARE(restored.contextScope(), Ui::AiChatSession::ContextScope::None);
 }
 
 QTEST_GUILESS_MAIN(AiChatTest)

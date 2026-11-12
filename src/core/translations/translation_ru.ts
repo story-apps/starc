@@ -9581,6 +9581,18 @@ Document translation replaces its content and asks for confirmation.</source>
         <source>Conversation context</source>
         <translation>Контекст беседы</translation>
     </message>
+    <message>
+        <source>Chat only</source>
+        <translation>Только переписка</translation>
+    </message>
+    <message>
+        <source>Let's discuss your ideas. I can use our chat history and any text you send here; documents are not attached.</source>
+        <translation>Давайте обсудим ваши идеи. Я вижу историю переписки и текст, который вы отправите сюда. Документы не подключены.</translation>
+    </message>
+    <message>
+        <source>Use only the conversation, without attaching documents. Explicit commands still apply to the open document.</source>
+        <translation>Использовать только переписку, без подключения документов. Явно вызванные команды по-прежнему работают с открытым документом.</translation>
+    </message>
 </context>
 <context>
     <name>Ui::ApplicationView</name>
@@ -23201,6 +23213,10 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <source>Could not read the assistant's response. Please send your message again.</source>
         <translation>Не удалось обработать ответ помощника. Отправьте сообщение ещё раз.</translation>
+    </message>
+    <message>
+        <source>Documents are excluded. I can use only our chat history.</source>
+        <translation>Документы не подключены. Я вижу только историю нашей переписки.</translation>
     </message>
 </context>
 

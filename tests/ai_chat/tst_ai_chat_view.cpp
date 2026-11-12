@@ -58,7 +58,9 @@ private slots:
         view.show();
         auto documentScope = view.findChild<RadioButton*>("aiDocumentScope");
         auto projectScope = view.findChild<RadioButton*>("aiProjectScope");
-        QVERIFY(documentScope && projectScope);
+        auto noDocumentScope = view.findChild<RadioButton*>("aiNoDocumentScope");
+        QVERIFY(documentScope && projectScope && noDocumentScope);
+        QVERIFY(!noDocumentScope->isChecked());
         QVERIFY(documentScope->isChecked());
         QVERIFY(!projectScope->isChecked());
         QTest::mouseClick(projectScope, Qt::LeftButton);
@@ -94,9 +96,15 @@ private slots:
         QCOMPARE(session->contextScope(), Ui::AiChatSession::ContextScope::Document);
         QVERIFY(documentScope->isChecked());
         QVERIFY(!projectScope->isChecked());
+        QTest::mouseClick(noDocumentScope, Qt::LeftButton);
+        QCOMPARE(session->contextScope(), Ui::AiChatSession::ContextScope::None);
+        QVERIFY(noDocumentScope->isChecked());
+        QVERIFY(!documentScope->isChecked());
+        QVERIFY(!projectScope->isChecked());
         session->setContextScope(Ui::AiChatSession::ContextScope::Project);
         QVERIFY(projectScope->isChecked());
         QVERIFY(!documentScope->isChecked());
+        QVERIFY(!noDocumentScope->isChecked());
     }
 
     void sourceNavigationFindsGroupsInsideFolders()
