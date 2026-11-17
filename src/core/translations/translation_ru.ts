@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
+    <name>Ui::ComparisonToolbar</name>
+    <message>
+        <source>Back to draft</source>
+        <translation>Вернуться к драфту</translation>
+    </message>
+</context>
+<context>
     <name>AppBar</name>
     <message>
         <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="413"/>

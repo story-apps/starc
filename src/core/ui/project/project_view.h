@@ -51,6 +51,13 @@ public:
     void addEditor(QWidget* _widget);
 
     /**
+     * @brief Временно показать сравнение поверх текущего редактора, сохранив его состояние
+     */
+    void showComparisonEditor(QWidget* _widget);
+    void closeComparison();
+    QWidget* comparisonEditor() const;
+
+    /**
      * @brief Активно ли представление в данный момент
      */
     void setActive(bool _active);

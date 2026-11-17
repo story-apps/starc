@@ -69,6 +69,8 @@
 #include <QUuid>
 #include <QVariantAnimation>
 
+#include <memory>
+
 
 namespace ManagementLayer {
 
@@ -2080,60 +2082,72 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
 void ProjectManager::Implementation::compareTextDocumentsItems(
     BusinessLayer::StructureModelItem* _lhsItem, BusinessLayer::StructureModelItem* _rhsItem)
 {
-    //
-    // Сформировать xml документа, который будет включать дифф между заданными документами
-    //
-    const bool addDraftName = true;
-    auto lhsName = itemConcreteName(_lhsItem, addDraftName);
-    const auto lhsModel = modelsFacade.modelFor(_lhsItem->uuid());
-    const auto lhsXml = lhsModel->document()->content();
-    //
-    auto rhsName = itemConcreteName(_rhsItem, addDraftName);
-    const auto rhsModel = modelsFacade.modelFor(_rhsItem->uuid());
-    const auto rhsXml = rhsModel->document()->content();
+    auto lhsModel
+        = qobject_cast<BusinessLayer::TextModel*>(modelsFacade.modelFor(_lhsItem->uuid()));
+    auto rhsModel
+        = qobject_cast<BusinessLayer::TextModel*>(modelsFacade.modelFor(_rhsItem->uuid()));
+    if (lhsModel == nullptr || rhsModel == nullptr) {
+        return;
+    }
 
-    //
-    // Создать новый драфт и поместить туда xml исходной модели
-    //
-    constexpr bool readOnly = true;
-    constexpr bool comparison = true;
-    //
-    // ... определим элемент внутрь которого будем помещать драфт со сравнением
-    //     по умолчанию это будет второй из выбранных элементов
-    //
-    auto comparisonDraftHostItem = _rhsItem;
-    for (int index = 0; index < _rhsItem->parent()->childCount(); ++index) {
-        if (auto childItem = _rhsItem->parent()->childAt(index);
-            childItem->type() == _rhsItem->type()) {
-            comparisonDraftHostItem = childItem;
-            break;
+    const auto draftHost = [](BusinessLayer::StructureModelItem* item) {
+        if (item->parent() != nullptr) {
+            for (int index = 0; index < item->parent()->childCount(); ++index) {
+                auto sibling = item->parent()->childAt(index);
+                if (sibling->drafts().contains(item)) {
+                    return sibling;
+                }
+            }
         }
+        return item;
+    };
+    const auto lhsHost = draftHost(_lhsItem);
+    const auto rhsHost = draftHost(_rhsItem);
+    auto lhsName = _lhsItem == lhsHost ? _lhsItem->draftName() : _lhsItem->name();
+    auto rhsName = _rhsItem == rhsHost ? _rhsItem->draftName() : _rhsItem->name();
+    if (lhsHost != rhsHost) {
+        lhsName = QString("%1 [%2]").arg(itemConcreteName(lhsHost), lhsName);
+        rhsName = QString("%1 [%2]").arg(itemConcreteName(rhsHost), rhsName);
     }
-    //
-    // ... если же сравнение происходит для драфтов одного документа, то скорректируем названия
-    //
-    if (_lhsItem->parent() == _rhsItem->parent()) {
-        lhsName = _lhsItem == comparisonDraftHostItem ? _lhsItem->draftName() : _lhsItem->name();
-        rhsName = _rhsItem == comparisonDraftHostItem ? _rhsItem->draftName() : _rhsItem->name();
+
+    // Сравнение живёт только в памяти и не участвует в сохранении/синхронизации проекта.
+    std::unique_ptr<BusinessLayer::TextModel> comparison(
+        modelsFacade.createComparisonModel(lhsModel));
+    if (comparison == nullptr) {
+        return;
     }
-    projectStructureModel->addItemDraft(comparisonDraftHostItem,
-                                        tr("%1 vs %2").arg(lhsName, rhsName), QColor(), readOnly,
-                                        lhsXml, comparison);
-    view.active->setDocumentDrafts(comparisonDraftHostItem);
+    rhsModel->saveChanges();
+    comparison->compareWith(rhsModel->document()->content(), lhsName, rhsName);
 
-    //
-    // Сформировать диф с заданной моделью в новый драфт
-    //
-    const auto comparisonItem = comparisonDraftHostItem->drafts().constLast();
-    auto comparisonModel = modelsFacade.modelFor(comparisonItem->uuid());
-    auto comparisonTextModel = qobject_cast<BusinessLayer::TextModel*>(comparisonModel);
-    Q_ASSERT(comparisonTextModel);
-    comparisonTextModel->compareWith(rhsXml, lhsName, rhsName);
+    // Для титульных страниц тоже нужен текстовый редактор с панелью добавлений/удалений.
+    const auto editorType
+        = qobject_cast<BusinessLayer::TitlePageModel*>(comparison.get()) != nullptr
+        ? Domain::DocumentObjectType::SimpleText
+        : _rhsItem->type();
+    const auto editors
+        = pluginsBuilder.editorsInfoFor(Domain::mimeTypeFor(editorType), isProjectRemote);
+    if (editors.isEmpty()) {
+        return;
+    }
+    auto comparisonView
+        = pluginsBuilder.activateWindowView(editors.first().mimeType, comparison.get());
+    if (comparisonView == nullptr) {
+        return;
+    }
 
-    //
-    // Открыть получившийся драфт в режиме отображения дифа
-    //
-    view.active->setCurrentDraft(comparisonDraftHostItem->drafts().size());
+    if (view.active->currentEditor() == nullptr) {
+        setCurrentItem(rhsHost);
+    }
+    auto projectView = view.active;
+    auto widget = comparisonView->asQWidget();
+    // Модель уничтожается после дочерних виджетов редактора, которые её используют.
+    comparison->setParent(widget);
+    comparison.release();
+    comparisonView->showComparison(tr("%1 vs %2").arg(lhsName, rhsName), [this, projectView] {
+        projectView->closeComparison();
+        updateViewsEditingMode();
+    });
+    projectView->showComparisonEditor(widget);
 }
 
 void ProjectManager::Implementation::emptyRecycleBin()
@@ -2212,6 +2226,10 @@ void ProjectManager::Implementation::sortChildrenAlphabetically()
 
 Ui::IDocumentView* ProjectManager::Implementation::activeDocumentView() const
 {
+    if (auto comparison = view.active->comparisonEditor()) {
+        return dynamic_cast<Ui::IDocumentView*>(comparison);
+    }
+
     Ui::IDocumentView* documentView = nullptr;
     auto plugin = pluginsBuilder.plugin(view.activeViewMimeType);
     if (plugin != nullptr) {
@@ -2226,6 +2244,10 @@ Ui::IDocumentView* ProjectManager::Implementation::activeDocumentView() const
 
 Ui::IDocumentView* ProjectManager::Implementation::inactiveDocumentView() const
 {
+    if (auto comparison = view.inactive->comparisonEditor()) {
+        return dynamic_cast<Ui::IDocumentView*>(comparison);
+    }
+
     Ui::IDocumentView* documentView = nullptr;
     auto plugin = pluginsBuilder.plugin(view.inactiveViewMimeType);
     if (plugin != nullptr) {

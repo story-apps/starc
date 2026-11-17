@@ -377,6 +377,9 @@ void StackWidget::takeWidget(QWidget* _widget)
 
     Q_ASSERT(d->currentWidget != _widget);
 
+    if (d->previousWidget == _widget) {
+        d->previousWidget = nullptr;
+    }
     d->widgets.takeAt(d->widgets.indexOf(_widget));
     _widget->removeEventFilter(this);
     _widget->setParent(nullptr);

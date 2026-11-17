@@ -28,6 +28,7 @@
 #include <ui/modules/comments/comments_view.h>
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/modules/search_toolbar/search_manager.h>
+#include <ui/widgets/floating_tool_bar/comparison_toolbar.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -165,6 +166,7 @@ public:
     NovelTextEditToolbar* toolbar = nullptr;
     BusinessLayer::SearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
+    bool comparisonMode = false;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
@@ -1376,11 +1378,30 @@ QWidget* NovelTextView::asQWidget()
 
 void NovelTextView::toggleFullScreen(bool _isFullScreen)
 {
-    d->toolbar->setVisible(!_isFullScreen);
+    d->toolbar->setVisible(!_isFullScreen && !d->comparisonMode);
+}
+
+bool NovelTextView::isComparison() const
+{
+    return d->comparisonMode;
+}
+
+void NovelTextView::showComparison(const QString& _title, const std::function<void()>& _close)
+{
+    d->comparisonMode = true;
+    setEditingMode(ManagementLayer::DocumentEditingMode::Read);
+    d->toolbar->setFastFormatPanelVisible(false);
+    d->toolbar->setAiAssistantEnabled(false);
+    d->toolbar->setItemIsolationEnabled(false);
+    d->toolbar->setCommentsModeEnabled(true);
+    new ComparisonToolbar(d->toolbar, d->toolbarAnimation, _title, _close);
 }
 
 void NovelTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
 {
+    if (d->comparisonMode) {
+        _mode = ManagementLayer::DocumentEditingMode::Read;
+    }
     const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
     d->textEdit->setReadOnly(readOnly);
     d->toolbar->setReadOnly(readOnly);

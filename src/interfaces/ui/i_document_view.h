@@ -2,6 +2,8 @@
 
 #include <QVector>
 
+#include <functional>
+
 class QAction;
 class QModelIndex;
 class QPixmap;
@@ -124,6 +126,19 @@ public:
     {
     }
     virtual void setGeneratedImage(const QPixmap& /*_image*/)
+    {
+    }
+
+
+    /**
+     * @brief Показать временное сравнение с возможностью вернуться к исходному редактору
+     */
+    virtual bool isComparison() const
+    {
+        return false;
+    }
+
+    virtual void showComparison(const QString& /*_title*/, const std::function<void()>& /*_close*/)
     {
     }
 

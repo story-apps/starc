@@ -313,6 +313,10 @@ void ComicBookTextManager::Implementation::loadModelAndViewSettings(
 void ComicBookTextManager::Implementation::saveModelAndViewSettings(
     BusinessLayer::AbstractModel* _model, Ui::ComicBookTextView* _view)
 {
+    if (_view->isComparison()) {
+        return;
+    }
+
     setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
     setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
 

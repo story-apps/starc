@@ -8,6 +8,7 @@ class AbstractImageWrapper;
 class AbstractRawDataWrapper;
 class AbstractModel;
 class StructureModel;
+class TextModel;
 } // namespace BusinessLayer
 
 namespace Domain {
@@ -36,6 +37,13 @@ public:
      * @brief Сбросить все загруженные модели
      */
     void clear();
+
+    /**
+     * @brief Создать независимую модель сравнения вне структуры, хранилища и синхронизации проекта
+     * @note Владение моделью передаётся вызывающему; документ удаляется вместе с моделью
+     */
+    BusinessLayer::TextModel* createComparisonModel(BusinessLayer::TextModel* _source);
+
 
     /**
      * @brief Получить модель для заданного документа

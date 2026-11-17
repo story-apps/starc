@@ -7,6 +7,7 @@
 #include <ui/widgets/tab_bar/tab_bar.h>
 #include <utils/helpers/color_helper.h>
 
+#include <QPointer>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
 
@@ -36,6 +37,9 @@ public:
     TabBar* documentDrafts = nullptr;
     QVariantAnimation documentDraftsHeightAnimation;
     StackWidget* documentEditor = nullptr;
+    QPointer<QWidget> comparisonEditor;
+    QPointer<QWidget> editorBeforeComparison;
+    QPointer<QWidget> pageBeforeComparison;
 
     Widget* overlay = nullptr;
     QVariantAnimation overlayOpacityAnimation;
@@ -181,16 +185,19 @@ ProjectView::~ProjectView() = default;
 
 void ProjectView::showDefaultPage()
 {
+    closeComparison();
     setCurrentWidget(d->defaultPage);
 }
 
 void ProjectView::showDocumentLoadingPage()
 {
+    closeComparison();
     setCurrentWidget(d->documentLoadingPage);
 }
 
 void ProjectView::showNotImplementedPage()
 {
+    closeComparison();
     setCurrentWidget(d->notImplementedPage);
 }
 
@@ -205,6 +212,7 @@ QWidget* ProjectView::currentEditor() const
 
 void ProjectView::showEditor(QWidget* _widget)
 {
+    closeComparison();
     setFocus();
     d->documentEditor->setCurrentWidget(_widget);
     setCurrentWidget(d->documentEditorPage);
@@ -213,6 +221,47 @@ void ProjectView::showEditor(QWidget* _widget)
 void ProjectView::addEditor(QWidget* _widget)
 {
     d->documentEditor->addWidget(_widget);
+}
+
+void ProjectView::showComparisonEditor(QWidget* _widget)
+{
+    closeComparison();
+    d->pageBeforeComparison = currentWidget();
+    if (d->documentEditor->currentWidget() == nullptr) {
+        d->documentEditor->setCurrentWidget(new Widget(d->documentEditor));
+    }
+    d->editorBeforeComparison = d->documentEditor->currentWidget();
+    d->comparisonEditor = _widget;
+    d->documentEditor->addWidget(_widget);
+    d->documentEditor->setCurrentWidget(_widget);
+    setCurrentWidget(d->documentEditorPage);
+    _widget->setFocus();
+}
+
+void ProjectView::closeComparison()
+{
+    if (d->comparisonEditor == nullptr) {
+        return;
+    }
+
+    auto editor = d->comparisonEditor.data();
+    d->comparisonEditor.clear();
+    d->documentEditor->setCurrentWidget(d->editorBeforeComparison);
+    d->documentEditor->takeWidget(editor);
+    editor->setParent(this);
+    setCurrentWidget(d->pageBeforeComparison);
+    editor->hide();
+    editor->deleteLater();
+    if (d->editorBeforeComparison != nullptr) {
+        d->editorBeforeComparison->setFocus();
+    }
+    d->editorBeforeComparison.clear();
+    d->pageBeforeComparison.clear();
+}
+
+QWidget* ProjectView::comparisonEditor() const
+{
+    return d->comparisonEditor;
 }
 
 void ProjectView::setActive(bool _active)

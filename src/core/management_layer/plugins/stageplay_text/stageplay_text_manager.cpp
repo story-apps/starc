@@ -313,6 +313,10 @@ void StageplayTextManager::Implementation::loadModelAndViewSettings(
 void StageplayTextManager::Implementation::saveModelAndViewSettings(
     BusinessLayer::AbstractModel* _model, Ui::StageplayTextView* _view)
 {
+    if (_view->isComparison()) {
+        return;
+    }
+
     setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
     setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
 

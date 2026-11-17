@@ -383,6 +383,10 @@ void NovelTextManager::Implementation::loadModelAndViewSettings(
 void NovelTextManager::Implementation::saveModelAndViewSettings(
     BusinessLayer::AbstractModel* _model, Ui::NovelTextView* _view)
 {
+    if (_view->isComparison()) {
+        return;
+    }
+
     setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
     setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
 

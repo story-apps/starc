@@ -650,6 +650,10 @@ void ScreenplayTextManager::Implementation::loadModelAndViewSettings(
 void ScreenplayTextManager::Implementation::saveModelAndViewSettings(
     BusinessLayer::AbstractModel* _model, Ui::ScreenplayTextView* _view)
 {
+    if (_view->isComparison()) {
+        return;
+    }
+
     setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
     setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
 

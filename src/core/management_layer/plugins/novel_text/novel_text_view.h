@@ -27,6 +27,8 @@ public:
      */
     /** @{ */
     QWidget* asQWidget() override;
+    bool isComparison() const override;
+    void showComparison(const QString& _title, const std::function<void()>& _close) override;
     void toggleFullScreen(bool _isFullScreen) override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     void setCursors(const QVector<Domain::CursorInfo>& _cursors) override;

@@ -310,6 +310,10 @@ void SimpleTextManager::Implementation::loadModelAndViewSettings(
 void SimpleTextManager::Implementation::saveModelAndViewSettings(
     BusinessLayer::AbstractModel* _model, Ui::SimpleTextView* _view)
 {
+    if (_view->isComparison()) {
+        return;
+    }
+
     setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
     setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
 

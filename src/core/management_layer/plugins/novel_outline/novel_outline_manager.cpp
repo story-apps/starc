@@ -259,6 +259,10 @@ void NovelOutlineManager::Implementation::loadModelAndViewSettings(
 void NovelOutlineManager::Implementation::saveModelAndViewSettings(
     BusinessLayer::AbstractModel* _model, Ui::NovelOutlineView* _view)
 {
+    if (_view->isComparison()) {
+        return;
+    }
+
     setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
     setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
 

@@ -194,6 +194,7 @@ DEPENDPATH += $$PWD/../3rd_party/pdfhummus/LibTiff
 #
 
 SOURCES += \
+    ui/widgets/floating_tool_bar/comparison_toolbar.cpp \
     business_layer/chronometry/chronometer.cpp \
     business_layer/compliance/compliance_checker.cpp \
     business_layer/compliance/compliance_checker_impl.cpp \
@@ -563,6 +564,7 @@ SOURCES += \
     utils/validators/email_validator.cpp
 
 HEADERS += \
+    ui/widgets/floating_tool_bar/comparison_toolbar.h \
     business_layer/chronometry/chronometer.h \
     business_layer/compliance/compliance_checker.h \
     business_layer/compliance/compliance_checker_impl.h \

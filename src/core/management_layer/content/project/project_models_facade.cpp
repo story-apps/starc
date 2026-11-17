@@ -48,9 +48,12 @@
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <domain/objects_builder.h>
 #include <utils/logging.h>
 
 #include <QSet>
+
+#include <memory>
 
 
 namespace ManagementLayer {
@@ -123,6 +126,196 @@ void ProjectModelsFacade::clear()
     // И очищаем список загруженных моделей
     //
     d->documentsToModels.clear();
+}
+
+BusinessLayer::TextModel* ProjectModelsFacade::createComparisonModel(
+    BusinessLayer::TextModel* _source)
+{
+    if (_source == nullptr || _source->document() == nullptr) {
+        return nullptr;
+    }
+
+    BusinessLayer::TextModel* model = nullptr;
+    switch (_source->document()->type()) {
+    case Domain::DocumentObjectType::ScreenplayTitlePage: {
+        const auto source = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::ScreenplayTitlePageModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::ScreenplaySynopsis: {
+        const auto source = qobject_cast<BusinessLayer::ScreenplaySynopsisModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::ScreenplaySynopsisModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::ScreenplayText: {
+        const auto source = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::ScreenplayTextModel;
+        copy->setInformationModel(source->informationModel());
+        copy->setDictionariesModel(source->dictionariesModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::ComicBookTitlePage: {
+        const auto source = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::ComicBookTitlePageModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::ComicBookSynopsis: {
+        const auto source = qobject_cast<BusinessLayer::ComicBookSynopsisModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::ComicBookSynopsisModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::ComicBookText: {
+        const auto source = qobject_cast<BusinessLayer::ComicBookTextModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::ComicBookTextModel;
+        copy->setInformationModel(source->informationModel());
+        copy->setDictionariesModel(source->dictionariesModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::AudioplayTitlePage: {
+        const auto source = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::AudioplayTitlePageModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::AudioplaySynopsis: {
+        const auto source = qobject_cast<BusinessLayer::AudioplaySynopsisModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::AudioplaySynopsisModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::AudioplayText: {
+        const auto source = qobject_cast<BusinessLayer::AudioplayTextModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::AudioplayTextModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::StageplayTitlePage: {
+        const auto source = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::StageplayTitlePageModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::StageplaySynopsis: {
+        const auto source = qobject_cast<BusinessLayer::StageplaySynopsisModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::StageplaySynopsisModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::StageplayText: {
+        const auto source = qobject_cast<BusinessLayer::StageplayTextModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::StageplayTextModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::NovelTitlePage: {
+        const auto source = qobject_cast<BusinessLayer::NovelTitlePageModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::NovelTitlePageModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::NovelSynopsis: {
+        const auto source = qobject_cast<BusinessLayer::NovelSynopsisModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::NovelSynopsisModel;
+        copy->setInformationModel(source->informationModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::NovelText: {
+        const auto source = qobject_cast<BusinessLayer::NovelTextModel*>(_source);
+        if (source == nullptr) {
+            return nullptr;
+        }
+        auto copy = new BusinessLayer::NovelTextModel;
+        copy->setInformationModel(source->informationModel());
+        copy->setDictionariesModel(source->dictionariesModel());
+        model = copy;
+        break;
+    }
+    case Domain::DocumentObjectType::SimpleText:
+    case Domain::DocumentObjectType::Folder:
+        model = new BusinessLayer::SimpleTextModel;
+        break;
+    default:
+        return nullptr;
+    }
+
+    model->setImageWrapper(d->imageWrapper);
+    model->setRawDataWrapper(d->rawDataWrapper);
+    model->setTitlePageModel(_source->titlePageModel());
+    model->setSynopsisModel(_source->synopsisModel());
+    if (auto script = qobject_cast<BusinessLayer::ScriptTextModel*>(model)) {
+        const auto source = qobject_cast<BusinessLayer::ScriptTextModel*>(_source);
+        script->setCharactersModel(source->charactersModel());
+        script->setLocationsModel(source->locationsModel());
+    }
+
+    // У исходного редактора ещё могут быть отложенные изменения.
+    _source->saveChanges();
+    const auto document = std::shared_ptr<Domain::DocumentObject>(
+        Domain::ObjectsBuilder::createDocument({}, QUuid::createUuid(), _source->document()->type(),
+                                               _source->document()->content(), {}));
+    connect(model, &QObject::destroyed, [document] { });
+    model->setDocument(document.get());
+    return model;
 }
 
 BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(const QUuid& _uuid)
