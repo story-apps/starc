@@ -1931,7 +1931,7 @@ AudioplayTextCorrector::AudioplayTextCorrector(QTextDocument* _document)
 
 AudioplayTextCorrector::~AudioplayTextCorrector() = default;
 
-void AudioplayTextCorrector::setCorrectionOptions(const QStringList& _options)
+void AudioplayTextCorrector::setCorrectionOptionsImpl(const QStringList& _options)
 {
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
     if (d->needToCorrectPageBreaks == needToCorrectPageBreaks) {

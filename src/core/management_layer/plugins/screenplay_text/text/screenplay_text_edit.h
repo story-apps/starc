@@ -41,7 +41,9 @@ public:
     /**
      * @brief Настроить необходимость корректировок
      */
-    void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
+    void setCorrectionOptions(bool _needToCorrectSceneCharacters,
+                              bool _needToCorrectCharacterContinuedState,
+                              bool _needToCorrectPageBreaks);
 
     /**
      * @brief Задать модель текста сценария

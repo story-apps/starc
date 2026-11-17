@@ -667,6 +667,16 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
 
             const auto item = d->model->itemForIndex(_topLeft);
             if (item->type() != TextModelItemType::Text) {
+                //
+                // ... если у нас изменились параметры сцены, то нужно сделать фиктивное изменение,
+                //     чтобы корректоры могли корректно обработать вещи, связанные с параметрами
+                //     самих сцен
+                //
+                if (item->type() == TextModelItemType::Group && item->hasChildren()
+                    && item->childAt(0)->type() == TextModelItemType::Text) {
+                    d->corrector->planCorrection(position, 0, 0);
+                }
+
                 return;
             }
 

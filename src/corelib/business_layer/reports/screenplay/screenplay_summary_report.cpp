@@ -242,6 +242,9 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
             ScreenplayTextDocument screenplayDocument;
             textEdit.setDocument(&screenplayDocument);
             screenplayDocument.setCorrectionOptions(
+                settingsValue(
+                    DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey)
+                    .toBool(),
                 settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
                     .toBool(),
                 settingsValue(

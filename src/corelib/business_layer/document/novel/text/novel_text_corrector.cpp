@@ -1158,7 +1158,13 @@ NovelTextCorrector::NovelTextCorrector(QTextDocument* _document)
 
 NovelTextCorrector::~NovelTextCorrector() = default;
 
-void NovelTextCorrector::setCorrectionOptions(const QStringList& _options)
+bool NovelTextCorrector::isBlockVisible(TextParagraphType _type) const
+{
+    const auto novelDocument = qobject_cast<NovelTextDocument*>(document());
+    return novelDocument->visibleBlocksTypes().contains(_type);
+}
+
+void NovelTextCorrector::setCorrectionOptionsImpl(const QStringList& _options)
 {
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
     if (d->needToCorrectPageBreaks == needToCorrectPageBreaks) {
@@ -1169,12 +1175,6 @@ void NovelTextCorrector::setCorrectionOptions(const QStringList& _options)
 
     clear();
     makeCorrections();
-}
-
-bool NovelTextCorrector::isBlockVisible(TextParagraphType _type) const
-{
-    const auto novelDocument = qobject_cast<NovelTextDocument*>(document());
-    return novelDocument->visibleBlocksTypes().contains(_type);
 }
 
 void NovelTextCorrector::clearImpl()

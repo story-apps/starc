@@ -22,12 +22,12 @@ public:
     explicit ComicBookTextCorrector(QTextDocument* _document);
     ~ComicBookTextCorrector() override;
 
+protected:
     /**
      * @brief Установить необходимость корректировать текст блоков имён персонажей
      */
-    void setCorrectionOptions(const QStringList& _options) override;
+    void setCorrectionOptionsImpl(const QStringList& _options) override;
 
-protected:
     /**
      * @brief Очистить все сохранённые параметры
      */

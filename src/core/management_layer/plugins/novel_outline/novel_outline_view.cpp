@@ -258,6 +258,7 @@ NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
     sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    itemParametersView->setAdditionalCharactersVisible(false);
     itemParametersView->setNumberingVisible(false);
     itemParametersView->setStartDateTimeVisible(false);
     itemParametersView->setStampVisible(false);

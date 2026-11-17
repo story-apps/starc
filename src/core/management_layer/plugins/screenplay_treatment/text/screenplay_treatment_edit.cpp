@@ -241,10 +241,13 @@ void ScreenplayTreatmentEdit::setShowDialogueNumber(bool _show)
     update();
 }
 
-void ScreenplayTreatmentEdit::setCorrectionOptions(bool _needToCorrectCharactersNames,
+void ScreenplayTreatmentEdit::setCorrectionOptions(bool _needToCorrectSceneCharacters,
+                                                   bool _needToCorrectCharacterContinuedState,
                                                    bool _needToCorrectPageBreaks)
 {
-    d->document.setCorrectionOptions(_needToCorrectCharactersNames, _needToCorrectPageBreaks);
+    d->document.setCorrectionOptions(_needToCorrectSceneCharacters,
+                                     _needToCorrectCharacterContinuedState,
+                                     _needToCorrectPageBreaks);
 }
 
 void ScreenplayTreatmentEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)

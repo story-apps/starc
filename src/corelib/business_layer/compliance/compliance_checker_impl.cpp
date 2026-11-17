@@ -172,6 +172,8 @@ void ComplianceCheckerImpl::startChecking()
     screenplayTextEdit.setDocument(&screenplayDocument);
     screenplayDocument.setModel(d->screenplayModel);
     screenplayDocument.setCorrectionOptions(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey)
+            .toBool(),
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool(),
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
             .toBool());

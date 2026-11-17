@@ -31,6 +31,12 @@ public:
     ~ScreenplayTextModelSceneItem() override;
 
     /**
+     * @brief Список дополнительный персонажей сцены
+     */
+    QString additionalCharacters() const;
+    void setAdditionalCharacters(const QString& _characters);
+
+    /**
      * @brief Ресурсы сцены
      */
     QVector<BreakdownSceneResource> resources() const;

@@ -91,6 +91,13 @@ QString AbstractTextCorrector::templateId() const
     return d->templateId;
 }
 
+void AbstractTextCorrector::setCorrectionOptions(const QStringList& _options)
+{
+    d->lastContent = {};
+
+    setCorrectionOptionsImpl(_options);
+}
+
 void AbstractTextCorrector::setVisibleTopLevelItem(TextModelItem* _item)
 {
     if (d->visibleTopLevelItem == _item) {
@@ -137,6 +144,9 @@ void AbstractTextCorrector::clear()
         d->visibleTopLevelItem = nullptr;
     }
 
+    d->plannedCorrection = {};
+    d->lastContent = {};
+
     clearImpl();
 }
 
@@ -172,6 +182,14 @@ void AbstractTextCorrector::makePlannedCorrection(const QByteArray& _contentHash
     // Проверяем есть ли чего корректировать
     //
     if (!d->plannedCorrection.isValid) {
+        return;
+    }
+
+    //
+    // Проверяем изменился ли кэш
+    //
+    if (d->lastContent.hash == _contentHash) {
+        d->plannedCorrection = {};
         return;
     }
 

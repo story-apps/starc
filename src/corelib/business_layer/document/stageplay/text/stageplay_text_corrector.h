@@ -22,12 +22,12 @@ public:
     explicit StageplayTextCorrector(QTextDocument* _document);
     ~StageplayTextCorrector() override;
 
+protected:
     /**
      * @brief Установить необходимость корректировки текста
      */
-    void setCorrectionOptions(const QStringList& _options) override;
+    void setCorrectionOptionsImpl(const QStringList& _options) override;
 
-protected:
     /**
      * @brief Очистить все сохранённые параметры
      */

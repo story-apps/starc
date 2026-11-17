@@ -1931,7 +1931,7 @@ StageplayTextCorrector::StageplayTextCorrector(QTextDocument* _document)
 
 StageplayTextCorrector::~StageplayTextCorrector() = default;
 
-void StageplayTextCorrector::setCorrectionOptions(const QStringList& _options)
+void StageplayTextCorrector::setCorrectionOptionsImpl(const QStringList& _options)
 {
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
     if (d->needToCorrectPageBreaks == needToCorrectPageBreaks) {

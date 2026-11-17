@@ -75,6 +75,8 @@ public:
     QVBoxLayout* contentLayout = nullptr;
     TextField* title = nullptr;
     TextField* heading = nullptr;
+    bool isAdditionalCharactersVisible = true;
+    TextField* additionalCharacters = nullptr;
     TextField* description = nullptr;
     QVector<TextField*> beats;
     TextField* storyDay = nullptr;
@@ -105,6 +107,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     , contentLayout(qobject_cast<QVBoxLayout*>(content->widget()->layout()))
     , title(new TextField(content))
     , heading(new TextField(content))
+    , additionalCharacters(new TextField(content))
     , description(new TextField(content))
     , beats({ new TextField(content) })
     , storyDay(new TextField(content))
@@ -137,6 +140,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     UiHelper::initOptionsFor({
         title,
         heading,
+        additionalCharacters,
         description,
         beats.constFirst(),
         storyDay,
@@ -162,6 +166,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
 
     contentLayout->addWidget(title);
     contentLayout->addWidget(heading);
+    contentLayout->addWidget(additionalCharacters);
     contentLayout->addWidget(description);
     contentLayout->addWidget(beats.constFirst());
     contentLayout->addWidget(storyDay);
@@ -268,6 +273,8 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
     });
     connect(d->heading, &TextField::textChanged, this,
             [this] { emit headingChanged(d->heading->text()); });
+    connect(d->additionalCharacters, &TextField::textChanged, this,
+            [this] { emit additionalCharactersChanged(d->additionalCharacters->text()); });
     connect(d->description, &TextField::textChanged, this,
             [this] { emit descriptionChanged(d->description->text()); });
     connect(d->beats.constFirst(), &TextField::textChanged, this,
@@ -426,6 +433,7 @@ void CardItemParametersView::setItemType(CardItemType _type)
     case CardItemType::Folder: {
         d->title->setVisible(true);
         d->heading->setVisible(false);
+        d->additionalCharacters->setVisible(d->isAdditionalCharactersVisible && false);
         d->description->setVisible(true);
         for (auto beat : std::as_const(d->beats)) {
             beat->setVisible(false);
@@ -446,6 +454,7 @@ void CardItemParametersView::setItemType(CardItemType _type)
     case CardItemType::Scene: {
         d->title->setVisible(true);
         d->heading->setVisible(true);
+        d->additionalCharacters->setVisible(d->isAdditionalCharactersVisible && true);
         d->description->setVisible(false);
         for (auto beat : std::as_const(d->beats)) {
             beat->setVisible(true);
@@ -509,6 +518,25 @@ void CardItemParametersView::setHeading(const QString& _heading)
     auto cursor = d->heading->textCursor();
     cursor.setPosition(lastCursorPosition);
     d->heading->setTextCursor(cursor);
+}
+
+void CardItemParametersView::setAdditionalCharactersVisible(bool _visible)
+{
+    d->isAdditionalCharactersVisible = _visible;
+    d->additionalCharacters->setVisible(d->isAdditionalCharactersVisible);
+}
+
+void CardItemParametersView::setAdditionalCharacters(const QString& _characters)
+{
+    if (d->additionalCharacters->text() == _characters) {
+        return;
+    }
+
+    auto lastCursorPosition = d->additionalCharacters->textCursor().position();
+    d->additionalCharacters->setText(_characters);
+    auto cursor = d->additionalCharacters->textCursor();
+    cursor.setPosition(lastCursorPosition);
+    d->additionalCharacters->setTextCursor(cursor);
 }
 
 void CardItemParametersView::setDescription(const QString& _description)
@@ -702,6 +730,7 @@ void CardItemParametersView::setReadOnly(bool _readOnly)
     const auto enabled = !_readOnly;
     d->title->setEnabled(enabled);
     d->heading->setEnabled(enabled);
+    d->additionalCharacters->setEnabled(enabled);
     d->description->setEnabled(enabled);
     for (auto cardBeat : std::as_const(d->beats)) {
         cardBeat->setEnabled(enabled);
@@ -792,6 +821,8 @@ void CardItemParametersView::updateTranslations()
 
     d->heading->setLabel(tr("Heading"));
     d->heading->setHelper(tr("Header text (visible in text)"));
+    d->additionalCharacters->setLabel(tr("Additional characters"));
+    d->additionalCharacters->setHelper(tr("Chanacters not mentioned in text"));
     d->description->setLabel(tr("Description"));
     d->initCardBeats();
     d->storyDay->setLabel(tr("Story day"));
@@ -850,6 +881,7 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     for (auto textField : std::vector<TextField*>{
              d->title,
              d->heading,
+             d->additionalCharacters,
              d->description,
              d->storyDay,
              d->startDateTime,

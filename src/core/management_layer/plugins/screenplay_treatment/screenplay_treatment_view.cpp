@@ -261,7 +261,6 @@ ScreenplayTreatmentView::Implementation::Implementation(ScreenplayTreatmentView*
     sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
-    itemParametersView->setNumberingVisible(false);
     itemParametersView->setStartDateTimeVisible(false);
     itemParametersView->setStampVisible(false);
     itemParametersView->hide();
@@ -1556,10 +1555,14 @@ void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKey
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey)
+        || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)) {
         d->textEdit->setCorrectionOptions(
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey)
+                .toBool(),
             settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
                 .toBool(),
             settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)

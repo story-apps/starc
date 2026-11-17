@@ -23,16 +23,16 @@ public:
     ~ScreenplayTextCorrector() override;
 
     /**
-     * @brief Установить необходимость корректировать текст блоков имён персонажей
-     */
-    void setCorrectionOptions(const QStringList& _options) override;
-
-    /**
      * @brief Должен ли быть виден в документе блок заданного типа
      */
     bool isBlockVisible(TextParagraphType _type) const override;
 
 protected:
+    /**
+     * @brief Установить необходимость корректировать текст блоков имён персонажей
+     */
+    void setCorrectionOptionsImpl(const QStringList& _options) override;
+
     /**
      * @brief Очистить все сохранённые параметры
      */

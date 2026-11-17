@@ -29,6 +29,7 @@ const QLatin1String kTagTag("tag");
 const QLatin1String kPlannedDurationTag("planned_duration");
 const QLatin1String kResourcesTag("resources");
 const QLatin1String kResourceTag("resource");
+const QLatin1String kAdditionalCharactersTag("additional_characters");
 
 //
 // Разделитель

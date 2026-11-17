@@ -5,7 +5,8 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
-#include <business_layer/model/text/text_model_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -98,14 +99,25 @@ public:
     void updateBlocksVisibility(int _from, int _charsChanged);
 
     /**
-     * @brief Скорректировать имена персонажей
+     * @brief Скорректировать список участников сцены
      */
-    void correctCharactersNames(int _position = -1, int _charsChanged = 0);
+    QPair<int, int> correctSceneCharacters(int _position = -1, int _charsChanged = 0);
+
+    /**
+     * @brief Очистить все корректировки списков персонажей
+     */
+    void clearSceneCharactersCorrections();
+
+    /**
+     * @brief Скорректировать состояния в именах персонажей (ПРОД для двух последовательных реплик
+     *        одного и того же пресонажа)
+     */
+    void correctCharacterContinuedState(int _position = -1, int _charsChanged = 0);
 
     /**
      * @brief Очистить все корректировки персонажей
      */
-    void clearCharacterNamesCorrections();
+    void clearCharacterContinuedStateCorrections();
 
     /**
      * @brief Скорректировать текст сценария
@@ -197,9 +209,14 @@ public:
     ScreenplayTextCorrector* q = nullptr;
 
     /**
+     * @brief Необходимо ли корректировать текст блоков участников сцены
+     */
+    bool needToCorrectSceneCharacters = true;
+
+    /**
      * @brief Необходимо ли корректировать текст блоков имён персонажей
      */
-    bool needToCorrectCharactersNames = true;
+    bool needToCorrectCharacterContinuedState = true;
 
     /**
      * @brief Необходимо ли корректировать текст на разрывах страниц
@@ -423,8 +440,277 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from, 
     }
 }
 
-void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _position,
-                                                                     int _charsChanged)
+QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(int _position,
+                                                                                int _charsChanged)
+{
+    //
+    // Логика тут заложена следующая:
+    // - идём в начало сцены
+    // - идём в конец сцены, по пути собираем персонажей
+    // - ищем блок с участниками сцену внутри
+    // - если блока участников сцены нет, то создаём блок для этого
+    // -- если был, то будем использовать его
+    // - пишем участников сцены в нужный блок
+    // - возвращаем координаты с учётом изменённого текста
+    //
+
+    //
+    // Определим границы работы алгоритма
+    //
+    int startPosition = _position;
+    int endPosition = _position + _charsChanged;
+    if (startPosition == -1) {
+        startPosition = 0;
+        endPosition = document()->characterCount();
+    }
+
+    //
+    // Начинаем работу с документом
+    //
+    TextCursor cursor(document());
+
+    //
+    // Идём в начало ближайшей сцены
+    //
+    QVector<TextParagraphType> sceneBorders = {
+        TextParagraphType::SceneHeading,   TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,      TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter,
+    };
+    QTextBlock block = document()->findBlock(startPosition);
+    while (block != document()->begin()) {
+        const auto blockType = TextBlockStyle::forBlock(block);
+        if (sceneBorders.contains(blockType)) {
+            break;
+        }
+
+        block = block.previous();
+    }
+    startPosition = block.position();
+
+    //
+    // Формируем регулярку для извлечения персонажей из описаний действия
+    //
+    QString rxPattern;
+    {
+        QSet<QString> characterNames;
+        const auto blockData = block.userData();
+        if (blockData != nullptr) {
+            auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(blockData);
+            const auto model
+                = qobject_cast<const ScreenplayTextModel*>(screenplayBlockData->item()->model());
+            if (model != nullptr) {
+                auto charactersModel = model->charactersList();
+                for (int index = 0; index < charactersModel->rowCount(); ++index) {
+                    characterNames.insert(charactersModel->index(index, 0).data().toString());
+                }
+            }
+        }
+        for (const auto& characterName : std::as_const(characterNames)) {
+            if (!rxPattern.isEmpty()) {
+                rxPattern.append("|");
+            }
+            rxPattern.append(TextHelper::toRxEscaped(characterName));
+        }
+        if (!rxPattern.isEmpty()) {
+            rxPattern.prepend("(^|\\W)(");
+            rxPattern.append(")($|\\W)");
+        }
+    }
+    const QRegularExpression rxCharacterFinder(
+        rxPattern,
+        QRegularExpression::CaseInsensitiveOption | QRegularExpression::UseUnicodePropertiesOption);
+
+    //
+    // Далее обрабатываем текст до конца сцены, которая содержит нижнюю границу изменённой области
+    // Учитваем, что на пути может быть несколько сцен, поэтому обрабатываем каждую отдельно
+    //
+    QStringList sceneCharacters;
+    QTextBlock sceneCharactersBlock;
+    QTextBlock endBlock = block;
+    bool isTextChanged = false;
+    while (endBlock.isValid() && endBlock != document()->end()) {
+        //
+        // Если дошли до конца сцены
+        //
+        const TextParagraphType blockType = TextBlockStyle::forBlock(endBlock);
+        if (endBlock != block && sceneBorders.contains(blockType)) {
+            //
+            // ... если есть кого записать в блок
+            //
+            if (!sceneCharacters.isEmpty()) {
+                //
+                // ... создадим блок участников сцены, если его не было
+                //
+                if (!sceneCharactersBlock.isValid()) {
+                    ++endPosition;
+
+                    cursor.setPosition(block.position());
+                    cursor.movePosition(TextCursor::EndOfBlock);
+                    cursor.insertBlock();
+                    const auto& sceneCharactersStyle
+                        = TemplatesFacade::screenplayTemplate(q->templateId())
+                              .paragraphStyle(TextParagraphType::SceneCharacters);
+                    auto sceneCharactersFormat = sceneCharactersStyle.blockFormat();
+                    sceneCharactersFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
+                    cursor.setBlockFormat(sceneCharactersFormat);
+                    cursor.setBlockCharFormat(sceneCharactersStyle.charFormat());
+                }
+                //
+                // ... если был, используем его
+                //
+                else {
+                    cursor.setPosition(sceneCharactersBlock.position());
+                    auto sceneCharactersFormat = sceneCharactersBlock.blockFormat();
+                    sceneCharactersFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
+                    cursor.setBlockFormat(sceneCharactersFormat);
+                }
+
+                //
+                // ... обновим текст блока персонажей сцены
+                //
+                sceneCharacters.removeAll("");
+                const auto sceneCharactersText = sceneCharacters.join(", ");
+                if (cursor.block().text() != sceneCharactersText) {
+                    endPosition += sceneCharactersText.length() - cursor.block().length();
+
+                    cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
+                    if (cursor.hasSelection()) {
+                        cursor.deleteChar();
+                    }
+                    cursor.insertText(sceneCharactersText);
+
+                    isTextChanged = true;
+                }
+            }
+
+            //
+            // ... сбрасываем все структуры, для нового накопления в следующей сцене
+            //
+            sceneCharacters.clear();
+            sceneCharactersBlock = {};
+            block = endBlock;
+
+            //
+            // ... прерываем выполнение, если дошли до конца сцены в нижней границе
+            //     NOTE: тут специально сравниваем начало блока, а не его конец, чтобы корректно
+            //     обработать кейс, когда заголовком сцены сделан целый абзац и соответственно нам
+            //     нужно найти персонажей из той части текста, что идёт после нового заголовка
+            //
+            if (endBlock.position() > endPosition) {
+                break;
+            }
+        }
+
+        //
+        // Собираем информацию о персонажах в текущей сцене
+        //
+        switch (blockType) {
+        case TextParagraphType::SceneHeading: {
+            const auto sceneItem = [endBlock]() -> ScreenplayTextModelSceneItem* {
+                auto blockData = endBlock.userData();
+                if (blockData == nullptr) {
+                    return {};
+                }
+
+                auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(blockData);
+                if (screenplayBlockData->item() == nullptr) {
+                    return {};
+                }
+
+                auto item = screenplayBlockData->item()->parent();
+                if (item->type() != TextModelItemType::Group) {
+                    return {};
+                }
+
+                auto groupItem = static_cast<TextModelGroupItem*>(item);
+                if (groupItem->groupType() != TextGroupType::Scene) {
+                    return {};
+                }
+
+                return static_cast<ScreenplayTextModelSceneItem*>(groupItem);
+            }();
+
+            if (sceneItem != nullptr) {
+                sceneCharacters = ScreenplaySceneCharactersParser::characters(
+                    sceneItem->additionalCharacters());
+            }
+            break;
+        }
+
+        case TextParagraphType::SceneCharacters: {
+            sceneCharactersBlock = endBlock;
+            break;
+        }
+
+        case TextParagraphType::Action: {
+            if (rxCharacterFinder.pattern().isEmpty()) {
+                break;
+            }
+
+            auto match = rxCharacterFinder.match(endBlock.text());
+            while (match.hasMatch()) {
+                const QString character = TextHelper::smartToUpper(match.captured(2));
+                if (!sceneCharacters.contains(character)) {
+                    sceneCharacters.append(character);
+                }
+
+                //
+                // ... ищем дальше
+                //
+                match = rxCharacterFinder.match(endBlock.text(), match.capturedEnd());
+            }
+            break;
+        }
+
+        case TextParagraphType::Character: {
+            const auto character = ScreenplayCharacterParser::name(endBlock.text());
+            if (!sceneCharacters.contains(character)) {
+                sceneCharacters.append(character);
+            }
+            break;
+        }
+
+        default: {
+            break;
+        }
+        }
+
+        endBlock = endBlock.next();
+    }
+
+    if (isTextChanged) {
+        return { startPosition, endPosition - startPosition };
+    }
+    return { _position, _charsChanged };
+}
+
+void ScreenplayTextCorrector::Implementation::clearSceneCharactersCorrections()
+{
+    //
+    // Тут у нас снимаются запреты на редактирование блоков
+    //
+
+    TextCursor cursor(document());
+    cursor.beginEditBlock();
+
+    auto block = document()->begin();
+    do {
+        const auto blockType = TextBlockStyle::forBlock(block);
+        if (blockType == TextParagraphType::SceneCharacters) {
+            auto sceneCharactersFormat = block.blockFormat();
+            sceneCharactersFormat.clearProperty(PageTextEdit::PropertyDontShowCursor);
+            cursor.setBlockFormat(sceneCharactersFormat);
+        }
+
+        block = block.next();
+    } while (block.isValid());
+
+    cursor.endEditBlock();
+}
+
+void ScreenplayTextCorrector::Implementation::correctCharacterContinuedState(int _position,
+                                                                             int _charsChanged)
 {
     //
     // Определим границы работы алгоритма
@@ -537,7 +823,7 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     } while (block.isValid() && block.position() < endPosition);
 }
 
-void ScreenplayTextCorrector::Implementation::clearCharacterNamesCorrections()
+void ScreenplayTextCorrector::Implementation::clearCharacterContinuedStateCorrections()
 {
     TextCursor cursor(document());
     cursor.beginEditBlock();
@@ -2311,18 +2597,31 @@ ScreenplayTextCorrector::ScreenplayTextCorrector(QTextDocument* _document)
 
 ScreenplayTextCorrector::~ScreenplayTextCorrector() = default;
 
-void ScreenplayTextCorrector::setCorrectionOptions(const QStringList& _options)
+bool ScreenplayTextCorrector::isBlockVisible(TextParagraphType _type) const
 {
-    const auto needToCorrectCharactersNames = _options.contains("correct-characters-names");
+    const auto screenplayDocument = qobject_cast<ScreenplayTextDocument*>(document());
+    return screenplayDocument->visibleBlocksTypes().contains(_type);
+}
+
+void ScreenplayTextCorrector::setCorrectionOptionsImpl(const QStringList& _options)
+{
+    const auto needToCorrectSceneCharacters = _options.contains("correct-scene-characters");
+    const auto needToCorrectCharacterContinuedState
+        = _options.contains("correct-character-continued-state");
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
-    if (d->needToCorrectCharactersNames == needToCorrectCharactersNames
+    if (d->needToCorrectSceneCharacters == needToCorrectSceneCharacters
+        && d->needToCorrectCharacterContinuedState == needToCorrectCharacterContinuedState
         && d->needToCorrectPageBreaks == needToCorrectPageBreaks) {
         return;
     }
 
-    d->needToCorrectCharactersNames = needToCorrectCharactersNames;
-    if (!d->needToCorrectCharactersNames) {
-        d->clearCharacterNamesCorrections();
+    d->needToCorrectSceneCharacters = needToCorrectSceneCharacters;
+    if (!d->needToCorrectSceneCharacters) {
+        d->clearSceneCharactersCorrections();
+    }
+    d->needToCorrectCharacterContinuedState = needToCorrectCharacterContinuedState;
+    if (!d->needToCorrectCharacterContinuedState) {
+        d->clearCharacterContinuedStateCorrections();
     }
     d->needToCorrectPageBreaks = needToCorrectPageBreaks;
     if (!d->needToCorrectPageBreaks) {
@@ -2331,12 +2630,6 @@ void ScreenplayTextCorrector::setCorrectionOptions(const QStringList& _options)
 
     clear();
     makeCorrections();
-}
-
-bool ScreenplayTextCorrector::isBlockVisible(TextParagraphType _type) const
-{
-    const auto screenplayDocument = qobject_cast<ScreenplayTextDocument*>(document());
-    return screenplayDocument->visibleBlocksTypes().contains(_type);
 }
 
 void ScreenplayTextCorrector::clearImpl()
@@ -2368,8 +2661,14 @@ void ScreenplayTextCorrector::makeCorrections(int _position, int _charsChanged)
     TextCursor cursor(document());
     cursor.beginEditBlock();
 
-    if (d->needToCorrectCharactersNames) {
-        d->correctCharactersNames(_position, _charsChanged);
+    if (d->needToCorrectSceneCharacters) {
+        const auto correctedPositions = d->correctSceneCharacters(_position, _charsChanged);
+        _position = correctedPositions.first;
+        _charsChanged = correctedPositions.second;
+    }
+
+    if (d->needToCorrectCharacterContinuedState) {
+        d->correctCharacterContinuedState(_position, _charsChanged);
     }
 
     if (d->needToCorrectPageBreaks) {

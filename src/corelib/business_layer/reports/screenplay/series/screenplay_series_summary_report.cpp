@@ -262,6 +262,9 @@ void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
                 const bool kCanChangeModel = false;
                 screenplayDocument.setModel(episode, kCanChangeModel);
                 screenplayDocument.setCorrectionOptions(
+                    settingsValue(
+                        DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey)
+                        .toBool(),
                     settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
                         .toBool(),
                     settingsValue(

@@ -85,6 +85,7 @@ public:
     void setScreenplayEditorDefaultTemplate(const QString& _templateId);
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
+    void setScreenplayEditorCorrectSceneCharacters(bool _correct);
     void setScreenplayEditorContinueDialogue(bool _continue);
     void setScreenplayEditorCorrectTextOnPageBreaks(bool _correct);
     void setScreenplayEditorSaveItemsFromText(bool _save);
@@ -228,6 +229,7 @@ signals:
     void screenplayEditorDefaultTemplateChanged(const QString& _templateId);
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
     void screenplayEditorShowDialogueNumberChanged(bool _show);
+    void screenplayEditorCorrectSceneCharactersChanged(bool _correct);
     void screenplayEditorContinueDialogueChanged(bool _continue);
     void screenplayEditorCorrectTextOnPageBreaksChanged(bool _correct);
     void screenplayEditorSaveItemsFromTextChanged(bool _save);

@@ -46,16 +46,6 @@ public:
      */
     QColor color;
 
-    //    /**
-    //     * @brief Тэги группы
-    //     */
-    //    QVector<Tag> tags;
-
-    //    /**
-    //     * @brief Сюжетные линии группы
-    //     */
-    //    QVector<StoryLine> storyLines;
-
     /**
      * @brief Название группы
      */

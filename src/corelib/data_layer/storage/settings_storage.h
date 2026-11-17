@@ -225,6 +225,8 @@ const QString kComponentsScreenplayEditorShowSceneNumbersOnLeftKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-scene-number-on-right");
 const QString kComponentsScreenplayEditorShowDialogueNumbersKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-dialogue-number");
+const QString kComponentsScreenplayEditorCorrectSceneCharactersKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/correct-scene-characters");
 const QString kComponentsScreenplayEditorContinueDialogueKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/continue-dialogue");
 const QString kComponentsScreenplayEditorCorrectTextOnPageBreaksKey

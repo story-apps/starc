@@ -218,6 +218,9 @@ void SettingsManager::Implementation::loadScreenplaySettings()
     view->setScreenplayEditorShowDialogueNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
             .toBool());
+    view->setScreenplayEditorCorrectSceneCharacters(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey)
+            .toBool());
     view->setScreenplayEditorContinueDialogue(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool());
     view->setScreenplayEditorCorrectTextOnPageBreaks(
@@ -1142,6 +1145,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setScreenplayEditorShowSceneNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowDialogueNumberChanged, this,
             &SettingsManager::setScreenplayEditorShowDialogueNumber);
+    connect(d->view, &Ui::SettingsView::screenplayEditorCorrectSceneCharactersChanged, this,
+            &SettingsManager::setScreenplayEditorCorrectSceneCharacters);
     connect(d->view, &Ui::SettingsView::screenplayEditorContinueDialogueChanged, this,
             &SettingsManager::setScreenplayEditorContinueDialogue);
     connect(d->view, &Ui::SettingsView::screenplayEditorCorrectTextOnPageBreaksChanged, this,
@@ -2285,6 +2290,14 @@ void SettingsManager::setScreenplayEditorShowDialogueNumber(bool _show)
     setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey, _show);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey });
+}
+
+void SettingsManager::setScreenplayEditorCorrectSceneCharacters(bool _correct)
+{
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey,
+                     _correct);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey });
 }
 
 void SettingsManager::setScreenplayEditorContinueDialogue(bool _continue)

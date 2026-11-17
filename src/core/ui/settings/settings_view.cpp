@@ -385,6 +385,7 @@ public:
     CheckBox* screenplayEditorShowSceneNumberOnLeft = nullptr;
     CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
     CheckBox* screenplayEditorShowDialogueNumber = nullptr;
+    CheckBox* screenplayEditorCorrectSceneCharacters = nullptr;
     CheckBox* screenplayEditorContinueDialogue = nullptr;
     CheckBox* screenplayEditorCorrectTextOnPageBreaks = nullptr;
     CheckBox* screenplayEditorSaveItemsFromText = nullptr;
@@ -727,6 +728,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowSceneNumberOnLeft(new CheckBox(screenplayCard))
     , screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard))
     , screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard))
+    , screenplayEditorCorrectSceneCharacters(new CheckBox(screenplayCard))
     , screenplayEditorContinueDialogue(new CheckBox(screenplayCard))
     , screenplayEditorCorrectTextOnPageBreaks(new CheckBox(screenplayCard))
     , screenplayEditorSaveItemsFromText(new CheckBox(screenplayCard))
@@ -1227,6 +1229,7 @@ void SettingsView::Implementation::initScreenplayCard()
         screenplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
     screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayEditorCorrectSceneCharacters, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorContinueDialogue, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorCorrectTextOnPageBreaks, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorSaveItemsFromText, itemIndex++, 0);
@@ -1993,6 +1996,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayEditorShowSceneNumberOnLeft,
                  d->screenplayEditorShowSceneNumberOnRight,
                  d->screenplayEditorShowDialogueNumber,
+                 d->screenplayEditorCorrectSceneCharacters,
                  d->screenplayEditorContinueDialogue,
                  d->screenplayEditorCorrectTextOnPageBreaks,
                  d->screenplayEditorSaveItemsFromText,
@@ -2154,6 +2158,8 @@ SettingsView::SettingsView(QWidget* _parent)
             notifyScreenplayEditorShowSceneNumbersChanged);
     connect(d->screenplayEditorShowDialogueNumber, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorShowDialogueNumberChanged);
+    connect(d->screenplayEditorCorrectSceneCharacters, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayEditorCorrectSceneCharactersChanged);
     connect(d->screenplayEditorContinueDialogue, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorContinueDialogueChanged);
     connect(d->screenplayEditorCorrectTextOnPageBreaks, &CheckBox::checkedChanged, this,
@@ -3397,6 +3403,11 @@ void SettingsView::setScreenplayEditorShowDialogueNumber(bool _show)
     d->screenplayEditorShowDialogueNumber->setChecked(_show);
 }
 
+void SettingsView::setScreenplayEditorCorrectSceneCharacters(bool _correct)
+{
+    d->screenplayEditorCorrectSceneCharacters->setChecked(_correct);
+}
+
 void SettingsView::setScreenplayEditorContinueDialogue(bool _continue)
 {
     d->screenplayEditorContinueDialogue->setChecked(_continue);
@@ -4292,6 +4303,8 @@ void SettingsView::updateTranslations()
     d->screenplayEditorShowSceneNumberOnLeft->setText(tr("on the left"));
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));
     d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
+    d->screenplayEditorCorrectSceneCharacters->setText(
+        tr("Automatically fill scene characters list"));
     d->screenplayEditorContinueDialogue->setText(
         tr("Add a continuation (CONT'D) to dialogues separated by an action"));
     d->screenplayEditorCorrectTextOnPageBreaks->setText(
@@ -4718,6 +4731,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorShowSceneNumberOnLeft,
              d->screenplayEditorShowSceneNumberOnRight,
              d->screenplayEditorShowDialogueNumber,
+             d->screenplayEditorCorrectSceneCharacters,
              d->screenplayEditorContinueDialogue,
              d->screenplayEditorCorrectTextOnPageBreaks,
              d->screenplayEditorSaveItemsFromText,

@@ -175,12 +175,16 @@ QSet<TextParagraphType> ScreenplayTextDocument::visibleBlocksTypes() const
     };
 }
 
-void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,
+void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectSceneCharacters,
+                                                  bool _needToCorrectCharacterContinuedState,
                                                   bool _needToCorrectPageBreaks)
 {
     QStringList correctionOptions;
-    if (_needToCorrectCharactersNames) {
-        correctionOptions.append("correct-characters-names");
+    if (_needToCorrectSceneCharacters) {
+        correctionOptions.append("correct-scene-characters");
+    }
+    if (_needToCorrectCharacterContinuedState) {
+        correctionOptions.append("correct-character-continued-state");
     }
     if (_needToCorrectPageBreaks) {
         correctionOptions.append("correct-page-breaks");

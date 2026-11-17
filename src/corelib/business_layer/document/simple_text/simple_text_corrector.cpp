@@ -1258,7 +1258,7 @@ SimpleTextCorrector::SimpleTextCorrector(QTextDocument* _document)
 
 SimpleTextCorrector::~SimpleTextCorrector() = default;
 
-void SimpleTextCorrector::setCorrectionOptions(const QStringList& _options)
+void SimpleTextCorrector::setCorrectionOptionsImpl(const QStringList& _options)
 {
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
     if (d->needToCorrectPageBreaks == needToCorrectPageBreaks) {

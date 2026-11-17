@@ -15,6 +15,11 @@ class ScreenplayTextModelSceneItem::Implementation
 {
 public:
     /**
+     * @brief Список дополнительных персонажей сцены
+     */
+    QString additionalCharacters;
+
+    /**
      * @brief Запланированная длительность сцены
      */
     std::optional<int> plannedDuration;
@@ -51,6 +56,21 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextM
 }
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
+
+QString ScreenplayTextModelSceneItem::additionalCharacters() const
+{
+    return d->additionalCharacters;
+}
+
+void ScreenplayTextModelSceneItem::setAdditionalCharacters(const QString& _characters)
+{
+    if (d->additionalCharacters == _characters) {
+        return;
+    }
+
+    d->additionalCharacters = _characters;
+    setChanged(true);
+}
 
 QVector<BreakdownSceneResource> ScreenplayTextModelSceneItem::resources() const
 {
@@ -255,6 +275,12 @@ QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _co
 {
     auto currentTag = _contentReader.name();
 
+    if (currentTag == xml::kAdditionalCharactersTag) {
+        d->additionalCharacters = xml::readContent(_contentReader).toString();
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
     if (currentTag == xml::kPlannedDurationTag) {
         d->plannedDuration = xml::readContent(_contentReader).toInt();
         xml::readNextElement(_contentReader); // end
@@ -284,6 +310,12 @@ QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _co
 QByteArray ScreenplayTextModelSceneItem::customContent() const
 {
     QByteArray xml;
+
+    if (!d->additionalCharacters.isEmpty()) {
+        xml += QString("<%1>%2</%1>\n")
+                   .arg(xml::kAdditionalCharactersTag, d->additionalCharacters)
+                   .toUtf8();
+    }
 
     if (d->plannedDuration.has_value()) {
         xml += QString("<%1>%2</%1>\n")

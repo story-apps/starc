@@ -35,9 +35,9 @@ public:
     QString templateId() const;
 
     /**
-     * @brief Установить необходимость корректировать текст блоков имён персонажей
+     * @brief Установить опции корректировки текста
      */
-    virtual void setCorrectionOptions(const QStringList& _options) = 0;
+    void setCorrectionOptions(const QStringList& _options);
 
     /**
      * @brief Задавть верхнеуровневый видимый элемент
@@ -66,6 +66,11 @@ public:
     void makePlannedCorrection(const QByteArray& _contentHash);
 
 protected:
+    /**
+     * @brief Реализация установки параметров корректировки
+     */
+    virtual void setCorrectionOptionsImpl(const QStringList& _options) = 0;
+
     /**
      * @brief Реализация очистки, которая будет выполняться внутри корректора
      */

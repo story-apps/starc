@@ -678,6 +678,7 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
         itemParametersView->setColor(sceneItem->color());
         itemParametersView->setTitle(sceneItem->title());
         itemParametersView->setHeading(sceneItem->heading());
+        itemParametersView->setAdditionalCharacters(sceneItem->additionalCharacters());
         itemParametersView->setBeats(sceneItem->beats());
         itemParametersView->setStoryDay(sceneItem->storyDay(),
                                         model->dictionariesModel()->storyDays());
@@ -1132,6 +1133,23 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item->childAt(0));
                 textItem->setText(_heading);
                 d->model->updateItem(textItem);
+            });
+    connect(d->itemParametersView, &CardItemParametersView::additionalCharactersChanged, this,
+            [this, findCurrentModelItem](const QString& _characters) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                    return;
+                }
+
+                const auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                if (groupItem->groupType() != BusinessLayer::TextGroupType::Scene) {
+                    return;
+                }
+
+                auto sceneItem = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
+
+                sceneItem->setAdditionalCharacters(_characters);
+                d->model->updateItem(sceneItem);
             });
     connect(d->itemParametersView, &CardItemParametersView::descriptionChanged, this,
             [this, findCurrentModelItem](const QString& _description) {
@@ -1797,9 +1815,12 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         || contains(kComponentsScreenplayEditorShowDialogueNumbersKey)) {
         d->reconfigureDialoguesNumbersVisibility();
     }
-    if (_changedSettingsKeys.isEmpty() || contains(kComponentsScreenplayEditorContinueDialogueKey)
+    if (_changedSettingsKeys.isEmpty()
+        || contains(kComponentsScreenplayEditorCorrectSceneCharactersKey)
+        || contains(kComponentsScreenplayEditorContinueDialogueKey)
         || contains(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)) {
         d->textEdit->setCorrectionOptions(
+            toBool(kComponentsScreenplayEditorCorrectSceneCharactersKey),
             toBool(kComponentsScreenplayEditorContinueDialogueKey),
             toBool(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey));
     }

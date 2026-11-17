@@ -1975,7 +1975,7 @@ ComicBookTextCorrector::ComicBookTextCorrector(QTextDocument* _document)
 
 ComicBookTextCorrector::~ComicBookTextCorrector() = default;
 
-void ComicBookTextCorrector::setCorrectionOptions(const QStringList& _options)
+void ComicBookTextCorrector::setCorrectionOptionsImpl(const QStringList& _options)
 {
     const auto needToCorrectCharactersNames = _options.contains("correct-characters-names");
     const auto needToShowDialogueNumber = _options.contains("show-dialogue-number");
