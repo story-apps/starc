@@ -20,3 +20,7 @@ remain read-only after permissions are updated, and restore the original editor'
 cursor and scroll position. They also cover Back, replacement by another
 comparison, navigation to another document, independent split panes, and deletion
 of the temporary editor/model while the outgoing animation is still running.
+
+Saving tests verify that the snapshot is appended after every existing draft
+(including legacy comparisons), remains an ordinary editable draft after reopening,
+retains the change annotations, and can be edited without modifying its source.

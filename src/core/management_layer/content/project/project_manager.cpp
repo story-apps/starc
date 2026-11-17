@@ -54,6 +54,7 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
+#include <ui/widgets/floating_tool_bar/comparison_toolbar.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <utils/logging.h>
 #include <utils/shugar.h>
@@ -2142,11 +2143,37 @@ void ProjectManager::Implementation::compareTextDocumentsItems(
     auto widget = comparisonView->asQWidget();
     // Модель уничтожается после дочерних виджетов редактора, которые её используют.
     comparison->setParent(widget);
-    comparison.release();
-    comparisonView->showComparison(tr("%1 vs %2").arg(lhsName, rhsName), [this, projectView] {
+    const auto comparisonModel = comparison.release();
+    const auto comparisonName = tr("%1 vs %2").arg(lhsName, rhsName);
+    comparisonView->showComparison(comparisonName, [this, projectView] {
         projectView->closeComparison();
         updateViewsEditingMode();
     });
+    auto comparisonToolbar = widget->findChild<Ui::ComparisonToolbar*>();
+    Q_ASSERT(comparisonToolbar);
+    comparisonToolbar->setSavingEnabled(documentEditingMode(rhsHost) == DocumentEditingMode::Edit);
+    connect(comparisonToolbar, &Ui::ComparisonToolbar::saveRequested, widget,
+            [this, projectView, comparisonModel, comparisonName, hostUuid = rhsHost->uuid()] {
+                // За время просмотра документ могли удалить или изменить права доступа к нему.
+                const auto host = projectStructureModel->itemForUuid(hostUuid);
+                if (host == nullptr || documentEditingMode(host) != DocumentEditingMode::Edit) {
+                    return;
+                }
+
+                comparisonModel->setDocumentName(comparisonName);
+                comparisonModel->saveChanges();
+                const auto content = comparisonModel->document()->content();
+                if (view.active != projectView) {
+                    switchViews();
+                }
+                projectView->closeComparison();
+                setCurrentItem(host);
+
+                // Сохраняем обычный редактируемый драфт последним, не меняя исходные драфты.
+                projectStructureModel->appendItemDraft(host, comparisonName, {}, content);
+                projectView->setDocumentDrafts(host);
+                projectView->setCurrentDraft(host->drafts().size());
+            });
     projectView->showComparisonEditor(widget);
 }
 

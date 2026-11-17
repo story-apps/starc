@@ -19,6 +19,11 @@ public:
     explicit ComparisonToolbar(FloatingToolBar* _toolbar, FloatingToolbarAnimator* _animator,
                                const QString& _title, const std::function<void()>& _close);
 
+    void setSavingEnabled(bool _enabled);
+
+signals:
+    void saveRequested();
+
 protected:
     bool eventFilter(QObject* _watched, QEvent* _event) override;
     void updateTranslations() override;
@@ -30,6 +35,7 @@ private:
     FloatingToolBar* m_toolbar = nullptr;
     QAction* m_back = nullptr;
     QAction* m_title = nullptr;
+    QAction* m_save = nullptr;
     QString m_fullTitle;
 };
 

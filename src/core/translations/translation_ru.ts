@@ -5,6 +5,10 @@
         <source>Back to draft</source>
         <translation>Вернуться к драфту</translation>
     </message>
+    <message>
+        <source>Save comparison as a new draft</source>
+        <translation>Сохранить сравнение как новый драфт</translation>
+    </message>
 </context>
 <context>
     <name>AppBar</name>

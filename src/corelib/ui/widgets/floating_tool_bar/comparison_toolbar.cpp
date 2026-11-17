@@ -18,6 +18,7 @@ ComparisonToolbar::ComparisonToolbar(FloatingToolBar* _toolbar, FloatingToolbarA
     , m_toolbar(_toolbar)
     , m_back(new QAction(this))
     , m_title(new QAction(this))
+    , m_save(new QAction(this))
     , m_fullTitle(_title)
 {
     setObjectName(QStringLiteral("comparisonToolbar"));
@@ -25,6 +26,9 @@ ComparisonToolbar::ComparisonToolbar(FloatingToolBar* _toolbar, FloatingToolbarA
     m_back->setIconText(u8"\U000F004D");
     addAction(m_back);
     addAction(m_title);
+    m_save->setIconText(u8"\U000F0193");
+    addAction(m_save);
+    connect(m_save, &QAction::triggered, this, &ComparisonToolbar::saveRequested);
     connect(m_back, &QAction::triggered, this, _close);
     m_toolbar->installEventFilter(this);
     parentWidget()->installEventFilter(this);
@@ -38,6 +42,11 @@ ComparisonToolbar::ComparisonToolbar(FloatingToolBar* _toolbar, FloatingToolbarA
         setTextColor(DesignSystem::color().onBackground());
         _animator->switchToolbars(u8"\U000F1492", {}, m_toolbar, this);
     });
+}
+
+void ComparisonToolbar::setSavingEnabled(bool _enabled)
+{
+    m_save->setEnabled(_enabled);
 }
 
 bool ComparisonToolbar::eventFilter(QObject* _watched, QEvent* _event)
@@ -56,8 +65,8 @@ void ComparisonToolbar::updateGeometryAndTitle()
     const int availableWidth = qMax(0, parentWidget()->width());
     const QFontMetrics metrics(DesignSystem::font().subtitle2());
     const int padding = style.shadowMargins().left() + style.shadowMargins().right()
-        + style.margins().left() + style.margins().right() + style.iconSize().width()
-        + style.spacing() * 2;
+        + style.margins().left() + style.margins().right() + style.iconSize().width() * 2
+        + style.spacing() * 3;
     const int textWidth
         = qMax(0, qMin(metrics.horizontalAdvance(m_fullTitle), availableWidth - padding));
     m_title->setText(metrics.elidedText(m_fullTitle, Qt::ElideMiddle, textWidth));
@@ -70,6 +79,7 @@ void ComparisonToolbar::updateGeometryAndTitle()
 void ComparisonToolbar::updateTranslations()
 {
     m_back->setText(tr("Back to draft"));
+    m_save->setText(tr("Save comparison as a new draft"));
 }
 
 void ComparisonToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

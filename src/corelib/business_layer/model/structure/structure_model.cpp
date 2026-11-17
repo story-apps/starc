@@ -1282,6 +1282,22 @@ void StructureModel::addItemDraft(StructureModelItem* _item, const QString& _nam
     emit draftAdded(_item->uuid());
 }
 
+void StructureModel::appendItemDraft(StructureModelItem* _item, const QString& _name,
+                                     const QColor& _color, const QByteArray& _content)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    auto draft = _item->addDraft(new StructureModelItem(QUuid::createUuid(), _item->type(), _name,
+                                                        _name, _color, true, false, false));
+    const auto itemIndex = indexForItem(_item);
+    emit dataChanged(itemIndex, itemIndex);
+    emit documentAdded(draft->uuid(), _item->parent()->uuid(), draft->type(), draft->name(),
+                       _content);
+    emit draftAdded(_item->uuid());
+}
+
 void StructureModel::updateItemDraft(StructureModelItem* _item, int _draftIndex,
                                      const QString& _name, const QColor& _color, bool _readOnly)
 {

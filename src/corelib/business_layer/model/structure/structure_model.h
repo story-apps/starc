@@ -156,6 +156,11 @@ public:
      */
     void addItemDraft(StructureModelItem* _item, const QString& _name, const QColor& _color,
                       bool _readOnly, const QByteArray& _content, bool _comparison);
+    /**
+     * @brief Сохранить редактируемый драфт в конце списка, не меняя текущий драфт
+     */
+    void appendItemDraft(StructureModelItem* _item, const QString& _name, const QColor& _color,
+                         const QByteArray& _content);
     void updateItemDraft(StructureModelItem* _item, int _draftIndex, const QString& _name,
                          const QColor& _color, bool _readOnly);
     void removeItemDraft(StructureModelItem* _item, int _draftIndex);
