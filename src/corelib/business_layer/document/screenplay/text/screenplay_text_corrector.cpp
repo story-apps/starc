@@ -700,6 +700,7 @@ void ScreenplayTextCorrector::Implementation::clearSceneCharactersCorrections()
         if (blockType == TextParagraphType::SceneCharacters) {
             auto sceneCharactersFormat = block.blockFormat();
             sceneCharactersFormat.clearProperty(PageTextEdit::PropertyDontShowCursor);
+            cursor.setPosition(block.position());
             cursor.setBlockFormat(sceneCharactersFormat);
         }
 
