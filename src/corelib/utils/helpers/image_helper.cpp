@@ -5,10 +5,12 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QCache>
+#include <QDataStream>
 #include <QIcon>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPixmap>
+#include <QPixmapCache>
 #include <QRegularExpression>
 #include <QtMath>
 
@@ -25,6 +27,18 @@ const int kImageMaxHeight = 2688;
  * @brief Используем низкое качество изображения (всё-таки у нас приложение не для фотографов)
  */
 const int kImageFileQuality = 80;
+
+/**
+ * @brief Сформировать ключ для кэша из заданных параметров
+ */
+template<typename... Args>
+QString pixmapCacheKey(const char* _prefix, const Args&... _args)
+{
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    (stream << ... << _args);
+    return QLatin1String(_prefix) + QString::fromLatin1(data.toBase64());
+}
 } // namespace
 
 QByteArray ImageHelper::bytesFromImage(const QPixmap& _image)
@@ -316,6 +330,34 @@ QPixmap ImageHelper::blurImage(const QPixmap& _sourcePixmap, qreal _blurRadius)
     return QPixmap::fromImage(blurredImage);
 }
 
+QPixmap ImageHelper::roundedRectShadow(const QSize& _size, const QColor& _backgroundColor,
+                                       qreal _radius, const QMarginsF& _shadowMargins,
+                                       qreal _blurRadius, const QColor& _shadowColor)
+{
+    if (_size.isEmpty()) {
+        return {};
+    }
+
+    const auto key = pixmapCacheKey("roundedRectShadow/", _size, _backgroundColor, _radius,
+                                    _shadowMargins, _blurRadius, _shadowColor);
+    QPixmap image;
+    if (QPixmapCache::find(key, &image)) {
+        return image;
+    }
+
+    image = QPixmap(_size);
+    image.fill(Qt::transparent);
+    {
+        QPainter painter(&image);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(_backgroundColor);
+        painter.drawRoundedRect(QRect(QPoint(0, 0), _size), _radius, _radius);
+    }
+    const auto shadow = dropShadow(image, _shadowMargins, _blurRadius, _shadowColor);
+    QPixmapCache::insert(key, shadow);
+    return shadow;
+}
+
 QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
                                 qreal _blurRadius, const QColor& _color, bool _useCache)
 {
@@ -324,19 +366,21 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
     }
 
     //
-    // Кэш теней
-    //
-    using CacheKey = QPair<int, QPair<int, QPair<int, QRgb>>>;
-    static QCache<CacheKey, QPixmap> s_shadowsCache;
-
-    //
     // Ищем тень в кэше
     //
-    const CacheKey shadowKey{ _sourcePixmap.width(),
-                              { _sourcePixmap.height(),
-                                { qCeil(_blurRadius * 100.0), _color.rgba() } } };
-    if (_useCache && s_shadowsCache.contains(shadowKey)) {
-        return *s_shadowsCache[shadowKey];
+    QString shadowKey;
+    if (_useCache) {
+        //
+        // ... включаем исходную альфа-маску и поля - изображения одинакового размера могут
+        //     отбрасывать разные тени
+        //
+        shadowKey
+            = pixmapCacheKey("shadow/", _sourcePixmap.cacheKey(), _sourcePixmap.devicePixelRatio(),
+                             _shadowMargins, _blurRadius, _color);
+        QPixmap shadow;
+        if (QPixmapCache::find(shadowKey, &shadow)) {
+            return shadow;
+        }
     }
 
     //
@@ -374,7 +418,7 @@ QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _
 
     auto shadowedPixmap = QPixmap::fromImage(shadowedImage);
     if (_useCache) {
-        s_shadowsCache.insert(shadowKey, new QPixmap(shadowedPixmap));
+        QPixmapCache::insert(shadowKey, shadowedPixmap);
     }
     return shadowedPixmap;
 }

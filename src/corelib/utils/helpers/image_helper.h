@@ -76,6 +76,13 @@ public:
     static QPixmap blurImage(const QPixmap& _sourcePixmap, qreal _blurRadius);
 
     /**
+     * @brief Получить тень для заданной области и параметров
+     */
+    static QPixmap roundedRectShadow(const QSize& _size, const QColor& _backgroundColor,
+                                     qreal _radius, const QMarginsF& _shadowMargins,
+                                     qreal _blurRadius, const QColor& _shadowColor);
+
+    /**
      * @brief Получить изображение тени для заданного изображения и параметров
      */
     static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
