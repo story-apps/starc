@@ -5,6 +5,7 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPixmapCache>
 #include <QVariantAnimation>
 
 
@@ -51,12 +52,27 @@ public:
     QVector<Domain::DocumentImage> images;
 
     /**
-     * @brief Текущее открытое изображение
+     * @brief Текущее открытое изображение и его параметры
      */
     int currentImageIndex = kInvalidImageIndex;
     QPixmap currentImage;
     QVariantAnimation opacityAnimation;
     QVariantAnimation geometryAnimation;
+
+    /**
+     * @brief Последнее положение курсора в момент отрисовки
+     */
+    CursorAction lastCursorAction = CursorAction::Close;
+
+    /**
+     * @brief Параметры рисуемой версии изображения (которая масштабируется в процессе открытия)
+     */
+    struct {
+        QPixmapCache::Key key;
+        qint64 cacheKey = 0;
+        QSize size;
+        Qt::TransformationMode mode = Qt::FastTransformation;
+    } scaledImage;
 };
 
 ImagesListPreview::Implementation::Implementation(ImagesListPreview* _q)
@@ -259,17 +275,17 @@ void ImagesListPreview::paintEvent(QPaintEvent* _event)
 
     painter.setPen(Ui::DesignSystem::color().onShadow());
     painter.setFont(Ui::DesignSystem::font().iconsBig());
-    const auto cursorAction = d->cursorAction();
+    d->lastCursorAction = d->cursorAction();
     if (d->currentImageIndex > 0 && d->images.size() > 1) {
         const QRectF goToPrevRect(0, margin(), margin(), height() - margin() * 2);
-        if (cursorAction == CursorAction::ToPrevious) {
+        if (d->lastCursorAction == CursorAction::ToPrevious) {
             painter.fillRect(goToPrevRect, Ui::DesignSystem::color().shadow());
         }
         painter.drawText(goToPrevRect, Qt::AlignCenter, u8"\U000F0141");
     }
     if (d->currentImageIndex < d->images.size() - 1 && d->images.size() > 1) {
         const QRectF goToNextRect(width() - margin(), margin(), margin(), height() - margin() * 2);
-        if (cursorAction == CursorAction::ToNext) {
+        if (d->lastCursorAction == CursorAction::ToNext) {
             painter.fillRect(goToNextRect, Ui::DesignSystem::color().shadow());
         }
         painter.drawText(goToNextRect, Qt::AlignCenter, u8"\U000F0142");
@@ -280,9 +296,21 @@ void ImagesListPreview::paintEvent(QPaintEvent* _event)
         ? Qt::FastTransformation
         : Qt::SmoothTransformation;
     const auto imageRect = d->geometryAnimation.currentValue().toRectF();
-    painter.drawPixmap(
-        imageRect.topLeft(),
-        d->currentImage.scaled(imageRect.size().toSize(), Qt::KeepAspectRatio, mode));
+    const auto imageSize = imageRect.size().toSize();
+    //
+    // Рисуем новое изображение, только если его параметры изменились, или его ещё даже нет в кэше
+    //
+    QPixmap scaledImage;
+    if (d->scaledImage.cacheKey != d->currentImage.cacheKey() || d->scaledImage.size != imageSize
+        || d->scaledImage.mode != mode || !QPixmapCache::find(d->scaledImage.key, &scaledImage)) {
+        scaledImage = d->currentImage.scaled(imageSize, Qt::KeepAspectRatio, mode);
+        QPixmapCache::remove(d->scaledImage.key);
+        d->scaledImage.key = QPixmapCache::insert(scaledImage);
+        d->scaledImage.cacheKey = d->currentImage.cacheKey();
+        d->scaledImage.size = imageSize;
+        d->scaledImage.mode = mode;
+    }
+    painter.drawPixmap(imageRect.topLeft(), scaledImage);
 }
 
 void ImagesListPreview::keyPressEvent(QKeyEvent* _event)
@@ -320,7 +348,14 @@ void ImagesListPreview::mouseMoveEvent(QMouseEvent* _event)
 {
     Widget::mouseMoveEvent(_event);
 
-    update();
+    //
+    // Когда изображение открыто, имеет смысл перерисовывать только стрелки навигации
+    //
+    if (d->lastCursorAction != d->cursorAction()) {
+        update(QRectF(0, margin(), margin(), height() - margin() * 2).toAlignedRect());
+        update(QRectF(width() - margin(), margin(), margin(), height() - margin() * 2)
+                   .toAlignedRect());
+    }
 }
 
 void ImagesListPreview::mouseReleaseEvent(QMouseEvent* _event)
