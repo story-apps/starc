@@ -59,6 +59,11 @@ protected:
     void updateGeometries() override;
 
     /**
+     * @brief Обновляем область дополнительной декорации при прокрутке
+     */
+    void scrollContentsBy(int _dx, int _dy) override;
+
+    /**
      * @brief Фильтруем события клика вьюпорта, чтобы анимировать их
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;

@@ -70,14 +70,11 @@ TreeView::TreeView(QWidget* _parent)
     setVerticalScrollMode(TreeView::ScrollPerPixel);
     viewport()->installEventFilter(this);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this, [this] {
-        update();
-        viewport()->update();
-    });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this, [this] {
-        update();
-        viewport()->update();
-    });
+    auto updateDecoration = [this] { viewport()->update(d->decorationRect.toAlignedRect()); };
+    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
+            updateDecoration);
+    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            updateDecoration);
 }
 
 void TreeView::setAutoAdjustSize(bool _auto)
@@ -201,9 +198,26 @@ void TreeView::updateGeometries()
     }
 }
 
+void TreeView::scrollContentsBy(int _dx, int _dy)
+{
+    QTreeView::scrollContentsBy(_dx, _dy);
+
+    //
+    // При прокрутке также смещается декорация, её необходимо перерисовать целиком
+    //
+    if (d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+        viewport()->update();
+    }
+}
+
 bool TreeView::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == viewport() && _event->type() == QEvent::MouseButtonPress) {
+        //
+        // Стираем старую декорацию, если была выбрана другая строка до завершения анимации
+        //
+        viewport()->update(d->decorationRect.toAlignedRect());
+
         auto event = static_cast<QMouseEvent*>(_event);
         d->decorationCenterPosition = event->pos();
         d->decorationRect = visualRect(indexAt(event->pos()));
