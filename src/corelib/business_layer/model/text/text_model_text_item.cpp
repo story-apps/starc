@@ -13,6 +13,7 @@
 
 #include <QColor>
 #include <QLocale>
+#include <QScopedValueRollback>
 #include <QVariant>
 #include <QXmlStreamReader>
 
@@ -94,6 +95,13 @@ public:
      * @brief Текст блока
      */
     QString text;
+
+    /**
+     * @brief Входные данные последнего пересчёта: оформление и заметки на счётчики не влияют
+     */
+    QString countedText;
+    std::optional<TextParagraphType> countedParagraphType;
+    bool isUpdatingCounters = false;
 
     /**
      * @brief Форматирование текста в параграфе
@@ -1401,7 +1409,7 @@ void TextModelTextItem::updateCounters(bool _force)
 
 void TextModelTextItem::markChanged()
 {
-    if (isCorrection()) {
+    if (isCorrection() || d->isUpdatingCounters) {
         return;
     }
 
@@ -1415,6 +1423,17 @@ QString TextModelTextItem::textToSave() const
 
 void TextModelTextItem::handleChange()
 {
+    if (d->countedParagraphType == d->paragraphType && d->countedText == d->text) {
+        return;
+    }
+
+    d->countedText = d->text;
+    d->countedParagraphType = d->paragraphType;
+
+    // setChanged() обновит родителя после handleChange(). Повторный markChanged()
+    // из updateCounters() здесь только дублировал бы пересчёт сцены и её родителей.
+    // При смене настроек хронометража модель вызывает updateCounters(true) напрямую.
+    QScopedValueRollback<bool> updatingCounters(d->isUpdatingCounters, true);
     updateCounters();
 }
 

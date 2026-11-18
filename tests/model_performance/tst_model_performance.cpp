@@ -1,8 +1,16 @@
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/model/abstract_model_item.h>
+#include <business_layer/model/audioplay/audioplay_information_model.h>
+#include <business_layer/model/audioplay/text/audioplay_text_model.h>
+#include <business_layer/model/audioplay/text/audioplay_text_model_text_item.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/novel/text/novel_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <business_layer/model/text/text_model_folder_item.h>
 #include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/text_template.h>
@@ -26,6 +34,33 @@ public:
         return {};
     }
 };
+
+class CountingParagraph : public ScreenplayTextModelTextItem
+{
+public:
+    using ScreenplayTextModelTextItem::ScreenplayTextModelTextItem;
+    int updates = 0;
+
+    void updateCounters(bool force = false) override
+    {
+        ++updates;
+        ScreenplayTextModelTextItem::updateCounters(force);
+    }
+};
+
+class CountingScene : public ScreenplayTextModelSceneItem
+{
+public:
+    using ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem;
+    int updates = 0;
+
+protected:
+    void handleChange() override
+    {
+        ++updates;
+        ScreenplayTextModelSceneItem::handleChange();
+    }
+};
 }
 
 class ModelPerformanceTest : public QObject
@@ -33,6 +68,180 @@ class ModelPerformanceTest : public QObject
     Q_OBJECT
 
 private slots:
+    void paragraphChangesAreCoalesced()
+    {
+        ScreenplayInformationModel information;
+        ScreenplayTextModel model;
+        model.setInformationModel(&information);
+        CountingScene scene(&model);
+        auto paragraph = new CountingParagraph(&model);
+        paragraph->setParagraphType(TextParagraphType::Action);
+        paragraph->setText(QStringLiteral("One word."));
+        scene.appendItem(paragraph);
+        paragraph->updates = scene.updates = 0;
+        paragraph->setText(QStringLiteral("One more word."));
+        QCOMPARE(paragraph->updates, 1);
+        QCOMPARE(scene.updates, 1);
+        QCOMPARE(scene.wordsCount(), 3);
+        QCOMPARE(scene.text(), paragraph->text());
+        QCOMPARE(scene.duration(), paragraph->duration());
+        QCOMPARE(scene.eighths(), paragraph->eighths());
+
+        paragraph->updates = scene.updates = 0;
+        paragraph->setAlignment(Qt::AlignRight);
+        paragraph->setNumber(12);
+        paragraph->setBookmark({ Qt::red, QStringLiteral("Bookmark") });
+        QCOMPARE(paragraph->updates, 0);
+        QCOMPARE(scene.updates, 3);
+        QCOMPARE(scene.wordsCount(), 3);
+        QVERIFY(paragraph->isChanged());
+        QVERIFY(paragraph->toXml().contains("Bookmark"));
+
+        TextModelTextItem::ReviewMark review;
+        review.length = 3;
+        review.comments.append({ {}, {}, {}, QStringLiteral("Review this") });
+        paragraph->setReviewMarks(QVector<TextModelTextItem::ReviewMark> { review });
+        QCOMPARE(paragraph->updates, 0);
+        QCOMPARE(scene.reviewMarksSize(), 1);
+        review.isDone = true;
+        paragraph->setReviewMarks(QVector<TextModelTextItem::ReviewMark> { review });
+        QCOMPARE(paragraph->updates, 0);
+        QCOMPARE(scene.reviewMarksSize(), 0);
+        QVERIFY(paragraph->toXml().contains("Review this"));
+
+        paragraph->updates = 0;
+        paragraph->setParagraphType(TextParagraphType::Dialogue);
+        QCOMPARE(paragraph->updates, 1);
+        paragraph->updates = 0;
+        paragraph->updateCounters(true);
+        QCOMPARE(paragraph->updates, 1);
+        QCOMPARE(scene.duration(), paragraph->duration());
+    }
+
+    void countersSurviveTextMutations()
+    {
+        ScreenplayInformationModel screenplayInformation;
+        AudioplayInformationModel audioplayInformation;
+        ScreenplayTextModel screenplay;
+        screenplay.setInformationModel(&screenplayInformation);
+        AudioplayTextModel audioplay;
+        audioplay.setInformationModel(&audioplayInformation);
+        SimpleTextModel simple;
+        NovelTextModel novel;
+        ComicBookTextModel comic;
+        StageplayTextModel stageplay;
+        const QVector<TextModel*> models { &screenplay, &audioplay, &simple, &novel, &comic,
+                                          &stageplay };
+        for (auto model : models) {
+            std::unique_ptr<TextModelTextItem> item(model->createTextItem());
+            item->setParagraphType(TextParagraphType::Action);
+            auto verify = [&] {
+                QCOMPARE(item->wordsCount(), TextHelper::wordsCount(item->text()));
+                const int length = item->text().size();
+                QCOMPARE(item->charactersCount(),
+                         qMakePair(length - int(item->text().count(' ')), length + 1));
+            };
+            verify(); // Empty paragraphs also have valid counters.
+            item->beginChangeTransaction();
+            item->setText(QStringLiteral("Привет, мир! One two."));
+            item->setAlignment(Qt::AlignRight);
+            item->finishChangeTransaction();
+            verify();
+            item->removeText(0, 8);
+            verify();
+            std::unique_ptr<TextModelTextItem> other(model->createTextItem());
+            other->setParagraphType(TextParagraphType::Action);
+            other->setText(QStringLiteral(" Another paragraph."));
+            item->mergeWith(other.get());
+            verify();
+            item->copyFrom(other.get());
+            verify();
+            QXmlStreamReader reader("<action><value><![CDATA[Loaded text.]]></value></action>");
+            QVERIFY(reader.readNextStartElement());
+            item->readContent(reader);
+            verify();
+            item->setCorrection(true);
+            item->setText(QStringLiteral("Changed during page correction."));
+            item->setCorrection(false);
+            verify();
+            item->setText({});
+            verify();
+        }
+    }
+
+    void forcedChronometryRefresh()
+    {
+        AudioplayInformationModel information;
+        information.setOverrideCommonSettings(true);
+        AudioplayTextModel model;
+        model.setInformationModel(&information);
+        std::unique_ptr<AudioplayTextModelTextItem> item(
+            static_cast<AudioplayTextModelTextItem*>(model.createTextItem()));
+        item->setParagraphType(TextParagraphType::Dialogue);
+        item->setText(QStringLiteral("One two three four."));
+        const auto before = item->duration();
+        auto options = information.chronometerOptions();
+        options.words.seconds *= 2;
+        information.setChronometerOptions(options);
+        item->updateCounters(true);
+        QCOMPARE(item->duration(), AudioplayChronometer::duration(
+                                      item->paragraphType(), item->text(),
+                                      information.templateId(), options));
+        QVERIFY(item->duration() > before);
+    }
+
+    void rangeRemovalPreservesReparentedItems()
+    {
+        QVector<int> deleted;
+        Item source;
+        Item destination;
+        class TrackedItem : public Item
+        {
+        public:
+            TrackedItem(int id, QVector<int>& deleted)
+                : id(id)
+                , deleted(deleted)
+            {
+            }
+            ~TrackedItem() override
+            {
+                deleted.append(id);
+            }
+            int id;
+            QVector<int>& deleted;
+        };
+        QVector<AbstractModelItem*> items;
+        for (int i = 0; i < 6; ++i) {
+            items.append(new TrackedItem(i, deleted));
+        }
+        source.appendItems(items);
+        source.removeItems(4, 2);
+        source.takeItems(4, 2);
+        QCOMPARE(source.childCount(), 6);
+        destination.appendItems({ items[1], items[3] });
+        source.removeItems(0, 4);
+        QCOMPARE(deleted, QVector<int>({ 4, 2, 0 }));
+        QCOMPARE(source.childCount(), 3);
+        QCOMPARE(source.childAt(0), items[1]);
+        QCOMPARE(source.childAt(1), items[3]);
+        QCOMPARE(source.childAt(2), items[5]);
+        QCOMPARE(source.rowOfChild(items[5]), 2);
+        source.takeItems(0, 2);
+        QCOMPARE(source.childCount(), 2);
+        QCOMPARE(items[5]->parent(), nullptr);
+        delete items[5];
+        for (auto item : { items[1], items[3] }) {
+            QCOMPARE(item->parent(), &destination);
+            item->setParent(&source);
+        }
+        source.takeItems(0, 1);
+        items[1]->setParent(&destination);
+        items[3]->setParent(&destination);
+        // Leave neither tree with shared ownership at destruction.
+        destination.removeItems(0, 1);
+        QCOMPARE(deleted, QVector<int>({ 4, 2, 0, 5, 3, 1 }));
+    }
+
     void treeMutations()
     {
         Item root;
@@ -314,12 +523,68 @@ private slots:
         QTest::newRow("shared-layout") << true;
     }
 
+    void benchmarkParagraphMetadata()
+    {
+        ScreenplayInformationModel information;
+        ScreenplayTextModel model;
+        model.setInformationModel(&information);
+        std::unique_ptr<TextModelTextItem> item(model.createTextItem());
+        item->setParagraphType(TextParagraphType::Action);
+        item->setText(QStringLiteral("Some screenplay action for the benchmark. ").repeated(20));
+        bool alternate = false;
+        QBENCHMARK {
+            alternate = !alternate;
+            item->setAlignment(alternate ? Qt::AlignLeft : Qt::AlignRight);
+        }
+    }
+
+    void benchmarkEditInLargeScene()
+    {
+        ScreenplayInformationModel information;
+        ScreenplayTextModel model;
+        model.setInformationModel(&information);
+        std::unique_ptr<TextModelGroupItem> scene(model.createGroupItem(TextGroupType::Scene));
+        QVector<AbstractModelItem*> paragraphs;
+        for (int i = 0; i < 1000; ++i) {
+            auto item = model.createTextItem();
+            item->setParagraphType(TextParagraphType::Action);
+            item->setText(QStringLiteral("Some screenplay action."));
+            paragraphs.append(item);
+        }
+        scene->appendItems(paragraphs);
+        auto edited = static_cast<TextModelTextItem*>(scene->childAt(500));
+        bool alternate = false;
+        QBENCHMARK {
+            alternate = !alternate;
+            edited->setText(alternate ? QStringLiteral("One word added.")
+                                      : QStringLiteral("One word."));
+        }
+    }
+
+    void benchmarkTakeRange()
+    {
+        Item root;
+        QVector<AbstractModelItem*> items;
+        for (int i = 0; i < 20000; ++i) {
+            items.append(new Item);
+        }
+        root.appendItems(items);
+        bool alternate = false;
+        QBENCHMARK {
+            const auto moved = items.mid(alternate ? 10000 : 0, 10000);
+            root.takeItems(0, 9999);
+            root.appendItems(moved);
+            alternate = !alternate;
+        }
+        QCOMPARE(root.childCount(), 20000);
+    }
+
     void benchmarkChronometry()
     {
         QFETCH(bool, combined);
         const auto text = QStringLiteral("Some screenplay action for the benchmark. ").repeated(20);
         ChronometerOptions options;
-        ScreenplayChronometer::Counters result;
+        ScreenplayChronometer::Counters result {};
         QBENCHMARK {
             if (combined) {
                 result = ScreenplayChronometer::counters(

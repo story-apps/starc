@@ -91,7 +91,7 @@ private slots:
         }
         QVERIFY(editor != nullptr);
         editor->setUsePageMode(true);
-        editor->setCorrectionOptions(false, correctBreaks);
+        editor->setCorrectionOptions(false, false, correctBreaks);
         wrapper->setZoomRange(zoom);
         view.show();
         QTest::qWait(50);
@@ -188,7 +188,7 @@ private slots:
         Ui::ScreenplayTextEdit editor;
         editor.resize(900, 600);
         editor.setUsePageMode(pageMode);
-        editor.setCorrectionOptions(false, pageMode);
+        editor.setCorrectionOptions(false, false, pageMode);
         editor.initWithModel(&model);
         editor.show();
         QTest::qWait(20);

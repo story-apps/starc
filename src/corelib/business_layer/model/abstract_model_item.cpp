@@ -118,15 +118,25 @@ void AbstractModelItem::removeItem(AbstractModelItem* _item)
 
 void AbstractModelItem::removeItems(int _fromIndex, int _toIndex)
 {
-    for (int index = _toIndex; index >= _fromIndex; --index) {
-        if (d->children[index]->parent() != this) {
-            continue;
-        }
+    if (_fromIndex > _toIndex) {
+        setChanged(true);
+        return;
+    }
 
-        auto item = d->children[index];
-        d->children.removeAt(index);
+    QVector<AbstractModelItem*> removedItems;
+    const auto first = d->children.begin() + _fromIndex;
+    const auto last = d->children.begin() + _toIndex + 1;
+    const auto removed = std::remove_if(first, last, [this, &removedItems](auto item) {
+        if (item->parent() != this) {
+            return false;
+        }
+        removedItems.append(item);
+        return true;
+    });
+    // Сдвигаем хвост один раз, сохраняя элементы, уже перенесённые в другое дерево.
+    d->children.erase(removed, last);
+    for (auto item : reversed(removedItems)) {
         delete item;
-        item = nullptr;
     }
 
     d->updateChildRows(_fromIndex);
@@ -141,14 +151,21 @@ void AbstractModelItem::takeItem(AbstractModelItem* _item)
 
 void AbstractModelItem::takeItems(int _fromIndex, int _toIndex)
 {
-    for (int index = _toIndex; index >= _fromIndex; --index) {
-        if (d->children[index]->parent() != this) {
-            continue;
-        }
-
-        d->children[index]->setParent(nullptr);
-        d->children.removeAt(index);
+    if (_fromIndex > _toIndex) {
+        setChanged(true);
+        return;
     }
+
+    const auto first = d->children.begin() + _fromIndex;
+    const auto last = d->children.begin() + _toIndex + 1;
+    const auto removed = std::remove_if(first, last, [this](auto item) {
+        if (item->parent() != this) {
+            return false;
+        }
+        item->setParent(nullptr);
+        return true;
+    });
+    d->children.erase(removed, last);
 
     d->updateChildRows(_fromIndex);
     setChanged(true);
