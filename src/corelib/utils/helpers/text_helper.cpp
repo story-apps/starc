@@ -6,6 +6,7 @@
 #include <utils/diff_match_patch/diff_match_patch.h>
 
 #include <QApplication>
+#include <QCache>
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QFontMetricsF>
@@ -14,6 +15,7 @@
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTextLayout>
+#include <QThread>
 #include <QtMath>
 
 
@@ -250,7 +252,8 @@ QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal
     return lastLineText;
 }
 
-QString TextHelper::elidedText(const QString& _text, const QFont& _font, const QRectF& _rect)
+namespace {
+QString elidedTextUncached(const QString& _text, const QFont& _font, const QRectF& _rect)
 {
     QFontMetricsF metrics(_font);
 
@@ -289,7 +292,8 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
             //
             elidedText.chop(lastLine.length());
             lastLine += nextLine + "…";
-            while (lastLine.length() > 1 && fineTextWidthF(lastLine, _font) > _rect.width()) {
+            while (lastLine.length() > 1
+                   && TextHelper::fineTextWidthF(lastLine, _font) > _rect.width()) {
                 lastLine.remove(lastLine.length() - 2, 1);
             }
             if (lastLine.endsWith(" …")) {
@@ -308,6 +312,35 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
     layout.endLayout();
 
     return elidedText.trimmed();
+}
+} // namespace
+
+QString TextHelper::elidedText(const QString& _text, const QFont& _font, const QRectF& _rect)
+{
+    //
+    // Delegates repeatedly elide the same previews during hover, scrolling and click animations.
+    // Keep the existing layout algorithm, and bound retained keys and results to 1 MiB.
+    // Background callers use the uncached path so the GUI cache needs no synchronization.
+    //
+
+    if (QApplication::instance() == nullptr
+        || QThread::currentThread() != QApplication::instance()->thread() || _text.size() > 16384) {
+        return elidedTextUncached(_text, _font, _rect);
+    }
+
+    static QCache<QByteArray, QString> cache(1024 * 1024);
+
+    QByteArray key;
+    QDataStream stream(&key, QIODevice::WriteOnly);
+    stream << _text << _font << _rect.size() << QFontMetricsF(_font).fontDpi();
+    if (const auto result = cache.object(key)) {
+        return *result;
+    }
+
+    const auto result = elidedTextUncached(_text, _font, _rect);
+    const auto cost = key.size() + result.size() * int(sizeof(QChar)) + 256;
+    cache.insert(key, new QString(result), cost);
+    return result;
 }
 
 QString TextHelper::elidedText(const QString& _text, const QFont& _font, qreal _width)
