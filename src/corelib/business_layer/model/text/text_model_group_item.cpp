@@ -522,6 +522,13 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
 
     currentTag = readCustomContent(_contentReader);
 
+    //
+    // Пропускаем всё, пока не дойдём до контента
+    //
+    while (currentTag != xml::kContentTag && !_contentReader.atEnd()) {
+        currentTag = xml::readNextElement(_contentReader);
+    }
+
     if (currentTag == xml::kContentTag) {
         xml::readNextElement(_contentReader); // next item
         do {
