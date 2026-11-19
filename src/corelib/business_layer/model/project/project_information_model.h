@@ -70,6 +70,14 @@ public:
     void setShowDialoguesNumbersForScreenplay(bool _show);
     Q_SIGNAL void showDialoguesNumbersForScreenplayChanged(bool _show);
 
+    bool correctSceneCharactersForScreenplay() const;
+    void setCorrectSceneCharactersForScreenplay(bool _correct);
+    Q_SIGNAL void correctSceneCharactersForScreenplayChanged(bool _correct);
+
+    bool correctTextOnPageBreaksForScreenplay() const;
+    void setCorrectTextOnPageBreaksForScreenplay(bool _correct);
+    Q_SIGNAL void correctTextOnPageBreaksForScreenplayChanged(bool _correct);
+
     ChronometerOptions chronometerOptionsForScreenplay() const;
     void setChronometerOptionsForScreenplay(const ChronometerOptions& _options);
     Q_SIGNAL void chronometerOptionsForScreenplayChanged(const ChronometerOptions& _options);

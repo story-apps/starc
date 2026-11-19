@@ -36,12 +36,14 @@ public:
     Card* projectInfo = nullptr;
     QVBoxLayout* infoLayout = nullptr;
 
-    CheckBox* overrideCommonSettings = nullptr;
-    ComboBox* screenplayTemplate = nullptr;
-    CheckBox* showSceneNumbers = nullptr;
-    CheckBox* showSceneNumbersOnLeft = nullptr;
-    CheckBox* showSceneNumbersOnRight = nullptr;
-    CheckBox* showDialoguesNumbers = nullptr;
+    CheckBox* overrideScreenplaySettings = nullptr;
+    ComboBox* screenplayEditorTemplate = nullptr;
+    CheckBox* screenplayEditorShowSceneNumbers = nullptr;
+    CheckBox* screenplayEditorShowSceneNumbersOnLeft = nullptr;
+    CheckBox* screenplayEditorShowSceneNumbersOnRight = nullptr;
+    CheckBox* screenplayEditorShowDialoguesNumbers = nullptr;
+    CheckBox* screenplayEditorCorrectSceneCharacters = nullptr;
+    CheckBox* screenplayEditorCorrectTextOnPageBreaks = nullptr;
     //
     RadioButton* screenplayDurationByPage = nullptr;
     TextField* screenplayDurationByPagePage = nullptr;
@@ -71,12 +73,14 @@ ProjectParametersView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
     , projectInfo(new Card(_parent))
     , infoLayout(new QVBoxLayout)
-    , overrideCommonSettings(new CheckBox(projectInfo))
-    , screenplayTemplate(new ComboBox(projectInfo))
-    , showSceneNumbers(new CheckBox(projectInfo))
-    , showSceneNumbersOnLeft(new CheckBox(projectInfo))
-    , showSceneNumbersOnRight(new CheckBox(projectInfo))
-    , showDialoguesNumbers(new CheckBox(projectInfo))
+    , overrideScreenplaySettings(new CheckBox(projectInfo))
+    , screenplayEditorTemplate(new ComboBox(projectInfo))
+    , screenplayEditorShowSceneNumbers(new CheckBox(projectInfo))
+    , screenplayEditorShowSceneNumbersOnLeft(new CheckBox(projectInfo))
+    , screenplayEditorShowSceneNumbersOnRight(new CheckBox(projectInfo))
+    , screenplayEditorShowDialoguesNumbers(new CheckBox(projectInfo))
+    , screenplayEditorCorrectSceneCharacters(new CheckBox(projectInfo))
+    , screenplayEditorCorrectTextOnPageBreaks(new CheckBox(projectInfo))
     , screenplayDurationByPage(new RadioButton(projectInfo))
     , screenplayDurationByPagePage(new TextField(projectInfo))
     , screenplayDurationByPageDuration(new TextField(projectInfo))
@@ -106,16 +110,18 @@ ProjectParametersView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
-    screenplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    screenplayTemplate->setModel(BusinessLayer::TemplatesFacade::screenplayTemplates());
-    screenplayTemplate->hide();
+    screenplayEditorTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    screenplayEditorTemplate->setModel(BusinessLayer::TemplatesFacade::screenplayTemplates());
+    screenplayEditorTemplate->hide();
 
-    showSceneNumbers->hide();
-    showSceneNumbersOnLeft->setEnabled(false);
-    showSceneNumbersOnLeft->hide();
-    showSceneNumbersOnRight->setEnabled(false);
-    showSceneNumbersOnRight->hide();
-    showDialoguesNumbers->hide();
+    screenplayEditorShowSceneNumbers->hide();
+    screenplayEditorShowSceneNumbersOnLeft->setEnabled(false);
+    screenplayEditorShowSceneNumbersOnLeft->hide();
+    screenplayEditorShowSceneNumbersOnRight->setEnabled(false);
+    screenplayEditorShowSceneNumbersOnRight->hide();
+    screenplayEditorShowDialoguesNumbers->hide();
+    screenplayEditorCorrectSceneCharacters->hide();
+    screenplayEditorCorrectTextOnPageBreaks->hide();
     auto durationGroup = new RadioButtonGroup(projectInfo);
     durationGroup->add(screenplayDurationByPage);
     durationGroup->add(screenplayDurationByCharacters);
@@ -168,17 +174,19 @@ ProjectParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->setDirection(QBoxLayout::TopToBottom);
     infoLayout->setContentsMargins({});
     infoLayout->setSpacing(0);
-    infoLayout->addWidget(overrideCommonSettings, 1, Qt::AlignTop);
-    infoLayout->addWidget(screenplayTemplate);
+    infoLayout->addWidget(overrideScreenplaySettings, 1, Qt::AlignTop);
+    infoLayout->addWidget(screenplayEditorTemplate);
     {
         auto layout = UiHelper::makeHBoxLayout();
-        layout->addWidget(showSceneNumbers);
-        layout->addWidget(showSceneNumbersOnLeft);
-        layout->addWidget(showSceneNumbersOnRight);
+        layout->addWidget(screenplayEditorShowSceneNumbers);
+        layout->addWidget(screenplayEditorShowSceneNumbersOnLeft);
+        layout->addWidget(screenplayEditorShowSceneNumbersOnRight);
         layout->addStretch();
         infoLayout->addLayout(layout);
     }
-    infoLayout->addWidget(showDialoguesNumbers);
+    infoLayout->addWidget(screenplayEditorShowDialoguesNumbers);
+    infoLayout->addWidget(screenplayEditorCorrectSceneCharacters);
+    infoLayout->addWidget(screenplayEditorCorrectTextOnPageBreaks);
     infoLayout->addWidget(screenplayDurationByPage);
     {
         auto layout = UiHelper::makeHBoxLayout();
@@ -255,34 +263,40 @@ ProjectParametersView::ProjectParametersView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
-    connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this,
-            &ProjectParametersView::overrideCommonSettingsChanged);
-    connect(d->screenplayTemplate, &ComboBox::currentIndexChanged, this,
+    connect(d->overrideScreenplaySettings, &CheckBox::checkedChanged, this,
+            &ProjectParametersView::overrideScreenplaySettingsChanged);
+    connect(d->screenplayEditorTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
                 const auto templateId
                     = _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
-                emit screenplayTemplateChanged(templateId);
+                emit screenplayEditorTemplateChanged(templateId);
             });
-    connect(d->showSceneNumbers, &CheckBox::checkedChanged, this,
-            &ProjectParametersView::showSceneNumbersChanged);
-    connect(d->showSceneNumbersOnLeft, &CheckBox::checkedChanged, this,
-            &ProjectParametersView::showSceneNumbersOnLeftChanged);
-    connect(d->showSceneNumbersOnRight, &CheckBox::checkedChanged, this,
-            &ProjectParametersView::showSceneNumbersOnRightChanged);
-    connect(d->showDialoguesNumbers, &CheckBox::checkedChanged, this,
-            &ProjectParametersView::showDialoguesNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumbers, &CheckBox::checkedChanged, this,
+            &ProjectParametersView::screenplayEditorShowSceneNumbersChanged);
+    connect(d->screenplayEditorShowSceneNumbersOnLeft, &CheckBox::checkedChanged, this,
+            &ProjectParametersView::screenplayEditorShowSceneNumbersOnLeftChanged);
+    connect(d->screenplayEditorShowSceneNumbersOnRight, &CheckBox::checkedChanged, this,
+            &ProjectParametersView::screenplayEditorShowSceneNumbersOnRightChanged);
+    connect(d->screenplayEditorShowDialoguesNumbers, &CheckBox::checkedChanged, this,
+            &ProjectParametersView::screenplayEditorShowDialoguesNumbersChanged);
+    connect(d->screenplayEditorCorrectSceneCharacters, &CheckBox::checkedChanged, this,
+            &ProjectParametersView::screenplayEditorCorrectSceneCharactersChanged);
+    connect(d->screenplayEditorCorrectTextOnPageBreaks, &CheckBox::checkedChanged, this,
+            &ProjectParametersView::screenplayEditorCorrectTextOnPageBreaksChanged);
 
-    connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this, [this](bool _checked) {
-        if (!d->overrideCommonSettings->isVisibleTo(this)) {
+    connect(d->overrideScreenplaySettings, &CheckBox::checkedChanged, this, [this](bool _checked) {
+        if (!d->overrideScreenplaySettings->isVisibleTo(this)) {
             return;
         }
 
         for (auto widget : std::vector<QWidget*>{
-                 d->screenplayTemplate,
-                 d->showSceneNumbers,
-                 d->showSceneNumbersOnLeft,
-                 d->showSceneNumbersOnRight,
-                 d->showDialoguesNumbers,
+                 d->screenplayEditorTemplate,
+                 d->screenplayEditorShowSceneNumbers,
+                 d->screenplayEditorShowSceneNumbersOnLeft,
+                 d->screenplayEditorShowSceneNumbersOnRight,
+                 d->screenplayEditorShowDialoguesNumbers,
+                 d->screenplayEditorCorrectSceneCharacters,
+                 d->screenplayEditorCorrectTextOnPageBreaks,
                  d->screenplayDurationByPage,
                  d->screenplayDurationByCharacters,
                  d->screenplayDurationConfigurable,
@@ -290,7 +304,7 @@ ProjectParametersView::ProjectParametersView(QWidget* _parent)
             widget->setVisible(_checked);
         }
 
-        if (d->overrideCommonSettings->isChecked()) {
+        if (d->overrideScreenplaySettings->isChecked()) {
             if (d->screenplayDurationByPage->isChecked()) {
                 d->screenplayDurationByPagePage->setVisible(_checked);
                 d->screenplayDurationByPageDuration->setVisible(_checked);
@@ -339,61 +353,64 @@ ProjectParametersView::ProjectParametersView(QWidget* _parent)
             }
         }
     });
-    connect(d->showSceneNumbers, &CheckBox::checkedChanged, d->showSceneNumbersOnLeft,
-            &CheckBox::setEnabled);
-    connect(d->showSceneNumbers, &CheckBox::checkedChanged, d->showSceneNumbersOnRight,
-            &CheckBox::setEnabled);
+    connect(d->screenplayEditorShowSceneNumbers, &CheckBox::checkedChanged,
+            d->screenplayEditorShowSceneNumbersOnLeft, &CheckBox::setEnabled);
+    connect(d->screenplayEditorShowSceneNumbers, &CheckBox::checkedChanged,
+            d->screenplayEditorShowSceneNumbersOnRight, &CheckBox::setEnabled);
     auto correctShownSceneNumber = [this] {
-        if (!d->showSceneNumbersOnLeft->isChecked() && !d->showSceneNumbersOnRight->isChecked()) {
-            d->showSceneNumbersOnLeft->setChecked(true);
+        if (!d->screenplayEditorShowSceneNumbersOnLeft->isChecked()
+            && !d->screenplayEditorShowSceneNumbersOnRight->isChecked()) {
+            d->screenplayEditorShowSceneNumbersOnLeft->setChecked(true);
         }
     };
-    connect(d->showSceneNumbersOnLeft, &CheckBox::checkedChanged, this, correctShownSceneNumber);
-    connect(d->showSceneNumbersOnRight, &CheckBox::checkedChanged, this, correctShownSceneNumber);
+    connect(d->screenplayEditorShowSceneNumbersOnLeft, &CheckBox::checkedChanged, this,
+            correctShownSceneNumber);
+    connect(d->screenplayEditorShowSceneNumbersOnRight, &CheckBox::checkedChanged, this,
+            correctShownSceneNumber);
     //
     // ... хронометраж
     //
     connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this, [this](bool _checked) {
-        d->screenplayDurationByPagePage->setVisible(d->overrideCommonSettings->isChecked()
+        d->screenplayDurationByPagePage->setVisible(d->overrideScreenplaySettings->isChecked()
                                                     && _checked);
-        d->screenplayDurationByPageDuration->setVisible(d->overrideCommonSettings->isChecked()
+        d->screenplayDurationByPageDuration->setVisible(d->overrideScreenplaySettings->isChecked()
                                                         && _checked);
     });
     connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, this,
             [this](bool _checked) {
                 d->screenplayDurationByCharactersCharacters->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationByCharactersIncludingSpaces->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationByCharactersDuration->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
             });
     connect(d->screenplayDurationConfigurable, &RadioButton::checkedChanged, this,
             [this](bool _checked) {
                 d->screenplayDurationConfigurableForActionLabel->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurablePerParagraphForAction->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurableForActionPlus->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurablePerEvery50ForAction->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurableForDialogueLabel->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurablePerParagraphForDialogue->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurableForDialoguePlus->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurablePerEvery50ForDialogue->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurableForSceneHeadingLabel->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurablePerParagraphForSceneHeading->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurableForSceneHeadingPlus->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
                 d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setVisible(
-                    d->overrideCommonSettings->isChecked() && _checked);
+                    d->overrideScreenplaySettings->isChecked() && _checked);
             });
     //
     auto notifyChronometerOptionsChanged = [this] {
@@ -427,7 +444,7 @@ ProjectParametersView::ProjectParametersView(QWidget* _parent)
         options.sophocles.secsPerEvery50SceneHeading
             = d->screenplayDurationConfigurablePerEvery50ForSceneHeading->text().toDouble();
 
-        emit chronometerOptionsChanged(options);
+        emit screenplayDurationOptionsChanged(options);
     };
     connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this,
             notifyChronometerOptionsChanged);
@@ -467,13 +484,15 @@ QWidget* ProjectParametersView::asQWidget()
 void ProjectParametersView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
 {
     const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
-    d->screenplayTemplate->setReadOnly(readOnly);
+    d->screenplayEditorTemplate->setReadOnly(readOnly);
     const auto enabled = !readOnly;
-    d->overrideCommonSettings->setEnabled(enabled);
-    d->showSceneNumbers->setEnabled(enabled);
-    d->showSceneNumbersOnLeft->setEnabled(enabled);
-    d->showSceneNumbersOnRight->setEnabled(enabled);
-    d->showDialoguesNumbers->setEnabled(enabled);
+    d->overrideScreenplaySettings->setEnabled(enabled);
+    d->screenplayEditorShowSceneNumbers->setEnabled(enabled);
+    d->screenplayEditorShowSceneNumbersOnLeft->setEnabled(enabled);
+    d->screenplayEditorShowSceneNumbersOnRight->setEnabled(enabled);
+    d->screenplayEditorShowDialoguesNumbers->setEnabled(enabled);
+    d->screenplayEditorCorrectSceneCharacters->setEnabled(enabled);
+    d->screenplayEditorCorrectTextOnPageBreaks->setEnabled(enabled);
     d->screenplayDurationByPage->setEnabled(enabled);
     d->screenplayDurationByPage->setEnabled(enabled);
     d->screenplayDurationByPagePage->setEnabled(enabled);
@@ -491,16 +510,16 @@ void ProjectParametersView::setEditingMode(ManagementLayer::DocumentEditingMode 
     d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setEnabled(enabled);
 }
 
-void ProjectParametersView::setOverrideCommonSettings(bool _override)
+void ProjectParametersView::setOverrideScreenplaySettings(bool _override)
 {
-    if (d->overrideCommonSettings->isChecked() == _override) {
+    if (d->overrideScreenplaySettings->isChecked() == _override) {
         return;
     }
 
-    d->overrideCommonSettings->setChecked(_override);
+    d->overrideScreenplaySettings->setChecked(_override);
 }
 
-void ProjectParametersView::setScreenplayTemplate(const QString& _templateId)
+void ProjectParametersView::setScreenplayEditorTemplate(const QString& _templateId)
 {
     using namespace BusinessLayer;
     for (int row = 0; row < TemplatesFacade::screenplayTemplates()->rowCount(); ++row) {
@@ -509,49 +528,69 @@ void ProjectParametersView::setScreenplayTemplate(const QString& _templateId)
             continue;
         }
 
-        if (d->screenplayTemplate->currentIndex() != item->index()) {
-            d->screenplayTemplate->setCurrentIndex(item->index());
+        if (d->screenplayEditorTemplate->currentIndex() != item->index()) {
+            d->screenplayEditorTemplate->setCurrentIndex(item->index());
         }
         break;
     }
 }
 
-void ProjectParametersView::setShowSceneNumbers(bool _show)
+void ProjectParametersView::setScreenplayEditorShowSceneNumbers(bool _show)
 {
-    if (d->showSceneNumbers->isChecked() == _show) {
+    if (d->screenplayEditorShowSceneNumbers->isChecked() == _show) {
         return;
     }
 
-    d->showSceneNumbers->setChecked(_show);
+    d->screenplayEditorShowSceneNumbers->setChecked(_show);
 }
 
-void ProjectParametersView::setShowSceneNumbersOnLeft(bool _show)
+void ProjectParametersView::setScreenplayEditorShowSceneNumbersOnLeft(bool _show)
 {
-    if (d->showSceneNumbersOnLeft->isChecked() == _show) {
+    if (d->screenplayEditorShowSceneNumbersOnLeft->isChecked() == _show) {
         return;
     }
 
-    d->showSceneNumbersOnLeft->setChecked(_show);
+    d->screenplayEditorShowSceneNumbersOnLeft->setChecked(_show);
 }
 
-void ProjectParametersView::setShowSceneNumbersOnRight(bool _show)
+void ProjectParametersView::setScreenplayEditorShowSceneNumbersOnRight(bool _show)
 {
-    if (d->showSceneNumbersOnRight->isChecked() == _show) {
+    if (d->screenplayEditorShowSceneNumbersOnRight->isChecked() == _show) {
         return;
     }
 
-    d->showSceneNumbersOnRight->setChecked(_show);
+    d->screenplayEditorShowSceneNumbersOnRight->setChecked(_show);
 }
 
-void ProjectParametersView::setShowDialoguesNumbers(bool _show)
+void ProjectParametersView::setScreenplayEditorShowDialoguesNumbers(bool _show)
 {
-    if (d->showDialoguesNumbers->isChecked() == _show) {
+    if (d->screenplayEditorShowDialoguesNumbers->isChecked() == _show) {
         return;
     }
 
-    d->showDialoguesNumbers->setChecked(_show);
+    d->screenplayEditorShowDialoguesNumbers->setChecked(_show);
 }
-void ProjectParametersView::setChronometerOptions(const BusinessLayer::ChronometerOptions& _options)
+
+void ProjectParametersView::setScreenplayEditorCorrectSceneCharacters(bool _correct)
+{
+    if (d->screenplayEditorCorrectSceneCharacters->isChecked() == _correct) {
+        return;
+    }
+
+    d->screenplayEditorCorrectSceneCharacters->setChecked(_correct);
+}
+
+void ProjectParametersView::setScreenplayEditorCorrectTextOnPageBreaks(bool _correct)
+{
+    if (d->screenplayEditorCorrectTextOnPageBreaks->isChecked() == _correct) {
+        return;
+    }
+
+    d->screenplayEditorCorrectTextOnPageBreaks->setChecked(_correct);
+}
+
+void ProjectParametersView::setScreenplayDurationOptions(
+    const BusinessLayer::ChronometerOptions& _options)
 {
     using namespace BusinessLayer;
     switch (_options.type) {
@@ -574,35 +613,45 @@ void ProjectParametersView::setChronometerOptions(const BusinessLayer::Chronomet
 
     d->screenplayDurationByPageDuration->setText(QString::number(_options.page.seconds));
 
-    d->screenplayDurationByCharactersCharacters->setText(
-        QString::number(_options.characters.characters));
+    auto setTextFor = [](TextField* _editor, const QString& _text) {
+        if (_editor->text() != _text) {
+            _editor->setText(_text);
+        }
+    };
+
+    setTextFor(d->screenplayDurationByCharactersCharacters,
+               QString::number(_options.characters.characters));
     d->screenplayDurationByCharactersIncludingSpaces->setChecked(
         _options.characters.considerSpaces);
-    d->screenplayDurationByCharactersDuration->setText(
-        QString::number(_options.characters.seconds));
+    setTextFor(d->screenplayDurationByCharactersDuration,
+               QString::number(_options.characters.seconds));
 
-    d->screenplayDurationConfigurablePerParagraphForAction->setText(
-        QString::number(_options.sophocles.secsPerAction, 'f', 1));
-    d->screenplayDurationConfigurablePerEvery50ForAction->setText(
-        QString::number(_options.sophocles.secsPerEvery50Action, 'f', 1));
-    d->screenplayDurationConfigurablePerParagraphForDialogue->setText(
-        QString::number(_options.sophocles.secsPerDialogue, 'f', 1));
-    d->screenplayDurationConfigurablePerEvery50ForDialogue->setText(
-        QString::number(_options.sophocles.secsPerEvery50Dialogue, 'f', 1));
-    d->screenplayDurationConfigurablePerParagraphForSceneHeading->setText(
-        QString::number(_options.sophocles.secsPerSceneHeading, 'f', 1));
-    d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setText(
-        QString::number(_options.sophocles.secsPerEvery50SceneHeading, 'f', 1));
+    setTextFor(d->screenplayDurationConfigurablePerParagraphForAction,
+               QString::number(_options.sophocles.secsPerAction, 'f', 1));
+    setTextFor(d->screenplayDurationConfigurablePerEvery50ForAction,
+               QString::number(_options.sophocles.secsPerEvery50Action, 'f', 1));
+    setTextFor(d->screenplayDurationConfigurablePerParagraphForDialogue,
+               QString::number(_options.sophocles.secsPerDialogue, 'f', 1));
+    setTextFor(d->screenplayDurationConfigurablePerEvery50ForDialogue,
+               QString::number(_options.sophocles.secsPerEvery50Dialogue, 'f', 1));
+    setTextFor(d->screenplayDurationConfigurablePerParagraphForSceneHeading,
+               QString::number(_options.sophocles.secsPerSceneHeading, 'f', 1));
+    setTextFor(d->screenplayDurationConfigurablePerEvery50ForSceneHeading,
+               QString::number(_options.sophocles.secsPerEvery50SceneHeading, 'f', 1));
 }
 
 void ProjectParametersView::updateTranslations()
 {
-    d->overrideCommonSettings->setText(tr("Override common settings for screenplays"));
-    d->screenplayTemplate->setLabel(tr("Template"));
-    d->showSceneNumbers->setText(tr("Print scenes numbers"));
-    d->showSceneNumbersOnLeft->setText(tr("on the left"));
-    d->showSceneNumbersOnRight->setText(tr("on the right"));
-    d->showDialoguesNumbers->setText(tr("Print dialogues numbers"));
+    d->overrideScreenplaySettings->setText(tr("Override common settings for screenplays"));
+    d->screenplayEditorTemplate->setLabel(tr("Template"));
+    d->screenplayEditorShowSceneNumbers->setText(tr("Print scenes numbers"));
+    d->screenplayEditorShowSceneNumbersOnLeft->setText(tr("on the left"));
+    d->screenplayEditorShowSceneNumbersOnRight->setText(tr("on the right"));
+    d->screenplayEditorShowDialoguesNumbers->setText(tr("Print dialogues numbers"));
+    d->screenplayEditorCorrectSceneCharacters->setText(
+        tr("Automatically fill scene characters list"));
+    d->screenplayEditorCorrectTextOnPageBreaks->setText(
+        tr("Automatically correct screenplay text on page breaks"));
     d->screenplayDurationByPage->setText(tr("Calculate duration based on the count of pages"));
     d->screenplayDurationByPagePage->setLabel(tr("at the rate of"));
     d->screenplayDurationByPagePage->setSuffix(tr("pages"));
@@ -646,7 +695,7 @@ void ProjectParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _ev
 
     d->projectInfo->setBackgroundColor(DesignSystem::color().background());
     for (auto textField : std::vector<TextField*>{
-             d->screenplayTemplate,
+             d->screenplayEditorTemplate,
              d->screenplayDurationByPagePage,
              d->screenplayDurationByPageDuration,
              d->screenplayDurationByCharactersCharacters,
@@ -662,16 +711,18 @@ void ProjectParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
     for (auto combobox : {
-             d->screenplayTemplate,
+             d->screenplayEditorTemplate,
          }) {
         combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
     for (auto checkBox : {
-             d->overrideCommonSettings,
-             d->showSceneNumbers,
-             d->showSceneNumbersOnLeft,
-             d->showSceneNumbersOnRight,
-             d->showDialoguesNumbers,
+             d->overrideScreenplaySettings,
+             d->screenplayEditorShowSceneNumbers,
+             d->screenplayEditorShowSceneNumbersOnLeft,
+             d->screenplayEditorShowSceneNumbersOnRight,
+             d->screenplayEditorShowDialoguesNumbers,
+             d->screenplayEditorCorrectSceneCharacters,
+             d->screenplayEditorCorrectTextOnPageBreaks,
              d->screenplayDurationByCharactersIncludingSpaces,
          }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());

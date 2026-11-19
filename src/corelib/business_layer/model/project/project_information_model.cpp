@@ -30,6 +30,8 @@ const QLatin1String kShowSceneNumbersKey("show_scenes_numbers");
 const QLatin1String kShowSceneNumbersOnLeftKey("show_scenes_numbers_on_left");
 const QLatin1String kShowScenesNumbersOnRightKey("show_scenes_numbers_on_right");
 const QLatin1String kShowDialoguesNumbersKey("show_dialogues_numbers");
+const QLatin1String kCorrectSceneCharacters("correct_scene_characters");
+const QLatin1String kCorrectTextOnPageBreaks("correct_text_on_page_breaks");
 const QLatin1String kChronomertyOptionsKey("chronmetry_options");
 } // namespace
 
@@ -59,6 +61,8 @@ public:
         bool showSceneNumbersOnLeft = false;
         bool showSceneNumbersOnRight = false;
         bool showDialoguesNumbers = false;
+        bool correctSceneCharacters = false;
+        bool correctTextOnPageBreaks = false;
         ChronometerOptions chronometerOptions;
     } screenplay;
 
@@ -104,6 +108,13 @@ void ProjectInformationModel::Implementation::updateSessionSettings()
         setSettingsValueForSession(kComponentsScreenplayEditorShowDialogueNumbersKey,
                                    screenplay.showDialoguesNumbers);
         //
+        // Автокорректировки
+        //
+        setSettingsValueForSession(kComponentsScreenplayEditorCorrectSceneCharactersKey,
+                                   screenplay.correctSceneCharacters);
+        setSettingsValueForSession(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey,
+                                   screenplay.correctTextOnPageBreaks);
+        //
         // Хронометраж
         //
         const auto& chrono = screenplay.chronometerOptions;
@@ -143,6 +154,8 @@ void ProjectInformationModel::Implementation::updateSessionSettings()
                  kComponentsScreenplayEditorShowSceneNumbersOnLeftKey,
                  kComponentsScreenplayEditorShowSceneNumbersOnRightKey,
                  kComponentsScreenplayEditorShowDialogueNumbersKey,
+                 kComponentsScreenplayEditorCorrectSceneCharactersKey,
+                 kComponentsScreenplayEditorCorrectTextOnPageBreaksKey,
                  kComponentsScreenplayDurationTypeKey,
                  kComponentsScreenplayDurationByPageDurationKey,
                  kComponentsScreenplayDurationByCharactersCharactersKey,
@@ -183,6 +196,8 @@ ProjectInformationModel::ProjectInformationModel(QObject* _parent)
               kShowSceneNumbersOnLeftKey,
               kShowScenesNumbersOnRightKey,
               kShowDialoguesNumbersKey,
+              kCorrectSceneCharacters,
+              kCorrectTextOnPageBreaks,
               kChronomertyOptionsKey,
           },
           _parent)
@@ -205,6 +220,12 @@ ProjectInformationModel::ProjectInformationModel(QObject* _parent)
     connect(this, &ProjectInformationModel::showSceneNumbersOnRightForScreenplayChanged, this,
             &ProjectInformationModel::updateDocumentContent);
     connect(this, &ProjectInformationModel::showDialoguesNumbersForScreenplayChanged, this,
+            &ProjectInformationModel::updateDocumentContent);
+    connect(this, &ProjectInformationModel::showDialoguesNumbersForScreenplayChanged, this,
+            &ProjectInformationModel::updateDocumentContent);
+    connect(this, &ProjectInformationModel::correctSceneCharactersForScreenplayChanged, this,
+            &ProjectInformationModel::updateDocumentContent);
+    connect(this, &ProjectInformationModel::correctTextOnPageBreaksForScreenplayChanged, this,
             &ProjectInformationModel::updateDocumentContent);
     connect(this, &ProjectInformationModel::chronometerOptionsForScreenplayChanged, this,
             &ProjectInformationModel::updateDocumentContent);
@@ -327,6 +348,10 @@ void ProjectInformationModel::setOverrideCommonSettingsForScreenplay(bool _overr
             settingsValue(kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool());
         setShowDialoguesNumbersForScreenplay(
             settingsValue(kComponentsScreenplayEditorShowDialogueNumbersKey).toBool());
+        setCorrectSceneCharactersForScreenplay(
+            settingsValue(kComponentsScreenplayEditorCorrectSceneCharactersKey).toBool());
+        setCorrectTextOnPageBreaksForScreenplay(
+            settingsValue(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey).toBool());
         //
         // ...  хронометраж
         //
@@ -496,6 +521,48 @@ void ProjectInformationModel::setShowDialoguesNumbersForScreenplay(bool _show)
     emit showDialoguesNumbersForScreenplayChanged(d->screenplay.showDialoguesNumbers);
 }
 
+bool ProjectInformationModel::correctSceneCharactersForScreenplay() const
+{
+    if (d->screenplay.overrideCommonSettings) {
+        return d->screenplay.correctSceneCharacters;
+    }
+
+    return settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectSceneCharactersKey)
+        .toBool();
+}
+
+void ProjectInformationModel::setCorrectSceneCharactersForScreenplay(bool _correct)
+{
+    if (d->screenplay.correctSceneCharacters == _correct) {
+        return;
+    }
+
+    d->screenplay.correctSceneCharacters = _correct;
+    d->updateSessionSettings();
+    emit correctSceneCharactersForScreenplayChanged(d->screenplay.correctSceneCharacters);
+}
+
+bool ProjectInformationModel::correctTextOnPageBreaksForScreenplay() const
+{
+    if (d->screenplay.overrideCommonSettings) {
+        return d->screenplay.correctTextOnPageBreaks;
+    }
+
+    return settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
+        .toBool();
+}
+
+void ProjectInformationModel::setCorrectTextOnPageBreaksForScreenplay(bool _correct)
+{
+    if (d->screenplay.correctTextOnPageBreaks == _correct) {
+        return;
+    }
+
+    d->screenplay.correctTextOnPageBreaks = _correct;
+    d->updateSessionSettings();
+    emit correctTextOnPageBreaksForScreenplayChanged(d->screenplay.correctTextOnPageBreaks);
+}
+
 ChronometerOptions ProjectInformationModel::chronometerOptionsForScreenplay() const
 {
     if (d->screenplay.overrideCommonSettings) {
@@ -661,6 +728,10 @@ void ProjectInformationModel::initDocument()
         = documentNode.firstChildElement(kShowScenesNumbersOnRightKey).text() == "true";
     d->screenplay.showDialoguesNumbers
         = documentNode.firstChildElement(kShowDialoguesNumbersKey).text() == "true";
+    d->screenplay.correctSceneCharacters
+        = documentNode.firstChildElement(kCorrectSceneCharacters).text() == "true";
+    d->screenplay.correctTextOnPageBreaks
+        = documentNode.firstChildElement(kCorrectTextOnPageBreaks).text() == "true";
     //
     // TODO: выпилить в одной из будущих версий
     //
@@ -778,6 +849,8 @@ QByteArray ProjectInformationModel::toXml() const
     writeBoolTag(kShowSceneNumbersOnLeftKey, d->screenplay.showSceneNumbersOnLeft);
     writeBoolTag(kShowScenesNumbersOnRightKey, d->screenplay.showSceneNumbersOnRight);
     writeBoolTag(kShowDialoguesNumbersKey, d->screenplay.showDialoguesNumbers);
+    writeBoolTag(kCorrectSceneCharacters, d->screenplay.correctSceneCharacters);
+    writeBoolTag(kCorrectTextOnPageBreaks, d->screenplay.correctTextOnPageBreaks);
     writeChronometerOptions(kChronomertyOptionsKey, d->screenplay.chronometerOptions);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
@@ -881,6 +954,10 @@ ChangeCursor ProjectInformationModel::applyPatch(const QByteArray& _patch)
             std::bind(&M::setShowSceneNumbersOnRightForScreenplay, this, _1));
     setBool(kShowDialoguesNumbersKey,
             std::bind(&M::setShowDialoguesNumbersForScreenplay, this, _1));
+    setBool(kCorrectSceneCharacters,
+            std::bind(&M::setCorrectSceneCharactersForScreenplay, this, _1));
+    setBool(kCorrectTextOnPageBreaks,
+            std::bind(&M::setCorrectTextOnPageBreaksForScreenplay, this, _1));
     setChronometerOptions(kChronomertyOptionsKey,
                           std::bind(&M::setChronometerOptionsForScreenplay, this, _1));
 

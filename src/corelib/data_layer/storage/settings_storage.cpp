@@ -540,6 +540,7 @@ SettingsStorage::Implementation::Implementation()
         defaultSettings.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
         defaultSettings.insert(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey, true);
         defaultSettings.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
+        defaultSettings.insert(kComponentsScreenplayEditorCorrectSceneCharactersKey, false);
         defaultSettings.insert(kComponentsScreenplayEditorContinueDialogueKey, false);
         defaultSettings.insert(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey, true);
         defaultSettings.insert(kComponentsScreenplayEditorSaveItemsFromTextKey, true);

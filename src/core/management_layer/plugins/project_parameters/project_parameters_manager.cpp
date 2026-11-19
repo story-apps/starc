@@ -102,49 +102,71 @@ void ProjectParametersManager::Implementation::setModelForView(BusinessLayer::Ab
     // Настраиваем соединения с новой моделью
     //
     if (model != nullptr) {
-        _view->setOverrideCommonSettings(model->overrideCommonSettingsForScreenplay());
-        _view->setScreenplayTemplate(model->templateIdForScreenplay());
-        _view->setShowSceneNumbers(model->showSceneNumbersForScreenplay());
-        _view->setShowSceneNumbersOnLeft(model->showSceneNumbersOnLeftForScreenplay());
-        _view->setShowSceneNumbersOnRight(model->showSceneNumbersOnRightForScreenplay());
-        _view->setShowDialoguesNumbers(model->showDialoguesNumbersForScreenplay());
-        _view->setChronometerOptions(model->chronometerOptionsForScreenplay());
+        _view->setOverrideScreenplaySettings(model->overrideCommonSettingsForScreenplay());
+        _view->setScreenplayEditorTemplate(model->templateIdForScreenplay());
+        _view->setScreenplayEditorShowSceneNumbers(model->showSceneNumbersForScreenplay());
+        _view->setScreenplayEditorShowSceneNumbersOnLeft(
+            model->showSceneNumbersOnLeftForScreenplay());
+        _view->setScreenplayEditorShowSceneNumbersOnRight(
+            model->showSceneNumbersOnRightForScreenplay());
+        _view->setScreenplayEditorShowDialoguesNumbers(model->showDialoguesNumbersForScreenplay());
+        _view->setScreenplayEditorCorrectSceneCharacters(
+            model->correctSceneCharactersForScreenplay());
+        _view->setScreenplayEditorCorrectTextOnPageBreaks(
+            model->correctTextOnPageBreaksForScreenplay());
+        _view->setScreenplayDurationOptions(model->chronometerOptionsForScreenplay());
 
         connect(model,
                 &BusinessLayer::ProjectInformationModel::overrideCommonSettingsForScreenplayChanged,
-                _view, &Ui::ProjectParametersView::setOverrideCommonSettings);
+                _view, &Ui::ProjectParametersView::setOverrideScreenplaySettings);
         connect(model, &BusinessLayer::ProjectInformationModel::templateIdForScreenplayChanged,
-                _view, &Ui::ProjectParametersView::setScreenplayTemplate);
+                _view, &Ui::ProjectParametersView::setScreenplayEditorTemplate);
         connect(model,
                 &BusinessLayer::ProjectInformationModel::showSceneNumbersForScreenplayChanged,
-                _view, &Ui::ProjectParametersView::setShowSceneNumbers);
+                _view, &Ui::ProjectParametersView::setScreenplayEditorShowSceneNumbers);
         connect(model,
                 &BusinessLayer::ProjectInformationModel::showSceneNumbersOnLeftForScreenplayChanged,
-                _view, &Ui::ProjectParametersView::setShowSceneNumbersOnLeft);
+                _view, &Ui::ProjectParametersView::setScreenplayEditorShowSceneNumbersOnLeft);
         connect(
             model,
             &BusinessLayer::ProjectInformationModel::showSceneNumbersOnRightForScreenplayChanged,
-            _view, &Ui::ProjectParametersView::setShowSceneNumbersOnRight);
+            _view, &Ui::ProjectParametersView::setScreenplayEditorShowSceneNumbersOnRight);
         connect(model,
                 &BusinessLayer::ProjectInformationModel::showDialoguesNumbersForScreenplayChanged,
-                _view, &Ui::ProjectParametersView::setShowDialoguesNumbers);
+                _view, &Ui::ProjectParametersView::setScreenplayEditorShowDialoguesNumbers);
+        connect(model,
+                &BusinessLayer::ProjectInformationModel::correctSceneCharactersForScreenplayChanged,
+                _view, &Ui::ProjectParametersView::setScreenplayEditorCorrectSceneCharacters);
+        connect(
+            model,
+            &BusinessLayer::ProjectInformationModel::correctTextOnPageBreaksForScreenplayChanged,
+            _view, &Ui::ProjectParametersView::setScreenplayEditorCorrectTextOnPageBreaks);
         connect(model,
                 &BusinessLayer::ProjectInformationModel::chronometerOptionsForScreenplayChanged,
-                _view, &Ui::ProjectParametersView::setChronometerOptions);
+                _view, &Ui::ProjectParametersView::setScreenplayDurationOptions);
         //
-        connect(_view, &Ui::ProjectParametersView::overrideCommonSettingsChanged, model,
+        connect(_view, &Ui::ProjectParametersView::overrideScreenplaySettingsChanged, model,
                 &BusinessLayer::ProjectInformationModel::setOverrideCommonSettingsForScreenplay);
-        connect(_view, &Ui::ProjectParametersView::screenplayTemplateChanged, model,
+        connect(_view, &Ui::ProjectParametersView::screenplayEditorTemplateChanged, model,
                 &BusinessLayer::ProjectInformationModel::setTemplateIdForScreenplay);
-        connect(_view, &Ui::ProjectParametersView::showSceneNumbersChanged, model,
+        connect(_view, &Ui::ProjectParametersView::screenplayEditorShowSceneNumbersChanged, model,
                 &BusinessLayer::ProjectInformationModel::setShowSceneNumbersForScreenplay);
-        connect(_view, &Ui::ProjectParametersView::showSceneNumbersOnLeftChanged, model,
+        connect(_view, &Ui::ProjectParametersView::screenplayEditorShowSceneNumbersOnLeftChanged,
+                model,
                 &BusinessLayer::ProjectInformationModel::setShowSceneNumbersOnLeftForScreenplay);
-        connect(_view, &Ui::ProjectParametersView::showSceneNumbersOnRightChanged, model,
+        connect(_view, &Ui::ProjectParametersView::screenplayEditorShowSceneNumbersOnRightChanged,
+                model,
                 &BusinessLayer::ProjectInformationModel::setShowSceneNumbersOnRightForScreenplay);
-        connect(_view, &Ui::ProjectParametersView::showDialoguesNumbersChanged, model,
+        connect(_view, &Ui::ProjectParametersView::screenplayEditorShowDialoguesNumbersChanged,
+                model,
                 &BusinessLayer::ProjectInformationModel::setShowDialoguesNumbersForScreenplay);
-        connect(_view, &Ui::ProjectParametersView::chronometerOptionsChanged, model,
+        connect(_view, &Ui::ProjectParametersView::screenplayEditorCorrectSceneCharactersChanged,
+                model,
+                &BusinessLayer::ProjectInformationModel::setCorrectSceneCharactersForScreenplay);
+        connect(_view, &Ui::ProjectParametersView::screenplayEditorCorrectTextOnPageBreaksChanged,
+                model,
+                &BusinessLayer::ProjectInformationModel::setCorrectTextOnPageBreaksForScreenplay);
+        connect(_view, &Ui::ProjectParametersView::screenplayDurationOptionsChanged, model,
                 &BusinessLayer::ProjectInformationModel::setChronometerOptionsForScreenplay);
     }
 }

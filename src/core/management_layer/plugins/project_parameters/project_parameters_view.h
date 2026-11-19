@@ -26,26 +26,33 @@ public:
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     /** @} */
 
-    void setOverrideCommonSettings(bool _override);
-    Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
+    void setOverrideScreenplaySettings(bool _override);
+    Q_SIGNAL void overrideScreenplaySettingsChanged(bool _override);
 
-    void setScreenplayTemplate(const QString& _templateId);
-    Q_SIGNAL void screenplayTemplateChanged(const QString& _templateId);
+    void setScreenplayEditorTemplate(const QString& _templateId);
+    Q_SIGNAL void screenplayEditorTemplateChanged(const QString& _templateId);
 
-    void setShowSceneNumbers(bool _show);
-    Q_SIGNAL void showSceneNumbersChanged(bool _show);
+    void setScreenplayEditorShowSceneNumbers(bool _show);
+    Q_SIGNAL void screenplayEditorShowSceneNumbersChanged(bool _show);
 
-    void setShowSceneNumbersOnLeft(bool _show);
-    Q_SIGNAL void showSceneNumbersOnLeftChanged(bool _show);
+    void setScreenplayEditorShowSceneNumbersOnLeft(bool _show);
+    Q_SIGNAL void screenplayEditorShowSceneNumbersOnLeftChanged(bool _show);
 
-    void setShowSceneNumbersOnRight(bool _show);
-    Q_SIGNAL void showSceneNumbersOnRightChanged(bool _show);
+    void setScreenplayEditorShowSceneNumbersOnRight(bool _show);
+    Q_SIGNAL void screenplayEditorShowSceneNumbersOnRightChanged(bool _show);
 
-    void setShowDialoguesNumbers(bool _show);
-    Q_SIGNAL void showDialoguesNumbersChanged(bool _show);
+    void setScreenplayEditorShowDialoguesNumbers(bool _show);
+    Q_SIGNAL void screenplayEditorShowDialoguesNumbersChanged(bool _show);
 
-    void setChronometerOptions(const BusinessLayer::ChronometerOptions& _options);
-    Q_SIGNAL void chronometerOptionsChanged(const BusinessLayer::ChronometerOptions& _options);
+    void setScreenplayEditorCorrectSceneCharacters(bool _correct);
+    Q_SIGNAL void screenplayEditorCorrectSceneCharactersChanged(bool _correct);
+
+    void setScreenplayEditorCorrectTextOnPageBreaks(bool _correct);
+    Q_SIGNAL void screenplayEditorCorrectTextOnPageBreaksChanged(bool _correct);
+
+    void setScreenplayDurationOptions(const BusinessLayer::ChronometerOptions& _options);
+    Q_SIGNAL void screenplayDurationOptionsChanged(
+        const BusinessLayer::ChronometerOptions& _options);
 
 protected:
     /**
