@@ -2,6 +2,7 @@
 
 #include <include/custom_events.h>
 
+#include <QApplication>
 #include <QEvent>
 #include <QPaintEvent>
 #include <QPainter>
@@ -64,6 +65,18 @@ Widget::Widget(QWidget* _parent)
 }
 
 Widget::~Widget() = default;
+
+bool Widget::hasFocusedChild() const
+{
+    for (auto widget = QApplication::focusWidget(); widget != nullptr;
+         widget = widget->parentWidget()) {
+        if (widget == this) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 QColor Widget::backgroundColor() const
 {

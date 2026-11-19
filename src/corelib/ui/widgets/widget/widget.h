@@ -25,6 +25,11 @@ public:
     ~Widget() override;
 
     /**
+     * @brief Установлен ли фокус в каком-либо из дочерних виджетов
+     */
+    bool hasFocusedChild() const;
+
+    /**
      * @brief Цвет фона виджета
      */
     QColor backgroundColor() const;
