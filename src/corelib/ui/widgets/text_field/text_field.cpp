@@ -894,10 +894,17 @@ void TextField::paintEvent(QPaintEvent* _event)
                                  - Ui::DesignSystem::textField().helperHeight());
     }
     painter.setPen(Qt::NoPen);
-    painter.setBrush(underMouse() || hasFocus()
-                             || findChildren<QWidget*>().contains(QApplication::focusWidget())
-                         ? d->backgroundActiveColor
-                         : d->backgroundInactiveColor);
+    const auto hasFocusedChild = [this] {
+        for (auto widget = QApplication::focusWidget(); widget != nullptr;
+             widget = widget->parentWidget()) {
+            if (widget == this) {
+                return true;
+            }
+        }
+        return false;
+    };
+    painter.setBrush(underMouse() || hasFocus() || hasFocusedChild() ? d->backgroundActiveColor
+                                                                     : d->backgroundInactiveColor);
     QPainterPath backgroundPath;
     backgroundPath.setFillRule(Qt::WindingFill);
     backgroundPath.addRoundedRect(backgroundRect, Ui::DesignSystem::textField().borderRadius(),
@@ -917,13 +924,13 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     // В противном случае, самостоятельно рисуем звёздочки вместо букв
     //
-    else if (!text().isEmpty()) {
+    else if (!document()->isEmpty()) {
         painter.begin(viewport());
         painter.setFont(Ui::DesignSystem::font().body1());
         painter.setPen(d->textColor);
         const auto passwdRect = d->inputTextRect();
         painter.drawText(passwdRect, Qt::AlignLeft | Qt::AlignBottom,
-                         QString(text().length(), QString("●").front()));
+                         QString(document()->characterCount(), QString("●").front()));
 
         //
         // TODO: рисовать курсор
@@ -944,7 +951,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         QFont labelFont = Ui::DesignSystem::font().caption();
         if (!d->labelFontSizeAnimation.currentValue().isNull()) {
             labelFont.setPixelSize(d->labelFontSizeAnimation.currentValue().toInt());
-        } else if (!hasFocus() && text().isEmpty() && d->placeholder.isEmpty()) {
+        } else if (!hasFocus() && document()->isEmpty() && d->placeholder.isEmpty()) {
             labelFont.setPixelSize(Ui::DesignSystem::font().body1().pixelSize());
         }
         painter.setFont(labelFont);
@@ -964,7 +971,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     // ... плейсхолдер
     //
-    if (text().isEmpty() && !d->placeholder.isEmpty()) {
+    if (document()->isEmpty() && !d->placeholder.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().body1());
         painter.setPen(d->textDisabledColor);
         const auto placeholderRect = d->inputTextRect();
