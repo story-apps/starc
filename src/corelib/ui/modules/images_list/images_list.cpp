@@ -293,6 +293,9 @@ QRectF ImagesList::Implementation::imageRect(int _imageIndex) const
     const auto spacing = finalImageSpacing(imageSpacing);
     auto x = q->contentsRect().x();
     auto y = q->contentsRect().y();
+    //
+    // Последняя ячейка - это кнопка добавления картинок
+    //
     for (int index = 0; index < images.size(); ++index) {
         if (index == _imageIndex) {
             return QRectF(x, y, size.width(), size.height());
@@ -652,11 +655,13 @@ void ImagesList::paintEvent(QPaintEvent* _event)
         const QPointF imagePosition
             = d->isImageReorderingActive ? d->imagePositions.at(imageIndex) : QPointF(x, y);
         const QRectF imageRect(imagePosition, size);
+        const auto needsPainting
+            = _event->region().intersects(imageRect.toAlignedRect().adjusted(-1, -1, 1, 1));
         //
         // ... пока изображение находится под курсором, его исходная ячейка остаётся пустой, а после
         //     отпускания оно рисуется в общем цикле и летит к целевой ячейке вместе с соседями
         //
-        if (!isDraggedImage || d->isDropAnimationActive) {
+        if (needsPainting && (!isDraggedImage || d->isDropAnimationActive)) {
             ImageHelper::drawRoundedImage(painter, imageRect,
                                           d->displayImages.at(imageIndex)
                                               .scaled(imageRect.size().toSize(),
@@ -666,7 +671,7 @@ void ImagesList::paintEvent(QPaintEvent* _event)
         }
 
         const auto imageOverlayAnimationIter = d->imageToOverlayAnimation.find(imageIndex);
-        if (!d->isImageReorderingActive
+        if (needsPainting && !d->isImageReorderingActive
             && imageOverlayAnimationIter != d->imageToOverlayAnimation.end()) {
 
             //
@@ -898,8 +903,15 @@ void ImagesList::mouseMoveEvent(QMouseEvent* _event)
                 animation->setEasingCurve(QEasingCurve::OutQuad);
                 animation->setStartValue(0.0);
                 animation->setEndValue(1.0);
-                connect(animation, &QVariantAnimation::valueChanged, this,
-                        qOverload<>(&ImagesList::update));
+                connect(animation, &QVariantAnimation::valueChanged, this, [this, imageIndex] {
+                    if (d->isImageReorderingActive) {
+                        update();
+                        return;
+                    }
+
+                    const auto index = imageIndex == kAddImageIndex ? d->images.size() : imageIndex;
+                    update(d->imageRect(index).toAlignedRect().adjusted(-1, -1, 1, 1));
+                });
                 connect(animation, &QVariantAnimation::finished, this,
                         [this, imageIndex, animation] {
                             if (animation->direction() == QVariantAnimation::Forward) {
@@ -927,8 +939,6 @@ void ImagesList::mouseMoveEvent(QMouseEvent* _event)
     // ... а для всех изображений, что не под курсором, скроем оверлеи
     //
     d->updateImagesAnimations();
-
-    update();
 }
 
 void ImagesList::mouseReleaseEvent(QMouseEvent* _event)
