@@ -308,6 +308,13 @@ void ComplianceCheckerImpl::startChecking()
         }
         return lines;
     };
+    auto scenesDuration = [](const QVector<ComplianceCheckResultItemScene>& _scenes) {
+        std::chrono::milliseconds duration{};
+        for (const auto& scene : _scenes) {
+            duration += scene.duration;
+        }
+        return duration;
+    };
     auto scenesEighths = [](const QVector<ComplianceCheckResultItemScene>& _scenes) {
         qreal eighths = 0.0;
         for (const auto& scene : _scenes) {
@@ -599,6 +606,58 @@ void ComplianceCheckerImpl::startChecking()
                     = nightScenesInSecondaryLocationsPercent - rule.maximumValue;
                 const auto deltaScenesAmount = qCeil(deltaPercent * scenes.size() / 100.0);
                 result.subtitle = tr("Needed %n less scenes", nullptr, deltaScenesAmount);
+            }
+
+            break;
+        }
+
+        case BusinessLayer::ComplianceRuleType::LongScenes: {
+            //
+            // Считать параметры
+            //
+            const auto lines = fillLines(rule);
+            const auto line = lines.constFirst();
+            const auto longSceneThreshold = std::chrono::seconds{ line.longSceneThreshold };
+
+            //
+            // Сформировать результат проверки для необходимой линии
+            //
+            result.title = tr("Long scenes (from %1) shouldn't be less %2%")
+                               .arg(TimeHelper::toString(longSceneThreshold),
+                                    QString::number(rule.minimumValue));
+
+            //
+            // Собираем длительность длинных сцен
+            //
+            QVector<ComplianceCheckResultItemScene> shortScenes;
+            QVector<ComplianceCheckResultItemScene> longScenes;
+            for (const auto& scene : std::as_const(scenes)) {
+                if (scene.duration < longSceneThreshold) {
+                    shortScenes.append(scene);
+                } else {
+                    longScenes.append(scene);
+                }
+            }
+
+            const auto totalScenesDuration = scenesDuration(scenes);
+            const auto longScenesDuration = scenesDuration(longScenes);
+            const auto longScenesDurationPercent = longScenesDuration.count() * 100
+                / static_cast<qreal>(totalScenesDuration.count());
+            if (longScenesDurationPercent >= rule.minimumValue) {
+                result.status = ComplianceCheckResultStatus::Passed;
+            } else {
+                result.status = failedStatus(rule);
+                ComplianceCheckResultItem lineItem;
+                lineItem.type = ComplianceCheckResultItemType::Scene;
+                lineItem.scenes = shortScenes;
+                result.items.append(lineItem);
+
+                const auto deltaPercent = rule.minimumValue - longScenesDurationPercent;
+                const int deltaScenesDuration = deltaPercent * totalScenesDuration.count() / 100.0;
+                result.subtitle = tr("%1% (needed %2 more)")
+                                      .arg(QString::number(longScenesDurationPercent, 'f', 2))
+                                      .arg(TimeHelper::toString(
+                                          std::chrono::milliseconds{ deltaScenesDuration }));
             }
 
             break;

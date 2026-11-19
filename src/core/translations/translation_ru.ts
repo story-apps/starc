@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
 <context>
     <name>AppBar</name>
     <message>
@@ -440,7 +442,11 @@
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="418"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="583"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
+        <translation>
+            <numerusform>Проходит %n раз</numerusform>
+            <numerusform>Проходит %n раза</numerusform>
+            <numerusform>Проходит %n раз</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="578"/>
@@ -1225,140 +1231,182 @@
 <context>
     <name>BusinessLayer::ComplianceCheckerImpl</name>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="329"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="336"/>
         <source>Script duration from %1 to %2</source>
         <translation>Хронометраж сценария от %1 до %2</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="339"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="346"/>
         <source>Duration is %1</source>
         <translation>Хронометраж равен %1</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="342"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="367"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="624"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="349"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="374"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="683"/>
         <source>(%1 less)</source>
         <translation>(на %1 меньше)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="347"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="369"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="627"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="354"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="376"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="686"/>
         <source>(%1 more)</source>
         <translation>(на %1 больше)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="358"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="365"/>
         <source>Scenes count from %1 to %2</source>
         <translation>Количество сцен от %1 до %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="365"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="372"/>
         <source>%n scenes</source>
-        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
+        <translation>
+            <numerusform>%n сцена</numerusform>
+            <numerusform>%n сцены</numerusform>
+            <numerusform>%n сцен</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="409"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="416"/>
         <source>Characters (%1) should speak in every scene</source>
         <translation>Персонажи (%1) должны иметь реплики в каждой сцене</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="428"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="518"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="558"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="435"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="525"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="565"/>
         <source>(%n scenes)</source>
-        <translation><numerusform>(%n сцена)</numerusform><numerusform>(%n сцены)</numerusform><numerusform>(%n сцен)</numerusform><numerusform>(%n сцен)</numerusform></translation>
+        <translation>
+            <numerusform>(%n сцена)</numerusform>
+            <numerusform>(%n сцены)</numerusform>
+            <numerusform>(%n сцен)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="443"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="450"/>
         <source>Scenes with more then %n characters</source>
-        <translation><numerusform>Сцены, в которых больше %n персонажа</numerusform><numerusform>Сцены, в которых больше %n персонажей</numerusform><numerusform>Сцены, в которых больше %n персонажей</numerusform><numerusform>Сцены, в которых больше %n персонажей</numerusform></translation>
+        <translation>
+            <numerusform>Сцены, в которых больше %n персонажа</numerusform>
+            <numerusform>Сцены, в которых больше %n персонажей</numerusform>
+            <numerusform>Сцены, в которых больше %n персонажей</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="470"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="477"/>
         <source>Primary locations (%1) should present in %2% of scenes</source>
         <translation>Основные локации (%1) должны использоваться в %2% сцен</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="493"/>
-        <source>Needed %n more scenes</source>
-        <translation><numerusform>Не хватает %n сцены</numerusform><numerusform>Не хватает %n сцен</numerusform><numerusform>Не хватает %n сцен</numerusform><numerusform>Не хватает %n сцен</numerusform></translation>
-    </message>
-    <message numerus="yes">
         <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="500"/>
+        <source>Needed %n more scenes</source>
+        <translation>
+            <numerusform>Не хватает %n сцены</numerusform>
+            <numerusform>Не хватает %n сцен</numerusform>
+            <numerusform>Не хватает %n сцен</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="507"/>
         <source>Maximum %n additional locations</source>
-        <translation><numerusform>Не более %n дополнительной локации</numerusform><numerusform>Не более %n дополнительных локаций</numerusform><numerusform>Не более %n дополнительных локаций</numerusform><numerusform>Не более %n дополнительных локаций</numerusform></translation>
+        <translation>
+            <numerusform>Не более %n дополнительной локации</numerusform>
+            <numerusform>Не более %n дополнительных локаций</numerusform>
+            <numerusform>Не более %n дополнительных локаций</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="527"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="534"/>
         <source>%n additional locations (%1 more)</source>
-        <translation><numerusform>%n дополнительная локация (на %1 больше)</numerusform><numerusform>%n дополнительные локации (на %1 больше)</numerusform><numerusform>%n дополнительных локаций (на %1 больше)</numerusform><numerusform>%n дополнительных локаций (на %1 больше)</numerusform></translation>
+        <translation>
+            <numerusform>%n дополнительная локация (на %1 больше)</numerusform>
+            <numerusform>%n дополнительные локации (на %1 больше)</numerusform>
+            <numerusform>%n дополнительных локаций (на %1 больше)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="536"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="543"/>
         <source>Minimum %n scenes for additional location</source>
-        <translation><numerusform>Не менее %n сцены в дополнительной локации</numerusform><numerusform>Не менее %n сцен в дополнительной локации</numerusform><numerusform>Не менее %n сцен в дополнительной локации</numerusform><numerusform>Не менее %n сцен в дополнительной локации</numerusform></translation>
+        <translation>
+            <numerusform>Не менее %n сцены в дополнительной локации</numerusform>
+            <numerusform>Не менее %n сцен в дополнительной локации</numerusform>
+            <numerusform>Не менее %n сцен в дополнительной локации</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="566"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="573"/>
         <source>%n additional locations has less scenes then needed</source>
-        <translation><numerusform>У %n дополнительной локации сцен меньше чем требуется</numerusform><numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform><numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform><numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform></translation>
+        <translation>
+            <numerusform>У %n дополнительной локации сцен меньше чем требуется</numerusform>
+            <numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform>
+            <numerusform>У %n дополнительных локаций сцен меньше чем требуется</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="575"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="582"/>
         <source>Night scenes in additional locations should be less then %1% of scenes</source>
         <translation>Процент ночных сцен в дополнительных локациях меньше %1%</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="601"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="608"/>
         <source>Needed %n less scenes</source>
-        <translation><numerusform>Нужно на %1 сцену меньше</numerusform><numerusform>Нужно на %1 сцены меньше</numerusform><numerusform>Нужно на %1 сцен меньше</numerusform><numerusform>Нужно на %1 сцен меньше</numerusform></translation>
+        <translation>
+            <numerusform>Нужно на %1 сцену меньше</numerusform>
+            <numerusform>Нужно на %1 сцены меньше</numerusform>
+            <numerusform>Нужно на %1 сцен меньше</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="609"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="625"/>
+        <source>Long scenes (from %1) shouldn&apos;t be less %2%</source>
+        <translation>Длинные сцены в (от %1) занимают не меньше %2%</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="668"/>
         <source>Script pages count from %1 to %2</source>
         <translation>Количество страниц от %1 до %2</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="621"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="680"/>
         <source>Page count is %1</source>
         <translation>Страниц %1</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="693"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="752"/>
         <source>%1 pages amount from %2% to %3% of all pages</source>
         <translation>%1 занимает от %2% до %3% всех страниц</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="720"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="779"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="729"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="843"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="657"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="788"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="902"/>
         <source>%1% (needed %2 more)</source>
         <translation>%1% (нужно на %2 больше)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="736"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="795"/>
         <source>%1% (needed %2 less)</source>
         <translation>%1% (нужно на %2 меньше)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="810"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="869"/>
         <source>Long scenes of %1 (from %2) shouldn&apos;t be less %3%</source>
         <translation>Длинные сцены в %1 (от %2) занимают не меньше %3%</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="377"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="384"/>
         <source>Scene duration from %1 to %2</source>
         <translation>Хронометраж сцен от %1 до %2</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="398"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="459"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="405"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="466"/>
         <source>%1% scenes out of range (%2 from %3)</source>
         <translation>%1% сцен не укладываются в диапазон (%2 из %3)</translation>
     </message>
@@ -1989,7 +2037,11 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="466"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="631"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
+        <translation>
+            <numerusform>Проходит %n раз</numerusform>
+            <numerusform>Проходит %n раза</numerusform>
+            <numerusform>Проходит %n раз</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="636"/>
@@ -3594,7 +3646,7 @@
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1195"/>
-        <source>Can't load url for the last version update.
+        <source>Can&apos;t load url for the last version update.
 
 Please visit our official website &quot;starc.app&quot; and download the last version manually.</source>
         <translation>Не удалось загрузить ссылку на последнее обновление.
@@ -3889,7 +3941,11 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="641"/>
         <source>PRO version subscription activated for %n month(s).</source>
-        <translation><numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform></translation>
+        <translation>
+            <numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform>
+            <numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform>
+            <numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="646"/>
@@ -3899,7 +3955,11 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="663"/>
         <source>%n credits were added to your balance.</source>
-        <translation><numerusform>Счёт пополнен на %n кредит</numerusform><numerusform>Счёт пополнен на %n кредита</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform></translation>
+        <translation>
+            <numerusform>Счёт пополнен на %n кредит</numerusform>
+            <numerusform>Счёт пополнен на %n кредита</numerusform>
+            <numerusform>Счёт пополнен на %n кредитов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="677"/>
@@ -4017,7 +4077,11 @@ Please visit our official website &quot;starc.app&quot; and download the last ve
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="650"/>
         <source>CREATOR version subscription activated for %n month(s).</source>
-        <translation><numerusform>Подписка на CREATOR версию активирована на %n месяц.</numerusform><numerusform>Подписка на CREATOR версию активирована на %n месяца.</numerusform><numerusform>Подписка на CREATOR версию активирована на %n месяцев.</numerusform><numerusform>Подписка на CREATOR версию активирована на %n месяцев.</numerusform></translation>
+        <translation>
+            <numerusform>Подписка на CREATOR версию активирована на %n месяц.</numerusform>
+            <numerusform>Подписка на CREATOR версию активирована на %n месяца.</numerusform>
+            <numerusform>Подписка на CREATOR версию активирована на %n месяцев.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="655"/>
@@ -5185,7 +5249,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="660"/>
         <source>Do you really want to remove element &quot;%1&quot; from entire screenplay? It participates in %n scene(s).</source>
-        <translation><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сцене.</numerusform><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform></translation>
+        <translation>
+            <numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сцене.</numerusform>
+            <numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform>
+            <numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="515"/>
@@ -5398,7 +5466,7 @@ This action can&apos;t be canceled.</source>
     <name>ManagementLayer::SettingsManager</name>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="999"/>
-        <source>Do you want to revert all changes in settings to the default state? This action can't be undone.
+        <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.
 
 &quot;Reset&quot; button reset only application settings except account and project info.
 
@@ -5649,27 +5717,27 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3975"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3962"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3982"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3969"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3989"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3976"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3996"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3983"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4002"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3989"/>
         <source>Select all</source>
         <translation>Выбрать всё</translation>
     </message>
@@ -7816,7 +7884,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../ui/account/account_navigator.cpp" line="410"/>
         <source>%n credits available</source>
-        <translation><numerusform>%n кредит доступен</numerusform><numerusform>%n кредита доступно</numerusform><numerusform>%n кредитов доступно</numerusform><numerusform>%n кредитов доступно</numerusform></translation>
+        <translation>
+            <numerusform>%n кредит доступен</numerusform>
+            <numerusform>%n кредита доступно</numerusform>
+            <numerusform>%n кредитов доступно</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="411"/>
@@ -8234,7 +8306,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1197"/>
         <source>%n word(s) available</source>
-        <translation><numerusform>%n слово доступно</numerusform><numerusform>%n слова доступно</numerusform><numerusform>%n слов доступно</numerusform><numerusform>%n слов доступно</numerusform></translation>
+        <translation>
+            <numerusform>%n слово доступно</numerusform>
+            <numerusform>%n слова доступно</numerusform>
+            <numerusform>%n слов доступно</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1198"/>
@@ -9218,7 +9294,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="199"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
+        <translation>
+            <numerusform>Проходит %n раз</numerusform>
+            <numerusform>Проходит %n раза</numerusform>
+            <numerusform>Проходит %n раз</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="264"/>
@@ -9266,7 +9346,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="130"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="229"/>
@@ -9759,27 +9843,47 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="120"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
+        <translation>
+            <numerusform>%n страница</numerusform>
+            <numerusform>%n страницы</numerusform>
+            <numerusform>%n страниц</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="121"/>
         <source>%n scene(s)</source>
-        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
+        <translation>
+            <numerusform>%n сцена</numerusform>
+            <numerusform>%n сцены</numerusform>
+            <numerusform>%n сцен</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="123"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
+        <translation>
+            <numerusform>%n символ</numerusform>
+            <numerusform>%n символа</numerusform>
+            <numerusform>%n символов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="124"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
+        <translation>
+            <numerusform>%n символ с пробелами</numerusform>
+            <numerusform>%n символа с пробелами</numerusform>
+            <numerusform>%n символов с пробелами</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="247"/>
@@ -9802,7 +9906,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1364"/>
         <source>Document translation will take %n word(s)</source>
-        <translation><numerusform>Перевод документа потребует обработки %n слово</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Перевод документа потребует обработки %n слово</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1492"/>
@@ -10946,7 +11054,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="131"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="230"/>
@@ -11065,7 +11177,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1215"/>
         <source>%n panels</source>
-        <translation><numerusform>%n кадр</numerusform><numerusform>%n кадра</numerusform><numerusform>%n кадров</numerusform><numerusform>%n кадров</numerusform></translation>
+        <translation>
+            <numerusform>%n кадр</numerusform>
+            <numerusform>%n кадра</numerusform>
+            <numerusform>%n кадров</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1411"/>
@@ -11171,7 +11287,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="352"/>
         <source>%n PANELS</source>
-        <translation><numerusform>%n КАДР</numerusform><numerusform>%n КАДРА</numerusform><numerusform>%n КАДРОВ</numerusform><numerusform>%n КАДРОВ</numerusform></translation>
+        <translation>
+            <numerusform>%n КАДР</numerusform>
+            <numerusform>%n КАДРА</numerusform>
+            <numerusform>%n КАДРОВ</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -11179,27 +11299,47 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="118"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
+        <translation>
+            <numerusform>%n страница</numerusform>
+            <numerusform>%n страницы</numerusform>
+            <numerusform>%n страниц</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="119"/>
         <source>%n panel(s)</source>
-        <translation><numerusform>%n кадр</numerusform><numerusform>%n кадра</numerusform><numerusform>%n кадров</numerusform><numerusform>%n кадров</numerusform></translation>
+        <translation>
+            <numerusform>%n кадр</numerusform>
+            <numerusform>%n кадра</numerusform>
+            <numerusform>%n кадров</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="120"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="121"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
+        <translation>
+            <numerusform>%n символ</numerusform>
+            <numerusform>%n символа</numerusform>
+            <numerusform>%n символов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="122"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
+        <translation>
+            <numerusform>%n символ с пробелами</numerusform>
+            <numerusform>%n символа с пробелами</numerusform>
+            <numerusform>%n символов с пробелами</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="242"/>
@@ -11222,7 +11362,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1362"/>
         <source>Document translation will take %n word(s)</source>
-        <translation><numerusform>Перевод документа потребует обработки %n слово</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Перевод документа потребует обработки %n слово</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1489"/>
@@ -11300,7 +11444,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="330"/>
         <source>%n reply(s)</source>
-        <translation><numerusform>%n ответ</numerusform><numerusform>%n ответа</numerusform><numerusform>%n ответов</numerusform><numerusform>%n ответов</numerusform></translation>
+        <translation>
+            <numerusform>%n ответ</numerusform>
+            <numerusform>%n ответа</numerusform>
+            <numerusform>%n ответов</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -12738,7 +12886,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../ui/notifications/credits_view.cpp" line="58"/>
         <source>%n credits were added to your balance.</source>
-        <translation><numerusform>Счёт пополнен на %n кредит</numerusform><numerusform>Счёт пополнен на %n кредита</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform></translation>
+        <translation>
+            <numerusform>Счёт пополнен на %n кредит</numerusform>
+            <numerusform>Счёт пополнен на %n кредита</numerusform>
+            <numerusform>Счёт пополнен на %n кредитов</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -14775,7 +14927,11 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="134"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="241"/>
@@ -15189,27 +15345,47 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="120"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
+        <translation>
+            <numerusform>%n страница</numerusform>
+            <numerusform>%n страницы</numerusform>
+            <numerusform>%n страниц</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="121"/>
         <source>%n scene(s)</source>
-        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
+        <translation>
+            <numerusform>%n сцена</numerusform>
+            <numerusform>%n сцены</numerusform>
+            <numerusform>%n сцен</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="123"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
+        <translation>
+            <numerusform>%n символ</numerusform>
+            <numerusform>%n символа</numerusform>
+            <numerusform>%n символов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="124"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
+        <translation>
+            <numerusform>%n символ с пробелами</numerusform>
+            <numerusform>%n символа с пробелами</numerusform>
+            <numerusform>%n символов с пробелами</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="243"/>
@@ -15248,12 +15424,20 @@ This action can&apos;t be canceled.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1729"/>
         <source>Document translation will take %n word(s)</source>
-        <translation><numerusform>Перевод документа потребует обработки %n слово</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Перевод документа потребует обработки %n слово</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1731"/>
         <source>Script generation will take %n word(s)</source>
-        <translation><numerusform>Генерация сценария потребует обработки %n слово</numerusform><numerusform>Генерация сценария потребует обработки %n слова</numerusform><numerusform>Генерация сценария потребует обработки %n слов</numerusform><numerusform>Генерация сценария потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Генерация сценария потребует обработки %n слово</numerusform>
+            <numerusform>Генерация сценария потребует обработки %n слова</numerusform>
+            <numerusform>Генерация сценария потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1854"/>
@@ -16414,7 +16598,11 @@ Discuss everything with fellow community of writers, share your work in progress
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="179"/>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="263"/>
         <source>%n month(s)</source>
-        <translation><numerusform>%n месяц</numerusform><numerusform>%n месяца</numerusform><numerusform>%n месяцев</numerusform><numerusform>%n месяцев</numerusform></translation>
+        <translation>
+            <numerusform>%n месяц</numerusform>
+            <numerusform>%n месяца</numerusform>
+            <numerusform>%n месяцев</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="180"/>
@@ -16495,7 +16683,11 @@ Promo code validity period is a 1 year</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="75"/>
         <source>There are %n document(s) in the recycle bin.</source>
-        <translation><numerusform>В корзине %n документ.</numerusform><numerusform>В корзине %n документа.</numerusform><numerusform>В корзине %n документов.</numerusform><numerusform>В корзине %n документов.</numerusform></translation>
+        <translation>
+            <numerusform>В корзине %n документ.</numerusform>
+            <numerusform>В корзине %n документа.</numerusform>
+            <numerusform>В корзине %n документов.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="76"/>
@@ -17046,127 +17238,127 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="409"/>
         <source>Hide scene parameters</source>
         <translation>Скрыть параметры сцены</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="408"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="410"/>
         <source>Show scene parameters</source>
         <translation>Показать параметры сцены</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="409"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="411"/>
         <source>Hide bookmarks list</source>
         <translation>Скрыть список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="410"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="412"/>
         <source>Show bookmarks list</source>
         <translation>Показать список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="412"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="414"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Скрыть справочники сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="413"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="415"/>
         <source>Show screenplay dictionaries</source>
         <translation>Показать справочники сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1298"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1300"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>Вы действительно хотите удалить ресурс &quot;%1&quot; из текущей сцены?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2166"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2168"/>
         <source>You&apos;re in the read only mode</source>
         <translation>Вы в режиме только для чтения</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2169"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2171"/>
         <source>Go back to text</source>
         <translation>Назад к тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2170"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2172"/>
         <source>Unlock breakdown</source>
         <translation>Разблокировать разбивку</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2172"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2174"/>
         <source>Elements</source>
         <translation>Ресурсы</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2193"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2195"/>
         <source>In the whole text</source>
         <translation>Во всём тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2194"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2196"/>
         <source>In scene heading</source>
         <translation>В заголовках сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2195"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2197"/>
         <source>In cast list</source>
         <translation>в списке персонажей</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2196"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2198"/>
         <source>In action</source>
         <translation>В описании действия</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2197"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2199"/>
         <source>In character</source>
         <translation>В персонажах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2198"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2200"/>
         <source>In dialogue</source>
         <translation>В репликах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1300"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1302"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1301"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1303"/>
         <source>Yes, remove</source>
         <translation>Да, удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2168"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2170"/>
         <source>Activate CREATOR version to unlock full access to the screenplay breakdown module</source>
         <translation>Активируйте CREATOR версию, чтобы получить полный доступ к модулю разбивки сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2173"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2175"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2174"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2176"/>
         <source>Scene parameters</source>
         <translation>Параметры сцены</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2175"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2177"/>
         <source>Comments</source>
         <translation>Комментарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2176"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2178"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2177"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2179"/>
         <source>Dictionaries</source>
         <translation>Справочники</translation>
     </message>
@@ -17459,7 +17651,11 @@ Promo code validity period is a 1 year</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="199"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
+        <translation>
+            <numerusform>Проходит %n раз</numerusform>
+            <numerusform>Проходит %n раза</numerusform>
+            <numerusform>Проходит %n раз</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="264"/>
@@ -17507,7 +17703,11 @@ Promo code validity period is a 1 year</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="157"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="278"/>
@@ -17671,7 +17871,11 @@ Promo code validity period is a 1 year</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="143"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_series_information/screenplay_series_information_view.cpp" line="250"/>
@@ -18900,27 +19104,47 @@ Promo code validity period is a 1 year</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="122"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
+        <translation>
+            <numerusform>%n страница</numerusform>
+            <numerusform>%n страницы</numerusform>
+            <numerusform>%n страниц</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="123"/>
         <source>%n scene(s)</source>
-        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
+        <translation>
+            <numerusform>%n сцена</numerusform>
+            <numerusform>%n сцены</numerusform>
+            <numerusform>%n сцен</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="124"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="125"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
+        <translation>
+            <numerusform>%n символ</numerusform>
+            <numerusform>%n символа</numerusform>
+            <numerusform>%n символов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="126"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
+        <translation>
+            <numerusform>%n символ с пробелами</numerusform>
+            <numerusform>%n символа с пробелами</numerusform>
+            <numerusform>%n символов с пробелами</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -18968,17 +19192,29 @@ Promo code validity period is a 1 year</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1979"/>
         <source>Document translation will take %n word(s)</source>
-        <translation><numerusform>Перевод документа потребует обработки %n слово</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Перевод документа потребует обработки %n слово</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1981"/>
         <source>Synopsis generation will take %n word(s)</source>
-        <translation><numerusform>Генерация синопсиса потребует обработки %n слово</numerusform><numerusform>Генерация синопсиса потребует обработки %n слова</numerusform><numerusform>Генерация синопсиса потребует обработки %n слов</numerusform><numerusform>Генерация синопсиса потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Генерация синопсиса потребует обработки %n слово</numerusform>
+            <numerusform>Генерация синопсиса потребует обработки %n слова</numerusform>
+            <numerusform>Генерация синопсиса потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1983"/>
         <source>Novel generation will take %n word(s)</source>
-        <translation><numerusform>Генерация романа потребует обработки %n слово</numerusform><numerusform>Генерация романа потребует обработки %n слова</numerusform><numerusform>Генерация романа потребует обработки %n слов</numerusform><numerusform>Генерация романа потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Генерация романа потребует обработки %n слово</numerusform>
+            <numerusform>Генерация романа потребует обработки %n слова</numerusform>
+            <numerusform>Генерация романа потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2119"/>
@@ -19572,7 +19808,11 @@ Promo code validity period is a 1 year</source>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="169"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="170"/>
         <source>word(s)</source>
-        <translation><numerusform>слово</numerusform><numerusform>слова</numerusform><numerusform>слов</numerusform><numerusform>слов</numerusform></translation>
+        <translation>
+            <numerusform>слово</numerusform>
+            <numerusform>слова</numerusform>
+            <numerusform>слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="178"/>
@@ -19710,7 +19950,7 @@ STARTED</source>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="175"/>
         <source>was active %1 at %2</source>
-        <extracomment>Last active date (%1) and time (%2) of the user's device</extracomment>
+        <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
         <translation>был активен %1 в %2</translation>
     </message>
     <message>
@@ -21239,22 +21479,38 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="115"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
+        <translation>
+            <numerusform>%n страница</numerusform>
+            <numerusform>%n страницы</numerusform>
+            <numerusform>%n страниц</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="116"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="117"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
+        <translation>
+            <numerusform>%n символ</numerusform>
+            <numerusform>%n символа</numerusform>
+            <numerusform>%n символов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="118"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
+        <translation>
+            <numerusform>%n символ с пробелами</numerusform>
+            <numerusform>%n символа с пробелами</numerusform>
+            <numerusform>%n символов с пробелами</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="237"/>
@@ -21283,7 +21539,11 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1284"/>
         <source>Document translation will take %n word(s)</source>
-        <translation><numerusform>Перевод документа потребует обработки %n слово</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Перевод документа потребует обработки %n слово</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1409"/>
@@ -21339,7 +21599,11 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="131"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="233"/>
@@ -21559,27 +21823,47 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="120"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
+        <translation>
+            <numerusform>%n страница</numerusform>
+            <numerusform>%n страницы</numerusform>
+            <numerusform>%n страниц</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="121"/>
         <source>%n scene(s)</source>
-        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
+        <translation>
+            <numerusform>%n сцена</numerusform>
+            <numerusform>%n сцены</numerusform>
+            <numerusform>%n сцен</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="123"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
+        <translation>
+            <numerusform>%n символ</numerusform>
+            <numerusform>%n символа</numerusform>
+            <numerusform>%n символов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="124"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
+        <translation>
+            <numerusform>%n символ с пробелами</numerusform>
+            <numerusform>%n символа с пробелами</numerusform>
+            <numerusform>%n символов с пробелами</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="247"/>
@@ -21607,7 +21891,11 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1323"/>
         <source>Document translation will take %n word(s)</source>
-        <translation><numerusform>Перевод документа потребует обработки %n слово</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform><numerusform>Перевод документа потребует обработки %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Перевод документа потребует обработки %n слово</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+            <numerusform>Перевод документа потребует обработки %n слов</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1450"/>
@@ -21691,7 +21979,11 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="159"/>
         <source>Your %1 version subscription expires in %n day(s).</source>
-        <translation><numerusform>Ваша подписка на %1 версию закончится через %n день.</numerusform><numerusform>Ваша подписка на %1 версию закончится через %n дня.</numerusform><numerusform>Ваша подписка на %1 версию закончится через %n дней.</numerusform><numerusform>Ваша подписка на %1 версию закончится через %n дней.</numerusform></translation>
+        <translation>
+            <numerusform>Ваша подписка на %1 версию закончится через %n день.</numerusform>
+            <numerusform>Ваша подписка на %1 версию закончится через %n дня.</numerusform>
+            <numerusform>Ваша подписка на %1 версию закончится через %n дней.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="167"/>
@@ -22689,12 +22981,20 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="305"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation><numerusform>Готово! Я только что написал %n слово</numerusform><numerusform>Готово! Я только что написал %n слова</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform></translation>
+        <translation>
+            <numerusform>Готово! Я только что написал %n слово</numerusform>
+            <numerusform>Готово! Я только что написал %n слова</numerusform>
+            <numerusform>Готово! Я только что написал %n слов</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="306"/>
         <source>in %n minute(s)</source>
-        <translation><numerusform>за %n мунуту</numerusform><numerusform>за %n минуты</numerusform><numerusform>за %n минут</numerusform><numerusform>за %n минут</numerusform></translation>
+        <translation>
+            <numerusform>за %n мунуту</numerusform>
+            <numerusform>за %n минуты</numerusform>
+            <numerusform>за %n минут</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="498"/>

@@ -331,7 +331,8 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
     // TODO: Пока доступно только для конкретных проектов, вынести в параметры проекта
     //
     switch (d->id) {
-    case 3661: {
+    case 3661: // ВШ
+    {
         const QStringList primaryLocations = {
             "ШКОЛА. КАБИНЕТ ВШ",        "ШКОЛА. КАБИНЕТ ВШ. КОРИДОР",
             "ШКОЛА. КАБИНЕТ ДИРЕКТОРА", "ШКОЛА. КАБИНЕТ ДИРЕКТОРА. КОРИДОР",
@@ -380,7 +381,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         break;
     }
 
-    case 4568:
+    case 4568: // ТРЁШКА
     case 4702: {
         const QStringList primaryLocations = {
             "ТРЕШКА. *",
@@ -431,7 +432,8 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
         break;
     }
 
-    case 4566: {
+    case 4566: // ИЕС
+    {
         QJsonArray line1Locations;
         line1Locations.append("ДОМ НИКОЛАЯ. *");
         QJsonArray line1Characters;
@@ -510,6 +512,60 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
             { BusinessLayer::ComplianceRuleType::ScenesCount, {}, true, 16, 24, {} },
             { BusinessLayer::ComplianceRuleType::SceneDuration, {}, true, 40, 80, {} },
             { BusinessLayer::ComplianceRuleType::SceneMaxCharactersCount, {}, false, 0, 5, {} },
+        };
+        break;
+    }
+
+    case 5013: // БЧС
+    {
+        QJsonObject line;
+        line["long_scene_threshold"] = 2 * 60; // две минуты
+        //
+        QJsonArray lines;
+        lines.append(line);
+        //
+        const QString linesRequirements = QJsonDocument(lines).toJson(QJsonDocument::Compact);
+        return {
+            { BusinessLayer::ComplianceRuleType::TotalDuration,
+              {},
+              true,
+              39 * 60 + 45,
+              41 * 60,
+              {} },
+            { BusinessLayer::ComplianceRuleType::ScenesCount, {}, true, 22, 24, {} },
+            { BusinessLayer::ComplianceRuleType::LongScenes,
+              {},
+              false,
+              80,
+              0,
+              { line["name"].toString(), linesRequirements } },
+        };
+        break;
+    }
+
+    case 5019: // ЧД
+    {
+        QJsonObject line;
+        line["long_scene_threshold"] = 2 * 60; // две минуты
+        //
+        QJsonArray lines;
+        lines.append(line);
+        //
+        const QString linesRequirements = QJsonDocument(lines).toJson(QJsonDocument::Compact);
+        return {
+            { BusinessLayer::ComplianceRuleType::TotalDuration,
+              {},
+              true,
+              39 * 60 + 45,
+              41 * 60,
+              {} },
+            { BusinessLayer::ComplianceRuleType::ScenesCount, {}, true, 23, 25, {} },
+            { BusinessLayer::ComplianceRuleType::LongScenes,
+              {},
+              false,
+              80,
+              0,
+              { line["name"].toString(), linesRequirements } },
         };
         break;
     }

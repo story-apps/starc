@@ -1230,36 +1230,36 @@
 <context>
     <name>BusinessLayer::ComplianceCheckerImpl</name>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="329"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="336"/>
         <source>Script duration from %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="339"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="346"/>
         <source>Duration is %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="342"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="367"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="624"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="349"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="374"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="683"/>
         <source>(%1 less)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="347"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="369"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="627"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="354"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="376"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="686"/>
         <source>(%1 more)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="358"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="365"/>
         <source>Scenes count from %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="365"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="372"/>
         <source>%n scenes</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1267,14 +1267,14 @@
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="409"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="416"/>
         <source>Characters (%1) should speak in every scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="428"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="518"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="558"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="435"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="525"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="565"/>
         <source>(%n scenes)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1282,7 +1282,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="443"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="450"/>
         <source>Scenes with more then %n characters</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1290,12 +1290,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="470"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="477"/>
         <source>Primary locations (%1) should present in %2% of scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="493"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="500"/>
         <source>Needed %n more scenes</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1303,7 +1303,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="500"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="507"/>
         <source>Maximum %n additional locations</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1311,7 +1311,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="527"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="534"/>
         <source>%n additional locations (%1 more)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1319,7 +1319,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="536"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="543"/>
         <source>Minimum %n scenes for additional location</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1327,7 +1327,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="566"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="573"/>
         <source>%n additional locations has less scenes then needed</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1335,12 +1335,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="575"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="582"/>
         <source>Night scenes in additional locations should be less then %1% of scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="601"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="608"/>
         <source>Needed %n less scenes</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1348,49 +1348,55 @@
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="609"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="625"/>
+        <source>Long scenes (from %1) shouldn&apos;t be less %2%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="668"/>
         <source>Script pages count from %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="621"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="680"/>
         <source>Page count is %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="693"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="752"/>
         <source>%1 pages amount from %2% to %3% of all pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="720"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="779"/>
         <source>Other</source>
         <translation type="unfinished">Other</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="729"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="843"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="657"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="788"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="902"/>
         <source>%1% (needed %2 more)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="736"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="795"/>
         <source>%1% (needed %2 less)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="810"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="869"/>
         <source>Long scenes of %1 (from %2) shouldn&apos;t be less %3%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="377"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="384"/>
         <source>Scene duration from %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="398"/>
-        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="459"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="405"/>
+        <location filename="../../corelib/business_layer/compliance/compliance_checker_impl.cpp" line="466"/>
         <source>%1% scenes out of range (%2 from %3)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5779,27 +5785,27 @@ This action can&apos;t be canceled.</source>
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3975"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3962"/>
         <source>Cut</source>
         <translation>Cut</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3982"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3969"/>
         <source>Copy</source>
         <translation>Copy</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3989"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3976"/>
         <source>Paste</source>
         <translation>Paste</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3996"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3983"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4002"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3989"/>
         <source>Select all</source>
         <translation>Select all</translation>
     </message>
@@ -17344,127 +17350,127 @@ Promo code validity period is a 1 year</translation>
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="409"/>
         <source>Hide scene parameters</source>
         <translation>Hide scene parameters</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="408"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="410"/>
         <source>Show scene parameters</source>
         <translation>Show scene parameters</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="409"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="411"/>
         <source>Hide bookmarks list</source>
         <translation>Hide bookmarks list</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="410"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="412"/>
         <source>Show bookmarks list</source>
         <translation>Show bookmarks list</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="412"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="414"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Hide screenplay dictionaries</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="413"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="415"/>
         <source>Show screenplay dictionaries</source>
         <translation>Show screenplay dictionaries</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1298"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1300"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>Do you really want to remove element &quot;%1&quot; from current scene?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2166"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2168"/>
         <source>You&apos;re in the read only mode</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2169"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2171"/>
         <source>Go back to text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2170"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2172"/>
         <source>Unlock breakdown</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2172"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2174"/>
         <source>Elements</source>
         <translation>Elements</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2193"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2195"/>
         <source>In the whole text</source>
         <translation>In the whole text</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2194"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2196"/>
         <source>In scene heading</source>
         <translation>In scene heading</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2195"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2197"/>
         <source>In cast list</source>
         <translation>In cast list</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2196"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2198"/>
         <source>In action</source>
         <translation>In action</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2197"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2199"/>
         <source>In character</source>
         <translation>In character</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2198"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2200"/>
         <source>In dialogue</source>
         <translation>In dialogue</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1300"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1302"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1301"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1303"/>
         <source>Yes, remove</source>
         <translation>Yes, remove</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2168"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2170"/>
         <source>Activate CREATOR version to unlock full access to the screenplay breakdown module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2173"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2175"/>
         <source>Formatting</source>
         <translation>Formatting</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2174"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2176"/>
         <source>Scene parameters</source>
         <translation>Scene parameters</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2175"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2177"/>
         <source>Comments</source>
         <translation>Comments</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2176"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2178"/>
         <source>Bookmarks</source>
         <translation>Bookmarks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2177"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2179"/>
         <source>Dictionaries</source>
         <translation>Dictionaries</translation>
     </message>

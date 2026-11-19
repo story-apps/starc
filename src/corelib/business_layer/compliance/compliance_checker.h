@@ -15,6 +15,8 @@ namespace BusinessLayer {
 enum class CORE_LIBRARY_EXPORT ComplianceRuleType {
     Undefined,
     //
+    // Правила ориентирующиеся на хронометраж
+    //
     // RCode 2026-05-22
     //
     TotalDuration, //!< Хронометраж серии
@@ -27,7 +29,13 @@ enum class CORE_LIBRARY_EXPORT ComplianceRuleType {
     SecondaryLocationsSceneCount, //!< Количество сцен в дополнительных локациях
     SecondaryLocationsNightScenePercent, //!< Количество ночных сцен в дополнительных локациях
     //
-    // RCode дополнительные по моей инициативе 2026-07-16
+    // RCode 2026-11-19
+    //
+    LongScenes, //!< Длительность сцен
+    //
+    // Правила ориентирующиеся на количество страниц
+    //
+    // RCode дополнительные по моей инициативе 2026-07-16 ИЕС
     //
     TotalPages, //!< Количество страниц серии
     ScenesDistributionByLocationsAndCharacters, //!< Распределение сцен по линиям
