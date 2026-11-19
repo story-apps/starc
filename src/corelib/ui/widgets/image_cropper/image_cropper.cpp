@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPixmapCache>
 #include <QVariantAnimation>
 
 
@@ -92,6 +93,9 @@ public:
      * @brief Изображение для обрезки
      */
     QPixmap sourceImage;
+    QPixmapCache::Key scaledImageKey;
+    qint64 scaledSourceKey = 0;
+    QSize scaledImageSize;
 
     /**
      * @brief Область выделения
@@ -563,8 +567,15 @@ void ImageCropper::paintEvent(QPaintEvent* _event)
     //
     // ... подгоним изображение для отображения по размеру виджета
     //
-    const QPixmap scaledImage
-        = d->sourceImage.scaled(size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+    QPixmap scaledImage;
+    if (d->scaledSourceKey != d->sourceImage.cacheKey() || d->scaledImageSize != size()
+        || !QPixmapCache::find(d->scaledImageKey, &scaledImage)) {
+        scaledImage = d->sourceImage.scaled(size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+        QPixmapCache::remove(d->scaledImageKey);
+        d->scaledImageKey = QPixmapCache::insert(scaledImage);
+        d->scaledSourceKey = d->sourceImage.cacheKey();
+        d->scaledImageSize = size();
+    }
     //
     // ... рисуем изображение по центру виджета
     //
