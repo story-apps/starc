@@ -499,7 +499,7 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
             auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(blockData);
             const auto model
                 = qobject_cast<const ScreenplayTextModel*>(screenplayBlockData->item()->model());
-            if (model != nullptr) {
+            if (model != nullptr && model->charactersList() != nullptr) {
                 auto charactersModel = model->charactersList();
                 for (int index = 0; index < charactersModel->rowCount(); ++index) {
                     characterNames.insert(charactersModel->index(index, 0).data().toString());
