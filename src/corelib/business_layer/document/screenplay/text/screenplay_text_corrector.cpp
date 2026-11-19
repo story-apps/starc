@@ -526,9 +526,75 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
     // Учитваем, что на пути может быть несколько сцен, поэтому обрабатываем каждую отдельно
     //
     QStringList sceneCharacters;
+    QStringList sceneAdditionalCharacters;
     QTextBlock sceneCharactersBlock;
     QTextBlock endBlock = block;
     bool isTextChanged = false;
+    auto writeCharactes = [&] {
+        //
+        // ... докинем дополнительных персонажей
+        //
+        for (const auto& character : sceneAdditionalCharacters) {
+            if (!sceneCharacters.contains(character)) {
+                sceneCharacters.append(character);
+            }
+        }
+        //
+        // ... если есть кого записать в блок
+        //
+        if (!sceneCharacters.isEmpty()) {
+            //
+            // ... создадим блок участников сцены, если его не было
+            //
+            if (!sceneCharactersBlock.isValid()) {
+                ++endPosition;
+
+                cursor.setPosition(block.position());
+                cursor.movePosition(TextCursor::EndOfBlock);
+                cursor.insertBlock();
+                const auto& sceneCharactersStyle
+                    = TemplatesFacade::screenplayTemplate(q->templateId())
+                          .paragraphStyle(TextParagraphType::SceneCharacters);
+                auto sceneCharactersFormat = sceneCharactersStyle.blockFormat();
+                sceneCharactersFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
+                cursor.setBlockFormat(sceneCharactersFormat);
+                cursor.setBlockCharFormat(sceneCharactersStyle.charFormat());
+            }
+            //
+            // ... если был, используем его
+            //
+            else {
+                cursor.setPosition(sceneCharactersBlock.position());
+                auto sceneCharactersFormat = sceneCharactersBlock.blockFormat();
+                sceneCharactersFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
+                cursor.setBlockFormat(sceneCharactersFormat);
+            }
+
+            //
+            // ... обновим текст блока персонажей сцены
+            //
+            sceneCharacters.removeAll("");
+            const auto sceneCharactersText = sceneCharacters.join(", ");
+            if (cursor.block().text() != sceneCharactersText) {
+                endPosition += sceneCharactersText.length() - cursor.block().length();
+
+                cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
+                if (cursor.hasSelection()) {
+                    cursor.deleteChar();
+                }
+                cursor.insertText(sceneCharactersText);
+
+                isTextChanged = true;
+            }
+        }
+
+        //
+        // ... сбрасываем все структуры, для нового накопления в следующей сцене
+        //
+        sceneCharacters.clear();
+        sceneAdditionalCharacters.clear();
+        sceneCharactersBlock = {};
+    };
     while (endBlock.isValid() && endBlock != document()->end()) {
         //
         // Если дошли до конца сцены
@@ -536,61 +602,13 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
         const TextParagraphType blockType = TextBlockStyle::forBlock(endBlock);
         if (endBlock != block && sceneBorders.contains(blockType)) {
             //
-            // ... если есть кого записать в блок
+            // ... пишем персонажей
             //
-            if (!sceneCharacters.isEmpty()) {
-                //
-                // ... создадим блок участников сцены, если его не было
-                //
-                if (!sceneCharactersBlock.isValid()) {
-                    ++endPosition;
-
-                    cursor.setPosition(block.position());
-                    cursor.movePosition(TextCursor::EndOfBlock);
-                    cursor.insertBlock();
-                    const auto& sceneCharactersStyle
-                        = TemplatesFacade::screenplayTemplate(q->templateId())
-                              .paragraphStyle(TextParagraphType::SceneCharacters);
-                    auto sceneCharactersFormat = sceneCharactersStyle.blockFormat();
-                    sceneCharactersFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-                    cursor.setBlockFormat(sceneCharactersFormat);
-                    cursor.setBlockCharFormat(sceneCharactersStyle.charFormat());
-                }
-                //
-                // ... если был, используем его
-                //
-                else {
-                    cursor.setPosition(sceneCharactersBlock.position());
-                    auto sceneCharactersFormat = sceneCharactersBlock.blockFormat();
-                    sceneCharactersFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
-                    cursor.setBlockFormat(sceneCharactersFormat);
-                }
-
-                //
-                // ... обновим текст блока персонажей сцены
-                //
-                sceneCharacters.removeAll("");
-                const auto sceneCharactersText = sceneCharacters.join(", ");
-                if (cursor.block().text() != sceneCharactersText) {
-                    endPosition += sceneCharactersText.length() - cursor.block().length();
-
-                    cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
-                    if (cursor.hasSelection()) {
-                        cursor.deleteChar();
-                    }
-                    cursor.insertText(sceneCharactersText);
-
-                    isTextChanged = true;
-                }
-            }
-
+            writeCharactes();
             //
-            // ... сбрасываем все структуры, для нового накопления в следующей сцене
+            // ... и переходим к следующему блоку
             //
-            sceneCharacters.clear();
-            sceneCharactersBlock = {};
             block = endBlock;
-
             //
             // ... прерываем выполнение, если дошли до конца сцены в нижней границе
             //     NOTE: тут специально сравниваем начало блока, а не его конец, чтобы корректно
@@ -632,7 +650,7 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
             }();
 
             if (sceneItem != nullptr) {
-                sceneCharacters = ScreenplaySceneCharactersParser::characters(
+                sceneAdditionalCharacters = ScreenplaySceneCharactersParser::characters(
                     sceneItem->additionalCharacters());
             }
             break;
@@ -678,6 +696,10 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
 
         endBlock = endBlock.next();
     }
+    //
+    // ... при необходимости пишем персонажей в последнюю сцену
+    //
+    writeCharactes();
 
     if (isTextChanged) {
         return { startPosition, endPosition - startPosition };
