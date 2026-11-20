@@ -33,6 +33,8 @@ public:
      */
     static qreal fineLineSpacing(const QFont& _font);
 
+    static qreal documentLineSpacing(const QFont& _font);
+
     /**
      * @brief Обновить хинтинг шрифта в зависимости от гарнитуры
      */
