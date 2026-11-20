@@ -1,6 +1,7 @@
 #include "text_helper.h"
 
 #include "measurement_helper.h"
+#include "document_layout_device.h"
 
 #include <business_layer/templates/text_template.h>
 #include <utils/diff_match_patch/diff_match_patch.h>
@@ -128,7 +129,7 @@ static void initFontMetrics()
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
 {
-    return fineTextWidthF(_text, QFontMetricsF(_font));
+    return fineTextWidthF(_text, QFontMetricsF(_font, DocumentLayoutDevice::device()));
 }
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics)
@@ -158,6 +159,11 @@ qreal TextHelper::fineLineSpacing(const QFont& _font)
         + sFontToLineSpacing.value(!_font.families().isEmpty() ? _font.families().constFirst()
                                                                : _font.family(),
                                    platformDelta);
+}
+
+qreal TextHelper::documentLineSpacing(const QFont& font)
+{
+    return QFontMetricsF(font, DocumentLayoutDevice::device()).lineSpacing();
 }
 
 void TextHelper::updateFontHinting(QFont& _font)
@@ -200,6 +206,7 @@ qreal TextHelper::layoutHeightForWidth(const QString& _text, const QFont& _font,
 
     QTextLayout textLayout(correctedText, _font);
     QTextOption textOption;
+    textOption.setUseDesignMetrics(true);
     textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(textOption);
 
@@ -233,6 +240,7 @@ QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal
     //
     QTextLayout textLayout(correctedText, _font);
     QTextOption textOption;
+    textOption.setUseDesignMetrics(true);
     textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(textOption);
     textLayout.beginLayout();
