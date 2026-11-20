@@ -413,10 +413,10 @@ void SimpleTextCorrector::Implementation::updateBlocksHeight(int _position, int 
             if (!formats.isEmpty()) {
                 for (const auto& format : formats) {
                     lineHeight
-                        = std::max(lineHeight, TextHelper::fineLineSpacing(format.format.font()));
+                        = std::max(lineHeight, TextHelper::documentLineSpacing(format.format.font()));
                 }
             } else {
-                lineHeight = TextHelper::fineLineSpacing(cursor.blockCharFormat().font());
+                lineHeight = TextHelper::documentLineSpacing(cursor.blockCharFormat().font());
             }
             //
             // ... учитываем межстрочный интервал стиля блока
