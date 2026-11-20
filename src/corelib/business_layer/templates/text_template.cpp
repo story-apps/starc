@@ -694,7 +694,7 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
 
 void TextBlockStyle::updateLineHeight()
 {
-    qreal lineHeight = TextHelper::fineLineSpacing(m_font);
+    qreal lineHeight = TextHelper::documentLineSpacing(m_font);
     switch (m_lineSpacing.type) {
     case LineSpacingType::FixedLineSpacing: {
         lineHeight = MeasurementHelper::mmToPx(m_lineSpacing.value);
