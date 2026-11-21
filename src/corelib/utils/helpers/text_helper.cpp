@@ -2,6 +2,7 @@
 
 #include "measurement_helper.h"
 #include "document_layout_device.h"
+#include "document_units.h"
 
 #include <business_layer/templates/text_template.h>
 #include <utils/diff_match_patch/diff_match_patch.h>
@@ -163,6 +164,23 @@ qreal TextHelper::fineLineSpacing(const QFont& _font)
 
 qreal TextHelper::documentLineSpacing(const QFont& font)
 {
+    // Screenplay line spacing is part of the document template, not a property
+    // of the rasterizer. Preserve the established 12 pt Courier page density:
+    // 51.5 lines per 249 mm for Courier New, 58 for Courier Prime.
+    const QString family = font.family();
+    const qreal sizeInPoints = font.pointSizeF() > 0.0
+        ? font.pointSizeF()
+        : (font.pixelSize() > 0 ? font.pixelSize() * 72.0 / DocumentUnits::Dpi : 12.0);
+    const qreal sizeFactor = sizeInPoints / 12.0;
+
+    if (family.compare(QLatin1String("Courier New"), Qt::CaseInsensitive) == 0) {
+        return DocumentUnits::mmToDu(249.0 / 51.5) * sizeFactor;
+    }
+    if (family.compare(QLatin1String("Courier Prime"), Qt::CaseInsensitive) == 0) {
+        return DocumentUnits::mmToDu(249.0 / 58.0) * sizeFactor;
+    }
+
+    // For all other fonts, query the same 96 DPI device as QTextDocument.
     return QFontMetricsF(font, DocumentLayoutDevice::device()).lineSpacing();
 }
 
