@@ -4,6 +4,8 @@
 #include <business_layer/export/export_options.h>
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/document_layout_config.h>
+#include <utils/helpers/document_units.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAbstractTextDocumentLayout>
@@ -381,6 +383,7 @@ void AbstractPdfExporter::Implementation::printDocument(QTextDocument* _document
                                                         const TextTemplate& _template,
                                                         const ExportOptions& _exportOptions) const
 {
+    DocumentLayoutConfig::configure(_document);
     QPainter painter(_printer);
     // Check that there is a valid device to print to.
     if (!painter.isActive())
@@ -389,26 +392,9 @@ void AbstractPdfExporter::Implementation::printDocument(QTextDocument* _document
     (void)_document->documentLayout(); // make sure that there is a layout
     QRectF body = QRectF(QPointF(0, 0), _document->pageSize());
 
-    {
-        qreal sourceDpiX = painter.device()->logicalDpiX();
-        qreal sourceDpiY = sourceDpiX;
-        QPaintDevice* dev = _document->documentLayout()->paintDevice();
-        if (dev) {
-            sourceDpiX = dev->logicalDpiX();
-            sourceDpiY = dev->logicalDpiY();
-        }
-        const qreal dpiScaleX = qreal(_printer->logicalDpiX()) / sourceDpiX;
-        const qreal dpiScaleY = qreal(_printer->logicalDpiY()) / sourceDpiY;
-        // scale to dpi
-        painter.scale(dpiScaleX, dpiScaleY);
-        QSizeF scaledPageSize = _document->pageSize();
-        scaledPageSize.rwidth() *= dpiScaleX;
-        scaledPageSize.rheight() *= dpiScaleY;
-        const QSizeF printerPageSize(painter.viewport().size());
-        // scale to page
-        painter.scale(printerPageSize.width() / scaledPageSize.width(),
-                      printerPageSize.height() / scaledPageSize.height());
-    }
+    // Keep pagination at reference DPI; map only the painter to PDF resolution.
+    const qreal scale = qreal(_printer->resolution()) / DocumentUnits::Dpi;
+    painter.scale(scale, scale);
 
     int docCopies = 1;
     int pageCopies = 1;
@@ -462,6 +448,7 @@ void AbstractPdfExporter::exportTo(AbstractModel* _model, ExportOptions& _export
     //
     const auto& exportTemplate = documentTemplate(_exportOptions);
     QPdfWriter printer(_exportOptions.filePath);
+    printer.setResolution(300);
     printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
     printer.setPageMargins({});
 

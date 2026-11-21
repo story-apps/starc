@@ -1,4 +1,5 @@
 #include "text_document.h"
+#include <utils/helpers/document_layout_config.h>
 
 #include "abstract_text_corrector.h"
 #include "text_block_data.h"
@@ -547,6 +548,8 @@ TextDocument::TextDocument(QObject* _parent)
     : QTextDocument(_parent)
     , d(new Implementation(this))
 {
+    DocumentLayoutConfig::configure(this);
+
     connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
     connect(this, &TextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
     connect(&d->modelChangeCorrectionDebouncer, &Debouncer::gotWork, this,

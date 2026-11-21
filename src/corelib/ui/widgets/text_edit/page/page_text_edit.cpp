@@ -32,6 +32,7 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/document_layout_config.h>
 
 #include <qapplication.h>
 #include <qdatetime.h>
@@ -1543,8 +1544,8 @@ void PageTextEditPrivate::updateViewportMargins()
         // Настроить размер документа
         //
 
-        const int pageWidth = pageMetrics.pxPageSize().width();
-        const int pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
+        const qreal pageWidth = pageMetrics.pxPageSize().width();
+        const qreal pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
 
         //
         // Рассчитываем отступы для viewport
@@ -1610,6 +1611,11 @@ void PageTextEditPrivate::updateDocumentGeometry()
     // Обновим размер документа
     //
     QTextDocument* doc = control->document();
+    if (usePageMode) {
+        DocumentLayoutConfig::configure(doc);
+    } else if (doc->documentLayout()->paintDevice() != viewport) {
+        doc->documentLayout()->setPaintDevice(viewport);
+    }
     if (doc->pageSize() != documentSize) {
         doc->setPageSize(documentSize);
     }
