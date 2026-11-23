@@ -209,6 +209,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                             showDialoguesNumbersForScreenplayChanged,
                         this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
                         Qt::UniqueConnection);
+                connect(projectInformationModel,
+                        &BusinessLayer::ProjectInformationModel::
+                            correctSceneCharactersForScreenplayChanged,
+                        this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                        Qt::UniqueConnection);
+                connect(projectInformationModel,
+                        &BusinessLayer::ProjectInformationModel::
+                            correctTextOnPageBreaksForScreenplayChanged,
+                        this, &ProjectModelsFacade::projectScreenplaySettingsChanged,
+                        Qt::UniqueConnection);
                 connect(
                     projectInformationModel,
                     &BusinessLayer::ProjectInformationModel::chronometerOptionsForScreenplayChanged,
