@@ -51,6 +51,11 @@ public:
     void grabExpandRect();
 
     /**
+     * @brief Очистить изображение расширяемой области
+     */
+    void clearSnapshot();
+
+    /**
      * @brief Установить цвет заливки
      */
     void setFillColor(const QColor& _fillColor);

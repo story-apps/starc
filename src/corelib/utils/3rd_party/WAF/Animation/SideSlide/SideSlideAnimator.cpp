@@ -31,7 +31,7 @@ SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide)
     : AbstractAnimator(_widgetForSlide)
     , m_decorateBackground(true)
     , m_decorator(new SideSlideDecorator(_widgetForSlide->parentWidget()))
-    , m_animation(new QVariantAnimation(_widgetForSlide))
+    , m_animation(new QVariantAnimation(this))
 {
     Q_ASSERT(_widgetForSlide);
     _widgetForSlide->parentWidget()->installEventFilter(this);
@@ -41,7 +41,7 @@ SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide)
 
     m_decorator->hide();
 
-    connect(m_animation, &QVariantAnimation::valueChanged, _widgetForSlide,
+    connect(m_animation, &QVariantAnimation::valueChanged, this,
             [_widgetForSlide](const QVariant& _value) {
                 const QPoint targetPosition = _value.toPoint();
                 if (_widgetForSlide->pos() != targetPosition) {
@@ -95,15 +95,31 @@ void SideSlideAnimator::slideIn()
     //
     // Не выполняем анимацию, если она и так уже выполнена
     //
-    if (m_decorator->isVisible() && !isAnimated())
+    if (m_decorator->isVisible() && !isAnimated()) {
         return;
+    }
 
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedForward())
+    if (isAnimated() && isAnimatedForward()) {
         return;
+    }
+
     setAnimatedForward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        if (m_decorateBackground) {
+            m_decorator->decorate(true);
+        }
+        return;
+    }
 
     //
     // Прячем виджет для анимирования
@@ -176,23 +192,11 @@ void SideSlideAnimator::slideIn()
     //
     // Выкатываем виджет
     //
-    if (m_animation->state() == QVariantAnimation::Running) {
-        //
-        // ... если ещё не закончилась предыдущая анимация реверсируем её
-        //
-        m_animation->pause();
-        m_animation->setDirection(QVariantAnimation::Backward);
-        m_animation->resume();
-    } else {
-        //
-        // ... если предыдущая анимация закончилась, запускаем новую анимацию
-        //
-        m_animation->setEasingCurve(QEasingCurve::OutQuart);
-        m_animation->setDirection(QVariantAnimation::Forward);
-        m_animation->setStartValue(startPosition);
-        m_animation->setEndValue(finalPosition);
-        m_animation->start();
-    }
+    m_animation->setEasingCurve(QEasingCurve::OutQuart);
+    m_animation->setDirection(QVariantAnimation::Forward);
+    m_animation->setStartValue(startPosition);
+    m_animation->setEndValue(finalPosition);
+    m_animation->start();
 
     //
     // Декорируем фон
@@ -213,15 +217,32 @@ void SideSlideAnimator::slideOut()
     //
     // Не выполняем анимацию, если она и так уже выполнена
     //
-    if (!m_decorator->isVisible() && !isAnimated())
+    if (!m_decorator->isVisible() && !isAnimated()) {
         return;
+    }
 
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedBackward())
+    if (isAnimated() && isAnimatedBackward()) {
         return;
+    }
+
     setAnimatedBackward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        setAnimatedBackward();
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        if (m_decorateBackground) {
+            m_decorator->decorate(false);
+        }
+        return;
+    }
 
     if (widgetForSlide()->isVisible() || m_decorator->isVisible()) {
         //
@@ -266,23 +287,11 @@ void SideSlideAnimator::slideOut()
         //
         // Анимируем закатывание виджета
         //
-        if (m_animation->state() == QVariantAnimation::Running) {
-            //
-            // ... если ещё не закончилась предыдущая анимация реверсируем её
-            //
-            m_animation->pause();
-            m_animation->setDirection(QVariantAnimation::Backward);
-            m_animation->resume();
-        } else {
-            //
-            // ... если предыдущая анимация закончилась, запускаем новую анимацию
-            //
-            m_animation->setEasingCurve(QEasingCurve::InQuart);
-            m_animation->setDirection(QVariantAnimation::Forward);
-            m_animation->setStartValue(startPosition);
-            m_animation->setEndValue(finalPosition);
-            m_animation->start();
-        }
+        m_animation->setEasingCurve(QEasingCurve::InQuart);
+        m_animation->setDirection(QVariantAnimation::Forward);
+        m_animation->setStartValue(startPosition);
+        m_animation->setEndValue(finalPosition);
+        m_animation->start();
 
         //
         // Декорируем фон

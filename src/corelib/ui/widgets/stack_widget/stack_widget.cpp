@@ -255,6 +255,21 @@ void ExpandAnimation::updateState(QAbstractAnimation::State _newState,
 class StackWidget::Implementation
 {
 public:
+    explicit Implementation(QObject* owner);
+
+    /**
+     * @brief Остановить переход
+     */
+    void stopTransition();
+
+    /**
+     * @brief Остановить переход и показать текущий виджет
+     */
+    void finishTransition();
+
+    /**
+     * @brief Текущая анимация в зависимости от типа перехода между страницами
+     */
     const QAbstractAnimation& currentAnimation() const;
 
 
@@ -270,6 +285,32 @@ public:
     SlideAnimation slideAnimation;
     ExpandAnimation expandAnimation;
 };
+
+StackWidget::Implementation::Implementation(QObject* owner)
+    : fadeAnimation(owner)
+    , slideAnimation(owner)
+    , expandAnimation(owner)
+{
+}
+
+void StackWidget::Implementation::stopTransition()
+{
+    fadeAnimation.stop();
+    slideAnimation.stop();
+    expandAnimation.stop();
+    previousWidgetImage = {};
+    currentWidgetImage = {};
+    previousWidget = nullptr;
+}
+
+void StackWidget::Implementation::finishTransition()
+{
+    stopTransition();
+
+    if (currentWidget != nullptr) {
+        currentWidget->show();
+    }
+}
 
 const QAbstractAnimation& StackWidget::Implementation::currentAnimation() const
 {
@@ -294,10 +335,10 @@ const QAbstractAnimation& StackWidget::Implementation::currentAnimation() const
 
 StackWidget::StackWidget(QWidget* _parent)
     : Widget(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
     auto update = [this] { this->update(); };
-    auto showCurrentWidget = [this] { d->currentWidget->show(); };
+    auto showCurrentWidget = [this] { d->finishTransition(); };
 
     connect(d->fadeAnimation.outgoingContentFadeOut, &QVariantAnimation::valueChanged, this,
             update);
@@ -329,7 +370,13 @@ StackWidget::~StackWidget() = default;
 
 void StackWidget::setAnimationType(StackWidget::AnimationType _type)
 {
+    if (d->animationType == _type) {
+        return;
+    }
+
+    d->finishTransition();
     d->animationType = _type;
+    update();
 }
 
 void StackWidget::setAnimationRect(QWidget* _widget, const QRect& _animationRect)
@@ -377,7 +424,11 @@ void StackWidget::takeWidget(QWidget* _widget)
 
     Q_ASSERT(d->currentWidget != _widget);
 
+    if (d->previousWidget == _widget) {
+        d->finishTransition();
+    }
     d->widgets.takeAt(d->widgets.indexOf(_widget));
+    d->expandAnimation.widgetToRect.remove(_widget);
     _widget->removeEventFilter(this);
     _widget->setParent(nullptr);
 }
@@ -392,6 +443,8 @@ void StackWidget::setCurrentWidget(QWidget* _widget)
     if (d->currentWidget == _widget) {
         return;
     }
+
+    d->stopTransition();
 
     //
     // Сохраняем виджет, который был активным до момента установки нового
@@ -421,7 +474,7 @@ void StackWidget::setCurrentWidget(QWidget* _widget)
     // Если виджет не виден на экране, просто отображаем новый текущий виджет
     //
     if (!isVisible()) {
-        d->currentWidget->show();
+        d->finishTransition();
         return;
     }
 
@@ -521,18 +574,42 @@ void StackWidget::paintEvent(QPaintEvent* _event)
     switch (d->animationType) {
     case AnimationType::Fade:
     case AnimationType::FadeThrough: {
-        if (!d->previousWidgetImage.isNull()) {
-            painter.setOpacity(d->fadeAnimation.outgoingContentFadeOut->currentValue().toReal());
+        if (const auto outgoingOpacity
+            = d->fadeAnimation.outgoingContentFadeOut->currentValue().toReal();
+            !d->previousWidgetImage.isNull() && outgoingOpacity > 0.0) {
+            painter.setOpacity(outgoingOpacity);
             painter.drawPixmap(0, 0, d->previousWidgetImage);
         }
-        if (!d->currentWidgetImage.isNull()) {
-            painter.setOpacity(d->fadeAnimation.incomingContentFadeIn->currentValue().toReal());
+        if (const auto incomingOpacity
+            = d->fadeAnimation.incomingContentFadeIn->currentValue().toReal();
+            !d->currentWidgetImage.isNull() && incomingOpacity > 0.0) {
+            painter.setOpacity(incomingOpacity);
             if (d->animationType == AnimationType::FadeThrough) {
                 const auto targetRect
                     = d->fadeAnimation.incomingContentGeometry->currentValue().toRectF();
                 const auto targetPos = targetRect.topLeft();
-                const auto targetSize = targetRect.size() * devicePixelRatio();
-                painter.drawPixmap(targetPos, d->currentWidgetImage.scaled(targetSize.toSize()));
+                const auto targetSize = targetRect.size() * devicePixelRatioF();
+                const auto transform = painter.deviceTransform();
+                const auto ratio = d->currentWidgetImage.devicePixelRatio();
+                //
+                // ... обеспечим такое же округление пикселей, как в QPixmap::scaled, не создавая
+                //     при этом полноразмерное промежуточное изображение для каждого кадра
+                //
+                if (transform.type() <= QTransform::TxScale && qFuzzyCompare(transform.m11(), ratio)
+                    && qFuzzyCompare(transform.m22(), ratio)) {
+                    const auto devicePos = transform.map(targetPos);
+                    const QPointF alignedPos((qRound(devicePos.x()) - transform.dx()) / ratio,
+                                             (qRound(devicePos.y()) - transform.dy()) / ratio);
+                    painter.drawPixmap(QRectF(alignedPos, QSizeF(targetSize.toSize()) / ratio),
+                                       d->currentWidgetImage, d->currentWidgetImage.rect());
+                }
+                //
+                // ... сохраняем сэплинг при отрисовке через трансформированный графический прокси
+                //
+                else {
+                    painter.drawPixmap(targetPos,
+                                       d->currentWidgetImage.scaled(targetSize.toSize()));
+                }
             } else {
                 painter.drawPixmap(0, 0, d->currentWidgetImage);
             }
@@ -641,6 +718,13 @@ void StackWidget::resizeEvent(QResizeEvent* _event)
             d->fadeAnimation.incomingContentGeometry->setEndValue(QRectF(rect()));
         }
     }
+}
+
+void StackWidget::hideEvent(QHideEvent* _event)
+{
+    d->finishTransition();
+
+    Widget::hideEvent(_event);
 }
 
 bool StackWidget::eventFilter(QObject* _watched, QEvent* _event)

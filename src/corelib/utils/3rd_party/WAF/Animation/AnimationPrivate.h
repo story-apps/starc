@@ -17,6 +17,8 @@
 #ifndef ANIMATIONPRIVATE
 #define ANIMATIONPRIVATE
 
+#include "../AbstractAnimator.h"
+
 #include <QMap>
 
 class QWidget;
@@ -71,6 +73,17 @@ public:
     {
         if (!hasAnimator(_widget, _animatorType)) {
             m_animators[_animatorType].insert(_widget, _animator);
+            QObject::connect(_animator, &QObject::destroyed, _animator,
+                             [this, _widget, _animatorType] {
+                                 auto iter = m_animators.find(_animatorType);
+                                 if (iter == m_animators.end()) {
+                                     return;
+                                 }
+                                 iter->remove(_widget);
+                                 if (iter->isEmpty()) {
+                                     m_animators.erase(iter);
+                                 }
+                             });
         }
     }
 

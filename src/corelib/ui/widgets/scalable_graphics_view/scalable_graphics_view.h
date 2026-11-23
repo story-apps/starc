@@ -5,6 +5,7 @@
 #include <corelib_global.h>
 
 class QGestureEvent;
+class QVariantAnimation;
 
 
 /**
@@ -111,6 +112,11 @@ private:
      */
     void scaleView(qreal _factor);
 
+    /**
+     * @brief Анимированно прокрутить к указанной позиции
+     */
+    void animateScrollTo(const QPoint& _position);
+
 private:
     /**
      * @brief Можно ли масштабировать содержимое
@@ -131,4 +137,9 @@ private:
      * @brief Инерционный тормоз масштабирования при помощи жестов
      */
     int m_gestureZoomInertionBreak = 0;
+
+    /**
+     * @brief Анимация полос прокрутки
+     */
+    QVariantAnimation* m_scrollAnimation = nullptr;
 };

@@ -14,7 +14,7 @@ using WAF::CircleFillDecorator;
 CircleFillAnimator::CircleFillAnimator(QWidget* _widgetForFill)
     : AbstractAnimator(_widgetForFill)
     , m_decorator(new CircleFillDecorator(_widgetForFill))
-    , m_animation(new QPropertyAnimation(m_decorator, "radius"))
+    , m_animation(new QPropertyAnimation(m_decorator, "radius", this))
 {
     Q_ASSERT(_widgetForFill);
 
@@ -57,9 +57,29 @@ void CircleFillAnimator::fillIn()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedForward())
+    if (isAnimated() && isAnimatedForward()) {
         return;
+    }
+
     setAnimatedForward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        return;
+    }
+
+    //
+    // Остановим анимацию скрытия декорации, если она была активна
+    //
+    if (m_hideAnimation != nullptr) {
+        m_hideAnimation->stop();
+        m_decorator->graphicsEffect()->setProperty("opacity", 1.0);
+    }
 
     //
     // Определим стартовые и финальные позиции для декораций
@@ -81,23 +101,11 @@ void CircleFillAnimator::fillIn()
     //
     // Анимируем виджет
     //
-    if (m_animation->state() == QPropertyAnimation::Running) {
-        //
-        // ... если ещё не закончилась предыдущая анимация реверсируем её
-        //
-        m_animation->pause();
-        m_animation->setDirection(QPropertyAnimation::Backward);
-        m_animation->resume();
-    } else {
-        //
-        // ... если предыдущая анимация закончилась, запускаем новую анимацию
-        //
-        m_animation->setEasingCurve(QEasingCurve::OutQuart);
-        m_animation->setDirection(QPropertyAnimation::Forward);
-        m_animation->setStartValue(startRadius);
-        m_animation->setEndValue(finalRadius);
-        m_animation->start();
-    }
+    m_animation->setEasingCurve(QEasingCurve::OutQuart);
+    m_animation->setDirection(QPropertyAnimation::Forward);
+    m_animation->setStartValue(startRadius);
+    m_animation->setEndValue(finalRadius);
+    m_animation->start();
 }
 
 void CircleFillAnimator::animateBackward()
@@ -110,9 +118,29 @@ void CircleFillAnimator::fillOut()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedBackward())
+    if (isAnimated() && isAnimatedBackward()) {
         return;
+    }
+
     setAnimatedBackward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        return;
+    }
+
+    //
+    // Остановим анимацию скрытия декорации, если она была активна
+    //
+    if (m_hideAnimation != nullptr) {
+        m_hideAnimation->stop();
+        m_decorator->graphicsEffect()->setProperty("opacity", 1.0);
+    }
 
     //
     // Определим стартовые и финальные позиции для декораций
@@ -131,23 +159,11 @@ void CircleFillAnimator::fillOut()
     //
     // Анимируем виджет
     //
-    if (m_animation->state() == QPropertyAnimation::Running) {
-        //
-        // ... если ещё не закончилась предыдущая анимация реверсируем её
-        //
-        m_animation->pause();
-        m_animation->setDirection(QPropertyAnimation::Backward);
-        m_animation->resume();
-    } else {
-        //
-        // ... если предыдущая анимация закончилась, запускаем новую анимацию
-        //
-        m_animation->setEasingCurve(QEasingCurve::OutQuart);
-        m_animation->setDirection(QPropertyAnimation::Forward);
-        m_animation->setStartValue(startRadius);
-        m_animation->setEndValue(finalRadius);
-        m_animation->start();
-    }
+    m_animation->setEasingCurve(QEasingCurve::OutQuart);
+    m_animation->setDirection(QPropertyAnimation::Forward);
+    m_animation->setStartValue(startRadius);
+    m_animation->setEndValue(finalRadius);
+    m_animation->start();
 }
 
 void CircleFillAnimator::finalize()
@@ -168,17 +184,18 @@ void CircleFillAnimator::hideDecorator()
     }
     hideEffect->setOpacity(1.);
 
-    QPropertyAnimation* hideAnimation = new QPropertyAnimation(hideEffect, "opacity", m_decorator);
-    hideAnimation->setDuration(240);
-    hideAnimation->setEasingCurve(QEasingCurve::OutQuad);
-    hideAnimation->setStartValue(1.);
-    hideAnimation->setEndValue(0.);
-    connect(hideAnimation, &QPropertyAnimation::finished, [this, hideEffect] {
-        m_decorator->hide();
-        hideEffect->setOpacity(1.);
-    });
-
-    hideAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+    if (m_hideAnimation == nullptr) {
+        m_hideAnimation = new QPropertyAnimation(hideEffect, "opacity", m_decorator);
+        m_hideAnimation->setDuration(240);
+        m_hideAnimation->setEasingCurve(QEasingCurve::OutQuad);
+        m_hideAnimation->setStartValue(1.);
+        m_hideAnimation->setEndValue(0.);
+        connect(m_hideAnimation, &QPropertyAnimation::finished, this, [this, hideEffect] {
+            m_decorator->hide();
+            hideEffect->setOpacity(1.);
+        });
+    }
+    m_hideAnimation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 QWidget* CircleFillAnimator::widgetForFill() const

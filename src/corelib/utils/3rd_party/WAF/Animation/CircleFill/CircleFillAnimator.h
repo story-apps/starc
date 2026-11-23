@@ -98,9 +98,14 @@ private:
     CircleFillDecorator* m_decorator;
 
     /**
-     * @brief Объект для анимирования декоратора
+     * @brief Анимация радиуса декоратора
      */
     QPropertyAnimation* m_animation;
+
+    /**
+     * @brief Анимация скрытия декоратора
+     */
+    QPropertyAnimation* m_hideAnimation = nullptr;
 
     /**
      * @brief Скрывать ли декоратор после завершения анимации

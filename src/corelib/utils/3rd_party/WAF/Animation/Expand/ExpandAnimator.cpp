@@ -12,7 +12,7 @@ using WAF::ExpandDecorator;
 ExpandAnimator::ExpandAnimator(QWidget* _widgetForFill)
     : AbstractAnimator(_widgetForFill)
     , m_decorator(new ExpandDecorator(_widgetForFill))
-    , m_animation(new QPropertyAnimation(m_decorator, "expandRect"))
+    , m_animation(new QPropertyAnimation(m_decorator, "expandRect", this))
 {
     Q_ASSERT(_widgetForFill);
 
@@ -22,10 +22,11 @@ ExpandAnimator::ExpandAnimator(QWidget* _widgetForFill)
 
     m_decorator->hide();
 
-    connect(m_animation, &QPropertyAnimation::finished, [this] {
+    connect(m_animation, &QPropertyAnimation::finished, this, [this] {
         setAnimatedStopped();
         if (isAnimatedBackward()) {
             m_decorator->hide();
+            m_decorator->clearSnapshot();
         }
     });
 }
@@ -33,7 +34,9 @@ ExpandAnimator::ExpandAnimator(QWidget* _widgetForFill)
 void ExpandAnimator::setExpandRect(const QRect& _rect)
 {
     m_expandRect = _rect;
-    m_decorator->setExpandRect(_rect);
+    if (!isAnimated()) {
+        m_decorator->setExpandRect(_rect);
+    }
 }
 
 void ExpandAnimator::setFillColor(const QColor& _color)
@@ -56,9 +59,21 @@ void ExpandAnimator::expandIn()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedForward())
+    if (isAnimated() && isAnimatedForward()) {
         return;
+    }
+
     setAnimatedForward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        return;
+    }
 
     //
     // Определим стартовые и финальные позиции для декораций
@@ -78,23 +93,11 @@ void ExpandAnimator::expandIn()
     //
     // Анимируем виджет
     //
-    if (m_animation->state() == QPropertyAnimation::Running) {
-        //
-        // ... если ещё не закончилась предыдущая анимация реверсируем её
-        //
-        m_animation->pause();
-        m_animation->setDirection(QPropertyAnimation::Backward);
-        m_animation->resume();
-    } else {
-        //
-        // ... если предыдущая анимация закончилась, запускаем новую анимацию
-        //
-        m_animation->setEasingCurve(QEasingCurve::InOutQuart);
-        m_animation->setDirection(QPropertyAnimation::Forward);
-        m_animation->setStartValue(startExpandRect);
-        m_animation->setEndValue(finalExpandRect);
-        m_animation->start();
-    }
+    m_animation->setEasingCurve(QEasingCurve::InOutQuart);
+    m_animation->setDirection(QPropertyAnimation::Forward);
+    m_animation->setStartValue(startExpandRect);
+    m_animation->setEndValue(finalExpandRect);
+    m_animation->start();
 }
 
 void ExpandAnimator::animateBackward()
@@ -107,9 +110,21 @@ void ExpandAnimator::expandOut()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedBackward())
+    if (isAnimated() && isAnimatedBackward()) {
         return;
+    }
+
     setAnimatedBackward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        return;
+    }
 
     //
     // Определим стартовые и финальные позиции для декораций
@@ -130,23 +145,11 @@ void ExpandAnimator::expandOut()
     //
     // Анимируем виджет
     //
-    if (m_animation->state() == QPropertyAnimation::Running) {
-        //
-        // ... если ещё не закончилась предыдущая анимация реверсируем её
-        //
-        m_animation->pause();
-        m_animation->setDirection(QPropertyAnimation::Backward);
-        m_animation->resume();
-    } else {
-        //
-        // ... если предыдущая анимация закончилась, запускаем новую анимацию
-        //
-        m_animation->setEasingCurve(QEasingCurve::InOutQuart);
-        m_animation->setDirection(QPropertyAnimation::Forward);
-        m_animation->setStartValue(startExpandRect);
-        m_animation->setEndValue(finalExpandRect);
-        m_animation->start();
-    }
+    m_animation->setEasingCurve(QEasingCurve::InOutQuart);
+    m_animation->setDirection(QPropertyAnimation::Forward);
+    m_animation->setStartValue(startExpandRect);
+    m_animation->setEndValue(finalExpandRect);
+    m_animation->start();
 }
 
 bool ExpandAnimator::eventFilter(QObject* _object, QEvent* _event)

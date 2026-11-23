@@ -96,6 +96,12 @@ protected:
     void resizeEvent(QResizeEvent* _event) override;
 
     /**
+     * @brief Переопределяем обработку события скрытия, чтобы остановить анимацию смены страниц,
+     *        если она активна в данный
+     */
+    void hideEvent(QHideEvent* _event) override;
+
+    /**
      * @brief Отлавливаем запрос на перекомпоновку и прокидываем его выше
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;

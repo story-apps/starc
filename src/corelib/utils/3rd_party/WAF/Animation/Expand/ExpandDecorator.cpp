@@ -30,6 +30,11 @@ void ExpandDecorator::grabExpandRect()
     parentWidget()->render(&m_expandRectPixmap, QPoint(), QRegion(m_expandRect));
 }
 
+void ExpandDecorator::clearSnapshot()
+{
+    m_expandRectPixmap = {};
+}
+
 void ExpandDecorator::setFillColor(const QColor& _fillColor)
 {
     if (m_fillColor != _fillColor) {

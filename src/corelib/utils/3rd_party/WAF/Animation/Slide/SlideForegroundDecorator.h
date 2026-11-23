@@ -41,6 +41,11 @@ public:
      */
     void grabParent(const QSize& _size);
 
+    /**
+     * @brief Очистить изображение родительского виджета
+     */
+    void clearSnapshot();
+
 protected:
     /**
      * @brief Переопределяется для прорисовки декорации

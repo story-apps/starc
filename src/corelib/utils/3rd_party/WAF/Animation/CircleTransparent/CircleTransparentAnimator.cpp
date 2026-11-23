@@ -14,7 +14,7 @@ using WAF::CircleTransparentDecorator;
 CircleTransparentAnimator::CircleTransparentAnimator(QWidget* _widgetForFill)
     : AbstractAnimator(_widgetForFill)
     , m_decorator(new CircleTransparentDecorator(_widgetForFill))
-    , m_animation(new QPropertyAnimation(m_decorator, "radius"))
+    , m_animation(new QPropertyAnimation(m_decorator, "radius", this))
 {
     Q_ASSERT(_widgetForFill);
 
@@ -57,9 +57,21 @@ void CircleTransparentAnimator::fillIn()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedForward())
+    if (isAnimated() && isAnimatedForward()) {
         return;
+    }
+
     setAnimatedForward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        return;
+    }
 
     //
     // Определим стартовые и финальные позиции для декораций
@@ -85,23 +97,11 @@ void CircleTransparentAnimator::fillIn()
     //
     // Анимируем виджет
     //
-    if (m_animation->state() == QPropertyAnimation::Running) {
-        //
-        // ... если ещё не закончилась предыдущая анимация реверсируем её
-        //
-        m_animation->pause();
-        m_animation->setDirection(QPropertyAnimation::Backward);
-        m_animation->resume();
-    } else {
-        //
-        // ... если предыдущая анимация закончилась, запускаем новую анимацию
-        //
-        m_animation->setEasingCurve(QEasingCurve::OutQuart);
-        m_animation->setDirection(QPropertyAnimation::Forward);
-        m_animation->setStartValue(startRadius);
-        m_animation->setEndValue(finalRadius);
-        m_animation->start();
-    }
+    m_animation->setEasingCurve(QEasingCurve::OutQuart);
+    m_animation->setDirection(QPropertyAnimation::Forward);
+    m_animation->setStartValue(startRadius);
+    m_animation->setEndValue(finalRadius);
+    m_animation->start();
 }
 
 void CircleTransparentAnimator::animateBackward()
@@ -114,9 +114,21 @@ void CircleTransparentAnimator::fillOut()
     //
     // Прерываем выполнение, если клиент хочет повторить его
     //
-    if (isAnimated() && isAnimatedBackward())
+    if (isAnimated() && isAnimatedBackward()) {
         return;
+    }
+
     setAnimatedBackward();
+
+    //
+    // Если ещё не закончилась предыдущая анимация реверсируем её
+    //
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        m_animation->setDirection(m_animation->direction() == QAbstractAnimation::Forward
+                                      ? QAbstractAnimation::Backward
+                                      : QAbstractAnimation::Forward);
+        return;
+    }
 
     //
     // Определим стартовые и финальные позиции для декораций
@@ -135,23 +147,11 @@ void CircleTransparentAnimator::fillOut()
     //
     // Анимируем виджет
     //
-    if (m_animation->state() == QPropertyAnimation::Running) {
-        //
-        // ... если ещё не закончилась предыдущая анимация реверсируем её
-        //
-        m_animation->pause();
-        m_animation->setDirection(QPropertyAnimation::Backward);
-        m_animation->resume();
-    } else {
-        //
-        // ... если предыдущая анимация закончилась, запускаем новую анимацию
-        //
-        m_animation->setEasingCurve(QEasingCurve::OutQuart);
-        m_animation->setDirection(QPropertyAnimation::Forward);
-        m_animation->setStartValue(startRadius);
-        m_animation->setEndValue(finalRadius);
-        m_animation->start();
-    }
+    m_animation->setEasingCurve(QEasingCurve::OutQuart);
+    m_animation->setDirection(QPropertyAnimation::Forward);
+    m_animation->setStartValue(startRadius);
+    m_animation->setEndValue(finalRadius);
+    m_animation->start();
 }
 
 void CircleTransparentAnimator::finalize()

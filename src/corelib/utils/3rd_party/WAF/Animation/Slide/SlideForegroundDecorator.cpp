@@ -33,6 +33,11 @@ void SlideForegroundDecorator::grabParent(const QSize& _size)
     parentWidget()->render(&m_foreground, QPoint(), QRegion(QRect(QPoint(), _size)));
 }
 
+void SlideForegroundDecorator::clearSnapshot()
+{
+    m_foreground = {};
+}
+
 void SlideForegroundDecorator::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);

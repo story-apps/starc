@@ -25,6 +25,7 @@ bool eventTriggeredBy(QMouseEvent* _event, Qt::MouseButton _button)
 
 ScalableGraphicsView::ScalableGraphicsView(QWidget* _parent)
     : QGraphicsView(_parent)
+    , m_scrollAnimation(new QVariantAnimation(this))
 {
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -36,6 +37,16 @@ ScalableGraphicsView::ScalableGraphicsView(QWidget* _parent)
     //
     grabGesture(Qt::PinchGesture);
     grabGesture(Qt::SwipeGesture);
+
+
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    m_scrollAnimation->setDuration(240);
+    connect(m_scrollAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& value) {
+                const auto position = value.toPoint();
+                horizontalScrollBar()->setValue(position.x());
+                verticalScrollBar()->setValue(position.y());
+            });
 }
 
 void ScalableGraphicsView::setScaleAvailable(bool _available)
@@ -77,19 +88,7 @@ void ScalableGraphicsView::animateCenterOn(QGraphicsItem* _item)
     }
     targetPosition.setY(int(viewPoint.y() - height / 2.0));
 
-    auto scrollingAnimation = new QVariantAnimation(this);
-    scrollingAnimation->setEasingCurve(QEasingCurve::OutQuad);
-    scrollingAnimation->setDuration(240);
-    scrollingAnimation->setStartValue(
-        QPoint(horizontalScrollBar()->value(), verticalScrollBar()->value()));
-    scrollingAnimation->setEndValue(targetPosition);
-    connect(scrollingAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                const auto position = _value.toPoint();
-                horizontalScrollBar()->setValue(position.x());
-                verticalScrollBar()->setValue(position.y());
-            });
-    scrollingAnimation->start(QVariantAnimation::DeleteWhenStopped);
+    animateScrollTo(targetPosition);
 }
 
 void ScalableGraphicsView::animateEnsureVisible(QGraphicsItem* _item)
@@ -119,18 +118,7 @@ void ScalableGraphicsView::animateEnsureVisible(QGraphicsItem* _item)
         targetPosition.setY(viewRect.bottom() - height + ymargin + 0.5);
     }
 
-    auto scrollingAnimation = new QVariantAnimation(this);
-    scrollingAnimation->setEasingCurve(QEasingCurve::OutQuad);
-    scrollingAnimation->setDuration(240);
-    scrollingAnimation->setStartValue(QPoint(left, top));
-    scrollingAnimation->setEndValue(targetPosition);
-    connect(scrollingAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                const auto position = _value.toPoint();
-                horizontalScrollBar()->setValue(position.x());
-                verticalScrollBar()->setValue(position.y());
-            });
-    scrollingAnimation->start(QVariantAnimation::DeleteWhenStopped);
+    animateScrollTo(targetPosition);
 }
 
 QByteArray ScalableGraphicsView::saveState() const
@@ -400,4 +388,33 @@ void ScalableGraphicsView::scaleView(qreal _factor)
 
     scale(1 + _factor, 1 + _factor);
     emit scaleChanged();
+}
+
+void ScalableGraphicsView::animateScrollTo(const QPoint& _position)
+{
+    const QPoint target(
+        qBound(horizontalScrollBar()->minimum(), _position.x(), horizontalScrollBar()->maximum()),
+        qBound(verticalScrollBar()->minimum(), _position.y(), verticalScrollBar()->maximum()));
+    if (m_scrollAnimation->state() == QAbstractAnimation::Running
+        && m_scrollAnimation->endValue().toPoint() == target) {
+        return;
+    }
+
+    m_scrollAnimation->stop();
+
+    const QPoint current(horizontalScrollBar()->value(), verticalScrollBar()->value());
+    if (current == target) {
+        return;
+    }
+
+    {
+        //
+        // Сбрасываем позицию текущего времени, перенастраиваем таймлайн и в бой
+        //
+        const QSignalBlocker blocker(m_scrollAnimation);
+        m_scrollAnimation->setCurrentTime(0);
+        m_scrollAnimation->setStartValue(current);
+        m_scrollAnimation->setEndValue(target);
+    }
+    m_scrollAnimation->start();
 }

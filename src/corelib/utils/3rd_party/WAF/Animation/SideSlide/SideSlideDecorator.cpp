@@ -66,12 +66,10 @@ void SideSlideDecorator::grabParentSize()
 
 void SideSlideDecorator::decorate(bool _dark)
 {
-    if (m_timeline.state() == QTimeLine::Running) {
-        m_timeline.stop();
-    }
-
     m_timeline.setDirection(_dark ? QTimeLine::Forward : QTimeLine::Backward);
-    m_timeline.start();
+    if (m_timeline.state() != QTimeLine::Running) {
+        m_timeline.start();
+    }
 }
 
 void SideSlideDecorator::paintEvent(QPaintEvent* _event)
