@@ -519,7 +519,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
     case 5013: // БЧС
     {
         QJsonObject line;
-        line["long_scene_threshold"] = 2 * 60; // две минуты
+        line["long_scene_threshold"] = 60 + 45; // 1 минута 45 секунд
         //
         QJsonArray lines;
         lines.append(line);
@@ -546,7 +546,7 @@ QVector<ComplianceRule> ProjectsModelProjectItem::complianceRules() const
     case 5019: // ЧД
     {
         QJsonObject line;
-        line["long_scene_threshold"] = 2 * 60; // две минуты
+        line["long_scene_threshold"] = 60 + 45; // 1 минута 45 секунд
         //
         QJsonArray lines;
         lines.append(line);
