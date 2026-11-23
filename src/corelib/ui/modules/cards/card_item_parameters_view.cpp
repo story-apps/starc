@@ -75,8 +75,8 @@ public:
     QVBoxLayout* contentLayout = nullptr;
     TextField* title = nullptr;
     TextField* heading = nullptr;
-    bool isAdditionalCharactersVisible = true;
-    TextField* additionalCharacters = nullptr;
+    bool isCustomCharactersVisible = true;
+    TextField* customCharacters = nullptr;
     TextField* description = nullptr;
     QVector<TextField*> beats;
     TextField* storyDay = nullptr;
@@ -107,7 +107,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     , contentLayout(qobject_cast<QVBoxLayout*>(content->widget()->layout()))
     , title(new TextField(content))
     , heading(new TextField(content))
-    , additionalCharacters(new TextField(content))
+    , customCharacters(new TextField(content))
     , description(new TextField(content))
     , beats({ new TextField(content) })
     , storyDay(new TextField(content))
@@ -140,7 +140,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     UiHelper::initOptionsFor({
         title,
         heading,
-        additionalCharacters,
+        customCharacters,
         description,
         beats.constFirst(),
         storyDay,
@@ -166,7 +166,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
 
     contentLayout->addWidget(title);
     contentLayout->addWidget(heading);
-    contentLayout->addWidget(additionalCharacters);
+    contentLayout->addWidget(customCharacters);
     contentLayout->addWidget(description);
     contentLayout->addWidget(beats.constFirst());
     contentLayout->addWidget(storyDay);
@@ -273,8 +273,8 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
     });
     connect(d->heading, &TextField::textChanged, this,
             [this] { emit headingChanged(d->heading->text()); });
-    connect(d->additionalCharacters, &TextField::textChanged, this,
-            [this] { emit additionalCharactersChanged(d->additionalCharacters->text()); });
+    connect(d->customCharacters, &TextField::textChanged, this,
+            [this] { emit customCharactersChanged(d->customCharacters->text()); });
     connect(d->description, &TextField::textChanged, this,
             [this] { emit descriptionChanged(d->description->text()); });
     connect(d->beats.constFirst(), &TextField::textChanged, this,
@@ -433,7 +433,7 @@ void CardItemParametersView::setItemType(CardItemType _type)
     case CardItemType::Folder: {
         d->title->setVisible(true);
         d->heading->setVisible(false);
-        d->additionalCharacters->setVisible(d->isAdditionalCharactersVisible && false);
+        d->customCharacters->setVisible(d->isCustomCharactersVisible && false);
         d->description->setVisible(true);
         for (auto beat : std::as_const(d->beats)) {
             beat->setVisible(false);
@@ -454,7 +454,7 @@ void CardItemParametersView::setItemType(CardItemType _type)
     case CardItemType::Scene: {
         d->title->setVisible(true);
         d->heading->setVisible(true);
-        d->additionalCharacters->setVisible(d->isAdditionalCharactersVisible && true);
+        d->customCharacters->setVisible(d->isCustomCharactersVisible && true);
         d->description->setVisible(false);
         for (auto beat : std::as_const(d->beats)) {
             beat->setVisible(true);
@@ -520,23 +520,23 @@ void CardItemParametersView::setHeading(const QString& _heading)
     d->heading->setTextCursor(cursor);
 }
 
-void CardItemParametersView::setAdditionalCharactersVisible(bool _visible)
+void CardItemParametersView::setCustomCharactersVisible(bool _visible)
 {
-    d->isAdditionalCharactersVisible = _visible;
-    d->additionalCharacters->setVisible(d->isAdditionalCharactersVisible);
+    d->isCustomCharactersVisible = _visible;
+    d->customCharacters->setVisible(d->isCustomCharactersVisible);
 }
 
-void CardItemParametersView::setAdditionalCharacters(const QString& _characters)
+void CardItemParametersView::setCustomCharacters(const QString& _characters)
 {
-    if (d->additionalCharacters->text() == _characters) {
+    if (d->customCharacters->text() == _characters) {
         return;
     }
 
-    auto lastCursorPosition = d->additionalCharacters->textCursor().position();
-    d->additionalCharacters->setText(_characters);
-    auto cursor = d->additionalCharacters->textCursor();
+    auto lastCursorPosition = d->customCharacters->textCursor().position();
+    d->customCharacters->setText(_characters);
+    auto cursor = d->customCharacters->textCursor();
     cursor.setPosition(lastCursorPosition);
-    d->additionalCharacters->setTextCursor(cursor);
+    d->customCharacters->setTextCursor(cursor);
 }
 
 void CardItemParametersView::setDescription(const QString& _description)
@@ -730,7 +730,7 @@ void CardItemParametersView::setReadOnly(bool _readOnly)
     const auto enabled = !_readOnly;
     d->title->setEnabled(enabled);
     d->heading->setEnabled(enabled);
-    d->additionalCharacters->setEnabled(enabled);
+    d->customCharacters->setEnabled(enabled);
     d->description->setEnabled(enabled);
     for (auto cardBeat : std::as_const(d->beats)) {
         cardBeat->setEnabled(enabled);
@@ -821,8 +821,8 @@ void CardItemParametersView::updateTranslations()
 
     d->heading->setLabel(tr("Heading"));
     d->heading->setHelper(tr("Header text (visible in text)"));
-    d->additionalCharacters->setLabel(tr("Additional characters"));
-    d->additionalCharacters->setHelper(tr("Chanacters not mentioned in text"));
+    d->customCharacters->setLabel(tr("Scene characters"));
+    d->customCharacters->setHelper(tr("Fill to use custom characters list"));
     d->description->setLabel(tr("Description"));
     d->initCardBeats();
     d->storyDay->setLabel(tr("Story day"));
@@ -881,7 +881,7 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     for (auto textField : std::vector<TextField*>{
              d->title,
              d->heading,
-             d->additionalCharacters,
+             d->customCharacters,
              d->description,
              d->storyDay,
              d->startDateTime,

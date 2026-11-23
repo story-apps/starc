@@ -33,8 +33,8 @@ public:
     /**
      * @brief Список дополнительный персонажей сцены
      */
-    QString additionalCharacters() const;
-    void setAdditionalCharacters(const QString& _characters);
+    QString customCharacters() const;
+    void setCustomCharacters(const QString& _characters);
 
     /**
      * @brief Ресурсы сцены

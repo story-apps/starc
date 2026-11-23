@@ -17,7 +17,7 @@ public:
     /**
      * @brief Список дополнительных персонажей сцены
      */
-    QString additionalCharacters;
+    QString customCharacters;
 
     /**
      * @brief Запланированная длительность сцены
@@ -57,18 +57,18 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextM
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
 
-QString ScreenplayTextModelSceneItem::additionalCharacters() const
+QString ScreenplayTextModelSceneItem::customCharacters() const
 {
-    return d->additionalCharacters;
+    return d->customCharacters;
 }
 
-void ScreenplayTextModelSceneItem::setAdditionalCharacters(const QString& _characters)
+void ScreenplayTextModelSceneItem::setCustomCharacters(const QString& _characters)
 {
-    if (d->additionalCharacters == _characters) {
+    if (d->customCharacters == _characters) {
         return;
     }
 
-    d->additionalCharacters = _characters;
+    d->customCharacters = _characters;
     setChanged(true);
 }
 
@@ -276,7 +276,7 @@ QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _co
     auto currentTag = _contentReader.name();
 
     if (currentTag == xml::kAdditionalCharactersTag) {
-        d->additionalCharacters = xml::readContent(_contentReader).toString();
+        d->customCharacters = xml::readContent(_contentReader).toString();
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -311,9 +311,9 @@ QByteArray ScreenplayTextModelSceneItem::customContent() const
 {
     QByteArray xml;
 
-    if (!d->additionalCharacters.isEmpty()) {
+    if (!d->customCharacters.isEmpty()) {
         xml += QString("<%1>%2</%1>\n")
-                   .arg(xml::kAdditionalCharactersTag, d->additionalCharacters)
+                   .arg(xml::kAdditionalCharactersTag, d->customCharacters)
                    .toUtf8();
     }
 

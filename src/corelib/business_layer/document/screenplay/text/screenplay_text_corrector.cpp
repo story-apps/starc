@@ -526,23 +526,15 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
     // Учитваем, что на пути может быть несколько сцен, поэтому обрабатываем каждую отдельно
     //
     QStringList sceneCharacters;
-    QStringList sceneAdditionalCharacters;
+    QString sceneCustomCharacters;
     QTextBlock sceneCharactersBlock;
     QTextBlock endBlock = block;
     bool isTextChanged = false;
     auto writeCharactes = [&] {
         //
-        // ... докинем дополнительных персонажей
-        //
-        for (const auto& character : sceneAdditionalCharacters) {
-            if (!sceneCharacters.contains(character)) {
-                sceneCharacters.append(character);
-            }
-        }
-        //
         // ... если есть кого записать в блок
         //
-        if (!sceneCharacters.isEmpty()) {
+        if (!sceneCharacters.isEmpty() || !sceneCustomCharacters.isEmpty()) {
             //
             // ... создадим блок участников сцены, если его не было
             //
@@ -574,7 +566,9 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
             // ... обновим текст блока персонажей сцены
             //
             sceneCharacters.removeAll("");
-            const auto sceneCharactersText = sceneCharacters.join(", ");
+            const auto sceneCharactersText = !sceneCustomCharacters.isEmpty()
+                ? sceneCustomCharacters
+                : sceneCharacters.join(", ");
             if (cursor.block().text() != sceneCharactersText) {
                 endPosition += sceneCharactersText.length() - cursor.block().length();
 
@@ -592,7 +586,7 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
         // ... сбрасываем все структуры, для нового накопления в следующей сцене
         //
         sceneCharacters.clear();
-        sceneAdditionalCharacters.clear();
+        sceneCustomCharacters.clear();
         sceneCharactersBlock = {};
     };
     while (endBlock.isValid() && endBlock != document()->end()) {
@@ -650,8 +644,7 @@ QPair<int, int> ScreenplayTextCorrector::Implementation::correctSceneCharacters(
             }();
 
             if (sceneItem != nullptr) {
-                sceneAdditionalCharacters = ScreenplaySceneCharactersParser::characters(
-                    sceneItem->additionalCharacters());
+                sceneCustomCharacters = sceneItem->customCharacters();
             }
             break;
         }

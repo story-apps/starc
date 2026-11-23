@@ -678,7 +678,7 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
         itemParametersView->setColor(sceneItem->color());
         itemParametersView->setTitle(sceneItem->title());
         itemParametersView->setHeading(sceneItem->heading());
-        itemParametersView->setAdditionalCharacters(sceneItem->additionalCharacters());
+        itemParametersView->setCustomCharacters(sceneItem->customCharacters());
         itemParametersView->setBeats(sceneItem->beats());
         itemParametersView->setStoryDay(sceneItem->storyDay(),
                                         model->dictionariesModel()->storyDays());
@@ -1134,7 +1134,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 textItem->setText(_heading);
                 d->model->updateItem(textItem);
             });
-    connect(d->itemParametersView, &CardItemParametersView::additionalCharactersChanged, this,
+    connect(d->itemParametersView, &CardItemParametersView::customCharactersChanged, this,
             [this, findCurrentModelItem](const QString& _characters) {
                 auto item = findCurrentModelItem();
                 if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
@@ -1148,7 +1148,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 
                 auto sceneItem = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
 
-                sceneItem->setAdditionalCharacters(_characters);
+                sceneItem->setCustomCharacters(_characters);
                 d->model->updateItem(sceneItem);
             });
     connect(d->itemParametersView, &CardItemParametersView::descriptionChanged, this,

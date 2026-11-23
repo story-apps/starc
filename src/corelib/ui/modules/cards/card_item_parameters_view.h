@@ -51,11 +51,11 @@ public:
     Q_SIGNAL void headingChanged(const QString& _heading);
 
     /**
-     * @brief Дополнительные персонажи
+     * @brief Кастомные персонажи
      */
-    void setAdditionalCharactersVisible(bool _visible);
-    void setAdditionalCharacters(const QString& _characters);
-    Q_SIGNAL void additionalCharactersChanged(const QString& _characters);
+    void setCustomCharactersVisible(bool _visible);
+    void setCustomCharacters(const QString& _characters);
+    Q_SIGNAL void customCharactersChanged(const QString& _characters);
 
     /**
      * @brief Описание папки
