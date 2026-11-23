@@ -8,7 +8,6 @@
 
 
 namespace {
-const char* kShowDevVersionsKey = "/managers/notifications/show-dev-versions";
 const char* kLastReadNotificationDateTimeKey
     = "/managers/notifications/last-read-notification-datetime";
 } // namespace
@@ -30,7 +29,6 @@ NotificationsManager::NotificationsManager(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation)
 {
-    d->showDevVersions = QSettings().value(kShowDevVersionsKey).toBool();
 }
 
 NotificationsManager::~NotificationsManager() = default;
@@ -47,7 +45,6 @@ void NotificationsManager::setShowDevVersions(bool _show)
     }
 
     d->showDevVersions = _show;
-    QSettings().setValue(kShowDevVersionsKey, d->showDevVersions);
     processNotifications({});
 }
 

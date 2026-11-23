@@ -724,9 +724,11 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
             [this] { setCurrentWidget(d->styleChoosePage); });
     //
     auto notifyAccountChanged = [this] {
+        const bool showDevUpdates = false;
         emit accountInfoChanged(d->accountInfo.email, d->accountInfo.name,
                                 d->accountInfo.description, d->accountInfo.newsletterLanguage,
-                                d->accountInfo.newsletterSubscribed, d->accountInfo.avatar);
+                                d->accountInfo.newsletterSubscribed, showDevUpdates,
+                                d->accountInfo.avatar);
     };
     connect(d->accountChangeAvatarButton, &Button::clicked, this, [this, notifyAccountChanged] {
         const auto imagesFolders

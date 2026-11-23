@@ -278,7 +278,8 @@ void AccountManager::Implementation::initViewConnections()
     auto notifyUpdateAccountInfoRequested = [this] {
         emit q->updateAccountInfoRequested(accountInfo.email, accountInfo.name,
                                            accountInfo.description, accountInfo.newsletterLanguage,
-                                           accountInfo.newsletterSubscribed, accountInfo.avatar);
+                                           accountInfo.newsletterSubscribed,
+                                           accountInfo.showDevUpdates, accountInfo.avatar);
     };
 
     connect(view, &Ui::AccountView::nameChanged, q,
@@ -883,6 +884,19 @@ void AccountManager::showPromocodeActivationMessage(const QString& _message)
 void AccountManager::setPromocodeError(const QString& _error)
 {
     d->view->setPromocodeError(_error);
+}
+
+void AccountManager::setShowDevUpdates(bool _show)
+{
+    if (d->accountInfo.showDevUpdates == _show) {
+        return;
+    }
+
+    d->accountInfo.showDevUpdates = _show;
+    emit updateAccountInfoRequested(d->accountInfo.email, d->accountInfo.name,
+                                    d->accountInfo.description, d->accountInfo.newsletterLanguage,
+                                    d->accountInfo.newsletterSubscribed,
+                                    d->accountInfo.showDevUpdates, d->accountInfo.avatar);
 }
 
 void AccountManager::setAccountTeams(const QVector<Domain::TeamInfo>& _teams)

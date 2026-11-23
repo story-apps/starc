@@ -94,7 +94,7 @@ signals:
      */
     void accountInfoChanged(const QString& _email, const QString& _name,
                             const QString& _description, const QString& _subscriptionLanguage,
-                            bool _subscribed, const QByteArray& _avatar);
+                            bool _subscribed, bool _showDevUpdates, const QByteArray& _avatar);
 
     /**
      * @brief Пользователь хочет завершить настройку

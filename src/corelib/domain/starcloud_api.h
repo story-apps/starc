@@ -217,6 +217,7 @@ struct AccountInfo {
     QString description;
     bool newsletterSubscribed = false;
     QString newsletterLanguage;
+    bool showDevUpdates = false;
     QByteArray avatar;
     quint64 cloudStorageSizeUsed = 0;
     quint64 cloudStorageSize = 0;

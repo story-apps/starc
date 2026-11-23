@@ -3614,7 +3614,10 @@ void ApplicationManager::initConnections()
                 d->menuView->setHasUnreadNotifications(_hasUnreadNotifications);
             });
     connect(d->menuView, &Ui::MenuView::showDevVersionsChanged, d->notificationsManager.data(),
-            &NotificationsManager::setShowDevVersions);
+            [this](bool _show) {
+                d->accountManager->setShowDevUpdates(_show);
+                d->notificationsManager->setShowDevVersions(_show);
+            });
     connect(d->menuView, &Ui::MenuView::notificationsPressed, d->notificationsManager.data(),
             &NotificationsManager::markAllRead);
     //
@@ -3694,6 +3697,8 @@ void ApplicationManager::initConnections()
                 d->menuView->setAvatar(ImageHelper::imageFromBytes(_accountInfo.avatar));
                 d->menuView->setAccountName(_accountInfo.name);
                 d->menuView->setAccountEmail(_accountInfo.email);
+                d->menuView->setShowDevVersions(_accountInfo.showDevUpdates);
+                d->notificationsManager->setShowDevVersions(_accountInfo.showDevUpdates);
                 d->projectsManager->setProjectsInCloudCanBeCreated(
                     true,
                     (_accountInfo.subscriptions.isEmpty()

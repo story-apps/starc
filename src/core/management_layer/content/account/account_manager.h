@@ -109,6 +109,8 @@ public:
 
     //
 
+    void setShowDevUpdates(bool _show);
+
     /**
      * @brief Задать список команд пользоватля
      */
@@ -174,7 +176,7 @@ signals:
     void updateAccountInfoRequested(const QString& _email, const QString& _name,
                                     const QString& _description,
                                     const QString& _subscriptionLanguage, bool _subscribed,
-                                    const QByteArray& _avatar);
+                                    bool _showDevUpdates, const QByteArray& _avatar);
 
     /**
      * @brief Пользователь хочет завершить заданную сессию
