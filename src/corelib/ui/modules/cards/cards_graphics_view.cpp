@@ -55,6 +55,11 @@ public:
     void removeItem(AbstractCardItem* _item);
 
     /**
+     * @brief Удалить все карточки при смене или сбросе модели
+     */
+    void clearCards();
+
+    /**
      * @brief Уведомить клиентов, если нужно изменить видимость списка проектов
      */
     void notifyVisibleChange();
@@ -357,12 +362,28 @@ void CardsGraphicsView::Implementation::removeItem(AbstractCardItem* _item)
 
     _item->setContainer(nullptr);
 
-    scene->removeItem(_item);
     modelItemsToCards.remove(_item->modelItemIndex().internalPointer());
     cardsItems.removeAll(_item);
     cardsAnimations.remove(_item);
+    scene->removeItem(_item);
     delete _item;
     _item = nullptr;
+}
+
+void CardsGraphicsView::Implementation::clearCards()
+{
+    //
+    // При очистке сцены обработчики могут синхронно запросить интервал позиций карточек, поэтому
+    // сперва очищаем все внутренние структуры с карточками, а только потом саму сцену
+    //
+    cardsItems.clear();
+    modelItemsToCards.clear();
+    cardsPositionsInterval = {};
+    cardsAnimations.clear();
+    movedCards.clear();
+    moveTarget = {};
+
+    scene->clear();
 }
 
 void CardsGraphicsView::Implementation::notifyVisibleChange()
@@ -2297,10 +2318,7 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
         d->model->disconnect(this);
     }
 
-    d->scene->clear();
-    d->cardsAnimations.clear();
-    d->modelItemsToCards.clear();
-    d->cardsItems.clear();
+    d->clearCards();
     d->model = _model;
 
     if (d->model == nullptr) {
@@ -2346,12 +2364,7 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
     //
     // Настраиваем соединения на изменение состава модели
     //
-    connect(d->model, &QAbstractItemModel::modelAboutToBeReset, this, [this] {
-        d->scene->clear();
-        d->cardsAnimations.clear();
-        d->modelItemsToCards.clear();
-        d->cardsItems.clear();
-    });
+    connect(d->model, &QAbstractItemModel::modelAboutToBeReset, this, [this] { d->clearCards(); });
     connect(d->model, &QAbstractItemModel::modelReset, this, loadModelContent);
     connect(d->model, &QAbstractItemModel::dataChanged, this, [this](const QModelIndex& _topLeft) {
         auto cardIter = d->modelItemsToCards.find(_topLeft.internalPointer());
