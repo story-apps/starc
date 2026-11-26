@@ -603,6 +603,11 @@ public:
     void sync();
 
     /**
+     * @brief Ключи настроек используемые в текущей сессии
+     */
+    QStringList sessionKeys() const;
+
+    /**
      * @brief Сбросить настройки сессии
      */
     void resetSession();

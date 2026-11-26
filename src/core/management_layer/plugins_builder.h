@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QScopedPointer>
+#include <QStringList>
 #include <QVector>
 
 class QModelIndex;
@@ -123,7 +124,7 @@ public:
     /**
      * @brief Перенастроить плагины
      */
-    void reconfigureAll() const;
+    void reconfigureAll(const QStringList _changedSettingsKeys = {}) const;
     void reconfigurePlugin(const QString& _mimeType, const QStringList& _changedSettingsKeys) const;
     void reconfigurePluginsWithAiAssistant(const QStringList& _changedSettingsKeys) const;
     void reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys) const;

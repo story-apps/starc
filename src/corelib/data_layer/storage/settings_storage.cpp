@@ -1487,6 +1487,15 @@ void SettingsStorage::sync()
     d->appSettings.sync();
 }
 
+QStringList SettingsStorage::sessionKeys() const
+{
+    QStringList settingsKeys;
+    for (auto iter = d->sessionSettings.begin(); iter != d->sessionSettings.end(); ++iter) {
+        settingsKeys.append(iter.key());
+    }
+    return settingsKeys;
+}
+
 void SettingsStorage::resetSession()
 {
     //

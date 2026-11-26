@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QStringList>
+
 #include <corelib_global.h>
 
 class QVariant;
@@ -10,6 +12,7 @@ namespace DataStorageLayer {
 class DocumentChangeStorage;
 class DocumentStorage;
 class SettingsStorage;
+
 
 /**
  * @brief Фасад для доступа к хранилищам данных
@@ -54,4 +57,5 @@ QVariantMap CORE_LIBRARY_EXPORT settingsValues(const QString& _key);
 void CORE_LIBRARY_EXPORT setSettingsValue(const QString& _key, const QVariant& _value);
 void CORE_LIBRARY_EXPORT setSettingsValues(const QString& _key, const QVariantMap& _value);
 void CORE_LIBRARY_EXPORT setSettingsValueForSession(const QString& _key, const QVariant& _value);
+QStringList CORE_LIBRARY_EXPORT settingsSessionKeys();
 void CORE_LIBRARY_EXPORT resetSettingsSession();

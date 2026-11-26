@@ -2467,6 +2467,13 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     writingSessionManager->startSession(currentProject->uuid(), currentProject->name());
 
+    //
+    // Перенастраиваем конфиги плагинов, чтобы подгрузить настройки актуальные для сессии
+    //
+    if (const auto sessionKeys = settingsSessionKeys(); !sessionKeys.isEmpty()) {
+        pluginsBuilder.reconfigureAll(sessionKeys);
+    }
+
 #ifdef PRINT_DOCUMENT_HISTORY
     const QUuid uuid("{951996cf-1432-4254-a675-5c7f7f28b771}");
     //
@@ -2552,7 +2559,15 @@ void ApplicationManager::Implementation::closeCurrentProject()
 
     writingSessionManager->finishSession();
 
-    DataStorageLayer::StorageFacade::settingsStorage()->resetSession();
+    //
+    // Сбрасываем параметры сессии и перенастраиваем плагины, чтобы они не тянули старые настройки
+    // для новых сессий работы с проектами
+    //
+    const auto lastSessionKeys = settingsSessionKeys();
+    resetSettingsSession();
+    if (!lastSessionKeys.isEmpty()) {
+        pluginsBuilder.reconfigureAll(lastSessionKeys);
+    }
 
     markChangesSaved(true);
     updateWindowTitle();

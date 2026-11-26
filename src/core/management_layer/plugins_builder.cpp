@@ -998,10 +998,10 @@ void PluginsBuilder::setSecondaryViewCurrentIndex(const QModelIndex& _index,
     }
 }
 
-void PluginsBuilder::reconfigureAll() const
+void PluginsBuilder::reconfigureAll(const QStringList _changedSettingsKeys) const
 {
     for (auto plugin : std::as_const(d->plugins)) {
-        plugin->reconfigure({});
+        plugin->reconfigure(_changedSettingsKeys);
     }
 }
 

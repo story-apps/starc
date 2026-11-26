@@ -79,6 +79,11 @@ void setSettingsValueForSession(const QString& _key, const QVariant& _value)
         _key, _value, DataStorageLayer::SettingsStorage::Type::Session);
 }
 
+QStringList settingsSessionKeys()
+{
+    return DataStorageLayer::StorageFacade::settingsStorage()->sessionKeys();
+}
+
 void resetSettingsSession()
 {
     DataStorageLayer::StorageFacade::settingsStorage()->resetSession();
