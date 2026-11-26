@@ -71,7 +71,7 @@ public:
                         MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
         const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
             - pxBlockMargins.left() - pxBlockMargins.right();
-        auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
+        auto textLineHeight = TextHelper::documentLineSpacing(blockStyle.font());
         switch (blockStyle.lineSpacingType()) {
         case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
             textLineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());
@@ -234,7 +234,7 @@ public:
                         MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
         const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
             - pxBlockMargins.left() - pxBlockMargins.right();
-        auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
+        auto textLineHeight = TextHelper::documentLineSpacing(blockStyle.font());
         switch (blockStyle.lineSpacingType()) {
         case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
             textLineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());

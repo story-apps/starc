@@ -556,7 +556,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
     const auto hasSpaceBefore
         = _prevEmptyLines > 0 || blockFormat.topMargin() > 0 || prevBlockFormat.bottomMargin() > 0;
     // ... есть отступ перед блоком (линия и больше)
-    const auto lineSpacing = TextHelper::fineLineSpacing(charFormat.font());
+    const auto lineSpacing = TextHelper::documentLineSpacing(charFormat.font());
     const auto hasLineBefore = _prevEmptyLines > 0 || blockFormat.topMargin() >= lineSpacing
         || prevBlockFormat.bottomMargin() >= lineSpacing;
 
@@ -606,7 +606,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
             // Реплика
             // 1. не имеет сверху отступа (допустим минимальный отступ, меньше высоты строки)
             //
-            else if (blockFormat.topMargin() < TextHelper::fineLineSpacing(charFormat.font())) {
+            else if (blockFormat.topMargin() < TextHelper::documentLineSpacing(charFormat.font())) {
                 blockType = TextParagraphType::Dialogue;
             }
             //

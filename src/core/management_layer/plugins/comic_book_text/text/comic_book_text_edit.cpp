@@ -1255,13 +1255,13 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                                     cursorR.bottom());
                                 QRectF rect(topLeft, bottomRight);
                                 const auto yDelta
-                                    = (TextHelper::fineLineSpacing(cursor.charFormat().font())
-                                       - TextHelper::fineLineSpacing(
+                                    = (TextHelper::documentLineSpacing(cursor.charFormat().font())
+                                       - TextHelper::documentLineSpacing(
                                            DesignSystem::font().iconsForEditors()))
                                     / 2;
                                 rect.adjust(
                                     0, yDelta,
-                                    -TextHelper::fineTextWidthF(".", cursor.charFormat().font())
+                                    -TextHelper::documentTextWidthF(".", cursor.charFormat().font())
                                         / 2,
                                     0);
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, _icon);
@@ -1279,13 +1279,13 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                                          cursorREnd.bottom());
                                 QRectF rect(topLeft, bottomRight);
                                 const auto yDelta
-                                    = (TextHelper::fineLineSpacing(cursor.charFormat().font())
-                                       - TextHelper::fineLineSpacing(
+                                    = (TextHelper::documentLineSpacing(cursor.charFormat().font())
+                                       - TextHelper::documentLineSpacing(
                                            DesignSystem::font().iconsForEditors()))
                                     / 2;
                                 rect.adjust(
                                     0, yDelta,
-                                    -TextHelper::fineTextWidthF(".", cursor.charFormat().font())
+                                    -TextHelper::documentTextWidthF(".", cursor.charFormat().font())
                                         / 2,
                                     0);
                                 painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, _icon);

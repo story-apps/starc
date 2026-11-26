@@ -309,5 +309,11 @@ private slots:
     }
 };
 
-QTEST_MAIN(RemoteTextChangesTest)
+int main(int argc, char** argv)
+{
+    QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
+    QApplication app(argc, argv);
+    RemoteTextChangesTest test;
+    return QTest::qExec(&test, argc, argv);
+}
 #include "tst_remote_text_changes.moc"

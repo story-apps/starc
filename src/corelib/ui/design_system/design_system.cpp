@@ -9,18 +9,18 @@
 #include <QFontDatabase>
 #include <QFontMetricsF>
 #include <QIcon>
+#include <QImage>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMarginsF>
 #include <QPixmap>
 #include <QPointF>
+#include <QScreen>
 #include <QSet>
 #include <QSizeF>
 
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
-#else
-#include <QScreen>
 #endif
 
 
@@ -445,16 +445,27 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
     fontFamilies.append("Apple Color Emoji");
     fontFamilies.append("Noto Color Emoji");
 
-    auto initFont
-        = [_scaleFactor, fontFamilies](QFont::Weight _weight, QFont::Capitalization _capitalization,
-                                       int _pixelSize, qreal _letterSpacing, QFont& _font) {
-              _font.setFamily(fontFamilies.constFirst());
-              _font.setFamilies(fontFamilies);
-              _font.setWeight(_weight);
-              _font.setCapitalization(_capitalization);
-              _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
-              _font.setLetterSpacing(QFont::AbsoluteSpacing, _letterSpacing * _scaleFactor);
-          };
+    // Bind UI fonts to the screen, as QPainter does. AA_Use96Dpi defines the
+    // document's base units, while widget paint devices retain their own DPI.
+    // Keeping that context in the font makes UI measurements include the same
+    // absolute letter spacing as widget painting.
+    QImage screenDevice(1, 1, QImage::Format_ARGB32_Premultiplied);
+    if (const auto screen = QGuiApplication::primaryScreen()) {
+        screenDevice.setDotsPerMeterX(qRound(screen->logicalDotsPerInchX() / 0.0254));
+        screenDevice.setDotsPerMeterY(qRound(screen->logicalDotsPerInchY() / 0.0254));
+    }
+
+    auto initFont = [_scaleFactor, fontFamilies,
+                     &screenDevice](QFont::Weight _weight, QFont::Capitalization _capitalization,
+                                    int _pixelSize, qreal _letterSpacing, QFont& _font) {
+        _font.setFamily(fontFamilies.constFirst());
+        _font.setFamilies(fontFamilies);
+        _font.setWeight(_weight);
+        _font.setCapitalization(_capitalization);
+        _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
+        _font.setLetterSpacing(QFont::AbsoluteSpacing, _letterSpacing * _scaleFactor);
+        _font = QFont(_font, &screenDevice);
+    };
 
     initFont(QFont::Light, QFont::Capitalization::MixedCase, 96, -1.5, h1);
     initFont(QFont::Light, QFont::Capitalization::MixedCase, 60, -0.5, h2);

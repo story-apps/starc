@@ -1269,13 +1269,15 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                                                           : pageRight + leftDelta,
                                             cursorR.bottom());
                         QRectF rect(topLeft, bottomRight);
-                        const auto yDelta = (TextHelper::fineLineSpacing(cursor.charFormat().font())
-                                             - TextHelper::fineLineSpacing(
-                                                 DesignSystem::font().iconsForEditors()))
+                        const auto yDelta
+                            = (TextHelper::documentLineSpacing(cursor.charFormat().font())
+                               - TextHelper::documentLineSpacing(
+                                   DesignSystem::font().iconsForEditors()))
                             / 2.0;
-                        rect.adjust(
-                            0, yDelta,
-                            -TextHelper::fineTextWidthF(".", cursor.charFormat().font()) / 2, 0);
+                        rect.adjust(0, yDelta,
+                                    -TextHelper::documentTextWidthF(".", cursor.charFormat().font())
+                                        / 2,
+                                    0);
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
                     }
                     //

@@ -412,11 +412,11 @@ void SimpleTextCorrector::Implementation::updateBlocksHeight(int _position, int 
             qreal lineHeight = 0.0;
             if (!formats.isEmpty()) {
                 for (const auto& format : formats) {
-                    lineHeight
-                        = std::max(lineHeight, TextHelper::fineLineSpacing(format.format.font()));
+                    lineHeight = std::max(lineHeight,
+                                          TextHelper::documentLineSpacing(format.format.font()));
                 }
             } else {
-                lineHeight = TextHelper::fineLineSpacing(cursor.blockCharFormat().font());
+                lineHeight = TextHelper::documentLineSpacing(cursor.blockCharFormat().font());
             }
             //
             // ... учитываем межстрочный интервал стиля блока

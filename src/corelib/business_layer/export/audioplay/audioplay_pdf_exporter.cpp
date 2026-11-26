@@ -61,7 +61,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             if (textItem && textItem->number().has_value()) {
                 const QString dialogueNumber = textItem->number()->text;
                 const int numberDelta
-                    = TextHelper::fineTextWidthF(dialogueNumber, _painter->font());
+                    = TextHelper::documentTextWidthF(dialogueNumber, _painter->font());
                 const auto& characterBlockStyle
                     = exportTemplate.paragraphStyle(TextParagraphType::Character);
                 QRectF dialogueNumberRect;
@@ -70,14 +70,14 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                         dialogueNumberRect
                             = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
                                      _blockRect.top(), numberDelta,
-                                     TextHelper::fineLineSpacing(_painter->font()));
+                                     TextHelper::documentLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
                         dialogueNumberRect
                             = QRectF(0, _blockRect.top(),
                                      MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                                          - distanceBetweenSceneNumberAndText,
-                                     TextHelper::fineLineSpacing(_painter->font()));
+                                     TextHelper::documentLineSpacing(_painter->font()));
                     }
                 } else {
                     if (_block.blockFormat().rightMargin() > numberDelta) {
@@ -85,7 +85,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                             = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                                          + _body.width() - numberDelta,
                                      _blockRect.top(), numberDelta,
-                                     TextHelper::fineLineSpacing(_painter->font()));
+                                     TextHelper::documentLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
                         dialogueNumberRect
@@ -94,7 +94,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                      _blockRect.top(),
                                      MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                                          - distanceBetweenSceneNumberAndText,
-                                     TextHelper::fineLineSpacing(_painter->font()));
+                                     TextHelper::documentLineSpacing(_painter->font()));
                     }
                 }
                 _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignVCenter,
@@ -123,7 +123,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                 _blockRect.top(),
                 _block.blockFormat().leftMargin()
                     - MeasurementHelper::mmToPx(characterBlockStyle.marginsOnHalfPage().left()),
-                TextHelper::fineLineSpacing(_painter->font()));
+                TextHelper::documentLineSpacing(_painter->font()));
         } else {
             //
             // FIXME: RTL

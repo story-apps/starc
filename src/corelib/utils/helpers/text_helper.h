@@ -24,13 +24,17 @@ class CORE_LIBRARY_EXPORT TextHelper
 {
 public:
     // Shared Qt layout context in document coordinates, independent of monitors.
+    // The application must set Qt::AA_Use96Dpi before QApplication construction:
+    // QTextDocument also uses Qt's default DPI to scale frame/block geometry.
     static QPaintDevice* documentPaintDevice();
     static void configureDocument(QTextDocument* _document);
+    static qreal documentTextWidthF(const QString& _text, const QFont& _font);
+    static qreal documentLineSpacing(const QFont& _font);
     static qreal fontPointSize(const QFont& _font);
     static QFont fontForPaintDevice(const QFont& _font, const QPaintDevice* _device);
 
     /**
-     * @brief Определить оптимальную ширину текста
+     * @brief Ширина текста интерфейса в экранных метриках
      */
     static qreal fineTextWidthF(const QString& _text, const QFont& _font);
     static qreal fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics);
@@ -84,7 +88,7 @@ public:
      * @param _text Текст.
      * @param _font Шрифт, которым компонуется текст.
      * @param _width Ширина области текста.
-     * @param _lineHeight Высота строки; если -1, используется fineLineSpacing(_font).
+     * @param _lineHeight Высота строки; если -1, используется documentLineSpacing(_font).
      */
     static qreal layoutHeightForWidth(const QString& _text, const QFont& _font, qreal _width,
                                       qreal _lineHeight);

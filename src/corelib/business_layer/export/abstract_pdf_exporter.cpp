@@ -80,7 +80,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         font.setBold(true);
         font.setPixelSize(600);
         const int maxWidth = static_cast<int>(sqrt(pow(_body.height(), 2) + pow(_body.width(), 2)));
-        while (TextHelper::fineTextWidthF(watermark, font) > maxWidth) {
+        while (TextHelper::documentTextWidthF(watermark, font) > maxWidth) {
             font.setPixelSize(font.pixelSize() - 4);
         }
 
@@ -95,7 +95,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             painter.rotate(-qRadiansToDegrees(atan(_body.height() / _body.width())));
             painter.setFont(font);
             painter.setPen(_exportOptions.watermarkColor);
-            const int delta = TextHelper::fineLineSpacing(font) / 4;
+            const int delta = TextHelper::documentLineSpacing(font) / 4;
             painter.drawText(delta, delta, watermark);
         }
         //
@@ -179,7 +179,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                 // ... необходимо также учитывать высоту строки для особых случаев
                 //
                 blockRect.moveTop(blockRect.top() + block.blockFormat().lineHeight()
-                                  - TextHelper::fineLineSpacing(block.charFormat().font()));
+                                  - TextHelper::documentLineSpacing(block.charFormat().font()));
             }
 
             const bool isFirstLineCanBePlacedAtCurrentPage = (blockRect.top() > pageYPos)
@@ -203,7 +203,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                 //
                 if (isBlockStartedOnPreviousPage && !isFirstLinePlacedAtPreviousPage) {
                     blockRect.moveTop(pageYPos + pageTopMargin + block.blockFormat().lineHeight()
-                                      - TextHelper::fineLineSpacing(block.charFormat().font()));
+                                      - TextHelper::documentLineSpacing(block.charFormat().font()));
                 }
 
 #ifdef DEBUG_BLOCKS_PRINTING

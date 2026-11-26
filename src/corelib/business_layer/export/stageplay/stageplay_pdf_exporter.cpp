@@ -61,7 +61,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             if (textItem && textItem->number().has_value()) {
                 const QString dialogueNumber = textItem->number()->text;
                 const int numberDelta
-                    = TextHelper::fineTextWidthF(dialogueNumber, _painter->font());
+                    = TextHelper::documentTextWidthF(dialogueNumber, _painter->font());
                 const auto& characterBlockStyle
                     = exportTemplate.paragraphStyle(TextParagraphType::Character);
                 QRectF dialogueNumberRect;
@@ -115,7 +115,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             if (_lineIndex < _block.layout()->lineCount() - 1) {
                 lineText = lineText.trimmed();
             }
-            return TextHelper::fineTextWidthF(lineText, _painter->font());
+            return TextHelper::documentTextWidthF(lineText, _painter->font());
         };
         auto firstLineWidth = [&lineWidth] { return lineWidth(0); };
         auto lastLineWidth = [&lineWidth, lastLineIndex = _block.layout()->lineCount() - 1] {
@@ -168,7 +168,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             // Определим сам префикс и область, в которой его нужно нарисовать
             //
             const auto prefix = _block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
-            const auto prefixWidth = TextHelper::fineTextWidthF(prefix, _painter->font());
+            const auto prefixWidth = TextHelper::documentTextWidthF(prefix, _painter->font());
             const auto prefixHeight = _painter->fontMetrics().boundingRect(prefix).height();
             const auto prefixLeft = _blockRect.left() // положение блока
                 + (_block.layout()->lineCount() == 1 ? 0.0 : blockTextIndent) // красная строка
@@ -218,7 +218,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             //
             const auto postfix
                 = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
-            const auto postfixWidth = TextHelper::fineTextWidthF(postfix, _painter->font());
+            const auto postfixWidth = TextHelper::documentTextWidthF(postfix, _painter->font());
             const auto postfixHeight = _painter->fontMetrics().boundingRect(postfix).height();
             const auto postfixLeft = _blockRect.left() // положение блока
                 + 0.0 // красная строка (не учитываем)

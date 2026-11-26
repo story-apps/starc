@@ -107,6 +107,11 @@ int main(int argc, char* argv[])
     //
     // Инициилизируем приложение
     //
+    // QTextDocument scales frame margins, fixed line heights and tab stops against
+    // Qt's default DPI, even when its layout has an explicit paint device. Keep
+    // that base equal to our 96-DPI document units before any fonts are created.
+    // Qt's device-pixel ratio still handles high-DPI displays.
+    QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
     Application application(argc, argv);
 
     //

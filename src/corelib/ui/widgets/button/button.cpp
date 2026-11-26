@@ -5,10 +5,12 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QFontMetricsF>
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QVariantAnimation>
+#include <QtMath>
 
 
 class Button::Implementation
@@ -161,29 +163,31 @@ void Button::click()
 
 QSize Button::sizeHint() const
 {
+    const auto margins = Ui::DesignSystem::button().margins().toMargins();
     const auto shadowMarginsWidth = d->isContained
         ? Ui::DesignSystem::button().shadowMargins().left()
             + Ui::DesignSystem::button().shadowMargins().right()
         : 0.0;
     const qreal width
-        = std::max(
-              Ui::DesignSystem::button().minimumWidth(),
-              Ui::DesignSystem::button().margins().left()
-                  + (!d->icon.isEmpty() ? Ui::DesignSystem::button().iconSize().width() : 0)
-                  + (!d->icon.isEmpty() && !d->text.isEmpty() ? Ui::DesignSystem::button().spacing()
-                                                              : 0)
-                  + (!d->text.isEmpty()
-                         ? TextHelper::fineTextWidth(d->text, Ui::DesignSystem::font().button())
-                         : 0)
-                  + Ui::DesignSystem::button().margins().right())
+        = std::max(Ui::DesignSystem::button().minimumWidth(),
+                   margins.left()
+                       + (!d->icon.isEmpty() ? Ui::DesignSystem::button().iconSize().width() : 0)
+                       + (!d->icon.isEmpty() && !d->text.isEmpty()
+                              ? Ui::DesignSystem::button().spacing()
+                              : 0)
+                       + (!d->text.isEmpty()
+                              ? qCeil(QFontMetricsF(Ui::DesignSystem::font().button(), this)
+                                          .horizontalAdvance(d->text))
+                              : 0)
+                       + margins.right())
         + shadowMarginsWidth;
     const auto shadowMarginsHeight = d->isContained
         ? Ui::DesignSystem::button().shadowMargins().top()
             + Ui::DesignSystem::button().shadowMargins().bottom()
         : 0.0;
     const qreal height = Ui::DesignSystem::button().height() + shadowMarginsHeight;
-    return QSize(static_cast<int>(width) + contentsMargins().left() + contentsMargins().right(),
-                 static_cast<int>(height) + contentsMargins().top() + contentsMargins().bottom());
+    return QSize(qCeil(width) + contentsMargins().left() + contentsMargins().right(),
+                 qCeil(height) + contentsMargins().top() + contentsMargins().bottom());
 }
 
 void Button::paintEvent(QPaintEvent* _event)
@@ -283,7 +287,10 @@ void Button::paintEvent(QPaintEvent* _event)
     //
     QRectF buttonInnerRect
         = contentsRect().marginsRemoved(Ui::DesignSystem::button().margins().toMargins());
-    const qreal textWidth = TextHelper::fineTextWidthF(d->text, Ui::DesignSystem::font().button());
+    // Reserve whole pixels, but keep elision in the same fractional metrics as
+    // painting. Truncating a fractional advance can elide a label that fits.
+    const qreal textWidth = qCeil(QFontMetricsF(Ui::DesignSystem::font().button(), painter.device())
+                                      .horizontalAdvance(d->text));
     //
     // ... если иконка задана, рисуем иконку и корректируем область отрисовки текста
     //
@@ -338,9 +345,9 @@ void Button::paintEvent(QPaintEvent* _event)
     //
     if (!d->text.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().button());
-        painter.drawText(
-            buttonInnerRect, textAlignment,
-            painter.fontMetrics().elidedText(d->text, Qt::ElideRight, buttonInnerRect.width()));
+        painter.drawText(buttonInnerRect, textAlignment,
+                         QFontMetricsF(painter.font(), painter.device())
+                             .elidedText(d->text, Qt::ElideRight, buttonInnerRect.width()));
     }
 }
 

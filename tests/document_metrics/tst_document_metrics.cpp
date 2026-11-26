@@ -10,6 +10,8 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
+#include <ui/design_system/design_system.h>
+#include <ui/widgets/button/button.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -23,6 +25,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QProcess>
+#include <QScopeGuard>
 #include <QTemporaryDir>
 #include <QTextBlock>
 #include <QtTest>
@@ -178,10 +181,10 @@ private slots:
             auto option = document.defaultTextOption();
             option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
             document.setDefaultTextOption(option);
-            const auto lineHeight = TextHelper::fineLineSpacing(font);
+            const auto lineHeight = TextHelper::documentLineSpacing(font);
             const auto text
                 = QString::fromUtf8("Words with accents: café, русский текст. ").repeated(8)
-                + QChar::LineSeparator + QString("VeryLongWordWithoutSpaces").repeated(8);
+                + QChar(QChar::LineSeparator) + QString("VeryLongWordWithoutSpaces").repeated(8);
             QTextCursor cursor(&document);
             QTextBlockFormat blockFormat;
             blockFormat.setLineHeight(lineHeight, QTextBlockFormat::FixedHeight);
@@ -210,6 +213,111 @@ private slots:
         QVERIFY(editor.document()->useDesignMetrics());
     }
 
+    void internationalTemplateWrapsLikeOffice()
+    {
+        ScreenplayTemplate textTemplate(":/templates/screenplay/world_cn");
+        const auto style = textTemplate.paragraphStyle(TextParagraphType::Action);
+        PageTextEdit editor;
+        editor.setUsePageMode(true);
+        editor.setPageFormat(textTemplate.pageSizeId());
+        editor.setPageMarginsMm(textTemplate.pageMargins());
+        editor.resize(900, 1200);
+        auto document = editor.document();
+        document->setDefaultFont(textTemplate.baseFont());
+        QTextCursor cursor(document);
+        cursor.setBlockFormat(style.blockFormat());
+        cursor.setBlockCharFormat(style.charFormat());
+        const auto text = QString::fromUtf8(
+            "Рабочий день на заводе. Вдалеке играет музыка Чайковского. От "
+            "сварки медленно разлетаются искры. Приборы ходят вверх-вниз и "
+            "гремят. Мужики стоят у станков, переносят грузы, кратко переговариваются.");
+        cursor.insertText(text, style.charFormat());
+        editor.show();
+        QCoreApplication::processEvents();
+        document->documentLayout()->documentSize();
+        const auto firstLine = document->begin().layout()->lineAt(0);
+        QCOMPARE(
+            text.left(firstLine.textLength()).trimmed(),
+            QString::fromUtf8("Рабочий день на заводе. Вдалеке играет музыка Чайковского. От"));
+        QCOMPARE(document->pageSize().width(), MeasurementHelper::mmToPx(210));
+        const auto layout = document->begin().layout();
+        QVERIFY(qAbs(layout->lineAt(1).y() - firstLine.y() - style.blockFormat().lineHeight())
+                < 0.02);
+    }
+
+    void cursorPageSurvivesScrolling()
+    {
+        PageTextEdit editor;
+        editor.setUsePageMode(true);
+        editor.setPageFormat(QPageSize::A4);
+        editor.setPageMarginsMm(QMarginsF(38, 24, 17, 24));
+        editor.setPageSpacing(25.5);
+        editor.resize(900, 500);
+        QTextCursor cursor(editor.document());
+        for (int i = 0; i < 40; ++i) {
+            if (i) {
+                QTextBlockFormat format;
+                format.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+                cursor.insertBlock(format);
+            }
+            cursor.insertText(QString("Page %1").arg(i + 1));
+        }
+        editor.show();
+        QCoreApplication::processEvents();
+        QCOMPARE(editor.document()->pageCount(), 40);
+        QCOMPARE(editor.cursorPage(cursor), 40);
+        editor.setVerticalScroll(editor.verticalScrollMaximum());
+        QCOMPARE(editor.cursorPage(cursor), 40);
+        QCOMPARE(editor.verticalScrollMaximum(),
+                 qCeil(editor.document()->pageSize().height() * 40) - editor.viewport()->height());
+    }
+
+    void buttonRendersWholeLabel_data()
+    {
+        QTest::addColumn<qreal>("uiScale");
+        for (qreal scale : { 1.0, 1.1, 1.25, 2.0 }) {
+            QTest::newRow(qPrintable(QString::number(scale))) << scale;
+        }
+    }
+
+    void buttonRendersWholeLabel()
+    {
+        QFETCH(qreal, uiScale);
+        const auto oldScale = Ui::DesignSystem::scaleFactor();
+        const auto restoreScale
+            = qScopeGuard([oldScale] { Ui::DesignSystem::setScaleFactor(oldScale); });
+        Ui::DesignSystem::setScaleFactor(uiScale);
+        for (const auto& text :
+             { QString::fromUtf8("Добавить документ"), QString("Export"), QString("Save") }) {
+            Button button;
+            button.setText(text);
+            const auto font = Ui::DesignSystem::font().button();
+            QCOMPARE(TextHelper::fineTextWidthF(text, font),
+                     QFontMetricsF(font, &button).horizontalAdvance(text));
+            button.resize(button.sizeHint());
+            button.setBackgroundColor(Qt::white);
+            button.setTextColor(Qt::black);
+            QImage actual(button.size(), QImage::Format_ARGB32_Premultiplied);
+            actual.setDotsPerMeterX(qRound(button.logicalDpiX() / 0.0254));
+            actual.setDotsPerMeterY(qRound(button.logicalDpiY() / 0.0254));
+            actual.fill(Qt::white);
+            button.render(&actual);
+            QImage expected(actual.size(), actual.format());
+            expected.setDotsPerMeterX(actual.dotsPerMeterX());
+            expected.setDotsPerMeterY(actual.dotsPerMeterY());
+            expected.fill(Qt::white);
+            QPainter painter(&expected);
+            painter.setFont(Ui::DesignSystem::font().button());
+            painter.setPen(Qt::black);
+            QRectF rect = button.contentsRect().marginsRemoved(
+                Ui::DesignSystem::button().margins().toMargins());
+            rect.setWidth(qCeil(QFontMetricsF(painter.font(), &expected).horizontalAdvance(text)));
+            painter.drawText(rect, Qt::AlignCenter | Qt::AlignVCenter, text);
+            painter.end();
+            QCOMPARE(actual, expected);
+        }
+    }
+
     void decorationsUseDocumentSize()
     {
         QFont font("Courier Prime");
@@ -227,6 +335,34 @@ private slots:
                 = QFontMetricsF(painter.font(), &image).horizontalAdvance("MMMMMMMMMM");
             QVERIFY2(qAbs(actual - expected) < 0.02,
                      qPrintable(QString("DPI %1: %2 != %3").arg(dpi).arg(actual).arg(expected)));
+        }
+    }
+
+    void documentPaintingUsesLayoutAdvances()
+    {
+        QTextDocument document;
+        TextHelper::configureDocument(&document);
+        ScreenplayTemplate textTemplate(":/templates/screenplay/world_cn");
+        document.setDefaultFont(textTemplate.baseFont());
+        document.setDocumentMargin(0);
+        document.setTextWidth(MeasurementHelper::mmToPx(155));
+        document.setPlainText(QString::fromUtf8("Courier New: русский текст. ").repeated(8));
+        QImage baseline;
+        for (int dpi : { 96, 72, 100, 120, 144, 192 }) {
+            QImage image(800, 200, QImage::Format_ARGB32_Premultiplied);
+            image.setDotsPerMeterX(qRound(dpi / 0.0254));
+            image.setDotsPerMeterY(qRound(dpi / 0.0254));
+            image.fill(Qt::white);
+            QPainter painter(&image);
+            document.drawContents(&painter);
+            painter.end();
+            // Compare pixels, not the DPI metadata of the image.
+            image.setDotsPerMeterX(qRound(96 / 0.0254));
+            image.setDotsPerMeterY(qRound(96 / 0.0254));
+            if (baseline.isNull())
+                baseline = image;
+            else
+                QCOMPARE(image, baseline);
         }
     }
 
@@ -307,10 +443,16 @@ private slots:
             ScreenplayTemplate textTemplate(":/templates/screenplay/" + QString(name));
             const auto style = textTemplate.paragraphStyle(TextParagraphType::Action);
             TextDocument document;
+            PageTextEdit editor;
+            editor.setUsePageMode(true);
+            editor.setPageFormat(textTemplate.pageSizeId());
+            editor.setPageMarginsMm(textTemplate.pageMargins());
+            editor.setPageSpacing(25.5);
+            editor.setDocument(&document);
+            editor.resize(1100, 850);
+            editor.show();
+            QCoreApplication::processEvents();
             document.setDefaultFont(style.font());
-            document.setPageSize(
-                QSizeF(MeasurementHelper::mmToPx(155), MeasurementHelper::mmToPx(249)));
-            document.setDocumentMargin(0);
             QTextCursor cursor(&document);
             const QString text
                 = QString::fromUtf8("A long line, русский текст, العربية עברית தமிழ். ").repeated(6);
@@ -347,7 +489,11 @@ private slots:
         QTemporaryDir dir;
         QVERIFY(dir.isValid());
         QByteArray baseline;
-        for (const auto& configuration : { "96:1", "120:1.25", "144:1.5", "192:2" }) {
+        // Vary font DPI and display scaling independently. Pairing them alone
+        // can keep Qt's default DPI at 96 and conceal device-dependent margins.
+        for (const auto& configuration :
+             { "72:1", "96:1", "100:1", "120:1", "144:1", "192:1", "96:1.25", "96:1.5", "96:2",
+               "120:1.25", "144:1.5", "192:2" }) {
             const auto values = QString(configuration).split(':');
             QProcess child;
             auto env = QProcessEnvironment::systemEnvironment();
@@ -355,10 +501,14 @@ private slots:
             env.insert("QT_SCALE_FACTOR", values[1]);
             env.insert("STARC_METRICS_SNAPSHOT", dir.filePath("layout.bin"));
             child.setProcessEnvironment(env);
-            child.start(QCoreApplication::applicationFilePath(), { "layoutSnapshot" });
+            child.start(QCoreApplication::applicationFilePath(),
+                        { "layoutSnapshot", "internationalTemplateWrapsLikeOffice",
+                          "buttonRendersWholeLabel", "cursorPageSurvivesScrolling" });
             QVERIFY(child.waitForFinished(60000));
             QVERIFY2(child.exitStatus() == QProcess::NormalExit && child.exitCode() == 0,
-                     child.readAllStandardOutput().constData());
+                     qPrintable(QString("DPI/scale %1: %2")
+                                    .arg(configuration,
+                                         QString::fromUtf8(child.readAllStandardOutput()))));
             QFile file(dir.filePath("layout.bin"));
             QVERIFY(file.open(QIODevice::ReadOnly));
             const auto current = file.readAll();
@@ -371,5 +521,12 @@ private slots:
     }
 };
 
-QTEST_MAIN(DocumentMetricsTest)
+int main(int argc, char** argv)
+{
+    // Match the application startup contract, before Qt creates any fonts.
+    QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
+    QApplication app(argc, argv);
+    DocumentMetricsTest test;
+    return QTest::qExec(&test, argc, argv);
+}
 #include "tst_document_metrics.moc"

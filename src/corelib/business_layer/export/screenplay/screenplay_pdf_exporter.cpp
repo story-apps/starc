@@ -57,7 +57,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
             if (_lineIndex < _block.layout()->lineCount() - 1) {
                 lineText = lineText.trimmed();
             }
-            return TextHelper::fineTextWidthF(lineText, _painter->font());
+            return TextHelper::documentTextWidthF(lineText, _painter->font());
         };
         auto firstLineWidth = [&lineWidth] { return lineWidth(0); };
         auto lastLineWidth = [&lineWidth, lastLineIndex = _block.layout()->lineCount() - 1] {
@@ -116,7 +116,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
             // Определим сам префикс и область, в которой его нужно нарисовать
             //
             const auto prefix = _text;
-            const auto prefixWidth = TextHelper::fineTextWidthF(prefix, _painter->font());
+            const auto prefixWidth = TextHelper::documentTextWidthF(prefix, _painter->font());
             const auto prefixHeight = _painter->fontMetrics().boundingRect(prefix).height();
             const auto prefixLeft = _blockRect.left() // положение блока
                 + (_block.layout()->lineCount() == 1 ? 0.0 : blockTextIndent) // красная строка
@@ -156,7 +156,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
             // Определим сам постфикс и область, в которой его нужно нарисовать
             //
             const auto postfix = _text;
-            const auto postfixWidth = TextHelper::fineTextWidthF(postfix, _painter->font());
+            const auto postfixWidth = TextHelper::documentTextWidthF(postfix, _painter->font());
             const auto postfixHeight = _painter->fontMetrics().boundingRect(postfix).height();
             const auto postfixLeft = _blockRect.left() // положение блока
                 + 0.0 // красная строка (не учитываем)
@@ -196,7 +196,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
                     0, _blockRect.top(),
                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                         - distanceBetweenSceneNumberAndText,
-                    TextHelper::fineLineSpacing(_painter->font()));
+                    TextHelper::documentLineSpacing(_painter->font()));
                 _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignVCenter,
                                    sceneItem->number()->text);
             }
@@ -208,7 +208,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
                     _blockRect.top(),
                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                         - distanceBetweenSceneNumberAndText,
-                    TextHelper::fineLineSpacing(_painter->font()));
+                    TextHelper::documentLineSpacing(_painter->font()));
                 _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignVCenter,
                                    sceneItem->number()->text);
             }
@@ -230,21 +230,21 @@ void ScreenplayPdfExporter::printBlockDecorations(
                 if (textItem && textItem->number().has_value()) {
                     const QString dialogueNumber = textItem->number()->text;
                     const int numberDelta
-                        = TextHelper::fineTextWidthF(dialogueNumber, _painter->font());
+                        = TextHelper::documentTextWidthF(dialogueNumber, _painter->font());
                     QRectF dialogueNumberRect;
                     if (QLocale().textDirection() == Qt::LeftToRight) {
                         if (_block.blockFormat().leftMargin() > numberDelta) {
                             dialogueNumberRect = QRectF(
                                 MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
                                 _blockRect.top(), numberDelta,
-                                TextHelper::fineLineSpacing(_painter->font()));
+                                TextHelper::documentLineSpacing(_painter->font()));
                         } else {
                             const int distanceBetweenSceneNumberAndText = 10;
                             dialogueNumberRect = QRectF(
                                 0, _blockRect.top(),
                                 MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                                     - distanceBetweenSceneNumberAndText,
-                                TextHelper::fineLineSpacing(_painter->font()));
+                                TextHelper::documentLineSpacing(_painter->font()));
                         }
                     } else {
                         if (_block.blockFormat().rightMargin() > numberDelta) {
@@ -252,7 +252,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
                                 MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                                     + _body.width() - numberDelta,
                                 _blockRect.top(), numberDelta,
-                                TextHelper::fineLineSpacing(_painter->font()));
+                                TextHelper::documentLineSpacing(_painter->font()));
                         } else {
                             const int distanceBetweenSceneNumberAndText = 10;
                             dialogueNumberRect = QRectF(
@@ -261,7 +261,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
                                 _blockRect.top(),
                                 MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                                     - distanceBetweenSceneNumberAndText,
-                                TextHelper::fineLineSpacing(_painter->font()));
+                                TextHelper::documentLineSpacing(_painter->font()));
                         }
                     }
                     _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignVCenter,
@@ -316,12 +316,12 @@ void ScreenplayPdfExporter::printBlockDecorations(
                     = TextHelper::lastLineText(_block.text(), _painter->font(), _blockRect.width());
                 const QPoint bottomRight = QPoint(
                     _blockRect.left() + _block.blockFormat().leftMargin() + _blockRect.width()
-                        - TextHelper::fineTextWidthF(lastLineText, _painter->font()),
+                        - TextHelper::documentTextWidthF(lastLineText, _painter->font()),
                     correctedBlockRect.bottom());
-                const QPoint topLeft
-                    = QPoint(bottomRight.x() - TextHelper::fineTextWidthF(prefix, _painter->font()),
-                             correctedBlockRect.bottom()
-                                 - _painter->fontMetrics().boundingRect(prefix).height());
+                const QPoint topLeft = QPoint(
+                    bottomRight.x() - TextHelper::documentTextWidthF(prefix, _painter->font()),
+                    correctedBlockRect.bottom()
+                        - _painter->fontMetrics().boundingRect(prefix).height());
                 const QRect postfixRect(topLeft, bottomRight);
                 _painter->drawText(postfixRect, Qt::AlignLeft | Qt::AlignBottom, prefix);
             }
@@ -334,7 +334,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
                 const auto postfix
                     = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
                 auto rect = _blockRect;
-                rect.setWidth(TextHelper::fineTextWidthF(postfix, _painter->font()));
+                rect.setWidth(TextHelper::documentTextWidthF(postfix, _painter->font()));
                 rect.moveLeft(rect.left() + _block.blockFormat().leftMargin() + _blockRect.width());
                 rect.setHeight(_painter->fontMetrics().boundingRect(postfix).height());
                 _painter->drawText(rect, Qt::AlignLeft | Qt::AlignBottom, postfix);

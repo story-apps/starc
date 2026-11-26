@@ -60,7 +60,7 @@ QFont TextHelper::fontForPaintDevice(const QFont& _font, const QPaintDevice* _de
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
 {
-    return fineTextWidthF(_text, QFontMetricsF(_font, documentPaintDevice()));
+    return fineTextWidthF(_text, QFontMetricsF(_font));
 }
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics)
@@ -79,6 +79,16 @@ int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
 
 qreal TextHelper::fineLineSpacing(const QFont& _font)
 {
+    return QFontMetricsF(_font).lineSpacing();
+}
+
+qreal TextHelper::documentTextWidthF(const QString& _text, const QFont& _font)
+{
+    return QFontMetricsF(_font, documentPaintDevice()).horizontalAdvance(_text);
+}
+
+qreal TextHelper::documentLineSpacing(const QFont& _font)
+{
     return QFontMetricsF(_font, documentPaintDevice()).lineSpacing();
 }
 
@@ -89,7 +99,7 @@ void TextHelper::updateFontHinting(QFont& _font)
 
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)
 {
-    const QFontMetricsF metrics(_font, documentPaintDevice());
+    const QFontMetricsF metrics(_font);
     return metrics
         .boundingRect(QRectF(0, 0, _width, 0), // width constraint, height=0 means unlimited
                       Qt::TextWordWrap | Qt::AlignLeft, _text)
@@ -103,7 +113,8 @@ qreal TextHelper::layoutHeightForWidth(const QString& _text, const QFont& _font,
         return 0.0;
     }
 
-    const auto lineHeight = qFuzzyCompare(_lineHeight, -1) ? fineLineSpacing(_font) : _lineHeight;
+    const auto lineHeight
+        = qFuzzyCompare(_lineHeight, -1) ? documentLineSpacing(_font) : _lineHeight;
     if (lineHeight <= 0.0) {
         return 0.0;
     }
@@ -170,7 +181,7 @@ QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal
 namespace {
 QString elidedTextUncached(const QString& _text, const QFont& _font, const QRectF& _rect)
 {
-    QFontMetricsF metrics(_font, TextHelper::documentPaintDevice());
+    QFontMetricsF metrics(_font);
 
     //
     // Если влезает целиком, сразу выходим
@@ -182,10 +193,7 @@ QString elidedTextUncached(const QString& _text, const QFont& _font, const QRect
     QString elidedText;
     QString lastLine;
 
-    QTextLayout layout(_text, _font, TextHelper::documentPaintDevice());
-    auto option = layout.textOption();
-    option.setUseDesignMetrics(true);
-    layout.setTextOption(option);
+    QTextLayout layout(_text, _font);
     layout.beginLayout();
     forever
     {

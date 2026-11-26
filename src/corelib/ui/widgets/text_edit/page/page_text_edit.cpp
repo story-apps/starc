@@ -34,6 +34,7 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QtMath>
 #include <qapplication.h>
 #include <qdatetime.h>
 #include <qpropertyanimation.h>
@@ -42,8 +43,8 @@
 #include <qtexttable.h>
 #include <qvariant.h>
 
+#include <cmath>
 #include <limits.h>
-#include <math.h>
 
 static inline bool shouldEnableInputMethod(PageTextEdit* textedit)
 {
@@ -309,8 +310,8 @@ void PageTextEditPrivate::_q_adjustScrollbars()
         // В постраничном режиме показываем страницу целиком
         //
         if (usePageMode) {
-            const int pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
-            const int documentHeight = pageHeight * control->document()->pageCount();
+            const qreal pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
+            const int documentHeight = qCeil(pageHeight * control->document()->pageCount());
             const int maximumValue = documentHeight - viewport->height();
             vbar->setRange(0, maximumValue);
         }
@@ -1545,8 +1546,8 @@ void PageTextEditPrivate::updateViewportMargins()
         // Настроить размер документа
         //
 
-        const int pageWidth = pageMetrics.pxPageSize().width();
-        const int pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
+        const qreal pageWidth = pageMetrics.pxPageSize().width();
+        const qreal pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
 
         //
         // Рассчитываем отступы для viewport
@@ -1575,7 +1576,7 @@ void PageTextEditPrivate::updateViewportMargins()
             // когда весь документ и даже больше помещается на экране
             //
             int bottomMargin = defaultBottomMargin;
-            const int documentHeight = pageHeight * control->document()->pageCount();
+            const int documentHeight = qCeil(pageHeight * control->document()->pageCount());
             if ((q->height() - documentHeight) > (defaultTopMargin + defaultBottomMargin)) {
                 const int borderHeight = 2;
                 const int horizontalScrollbarHeight = hbar->isVisible() ? hbar->height() : 0;
@@ -1603,8 +1604,8 @@ void PageTextEditPrivate::updateDocumentGeometry()
     //
     QSizeF documentSize(q->width() - vbar->width(), -1);
     if (usePageMode) {
-        const int pageWidth = pageMetrics.pxPageSize().width();
-        const int pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
+        const qreal pageWidth = pageMetrics.pxPageSize().width();
+        const qreal pageHeight = pageMetrics.pxPageSize().height() + pageSpacing;
         documentSize = QSizeF(pageWidth, pageHeight);
     }
 
@@ -1791,8 +1792,7 @@ void PageTextEditPrivate::paintPagesView(QPainter* _painter)
     //
     // Определим нижнюю границу разрыва страниц
     //
-    const qreal firstVisiblePageBottom
-        = pageHeight - (vbar->value() % static_cast<int>(pageHeight));
+    const qreal firstVisiblePageBottom = pageHeight - std::fmod(vbar->value(), pageHeight);
 
     //
     // Смещение по горизонтали, если есть полоса прокрутки
@@ -1868,7 +1868,7 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     //
     // Текущие высота и ширина которые отображаются на экране
     //
-    qreal currentPageBottom = pageSize.height() - (vbar->value() % (int)pageSize.height());
+    qreal currentPageBottom = pageSize.height() - std::fmod(vbar->value(), pageSize.height());
 
     //
     // Начало поля должно учитывать смещение полосы прокрутки
@@ -1882,7 +1882,7 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     //
     // Номер первой видимой на экране страницы
     //
-    int pageNumber = vbar->value() / (int)pageSize.height() + 1;
+    int pageNumber = qFloor(vbar->value() / pageSize.height()) + 1;
 
     //
     // Верхнее поле первой страницы на экране, когда не видно предыдущей страницы
@@ -2141,7 +2141,7 @@ void PageTextEditPrivate::clipPageDecorationRegions(QPainter* _painter)
     //
     // Текущие высота и ширина которые отображаются на экране
     //
-    qreal currentPageBottom = pageSize.height() - (vbar->value() % int(pageSize.height()));
+    qreal currentPageBottom = pageSize.height() - std::fmod(vbar->value(), pageSize.height());
 
     //
     // Начало поля должно учитывать смещение полосы прокрутки
@@ -3783,7 +3783,8 @@ void PageTextEdit::setUsePageMode(bool _use)
 int PageTextEdit::cursorPage(const QTextCursor& _cursor)
 {
     Q_D(PageTextEdit);
-    return (cursorRect(_cursor).top() / d->pageMetrics.pxPageSize().height()) + 1;
+    const auto pageHeight = d->pageMetrics.pxPageSize().height() + d->pageSpacing;
+    return qFloor((cursorRect(_cursor).top() + d->verticalOffset()) / pageHeight) + 1;
 }
 
 void PageTextEdit::setAddSpaceToBottom(bool _addSpace)

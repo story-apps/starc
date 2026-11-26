@@ -70,11 +70,12 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
             const auto rightMargin = block.textDirection() == Qt::LeftToRight
                 ? block.blockFormat().rightMargin()
                 : block.blockFormat().leftMargin();
-            _documentXml.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
-                                    .arg(MeasurementHelper::pxToTwips(leftMargin))
-                                    .arg(MeasurementHelper::pxToTwips(rightMargin))
-                                    .arg(MeasurementHelper::pxToTwips(TextHelper::fineTextWidthF(
-                                        sceneNumber, block.charFormat().font()))));
+            _documentXml.append(
+                QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
+                    .arg(MeasurementHelper::pxToTwips(leftMargin))
+                    .arg(MeasurementHelper::pxToTwips(rightMargin))
+                    .arg(MeasurementHelper::pxToTwips(
+                        TextHelper::documentTextWidthF(sceneNumber, block.charFormat().font()))));
 
             auto cursor = _cursor;
             cursor.setPosition(block.position());
@@ -128,9 +129,9 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
             QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
                 .arg(MeasurementHelper::pxToTwips(leftMargin))
                 .arg(MeasurementHelper::pxToTwips(
-                    rightMargin - TextHelper::fineTextWidthF(postfix, charFormat.font())))
+                    rightMargin - TextHelper::documentTextWidthF(postfix, charFormat.font())))
                 .arg(MeasurementHelper::pxToTwips(
-                    TextHelper::fineTextWidthF(prefix, charFormat.font()))));
+                    TextHelper::documentTextWidthF(prefix, charFormat.font()))));
 
         auto cursor = _cursor;
         cursor.setPosition(block.position());

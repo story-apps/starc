@@ -15,14 +15,21 @@ The tests load the actual bundled fonts and templates. They cover:
 
 - Physical units, fractional template and inline font sizes through serialization.
 - Replacing a PageTextEdit document without reverting to viewport metrics.
+- The international A4/Courier New sample from the LibreOffice comparison: the
+  first line ends in “От”, using a real PageTextEdit with template margins.
+- Whole button labels compared against an independent, unelided Qt rendering.
+- Fractional page height, scrollbar extent and cursor page numbers after scrolling.
+- Identical document raster output on paint devices with different logical DPI.
 - Agreement between document line breaks and the standalone measurement helpers.
 - Decoration font sizes on paint devices with 72, 96, 144 and 192 DPI.
 - DOCX style and direct paragraph spacing, including half-point font sizes.
 - The actual screenplay PDF exporter, with headers and footers.
 - Identical serialized line geometry and page counts in child processes with
-  `QT_FONT_DPI` 96/120/144/192 and `QT_SCALE_FACTOR` 1/1.25/1.5/2, and unchanged
-  layout when drawing at 75/100/150/200% zoom. The corpus includes Courier Prime,
-  Courier New, Arial, Tamil, Hebrew and Arabic templates and mixed-script text.
+  `QT_FONT_DPI` 72/96/100/120/144/192 and `QT_SCALE_FACTOR` 1/1.25/1.5/2 varied
+  independently as well as together, and unchanged layout when drawing at
+  75/100/150/200% zoom. These documents include real page margins. The corpus
+  includes Courier Prime, Courier New, Arial, Tamil, Hebrew and Arabic templates
+  and mixed-script text.
 
 For a PDF suitable for independent inspection, run:
 
@@ -34,9 +41,17 @@ STARC_METRICS_PDF=/absolute/path/document.pdf QT_QPA_PLATFORM=offscreen \
 ## Layout contract
 
 Document coordinates are logical pixels at 96 DPI, with fractional point sizes
-stored in templates/model formatting. The document, independent QTextLayout
-measurements and Qt font metrics share a fixed paint device; screens only affect
-painting. Font selection still uses Qt's font database and fallback mechanisms.
+stored in templates/model formatting. Application entry points must set
+`Qt::AA_Use96Dpi` before creating QApplication or any fonts: QTextDocument scales
+frame margins, fixed line heights and tab stops against Qt's default DPI even
+with an explicit layout paint device. Display scaling/device-pixel ratios remain
+enabled. Page dimensions and positions stay fractional until a widget/scrollbar
+requires integers; rounding each page separately accumulates drift. The document,
+independent QTextLayout measurements and document font metrics share a fixed paint device; screens only
+affect painting. UI measurements use their native font metrics, separately from
+`documentTextWidthF`/`documentLineSpacing`. Button sizing and elision must use the
+same metrics as their painter, with sufficient whole pixels for the label. Font
+selection still uses Qt's font database and fallback mechanisms.
 This does not promise identical glyph rasterization or identical layout across
 different Qt/font versions or against arbitrary Word/LibreOffice versions.
 Run this target on Windows and macOS as well before releasing; the Linux DPI
