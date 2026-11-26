@@ -27,6 +27,7 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QFontMetricsF>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -885,7 +886,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                 const auto bookmark = d->document.bookmark(block);
                 if (bookmark.isValid()) {
                     setPainterPen(bookmark.color);
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    painter.setFont(TextHelper::fontForPaintDevice(
+                        DesignSystem::font().iconsForEditors(), painter.device()));
 
                     //
                     // Определим область для отрисовки
@@ -936,7 +938,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                     //
                     if (blockType == TextParagraphType::PartFooter
                         || blockType == TextParagraphType::ChapterFooter) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Ищем открывающий блок папки
@@ -981,7 +984,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                     // В остальных случаях рисуем индикатор пустой строки
                     //
                     else {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
                         const QString emptyLineMark = "» ";
                         //
                         // Определим область для отрисовки и выведем символ в редактор
@@ -1004,7 +1008,10 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                         else {
                             const qreal x = splitterX - cursor.currentTable()->format().border();
                             const QPointF topLeft(
-                                x - TextHelper::fineTextWidthF(emptyLineMark, painter.font()),
+                                x
+                                    - TextHelper::fineTextWidthF(
+                                        emptyLineMark,
+                                        QFontMetricsF(painter.font(), painter.device())),
                                 cursorR.top());
                             const QPointF bottomRight(x, cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
@@ -1018,7 +1025,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                     if (blockType == BusinessLayer::TextParagraphType::SceneHeading) {
                         const auto title = d->document.groupTitle(block);
                         if (!title.isEmpty()) {
-                            painter.setFont(block.charFormat().font());
+                            painter.setFont(TextHelper::fontForPaintDevice(
+                                block.charFormat().font(), painter.device()));
                             const QPoint topLeft
                                 = QPoint(textLeft + leftDelta + spaceBetweenSceneNumberAndText,
                                          cursorR.top());
@@ -1042,7 +1050,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                     if (blockType == TextParagraphType::PartHeading
                         || blockType == TextParagraphType::ChapterHeading) {
                         setPainterPen(palette().text().color());
-                        painter.setFont(DesignSystem::font().iconsForEditors());
+                        painter.setFont(TextHelper::fontForPaintDevice(
+                            DesignSystem::font().iconsForEditors(), painter.device()));
 
                         //
                         // Определим область для отрисовки и выведем номер сцены в редактор в
@@ -1079,7 +1088,7 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                             setPainterPen(palette().text().color());
                             auto font = cursor.charFormat().font();
                             font.setUnderline(false);
-                            painter.setFont(font);
+                            painter.setFont(TextHelper::fontForPaintDevice(font, painter.device()));
 
                             //
                             // Определим область для отрисовки и выведем номер сцены в редактор
@@ -1166,7 +1175,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
 
-                        painter.setFont(cursor.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(cursor.charFormat().font(),
+                                                                       painter.device()));
                         for (const auto& reviewMark : std::as_const(revisionMarks)) {
                             setPainterPen(reviewMark.second);
                             painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,
@@ -1185,7 +1195,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                     //
                     if (beatColor.isValid()) {
                         setPainterPen(beatColor.isValid() ? beatColor : palette().text().color());
-                        painter.setFont(DesignSystem::font().iconsForEditors());
+                        painter.setFont(TextHelper::fontForPaintDevice(
+                            DesignSystem::font().iconsForEditors(), painter.device()));
 
                         //
                         // Определим область для отрисовки и выведем номер сцены в редактор в

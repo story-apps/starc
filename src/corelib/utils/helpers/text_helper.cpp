@@ -5,13 +5,14 @@
 #include <business_layer/templates/text_template.h>
 #include <utils/diff_match_patch/diff_match_patch.h>
 
+#include <QAbstractTextDocumentLayout>
 #include <QApplication>
 #include <QCache>
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QFontMetricsF>
+#include <QImage>
 #include <QRegularExpression>
-#include <QScreen>
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTextLayout>
@@ -19,124 +20,52 @@
 #include <QtMath>
 
 
-namespace {
-/**
- * @brief Протестировать корректность тюнинга метрик шрифтов для текущей системы
- */
-void testFontsMetrics()
+QPaintDevice* TextHelper::documentPaintDevice()
 {
-    //
-    // В 249 миллиметров должны влезать 51,5 строка Courier New, или 58 строк Courier Prime
-    // В 155 миллиметров должен влезать 61 символ обоих шрифтов
-    //
-    QString str = QString("DPIX: %1 | DPIY: %2\n\n")
-                      .arg(QApplication::primaryScreen()->physicalDotsPerInchX())
-                      .arg(QApplication::primaryScreen()->physicalDotsPerInchY());
-    for (const auto& fn : { "Courier New", "Courier Prime" }) {
-        QFont f(fn);
-        f.setPixelSize(MeasurementHelper::ptToPx(12));
-        QFontMetricsF fm(f);
-        str += QString("%1 | %2 lines per page | %3 from 155 | horadv for 1 %4 and for 61 %5\n")
-                   .arg(f.family())
-                   .arg(249.0 / MeasurementHelper::pxToMm(TextHelper::fineLineSpacing(f), false))
-                   .arg(MeasurementHelper::pxToMm(
-                       TextHelper::fineTextWidthF(QString().fill('W', 61), f), true))
-                   .arg(fm.horizontalAdvance("W"))
-                   .arg(fm.horizontalAdvance(QString().fill('W', 61)));
-    }
-    qDebug() << str;
+    // A process-lifetime device: layouts retain a non-owning pointer to it.
+    // Never paint into this image or change its metrics after initialization.
+    static QImage device = [] {
+        QImage image(1, 1, QImage::Format_ARGB32_Premultiplied);
+        const auto dotsPerMeter = qRound(MeasurementHelper::kDocumentDpi / 0.0254);
+        image.setDotsPerMeterX(dotsPerMeter);
+        image.setDotsPerMeterY(dotsPerMeter);
+        return image;
+    }();
+    return &device;
 }
 
-/**
- * @brief Дельты для высоты строки, которые должны учитываться на данной системе
- */
-static QHash<QString, qreal> sFontToLineSpacing;
-
-/**
- * @brief Настраиваем метрики шрифтов и коэффициент масштабровнаия таким образом,
- *        чтобы текст на всех платформах выглядел одинаково
- */
-static void initFontMetrics()
+void TextHelper::configureDocument(QTextDocument* _document)
 {
-    if (!sFontToLineSpacing.isEmpty()) {
-        return;
-    }
-
-    //
-    // Значения высоты шрифта из файла самого шрифта, платформы тут могут выдавать разные значения
-    //
-    constexpr auto courierNewHeight = 2320.0;
-
-    //
-    // Отстраиваем параметры по Courier New, а все остальные адаптируем исходя из этой настройки
-    //
-    QFont courierNewFont("Courier New");
-    courierNewFont.setPixelSize(MeasurementHelper::ptToPx(12));
-    QFontMetricsF courierNewMetrics(courierNewFont);
-    qreal courierNewLineSpacing = courierNewMetrics.lineSpacing();
-    qreal courierNewDelta = 0.0;
-    //
-    // ... в 249 миллиметров должны вмещаться 51.5 строки шрифтом Courier New
-    //
-    while ((249.0 / MeasurementHelper::pxToMm(courierNewLineSpacing, false)) > 51.8) {
-        courierNewDelta += 0.1;
-        courierNewLineSpacing = courierNewMetrics.lineSpacing() + courierNewDelta;
-    }
-    sFontToLineSpacing[courierNewFont.family()] = courierNewDelta;
-
-    //
-    // Остальные дельты высчитываются на основе Courier New
-    //
-    auto addFontDelta = [courierNewHeight, courierNewLineSpacing](const QString& _fontFamily,
-                                                                  int _fontMetricsHeight) {
-        if (!QFontDatabase().hasFamily(_fontFamily)) {
-            return;
-        }
-
-        QFont font(_fontFamily);
-        font.setPixelSize(MeasurementHelper::ptToPx(12));
-        QFontMetricsF fontMetrics(font);
-        const qreal fontDelta =
-            //
-            // ... такой Line Spacing должен быть у настраимого шрифта
-            //
-            courierNewLineSpacing * (_fontMetricsHeight / courierNewHeight)
-            //
-            // ... вычитая из него Line Spacing из метрики, получим дельту
-            //
-            - fontMetrics.lineSpacing();
-        sFontToLineSpacing[_fontFamily] = fontDelta;
-    };
-    //
-    // ... собственно высчитываем дельту для других шрифтов (HHead group summary)
-    //
-    addFontDelta("Courier Prime", 2060.0);
-    addFontDelta("Courier Screenplay", 2370.0);
-    addFontDelta("Courier Final Draft", 2318.0);
-    addFontDelta("Arial", 2355.0);
-    addFontDelta("Times New Roman", 2355.0);
-
-    //
-    // Прочие шрифты
-    //
-#ifndef Q_OS_WIN
-    sFontToLineSpacing.insert("Roboto", 0.98);
-#endif
+    _document->setUseDesignMetrics(true);
+    _document->documentLayout()->setPaintDevice(documentPaintDevice());
 }
 
-} // namespace
+qreal TextHelper::fontPointSize(const QFont& _font)
+{
+    return _font.pointSizeF() > 0 ? _font.pointSizeF()
+                                  : MeasurementHelper::pxToPt(_font.pixelSize());
+}
+
+QFont TextHelper::fontForPaintDevice(const QFont& _font, const QPaintDevice* _device)
+{
+    auto font = _font;
+    if (font.pointSizeF() > 0) {
+        // QPainter resolves point sizes against its target device even when the
+        // painter already has a document-to-screen transform.
+        font.setPointSizeF(font.pointSizeF() * MeasurementHelper::kDocumentDpi
+                           / _device->logicalDpiY());
+    }
+    return font;
+}
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
 {
-    return fineTextWidthF(_text, QFontMetricsF(_font));
+    return fineTextWidthF(_text, QFontMetricsF(_font, documentPaintDevice()));
 }
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics)
 {
-    //
-    // Не забываем прибавить волшебную единичку, а то так не работает :)
-    //
-    return _metrics.horizontalAdvance(_text) + 1.0;
+    return _metrics.horizontalAdvance(_text);
 }
 
 int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
@@ -150,33 +79,17 @@ int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
 
 qreal TextHelper::fineLineSpacing(const QFont& _font)
 {
-    initFontMetrics();
-
-    const QFontMetricsF metrics(_font);
-    const qreal platformDelta = 0;
-    return metrics.boundingRect("X").height()
-        + sFontToLineSpacing.value(!_font.families().isEmpty() ? _font.families().constFirst()
-                                                               : _font.family(),
-                                   platformDelta);
+    return QFontMetricsF(_font, documentPaintDevice()).lineSpacing();
 }
 
 void TextHelper::updateFontHinting(QFont& _font)
 {
-#ifdef Q_OS_WINDOWS
-    //
-    // Arial в Windows при масштабировании рисуется коряво, поэтому убираем ему хинтинг
-    //
-    if (_font.family() == "Arial") {
-        _font.setHintingPreference(QFont::PreferNoHinting);
-    }
-#else
-    Q_UNUSED(_font)
-#endif
+    _font.setHintingPreference(QFont::PreferNoHinting);
 }
 
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)
 {
-    const QFontMetricsF metrics(_font);
+    const QFontMetricsF metrics(_font, documentPaintDevice());
     return metrics
         .boundingRect(QRectF(0, 0, _width, 0), // width constraint, height=0 means unlimited
                       Qt::TextWordWrap | Qt::AlignLeft, _text)
@@ -198,8 +111,9 @@ qreal TextHelper::layoutHeightForWidth(const QString& _text, const QFont& _font,
     auto correctedText = _text;
     correctedText.replace(QLatin1Char('\n'), QChar::LineSeparator);
 
-    QTextLayout textLayout(correctedText, _font);
+    QTextLayout textLayout(correctedText, _font, documentPaintDevice());
     QTextOption textOption;
+    textOption.setUseDesignMetrics(true);
     textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(textOption);
 
@@ -231,8 +145,9 @@ QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal
     //
     // Компануем текст и считаем, какой высоты получается результат
     //
-    QTextLayout textLayout(correctedText, _font);
+    QTextLayout textLayout(correctedText, _font, documentPaintDevice());
     QTextOption textOption;
+    textOption.setUseDesignMetrics(true);
     textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     textLayout.setTextOption(textOption);
     textLayout.beginLayout();
@@ -255,7 +170,7 @@ QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal
 namespace {
 QString elidedTextUncached(const QString& _text, const QFont& _font, const QRectF& _rect)
 {
-    QFontMetricsF metrics(_font);
+    QFontMetricsF metrics(_font, TextHelper::documentPaintDevice());
 
     //
     // Если влезает целиком, сразу выходим
@@ -267,7 +182,10 @@ QString elidedTextUncached(const QString& _text, const QFont& _font, const QRect
     QString elidedText;
     QString lastLine;
 
-    QTextLayout layout(_text, _font);
+    QTextLayout layout(_text, _font, TextHelper::documentPaintDevice());
+    auto option = layout.textOption();
+    option.setUseDesignMetrics(true);
+    layout.setTextOption(option);
     layout.beginLayout();
     forever
     {
@@ -675,9 +593,10 @@ void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor,
             if (rangeFormat.fontFamilies() == currentBlockCharFormat.fontFamilies()) {
                 rangeFormat.setFontFamilies(_newFormat.fontFamilies().toStringList());
             }
-            if (rangeFormat.font().pixelSize() == currentBlockCharFormat.font().pixelSize()) {
+            if (qFuzzyCompare(fontPointSize(rangeFormat.font()),
+                              fontPointSize(currentBlockCharFormat.font()))) {
                 auto font = rangeFormat.font();
-                font.setPixelSize(_newFormat.font().pixelSize());
+                font.setPointSizeF(fontPointSize(_newFormat.font()));
                 rangeFormat.setFont(font);
             }
             if (rangeFormat.fontCapitalization() == currentBlockCharFormat.fontCapitalization()) {

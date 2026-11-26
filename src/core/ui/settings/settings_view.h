@@ -177,7 +177,6 @@ public:
     //
     // Задание экспериментальных параметров
     //
-    void setAdvancedAccurateMetricsHandling(bool _accurate);
     void setAdvancedUseExtendedLogging(bool _use);
 
 signals:
@@ -391,7 +390,6 @@ signals:
     //
     // Уведомления об изменении экспериментальных параметров
     //
-    void advancedAccurateMetricsHandlingChanged(bool _use);
     void advancedUseExtendedLoggingChanged(bool _use);
 
 protected:

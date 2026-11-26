@@ -91,7 +91,7 @@ private slots:
         }
         QVERIFY(editor != nullptr);
         editor->setUsePageMode(true);
-        editor->setCorrectionOptions(false, correctBreaks);
+        editor->setCorrectionOptions(false, false, correctBreaks);
         wrapper->setZoomRange(zoom);
         view.show();
         QTest::qWait(50);
@@ -188,7 +188,7 @@ private slots:
         Ui::ScreenplayTextEdit editor;
         editor.resize(900, 600);
         editor.setUsePageMode(pageMode);
-        editor.setCorrectionOptions(false, pageMode);
+        editor.setCorrectionOptions(false, false, pageMode);
         editor.initWithModel(&model);
         editor.show();
         QTest::qWait(20);
@@ -212,6 +212,14 @@ private slots:
         viewAnchor.clearSelection();
         editor.setVerticalScroll(editor.verticalScroll() + editor.cursorRect(viewAnchor).top() - 180);
         QTest::qWait(20);
+        if (change == "offscreen-cursor") {
+            QVERIFY(!editor.viewport()->rect().intersects(editor.cursorRect()));
+            // Repagination can insert a page gap between visible paragraphs.
+            // The editor preserves the top visible text, not an arbitrary later paragraph.
+            viewAnchor = editor.cursorForPosition(QPoint(0, 0));
+        }
+        const auto viewAnchorText = viewAnchor.block().text();
+        const auto viewAnchorOffset = viewAnchor.positionInBlock();
         const auto oldTop = editor.cursorRect(viewAnchor).top();
         const auto oldHorizontal = editor.horizontalScroll();
 
@@ -289,8 +297,12 @@ private slots:
             QCOMPARE(editor.textCursor().position(), expectedPosition);
             QCOMPARE(editor.textCursor().selectedText(), selected);
             QCOMPARE(editor.textCursor().position() < editor.textCursor().anchor(), backward);
-            const auto expectedAnchor = change == "offscreen-cursor" ? find("Paragraph 35:")
-                                                                       : editor.textCursor();
+            auto expectedAnchor = editor.textCursor();
+            if (change == "offscreen-cursor") {
+                expectedAnchor = find(viewAnchorText);
+                QVERIFY(!expectedAnchor.isNull());
+                expectedAnchor.setPosition(expectedAnchor.position() + viewAnchorOffset);
+            }
             QCOMPARE(editor.cursorRect(expectedAnchor).top(), oldTop);
             QCOMPARE(editor.horizontalScroll(), oldHorizontal);
         }

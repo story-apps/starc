@@ -577,14 +577,20 @@ void ScreenplayTemplateParagraphsView::setFontFamily(const QString& _family)
     d->fontFamily->setCurrentIndex(d->fontFamilyModel->index(row));
 }
 
-int ScreenplayTemplateParagraphsView::fontSize() const
+qreal ScreenplayTemplateParagraphsView::fontSize() const
 {
-    return d->fontSize->text().toInt();
+    return d->fontSize->text().toDouble();
 }
 
-void ScreenplayTemplateParagraphsView::setFontSize(int _size)
+void ScreenplayTemplateParagraphsView::setFontSize(qreal _size)
 {
-    const auto row = d->fontSizeModel->stringList().indexOf(QString::number(_size));
+    const auto sizeText = QString::number(_size);
+    auto sizes = d->fontSizeModel->stringList();
+    if (!sizes.contains(sizeText)) {
+        sizes.append(sizeText);
+        d->fontSizeModel->setStringList(sizes);
+    }
+    const auto row = sizes.indexOf(sizeText);
     d->fontSize->setCurrentIndex(d->fontSizeModel->index(row));
 }
 

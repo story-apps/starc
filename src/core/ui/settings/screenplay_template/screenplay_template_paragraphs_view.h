@@ -51,8 +51,8 @@ public:
     void setParagraphEnabled(bool _enabled);
     QString fontFamily() const;
     void setFontFamily(const QString& _family);
-    int fontSize() const;
-    void setFontSize(int _size);
+    qreal fontSize() const;
+    void setFontSize(qreal _size);
     bool isStartsFromNewPage() const;
     void setStartsFromNewPage(bool _starts);
     bool isUppercase() const;

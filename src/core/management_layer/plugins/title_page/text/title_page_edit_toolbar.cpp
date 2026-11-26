@@ -147,7 +147,7 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
             update();
 
             QFont newFont(d->textFontAction->text());
-            newFont.setPixelSize(MeasurementHelper::ptToPx(d->textFontSizeAction->text().toInt()));
+            newFont.setPointSizeF(d->textFontSizeAction->text().toDouble());
             emit fontChanged(newFont);
         });
     connect(d->popup, &CardPopupWithTree::disappeared, this, [this] {
@@ -186,7 +186,7 @@ void TitlePageEditToolbar::setCurrentFont(const QFont& _font)
     QSignalBlocker blocker(this);
 
     d->textFontAction->setText(_font.family());
-    d->textFontSizeAction->setText(QString::number(MeasurementHelper::pxToPt(_font.pixelSize())));
+    d->textFontSizeAction->setText(QString::number(TextHelper::fontPointSize(_font)));
 }
 
 void TitlePageEditToolbar::setAddCastListVisible(bool _visible)

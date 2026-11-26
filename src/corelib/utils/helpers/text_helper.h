@@ -8,6 +8,8 @@
 class QChar;
 class QFont;
 class QFontMetricsF;
+class QPaintDevice;
+class QTextDocument;
 class QRectF;
 class QString;
 class QTextBlock;
@@ -21,6 +23,12 @@ class QTextCursor;
 class CORE_LIBRARY_EXPORT TextHelper
 {
 public:
+    // Shared Qt layout context in document coordinates, independent of monitors.
+    static QPaintDevice* documentPaintDevice();
+    static void configureDocument(QTextDocument* _document);
+    static qreal fontPointSize(const QFont& _font);
+    static QFont fontForPaintDevice(const QFont& _font, const QPaintDevice* _device);
+
     /**
      * @brief Определить оптимальную ширину текста
      */
@@ -34,7 +42,7 @@ public:
     static qreal fineLineSpacing(const QFont& _font);
 
     /**
-     * @brief Обновить хинтинг шрифта в зависимости от гарнитуры
+     * @brief Использовать масштабируемые метрики шрифта без привязки к пиксельной сетке
      */
     static void updateFontHinting(QFont& _font);
 

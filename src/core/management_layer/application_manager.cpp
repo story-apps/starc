@@ -170,11 +170,6 @@ public:
     bool initCrashpad();
 
     /**
-     * @brief Настроить способ работы с конвертацией метрик
-     */
-    void initMeasurementMetrics();
-
-    /**
      * @brief Настроить логгирование
      */
     void initLogging();
@@ -602,12 +597,6 @@ bool ApplicationManager::Implementation::initCrashpad()
         crashpadClient.reset();
     }
     return status;
-}
-
-void ApplicationManager::Implementation::initMeasurementMetrics()
-{
-    MeasurementHelper::setAccurateMetricsHandling(
-        settingsValue(DataStorageLayer::kApplicationAdvancedAccurateMetricsHandlingKey).toBool());
 }
 
 void ApplicationManager::Implementation::initLogging()
@@ -2800,11 +2789,6 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     PlatformHelper::initConsoleOutput();
 
     //
-    // Настраиваем способ конвертации пикселей в миллиметры
-    //
-    d->initMeasurementMetrics();
-
-    //
     // Первым делом настраиваем сбор логов
     //
     d->initLogging();
@@ -3544,24 +3528,6 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::novelNavigatorChanged, this,
             [this] { d->projectManager->reconfigureNovelNavigator(); });
     //
-    connect(d->settingsManager.data(), &SettingsManager::advancedAccurateMetricsHandlingChanged,
-            this, [this] {
-                //
-                // Метрики нельзя переключить на лету, так что если пользователь сюда пришёл,
-                // перезапускаем прилжоение
-                //
-                // ... закроем текущий проект
-                //
-                d->closeCurrentProject();
-                //
-                // ... сохраним настройки, чтобы они успешно считались следующей копией приложения
-                //
-                DataStorageLayer::StorageFacade::settingsStorage()->sync();
-                //
-                // ... перезапустим приложение
-                //
-                restartApplication();
-            });
     connect(d->settingsManager.data(), &SettingsManager::advancedUseExtendingLoggingChanged, this,
             [this] { d->initLogging(); });
     //

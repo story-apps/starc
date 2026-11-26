@@ -28,6 +28,7 @@
 #include <QAction>
 #include <QCoreApplication>
 #include <QDir>
+#include <QFontMetricsF>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -1057,7 +1058,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 const auto bookmark = d->document.bookmark(block);
                 if (bookmark.isValid()) {
                     setPainterPen(bookmark.color);
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    painter.setFont(TextHelper::fontForPaintDevice(
+                        DesignSystem::font().iconsForEditors(), painter.device()));
 
                     //
                     // Определим область для отрисовки
@@ -1107,7 +1109,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                     // Для пустого футера рисуем плейсхолдер
                     //
                     if (blockType == TextParagraphType::SequenceFooter) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Ищем открывающий блок папки
@@ -1148,7 +1151,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                     // В остальных случаях рисуем индикатор пустой строки
                     //
                     else {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
                         const QString emptyLineMark = "» ";
                         //
                         // Определим область для отрисовки и выведем символ в редактор
@@ -1171,7 +1175,10 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         else {
                             const qreal x = splitterX - cursor.currentTable()->format().border();
                             const QPointF topLeft(
-                                x - TextHelper::fineTextWidthF(emptyLineMark, painter.font()),
+                                x
+                                    - TextHelper::fineTextWidthF(
+                                        emptyLineMark,
+                                        QFontMetricsF(painter.font(), painter.device())),
                                 cursorR.top());
                             const QPointF bottomRight(x, cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
@@ -1206,15 +1213,17 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
 
                                 auto font = block.charFormat().font();
                                 font.setCapitalization(QFont::MixedCase);
-                                painter.setFont(
+                                painter.setFont(TextHelper::fontForPaintDevice(
                                     currentTemplate
                                         .paragraphStyle(
                                             BusinessLayer::TextParagraphType::Description)
-                                        .font());
+                                        .font(),
+                                    painter.device()));
                                 const auto panelsCountText = QString(" (%1)").arg(
                                     tr("%n panels", "", pageItem->panelsCount()));
-                                panelsCountWidth
-                                    = TextHelper::fineTextWidthF(panelsCountText, painter.font());
+                                panelsCountWidth = TextHelper::fineTextWidthF(
+                                    panelsCountText,
+                                    QFontMetricsF(painter.font(), painter.device()));
                                 const QPoint topLeft = isLeftToRight
                                     ? cursorREnd.topLeft()
                                     : cursorREnd.topRight() - QPoint(panelsCountWidth, 0);
@@ -1232,7 +1241,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         // Иконка положения страницы
                         //
                         {
-                            painter.setFont(DesignSystem::font().iconsForEditors());
+                            painter.setFont(TextHelper::fontForPaintDevice(
+                                DesignSystem::font().iconsForEditors(), painter.device()));
                             setPainterPen(palette().text().color());
 
                             auto paintLeftPageIcon = [&](const QString& _icon) {
@@ -1257,8 +1267,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, _icon);
                             };
                             auto paintRightPageIcon = [&](const QString& _icon) {
-                                const int spaceWidth
-                                    = TextHelper::fineTextWidthF(" ", painter.font());
+                                const int spaceWidth = TextHelper::fineTextWidthF(
+                                    " ", QFontMetricsF(painter.font(), painter.device()));
                                 const QPoint topLeft(isLeftToRight
                                                          ? cursorREnd.left() + panelsCountWidth
                                                              + spaceWidth
@@ -1370,7 +1380,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
 
-                        painter.setFont(cursor.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(cursor.charFormat().font(),
+                                                                       painter.device()));
                         for (const auto& reviewMark : std::as_const(revisionMarks)) {
                             setPainterPen(reviewMark.second);
                             painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,

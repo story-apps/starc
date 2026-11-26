@@ -242,7 +242,7 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
                     && formatAttributes.hasAttribute(xml::kFontSizeAttribute)) {
                     format.font.family
                         = formatAttributes.value(xml::kFontFamilyAttribute).toString();
-                    format.font.size = formatAttributes.value(xml::kFontSizeAttribute).toInt();
+                    format.font.size = formatAttributes.value(xml::kFontSizeAttribute).toDouble();
                 }
 
                 formats.append(format);
@@ -580,7 +580,8 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
     if (!font.family.isEmpty() && font.size > 0) {
         auto formatFont = format.font();
         formatFont.setFamily(font.family);
-        formatFont.setPixelSize(MeasurementHelper::ptToPx(font.size));
+        formatFont.setPointSizeF(font.size);
+        TextHelper::updateFontHinting(formatFont);
         format.setFont(formatFont);
     }
     return format;
@@ -1114,10 +1115,14 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
         if (format.format.hasProperty(QTextFormat::FontStrikeOut)) {
             newFormat.isStrikethrough = format.format.font().strikeOut();
         }
-        if (format.format.font().family() != defaultBlockFormat.font().family()
-            || format.format.font().pixelSize() != defaultBlockFormat.font().pixelSize()) {
-            newFormat.font.family = format.format.font().family();
-            newFormat.font.size = MeasurementHelper::pxToPt(format.format.font().pixelSize());
+        // A format containing only bold/italic has no explicit font size. Resolve
+        // it against the paragraph, not QApplication's default point-sized font.
+        const auto font = format.format.font().resolve(defaultBlockFormat.font());
+        if (font.family() != defaultBlockFormat.font().family()
+            || !qFuzzyCompare(TextHelper::fontPointSize(font),
+                              TextHelper::fontPointSize(defaultBlockFormat.font()))) {
+            newFormat.font.family = font.family();
+            newFormat.font.size = TextHelper::fontPointSize(font);
         }
 
         if (newFormat.isValid()) {

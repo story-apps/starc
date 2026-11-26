@@ -63,18 +63,18 @@ TextDocument* WorldExporter::prepareDocument(AbstractModel* _model,
     // Работаем от стандартного шрифта шаблона
     //
     auto baseFont = exportTemplate.baseFont();
-    baseFont.setPixelSize(MeasurementHelper::ptToPx(12));
+    baseFont.setPointSizeF(12);
     auto titleFont = baseFont;
-    titleFont.setPixelSize(MeasurementHelper::ptToPx(20));
+    titleFont.setPointSizeF(20);
     titleFont.setBold(true);
     auto headingFont = baseFont;
-    headingFont.setPixelSize(MeasurementHelper::ptToPx(18));
+    headingFont.setPointSizeF(18);
     headingFont.setBold(true);
     auto subHeadingFont = baseFont;
-    subHeadingFont.setPixelSize(MeasurementHelper::ptToPx(16));
+    subHeadingFont.setPointSizeF(16);
     subHeadingFont.setBold(true);
     auto subSubHeadingFont = baseFont;
-    subSubHeadingFont.setPixelSize(MeasurementHelper::ptToPx(14));
+    subSubHeadingFont.setPointSizeF(14);
     subSubHeadingFont.setBold(true);
 
     const auto world = qobject_cast<WorldModel*>(_model);

@@ -28,6 +28,7 @@
 #include <QAction>
 #include <QCoreApplication>
 #include <QDir>
+#include <QFontMetricsF>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -1071,7 +1072,8 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                 const auto bookmark = d->document.bookmark(block);
                 if (bookmark.isValid()) {
                     setPainterPen(bookmark.color);
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    painter.setFont(TextHelper::fontForPaintDevice(
+                        DesignSystem::font().iconsForEditors(), painter.device()));
 
                     //
                     // Определим область для отрисовки
@@ -1111,7 +1113,8 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                 const auto& blockStyle = d->stageplayTemplate().paragraphStyle(blockType);
                 if (blockStyle.isTitleVisible()) {
                     setPainterPen(palette().text().color());
-                    painter.setFont(cursor.charFormat().font());
+                    painter.setFont(TextHelper::fontForPaintDevice(cursor.charFormat().font(),
+                                                                   painter.device()));
 
                     //
                     // Определим область для отрисовки (отступы используем от стиля персонажа)
@@ -1158,7 +1161,8 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                     // Для пустого футера рисуем плейсхолдер
                     //
                     if (blockType == TextParagraphType::SequenceFooter) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Ищем открывающий блок папки
@@ -1199,7 +1203,8 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                     // В остальных случаях рисуем индикатор пустой строки
                     //
                     else {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
                         const QString emptyLineMark = "» ";
                         //
                         // Определим область для отрисовки и выведем символ в редактор
@@ -1222,7 +1227,10 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                         else {
                             const qreal x = splitterX - cursor.currentTable()->format().border();
                             const QPointF topLeft(
-                                x - TextHelper::fineTextWidthF(emptyLineMark, painter.font()),
+                                x
+                                    - TextHelper::fineTextWidthF(
+                                        emptyLineMark,
+                                        QFontMetricsF(painter.font(), painter.device())),
                                 cursorR.top());
                             const QPointF bottomRight(x, cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
@@ -1239,7 +1247,8 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     if (blockType == TextParagraphType::SequenceHeading) {
                         setPainterPen(palette().text().color());
-                        painter.setFont(DesignSystem::font().iconsForEditors());
+                        painter.setFont(TextHelper::fontForPaintDevice(
+                            DesignSystem::font().iconsForEditors(), painter.device()));
 
                         //
                         // Определим область для отрисовки и выведем номер сцены в редактор в
@@ -1278,14 +1287,14 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                             QFont font = cursor.charFormat().font();
                             font.setBold(false);
                             font.setUnderline(false);
-                            painter.setFont(font);
+                            painter.setFont(TextHelper::fontForPaintDevice(font, painter.device()));
 
                             //
                             // Определим область для отрисовки и выведем номер реплики в
                             // редактор
                             //
-                            const int numberDelta
-                                = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
+                            const int numberDelta = TextHelper::fineTextWidthF(
+                                dialogueNumber, QFontMetricsF(painter.font(), painter.device()));
                             QRectF numberRect;
                             //
                             // ... если у стиля персонажа есть пустое пространство слева, то
@@ -1386,7 +1395,8 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
 
-                        painter.setFont(cursor.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(cursor.charFormat().font(),
+                                                                       painter.device()));
                         for (const auto& reviewMark : std::as_const(revisionMarks)) {
                             setPainterPen(reviewMark.second);
                             painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,
@@ -1402,7 +1412,8 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
             if (!block.text().isEmpty()
                 || !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
                 setPainterPen(palette().text().color());
-                painter.setFont(block.charFormat().font());
+                painter.setFont(
+                    TextHelper::fontForPaintDevice(block.charFormat().font(), painter.device()));
                 //
                 // ... префикс
                 //
@@ -1411,10 +1422,12 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                         = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
                     const QPoint topLeft = block.text().isRightToLeft()
                         ? QPoint(cursorREnd.left()
-                                     - TextHelper::fineTextWidthF(prefix, painter.font()),
+                                     - TextHelper::fineTextWidthF(
+                                         prefix, QFontMetricsF(painter.font(), painter.device())),
                                  cursorREnd.top())
                         : QPoint(cursorR.left()
-                                     - TextHelper::fineTextWidthF(prefix, painter.font()),
+                                     - TextHelper::fineTextWidthF(
+                                         prefix, QFontMetricsF(painter.font(), painter.device())),
                                  cursorR.top());
                     const QPoint bottomRight = block.text().isRightToLeft()
                         ? QPoint(cursorREnd.left(), cursorREnd.bottom())
@@ -1433,10 +1446,12 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                         : QPoint(cursorREnd.left(), cursorREnd.top());
                     const QPoint bottomRight = block.text().isRightToLeft()
                         ? QPoint(cursorR.left()
-                                     + TextHelper::fineTextWidthF(postfix, painter.font()),
+                                     + TextHelper::fineTextWidthF(
+                                         postfix, QFontMetricsF(painter.font(), painter.device())),
                                  cursorR.bottom())
                         : QPoint(cursorREnd.left()
-                                     + TextHelper::fineTextWidthF(postfix, painter.font()),
+                                     + TextHelper::fineTextWidthF(
+                                         postfix, QFontMetricsF(painter.font(), painter.device())),
                                  cursorREnd.bottom());
                     const QRect rect(topLeft, bottomRight);
                     painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);

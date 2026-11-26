@@ -9,10 +9,9 @@
 class CORE_LIBRARY_EXPORT MeasurementHelper
 {
 public:
-    /**
-     * @brief Задать необходимость использования системных метрик для определения физических единиц
-     */
-    static void setAccurateMetricsHandling(bool _accurate);
+    // Document coordinates use logical pixels at 96 DPI. Screen DPI and zoom only
+    // affect painting, never page geometry. The axis argument is retained for callers.
+    static constexpr int kDocumentDpi = 96;
 
     /**
      * @brief Перевести миллиметры в пикселы и обратно
@@ -36,7 +35,7 @@ public:
      * необходимо произвести рассчёт
      */
     static qreal ptToPx(qreal _pt, bool _x = true);
-    static int pxToPt(qreal _px, bool _x = true);
+    static qreal pxToPt(qreal _px, bool _x = true);
 
     /**
      * @brief Перевести миллиметры в дюймы и обратно
@@ -49,10 +48,4 @@ public:
      */
     static int mmToTwips(qreal _mm);
     static int pxToTwips(qreal _px, bool _x = true);
-
-private:
-    /**
-     * @brief Необходимо ли использовать системных метрик шрифтов
-     */
-    static bool m_accurateMetricsHandling;
 };

@@ -224,32 +224,8 @@ QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextTemplate&
         blockStyle.append("<w:spacing w:before=\"0\" w:after=\"0\" ");
     }
     // ... межстрочный
-    int lineSpacing = 240;
-    QString lineSpacingType = "auto";
-    switch (_style.lineSpacingType()) {
-    default:
-    case TextBlockStyle::LineSpacingType::SingleLineSpacing: {
-        break;
-    }
-
-    case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
-        lineSpacing = 360;
-        break;
-    }
-
-    case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
-        lineSpacing = 480;
-        break;
-    }
-
-    case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
-        lineSpacing = mmToTwips(_style.lineSpacingValue());
-        lineSpacingType = "exact";
-        break;
-    }
-    }
-    blockStyle.append(
-        QString("w:line=\"%1\" w:lineRule=\"%2\"/>").arg(lineSpacing).arg(lineSpacingType));
+    blockStyle.append(QString("w:line=\"%1\" w:lineRule=\"exact\"/>")
+                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).lineHeight(), false)));
     //
     // ... выравнивание
     //
@@ -280,7 +256,7 @@ QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextTemplate&
     // ... размер
     //
     blockStyle.append(QString("<w:sz w:val=\"%1\"/><w:szCs w:val=\"%1\"/>")
-                          .arg(MeasurementHelper::pxToPt(_style.font().pixelSize()) * 2));
+                          .arg(qRound(TextHelper::fontPointSize(_style.font()) * 2)));
     //
     // ... начертание
     //
@@ -430,7 +406,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
             QString("<w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:sz w:val=\"%2\"/><w:szCs "
                     "w:val=\"%2\"/></w:rPr>")
                 .arg(_cursor.charFormat().font().family())
-                .arg(MeasurementHelper::pxToPt(_cursor.charFormat().font().pixelSize()) * 2));
+                .arg(qRound(TextHelper::fontPointSize(_cursor.charFormat().font()) * 2)));
         documentXml.append(docxAlignment(_cursor.blockFormat().alignment()));
         if (_cursor.blockFormat().rightMargin() != 0 || _cursor.blockFormat().leftMargin() != 0) {
             documentXml.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"0\" />")
@@ -440,12 +416,15 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         //
         // ... интервалы
         //
-        if (_cursor.blockFormat().topMargin() != 0 || _cursor.blockFormat().bottomMargin() != 0) {
-            documentXml.append(
-                QString("<w:spacing w:before=\"%1\" w:after=\"%2\" w:lineRule=\"auto\"/>")
-                    .arg(pxToTwips(_cursor.blockFormat().topMargin(), false))
-                    .arg(pxToTwips(_cursor.blockFormat().bottomMargin(), false)));
+        const auto blockFormat = _cursor.blockFormat();
+        documentXml.append(QString("<w:spacing w:before=\"%1\" w:after=\"%2\"")
+                               .arg(pxToTwips(blockFormat.topMargin(), false))
+                               .arg(pxToTwips(blockFormat.bottomMargin(), false)));
+        if (blockFormat.lineHeightType() == QTextBlockFormat::FixedHeight) {
+            documentXml.append(QString(" w:line=\"%1\" w:lineRule=\"exact\"")
+                                   .arg(pxToTwips(blockFormat.lineHeight(), false)));
         }
+        documentXml.append("/>");
         documentXml.append("<w:rPr/></w:pPr>");
         //
         // ... текст блока
@@ -462,7 +441,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                 QString("<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/>"
                         "<w:sz w:val=\"%2\"/><w:szCs w:val=\"%2\"/>")
                     .arg(range.format.font().family())
-                    .arg(MeasurementHelper::pxToPt(range.format.font().pixelSize()) * 2));
+                    .arg(qRound(TextHelper::fontPointSize(range.format.font()) * 2)));
             if (range.format.font().bold()) {
                 documentXml.append("<w:b/><w:bCs/>");
             }
@@ -584,22 +563,26 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                     .arg(pxToTwips(blockStyle.blockFormat(_cursor.inTable()).leftMargin())));
             documentXml.append("<w:bidi/>");
         }
-        //
-        // ... начинать с новой страницы
-        //
-        if (_cursor.blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
-            documentXml.append("<w:spacing w:before=\"0\"/>");
-            documentXml.append("<w:pageBreakBefore/>");
+        const auto blockFormat = block.blockFormat();
+        const bool startsPage
+            = blockFormat.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore;
+        const bool suppressTopMargin = startsPage || _cursor.atStart()
+            || blockFormat.hasProperty(TextBlockStyle::PropertyIsCorrectionContinued);
+        // Keep direct paragraph spacing in one element. A custom font can change
+        // the editor's fixed line height relative to the template style.
+        if (suppressTopMargin || blockFormat.lineHeightType() == QTextBlockFormat::FixedHeight) {
+            documentXml.append("<w:spacing");
+            if (suppressTopMargin) {
+                documentXml.append(" w:before=\"0\"");
+            }
+            if (blockFormat.lineHeightType() == QTextBlockFormat::FixedHeight) {
+                documentXml.append(QString(" w:line=\"%1\" w:lineRule=\"exact\"")
+                                       .arg(pxToTwips(blockFormat.lineHeight(), false)));
+            }
+            documentXml.append("/>");
         }
-        //
-        // ... если это самый первый блок в документе,
-        //     или блок с текстом ПРОД., вставляемый на обрыве реплики,
-        //     принудительно убираем отступ сверху у абзаца
-        //
-        else if (_cursor.atStart()
-                 || _cursor.blockFormat().hasProperty(
-                     TextBlockStyle::PropertyIsCorrectionContinued)) {
-            documentXml.append("<w:spacing w:before=\"0\"/>");
+        if (startsPage) {
+            documentXml.append("<w:pageBreakBefore/>");
         }
 
         //

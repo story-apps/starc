@@ -31,6 +31,7 @@
 #include <QAction>
 #include <QCoreApplication>
 #include <QDir>
+#include <QFontMetricsF>
 #include <QLocale>
 #include <QMenu>
 #include <QMimeData>
@@ -1216,7 +1217,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 const auto bookmark = d->document.bookmark(block);
                 if (bookmark.isValid()) {
                     setPainterPen(bookmark.color);
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    painter.setFont(TextHelper::fontForPaintDevice(
+                        DesignSystem::font().iconsForEditors(), painter.device()));
 
                     //
                     // Определим область для отрисовки
@@ -1279,7 +1281,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     if (blockType == TextParagraphType::ActFooter
                         || blockType == TextParagraphType::SequenceFooter) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Ищем открывающий блок папки
@@ -1319,7 +1322,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     // пустой строки, а рисуем индикатор бита
                     //
                     else if (!lastBeat.color.isValid()) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
                         const QString emptyLineMark = "» ";
                         //
                         // Определим область для отрисовки и выведем символ в редактор
@@ -1342,7 +1346,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         else {
                             const qreal x = splitterX - cursor.currentTable()->format().border();
                             const QPointF topLeft(
-                                x - TextHelper::fineTextWidthF(emptyLineMark, painter.font()),
+                                x
+                                    - TextHelper::fineTextWidthF(
+                                        emptyLineMark,
+                                        QFontMetricsF(painter.font(), painter.device())),
                                 cursorR.top());
                             const QPointF bottomRight(x, cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
@@ -1356,7 +1363,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     if (blockType == BusinessLayer::TextParagraphType::SceneHeading) {
                         const auto title = d->document.groupTitle(block);
                         if (!title.isEmpty()) {
-                            painter.setFont(block.charFormat().font());
+                            painter.setFont(TextHelper::fontForPaintDevice(
+                                block.charFormat().font(), painter.device()));
                             const auto rect = textRect();
                             painter.drawText(rect, block.blockFormat().alignment(),
                                              painter.fontMetrics().elidedText(title, Qt::ElideRight,
@@ -1368,7 +1376,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     // Для первого блока бита, если там ещё нет текста, рисуем текст бита
                     //
                     if (!lastBeat.text.isEmpty()) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Определим область для отрисовки плейсхолдера
@@ -1389,7 +1398,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     if (blockType == TextParagraphType::ActHeading
                         || blockType == TextParagraphType::SequenceHeading) {
                         setPainterPen(palette().text().color());
-                        painter.setFont(DesignSystem::font().iconsForEditors());
+                        painter.setFont(TextHelper::fontForPaintDevice(
+                            DesignSystem::font().iconsForEditors(), painter.device()));
 
                         //
                         // Определим область для отрисовки и выведем номер сцены в редактор в
@@ -1426,7 +1436,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             setPainterPen(palette().text().color());
                             auto font = cursor.charFormat().font();
                             font.setUnderline(false);
-                            painter.setFont(font);
+                            painter.setFont(TextHelper::fontForPaintDevice(font, painter.device()));
 
                             //
                             // Определим область для отрисовки и выведем номер сцены в редактор
@@ -1464,7 +1474,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         const auto dialogueNumber = d->document.dialogueNumber(block);
                         if (!dialogueNumber.isEmpty()) {
                             setPainterPen(palette().text().color());
-                            painter.setFont(cursor.charFormat().font());
+                            painter.setFont(TextHelper::fontForPaintDevice(
+                                cursor.charFormat().font(), painter.device()));
 
                             //
                             // Определим область для отрисовки и выведем номер реплики в редактор
@@ -1472,8 +1483,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             // ... в тексте или в первой колоке таблички
                             //
                             QRectF rect;
-                            const int numberWidth
-                                = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
+                            const int numberWidth = TextHelper::fineTextWidthF(
+                                dialogueNumber, QFontMetricsF(painter.font(), painter.device()));
                             if (!cursor.inTable() || cursor.inFirstColumn()) {
                                 //
                                 // ... поместим номер реплики внутри текстовой области,
@@ -1518,14 +1529,15 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         && !block.blockFormat().boolProperty(
                             TextBlockStyle::PropertyIsCorrection)) {
                         setPainterPen(palette().text().color());
-                        painter.setFont(cursor.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(cursor.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Определим место положение конца имени персонажа
                         //
                         const int continuedTermWidth = TextHelper::fineTextWidthF(
                             BusinessLayer::ScreenplayTextCorrector::continuedTerm(),
-                            painter.font());
+                            QFontMetricsF(painter.font(), painter.device()));
                         const QPoint topLeft = isLeftToRight
                             ? cursorREnd.topLeft()
                             : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
@@ -1589,7 +1601,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
 
-                        painter.setFont(cursor.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(cursor.charFormat().font(),
+                                                                       painter.device()));
                         for (const auto& reviewMark : std::as_const(revisionMarks)) {
                             setPainterPen(reviewMark.second);
                             painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,
@@ -1603,7 +1616,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 if (lastBeat.color.isValid()) {
                     setPainterPen(lastBeat.color);
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    painter.setFont(TextHelper::fontForPaintDevice(
+                        DesignSystem::font().iconsForEditors(), painter.device()));
 
                     //
                     // Определим область для отрисовки и выведем номер сцены в редактор в
@@ -1634,7 +1648,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 if ((block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)
                      || block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix))) {
                     setPainterPen(palette().text().color());
-                    painter.setFont(block.charFormat().font());
+                    painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                   painter.device()));
 
                     //
                     // Из-за того, что при смешивании RTL и LTR текста курсор в параграфе может
@@ -1664,8 +1679,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     const auto prefix
                         = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
                     const QRectF prefixRect(
-                        prefixTopLeft.x() - TextHelper::fineTextWidthF(prefix, painter.font()),
-                        prefixTopLeft.y(), TextHelper::fineTextWidthF(prefix, painter.font()),
+                        prefixTopLeft.x()
+                            - TextHelper::fineTextWidthF(
+                                prefix, QFontMetricsF(painter.font(), painter.device())),
+                        prefixTopLeft.y(),
+                        TextHelper::fineTextWidthF(prefix,
+                                                   QFontMetricsF(painter.font(), painter.device())),
                         decorationCursorR.height());
                     painter.drawText(prefixRect,
                                      Qt::AlignLeft | Qt::AlignVCenter | Qt::TextForceLeftToRight,
@@ -1673,9 +1692,11 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 
                     const auto postfix
                         = block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
-                    const QRectF postfixRect(postfixTopRight.x(), postfixTopRight.y(),
-                                             TextHelper::fineTextWidthF(postfix, painter.font()),
-                                             decorationCursorR.height());
+                    const QRectF postfixRect(
+                        postfixTopRight.x(), postfixTopRight.y(),
+                        TextHelper::fineTextWidthF(postfix,
+                                                   QFontMetricsF(painter.font(), painter.device())),
+                        decorationCursorR.height());
                     painter.drawText(postfixRect,
                                      Qt::AlignLeft | Qt::AlignVCenter | Qt::TextForceLeftToRight,
                                      postfix);
@@ -1868,14 +1889,15 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
                                 " align=\"%1\" "
                                 " style=\"margin-top: 0mm; margin-bottom: 0mm; "
                                 " margn-left: %2px; margin-right: %3px; "
-                                " font-family: %4; font-size: %5px;\">"
+                                " font-family: %4; font-size: %5pt;\">"
                                 "%6"
                                 "</p>\n")
                             .arg(toString(_cursor.blockFormat().alignment()),
                                  QString::number(_cursor.blockFormat().leftMargin(), 'f', 2),
                                  QString::number(_cursor.blockFormat().rightMargin(), 'f', 2),
                                  _cursor.blockCharFormat().fontFamily(),
-                                 QString::number(_cursor.blockCharFormat().font().pixelSize()),
+                                 QString::number(
+                                     TextHelper::fontPointSize(_cursor.blockCharFormat().font())),
                                  _text.trimmed())
                             .toUtf8());
         };

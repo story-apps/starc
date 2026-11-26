@@ -608,7 +608,7 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     };
     m_font.setFamilies(fontFamilies);
     TextHelper::updateFontHinting(m_font);
-    m_font.setPixelSize(MeasurementHelper::ptToPx(_blockAttributes.value("font_size").toDouble()));
+    m_font.setPointSizeF(_blockAttributes.value("font_size").toDouble());
     //
     // ... начертание
     //
@@ -1025,7 +1025,7 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
         blockStyle.setType(type);
         synopsisTemplate->setParagraphStyle(blockStyle);
 
-        headingFont.setPixelSize(headingFont.pixelSize() + MeasurementHelper::ptToPx(2));
+        headingFont.setPointSizeF(TextHelper::fontPointSize(headingFont) + 2);
         headingBlockStyle.setFont(headingFont);
     }
 }
@@ -1255,7 +1255,7 @@ QString TextTemplate::save() const
         writer.writeAttribute("starts_from_new_page", ::toString(blockStyle.isStartFromNewPage()));
         writer.writeAttribute("font_family", blockStyle.font().family());
         writer.writeAttribute("font_size",
-                              ::toString(MeasurementHelper::pxToPt(blockStyle.font().pixelSize())));
+                              ::toString(TextHelper::fontPointSize(blockStyle.font())));
         writer.writeAttribute("bold", ::toString(blockStyle.font().bold()));
         writer.writeAttribute("italic", ::toString(blockStyle.font().italic()));
         writer.writeAttribute("underline", ::toString(blockStyle.font().underline()));

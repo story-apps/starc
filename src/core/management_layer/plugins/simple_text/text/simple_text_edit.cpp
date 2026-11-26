@@ -885,7 +885,8 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                     const auto bookmark = d->document.bookmark(block);
                     if (bookmark.isValid()) {
                         setPainterPen(bookmark.color);
-                        painter.setFont(DesignSystem::font().iconsForEditors());
+                        painter.setFont(TextHelper::fontForPaintDevice(
+                            DesignSystem::font().iconsForEditors(), painter.device()));
 
                         //
                         // Определим область для отрисовки
@@ -933,7 +934,8 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Рисуем индикатор пустой строки
                         //
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
                         const QString emptyLineMark = "» ";
                         //
                         // Определим область для отрисовки и выведем символ в редактор
@@ -1007,7 +1009,8 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                                 }
                             }
 
-                            painter.setFont(cursor.charFormat().font());
+                            painter.setFont(TextHelper::fontForPaintDevice(
+                                cursor.charFormat().font(), painter.device()));
                             for (const auto& reviewMark : std::as_const(revisionMarks)) {
                                 setPainterPen(reviewMark.second);
                                 painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,

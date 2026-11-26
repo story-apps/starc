@@ -393,7 +393,9 @@ void BaseTextEdit::setTextFont(const QFont& _font)
 {
     auto buildFormat = [_font](const QTextCharFormat& _format) {
         auto format = _format;
-        format.setFont(_font);
+        auto font = _font;
+        TextHelper::updateFontHinting(font);
+        format.setFont(font);
         return format;
     };
     d->updateSelectionFormatting(this, buildFormat);

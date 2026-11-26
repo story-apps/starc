@@ -23,6 +23,7 @@
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QTimer>
 
@@ -283,7 +284,7 @@ void TemplateOptionsManager::Implementation::updateParagraphParameters(
     const auto& paragraphStyle = currentTemplate.get().paragraphStyle(_paragraphType);
     paragraphsView->setParagraphEnabled(paragraphStyle.isActive());
     paragraphsView->setFontFamily(paragraphStyle.font().family());
-    paragraphsView->setFontSize(MeasurementHelper::pxToPt(paragraphStyle.font().pixelSize()));
+    paragraphsView->setFontSize(TextHelper::fontPointSize(paragraphStyle.font()));
     paragraphsView->setStartsFromNewPage(paragraphStyle.isStartFromNewPage());
     paragraphsView->setUppercase(paragraphStyle.font().capitalization() == QFont::AllUppercase);
     paragraphsView->setBold(paragraphStyle.font().bold());
@@ -325,7 +326,7 @@ void TemplateOptionsManager::Implementation::saveParagraphParameters(
         QLatin1String("Noto Color Emoji"),
     };
     font.setFamilies(fontFamilies);
-    font.setPixelSize(MeasurementHelper::ptToPx(paragraphsView->fontSize()));
+    font.setPointSizeF(paragraphsView->fontSize());
     font.setCapitalization(paragraphsView->isUppercase() ? QFont::AllUppercase : QFont::MixedCase);
     font.setBold(paragraphsView->isBold());
     font.setItalic(paragraphsView->isItalic());

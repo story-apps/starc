@@ -547,6 +547,7 @@ TextDocument::TextDocument(QObject* _parent)
     : QTextDocument(_parent)
     , d(new Implementation(this))
 {
+    TextHelper::configureDocument(this);
     connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
     connect(this, &TextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
     connect(&d->modelChangeCorrectionDebouncer, &Debouncer::gotWork, this,

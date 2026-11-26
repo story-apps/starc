@@ -32,6 +32,7 @@
 #include <QAction>
 #include <QCoreApplication>
 #include <QDir>
+#include <QFontMetricsF>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -1141,7 +1142,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                 const auto bookmark = d->document.bookmark(block);
                 if (bookmark.isValid()) {
                     setPainterPen(bookmark.color);
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    painter.setFont(TextHelper::fontForPaintDevice(
+                        DesignSystem::font().iconsForEditors(), painter.device()));
 
                     //
                     // Определим область для отрисовки
@@ -1204,7 +1206,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     if (blockType == TextParagraphType::PartFooter
                         || blockType == TextParagraphType::ChapterFooter) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Ищем открывающий блок папки
@@ -1246,7 +1249,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                     // пустой строки, а рисуем индикатор бита
                     //
                     else if (!lastBeat.color.isValid()) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
                         const QString emptyLineMark = "» ";
                         //
                         // Определим область для отрисовки и выведем символ в редактор
@@ -1269,7 +1273,10 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                         else {
                             const qreal x = splitterX - cursor.currentTable()->format().border();
                             const QPointF topLeft(
-                                x - TextHelper::fineTextWidthF(emptyLineMark, painter.font()),
+                                x
+                                    - TextHelper::fineTextWidthF(
+                                        emptyLineMark,
+                                        QFontMetricsF(painter.font(), painter.device())),
                                 cursorR.top());
                             const QPointF bottomRight(x, cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
@@ -1283,7 +1290,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                     if (blockType == BusinessLayer::TextParagraphType::SceneHeading) {
                         const auto title = d->document.groupTitle(block);
                         if (!title.isEmpty()) {
-                            painter.setFont(block.charFormat().font());
+                            painter.setFont(TextHelper::fontForPaintDevice(
+                                block.charFormat().font(), painter.device()));
                             const auto rect = textRect();
                             painter.drawText(rect, block.blockFormat().alignment(),
                                              painter.fontMetrics().elidedText(title, Qt::ElideRight,
@@ -1295,7 +1303,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                     // Для первого блока бита, если там ещё нет текста, рисуем текст бита
                     //
                     if (!lastBeat.text.isEmpty()) {
-                        painter.setFont(block.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                       painter.device()));
 
                         //
                         // Определим область для отрисовки плейсхолдера
@@ -1316,7 +1325,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                     if (blockType == TextParagraphType::PartHeading
                         || blockType == TextParagraphType::ChapterHeading) {
                         setPainterPen(palette().text().color());
-                        painter.setFont(DesignSystem::font().iconsForEditors());
+                        painter.setFont(TextHelper::fontForPaintDevice(
+                            DesignSystem::font().iconsForEditors(), painter.device()));
 
                         //
                         // Определим область для отрисовки и выведем номер сцены в редактор в
@@ -1353,7 +1363,7 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                             setPainterPen(palette().text().color());
                             auto font = cursor.charFormat().font();
                             font.setUnderline(false);
-                            painter.setFont(font);
+                            painter.setFont(TextHelper::fontForPaintDevice(font, painter.device()));
 
                             //
                             // Определим область для отрисовки и выведем номер сцены в редактор
@@ -1391,7 +1401,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                         const auto dialogueNumber = d->document.dialogueNumber(block);
                         if (!dialogueNumber.isEmpty()) {
                             setPainterPen(palette().text().color());
-                            painter.setFont(cursor.charFormat().font());
+                            painter.setFont(TextHelper::fontForPaintDevice(
+                                cursor.charFormat().font(), painter.device()));
 
                             //
                             // Определим область для отрисовки и выведем номер реплики в редактор
@@ -1400,8 +1411,9 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                             //
                             QRectF rect;
                             if (!cursor.inTable() || cursor.inFirstColumn()) {
-                                const int numberDelta
-                                    = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
+                                const int numberDelta = TextHelper::fineTextWidthF(
+                                    dialogueNumber,
+                                    QFontMetricsF(painter.font(), painter.device()));
                                 //
                                 // ... поместим номер реплики внутри текстовой области,
                                 //     чтобы их было удобно отличать от номеров сцен
@@ -1426,8 +1438,9 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                             else {
                                 const qreal x = splitterX + spaceBetweenSceneNumberAndText
                                     + cursor.currentTable()->format().border();
-                                const int numberDelta
-                                    = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
+                                const int numberDelta = TextHelper::fineTextWidthF(
+                                    dialogueNumber,
+                                    QFontMetricsF(painter.font(), painter.device()));
                                 const QPointF topLeft(x, cursorR.top());
                                 const QPointF bottomRight(x + numberDelta, cursorR.bottom());
                                 rect = QRectF(topLeft, bottomRight);
@@ -1495,7 +1508,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
 
-                        painter.setFont(cursor.charFormat().font());
+                        painter.setFont(TextHelper::fontForPaintDevice(cursor.charFormat().font(),
+                                                                       painter.device()));
                         for (const auto& reviewMark : std::as_const(revisionMarks)) {
                             setPainterPen(reviewMark.second);
                             painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,
@@ -1509,7 +1523,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 if (lastBeat.color.isValid()) {
                     setPainterPen(lastBeat.color);
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    painter.setFont(TextHelper::fontForPaintDevice(
+                        DesignSystem::font().iconsForEditors(), painter.device()));
 
                     //
                     // Определим область для отрисовки и выведем номер сцены в редактор в
@@ -1540,7 +1555,8 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                 if ((block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)
                      || block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix))) {
                     setPainterPen(palette().text().color());
-                    painter.setFont(block.charFormat().font());
+                    painter.setFont(TextHelper::fontForPaintDevice(block.charFormat().font(),
+                                                                   painter.device()));
 
                     //
                     // Из-за того, что при смешивании RTL и LTR текста курсор в параграфе может
@@ -1570,8 +1586,12 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                     const auto prefix
                         = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
                     const QRectF prefixRect(
-                        prefixTopLeft.x() - TextHelper::fineTextWidthF(prefix, painter.font()),
-                        prefixTopLeft.y(), TextHelper::fineTextWidthF(prefix, painter.font()),
+                        prefixTopLeft.x()
+                            - TextHelper::fineTextWidthF(
+                                prefix, QFontMetricsF(painter.font(), painter.device())),
+                        prefixTopLeft.y(),
+                        TextHelper::fineTextWidthF(prefix,
+                                                   QFontMetricsF(painter.font(), painter.device())),
                         decorationCursorR.height());
                     painter.drawText(prefixRect,
                                      Qt::AlignLeft | Qt::AlignVCenter | Qt::TextForceLeftToRight,
@@ -1579,9 +1599,11 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
 
                     const auto postfix
                         = block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
-                    const QRectF postfixRect(postfixTopRight.x(), postfixTopRight.y(),
-                                             TextHelper::fineTextWidthF(postfix, painter.font()),
-                                             decorationCursorR.height());
+                    const QRectF postfixRect(
+                        postfixTopRight.x(), postfixTopRight.y(),
+                        TextHelper::fineTextWidthF(postfix,
+                                                   QFontMetricsF(painter.font(), painter.device())),
+                        decorationCursorR.height());
                     painter.drawText(postfixRect,
                                      Qt::AlignLeft | Qt::AlignVCenter | Qt::TextForceLeftToRight,
                                      postfix);

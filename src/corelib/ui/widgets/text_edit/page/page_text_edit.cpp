@@ -32,6 +32,7 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <qapplication.h>
 #include <qdatetime.h>
@@ -164,7 +165,7 @@ void PageTextEditPrivate::init(const QString& html)
     // is shown. relayoutDocument() will take care of setting the page size to the
     // viewport dimensions later.
     doc->setPageSize(QSize(0, 0));
-    doc->documentLayout()->setPaintDevice(viewport);
+    TextHelper::configureDocument(doc);
     doc->setDefaultFont(q->font());
     doc->setUndoRedoEnabled(false); // flush undo buffer.
     doc->setUndoRedoEnabled(true);
@@ -813,6 +814,7 @@ void PageTextEdit::setDocument(QTextDocument* document)
 
     Q_D(PageTextEdit);
     d->control->setDocument(document);
+    TextHelper::configureDocument(d->control->document());
     d->updateDefaultTextOption();
     d->updateDocumentGeometry();
     d->relayoutDocument();
@@ -1857,7 +1859,8 @@ void PageTextEditPrivate::paintPageMargins(QPainter* _painter)
     pageSize.setHeight(pageSize.height() + pageSpacing);
     const QMarginsF pageMargins(pageMetrics.pxPageMargins());
 
-    _painter->setFont(control->document()->defaultFont());
+    _painter->setFont(
+        TextHelper::fontForPaintDevice(control->document()->defaultFont(), _painter->device()));
     _painter->setPen(ColorHelper::transparent(
         control->palette().text().color(),
         1.0 - (focusCurrentParagraph ? Ui::DesignSystem::inactiveTextOpacity() : 0.0)));

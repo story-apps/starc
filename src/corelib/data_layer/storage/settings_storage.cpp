@@ -127,7 +127,6 @@ SettingsStorage::Implementation::Implementation()
     defaultSettings.insert(kApplicationAiAssistantEnabledKey, true);
     defaultSettings.insert(kApplicationShortcutsImportKey, "Alt+I");
     defaultSettings.insert(kApplicationShortcutsCurrentDocumentExportKey, "Alt+E");
-    defaultSettings.insert(kApplicationAdvancedAccurateMetricsHandlingKey, false);
     defaultSettings.insert(kApplicationLoggingLevelKey, static_cast<int>(Log::Level::Debug));
 
     defaultSettings.insert(kProjectTypeKey, 0);

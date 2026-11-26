@@ -59,12 +59,12 @@ TextDocument* CharactersExporter::prepareDocument(AbstractModel* _model,
     // Работаем от стандартного шрифта шаблона
     //
     auto baseFont = exportTemplate.baseFont();
-    baseFont.setPixelSize(MeasurementHelper::ptToPx(12));
+    baseFont.setPointSizeF(12);
     auto titleFont = baseFont;
-    titleFont.setPixelSize(MeasurementHelper::ptToPx(20));
+    titleFont.setPointSizeF(20);
     titleFont.setBold(true);
     auto headingFont = baseFont;
-    headingFont.setPixelSize(MeasurementHelper::ptToPx(16));
+    headingFont.setPointSizeF(16);
     headingFont.setBold(true);
 
     const auto characters = qobject_cast<CharactersModel*>(_model);
